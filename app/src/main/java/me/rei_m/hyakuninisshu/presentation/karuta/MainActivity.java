@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.context;
+package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.os.Bundle;
 

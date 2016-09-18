@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="me.rei_m.hyakuninisshu.presentation.context.MainActivity">
+        <activity android:name="me.rei_m.hyakuninisshu.presentation.karuta.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

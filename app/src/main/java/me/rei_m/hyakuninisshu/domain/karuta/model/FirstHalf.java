@@ -9,7 +9,7 @@ public class FirstHalf implements ValueObject {
     private final KarutaPart first;
 
     private final KarutaPart second;
-
+    
     private final KarutaPart third;
 
     public FirstHalf(@NonNull KarutaPart first, @NonNull KarutaPart second, @NonNull KarutaPart third) {

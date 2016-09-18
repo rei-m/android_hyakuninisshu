@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.BuildConfig;
+import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -20,6 +21,13 @@ public class InfrastructureModule {
     @Singleton
     public SharedPreferences provideSharedPreferences(@ForApplication Context context) {
         return context.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE);
+    }
+
+    @Singleton
+    @Provides
+    public OrmaDatabase provideOrmaDatabase(@ForApplication Context context) {
+        return OrmaDatabase.builder(context)
+                .build();
     }
 
     @Provides

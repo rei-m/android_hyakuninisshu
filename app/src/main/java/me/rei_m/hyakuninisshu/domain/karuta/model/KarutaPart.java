@@ -7,7 +7,7 @@ import me.rei_m.hyakuninisshu.domain.ValueObject;
 public class KarutaPart implements ValueObject {
 
     private final String kana;
-
+    
     private final String kanji;
 
     public KarutaPart(@NonNull String kana, @NonNull String kanji) {

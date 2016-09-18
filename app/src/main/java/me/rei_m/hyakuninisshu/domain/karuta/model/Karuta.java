@@ -26,6 +26,26 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         this.imageNo = imageNo;
     }
 
+    public FirstHalf getFirstHalf() {
+        return firstHalf;
+    }
+
+    public SecondHalf getSecondHalf() {
+        return secondHalf;
+    }
+
+    public int getKimariji() {
+        return kimariji;
+    }
+
+    public String getImageNo() {
+        return imageNo;
+    }
+
+    public boolean isCollectSecondHalf(SecondHalf secondHalf) {
+        return this.secondHalf.equals(secondHalf);
+    }
+
     @Override
     public String toString() {
         return "Karuta{" +

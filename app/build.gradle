@@ -63,6 +63,8 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
     compile "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    
+    compile 'com.squareup.moshi:moshi:1.2.0'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:8.4.0'
