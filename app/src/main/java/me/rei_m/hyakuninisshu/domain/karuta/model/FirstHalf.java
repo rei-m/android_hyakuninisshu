@@ -2,9 +2,9 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.domain.ValueObject;
+import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-public class FirstHalf implements ValueObject {
+class FirstHalf extends AbstractEntity<FirstHalf, KarutaIdentifier> {
 
     private final KarutaPart first;
 
@@ -12,7 +12,11 @@ public class FirstHalf implements ValueObject {
 
     private final KarutaPart third;
 
-    public FirstHalf(@NonNull KarutaPart first, @NonNull KarutaPart second, @NonNull KarutaPart third) {
+    FirstHalf(@NonNull KarutaIdentifier identifier,
+              @NonNull KarutaPart first,
+              @NonNull KarutaPart second,
+              @NonNull KarutaPart third) {
+        super(identifier);
         this.first = first;
         this.second = second;
         this.third = third;
@@ -31,29 +35,11 @@ public class FirstHalf implements ValueObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FirstHalf firstHalf = (FirstHalf) o;
-
-        return first.equals(firstHalf.first) && second.equals(firstHalf.second) && third.equals(firstHalf.third);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = first.hashCode();
-        result = 31 * result + second.hashCode();
-        result = 31 * result + third.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "FirstHalf{" +
                 "first=" + first +
                 ", second=" + second +
                 ", third=" + third +
-                '}';
+                "} " + super.toString();
     }
 }

@@ -2,13 +2,13 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaIdentifier implements EntityIdentifier<Karuta> {
+class KarutaIdentifier implements EntityIdentifier<Karuta> {
 
     private String kind = "Karuta";
 
     private int value;
 
-    public KarutaIdentifier(int value) {
+    KarutaIdentifier(int value) {
         this.value = value;
     }
 

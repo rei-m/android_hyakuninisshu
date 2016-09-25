@@ -2,21 +2,25 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.domain.ValueObject;
+import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-public class SecondHalf implements ValueObject {
+class SecondHalf extends AbstractEntity<SecondHalf, KarutaIdentifier> {
 
-    private final KarutaPart forth;
+    private final KarutaPart fourth;
 
     private final KarutaPart fifth;
 
-    public SecondHalf(@NonNull KarutaPart forth, @NonNull KarutaPart fifth) {
-        this.forth = forth;
+
+    SecondHalf(@NonNull KarutaIdentifier identifier,
+               @NonNull KarutaPart fourth,
+               @NonNull KarutaPart fifth) {
+        super(identifier);
+        this.fourth = fourth;
         this.fifth = fifth;
     }
 
-    public KarutaPart getForth() {
-        return forth;
+    public KarutaPart getFourth() {
+        return fourth;
     }
 
     public KarutaPart getFifth() {
@@ -24,27 +28,10 @@ public class SecondHalf implements ValueObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SecondHalf that = (SecondHalf) o;
-
-        return forth.equals(that.forth) && fifth.equals(that.fifth);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = forth.hashCode();
-        result = 31 * result + fifth.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "SecondHalf{" +
-                "forth=" + forth +
+                "fourth=" + fourth +
                 ", fifth=" + fifth +
-                '}';
+                "} " + super.toString();
     }
 }
