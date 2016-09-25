@@ -14,11 +14,11 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     private final String imageNo;
 
-    public Karuta(@NonNull KarutaIdentifier identifier,
-                  @NonNull FirstHalf firstHalf,
-                  @NonNull SecondHalf secondHalf,
-                  int kimariji,
-                  @NonNull String imageNo) {
+    Karuta(@NonNull KarutaIdentifier identifier,
+           @NonNull FirstHalf firstHalf,
+           @NonNull SecondHalf secondHalf,
+           int kimariji,
+           @NonNull String imageNo) {
         super(identifier);
         this.firstHalf = firstHalf;
         this.secondHalf = secondHalf;

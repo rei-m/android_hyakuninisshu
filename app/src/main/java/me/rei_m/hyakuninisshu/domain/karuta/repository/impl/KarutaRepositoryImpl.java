@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaConverter;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
-import me.rei_m.hyakuninisshu.infrastructure.database.KarutaScheme;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 import rx.Observable;
 
@@ -21,9 +21,9 @@ public class KarutaRepositoryImpl implements KarutaRepository {
 
     @Override
     public Observable<List<Karuta>> asEntityList() {
-        return KarutaScheme.relation(orma).selector()
+        return KarutaSchema.relation(orma).selector()
                 .executeAsObservable()
-                .map(KarutaConverter::convert)
+                .map(KarutaFactory::create)
                 .toList();
     }
 }

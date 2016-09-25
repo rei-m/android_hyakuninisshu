@@ -19,20 +19,20 @@ public class InfrastructureModule {
 
     @Provides
     @Singleton
-    public SharedPreferences provideSharedPreferences(@ForApplication Context context) {
+    SharedPreferences provideSharedPreferences(@ForApplication Context context) {
         return context.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Singleton
     @Provides
-    public OrmaDatabase provideOrmaDatabase(@ForApplication Context context) {
+    OrmaDatabase provideOrmaDatabase(@ForApplication Context context) {
         return OrmaDatabase.builder(context)
                 .build();
     }
 
     @Provides
     @Singleton
-    public OkHttpClient provideOkHttpClient() {
+    OkHttpClient provideOkHttpClient() {
 
         OkHttpClient client = new OkHttpClient();
 

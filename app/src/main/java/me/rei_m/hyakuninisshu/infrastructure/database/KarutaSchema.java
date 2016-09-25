@@ -5,10 +5,10 @@ import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
 
 @Table
-public class KarutaScheme {
+public class KarutaSchema {
 
-    public static KarutaScheme_Relation relation(OrmaDatabase orma) {
-        return orma.relationOfKarutaScheme().orderByIdAsc();
+    public static KarutaSchema_Relation relation(OrmaDatabase orma) {
+        return orma.relationOfKarutaSchema().orderByIdAsc();
     }
 
     @PrimaryKey(auto = false)
