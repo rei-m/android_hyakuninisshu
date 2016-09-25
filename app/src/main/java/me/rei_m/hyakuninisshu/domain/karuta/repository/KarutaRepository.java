@@ -1,7 +1,5 @@
 package me.rei_m.hyakuninisshu.domain.karuta.repository;
 
-import android.content.Context;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -11,7 +9,7 @@ import rx.Observable;
 
 public interface KarutaRepository {
 
-    Completable initializeEntityList(Context context) throws IOException;
+    Observable<Void> initializeEntityList();
 
     Observable<List<Karuta>> asEntityList();
 }

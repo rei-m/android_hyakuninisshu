@@ -17,35 +17,42 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
-import rx.Completable;
 import rx.Observable;
 
 public class KarutaRepositoryImpl implements KarutaRepository {
 
+    private Context context;
+
     private OrmaDatabase orma;
 
-    public KarutaRepositoryImpl(@NonNull OrmaDatabase orma) {
+    public KarutaRepositoryImpl(@NonNull Context context, @NonNull OrmaDatabase orma) {
+        this.context = context;
         this.orma = orma;
     }
 
     @Override
-    public Completable initializeEntityList(Context context) throws IOException {
+    public Observable<Void> initializeEntityList() {
 
-        InputStream inputStream = context.getAssets().open("karuta_list.json");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
+        try {
+            InputStream inputStream = context.getAssets().open("karuta_list.json");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            reader.close();
+
+            List<KarutaSchema> karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString());
+
+            return orma.transactionAsync(() -> {
+                Inserter<KarutaSchema> inserter = orma.prepareInsertIntoKarutaSchema();
+                inserter.executeAll(karutaSchemaList);
+            }).toObservable();
+
+        } catch (IOException e) {
+            return Observable.error(e);
         }
-        reader.close();
-
-        List<KarutaSchema> karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString());
-
-        return orma.transactionAsync(() -> {
-            Inserter<KarutaSchema> inserter = orma.prepareInsertIntoKarutaSchema();
-            inserter.executeAll(karutaSchemaList);
-        });
     }
 
     @Override

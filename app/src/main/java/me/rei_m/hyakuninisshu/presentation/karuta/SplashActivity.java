@@ -2,7 +2,6 @@ package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.os.Bundle;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,23 +23,18 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entrance);
+        setContentView(R.layout.activity_splash);
 
         getComponent().inject(this);
 
-        karutaRepository.asEntityList().concatMap(new Func1<List<Karuta>, Observable<Boolean>>() {
+        karutaRepository.asEntityList().concatMap(new Func1<List<Karuta>, Observable<Void>>() {
             @Override
-            public Observable<Boolean> call(List<Karuta> karutaList) {
+            public Observable<Void> call(List<Karuta> karutaList) {
                 if (karutaList.isEmpty()) {
-                    try {
-                        return karutaRepository.initializeEntityList(getApplicationContext())
-                                .toObservable()
-                                .map(v -> true);
-                    } catch (IOException e) {
-                        return Observable.error(e);
-                    }
+                    return karutaRepository.initializeEntityList();
+                } else {
+                    return Observable.just(null);
                 }
-                return Observable.just(false);
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(karutaList -> {
 

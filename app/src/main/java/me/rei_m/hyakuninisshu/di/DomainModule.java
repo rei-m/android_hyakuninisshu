@@ -1,5 +1,7 @@
 package me.rei_m.hyakuninisshu.di;
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -13,7 +15,7 @@ public class DomainModule {
 
     @Singleton
     @Provides
-    KarutaRepository provideKarutaRepository(OrmaDatabase orma) {
-        return new KarutaRepositoryImpl(orma);
+    KarutaRepository provideKarutaRepository(@ForApplication Context context, OrmaDatabase orma) {
+        return new KarutaRepositoryImpl(context, orma);
     }
 }
