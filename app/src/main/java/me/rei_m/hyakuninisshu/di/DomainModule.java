@@ -10,10 +10,10 @@ import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
 @Module
 public class DomainModule {
-    
+
     @Singleton
     @Provides
-    public KarutaRepository provideKarutaRepository(OrmaDatabase orma) {
+    KarutaRepository provideKarutaRepository(OrmaDatabase orma) {
         return new KarutaRepositoryImpl(orma);
     }
 }

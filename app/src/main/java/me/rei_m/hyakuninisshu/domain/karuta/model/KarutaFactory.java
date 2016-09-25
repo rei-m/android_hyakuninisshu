@@ -22,6 +22,6 @@ public class KarutaFactory {
         FirstHalf firstHalf = new FirstHalf(identifier, firstPart, secondPart, thirdPart);
         SecondHalf secondHalf = new SecondHalf(identifier, fourthPart, fifthPart);
 
-        return new Karuta(identifier, firstHalf, secondHalf, schema.kimariji, schema.imageNo);
+        return new Karuta(identifier, schema.creator, firstHalf, secondHalf, schema.kimariji, schema.imageNo);
     }
 }

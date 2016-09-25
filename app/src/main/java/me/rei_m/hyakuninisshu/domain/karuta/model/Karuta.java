@@ -6,6 +6,8 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
 public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
+    private final String creator;
+
     private final FirstHalf firstHalf;
 
     private final SecondHalf secondHalf;
@@ -15,11 +17,13 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
     private final String imageNo;
 
     Karuta(@NonNull KarutaIdentifier identifier,
+           @NonNull String creator,
            @NonNull FirstHalf firstHalf,
            @NonNull SecondHalf secondHalf,
            int kimariji,
            @NonNull String imageNo) {
         super(identifier);
+        this.creator = creator;
         this.firstHalf = firstHalf;
         this.secondHalf = secondHalf;
         this.kimariji = kimariji;

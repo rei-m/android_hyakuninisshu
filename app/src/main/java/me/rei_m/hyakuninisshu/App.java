@@ -17,7 +17,7 @@ public class App extends Application {
     public ApplicationComponent getComponent() {
         return component;
     }
-
+    
     @VisibleForTesting
     protected ApplicationComponent createApplicationComponent() {
         return DaggerApplicationComponent.builder()

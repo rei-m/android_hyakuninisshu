@@ -6,7 +6,7 @@ const fs = require('fs');
 class Karuta {
   constructor(id, creator, kanaList, kanjiList, translation) {
     this.id = Number.parseInt(id);
-    this.cretor = creator;
+    this.creator = creator;
     this.first_kana = kanaList[0];
     this.first_kanji = kanjiList[0];
     this.second_kana = kanaList[1];
@@ -24,7 +24,7 @@ class Karuta {
 
   isCollectData() {
     if (this.id === 0,
-        this.checkInvalidString(this.cretor) ||
+        this.checkInvalidString(this.creator) ||
         this.checkInvalidString(this.first_kana) || this.checkInvalidString(this.first_kanji) ||
         this.checkInvalidString(this.second_kana) || this.checkInvalidString(this.second_kanji) ||
         this.checkInvalidString(this.third_kana) || this.checkInvalidString(this.third_kanji) ||
