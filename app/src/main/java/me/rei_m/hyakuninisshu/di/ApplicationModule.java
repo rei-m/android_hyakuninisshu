@@ -21,7 +21,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     @ForApplication
-    public Context provideContext() {
+    Context provideContext() {
         return context;
     }
 }

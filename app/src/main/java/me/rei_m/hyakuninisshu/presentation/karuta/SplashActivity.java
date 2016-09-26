@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
+import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -16,6 +17,9 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class SplashActivity extends BaseActivity {
+
+    @Inject
+    ActivityNavigator activityNavigator;
 
     @Inject
     KarutaRepository karutaRepository;
@@ -37,7 +41,7 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(karutaList -> {
-
+            activityNavigator.navigateToEntrance(this);
         });
     }
 }

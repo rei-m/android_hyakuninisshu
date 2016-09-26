@@ -3,19 +3,20 @@
     package="me.rei_m.hyakuninisshu">
 
     <application
-        android:name="me.rei_m.hyakuninisshu.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="me.rei_m.hyakuninisshu.presentation.karuta.SplashActivity">
+        <activity android:name=".presentation.karuta.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".presentation.karuta.EntranceActivity"></activity>
     </application>
 
 </manifest>
