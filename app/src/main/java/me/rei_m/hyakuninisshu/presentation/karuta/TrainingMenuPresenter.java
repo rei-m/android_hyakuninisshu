@@ -13,17 +13,6 @@ public class TrainingMenuPresenter implements TrainingMenuContact.Actions {
 
     @Override
     public void onClickStartTraining() {
-        System.out.println("hogehoge");
         view.navigateToTraining();
-    }
-
-    @Override
-    public void onQuestionRangeItemSelected(int position) {
-        System.out.println(position);
-    }
-
-    @Override
-    public void onKimarijiItemSelected(int position) {
-        System.out.println(position);
     }
 }

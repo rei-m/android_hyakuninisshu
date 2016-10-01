@@ -1,7 +1,5 @@
 package me.rei_m.hyakuninisshu.presentation;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import me.rei_m.hyakuninisshu.App;
@@ -13,12 +11,9 @@ public class BaseActivity extends AppCompatActivity implements GraphActivity {
 
     @Override
     public ActivityComponent getComponent() {
+        if (component == null) {
+            component = ((App) getApplication()).getComponent().activityComponent();
+        }
         return component;
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        component = ((App) getApplication()).getComponent().activityComponent();
     }
 }

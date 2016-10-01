@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,9 @@ import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 
 public class TrainingMenuFragment extends BaseFragment implements TrainingMenuContact.View {
 
@@ -16,6 +20,8 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
 
     @Inject
     TrainingMenuContact.Actions presenter;
+
+    private FragmentTrainingMenuBinding binding;
 
     public TrainingMenuFragment() {
         // Required empty public constructor
@@ -33,12 +39,28 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        FragmentTrainingMenuBinding binding = FragmentTrainingMenuBinding.inflate(inflater, container, false);
+        binding = FragmentTrainingMenuBinding.inflate(inflater, container, false);
+
+        Context context = getActivity().getApplicationContext();
+
+        SpinnerAdapter trainingRangeAdapter = SpinnerAdapter.newInstance(context, TrainingRange.values(), false);
+        binding.spinnerRangeQuestion.setAdapter(trainingRangeAdapter);
+
+        SpinnerAdapter kimarijiAdapter = SpinnerAdapter.newInstance(context, Kimariji.values(), false);
+        binding.spinnerKimariji.setAdapter(kimarijiAdapter);
+
         binding.setPresenter(presenter);
+
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter = null;
+        binding = null;
     }
 
     @Override

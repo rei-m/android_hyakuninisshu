@@ -19,4 +19,12 @@
     <string name="training_range_71_80">七十一 〜 八十</string>
     <string name="training_range_81_90">八十一 〜 九十</string>
     <string name="training_range_91_100">九十一 〜 百</string>
+
+    <string name="kimariji_not_select">指定しない</string>
+    <string name="kimariji_1">一字決まり</string>
+    <string name="kimariji_2">二字決まり</string>
+    <string name="kimariji_3">三字決まり</string>
+    <string name="kimariji_4">四字決まり</string>
+    <string name="kimariji_5">五字決まり</string>
+    <string name="kimariji_6">六字決まり</string>
 </resources>
