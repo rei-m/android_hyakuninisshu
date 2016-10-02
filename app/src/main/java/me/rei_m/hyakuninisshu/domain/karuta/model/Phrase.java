@@ -4,13 +4,13 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
-class KarutaPart implements ValueObject {
+class Phrase implements ValueObject {
 
     private final String kana;
     
     private final String kanji;
 
-    KarutaPart(@NonNull String kana, @NonNull String kanji) {
+    Phrase(@NonNull String kana, @NonNull String kanji) {
         this.kana = kana;
         this.kanji = kanji;
     }
@@ -30,7 +30,7 @@ class KarutaPart implements ValueObject {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        KarutaPart that = (KarutaPart) o;
+        Phrase that = (Phrase) o;
 
         return kana.equals(that.kana) && kanji.equals(that.kanji);
     }

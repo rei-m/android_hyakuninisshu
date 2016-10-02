@@ -45,13 +45,13 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         }
     }
 
-    public SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, SpinnerItem[] objects) {
+    private SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, SpinnerItem[] objects) {
         super(context, resource, objects);
         this.resource = resource;
         this.dropDownResource = dropDownResource;
     }
 
-    public SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, List<SpinnerItem> objects) {
+    private SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, List<SpinnerItem> objects) {
         super(context, resource, objects);
         this.resource = resource;
         this.dropDownResource = dropDownResource;
