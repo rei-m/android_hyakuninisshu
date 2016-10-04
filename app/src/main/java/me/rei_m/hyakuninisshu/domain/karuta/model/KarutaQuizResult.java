@@ -49,4 +49,13 @@ public class KarutaQuizResult implements ValueObject {
         result = 31 * result + (int) (answerTime ^ (answerTime >>> 32));
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "KarutaQuizResult{" +
+                "karuta=" + karuta +
+                ", isCollect=" + isCollect +
+                ", answerTime=" + answerTime +
+                '}';
+    }
 }

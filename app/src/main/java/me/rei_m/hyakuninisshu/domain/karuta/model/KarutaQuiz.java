@@ -47,4 +47,12 @@ public class KarutaQuiz implements ValueObject {
         result = 31 * result + collectKaruta.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "KarutaQuiz{" +
+                "bottomPhraseList=" + bottomPhraseList +
+                ", collectKaruta=" + collectKaruta +
+                '}';
+    }
 }

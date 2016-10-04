@@ -58,6 +58,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     @Override
     public Observable<List<Karuta>> asEntityList() {
         return KarutaSchema.relation(orma).selector()
+                .orderByIdAsc()
                 .executeAsObservable()
                 .map(KarutaFactory::create)
                 .toList();

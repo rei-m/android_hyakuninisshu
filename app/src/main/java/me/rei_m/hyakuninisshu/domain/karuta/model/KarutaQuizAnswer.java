@@ -40,4 +40,12 @@ public class KarutaQuizAnswer implements ValueObject {
         result = 31 * result + startDate.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "KarutaQuizAnswer{" +
+                "collectKaruta=" + collectKaruta +
+                ", startDate=" + startDate +
+                '}';
+    }
 }
