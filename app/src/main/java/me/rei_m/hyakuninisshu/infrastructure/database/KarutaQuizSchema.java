@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.infrastructure.database;
 
+import com.github.gfx.android.orma.SingleAssociation;
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
@@ -11,10 +12,13 @@ public class KarutaQuizSchema {
     public int id;
 
     @Column
-    public int collectKarutaId;
+    public SingleAssociation<KarutaSchema> choiceList;
 
     @Column
-    public int answerKarutaId;
+    public KarutaSchema collectKaruta;
+
+    @Column
+    public KarutaSchema answer;
 
     @Column
     public long startedTimeInMills;
