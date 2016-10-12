@@ -5,16 +5,18 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 import java.util.List;
 
-import me.rei_m.hyakuninisshu.domain.ValueObject;
+import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-public class KarutaQuiz implements ValueObject {
+public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier> {
 
     private final List<BottomPhrase> bottomPhraseList;
 
     private final Karuta collectKaruta;
 
-    public KarutaQuiz(@NonNull List<BottomPhrase> bottomPhraseList,
+    public KarutaQuiz(@NonNull KarutaQuizIdentifier identifier,
+                      @NonNull List<BottomPhrase> bottomPhraseList,
                       @NonNull Karuta collectKaruta) {
+        super(identifier);
         this.bottomPhraseList = bottomPhraseList;
         this.collectKaruta = collectKaruta;
     }
@@ -35,15 +37,18 @@ public class KarutaQuiz implements ValueObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         KarutaQuiz that = (KarutaQuiz) o;
 
         return bottomPhraseList.equals(that.bottomPhraseList) && collectKaruta.equals(that.collectKaruta);
+
     }
 
     @Override
     public int hashCode() {
-        int result = bottomPhraseList.hashCode();
+        int result = super.hashCode();
+        result = 31 * result + bottomPhraseList.hashCode();
         result = 31 * result + collectKaruta.hashCode();
         return result;
     }
@@ -53,6 +58,6 @@ public class KarutaQuiz implements ValueObject {
         return "KarutaQuiz{" +
                 "bottomPhraseList=" + bottomPhraseList +
                 ", collectKaruta=" + collectKaruta +
-                '}';
+                "} " + super.toString();
     }
 }

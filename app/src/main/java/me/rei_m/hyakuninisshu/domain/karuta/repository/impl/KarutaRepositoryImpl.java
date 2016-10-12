@@ -46,7 +46,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
             List<KarutaSchema> karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString());
 
             return orma.transactionAsync(() -> {
-                Inserter<KarutaSchema> inserter = orma.prepareInsertIntoKarutaSchema();
+                Inserter<KarutaSchema> inserter = KarutaSchema.relation(orma).inserter();
                 inserter.executeAll(karutaSchemaList);
             }).toObservable();
 

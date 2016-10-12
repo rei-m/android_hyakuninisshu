@@ -47,7 +47,7 @@ dependencies {
     ext.android_support_lib_version = '24.2.1'
     ext.okhttp_version = '3.4.1'
     ext.retrofit_version = '2.1.0'
-    ext.streamsupport_version = '1.5.1'
+    ext.streamsupport_version = '1.5.2'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
 

@@ -9,11 +9,11 @@ import com.squareup.moshi.Json;
 public class KarutaSchema {
 
     public static KarutaSchema_Relation relation(OrmaDatabase orma) {
-        return orma.relationOfKarutaSchema().orderByIdAsc();
+        return orma.relationOfKarutaSchema();
     }
 
     @PrimaryKey(auto = false)
-    public int id;
+    public long id;
 
     @Column
     public String creator;
