@@ -51,7 +51,7 @@ public class KarutaQuizListFactory {
 
                 bottomPhraseList.add(correctPosition[0], correctKaruta.getBottomPhrase());
 
-                KarutaQuiz karutaQuiz = new KarutaQuiz(bottomPhraseList, correctKaruta);
+                KarutaQuiz karutaQuiz = new KarutaQuiz(new KarutaQuizIdentifier(), bottomPhraseList, correctKaruta);
                 karutaQuizList.add(karutaQuiz);
             }
 

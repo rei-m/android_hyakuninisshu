@@ -6,22 +6,22 @@ import me.rei_m.hyakuninisshu.domain.ValueObject;
 
 public class KarutaQuizResult implements ValueObject {
 
-    private final Karuta karuta;
+    private final KarutaQuizIdentifier identifier;
 
     private final boolean isCollect;
 
     private final long answerTime;
 
-    public KarutaQuizResult(@NonNull Karuta karuta,
+    public KarutaQuizResult(@NonNull KarutaQuizIdentifier identifier,
                             boolean isCollect,
                             long answerTime) {
-        this.karuta = karuta;
+        this.identifier = identifier;
         this.isCollect = isCollect;
         this.answerTime = answerTime;
     }
 
-    public Karuta getKaruta() {
-        return karuta;
+    public KarutaQuizIdentifier getIdentifier() {
+        return identifier;
     }
 
     public boolean isCollect() {
@@ -39,12 +39,13 @@ public class KarutaQuizResult implements ValueObject {
 
         KarutaQuizResult that = (KarutaQuizResult) o;
 
-        return isCollect == that.isCollect && answerTime == that.answerTime && karuta.equals(that.karuta);
+        return isCollect == that.isCollect && answerTime == that.answerTime && identifier.equals(that.identifier);
+
     }
 
     @Override
     public int hashCode() {
-        int result = karuta.hashCode();
+        int result = identifier.hashCode();
         result = 31 * result + (isCollect ? 1 : 0);
         result = 31 * result + (int) (answerTime ^ (answerTime >>> 32));
         return result;
@@ -53,7 +54,7 @@ public class KarutaQuizResult implements ValueObject {
     @Override
     public String toString() {
         return "KarutaQuizResult{" +
-                "karuta=" + karuta +
+                "identifier=" + identifier +
                 ", isCollect=" + isCollect +
                 ", answerTime=" + answerTime +
                 '}';

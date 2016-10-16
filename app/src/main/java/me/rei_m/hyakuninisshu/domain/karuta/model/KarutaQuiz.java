@@ -30,7 +30,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
     }
 
     public KarutaQuizAnswer start(@NonNull Date startDate) {
-        return new KarutaQuizAnswer(collectKaruta, startDate);
+        return new KarutaQuizAnswer(getIdentifier(), collectKaruta, startDate);
     }
 
     @Override
