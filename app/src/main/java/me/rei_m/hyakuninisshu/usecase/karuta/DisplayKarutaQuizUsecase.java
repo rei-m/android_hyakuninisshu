@@ -4,7 +4,5 @@ import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.KarutaQuiz;
 import rx.Observable;
 
 public interface DisplayKarutaQuizUsecase {
-
     Observable<KarutaQuiz> execute();
-
 }

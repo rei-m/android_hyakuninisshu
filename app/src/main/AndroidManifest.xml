@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.karuta.EntranceActivity"></activity>
+        <activity android:name=".presentation.karuta.EntranceActivity" />
+        <activity android:name=".presentation.karuta.QuizMasterActivity"></activity>
     </application>
 
 </manifest>

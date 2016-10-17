@@ -8,10 +8,10 @@ public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
 
     private final String kind = "KarutaQuiz";
 
-    private final UUID value;
+    private final String value;
 
     KarutaQuizIdentifier() {
-        this.value = UUID.randomUUID();
+        this.value = UUID.randomUUID().toString();
     }
 
     @Override
