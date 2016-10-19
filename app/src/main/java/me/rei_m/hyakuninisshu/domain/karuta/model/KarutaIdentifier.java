@@ -2,7 +2,7 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-class KarutaIdentifier implements EntityIdentifier<Karuta> {
+public class KarutaIdentifier implements EntityIdentifier<Karuta> {
 
     private final String kind = "Karuta";
 

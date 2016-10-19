@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-class TopPhrase extends AbstractEntity<TopPhrase, KarutaIdentifier> {
+public class TopPhrase extends AbstractEntity<TopPhrase, KarutaIdentifier> {
 
     private final Phrase first;
 

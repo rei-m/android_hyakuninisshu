@@ -4,10 +4,10 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
-class Phrase implements ValueObject {
+public class Phrase implements ValueObject {
 
     private final String kana;
-    
+
     private final String kanji;
 
     Phrase(@NonNull String kana, @NonNull String kanji) {

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier> {
+public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier> {
 
     private final Phrase fourth;
 

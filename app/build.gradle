@@ -54,6 +54,7 @@ dependencies {
     compile "com.android.support:support-annotations:$android_support_lib_version"
     compile "com.android.support:appcompat-v7:$android_support_lib_version"
     compile "com.android.support:support-v4:$android_support_lib_version"
+    compile "com.android.support:percent:$android_support_lib_version"
 
     compile "com.squareup.okhttp3:okhttp:$okhttp_version"
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
