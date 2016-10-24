@@ -63,7 +63,6 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter = null;
         binding = null;
     }
 

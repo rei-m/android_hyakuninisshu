@@ -8,7 +8,7 @@ import java8.util.stream.StreamSupport;
 import me.rei_m.hyakuninisshu.domain.karuta.model.BottomPhrase;
 import me.rei_m.hyakuninisshu.domain.karuta.model.TopPhrase;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.KarutaQuizViewModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
 import rx.Observable;
 
@@ -21,19 +21,26 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
     }
 
     @Override
-    public Observable<KarutaQuizViewModel> execute() {
+    public Observable<QuizViewModel> execute() {
         return karutaQuizRepository.pop().map(karutaQuiz -> {
             TopPhrase quizPhrase = karutaQuiz.getQuizPhrase();
             List<BottomPhrase> choices = karutaQuiz.getQuizChoices();
             StreamSupport.stream(karutaQuiz.getQuizChoices())
-                    .map(it -> new KarutaQuizViewModel.KarutaQuizChoiceViewModel(it.getIdentifier().getValue(), it.getFourth().getKanji(), it.getFifth().getKana()));
-            return new KarutaQuizViewModel(quizPhrase.getFirst().getKanji(),
+                    .map(it -> new QuizViewModel.QuizChoiceViewModel(it.getIdentifier().getValue(), it.getFourth().getKanji(), it.getFifth().getKanji()));
+
+            BottomPhrase choiceFirst = choices.get(0);
+            BottomPhrase choiceSecond = choices.get(1);
+            BottomPhrase choiceThird = choices.get(2);
+            BottomPhrase choiceFourth = choices.get(3);
+
+            return new QuizViewModel(karutaQuiz.getIdentifier().getValue(),
+                    quizPhrase.getFirst().getKanji(),
                     quizPhrase.getSecond().getKanji(),
                     quizPhrase.getThird().getKanji(),
-                    new KarutaQuizViewModel.KarutaQuizChoiceViewModel(choices.get(0).getIdentifier().getValue(), choices.get(0).getFourth().getKanji(), choices.get(0).getFifth().getKana()),
-                    new KarutaQuizViewModel.KarutaQuizChoiceViewModel(choices.get(1).getIdentifier().getValue(), choices.get(1).getFourth().getKanji(), choices.get(1).getFifth().getKana()),
-                    new KarutaQuizViewModel.KarutaQuizChoiceViewModel(choices.get(2).getIdentifier().getValue(), choices.get(2).getFourth().getKanji(), choices.get(2).getFifth().getKana()),
-                    new KarutaQuizViewModel.KarutaQuizChoiceViewModel(choices.get(3).getIdentifier().getValue(), choices.get(3).getFourth().getKanji(), choices.get(3).getFifth().getKana()));
+                    new QuizViewModel.QuizChoiceViewModel(choiceFirst.getIdentifier().getValue(), choiceFirst.getFourth().getKanji(), choiceFirst.getFifth().getKanji()),
+                    new QuizViewModel.QuizChoiceViewModel(choiceSecond.getIdentifier().getValue(), choiceSecond.getFourth().getKanji(), choiceSecond.getFifth().getKanji()),
+                    new QuizViewModel.QuizChoiceViewModel(choiceThird.getIdentifier().getValue(), choiceThird.getFourth().getKanji(), choiceThird.getFifth().getKanji()),
+                    new QuizViewModel.QuizChoiceViewModel(choiceFourth.getIdentifier().getValue(), choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()));
         });
     }
 }

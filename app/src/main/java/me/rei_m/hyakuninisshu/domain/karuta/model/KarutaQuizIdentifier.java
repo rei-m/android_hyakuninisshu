@@ -14,6 +14,10 @@ public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
         this.value = UUID.randomUUID().toString();
     }
 
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String getKind() {
         return kind;

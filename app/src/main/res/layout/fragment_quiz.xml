@@ -1,0 +1,155 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.QuizFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel" />
+
+        <variable
+            name="presenter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.QuizContact.Actions" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.firstPhrase}"
+                android:textSize="34sp"
+                app:relativeLeftMarginTop="@{-1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.secondPhrase}"
+                android:textSize="34sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.thirdPhrase}"
+                android:textSize="34sp"
+                app:relativeLeftMarginTop="@{1}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 1)}"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceFirst.fourthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{-1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceFirst.fifthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{1}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 2)}"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceSecond.fourthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{-1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceSecond.fifthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{1}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 3)}"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceThird.fourthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{-1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceThird.fifthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{1}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 4)}"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceFourth.fourthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{-1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.choiceFourth.fifthPhrase}"
+                android:textSize="20sp"
+                app:relativeLeftMarginBottom="@{1}" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
