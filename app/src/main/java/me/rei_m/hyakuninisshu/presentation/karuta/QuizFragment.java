@@ -76,6 +76,11 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         binding.setViewModel(viewModel);
     }
 
+    @Override
+    public void displayAnswer(String quizId, boolean isCollect) {
+        
+    }
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

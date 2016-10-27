@@ -1,42 +1,43 @@
 package me.rei_m.hyakuninisshu.domain.karuta.repository.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import rx.Observable;
 
 public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
-    private List<KarutaQuiz> karutaQuizList;
-
-    private List<KarutaQuizResult> resultList = new ArrayList<>();
+    private Map<KarutaQuizIdentifier, KarutaQuiz> karutaQuizCollection;
 
     @Override
     public Observable<Void> initialize(List<KarutaQuiz> karutaQuizList) {
-        this.karutaQuizList = karutaQuizList;
-        this.resultList = new ArrayList<>();
+        this.karutaQuizCollection = new HashMap<>();
+        for (KarutaQuiz karutaQuiz : karutaQuizList) {
+            this.karutaQuizCollection.put(karutaQuiz.getIdentifier(), karutaQuiz);
+        }
         return Observable.just(null);
     }
 
     @Override
     public Observable<KarutaQuiz> pop() {
-        return Observable.from(karutaQuizList).firstOrDefault(null);
+        return Observable.from(karutaQuizCollection.values())
+                .filter(karutaQuiz -> karutaQuiz.getResult() == null)
+                .firstOrDefault(null);
     }
 
     @Override
-    public Observable<Void> storeResult(KarutaQuiz karutaQuiz, KarutaQuizResult karutaQuizResult) {
-        Iterator<KarutaQuiz> iterator = karutaQuizList.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getIdentifier().equals(karutaQuiz.getIdentifier())) {
-                iterator.remove();
-                resultList.add(karutaQuizResult);
-                break;
-            }
-        }
+    public Observable<KarutaQuiz> resolve(KarutaQuizIdentifier identifier) {
+        return Observable.just(karutaQuizCollection.get(identifier));
+    }
+
+    @Override
+    public Observable<Void> store(KarutaQuiz karutaQuiz) {
+        karutaQuizCollection.remove(karutaQuiz.getIdentifier());
+        karutaQuizCollection.put(karutaQuiz.getIdentifier(), karutaQuiz);
         return Observable.just(null);
     }
 }

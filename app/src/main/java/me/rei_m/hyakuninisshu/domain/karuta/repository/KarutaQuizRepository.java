@@ -3,7 +3,7 @@ package me.rei_m.hyakuninisshu.domain.karuta.repository;
 import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
 import rx.Observable;
 
 public interface KarutaQuizRepository {
@@ -12,5 +12,7 @@ public interface KarutaQuizRepository {
 
     Observable<KarutaQuiz> pop();
 
-    Observable<Void> storeResult(KarutaQuiz karutaQuiz, KarutaQuizResult karutaQuizResult);
+    Observable<KarutaQuiz> resolve(KarutaQuizIdentifier identifier);
+
+    Observable<Void> store(KarutaQuiz karutaQuiz);
 }

@@ -9,6 +9,8 @@ public interface QuizContact {
 
     interface View {
         void startQuiz(QuizViewModel viewModel);
+
+        void displayAnswer(String quizId, boolean isCollect);
     }
 
     interface Actions {

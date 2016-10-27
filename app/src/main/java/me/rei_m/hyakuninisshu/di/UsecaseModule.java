@@ -4,8 +4,11 @@ import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
+import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.impl.AnswerKarutaQuizUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartKarutaQuizUsecaseImpl;
 
@@ -19,7 +22,13 @@ public class UsecaseModule {
     }
 
     @Provides
-    DisplayKarutaQuizUsecase provideDisplayKarutaQuizUsecase(KarutaQuizRepository karutaQuizRepository) {
-        return new DisplayKarutaQuizUsecaseImpl(karutaQuizRepository);
+    DisplayKarutaQuizUsecase provideDisplayKarutaQuizUsecase(KarutaRepository karutaRepository,
+                                                             KarutaQuizRepository karutaQuizRepository) {
+        return new DisplayKarutaQuizUsecaseImpl(karutaRepository, karutaQuizRepository);
+    }
+
+    @Provides
+    AnswerKarutaQuizUsecase provideAnswerKarutaQuizUsecase(KarutaQuizRepository karutaQuizRepository) {
+        return new AnswerKarutaQuizUsecaseImpl(karutaQuizRepository);
     }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
@@ -62,5 +63,13 @@ public class KarutaRepositoryImpl implements KarutaRepository {
                 .executeAsObservable()
                 .map(KarutaFactory::create)
                 .toList();
+    }
+
+    @Override
+    public Observable<Karuta> resolve(KarutaIdentifier identifier) {
+        return KarutaSchema.relation(orma).selector()
+                .idEq(identifier.getValue())
+                .executeAsObservable()
+                .map(KarutaFactory::create);
     }
 }

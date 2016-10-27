@@ -9,55 +9,35 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
 public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier> {
 
-    private final List<BottomPhrase> bottomPhraseList;
+    private final KarutaQuizContents contents;
 
-    private final Karuta collectKaruta;
+    private Date startDate;
+
+    private KarutaQuizResult result;
 
     public KarutaQuiz(@NonNull KarutaQuizIdentifier identifier,
-                      @NonNull List<BottomPhrase> bottomPhraseList,
-                      @NonNull Karuta collectKaruta) {
+                      @NonNull List<KarutaIdentifier> choiceList,
+                      @NonNull KarutaIdentifier collectId) {
         super(identifier);
-        this.bottomPhraseList = bottomPhraseList;
-        this.collectKaruta = collectKaruta;
+        contents = new KarutaQuizContents(choiceList, collectId);
     }
 
-    public TopPhrase getQuizPhrase() {
-        return collectKaruta.getTopPhrase();
-    }
-
-    public List<BottomPhrase> getQuizChoices() {
-        return bottomPhraseList;
-    }
-
-    public KarutaQuizAnswer start(@NonNull Date startDate) {
-        return new KarutaQuizAnswer(getIdentifier(), collectKaruta, startDate);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        KarutaQuiz that = (KarutaQuiz) o;
-
-        return bottomPhraseList.equals(that.bottomPhraseList) && collectKaruta.equals(that.collectKaruta);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + bottomPhraseList.hashCode();
-        result = 31 * result + collectKaruta.hashCode();
+    public KarutaQuizResult getResult() {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "KarutaQuiz{" +
-                "bottomPhraseList=" + bottomPhraseList +
-                ", collectKaruta=" + collectKaruta +
-                "} " + super.toString();
+    public KarutaQuizContents start(@NonNull Date startDate) {
+        this.startDate = startDate;
+        return contents;
+    }
+
+    public void verify(int choiceNo, @NonNull Date answerDate) {
+        // TODO: startをチェックしてnullならエラー
+        // TODO: startよりanswerが小さかったらエラー
+        // TODO: choiceNoがリストの数より大きかったらエラー
+        KarutaIdentifier selectedId = contents.choiceList.get(choiceNo - 1);
+        boolean isCollect = contents.collectId.equals(selectedId);
+        long answerTime = startDate.getTime() - answerDate.getTime();
+        this.result = new KarutaQuizResult(contents.collectId, isCollect, answerTime);
     }
 }

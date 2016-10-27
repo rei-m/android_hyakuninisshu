@@ -2,45 +2,61 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
 import android.support.annotation.NonNull;
 
+import java.util.Date;
 import java.util.List;
 
-import java8.util.stream.StreamSupport;
 import me.rei_m.hyakuninisshu.domain.karuta.model.BottomPhrase;
-import me.rei_m.hyakuninisshu.domain.karuta.model.TopPhrase;
+import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizContents;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
 import rx.Observable;
+import rx.functions.Func1;
 
 public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
 
+    private final KarutaRepository karutaRepository;
+
     private final KarutaQuizRepository karutaQuizRepository;
 
-    public DisplayKarutaQuizUsecaseImpl(@NonNull KarutaQuizRepository karutaQuizRepository) {
+    public DisplayKarutaQuizUsecaseImpl(@NonNull KarutaRepository karutaRepository,
+                                        @NonNull KarutaQuizRepository karutaQuizRepository) {
+        this.karutaRepository = karutaRepository;
         this.karutaQuizRepository = karutaQuizRepository;
     }
 
     @Override
     public Observable<QuizViewModel> execute() {
-        return karutaQuizRepository.pop().map(karutaQuiz -> {
-            TopPhrase quizPhrase = karutaQuiz.getQuizPhrase();
-            List<BottomPhrase> choices = karutaQuiz.getQuizChoices();
-            StreamSupport.stream(karutaQuiz.getQuizChoices())
-                    .map(it -> new QuizViewModel.QuizChoiceViewModel(it.getIdentifier().getValue(), it.getFourth().getKanji(), it.getFifth().getKanji()));
+        return karutaQuizRepository.pop().concatMap(karutaQuiz -> {
 
-            BottomPhrase choiceFirst = choices.get(0);
-            BottomPhrase choiceSecond = choices.get(1);
-            BottomPhrase choiceThird = choices.get(2);
-            BottomPhrase choiceFourth = choices.get(3);
+            KarutaQuizContents quizContents = karutaQuiz.start(new Date());
 
-            return new QuizViewModel(karutaQuiz.getIdentifier().getValue(),
-                    quizPhrase.getFirst().getKanji(),
-                    quizPhrase.getSecond().getKanji(),
-                    quizPhrase.getThird().getKanji(),
-                    new QuizViewModel.QuizChoiceViewModel(choiceFirst.getIdentifier().getValue(), choiceFirst.getFourth().getKanji(), choiceFirst.getFifth().getKanji()),
-                    new QuizViewModel.QuizChoiceViewModel(choiceSecond.getIdentifier().getValue(), choiceSecond.getFourth().getKanji(), choiceSecond.getFifth().getKanji()),
-                    new QuizViewModel.QuizChoiceViewModel(choiceThird.getIdentifier().getValue(), choiceThird.getFourth().getKanji(), choiceThird.getFifth().getKanji()),
-                    new QuizViewModel.QuizChoiceViewModel(choiceFourth.getIdentifier().getValue(), choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()));
+            Observable<List<Karuta>> choiceObservable = Observable.from(quizContents.choiceList).flatMap(new Func1<KarutaIdentifier, Observable<Karuta>>() {
+                @Override
+                public Observable<Karuta> call(KarutaIdentifier identifier) {
+                    return karutaRepository.resolve(identifier);
+                }
+            }).toList();
+
+            Observable<Karuta> collectObservable = karutaRepository.resolve(quizContents.collectId);
+
+            return Observable.zip(choiceObservable, collectObservable, (karutaList, karuta) -> {
+                BottomPhrase choiceFirst = karutaList.get(0).getBottomPhrase();
+                BottomPhrase choiceSecond = karutaList.get(1).getBottomPhrase();
+                BottomPhrase choiceThird = karutaList.get(2).getBottomPhrase();
+                BottomPhrase choiceFourth = karutaList.get(3).getBottomPhrase();
+                return new QuizViewModel(karutaQuiz.getIdentifier().getValue(),
+                        karuta.getTopPhrase().getFirst().getKanji(),
+                        karuta.getTopPhrase().getSecond().getKanji(),
+                        karuta.getTopPhrase().getThird().getKanji(),
+                        new QuizViewModel.QuizChoiceViewModel(choiceFirst.getFourth().getKanji(), choiceFirst.getFifth().getKanji()),
+                        new QuizViewModel.QuizChoiceViewModel(choiceSecond.getFourth().getKanji(), choiceSecond.getFifth().getKanji()),
+                        new QuizViewModel.QuizChoiceViewModel(choiceThird.getFourth().getKanji(), choiceThird.getFifth().getKanji()),
+                        new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()));
+            });
         });
     }
 }

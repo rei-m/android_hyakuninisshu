@@ -15,16 +15,13 @@ import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
 public class QuizViewModel {
 
     public static class QuizChoiceViewModel {
-        public final long id;
 
         public final String fourthPhrase;
 
         public final String fifthPhrase;
 
-        public QuizChoiceViewModel(long id,
-                                   @NonNull String fourthPhrase,
+        public QuizChoiceViewModel(@NonNull String fourthPhrase,
                                    @NonNull String fifthPhrase) {
-            this.id = id;
             this.fourthPhrase = KarutaDisplayUtil.padSpace(fourthPhrase, 7);
             this.fifthPhrase = fifthPhrase;
         }

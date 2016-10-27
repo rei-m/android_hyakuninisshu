@@ -9,6 +9,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterPresenter;
 import me.rei_m.hyakuninisshu.presentation.karuta.QuizPresenter;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuPresenter;
+import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
 
@@ -31,7 +32,8 @@ class PresentationModule {
     }
 
     @Provides
-    QuizContact.Actions provideQuizPresenter(DisplayKarutaQuizUsecase displayKarutaQuizUsecase) {
-        return new QuizPresenter(displayKarutaQuizUsecase);
+    QuizContact.Actions provideQuizPresenter(DisplayKarutaQuizUsecase displayKarutaQuizUsecase,
+                                             AnswerKarutaQuizUsecase answerKarutaQuizUsecase) {
+        return new QuizPresenter(displayKarutaQuizUsecase, answerKarutaQuizUsecase);
     }
 }

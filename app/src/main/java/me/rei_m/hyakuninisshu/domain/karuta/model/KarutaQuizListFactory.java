@@ -35,23 +35,23 @@ public class KarutaQuizListFactory {
 
             for (Karuta correctKaruta : correctKarutaList) {
 
-                List<BottomPhrase> bottomPhraseList = new ArrayList<>();
+                List<KarutaIdentifier> choiceList = new ArrayList<>();
 
                 long correctIndex = correctKaruta.getIdentifier().getValue() - 1;
 
                 for (int targetIndex : ArrayUtil.generateRandomArray(karutaList.size() - 1, 3)) {
                     if (targetIndex == correctIndex) {
-                        bottomPhraseList.add(karutaList.get(karutaList.size() - 1).getBottomPhrase());
+                        choiceList.add(karutaList.get(karutaList.size() - 1).getIdentifier());
                     } else {
-                        bottomPhraseList.add(karutaList.get(targetIndex).getBottomPhrase());
+                        choiceList.add(karutaList.get(targetIndex).getIdentifier());
                     }
                 }
 
                 int[] correctPosition = ArrayUtil.generateRandomArray(4, 1);
 
-                bottomPhraseList.add(correctPosition[0], correctKaruta.getBottomPhrase());
+                choiceList.add(correctPosition[0], correctKaruta.getIdentifier());
 
-                KarutaQuiz karutaQuiz = new KarutaQuiz(new KarutaQuizIdentifier(), bottomPhraseList, correctKaruta);
+                KarutaQuiz karutaQuiz = new KarutaQuiz(new KarutaQuizIdentifier(), choiceList, correctKaruta.getIdentifier());
                 karutaQuizList.add(karutaQuiz);
             }
 
