@@ -94,6 +94,13 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         }
     }
 
+    @Override
+    public void goToResult() {
+        if (mListener != null) {
+            mListener.onClickGoToResult();
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -106,5 +113,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
      */
     public interface OnFragmentInteractionListener {
         void onClickGoToNext();
+
+        void onClickGoToResult();
     }
 }

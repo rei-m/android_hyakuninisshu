@@ -17,4 +17,6 @@ public interface KarutaQuizRepository {
     Observable<Void> store(KarutaQuiz karutaQuiz);
 
     Observable<Boolean> existNextQuiz();
+
+    Observable<List<KarutaQuiz>> asEntityList();
 }

@@ -56,4 +56,12 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
                 .replace(R.id.content, QuizFragment.newInstance(), QuizFragment.class.getSimpleName())
                 .commit();
     }
+
+    @Override
+    public void onClickGoToResult() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.class.getSimpleName())
+                .commit();
+    }
 }

@@ -1,0 +1,33 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.QuizResultFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizResultViewModel" />
+
+        <variable
+            name="presenter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.QuizResultContact.Actions" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.result}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.averageAnswerTime}" />
+
+    </LinearLayout>
+
+</layout>

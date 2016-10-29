@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.domain.karuta.repository.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,5 +47,10 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
         return Observable.from(karutaQuizCollection.values())
                 .filter(karutaQuiz -> karutaQuiz.getResult() == null)
                 .count().map(count -> 0 < count);
+    }
+
+    @Override
+    public Observable<List<KarutaQuiz>> asEntityList() {
+        return Observable.just(new ArrayList<>(karutaQuizCollection.values()));
     }
 }
