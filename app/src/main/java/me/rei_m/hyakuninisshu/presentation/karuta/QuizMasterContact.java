@@ -10,5 +10,7 @@ public interface QuizMasterContact {
 
     interface Actions {
         void onCreate(View view, Bundle savedInstanceState);
+
+        void onAnswered(String quizId, boolean isCollect);
     }
 }

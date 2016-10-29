@@ -18,11 +18,15 @@ public class QuizMasterPresenter implements QuizMasterContact.Actions {
     @Override
     public void onCreate(@NonNull QuizMasterContact.View view,
                          Bundle savedInstanceState) {
-
         if (savedInstanceState == null) {
             startKarutaQuizUsecase.execute(10).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(aVoid -> {
                 view.startQuiz();
             });
         }
+    }
+
+    @Override
+    public void onAnswered(String quizId, boolean isCollect) {
+
     }
 }

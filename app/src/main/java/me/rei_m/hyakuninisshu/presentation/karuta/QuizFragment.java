@@ -1,7 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,8 +59,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
         } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -72,16 +71,18 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     }
 
     @Override
-    public void startQuiz(QuizViewModel viewModel) {
+    public void initialize(QuizViewModel viewModel) {
         binding.setViewModel(viewModel);
     }
 
     @Override
-    public void displayAnswer(String quizId, boolean isCollect) {
-        
+    public void displayAnswer(String quizId) {
+        if (listener != null) {
+            listener.onAnswered(quizId);
+        }
     }
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+        void onAnswered(String quizId);
     }
 }

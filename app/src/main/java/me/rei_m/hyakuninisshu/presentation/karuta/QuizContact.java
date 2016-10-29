@@ -8,9 +8,9 @@ import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 public interface QuizContact {
 
     interface View {
-        void startQuiz(QuizViewModel viewModel);
+        void initialize(QuizViewModel viewModel);
 
-        void displayAnswer(String quizId, boolean isCollect);
+        void displayAnswer(String quizId);
     }
 
     interface Actions {

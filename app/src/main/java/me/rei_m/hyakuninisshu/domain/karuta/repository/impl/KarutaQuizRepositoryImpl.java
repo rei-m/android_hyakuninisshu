@@ -40,4 +40,11 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
         karutaQuizCollection.put(karutaQuiz.getIdentifier(), karutaQuiz);
         return Observable.just(null);
     }
+
+    @Override
+    public Observable<Boolean> existNextQuiz() {
+        return Observable.from(karutaQuizCollection.values())
+                .filter(karutaQuiz -> karutaQuiz.getResult() == null)
+                .count().map(count -> 0 < count);
+    }
 }

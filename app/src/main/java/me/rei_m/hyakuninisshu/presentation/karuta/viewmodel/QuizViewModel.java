@@ -1,15 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.viewmodel;
 
-import android.content.Context;
-import android.databinding.BindingAdapter;
-import android.graphics.Point;
 import android.support.annotation.NonNull;
-import android.view.Display;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 
-import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
 
 public class QuizViewModel {
@@ -25,44 +17,6 @@ public class QuizViewModel {
             this.fourthPhrase = KarutaDisplayUtil.padSpace(fourthPhrase, 7);
             this.fifthPhrase = fifthPhrase;
         }
-    }
-
-    @BindingAdapter({"relativeLeftMarginTop"})
-    public static void setRelativeLeftMarginTop(View view, int intentLevel) {
-
-        Context context = view.getContext();
-
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-
-        int levelMargin = context.getResources().getDimensionPixelOffset(R.dimen.margin_karuta_phrase);
-        int margin = levelMargin * intentLevel;
-
-        ViewGroup.LayoutParams lp = view.getLayoutParams();
-        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lp;
-        mlp.setMargins(mlp.leftMargin + margin, mlp.topMargin, mlp.rightMargin, mlp.bottomMargin);
-        view.setLayoutParams(mlp);
-    }
-
-    @BindingAdapter({"relativeLeftMarginBottom"})
-    public static void setRelativeLeftMarginBottom(View view, int intentLevel) {
-
-        Context context = view.getContext();
-
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-
-        int levelMargin = context.getResources().getDimensionPixelOffset(R.dimen.margin_karuta_phrase) / 2;
-        int margin = levelMargin * intentLevel;
-
-        ViewGroup.LayoutParams lp = view.getLayoutParams();
-        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lp;
-        mlp.setMargins(mlp.leftMargin + margin, mlp.topMargin, mlp.rightMargin, mlp.bottomMargin);
-        view.setLayoutParams(mlp);
     }
 
     public final String quizId;
@@ -99,5 +53,19 @@ public class QuizViewModel {
         this.choiceSecond = choiceSecond;
         this.choiceThird = choiceThird;
         this.choiceFourth = choiceFourth;
+    }
+
+    @Override
+    public String toString() {
+        return "QuizViewModel{" +
+                "quizId='" + quizId + '\'' +
+                ", firstPhrase='" + firstPhrase + '\'' +
+                ", secondPhrase='" + secondPhrase + '\'' +
+                ", thirdPhrase='" + thirdPhrase + '\'' +
+                ", choiceFirst=" + choiceFirst +
+                ", choiceSecond=" + choiceSecond +
+                ", choiceThird=" + choiceThird +
+                ", choiceFourth=" + choiceFourth +
+                '}';
     }
 }

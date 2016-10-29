@@ -15,4 +15,6 @@ public interface KarutaQuizRepository {
     Observable<KarutaQuiz> resolve(KarutaQuizIdentifier identifier);
 
     Observable<Void> store(KarutaQuiz karutaQuiz);
+
+    Observable<Boolean> existNextQuiz();
 }

@@ -32,14 +32,14 @@ public class QuizPresenter implements QuizContact.Actions {
     @Override
     public void onCreateView(@Nullable Bundle savedInstanceState) {
         displayKarutaQuizUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::startQuiz);
+                .subscribe(view::initialize);
     }
 
     @Override
     public void onClickChoice(String quizId, int choiceNo) {
         answerKarutaQuizUsecase.execute(quizId, choiceNo).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isCollect -> {
-                    view.displayAnswer(quizId, isCollect);
+                    view.displayAnswer(quizId);
                 });
     }
 }
