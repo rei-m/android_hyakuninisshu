@@ -4,26 +4,26 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-class SecondHalf extends AbstractEntity<SecondHalf, KarutaIdentifier> {
+public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier> {
 
-    private final KarutaPart fourth;
+    private final Phrase fourth;
 
-    private final KarutaPart fifth;
+    private final Phrase fifth;
 
 
-    SecondHalf(@NonNull KarutaIdentifier identifier,
-               @NonNull KarutaPart fourth,
-               @NonNull KarutaPart fifth) {
+    BottomPhrase(@NonNull KarutaIdentifier identifier,
+                 @NonNull Phrase fourth,
+                 @NonNull Phrase fifth) {
         super(identifier);
         this.fourth = fourth;
         this.fifth = fifth;
     }
 
-    public KarutaPart getFourth() {
+    public Phrase getFourth() {
         return fourth;
     }
 
-    public KarutaPart getFifth() {
+    public Phrase getFifth() {
         return fifth;
     }
 

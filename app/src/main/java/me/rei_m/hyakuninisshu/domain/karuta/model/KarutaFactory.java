@@ -13,15 +13,15 @@ public class KarutaFactory {
 
         KarutaIdentifier identifier = new KarutaIdentifier(schema.id);
 
-        KarutaPart firstPart = new KarutaPart(schema.firstKana, schema.firstKanji);
-        KarutaPart secondPart = new KarutaPart(schema.secondKana, schema.secondKanji);
-        KarutaPart thirdPart = new KarutaPart(schema.thirdKana, schema.thirdKanji);
-        KarutaPart fourthPart = new KarutaPart(schema.fourthKana, schema.fourthKanji);
-        KarutaPart fifthPart = new KarutaPart(schema.fifthKana, schema.fifthKanji);
+        Phrase firstPart = new Phrase(schema.firstKana, schema.firstKanji);
+        Phrase secondPart = new Phrase(schema.secondKana, schema.secondKanji);
+        Phrase thirdPart = new Phrase(schema.thirdKana, schema.thirdKanji);
+        Phrase fourthPart = new Phrase(schema.fourthKana, schema.fourthKanji);
+        Phrase fifthPart = new Phrase(schema.fifthKana, schema.fifthKanji);
 
-        FirstHalf firstHalf = new FirstHalf(identifier, firstPart, secondPart, thirdPart);
-        SecondHalf secondHalf = new SecondHalf(identifier, fourthPart, fifthPart);
+        TopPhrase topPhrase = new TopPhrase(identifier, firstPart, secondPart, thirdPart);
+        BottomPhrase bottomPhrase = new BottomPhrase(identifier, fourthPart, fifthPart);
 
-        return new Karuta(identifier, schema.creator, firstHalf, secondHalf, schema.kimariji, schema.imageNo);
+        return new Karuta(identifier, schema.creator, topPhrase, bottomPhrase, schema.kimariji, schema.imageNo);
     }
 }

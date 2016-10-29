@@ -1,0 +1,93 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.QuizAnswerFragment">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel" />
+
+        <variable
+            name="presenter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.QuizAnswerContact.Actions" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.karutaNo}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.creator}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.firstPhrase}"
+                android:textSize="34sp"
+                app:relativeLeftMarginTop="@{-1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.secondPhrase}"
+                android:textSize="34sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.thirdPhrase}"
+                android:textSize="34sp"
+                app:relativeLeftMarginTop="@{1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.fourthPhrase}"
+                android:textSize="34sp"
+                app:relativeLeftMarginBottom="@{-1}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.fifthPhrase}"
+                android:textSize="34sp"
+                app:relativeLeftMarginBottom="@{1}" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> presenter.onClickNextQuiz()}"
+            android:text="次に進む"
+            android:textSize="20sp"
+            android:visibility="@{viewModel.existNextQuiz ? View.VISIBLE : View.GONE}" />
+
+    </LinearLayout>
+
+</layout>

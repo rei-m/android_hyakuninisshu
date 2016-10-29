@@ -8,9 +8,9 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     private final String creator;
 
-    private final FirstHalf firstHalf;
+    private final TopPhrase topPhrase;
 
-    private final SecondHalf secondHalf;
+    private final BottomPhrase bottomPhrase;
 
     private final int kimariji;
 
@@ -18,24 +18,28 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     Karuta(@NonNull KarutaIdentifier identifier,
            @NonNull String creator,
-           @NonNull FirstHalf firstHalf,
-           @NonNull SecondHalf secondHalf,
+           @NonNull TopPhrase topPhrase,
+           @NonNull BottomPhrase bottomPhrase,
            int kimariji,
            @NonNull String imageNo) {
         super(identifier);
         this.creator = creator;
-        this.firstHalf = firstHalf;
-        this.secondHalf = secondHalf;
+        this.topPhrase = topPhrase;
+        this.bottomPhrase = bottomPhrase;
         this.kimariji = kimariji;
         this.imageNo = imageNo;
     }
 
-    public FirstHalf getFirstHalf() {
-        return firstHalf;
+    public String getCreator() {
+        return creator;
     }
 
-    public SecondHalf getSecondHalf() {
-        return secondHalf;
+    public TopPhrase getTopPhrase() {
+        return topPhrase;
+    }
+
+    public BottomPhrase getBottomPhrase() {
+        return bottomPhrase;
     }
 
     public int getKimariji() {
@@ -46,15 +50,15 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         return imageNo;
     }
 
-    public boolean isCollectSecondHalf(SecondHalf secondHalf) {
-        return this.secondHalf.equals(secondHalf);
+    public boolean isCollect(BottomPhrase bottomPhrase) {
+        return this.bottomPhrase.equals(bottomPhrase);
     }
 
     @Override
     public String toString() {
         return "Karuta{" +
-                "firstHalf=" + firstHalf +
-                ", secondHalf=" + secondHalf +
+                "firstHalf=" + topPhrase +
+                ", secondHalf=" + bottomPhrase +
                 ", kimariji=" + kimariji +
                 ", imageNo='" + imageNo + '\'' +
                 "} " + super.toString();

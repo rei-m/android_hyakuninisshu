@@ -13,6 +13,7 @@ import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
@@ -46,7 +47,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
             List<KarutaSchema> karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString());
 
             return orma.transactionAsync(() -> {
-                Inserter<KarutaSchema> inserter = orma.prepareInsertIntoKarutaSchema();
+                Inserter<KarutaSchema> inserter = KarutaSchema.relation(orma).inserter();
                 inserter.executeAll(karutaSchemaList);
             }).toObservable();
 
@@ -58,8 +59,17 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     @Override
     public Observable<List<Karuta>> asEntityList() {
         return KarutaSchema.relation(orma).selector()
+                .orderByIdAsc()
                 .executeAsObservable()
                 .map(KarutaFactory::create)
                 .toList();
+    }
+
+    @Override
+    public Observable<Karuta> resolve(KarutaIdentifier identifier) {
+        return KarutaSchema.relation(orma).selector()
+                .idEq(identifier.getValue())
+                .executeAsObservable()
+                .map(KarutaFactory::create);
     }
 }

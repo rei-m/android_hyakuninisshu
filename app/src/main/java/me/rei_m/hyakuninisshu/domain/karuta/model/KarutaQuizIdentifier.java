@@ -1,18 +1,24 @@
 package me.rei_m.hyakuninisshu.domain.karuta.model;
 
+import java.util.UUID;
+
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaIdentifier implements EntityIdentifier<Karuta> {
+public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
 
-    private final String kind = "Karuta";
+    private final String kind = "KarutaQuiz";
 
-    private final long value;
+    private final String value;
 
-    KarutaIdentifier(long value) {
+    public KarutaQuizIdentifier() {
+        this.value = UUID.randomUUID().toString();
+    }
+
+    public KarutaQuizIdentifier(String value) {
         this.value = value;
     }
 
-    public long getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -26,21 +32,21 @@ public class KarutaIdentifier implements EntityIdentifier<Karuta> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        KarutaIdentifier that = (KarutaIdentifier) o;
+        KarutaQuizIdentifier that = (KarutaQuizIdentifier) o;
 
-        return value == that.value && kind.equals(that.kind);
+        return kind.equals(that.kind) && value.equals(that.value);
     }
 
     @Override
     public int hashCode() {
         int result = kind.hashCode();
-        result = 31 * result + (int) (value ^ (value >>> 32));
+        result = 31 * result + value.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return "KarutaIdentifier{" +
+        return "KarutaQuizIdentifier{" +
                 "kind='" + kind + '\'' +
                 ", value=" + value +
                 '}';
