@@ -37,7 +37,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         // TODO: choiceNoがリストの数より大きかったらエラー
         KarutaIdentifier selectedId = contents.choiceList.get(choiceNo - 1);
         boolean isCollect = contents.collectId.equals(selectedId);
-        long answerTime = startDate.getTime() - answerDate.getTime();
+        long answerTime = answerDate.getTime() - startDate.getTime();
         this.result = new KarutaQuizResult(contents.collectId, isCollect, answerTime);
     }
 }

@@ -7,10 +7,12 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizAnswerUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizResultUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.AnswerKarutaQuizUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizAnswerUsecaseImpl;
+import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizResultUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartKarutaQuizUsecaseImpl;
 
@@ -38,5 +40,10 @@ public class UsecaseModule {
     DisplayKarutaQuizAnswerUsecase provideDisplayKarutaQuizAnswerUsecase(KarutaRepository karutaRepository,
                                                                          KarutaQuizRepository karutaQuizRepository) {
         return new DisplayKarutaQuizAnswerUsecaseImpl(karutaRepository, karutaQuizRepository);
+    }
+
+    @Provides
+    DisplayKarutaQuizResultUsecase provideDisplayKarutaQuizResultUsecase(KarutaQuizRepository karutaQuizRepository) {
+        return new DisplayKarutaQuizResultUsecaseImpl(karutaQuizRepository);
     }
 }

@@ -9,10 +9,13 @@ import me.rei_m.hyakuninisshu.presentation.karuta.QuizContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterPresenter;
 import me.rei_m.hyakuninisshu.presentation.karuta.QuizPresenter;
+import me.rei_m.hyakuninisshu.presentation.karuta.QuizResultContact;
+import me.rei_m.hyakuninisshu.presentation.karuta.QuizResultPresenter;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuPresenter;
 import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizAnswerUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizResultUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
 
@@ -43,5 +46,10 @@ class PresentationModule {
     @Provides
     QuizAnswerContact.Actions provideQuizAnswerPresenter(DisplayKarutaQuizAnswerUsecase displayKarutaQuizAnswerUsecase) {
         return new QuizAnswerPresenter(displayKarutaQuizAnswerUsecase);
+    }
+
+    @Provides
+    QuizResultContact.Actions provideQuizResultPresenter(DisplayKarutaQuizResultUsecase displayKarutaQuizResultUsecase) {
+        return new QuizResultPresenter(displayKarutaQuizResultUsecase);
     }
 }

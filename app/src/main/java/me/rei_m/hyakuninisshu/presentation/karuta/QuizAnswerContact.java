@@ -8,6 +8,8 @@ public interface QuizAnswerContact {
         void initialize(QuizAnswerViewModel viewModel);
 
         void goToNext();
+
+        void goToResult();
     }
 
     interface Actions {
@@ -16,5 +18,7 @@ public interface QuizAnswerContact {
         void onCreateView(String quizId);
 
         void onClickNextQuiz();
+
+        void onClickConfirmResult();
     }
 }

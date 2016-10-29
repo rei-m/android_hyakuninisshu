@@ -88,6 +88,14 @@
             android:textSize="20sp"
             android:visibility="@{viewModel.existNextQuiz ? View.VISIBLE : View.GONE}" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> presenter.onClickConfirmResult()}"
+            android:text="結果を見る"
+            android:textSize="20sp"
+            android:visibility="@{viewModel.existNextQuiz ? View.GONE : View.VISIBLE}" />
+
     </LinearLayout>
 
 </layout>

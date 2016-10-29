@@ -8,9 +8,9 @@ import rx.schedulers.Schedulers;
 
 public class QuizAnswerPresenter implements QuizAnswerContact.Actions {
 
-    private QuizAnswerContact.View view;
-
     private final DisplayKarutaQuizAnswerUsecase displayKarutaQuizAnswerUsecase;
+
+    private QuizAnswerContact.View view;
 
     public QuizAnswerPresenter(DisplayKarutaQuizAnswerUsecase displayKarutaQuizAnswerUsecase) {
         this.displayKarutaQuizAnswerUsecase = displayKarutaQuizAnswerUsecase;
@@ -30,5 +30,10 @@ public class QuizAnswerPresenter implements QuizAnswerContact.Actions {
     @Override
     public void onClickNextQuiz() {
         view.goToNext();
+    }
+
+    @Override
+    public void onClickConfirmResult() {
+        view.goToResult();
     }
 }
