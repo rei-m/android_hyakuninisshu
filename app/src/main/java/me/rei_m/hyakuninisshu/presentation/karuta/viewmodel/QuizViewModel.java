@@ -2,8 +2,6 @@ package me.rei_m.hyakuninisshu.presentation.karuta.viewmodel;
 
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
-
 public class QuizViewModel {
 
     public static class QuizChoiceViewModel {
@@ -14,7 +12,7 @@ public class QuizViewModel {
 
         public QuizChoiceViewModel(@NonNull String fourthPhrase,
                                    @NonNull String fifthPhrase) {
-            this.fourthPhrase = KarutaDisplayUtil.padSpace(fourthPhrase, 7);
+            this.fourthPhrase = fourthPhrase;
             this.fifthPhrase = fifthPhrase;
         }
     }

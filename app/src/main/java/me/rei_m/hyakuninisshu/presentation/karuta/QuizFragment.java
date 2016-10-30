@@ -51,8 +51,6 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         super.onCreate(savedInstanceState);
         getComponent().inject(this);
         presenter.onCreate(this);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
@@ -110,7 +108,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
                 binding.phrase12,
                 binding.phrase13,
                 binding.phrase14,
-                binding.phrase15
+                binding.phrase15,
+                binding.phrase16
         ));
 
         final List<TextView> secondLine = new ArrayList<>(Arrays.asList(
@@ -120,7 +119,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
                 binding.phrase24,
                 binding.phrase25,
                 binding.phrase26,
-                binding.phrase27
+                binding.phrase27,
+                binding.phrase28
         ));
 
         final List<TextView> thirdLine = new ArrayList<>(Arrays.asList(
@@ -128,7 +128,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
                 binding.phrase32,
                 binding.phrase33,
                 binding.phrase34,
-                binding.phrase35
+                binding.phrase35,
+                binding.phrase36
         ));
 
         final List<TextView> totalKarutaTextViewList = new ArrayList<>();

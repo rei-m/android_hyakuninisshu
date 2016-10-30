@@ -11,9 +11,9 @@ import me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapt
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 
-public class SpinnerBindingUtil {
+public class SpinnerBindingAttributeBindingAdapter {
 
-    private SpinnerBindingUtil() {
+    private SpinnerBindingAttributeBindingAdapter() {
     }
 
     @BindingAdapter({"spinnerAdapter"})

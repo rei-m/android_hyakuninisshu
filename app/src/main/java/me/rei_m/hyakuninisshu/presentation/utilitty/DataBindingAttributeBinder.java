@@ -9,10 +9,17 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView;
 
 public class DataBindingAttributeBinder {
 
     private DataBindingAttributeBinder() {
+    }
+
+    @BindingAdapter({"verticalText"})
+    public static void setVerticalText(VerticalSingleLineTextView view, String text) {
+        System.out.println(text);
+        view.drawText(text);
     }
 
     @BindingAdapter({"relativeLeftMarginTop"})
