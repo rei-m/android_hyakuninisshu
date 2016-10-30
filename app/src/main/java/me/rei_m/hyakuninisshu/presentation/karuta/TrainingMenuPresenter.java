@@ -2,6 +2,9 @@ package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.support.annotation.NonNull;
 
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+
 public class TrainingMenuPresenter implements TrainingMenuContact.Actions {
 
     private TrainingMenuContact.View view;
@@ -12,7 +15,7 @@ public class TrainingMenuPresenter implements TrainingMenuContact.Actions {
     }
 
     @Override
-    public void onClickStartTraining() {
-        view.navigateToTraining();
+    public void onClickStartTraining(TrainingRange trainingRange, Kimariji kimariji) {
+        view.navigateToTraining(trainingRange, kimariji);
     }
 }

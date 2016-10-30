@@ -12,5 +12,9 @@ public interface KarutaRepository {
 
     Observable<List<Karuta>> asEntityList();
 
+    Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier);
+
+    Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier, int kimariji);
+
     Observable<Karuta> resolve(KarutaIdentifier identifier);
 }

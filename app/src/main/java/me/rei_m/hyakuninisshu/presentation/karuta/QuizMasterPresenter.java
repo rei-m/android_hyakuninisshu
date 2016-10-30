@@ -1,32 +1,32 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class QuizMasterPresenter implements QuizMasterContact.Actions {
 
-    private StartKarutaQuizUsecase startKarutaQuizUsecase;
+    private final StartKarutaQuizUsecase startKarutaQuizUsecase;
 
-    public QuizMasterPresenter(StartKarutaQuizUsecase startKarutaQuizUsecase) {
+    public QuizMasterPresenter(@NonNull StartKarutaQuizUsecase startKarutaQuizUsecase) {
         this.startKarutaQuizUsecase = startKarutaQuizUsecase;
     }
 
     @Override
     public void onCreate(@NonNull QuizMasterContact.View view,
-                         Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            startKarutaQuizUsecase.execute(10).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(aVoid -> {
-                view.startQuiz();
-            });
-        }
-    }
-
-    @Override
-    public void onAnswered(String quizId, boolean isCollect) {
-
+                         @NonNull TrainingRange trainingRange,
+                         @NonNull Kimariji kimariji) {
+        startKarutaQuizUsecase.execute(trainingRange.getFromId(),
+                trainingRange.getToId(),
+                kimariji.getPosition()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(v -> {
+                    view.startQuiz();
+                }, throwable -> {
+                    view.showEmpty();
+                });
     }
 }
