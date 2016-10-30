@@ -45,7 +45,7 @@ public class QuizViewModel {
                          QuizChoiceViewModel choiceFourth) {
 
         this.quizId = quizId;
-        this.firstPhrase = KarutaDisplayUtil.padSpace(firstPhrase, 5);
+        this.firstPhrase = firstPhrase;
         this.secondPhrase = secondPhrase;
         this.thirdPhrase = thirdPhrase;
 

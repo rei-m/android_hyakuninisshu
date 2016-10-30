@@ -1,8 +1,5 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 
 public interface QuizContact {
@@ -14,9 +11,9 @@ public interface QuizContact {
     }
 
     interface Actions {
-        void onCreate(View view, @Nullable Bundle savedInstanceState);
-
-        void onCreateView(@Nullable Bundle savedInstanceState);
+        void onCreate(View view);
+        
+        void onResume();
 
         void onClickChoice(String quizId, int choiceNo);
     }
