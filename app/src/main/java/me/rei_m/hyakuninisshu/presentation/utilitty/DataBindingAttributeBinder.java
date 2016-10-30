@@ -18,7 +18,6 @@ public class DataBindingAttributeBinder {
 
     @BindingAdapter({"verticalText"})
     public static void setVerticalText(VerticalSingleLineTextView view, String text) {
-        System.out.println(text);
         view.drawText(text);
     }
 
