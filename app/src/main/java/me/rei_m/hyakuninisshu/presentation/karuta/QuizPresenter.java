@@ -1,8 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
@@ -24,13 +22,12 @@ public class QuizPresenter implements QuizContact.Actions {
     }
 
     @Override
-    public void onCreate(@NonNull QuizContact.View view,
-                         @Nullable Bundle savedInstanceState) {
+    public void onCreate(@NonNull QuizContact.View view) {
         this.view = view;
     }
-
+    
     @Override
-    public void onCreateView(@Nullable Bundle savedInstanceState) {
+    public void onResume() {
         displayKarutaQuizUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::initialize);
     }
