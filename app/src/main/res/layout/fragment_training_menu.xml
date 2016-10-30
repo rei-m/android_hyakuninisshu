@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuFragment">
 
     <data>
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel" />
+
+        <variable
+            name="trainingRangeAdapter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter" />
+
+        <variable
+            name="kimarijiAdapter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter" />
 
         <variable
             name="presenter"
             type="me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuContact.Actions" />
     </data>
 
-    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuFragment">
+        android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
-                android:onClick="@{() -> presenter.onClickStartTraining()}"
+                android:onClick="@{() -> presenter.onClickStartTraining(viewModel.getTrainingRange().get(), viewModel.getKimariji().get())}"
                 android:text="@string/start_training"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -49,13 +62,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/text_title_setting" />
 
             <Spinner
-                android:id="@+id/spinner_range_question"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"
                 app:layout_constraintLeft_toRightOf="@+id/text_title_range_question"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_title_setting" />
+                app:layout_constraintTop_toBottomOf="@+id/text_title_setting"
+                app:selectedValue="@={viewModel.trainingRange}"
+                app:spinnerAdapter="@{trainingRangeAdapter}" />
 
             <TextView
                 android:id="@+id/text_title_kimariji"
@@ -74,7 +88,9 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/text_title_kimariji"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:selectedValue="@={viewModel.kimariji}"
+                app:spinnerAdapter="@{kimarijiAdapter}" />
 
         </android.support.constraint.ConstraintLayout>
 

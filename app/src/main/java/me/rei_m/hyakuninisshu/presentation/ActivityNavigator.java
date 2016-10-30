@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.presentation.karuta.EntranceActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 
 public class ActivityNavigator {
 
@@ -15,8 +17,10 @@ public class ActivityNavigator {
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToQuizMaster(@NonNull Activity activity) {
-        Intent intentToLaunch = QuizMasterActivity.createIntent(activity);
+    public void navigateToQuizMaster(@NonNull Activity activity,
+                                     @NonNull TrainingRange trainingRange,
+                                     @NonNull Kimariji kimariji) {
+        Intent intentToLaunch = QuizMasterActivity.createIntent(activity, trainingRange, kimariji);
         activity.startActivity(intentToLaunch);
     }
 }

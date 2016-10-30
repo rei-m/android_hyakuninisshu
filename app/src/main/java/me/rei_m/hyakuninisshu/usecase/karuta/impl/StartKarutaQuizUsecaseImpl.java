@@ -24,11 +24,15 @@ public class StartKarutaQuizUsecaseImpl implements StartKarutaQuizUsecase {
     }
 
     @Override
-    public Observable<Void> execute(int quizSize) {
-        return karutaQuizListFactory.create(quizSize, 0).concatMap(new Func1<List<KarutaQuiz>, Observable<Void>>() {
+    public Observable<Void> execute(int fromKarutaId, int toKarutaId, int kimarijiPosition) {
+        return karutaQuizListFactory.create(fromKarutaId, toKarutaId, kimarijiPosition).concatMap(new Func1<List<KarutaQuiz>, Observable<Void>>() {
             @Override
             public Observable<Void> call(List<KarutaQuiz> karutaQuizList) {
-                return karutaQuizRepository.initialize(karutaQuizList);
+                if (karutaQuizList.isEmpty()) {
+                    return Observable.error(new IllegalArgumentException("This condition is not valid."));
+                } else {
+                    return karutaQuizRepository.initialize(karutaQuizList);
+                }
             }
         });
     }

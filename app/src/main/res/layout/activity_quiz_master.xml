@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".presentation.karuta.QuizMasterActivity">
 
-    <FrameLayout
-        android:id="@+id/content"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="MergeRootFrame" />
+        android:layout_height="match_parent">
 
-</RelativeLayout>
+        <FrameLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="MergeRootFrame" />
+
+        <RelativeLayout
+            android:id="@+id/layout_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="指定した条件のかるたはありませんでした。。。" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>

@@ -66,6 +66,32 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
+    public Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier) {
+        return KarutaSchema.relation(orma).selector()
+                .idGe(fromIdentifier.getValue())
+                .and()
+                .idLe(toIdentifier.getValue())
+                .orderByIdAsc()
+                .executeAsObservable()
+                .map(KarutaFactory::create)
+                .toList();
+    }
+
+    @Override
+    public Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier, int kimariji) {
+        return KarutaSchema.relation(orma).selector()
+                .idGe(fromIdentifier.getValue())
+                .and()
+                .idLe(toIdentifier.getValue())
+                .and()
+                .where("kimariji = ?", kimariji)
+                .orderByIdAsc()
+                .executeAsObservable()
+                .map(KarutaFactory::create)
+                .toList();
+    }
+
+    @Override
     public Observable<Karuta> resolve(KarutaIdentifier identifier) {
         return KarutaSchema.relation(orma).selector()
                 .idEq(identifier.getValue())

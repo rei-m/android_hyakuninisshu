@@ -14,6 +14,7 @@ import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel;
 
 public class TrainingMenuFragment extends BaseFragment implements TrainingMenuContact.View {
 
@@ -50,12 +51,13 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
         Context context = getActivity().getApplicationContext();
 
         SpinnerAdapter trainingRangeAdapter = SpinnerAdapter.newInstance(context, TrainingRange.values(), false);
-        binding.spinnerRangeQuestion.setAdapter(trainingRangeAdapter);
+        binding.setTrainingRangeAdapter(trainingRangeAdapter);
 
         SpinnerAdapter kimarijiAdapter = SpinnerAdapter.newInstance(context, Kimariji.values(), false);
-        binding.spinnerKimariji.setAdapter(kimarijiAdapter);
+        binding.setKimarijiAdapter(kimarijiAdapter);
 
         binding.setPresenter(presenter);
+        binding.setViewModel(new TrainingMenuViewModel());
 
         return binding.getRoot();
     }
@@ -67,7 +69,7 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     }
 
     @Override
-    public void navigateToTraining() {
-        navigator.navigateToQuizMaster(getActivity());
+    public void navigateToTraining(TrainingRange trainingRange, Kimariji kimariji) {
+        navigator.navigateToQuizMaster(getActivity(), trainingRange, kimariji);
     }
 }

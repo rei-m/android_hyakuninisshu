@@ -15,11 +15,17 @@ public class KarutaQuizListFactory {
         this.karutaRepository = karutaRepository;
     }
 
-    public Observable<List<KarutaQuiz>> create(int quizSize, int kimariji) {
+    public Observable<List<KarutaQuiz>> create(int fromKarutaId, int toKarutaId, int kimariji) {
 
         List<Karuta> correctKarutaList = new ArrayList<>();
 
-        karutaRepository.asEntityList().subscribe(karutaList -> {
+        int quizSize = toKarutaId - fromKarutaId + 1;
+
+        Observable<List<Karuta>> karutaListObservable = (kimariji == 0) ?
+                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId)) :
+                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), kimariji);
+
+        karutaListObservable.subscribe(karutaList -> {
 
             int size = (karutaList.size() < quizSize) ? karutaList.size() : quizSize;
             int[] collectKarutaIndexList = ArrayUtil.generateRandomArray(karutaList.size(), size);
