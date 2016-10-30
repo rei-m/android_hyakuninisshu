@@ -37,6 +37,7 @@ public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnsw
         });
 
         return Observable.zip(existNextQuizObservable, karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) ->
+
                 new QuizAnswerViewModel("第" + karuta.getIdentifier().getValue() + "首",
                         karuta.getCreator(),
                         karuta.getTopPhrase().getFirst().getKanji(),
@@ -44,6 +45,7 @@ public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnsw
                         karuta.getTopPhrase().getThird().getKanji(),
                         karuta.getBottomPhrase().getFourth().getKanji(),
                         karuta.getBottomPhrase().getFifth().getKanji(),
+                        "karuta_" + karuta.getImageNo(),
                         karutaQuiz.getResult().isCollect,
                         existNextQuiz));
     }
