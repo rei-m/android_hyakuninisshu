@@ -3,10 +3,12 @@ package me.rei_m.hyakuninisshu.presentation.utilitty;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.graphics.Point;
+import android.support.annotation.DimenRes;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView;
@@ -18,8 +20,21 @@ public class DataBindingAttributeBinder {
 
     @BindingAdapter({"verticalText"})
     public static void setVerticalText(VerticalSingleLineTextView view, String text) {
-        System.out.println(text);
         view.drawText(text);
+    }
+
+    @BindingAdapter({"verticalTextSize"})
+    public static void setVerticalTextSize(VerticalSingleLineTextView view, @DimenRes int dimenId) {
+        view.setTextSize(dimenId);
+    }
+
+    @BindingAdapter({"stringDrawableId"})
+    public static void setStringDrawableId(ImageView view, String drawableId) {
+        if (drawableId == null) {
+            return;
+        }
+        int resId = view.getResources().getIdentifier(drawableId, "drawable", view.getContext().getApplicationContext().getPackageName());
+        view.setImageResource(resId);
     }
 
     @BindingAdapter({"relativeLeftMarginTop"})

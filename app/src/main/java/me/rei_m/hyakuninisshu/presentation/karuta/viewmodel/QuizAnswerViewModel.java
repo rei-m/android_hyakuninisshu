@@ -20,6 +20,8 @@ public class QuizAnswerViewModel {
 
     public final String fifthPhrase;
 
+    public final String karutaImageNo;
+
     public final boolean isCollect;
 
     public final boolean existNextQuiz;
@@ -31,6 +33,7 @@ public class QuizAnswerViewModel {
                                @NonNull String thirdPhrase,
                                @NonNull String fourthPhrase,
                                @NonNull String fifthPhrase,
+                               @NonNull String karutaImageNo,
                                boolean isCollect,
                                boolean existNextQuiz) {
         this.karutaNo = karutaNo;
@@ -40,6 +43,7 @@ public class QuizAnswerViewModel {
         this.thirdPhrase = thirdPhrase;
         this.fourthPhrase = KarutaDisplayUtil.padSpace(fourthPhrase, 7);
         this.fifthPhrase = fifthPhrase;
+        this.karutaImageNo = karutaImageNo;
         this.isCollect = isCollect;
         this.existNextQuiz = existNextQuiz;
     }

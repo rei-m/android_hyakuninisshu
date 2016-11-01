@@ -7,6 +7,8 @@
 
         <import type="android.view.View" />
 
+        <import type="me.rei_m.hyakuninisshu.R" />
+
         <variable
             name="viewModel"
             type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel" />
@@ -21,68 +23,87 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.karutaNo}" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.creator}" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:paddingBottom="16dp"
             android:paddingTop="16dp">
 
-            <TextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.firstPhrase}"
-                android:textSize="34sp"
-                app:relativeLeftMarginTop="@{-1}" />
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="@dimen/margin_ms"
+                app:verticalText="@{viewModel.creator}"
+                app:verticalTextSize="@{R.dimen.text_l}" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.secondPhrase}"
-                android:textSize="34sp" />
+            <!--<me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:verticalText="@{viewModel.karutaNo}"-->
+            <!--app:verticalTextSize="@{R.dimen.text_s}" />-->
 
-            <TextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.thirdPhrase}"
-                android:textSize="34sp"
-                app:relativeLeftMarginTop="@{1}" />
+                android:layout_marginTop="@dimen/margin_l"
+                app:verticalText="@{viewModel.fifthPhrase}"
+                app:verticalTextSize="@{R.dimen.text_ll}" />
 
-            <TextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.fourthPhrase}"
-                android:textSize="34sp"
-                app:relativeLeftMarginBottom="@{-1}" />
+                android:layout_marginStart="@dimen/margin_s"
+                app:verticalText="@{viewModel.fourthPhrase}"
+                app:verticalTextSize="@{R.dimen.text_ll}" />
 
-            <TextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.fifthPhrase}"
-                android:textSize="34sp"
-                app:relativeLeftMarginBottom="@{1}" />
+                android:layout_marginEnd="@dimen/margin_s"
+                android:layout_marginStart="@dimen/margin_s"
+                android:layout_marginTop="@dimen/margin_xxl"
+                app:verticalText="@{viewModel.thirdPhrase}"
+                app:verticalTextSize="@{R.dimen.text_ll}" />
+
+            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_s"
+                android:layout_marginTop="@dimen/margin_l"
+                app:verticalText="@{viewModel.secondPhrase}"
+                app:verticalTextSize="@{R.dimen.text_ll}" />
+
+            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:verticalText="@{viewModel.firstPhrase}"
+                app:verticalTextSize="@{R.dimen.text_ll}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@{viewModel.creator}"
+                app:stringDrawableId="@{viewModel.karutaImageNo}" />
 
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_xl"
             android:onClick="@{() -> presenter.onClickNextQuiz()}"
             android:text="次に進む"
             android:textSize="20sp"
@@ -91,6 +112,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_xl"
             android:onClick="@{() -> presenter.onClickConfirmResult()}"
             android:text="結果を見る"
             android:textSize="20sp"

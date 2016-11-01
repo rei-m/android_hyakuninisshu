@@ -3,6 +3,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.component.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.DimenRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,9 @@ public class VerticalSingleLineTextView extends View {
         paint.setTextSize(textSize);
     }
 
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
+    public void setTextSize(@DimenRes int dimenId) {
+        textSize = getContext().getResources().getDimensionPixelOffset(dimenId);
+        paint.setTextSize(textSize);
     }
 
     public void drawText(String text) {
