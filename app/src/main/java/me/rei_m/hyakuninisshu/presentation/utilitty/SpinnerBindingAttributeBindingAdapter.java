@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 

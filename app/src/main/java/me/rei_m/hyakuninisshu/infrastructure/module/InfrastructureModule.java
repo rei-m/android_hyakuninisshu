@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.di;
+package me.rei_m.hyakuninisshu.infrastructure.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.BuildConfig;
+import me.rei_m.hyakuninisshu.di.ForApplication;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

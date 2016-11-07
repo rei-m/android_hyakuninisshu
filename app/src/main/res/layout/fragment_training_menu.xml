@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuFragment">
+    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment">
 
     <data>
 
@@ -12,15 +12,15 @@
 
         <variable
             name="trainingRangeAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="kimarijiAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.TrainingMenuContact.Actions" />
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuContact.Actions" />
     </data>
 
     <ScrollView

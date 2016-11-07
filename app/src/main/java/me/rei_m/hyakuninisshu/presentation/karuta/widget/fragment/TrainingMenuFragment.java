@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.karuta;
+package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
+import me.rei_m.hyakuninisshu.di.HasComponent;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.TrainingMenuFragmentComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.TrainingMenuFragmentModule;
 
 public class TrainingMenuFragment extends BaseFragment implements TrainingMenuContact.View {
 
@@ -39,7 +42,6 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getComponent().inject(this);
         presenter.onCreate(this);
     }
 
@@ -69,7 +71,18 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    protected void setupFragmentComponent() {
+        ((HasComponent<Injector>) getActivity()).getComponent()
+                .plus(new TrainingMenuFragmentModule(getContext())).inject(this);
+    }
+
+    @Override
     public void navigateToTraining(TrainingRange trainingRange, Kimariji kimariji) {
         navigator.navigateToQuizMaster(getActivity(), trainingRange, kimariji);
+    }
+
+    public interface Injector {
+        TrainingMenuFragmentComponent plus(TrainingMenuFragmentModule fragmentModule);
     }
 }

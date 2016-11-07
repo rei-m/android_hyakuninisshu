@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.karuta;
+package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizResultViewModel;
 

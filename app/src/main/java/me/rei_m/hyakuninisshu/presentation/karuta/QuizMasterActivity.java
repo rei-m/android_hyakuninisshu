@@ -9,12 +9,17 @@ import android.view.View;
 
 import javax.inject.Inject;
 
+import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityQuizMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 
 public class QuizMasterActivity extends BaseActivity implements QuizMasterContact.View,
         QuizFragment.OnFragmentInteractionListener,
@@ -44,7 +49,6 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_quiz_master);
 
         TrainingRange trainingRange = (TrainingRange) getIntent().getSerializableExtra(ARG_TRAINING_RANGE);
@@ -53,6 +57,11 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
         if (savedInstanceState == null) {
             presenter.onCreate(this, trainingRange, kimariji);
         }
+    }
+
+    @Override
+    protected void setupActivityComponent() {
+        ((App) getApplication()).getComponent().plus(new QuizMasterActivityModule(this)).inject(this);
     }
 
     @Override

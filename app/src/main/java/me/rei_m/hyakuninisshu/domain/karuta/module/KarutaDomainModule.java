@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.di;
+package me.rei_m.hyakuninisshu.domain.karuta.module;
 
 import android.content.Context;
 
@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import me.rei_m.hyakuninisshu.di.ForApplication;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
@@ -14,7 +15,7 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.impl.KarutaRepositoryImpl
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
 @Module
-public class DomainModule {
+public class KarutaDomainModule {
 
     @Singleton
     @Provides

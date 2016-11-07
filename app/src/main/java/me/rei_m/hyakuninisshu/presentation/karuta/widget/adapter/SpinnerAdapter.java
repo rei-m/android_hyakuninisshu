@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.karuta.component.adapter;
+package me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;

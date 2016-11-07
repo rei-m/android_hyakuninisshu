@@ -6,9 +6,9 @@ import android.support.annotation.VisibleForTesting;
 import me.rei_m.hyakuninisshu.di.ApplicationComponent;
 import me.rei_m.hyakuninisshu.di.ApplicationModule;
 import me.rei_m.hyakuninisshu.di.DaggerApplicationComponent;
-import me.rei_m.hyakuninisshu.di.DomainModule;
-import me.rei_m.hyakuninisshu.di.InfrastructureModule;
-import me.rei_m.hyakuninisshu.di.UsecaseModule;
+import me.rei_m.hyakuninisshu.domain.karuta.module.KarutaDomainModule;
+import me.rei_m.hyakuninisshu.infrastructure.module.InfrastructureModule;
+import me.rei_m.hyakuninisshu.usecase.karuta.module.UsecaseModule;
 
 public class App extends Application {
 
@@ -23,7 +23,7 @@ public class App extends Application {
         return DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .infrastructureModule(new InfrastructureModule())
-                .domainModule(new DomainModule())
+                .domainModule(new KarutaDomainModule())
                 .usecaseModule(new UsecaseModule())
                 .build();
     }

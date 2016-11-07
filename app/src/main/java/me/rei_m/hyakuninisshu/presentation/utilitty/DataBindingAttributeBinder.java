@@ -11,7 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
 
 public class DataBindingAttributeBinder {
 

@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.karuta.component.view;
+package me.rei_m.hyakuninisshu.presentation.karuta.widget.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

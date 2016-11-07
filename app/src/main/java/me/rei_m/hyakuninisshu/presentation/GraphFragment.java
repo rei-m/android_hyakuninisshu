@@ -1,7 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation;
 
-import me.rei_m.hyakuninisshu.di.FragmentComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.TrainingMenuFragmentComponent;
 
 interface GraphFragment {
-    FragmentComponent getComponent();
+    TrainingMenuFragmentComponent getComponent();
 }

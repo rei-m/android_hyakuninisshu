@@ -1,7 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.QuizAnswerFragment">
+    tools:context="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment">
 
     <data>
 
@@ -32,7 +32,7 @@
             android:paddingBottom="16dp"
             android:paddingTop="16dp">
 
-            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -46,21 +46,21 @@
             <!--app:verticalText="@{viewModel.karutaNo}"-->
             <!--app:verticalTextSize="@{R.dimen.text_s}" />-->
 
-            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_l"
                 app:verticalText="@{viewModel.fifthPhrase}"
                 app:verticalTextSize="@{R.dimen.text_ll}" />
 
-            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_s"
                 app:verticalText="@{viewModel.fourthPhrase}"
                 app:verticalTextSize="@{R.dimen.text_ll}" />
 
-            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_s"
@@ -69,7 +69,7 @@
                 app:verticalText="@{viewModel.thirdPhrase}"
                 app:verticalTextSize="@{R.dimen.text_ll}" />
 
-            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_s"
@@ -77,7 +77,7 @@
                 app:verticalText="@{viewModel.secondPhrase}"
                 app:verticalTextSize="@{R.dimen.text_ll}" />
 
-            <me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView
+            <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:verticalText="@{viewModel.firstPhrase}"
