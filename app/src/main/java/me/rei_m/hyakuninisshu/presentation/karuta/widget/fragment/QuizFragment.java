@@ -17,9 +17,12 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,7 +52,6 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getComponent().inject(this);
         presenter.onCreate(this);
     }
 
@@ -97,6 +99,13 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void setupFragmentComponent() {
+        ((HasComponent<Injector>) getActivity()).getComponent()
+                .plus(new QuizFragmentModule(getContext())).inject(this);
     }
 
     @Override
@@ -170,6 +179,10 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         if (listener != null) {
             listener.onAnswered(quizId);
         }
+    }
+
+    public interface Injector {
+        QuizFragmentComponent plus(QuizFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {

@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizResultBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizResultViewModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizResultFragmentComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizResultFragmentModule;
 
 public class QuizResultFragment extends BaseFragment implements QuizResultContact.View {
 
@@ -34,7 +37,6 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getComponent().inject(this);
         presenter.onCreate(this);
         if (getArguments() != null) {
         }
@@ -67,8 +69,19 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    protected void setupFragmentComponent() {
+        ((HasComponent<Injector>) getActivity()).getComponent()
+                .plus(new QuizResultFragmentModule(getContext())).inject(this);
+    }
+
+    @Override
     public void initialize(QuizResultViewModel viewModel) {
         binding.setViewModel(viewModel);
+    }
+
+    public interface Injector {
+        QuizResultFragmentComponent plus(QuizResultFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {

@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.di;
+package me.rei_m.hyakuninisshu.module;
 
 import android.app.Application;
 import android.content.Context;

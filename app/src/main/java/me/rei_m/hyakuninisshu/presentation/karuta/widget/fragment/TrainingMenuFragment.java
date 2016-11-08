@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
-import me.rei_m.hyakuninisshu.di.HasComponent;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;

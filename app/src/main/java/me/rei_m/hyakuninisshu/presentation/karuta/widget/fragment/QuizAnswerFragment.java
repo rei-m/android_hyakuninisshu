@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizAnswerFragmentComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizAnswerFragmentModule;
 
 public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContact.View {
 
@@ -40,7 +43,6 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getComponent().inject(this);
         presenter.onCreate(this);
         if (getArguments() != null) {
             // TODO: エラーチェック.
@@ -83,6 +85,13 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    protected void setupFragmentComponent() {
+        ((HasComponent<Injector>) getActivity()).getComponent()
+                .plus(new QuizAnswerFragmentModule(getContext())).inject(this);
+    }
+
+    @Override
     public void initialize(QuizAnswerViewModel viewModel) {
         binding.setViewModel(viewModel);
     }
@@ -101,16 +110,10 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    public interface Injector {
+        QuizAnswerFragmentComponent plus(QuizAnswerFragmentModule fragmentModule);
+    }
+
     public interface OnFragmentInteractionListener {
         void onClickGoToNext();
 

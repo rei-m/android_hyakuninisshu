@@ -11,9 +11,11 @@ import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityQuizMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
@@ -22,6 +24,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 
 public class QuizMasterActivity extends BaseActivity implements QuizMasterContact.View,
+        HasComponent<QuizMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener {
 
@@ -37,6 +40,8 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     private static final String ARG_TRAINING_RANGE = "trainingRange";
 
     private static final String ARG_KIMARIJI = "kimarij";
+
+    private QuizMasterActivityComponent component;
 
     @Inject
     ActivityNavigator activityNavigator;
@@ -61,7 +66,16 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
 
     @Override
     protected void setupActivityComponent() {
-        ((App) getApplication()).getComponent().plus(new QuizMasterActivityModule(this)).inject(this);
+        component = ((App) getApplication()).getComponent().plus(new QuizMasterActivityModule(this));
+        component.inject(this);
+    }
+
+    @Override
+    public QuizMasterActivityComponent getComponent() {
+        if (component == null) {
+            setupActivityComponent();
+        }
+        return component;
     }
 
     @Override

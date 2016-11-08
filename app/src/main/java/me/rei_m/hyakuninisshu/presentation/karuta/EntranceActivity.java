@@ -8,8 +8,8 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding;
-import me.rei_m.hyakuninisshu.di.HasComponent;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.EntranceActivityModule;

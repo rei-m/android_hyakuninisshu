@@ -15,7 +15,7 @@
 
         <variable
             name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.QuizAnswerContact.Actions" />
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerContact.Actions" />
     </data>
 
     <LinearLayout

@@ -17,7 +17,7 @@ import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartKarutaQuizUsecaseImpl;
 
 @Module
-public class UsecaseModule {
+public class KarutaUsecaseModule {
 
     @Provides
     StartKarutaQuizUsecase provideStartKarutaQuizUsecase(KarutaQuizRepository karutaQuizRepository,
