@@ -7,7 +7,7 @@ public interface QuizContact {
     interface View {
         void initialize(QuizViewModel viewModel);
 
-        void displayAnswer(String quizId);
+        void displayAnswer(String quizId, boolean isCollect);
     }
 
     interface Actions {

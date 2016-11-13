@@ -23,6 +23,10 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
 
     public static final String TAG = "TrainingMenuFragment";
 
+    public static TrainingMenuFragment newInstance() {
+        return new TrainingMenuFragment();
+    }
+
     @Inject
     TrainingMenuContact.Actions presenter;
 
@@ -33,10 +37,6 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
 
     public TrainingMenuFragment() {
         // Required empty public constructor
-    }
-
-    public static TrainingMenuFragment newInstance() {
-        return new TrainingMenuFragment();
     }
 
     @Override

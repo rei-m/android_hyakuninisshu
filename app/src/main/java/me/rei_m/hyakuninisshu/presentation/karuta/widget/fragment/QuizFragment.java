@@ -17,20 +17,25 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.StateVm;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
 import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
+
+    public static QuizFragment newInstance() {
+        return new QuizFragment();
+    }
 
     @Inject
     QuizContact.Actions presenter;
@@ -45,10 +50,6 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         // Required empty public constructor
     }
 
-    public static QuizFragment newInstance() {
-        return new QuizFragment();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
         binding = FragmentQuizBinding.inflate(inflater, container, false);
         binding.setPresenter(presenter);
+        binding.setState(new StateVm());
         return binding.getRoot();
     }
 
@@ -175,9 +177,12 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     }
 
     @Override
-    public void displayAnswer(String quizId) {
+    public void displayAnswer(String quizId, boolean isCollect) {
         if (listener != null) {
-            listener.onAnswered(quizId);
+//            listener.onAnswered(quizId);
+//            binding.getViewModel().setQuizState((isCollect) ? QuizState.ANSWERED_COLLECT : QuizState.ANSWERED_INCORRECT);
+//            System.out.println(binding.getViewModel().getQuizState());
+
         }
     }
 

@@ -25,7 +25,7 @@ public class QuizPresenter implements QuizContact.Actions {
     public void onCreate(@NonNull QuizContact.View view) {
         this.view = view;
     }
-    
+
     @Override
     public void onResume() {
         displayKarutaQuizUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
@@ -36,7 +36,7 @@ public class QuizPresenter implements QuizContact.Actions {
     public void onClickChoice(String quizId, int choiceNo) {
         answerKarutaQuizUsecase.execute(quizId, choiceNo).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isCollect -> {
-                    view.displayAnswer(quizId);
+                    view.displayAnswer(quizId, isCollect);
                 });
     }
 }

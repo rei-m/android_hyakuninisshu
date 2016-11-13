@@ -18,6 +18,11 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizRes
 
 public class QuizResultFragment extends BaseFragment implements QuizResultContact.View {
 
+    public static QuizResultFragment newInstance() {
+        QuizResultFragment fragment = new QuizResultFragment();
+        return fragment;
+    }
+    
     @Inject
     QuizResultContact.Actions presenter;
 
@@ -27,11 +32,6 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
 
     public QuizResultFragment() {
         // Required empty public constructor
-    }
-
-    public static QuizResultFragment newInstance() {
-        QuizResultFragment fragment = new QuizResultFragment();
-        return fragment;
     }
 
     @Override

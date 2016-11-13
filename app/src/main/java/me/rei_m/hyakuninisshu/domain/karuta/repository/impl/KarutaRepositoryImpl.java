@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
@@ -18,7 +19,6 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
-import rx.Observable;
 
 public class KarutaRepositoryImpl implements KarutaRepository {
 

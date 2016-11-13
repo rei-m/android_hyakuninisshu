@@ -19,6 +19,14 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
 
     private static final String ARG_QUIZ_ID = "quizId";
 
+    public static QuizAnswerFragment newInstance(String quizId) {
+        QuizAnswerFragment fragment = new QuizAnswerFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_QUIZ_ID, quizId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    
     @Inject
     QuizAnswerContact.Actions presenter;
 
@@ -30,14 +38,6 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
 
     public QuizAnswerFragment() {
         // Required empty public constructor
-    }
-
-    public static QuizAnswerFragment newInstance(String quizId) {
-        QuizAnswerFragment fragment = new QuizAnswerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_QUIZ_ID, quizId);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

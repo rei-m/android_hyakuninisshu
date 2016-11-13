@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
-import rx.Observable;
 
 public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 

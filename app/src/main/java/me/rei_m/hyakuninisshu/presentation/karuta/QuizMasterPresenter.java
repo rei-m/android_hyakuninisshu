@@ -2,11 +2,11 @@ package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class QuizMasterPresenter implements QuizMasterContact.Actions {
 

@@ -10,6 +10,10 @@
             type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel" />
 
         <variable
+            name="state"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.StateVm" />
+
+        <variable
             name="presenter"
             type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizContact.Actions" />
     </data>
@@ -342,19 +346,11 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="248dp"
-            android:layout_height="248dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/check_correct"
-            android:visibility="gone" />
-
-        <ImageView
-            android:layout_width="248dp"
-            android:layout_height="248dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/check_incorrect"
-            android:visibility="gone" />
+        <!--<ImageView-->
+            <!--android:layout_width="248dp"-->
+            <!--android:layout_height="248dp"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--app:visibilityByQuizState="@{state.trainingRange}" />-->
 
     </RelativeLayout>
 

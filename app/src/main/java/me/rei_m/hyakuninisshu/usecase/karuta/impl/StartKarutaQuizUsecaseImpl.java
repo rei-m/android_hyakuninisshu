@@ -4,11 +4,11 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
-import rx.Observable;
 import rx.functions.Func1;
 
 public class StartKarutaQuizUsecaseImpl implements StartKarutaQuizUsecase {

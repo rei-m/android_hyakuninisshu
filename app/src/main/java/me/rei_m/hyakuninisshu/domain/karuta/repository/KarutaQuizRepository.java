@@ -2,9 +2,9 @@ package me.rei_m.hyakuninisshu.domain.karuta.repository;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
-import rx.Observable;
 
 public interface KarutaQuizRepository {
 
