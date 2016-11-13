@@ -23,10 +23,6 @@ public class QuizMasterPresenter implements QuizMasterContact.Actions {
         startKarutaQuizUsecase.execute(trainingRange.getFromId(),
                 trainingRange.getToId(),
                 kimariji.getPosition()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(v -> {
-                    view.startQuiz();
-                }, throwable -> {
-                    view.showEmpty();
-                });
+                .subscribe(v -> view.startQuiz(), throwable -> view.showEmpty());
     }
 }

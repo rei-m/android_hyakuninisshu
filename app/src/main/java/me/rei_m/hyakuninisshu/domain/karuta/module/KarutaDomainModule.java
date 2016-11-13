@@ -6,13 +6,13 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.module.ForApplication;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.impl.KarutaQuizRepositoryImpl;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.impl.KarutaRepositoryImpl;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
+import me.rei_m.hyakuninisshu.module.ForApplication;
 
 @Module
 public class KarutaDomainModule {

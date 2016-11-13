@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import me.rei_m.hyakuninisshu.domain.karuta.model.BottomPhrase;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
@@ -13,8 +15,6 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
-import rx.Observable;
-import rx.functions.Func1;
 
 public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
 
@@ -30,16 +30,17 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
 
     @Override
     public Observable<QuizViewModel> execute() {
-        return karutaQuizRepository.pop().concatMap(karutaQuiz -> {
+
+        return karutaQuizRepository.pop().toObservable().concatMap(karutaQuiz -> {
 
             KarutaQuizContents quizContents = karutaQuiz.start(new Date());
 
-            Observable<List<Karuta>> choiceObservable = Observable.from(quizContents.choiceList).flatMap(new Func1<KarutaIdentifier, Observable<Karuta>>() {
+            Observable<List<Karuta>> choiceObservable = Observable.fromIterable(quizContents.choiceList).flatMap(new Function<KarutaIdentifier, Observable<Karuta>>() {
                 @Override
-                public Observable<Karuta> call(KarutaIdentifier identifier) {
+                public Observable<Karuta> apply(KarutaIdentifier identifier) throws Exception {
                     return karutaRepository.resolve(identifier);
                 }
-            }).toList();
+            }).toList().toObservable();
 
             Observable<Karuta> collectObservable = karutaRepository.resolve(quizContents.collectId);
 

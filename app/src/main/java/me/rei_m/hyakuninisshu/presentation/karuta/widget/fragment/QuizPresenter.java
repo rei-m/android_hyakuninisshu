@@ -2,10 +2,10 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class QuizPresenter implements QuizContact.Actions {
 

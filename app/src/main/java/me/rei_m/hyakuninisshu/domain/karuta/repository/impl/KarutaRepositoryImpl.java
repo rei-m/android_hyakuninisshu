@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
@@ -57,10 +58,9 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Observable<List<Karuta>> asEntityList() {
-        return KarutaSchema.relation(orma).selector()
-                .orderByIdAsc()
-                .executeAsObservable()
+    public Single<List<Karuta>> asEntityList() {
+        return Observable.fromIterable(KarutaSchema.relation(orma).selector()
+                .orderByIdAsc())
                 .map(KarutaFactory::create)
                 .toList();
     }

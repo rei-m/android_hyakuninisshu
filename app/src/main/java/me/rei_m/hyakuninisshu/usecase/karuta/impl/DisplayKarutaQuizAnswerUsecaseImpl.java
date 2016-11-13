@@ -2,6 +2,10 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
@@ -9,8 +13,6 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizAnswerUsecase;
-import rx.Observable;
-import rx.functions.Func1;
 
 public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnswerUsecase {
 
@@ -25,19 +27,21 @@ public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnsw
     }
 
     @Override
-    public Observable<QuizAnswerViewModel> execute(String quizId) {
+    public Observable<QuizAnswerViewModel> execute(@NonNull String quizId) {
 
-        Observable<Boolean> existNextQuizObservable = karutaQuizRepository.existNextQuiz();
-        Observable<KarutaQuiz> karutaQuizObservable = karutaQuizRepository.resolve(new KarutaQuizIdentifier(quizId)).share();
-        Observable<Karuta> karutaObservable = karutaQuizObservable.concatMap(new Func1<KarutaQuiz, Observable<Karuta>>() {
+        Single<Boolean> existNextQuizObservable = karutaQuizRepository.existNextQuiz();
+        Observable<KarutaQuiz> karutaQuizObservable = karutaQuizRepository.resolve(new KarutaQuizIdentifier(quizId))
+                .toObservable()
+                .share();
+
+        Observable<Karuta> karutaObservable = karutaQuizObservable.concatMap(new Function<KarutaQuiz, ObservableSource<Karuta>>() {
             @Override
-            public Observable<Karuta> call(KarutaQuiz karutaQuiz) {
+            public ObservableSource<Karuta> apply(KarutaQuiz karutaQuiz) throws Exception {
                 return karutaRepository.resolve(karutaQuiz.getResult().collectKarutaId);
             }
         });
 
-        return Observable.zip(existNextQuizObservable, karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) ->
-
+        return Observable.zip(existNextQuizObservable.toObservable(), karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) ->
                 new QuizAnswerViewModel("第" + karuta.getIdentifier().getValue() + "首",
                         karuta.getCreator(),
                         karuta.getTopPhrase().getFirst().getKanji(),

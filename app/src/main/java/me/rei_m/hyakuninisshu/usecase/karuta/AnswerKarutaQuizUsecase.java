@@ -1,7 +1,7 @@
 package me.rei_m.hyakuninisshu.usecase.karuta;
 
-import rx.Observable;
+import io.reactivex.Maybe;
 
 public interface AnswerKarutaQuizUsecase {
-    Observable<Boolean> execute(String quizId, int choiceNo);
+    Maybe<Boolean> execute(String quizId, int choiceNo);
 }

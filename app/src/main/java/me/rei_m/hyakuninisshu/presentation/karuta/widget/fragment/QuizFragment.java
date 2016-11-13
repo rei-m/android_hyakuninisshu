@@ -17,7 +17,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
@@ -25,9 +28,6 @@ import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.StateVm;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
-import rx.Observable;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class QuizFragment extends BaseFragment implements QuizContact.View {
 
@@ -44,7 +44,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private OnFragmentInteractionListener listener;
 
-    private Subscription subscription;
+    private Disposable disposable;
 
     public QuizFragment() {
         // Required empty public constructor
@@ -80,9 +80,9 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onPause() {
         super.onPause();
-        if (subscription != null) {
-            subscription.unsubscribe();
-            subscription = null;
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
         }
     }
 
@@ -147,21 +147,21 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         final StringBuilder totalKarutaStringBuilder = new StringBuilder();
 
         totalKarutaStringBuilder.append(viewModel.firstPhrase);
-        Observable.from(firstLine).take(viewModel.firstPhrase.length()).subscribe(totalKarutaTextViewList::add);
+        Observable.fromIterable(firstLine).take(viewModel.firstPhrase.length()).subscribe(totalKarutaTextViewList::add);
 
         totalKarutaStringBuilder.append(viewModel.secondPhrase);
-        Observable.from(secondLine).take(viewModel.secondPhrase.length()).subscribe(totalKarutaTextViewList::add);
+        Observable.fromIterable(secondLine).take(viewModel.secondPhrase.length()).subscribe(totalKarutaTextViewList::add);
 
         totalKarutaStringBuilder.append(viewModel.thirdPhrase);
-        Observable.from(thirdLine).take(viewModel.thirdPhrase.length()).subscribe(totalKarutaTextViewList::add);
+        Observable.fromIterable(thirdLine).take(viewModel.thirdPhrase.length()).subscribe(totalKarutaTextViewList::add);
 
-        Observable.from(totalKarutaTextViewList).subscribe(textView -> {
+        Observable.fromIterable(totalKarutaTextViewList).subscribe(textView -> {
             textView.setVisibility(View.INVISIBLE);
         });
 
         String totalKarutaString = totalKarutaStringBuilder.toString();
 
-        subscription = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS).take(totalKarutaString.length())
+        disposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS).take(totalKarutaString.length())
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(indexL -> {
                     final int index = indexL.intValue();

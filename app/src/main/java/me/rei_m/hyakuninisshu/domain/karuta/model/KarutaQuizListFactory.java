@@ -3,9 +3,9 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
-import rx.Observable;
 
 public class KarutaQuizListFactory {
 
