@@ -2,8 +2,8 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
@@ -27,21 +27,22 @@ public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnsw
     }
 
     @Override
-    public Observable<QuizAnswerViewModel> execute(@NonNull String quizId) {
+    public Single<QuizAnswerViewModel> execute(@NonNull String quizId) {
 
-        Single<Boolean> existNextQuizObservable = karutaQuizRepository.existNextQuiz();
+        Observable<Boolean> existNextQuizObservable = karutaQuizRepository.existNextQuiz().toObservable();
+
         Observable<KarutaQuiz> karutaQuizObservable = karutaQuizRepository.resolve(new KarutaQuizIdentifier(quizId))
                 .toObservable()
                 .share();
 
-        Observable<Karuta> karutaObservable = karutaQuizObservable.concatMap(new Function<KarutaQuiz, ObservableSource<Karuta>>() {
+        Observable<Karuta> karutaObservable = karutaQuizObservable.flatMapMaybe(new Function<KarutaQuiz, MaybeSource<Karuta>>() {
             @Override
-            public ObservableSource<Karuta> apply(KarutaQuiz karutaQuiz) throws Exception {
+            public MaybeSource<Karuta> apply(KarutaQuiz karutaQuiz) {
                 return karutaRepository.resolve(karutaQuiz.getResult().collectKarutaId);
             }
         });
 
-        return Observable.zip(existNextQuizObservable.toObservable(), karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) ->
+        return Observable.zip(existNextQuizObservable, karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) ->
                 new QuizAnswerViewModel("第" + karuta.getIdentifier().getValue() + "首",
                         karuta.getCreator(),
                         karuta.getTopPhrase().getFirst().getKanji(),
@@ -51,6 +52,6 @@ public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnsw
                         karuta.getBottomPhrase().getFifth().getKanji(),
                         "karuta_" + karuta.getImageNo(),
                         karutaQuiz.getResult().isCollect,
-                        existNextQuiz));
+                        existNextQuiz)).singleOrError();
     }
 }

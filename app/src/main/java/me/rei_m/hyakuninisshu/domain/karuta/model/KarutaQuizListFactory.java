@@ -3,7 +3,7 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 
@@ -15,13 +15,13 @@ public class KarutaQuizListFactory {
         this.karutaRepository = karutaRepository;
     }
 
-    public Observable<List<KarutaQuiz>> create(int fromKarutaId, int toKarutaId, int kimariji) {
+    public Single<List<KarutaQuiz>> create(int fromKarutaId, int toKarutaId, int kimariji) {
 
         List<Karuta> correctKarutaList = new ArrayList<>();
 
         int quizSize = toKarutaId - fromKarutaId + 1;
 
-        Observable<List<Karuta>> karutaListObservable = (kimariji == 0) ?
+        Single<List<Karuta>> karutaListObservable = (kimariji == 0) ?
                 karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId)) :
                 karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), kimariji);
 

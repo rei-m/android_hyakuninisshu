@@ -2,19 +2,21 @@ package me.rei_m.hyakuninisshu.domain.karuta.repository;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 
 public interface KarutaRepository {
 
-    Observable<Void> initializeEntityList();
+    Completable initializeEntityList();
 
-    Observable<List<Karuta>> asEntityList();
+    Single<List<Karuta>> asEntityList();
 
-    Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier);
+    Single<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier);
 
-    Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier, int kimariji);
+    Single<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier, int kimariji);
 
-    Observable<Karuta> resolve(KarutaIdentifier identifier);
+    Maybe<Karuta> resolve(KarutaIdentifier identifier);
 }

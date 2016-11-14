@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -17,12 +18,12 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     private Map<KarutaQuizIdentifier, KarutaQuiz> karutaQuizCollection;
 
     @Override
-    public Observable<Void> initialize(List<KarutaQuiz> karutaQuizList) {
+    public Completable initialize(List<KarutaQuiz> karutaQuizList) {
         this.karutaQuizCollection = new HashMap<>();
         for (KarutaQuiz karutaQuiz : karutaQuizList) {
             this.karutaQuizCollection.put(karutaQuiz.getIdentifier(), karutaQuiz);
         }
-        return Observable.empty();
+        return Completable.complete();
     }
 
     @Override
@@ -38,10 +39,10 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     }
 
     @Override
-    public Observable<Void> store(KarutaQuiz karutaQuiz) {
+    public Completable store(KarutaQuiz karutaQuiz) {
         karutaQuizCollection.remove(karutaQuiz.getIdentifier());
         karutaQuizCollection.put(karutaQuiz.getIdentifier(), karutaQuiz);
-        return Observable.empty();
+        return Completable.complete();
     }
 
     @Override
@@ -53,7 +54,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     }
 
     @Override
-    public Observable<List<KarutaQuiz>> asEntityList() {
-        return Observable.just(new ArrayList<>(karutaQuizCollection.values()));
+    public Single<List<KarutaQuiz>> asEntityList() {
+        return Single.just(new ArrayList<>(karutaQuizCollection.values()));
     }
 }

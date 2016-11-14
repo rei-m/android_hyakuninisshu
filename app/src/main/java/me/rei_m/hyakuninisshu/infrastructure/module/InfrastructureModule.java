@@ -7,11 +7,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.BuildConfig;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 import me.rei_m.hyakuninisshu.module.ForApplication;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 @Module
 public class InfrastructureModule {
@@ -29,22 +26,5 @@ public class InfrastructureModule {
     OrmaDatabase provideOrmaDatabase(@ForApplication Context context) {
         return OrmaDatabase.builder(context)
                 .build();
-    }
-
-    @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient() {
-
-        OkHttpClient client = new OkHttpClient();
-
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-
-        if (BuildConfig.DEBUG) {
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        } else {
-            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
-        }
-
-        return client.newBuilder().addInterceptor(logging).build();
     }
 }

@@ -2,12 +2,7 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
+import io.reactivex.Completable;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
@@ -25,15 +20,12 @@ public class StartKarutaQuizUsecaseImpl implements StartKarutaQuizUsecase {
     }
 
     @Override
-    public Observable<Void> execute(int fromKarutaId, int toKarutaId, int kimarijiPosition) {
-        return karutaQuizListFactory.create(fromKarutaId, toKarutaId, kimarijiPosition).concatMap(new Function<List<KarutaQuiz>, ObservableSource<Void>>() {
-            @Override
-            public ObservableSource<Void> apply(List<KarutaQuiz> karutaQuizList) {
-                if (karutaQuizList.isEmpty()) {
-                    return Observable.error(new IllegalArgumentException("This condition is not valid."));
-                } else {
-                    return karutaQuizRepository.initialize(karutaQuizList);
-                }
+    public Completable execute(int fromKarutaId, int toKarutaId, int kimarijiPosition) {
+        return karutaQuizListFactory.create(fromKarutaId, toKarutaId, kimarijiPosition).flatMapCompletable(karutaQuizList -> {
+            if (karutaQuizList.isEmpty()) {
+                return Completable.error(new IllegalArgumentException("This condition is not valid."));
+            } else {
+                return karutaQuizRepository.initialize(karutaQuizList);
             }
         });
     }
