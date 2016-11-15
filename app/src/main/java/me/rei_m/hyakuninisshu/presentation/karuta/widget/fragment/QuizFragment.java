@@ -21,6 +21,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
@@ -180,9 +181,11 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     public void displayAnswer(String quizId, boolean isCollect) {
         if (listener != null) {
 //            listener.onAnswered(quizId);
-//            binding.getViewModel().setQuizState((isCollect) ? QuizState.ANSWERED_COLLECT : QuizState.ANSWERED_INCORRECT);
-//            System.out.println(binding.getViewModel().getQuizState());
-
+            if (isCollect) {
+                binding.imageQuizResult.setImageResource(R.drawable.check_correct);
+            } else {
+                binding.imageQuizResult.setImageResource(R.drawable.check_incorrect);
+            }
         }
     }
 
