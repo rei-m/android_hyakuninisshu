@@ -36,7 +36,12 @@ public class QuizPresenter implements QuizContact.Actions {
     public void onClickChoice(String quizId, int choiceNo) {
         answerKarutaQuizUsecase.execute(quizId, choiceNo).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isCollect -> {
-                    view.displayAnswer(quizId, isCollect);
+                    view.displayResult(quizId, isCollect);
                 });
+    }
+
+    @Override
+    public void onClickResult(String quizId) {
+        view.displayAnswer(quizId);
     }
 }

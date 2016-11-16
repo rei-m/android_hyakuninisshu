@@ -7,14 +7,18 @@ public interface QuizContact {
     interface View {
         void initialize(QuizViewModel viewModel);
 
-        void displayAnswer(String quizId, boolean isCollect);
+        void displayResult(String quizId, boolean isCollect);
+
+        void displayAnswer(String quizId);
     }
 
     interface Actions {
         void onCreate(View view);
-        
+
         void onResume();
 
         void onClickChoice(String quizId, int choiceNo);
+
+        void onClickResult(String quizId);
     }
 }

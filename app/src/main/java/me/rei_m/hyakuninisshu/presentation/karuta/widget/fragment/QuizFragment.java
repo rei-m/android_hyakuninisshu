@@ -178,15 +178,21 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     }
 
     @Override
-    public void displayAnswer(String quizId, boolean isCollect) {
+    public void displayResult(String quizId, boolean isCollect) {
         if (listener != null) {
-//            listener.onAnswered(quizId);
             if (isCollect) {
                 binding.imageQuizResult.setImageResource(R.drawable.check_correct);
             } else {
                 binding.imageQuizResult.setImageResource(R.drawable.check_incorrect);
             }
+            binding.layoutQuizResult.setVisibility(View.VISIBLE);
+            disposable.dispose();
         }
+    }
+
+    @Override
+    public void displayAnswer(String quizId) {
+        listener.onAnswered(quizId);
     }
 
     public interface Injector {
