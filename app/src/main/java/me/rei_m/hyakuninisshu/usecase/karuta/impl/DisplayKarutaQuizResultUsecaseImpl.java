@@ -5,11 +5,11 @@ import android.support.annotation.NonNull;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizResultViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizResultUsecase;
-import rx.Observable;
 
 public class DisplayKarutaQuizResultUsecaseImpl implements DisplayKarutaQuizResultUsecase {
 
@@ -20,7 +20,7 @@ public class DisplayKarutaQuizResultUsecaseImpl implements DisplayKarutaQuizResu
     }
 
     @Override
-    public Observable<QuizResultViewModel> execute() {
+    public Single<QuizResultViewModel> execute() {
 
         return karutaQuizRepository.asEntityList().map(karutaQuizList -> {
 

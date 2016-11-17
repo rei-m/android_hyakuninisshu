@@ -3,12 +3,12 @@ package me.rei_m.hyakuninisshu;
 import android.app.Application;
 import android.support.annotation.VisibleForTesting;
 
-import me.rei_m.hyakuninisshu.di.ApplicationComponent;
-import me.rei_m.hyakuninisshu.di.ApplicationModule;
-import me.rei_m.hyakuninisshu.di.DaggerApplicationComponent;
-import me.rei_m.hyakuninisshu.di.DomainModule;
-import me.rei_m.hyakuninisshu.di.InfrastructureModule;
-import me.rei_m.hyakuninisshu.di.UsecaseModule;
+import me.rei_m.hyakuninisshu.component.ApplicationComponent;
+import me.rei_m.hyakuninisshu.component.DaggerApplicationComponent;
+import me.rei_m.hyakuninisshu.domain.karuta.module.KarutaDomainModule;
+import me.rei_m.hyakuninisshu.infrastructure.module.InfrastructureModule;
+import me.rei_m.hyakuninisshu.module.ApplicationModule;
+import me.rei_m.hyakuninisshu.usecase.karuta.module.KarutaUsecaseModule;
 
 public class App extends Application {
 
@@ -17,14 +17,14 @@ public class App extends Application {
     public ApplicationComponent getComponent() {
         return component;
     }
-    
+
     @VisibleForTesting
     protected ApplicationComponent createApplicationComponent() {
         return DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .infrastructureModule(new InfrastructureModule())
-                .domainModule(new DomainModule())
-                .usecaseModule(new UsecaseModule())
+                .karutaDomainModule(new KarutaDomainModule())
+                .karutaUsecaseModule(new KarutaUsecaseModule())
                 .build();
     }
 

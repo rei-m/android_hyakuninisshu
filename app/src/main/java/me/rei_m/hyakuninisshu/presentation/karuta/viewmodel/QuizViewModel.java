@@ -33,6 +33,8 @@ public class QuizViewModel {
 
     public final QuizChoiceViewModel choiceFourth;
 
+//    private QuizState quizState;
+
     public QuizViewModel(String quizId,
                          String firstPhrase,
                          String secondPhrase,
@@ -51,19 +53,16 @@ public class QuizViewModel {
         this.choiceSecond = choiceSecond;
         this.choiceThird = choiceThird;
         this.choiceFourth = choiceFourth;
+//        this.quizState = QuizState.UNANSWERED;
     }
 
-    @Override
-    public String toString() {
-        return "QuizViewModel{" +
-                "quizId='" + quizId + '\'' +
-                ", firstPhrase='" + firstPhrase + '\'' +
-                ", secondPhrase='" + secondPhrase + '\'' +
-                ", thirdPhrase='" + thirdPhrase + '\'' +
-                ", choiceFirst=" + choiceFirst +
-                ", choiceSecond=" + choiceSecond +
-                ", choiceThird=" + choiceThird +
-                ", choiceFourth=" + choiceFourth +
-                '}';
-    }
+//    @Bindable
+//    public QuizState getQuizState() {
+//        return quizState;
+//    }
+
+//    public void setQuizState(QuizState quizState) {
+//        this.quizState = quizState;
+//        notifyPropertyChanged(BR.quizState);
+//    }
 }

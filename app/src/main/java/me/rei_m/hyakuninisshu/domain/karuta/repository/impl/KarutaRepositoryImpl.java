@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
@@ -18,7 +21,6 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
-import rx.Observable;
 
 public class KarutaRepositoryImpl implements KarutaRepository {
 
@@ -32,8 +34,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Observable<Void> initializeEntityList() {
-
+    public Completable initializeEntityList() {
         try {
             InputStream inputStream = context.getAssets().open("karuta_list.json");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -46,18 +47,17 @@ public class KarutaRepositoryImpl implements KarutaRepository {
 
             List<KarutaSchema> karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString());
 
-            return orma.transactionAsync(() -> {
+            return orma.transactionAsCompletable(() -> {
                 Inserter<KarutaSchema> inserter = KarutaSchema.relation(orma).inserter();
                 inserter.executeAll(karutaSchemaList);
-            }).toObservable();
-
+            });
         } catch (IOException e) {
-            return Observable.error(e);
+            return Completable.error(e);
         }
     }
 
     @Override
-    public Observable<List<Karuta>> asEntityList() {
+    public Single<List<Karuta>> asEntityList() {
         return KarutaSchema.relation(orma).selector()
                 .orderByIdAsc()
                 .executeAsObservable()
@@ -66,7 +66,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier) {
+    public Single<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier) {
         return KarutaSchema.relation(orma).selector()
                 .idGe(fromIdentifier.getValue())
                 .and()
@@ -78,7 +78,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Observable<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier, int kimariji) {
+    public Single<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier, int kimariji) {
         return KarutaSchema.relation(orma).selector()
                 .idGe(fromIdentifier.getValue())
                 .and()
@@ -92,10 +92,11 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Observable<Karuta> resolve(KarutaIdentifier identifier) {
-        return KarutaSchema.relation(orma).selector()
+    public Maybe<Karuta> resolve(KarutaIdentifier identifier) {
+        return Maybe.fromSingle(KarutaSchema.relation(orma).selector()
                 .idEq(identifier.getValue())
                 .executeAsObservable()
-                .map(KarutaFactory::create);
+                .map(KarutaFactory::create)
+                .singleOrError());
     }
 }

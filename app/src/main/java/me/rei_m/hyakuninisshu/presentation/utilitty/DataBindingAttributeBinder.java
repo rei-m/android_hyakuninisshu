@@ -1,17 +1,16 @@
 package me.rei_m.hyakuninisshu.presentation.utilitty;
 
-import android.content.Context;
 import android.databinding.BindingAdapter;
-import android.graphics.Point;
+import android.databinding.ObservableField;
 import android.support.annotation.DimenRes;
-import android.view.Display;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.view.VerticalSingleLineTextView;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
 
 public class DataBindingAttributeBinder {
 
@@ -19,17 +18,20 @@ public class DataBindingAttributeBinder {
     }
 
     @BindingAdapter({"verticalText"})
-    public static void setVerticalText(VerticalSingleLineTextView view, String text) {
+    public static void setVerticalText(@NonNull VerticalSingleLineTextView view,
+                                       @NonNull String text) {
         view.drawText(text);
     }
 
     @BindingAdapter({"verticalTextSize"})
-    public static void setVerticalTextSize(VerticalSingleLineTextView view, @DimenRes int dimenId) {
+    public static void setVerticalTextSize(@NonNull VerticalSingleLineTextView view,
+                                           @DimenRes int dimenId) {
         view.setTextSize(dimenId);
     }
 
     @BindingAdapter({"stringDrawableId"})
-    public static void setStringDrawableId(ImageView view, String drawableId) {
+    public static void setStringDrawableId(@NonNull ImageView view,
+                                           @Nullable String drawableId) {
         if (drawableId == null) {
             return;
         }
@@ -37,41 +39,50 @@ public class DataBindingAttributeBinder {
         view.setImageResource(resId);
     }
 
-    @BindingAdapter({"relativeLeftMarginTop"})
-    public static void setRelativeLeftMarginTop(View view, int intentLevel) {
+    @BindingAdapter({"visibilityByQuizState"})
+    public static void setVisibilityByQuizState(@NonNull ImageView imageView,
+                                                @Nullable ObservableField<QuizState> quizState) {
 
-        Context context = view.getContext();
+        System.out.println(quizState);
 
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
+        if (quizState == null) {
+            imageView.setVisibility(View.GONE);
+            return;
+        }
 
-        int levelMargin = context.getResources().getDimensionPixelOffset(R.dimen.margin_karuta_phrase);
-        int margin = levelMargin * intentLevel;
-
-        ViewGroup.LayoutParams lp = view.getLayoutParams();
-        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lp;
-        mlp.setMargins(mlp.leftMargin + margin, mlp.topMargin, mlp.rightMargin, mlp.bottomMargin);
-        view.setLayoutParams(mlp);
+        switch (quizState.get()) {
+            case UNANSWERED:
+                imageView.setVisibility(View.GONE);
+                break;
+            case ANSWERED_COLLECT:
+                imageView.setImageResource(R.drawable.check_correct);
+                imageView.setVisibility(View.VISIBLE);
+                break;
+            case ANSWERED_INCORRECT:
+                imageView.setImageResource(R.drawable.check_incorrect);
+                imageView.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
-    @BindingAdapter({"relativeLeftMarginBottom"})
-    public static void setRelativeLeftMarginBottom(View view, int intentLevel) {
-
-        Context context = view.getContext();
-
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-
-        int levelMargin = context.getResources().getDimensionPixelOffset(R.dimen.margin_karuta_phrase) / 2;
-        int margin = levelMargin * intentLevel;
-
-        ViewGroup.LayoutParams lp = view.getLayoutParams();
-        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lp;
-        mlp.setMargins(mlp.leftMargin + margin, mlp.topMargin, mlp.rightMargin, mlp.bottomMargin);
-        view.setLayoutParams(mlp);
-    }
+//    @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
+//    public static void bindTrainingRangeData(Spinner spinner,
+//                                             TrainingRange newSelectedValue,
+//                                             final InverseBindingListener newTextAttrChanged) {
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                newTextAttrChanged.onChange();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
+//
+//        if (newSelectedValue != null) {
+//            int pos = ((SpinnerAdapter) spinner.getAdapter()).getPosition(newSelectedValue);
+//            spinner.setSelection(pos, true);
+//        }
+//    }
 }

@@ -1,7 +1,8 @@
 package me.rei_m.hyakuninisshu.usecase.karuta;
 
-import rx.Observable;
+
+import io.reactivex.Completable;
 
 public interface StartKarutaQuizUsecase {
-    Observable<Void> execute(int fromKarutaId, int toKarutaId, int kimarijiPosition);
+    Completable execute(int fromKarutaId, int toKarutaId, int kimarijiPosition);
 }

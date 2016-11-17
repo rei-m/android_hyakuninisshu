@@ -2,21 +2,23 @@ package me.rei_m.hyakuninisshu.domain.karuta.repository;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
-import rx.Observable;
 
 public interface KarutaQuizRepository {
 
-    Observable<Void> initialize(List<KarutaQuiz> karutaQuizList);
+    Completable initialize(List<KarutaQuiz> karutaQuizList);
 
-    Observable<KarutaQuiz> pop();
+    Maybe<KarutaQuiz> pop();
 
-    Observable<KarutaQuiz> resolve(KarutaQuizIdentifier identifier);
+    Maybe<KarutaQuiz> resolve(KarutaQuizIdentifier identifier);
 
-    Observable<Void> store(KarutaQuiz karutaQuiz);
+    Completable store(KarutaQuiz karutaQuiz);
 
-    Observable<Boolean> existNextQuiz();
+    Single<Boolean> existNextQuiz();
 
-    Observable<List<KarutaQuiz>> asEntityList();
+    Single<List<KarutaQuiz>> asEntityList();
 }

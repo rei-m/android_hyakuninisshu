@@ -7,9 +7,9 @@ import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 
 public class TrainingMenuViewModel {
 
-    private ObservableField<TrainingRange> trainingRange;
+    private final ObservableField<TrainingRange> trainingRange;
 
-    private ObservableField<Kimariji> kimariji;
+    private final ObservableField<Kimariji> kimariji;
 
     public TrainingMenuViewModel() {
         trainingRange = new ObservableField<>();
