@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 
 public interface QuizContact {
@@ -15,7 +16,7 @@ public interface QuizContact {
     interface Actions {
         void onCreate(View view);
 
-        void onResume();
+        void onResume(QuizState state);
 
         void onClickChoice(String quizId, int choiceNo);
 

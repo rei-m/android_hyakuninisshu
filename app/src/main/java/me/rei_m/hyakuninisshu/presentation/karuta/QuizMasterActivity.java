@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import javax.inject.Inject;
@@ -92,9 +93,10 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     }
 
     @Override
-    public void onAnswered(String quizId) {
+    public void onAnswered(@NonNull String quizId) {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.class.getSimpleName())
                 .commit();
     }
@@ -103,6 +105,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     public void onClickGoToNext() {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                 .replace(R.id.content, QuizFragment.newInstance(), QuizFragment.class.getSimpleName())
                 .commit();
     }
@@ -111,6 +114,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     public void onClickGoToResult() {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.class.getSimpleName())
                 .commit();
     }

@@ -2,6 +2,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +26,16 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.StateVm;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
 
 public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
+
+    private static final String KEY_QUIZ_STATE = "quizState";
 
     public static QuizFragment newInstance() {
         return new QuizFragment();
@@ -47,6 +50,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private Disposable disposable;
 
+    private QuizState state = QuizState.UNANSWERED;
+
     public QuizFragment() {
         // Required empty public constructor
     }
@@ -54,15 +59,16 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            state = (QuizState) savedInstanceState.getSerializable(KEY_QUIZ_STATE);
+        }
         presenter.onCreate(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         binding = FragmentQuizBinding.inflate(inflater, container, false);
         binding.setPresenter(presenter);
-        binding.setState(new StateVm());
         return binding.getRoot();
     }
 
@@ -75,7 +81,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume();
+        presenter.onResume(state);
     }
 
     @Override
@@ -102,6 +108,12 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_QUIZ_STATE, state);
     }
 
     @Override
@@ -178,21 +190,27 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     }
 
     @Override
-    public void displayResult(String quizId, boolean isCollect) {
-        if (listener != null) {
-            if (isCollect) {
-                binding.imageQuizResult.setImageResource(R.drawable.check_correct);
-            } else {
-                binding.imageQuizResult.setImageResource(R.drawable.check_incorrect);
-            }
-            binding.layoutQuizResult.setVisibility(View.VISIBLE);
+    public void displayResult(@NonNull String quizId, boolean isCollect) {
+        if (isCollect) {
+            state = QuizState.ANSWERED_COLLECT;
+            binding.imageQuizResult.setImageResource(R.drawable.check_correct);
+        } else {
+            state = QuizState.ANSWERED_INCORRECT;
+            binding.imageQuizResult.setImageResource(R.drawable.check_incorrect);
+        }
+        binding.layoutQuizResult.setVisibility(View.VISIBLE);
+
+        if (disposable != null) {
             disposable.dispose();
+            disposable = null;
         }
     }
 
     @Override
-    public void displayAnswer(String quizId) {
-        listener.onAnswered(quizId);
+    public void displayAnswer(@NonNull String quizId) {
+        if (listener != null) {
+            listener.onAnswered(quizId);
+        }
     }
 
     public interface Injector {

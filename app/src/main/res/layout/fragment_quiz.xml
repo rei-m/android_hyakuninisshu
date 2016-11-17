@@ -8,11 +8,7 @@
         <variable
             name="viewModel"
             type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel" />
-
-        <variable
-            name="state"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.StateVm" />
-
+        
         <variable
             name="presenter"
             type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizContact.Actions" />
