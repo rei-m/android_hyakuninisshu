@@ -1,5 +1,7 @@
 package me.rei_m.hyakuninisshu.domain.karuta.repository;
 
+import android.support.v4.util.Pair;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -21,4 +23,6 @@ public interface KarutaQuizRepository {
     Single<Boolean> existNextQuiz();
 
     Single<List<KarutaQuiz>> asEntityList();
+
+    Single<Pair<Integer, Integer>> countQuizByAnswered();
 }

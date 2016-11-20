@@ -1,5 +1,7 @@
 package me.rei_m.hyakuninisshu.domain.karuta.repository.impl;
 
+import android.support.v4.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,5 +58,12 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     @Override
     public Single<List<KarutaQuiz>> asEntityList() {
         return Single.just(new ArrayList<>(karutaQuizCollection.values()));
+    }
+
+    @Override
+    public Single<Pair<Integer, Integer>> countQuizByAnswered() {
+        return Observable.fromIterable(karutaQuizCollection.values())
+                .reduce(0, (answeredCount, karutaQuiz) -> (karutaQuiz.getResult() != null) ? answeredCount + 1 : answeredCount)
+                .map(answeredCount -> new Pair<>(karutaQuizCollection.size(), answeredCount));
     }
 }
