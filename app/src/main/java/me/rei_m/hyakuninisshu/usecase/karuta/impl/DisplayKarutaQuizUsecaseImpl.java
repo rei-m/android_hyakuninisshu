@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
 
     @Override
     public Single<QuizViewModel> execute() {
+
         return karutaQuizRepository.pop().flatMapSingle(new Function<KarutaQuiz, SingleSource<QuizViewModel>>() {
             @Override
             public SingleSource<QuizViewModel> apply(KarutaQuiz karutaQuiz) {
@@ -48,11 +50,16 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
 
                 Single<Karuta> collectObservable = karutaRepository.resolve(quizContents.collectId).toSingle();
 
-                return Single.zip(choiceObservable, collectObservable, (karutaList, karuta) -> {
+                Single<Pair<Integer, Integer>> countObservable = karutaQuizRepository.countQuizByAnswered();
+
+                return Single.zip(choiceObservable, collectObservable, countObservable, (karutaList, karuta, count) -> {
                     BottomPhrase choiceFirst = karutaList.get(0).getBottomPhrase();
                     BottomPhrase choiceSecond = karutaList.get(1).getBottomPhrase();
                     BottomPhrase choiceThird = karutaList.get(2).getBottomPhrase();
                     BottomPhrase choiceFourth = karutaList.get(3).getBottomPhrase();
+
+                    String quizCount = String.valueOf(count.second + 1) + " / " + count.first.toString();
+
                     return new QuizViewModel(karutaQuiz.getIdentifier().getValue(),
                             karuta.getTopPhrase().getFirst().getKanji(),
                             karuta.getTopPhrase().getSecond().getKanji(),
@@ -60,7 +67,8 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
                             new QuizViewModel.QuizChoiceViewModel(choiceFirst.getFourth().getKanji(), choiceFirst.getFifth().getKanji()),
                             new QuizViewModel.QuizChoiceViewModel(choiceSecond.getFourth().getKanji(), choiceSecond.getFifth().getKanji()),
                             new QuizViewModel.QuizChoiceViewModel(choiceThird.getFourth().getKanji(), choiceThird.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()));
+                            new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()),
+                            quizCount);
                 });
             }
         });

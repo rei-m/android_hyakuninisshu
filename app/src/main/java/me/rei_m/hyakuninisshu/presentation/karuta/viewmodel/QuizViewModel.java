@@ -33,16 +33,17 @@ public class QuizViewModel {
 
     public final QuizChoiceViewModel choiceFourth;
 
-//    private QuizState quizState;
+    public final String quizCount;
 
-    public QuizViewModel(String quizId,
-                         String firstPhrase,
-                         String secondPhrase,
-                         String thirdPhrase,
-                         QuizChoiceViewModel choiceFirst,
-                         QuizChoiceViewModel choiceSecond,
-                         QuizChoiceViewModel choiceThird,
-                         QuizChoiceViewModel choiceFourth) {
+    public QuizViewModel(@NonNull String quizId,
+                         @NonNull String firstPhrase,
+                         @NonNull String secondPhrase,
+                         @NonNull String thirdPhrase,
+                         @NonNull QuizChoiceViewModel choiceFirst,
+                         @NonNull QuizChoiceViewModel choiceSecond,
+                         @NonNull QuizChoiceViewModel choiceThird,
+                         @NonNull QuizChoiceViewModel choiceFourth,
+                         String quizCount) {
 
         this.quizId = quizId;
         this.firstPhrase = firstPhrase;
@@ -53,16 +54,22 @@ public class QuizViewModel {
         this.choiceSecond = choiceSecond;
         this.choiceThird = choiceThird;
         this.choiceFourth = choiceFourth;
-//        this.quizState = QuizState.UNANSWERED;
+
+        this.quizCount = quizCount;
     }
-
-//    @Bindable
-//    public QuizState getQuizState() {
-//        return quizState;
-//    }
-
-//    public void setQuizState(QuizState quizState) {
-//        this.quizState = quizState;
-//        notifyPropertyChanged(BR.quizState);
-//    }
+    
+    @Override
+    public String toString() {
+        return "QuizViewModel{" +
+                "quizId='" + quizId + '\'' +
+                ", firstPhrase='" + firstPhrase + '\'' +
+                ", secondPhrase='" + secondPhrase + '\'' +
+                ", thirdPhrase='" + thirdPhrase + '\'' +
+                ", choiceFirst=" + choiceFirst +
+                ", choiceSecond=" + choiceSecond +
+                ", choiceThird=" + choiceThird +
+                ", choiceFourth=" + choiceFourth +
+                ", quizCount='" + quizCount + '\'' +
+                '}';
+    }
 }
