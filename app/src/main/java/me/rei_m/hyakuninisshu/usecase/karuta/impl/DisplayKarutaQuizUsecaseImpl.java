@@ -10,7 +10,6 @@ import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import me.rei_m.hyakuninisshu.domain.karuta.model.BottomPhrase;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
@@ -37,37 +36,6 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
     @Override
     public Single<QuizViewModel> execute() {
 
-        return Observable.zip(karutaQuizRepository.countQuizByAnswered(), karutaQuizRepository.pop(), new BiFunction<Pair<Integer, Integer>, KarutaQuiz, QuizViewModel>() {
-            @Override
-            public QuizViewModel apply(Pair<Integer, Integer> integerIntegerPair, KarutaQuiz karutaQuiz) throws Exception {
-                KarutaQuizContents quizContents = karutaQuiz.start(new Date());
-
-                Single<List<Karuta>> choiceObservable = Observable.fromIterable(quizContents.choiceList).flatMapMaybe(new Function<KarutaIdentifier, MaybeSource<Karuta>>() {
-                    @Override
-                    public MaybeSource<Karuta> apply(KarutaIdentifier identifier) {
-                        return karutaRepository.resolve(identifier);
-                    }
-                }).toList();
-
-                Single<Karuta> collectObservable = karutaRepository.resolve(quizContents.collectId).toSingle();
-
-                return Single.zip(choiceObservable, collectObservable, (karutaList, karuta) -> {
-                    BottomPhrase choiceFirst = karutaList.get(0).getBottomPhrase();
-                    BottomPhrase choiceSecond = karutaList.get(1).getBottomPhrase();
-                    BottomPhrase choiceThird = karutaList.get(2).getBottomPhrase();
-                    BottomPhrase choiceFourth = karutaList.get(3).getBottomPhrase();
-                    return new QuizViewModel(karutaQuiz.getIdentifier().getValue(),
-                            karuta.getTopPhrase().getFirst().getKanji(),
-                            karuta.getTopPhrase().getSecond().getKanji(),
-                            karuta.getTopPhrase().getThird().getKanji(),
-                            new QuizViewModel.QuizChoiceViewModel(choiceFirst.getFourth().getKanji(), choiceFirst.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceSecond.getFourth().getKanji(), choiceSecond.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceThird.getFourth().getKanji(), choiceThird.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()));
-                });
-            }
-        });
-
         return karutaQuizRepository.pop().flatMapSingle(new Function<KarutaQuiz, SingleSource<QuizViewModel>>() {
             @Override
             public SingleSource<QuizViewModel> apply(KarutaQuiz karutaQuiz) {
@@ -82,11 +50,16 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
 
                 Single<Karuta> collectObservable = karutaRepository.resolve(quizContents.collectId).toSingle();
 
-                return Single.zip(choiceObservable, collectObservable, (karutaList, karuta) -> {
+                Single<Pair<Integer, Integer>> countObservable = karutaQuizRepository.countQuizByAnswered();
+
+                return Single.zip(choiceObservable, collectObservable, countObservable, (karutaList, karuta, count) -> {
                     BottomPhrase choiceFirst = karutaList.get(0).getBottomPhrase();
                     BottomPhrase choiceSecond = karutaList.get(1).getBottomPhrase();
                     BottomPhrase choiceThird = karutaList.get(2).getBottomPhrase();
                     BottomPhrase choiceFourth = karutaList.get(3).getBottomPhrase();
+
+                    String quizCount = String.valueOf(count.second + 1) + " / " + count.first.toString();
+
                     return new QuizViewModel(karutaQuiz.getIdentifier().getValue(),
                             karuta.getTopPhrase().getFirst().getKanji(),
                             karuta.getTopPhrase().getSecond().getKanji(),
@@ -94,7 +67,8 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
                             new QuizViewModel.QuizChoiceViewModel(choiceFirst.getFourth().getKanji(), choiceFirst.getFifth().getKanji()),
                             new QuizViewModel.QuizChoiceViewModel(choiceSecond.getFourth().getKanji(), choiceSecond.getFifth().getKanji()),
                             new QuizViewModel.QuizChoiceViewModel(choiceThird.getFourth().getKanji(), choiceThird.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()));
+                            new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()),
+                            quizCount);
                 });
             }
         });
