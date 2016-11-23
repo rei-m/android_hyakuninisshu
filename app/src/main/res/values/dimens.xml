@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <dimen name="margin_xxxl">96dp</dimen>
@@ -11,10 +12,6 @@
     <dimen name="margin_xs">4dp</dimen>
     <dimen name="margin_xxs">2dp</dimen>
 
-    <dimen name="margin_karuta_phrase">56dp</dimen>
-
-    <dimen name="margin_karuta_word_adjust">-10dp</dimen>
-
     <dimen name="padding_xxxl">96dp</dimen>
     <dimen name="padding_xxl">64dp</dimen>
     <dimen name="padding_xl">40dp</dimen>
@@ -26,6 +23,18 @@
     <dimen name="padding_xs">4dp</dimen>
     <dimen name="padding_xxs">2dp</dimen>
 
+    <!-- https://material.google.com/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->
+    <dimen name="elevation_level_xxxl">24dp</dimen>
+    <dimen name="elevation_level_xxl">16dp</dimen>
+    <dimen name="elevation_level_xl">12dp</dimen>
+    <dimen name="elevation_level_ll">9dp</dimen>
+    <dimen name="elevation_level_l">8dp</dimen>
+    <dimen name="elevation_level_m">6dp</dimen>
+    <dimen name="elevation_level_ms">4dp</dimen>
+    <dimen name="elevation_level_w">3dp</dimen>
+    <dimen name="elevation_level_xs">2dp</dimen>
+    <dimen name="elevation_level_xxs">1dp</dimen>
+
     <dimen name="text_xxl">52sp</dimen>
     <dimen name="text_xl">34sp</dimen>
     <dimen name="text_ll">24sp</dimen>
@@ -35,7 +44,5 @@
     <dimen name="text_s">14sp</dimen>
     <dimen name="text_xs">12sp</dimen>
     <dimen name="text_xxs">10sp</dimen>
-
-    <dimen name="text_karuta_quiz">28sp</dimen>
 
 </resources>

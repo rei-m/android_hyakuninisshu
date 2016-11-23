@@ -1,10 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HyakuninIsshu</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="blank">　</string>
+    <string name="result">結果</string>
 
     <string name="start_training">練習をはじめる</string>
     <string name="setting">設定</string>
