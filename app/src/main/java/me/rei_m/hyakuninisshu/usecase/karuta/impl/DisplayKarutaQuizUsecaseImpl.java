@@ -64,10 +64,10 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
                             karuta.getTopPhrase().getFirst().getKanji(),
                             karuta.getTopPhrase().getSecond().getKanji(),
                             karuta.getTopPhrase().getThird().getKanji(),
-                            new QuizViewModel.QuizChoiceViewModel(choiceFirst.getFourth().getKanji(), choiceFirst.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceSecond.getFourth().getKanji(), choiceSecond.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceThird.getFourth().getKanji(), choiceThird.getFifth().getKanji()),
-                            new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKanji(), choiceFourth.getFifth().getKanji()),
+                            new QuizViewModel.QuizChoiceViewModel(choiceFirst.getFourth().getKana(), choiceFirst.getFifth().getKana()),
+                            new QuizViewModel.QuizChoiceViewModel(choiceSecond.getFourth().getKana(), choiceSecond.getFifth().getKana()),
+                            new QuizViewModel.QuizChoiceViewModel(choiceThird.getFourth().getKana(), choiceThird.getFifth().getKana()),
+                            new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKana(), choiceFourth.getFifth().getKana()),
                             quizCount);
                 });
             }
