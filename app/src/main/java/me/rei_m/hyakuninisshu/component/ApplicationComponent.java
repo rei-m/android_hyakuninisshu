@@ -4,9 +4,9 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import me.rei_m.hyakuninisshu.App;
-import me.rei_m.hyakuninisshu.module.ApplicationModule;
 import me.rei_m.hyakuninisshu.domain.karuta.module.KarutaDomainModule;
 import me.rei_m.hyakuninisshu.infrastructure.module.InfrastructureModule;
+import me.rei_m.hyakuninisshu.module.ApplicationModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.SplashActivityComponent;

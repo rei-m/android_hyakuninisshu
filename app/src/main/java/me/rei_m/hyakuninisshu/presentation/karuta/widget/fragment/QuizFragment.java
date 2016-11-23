@@ -30,6 +30,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
+import me.rei_m.hyakuninisshu.presentation.manager.DeviceManager;
 
 public class QuizFragment extends BaseFragment implements QuizContact.View {
 
@@ -43,6 +44,9 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     @Inject
     QuizContact.Actions presenter;
+
+    @Inject
+    DeviceManager deviceManager;
 
     private FragmentQuizBinding binding;
 
