@@ -5,11 +5,10 @@ import android.graphics.Point;
 import android.view.WindowManager;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import me.rei_m.hyakuninisshu.module.ForApplication;
 
-@Singleton
+@ForApplication
 public class DeviceManager {
 
     private final Context context;

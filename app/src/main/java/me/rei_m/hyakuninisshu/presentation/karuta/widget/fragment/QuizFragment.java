@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -72,7 +73,13 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
+
+        Point windowSize = deviceManager.getWindowSize();
+        RelativeViewSize relativeViewSize = new RelativeViewSize(windowSize);
+
         binding.setPresenter(presenter);
+        binding.setViewSize(relativeViewSize);
+
         return binding.getRoot();
     }
 
@@ -223,5 +230,27 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     public interface OnFragmentInteractionListener {
         void onAnswered(String quizId);
+    }
+
+    public static class RelativeViewSize {
+
+        public final int windowWidth;
+        public final int windowHeight;
+        public final int phraseHeight;
+        public final int choiceWidth;
+        public final int quizTextSize;
+        public final int choiceTextSize;
+
+        public RelativeViewSize(@NonNull Point windowSize) {
+            windowWidth = windowSize.x;
+            windowHeight = windowSize.y;
+
+            phraseHeight = windowHeight / 2;
+            quizTextSize = phraseHeight / 13;
+
+            int hoge = windowWidth / 4;
+            choiceTextSize = hoge / 5;
+            choiceWidth = choiceTextSize * 3;
+        }
     }
 }

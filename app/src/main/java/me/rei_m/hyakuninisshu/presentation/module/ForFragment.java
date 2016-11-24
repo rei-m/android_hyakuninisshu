@@ -1,12 +1,11 @@
 package me.rei_m.hyakuninisshu.presentation.module;
 
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import javax.inject.Qualifier;
+import javax.inject.Scope;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-@Qualifier
-@Retention(RUNTIME)
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ForFragment {
 }
