@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
@@ -190,7 +189,6 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
         disposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS)
                 .zipWith(totalKarutaTextViewList, (aLong, textView) -> textView)
-                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textView -> {
                     final Animation fadeIn = new AlphaAnimation(0, 1);
@@ -235,23 +233,18 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     public static class RelativeViewSize {
 
-        public final int windowWidth;
-        public final int windowHeight;
-        public final int phraseHeight;
-        public final int choiceWidth;
         public final int quizTextSize;
         public final int choiceTextSize;
 
-        public RelativeViewSize(@NonNull Point windowSize) {
-            windowWidth = windowSize.x;
-            windowHeight = windowSize.y;
+        RelativeViewSize(@NonNull Point windowSize) {
+            int windowWidth = windowSize.x;
+            int windowHeight = windowSize.y;
 
-            phraseHeight = windowHeight / 2;
+            int phraseHeight = windowHeight / 2;
             quizTextSize = phraseHeight / 13;
 
-            int hoge = windowWidth / 4;
-            choiceTextSize = hoge / 5;
-            choiceWidth = choiceTextSize * 3;
+            int choiceWidth = windowWidth / 4;
+            choiceTextSize = choiceWidth / 5;
         }
     }
 }
