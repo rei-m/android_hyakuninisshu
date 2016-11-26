@@ -19,6 +19,16 @@ public class DataBindingAttributeBinder {
     private DataBindingAttributeBinder() {
     }
 
+    @BindingAdapter({"textForQuiz", "textPosition"})
+    public static void setTextForQuiz(@NonNull TextView view,
+                                      @Nullable String text,
+                                      int textPosition) {
+        if (text == null || text.length() < textPosition) {
+            return;
+        }
+        view.setText(text.substring(textPosition - 1, textPosition));
+    }
+
     @BindingAdapter({"textSizeByPx"})
     public static void setTextSizeByPx(@NonNull TextView view,
                                        int textSize) {

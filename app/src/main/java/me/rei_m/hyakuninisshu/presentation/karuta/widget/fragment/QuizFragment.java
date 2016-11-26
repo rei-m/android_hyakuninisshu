@@ -37,6 +37,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
 
+    private static final String KEY_VIEW_MODEL = "viewModel";
+
     private static final String KEY_QUIZ_STATE = "quizState";
 
     public static QuizFragment newInstance() {
@@ -55,6 +57,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private Disposable disposable;
 
+    private QuizViewModel viewModel;
+
     private QuizState state = QuizState.UNANSWERED;
 
     public QuizFragment() {
@@ -65,6 +69,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
+            viewModel = (QuizViewModel) savedInstanceState.getSerializable(KEY_VIEW_MODEL);
             state = (QuizState) savedInstanceState.getSerializable(KEY_QUIZ_STATE);
         }
         presenter.onCreate(this);
@@ -92,7 +97,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume(state);
+        presenter.onResume(viewModel, state);
     }
 
     @Override
@@ -124,6 +129,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_VIEW_MODEL, viewModel);
         outState.putSerializable(KEY_QUIZ_STATE, state);
     }
 
@@ -135,9 +141,15 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     }
 
     @Override
-    public void initialize(QuizViewModel viewModel) {
-        binding.setViewModel(viewModel);
+    public void initialize(@NonNull QuizViewModel viewModel) {
 
+        this.viewModel = viewModel;
+
+        binding.setViewModel(viewModel);
+    }
+
+    @Override
+    public void startDisplayQuizAnimation(@NonNull QuizViewModel viewModel) {
         final List<TextView> firstLine = new ArrayList<>(Arrays.asList(
                 binding.phrase11,
                 binding.phrase12,
@@ -168,35 +180,24 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         ));
 
         final List<TextView> totalKarutaTextViewList = new ArrayList<>();
-        final StringBuilder totalKarutaStringBuilder = new StringBuilder();
-
-        totalKarutaStringBuilder.append(viewModel.firstPhrase);
         Observable.fromIterable(firstLine).take(viewModel.firstPhrase.length()).subscribe(totalKarutaTextViewList::add);
-
-        totalKarutaStringBuilder.append(viewModel.secondPhrase);
         Observable.fromIterable(secondLine).take(viewModel.secondPhrase.length()).subscribe(totalKarutaTextViewList::add);
-
-        totalKarutaStringBuilder.append(viewModel.thirdPhrase);
         Observable.fromIterable(thirdLine).take(viewModel.thirdPhrase.length()).subscribe(totalKarutaTextViewList::add);
 
         Observable.fromIterable(totalKarutaTextViewList).subscribe(textView -> {
             textView.setVisibility(View.INVISIBLE);
         });
 
-        String totalKarutaString = totalKarutaStringBuilder.toString();
-
-        disposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS).take(totalKarutaString.length())
-                .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(indexL -> {
-                    final int index = indexL.intValue();
+        disposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS)
+                .zipWith(totalKarutaTextViewList, (aLong, textView) -> textView)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(textView -> {
                     final Animation fadeIn = new AlphaAnimation(0, 1);
                     fadeIn.setInterpolator(new DecelerateInterpolator());
                     fadeIn.setDuration(SPEED_DISPLAY_ANIMATION_MILL_SEC);
-
-                    final TextView currentPhraseView = totalKarutaTextViewList.get(index);
-                    currentPhraseView.setText(totalKarutaString.substring(index, index + 1));
-                    currentPhraseView.setVisibility(View.VISIBLE);
-                    currentPhraseView.startAnimation(fadeIn);
+                    textView.setVisibility(View.VISIBLE);
+                    textView.startAnimation(fadeIn);
                 });
     }
 

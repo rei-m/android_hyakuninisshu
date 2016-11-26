@@ -51,7 +51,8 @@
                     android:id="@+id/phrase_1_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.firstPhrase}"
+                    app:textPosition="@{1}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -60,7 +61,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_1_1"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.firstPhrase}"
+                    app:textPosition="@{2}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -69,7 +71,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_1_2"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.firstPhrase}"
+                    app:textPosition="@{3}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -78,7 +81,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_1_3"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.firstPhrase}"
+                    app:textPosition="@{4}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -87,7 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_1_4"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.firstPhrase}"
+                    app:textPosition="@{5}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -96,7 +101,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_1_5"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.firstPhrase}"
+                    app:textPosition="@{6}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
             </RelativeLayout>
@@ -116,8 +122,8 @@
                     android:id="@+id/phrase_2_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/blank"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{1}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -126,7 +132,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_2_1"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{2}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -135,7 +142,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_2_2"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{3}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -144,7 +152,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_2_3"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{4}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -153,7 +162,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_2_4"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{5}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -162,7 +172,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_2_5"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{6}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -171,7 +182,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_2_6"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{7}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -180,7 +192,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_2_7"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.secondPhrase}"
+                    app:textPosition="@{8}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
             </RelativeLayout>
@@ -197,7 +210,8 @@
                     android:id="@+id/phrase_3_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.thirdPhrase}"
+                    app:textPosition="@{1}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -206,7 +220,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_3_1"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.thirdPhrase}"
+                    app:textPosition="@{2}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -215,7 +230,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_3_2"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.thirdPhrase}"
+                    app:textPosition="@{3}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -224,7 +240,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_3_3"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.thirdPhrase}"
+                    app:textPosition="@{4}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -233,7 +250,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phrase_3_4"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
-                    android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.thirdPhrase}"
+                    app:textPosition="@{5}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
                 <TextView
@@ -243,6 +261,8 @@
                     android:layout_below="@id/phrase_3_5"
                     android:layout_marginTop="@dimen/margin_karuta_word_adjust"
                     android:visibility="invisible"
+                    app:textForQuiz="@{viewModel.thirdPhrase}"
+                    app:textPosition="@{6}"
                     app:textSizeByPx="@{viewSize.quizTextSize}" />
 
             </RelativeLayout>
