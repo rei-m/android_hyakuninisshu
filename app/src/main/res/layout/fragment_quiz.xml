@@ -279,6 +279,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/layout_choice_1"
                 style="@style/KarutaChoicePhrase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -305,6 +306,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_choice_2"
                 style="@style/KarutaChoicePhrase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -331,6 +333,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_choice_3"
                 style="@style/KarutaChoicePhrase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -357,6 +360,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_choice_4"
                 style="@style/KarutaChoicePhrase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
