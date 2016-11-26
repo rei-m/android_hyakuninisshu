@@ -31,6 +31,7 @@ public class QuizPresenter implements QuizContact.Actions {
 
     @Override
     public void onResume(@Nullable QuizViewModel viewModel,
+                         int selectedChoiceNo,
                          @NonNull QuizState state) {
         if (viewModel == null || state == QuizState.UNANSWERED) {
             displayKarutaQuizUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
@@ -40,7 +41,7 @@ public class QuizPresenter implements QuizContact.Actions {
                     });
         } else {
             view.initialize(viewModel);
-            view.displayResult(viewModel.quizId, state == QuizState.ANSWERED_COLLECT);
+            view.displayResult(selectedChoiceNo, state == QuizState.ANSWERED_COLLECT);
         }
     }
 
@@ -48,7 +49,7 @@ public class QuizPresenter implements QuizContact.Actions {
     public void onClickChoice(@NonNull String quizId, int choiceNo) {
         answerKarutaQuizUsecase.execute(quizId, choiceNo).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isCollect -> {
-                    view.displayResult(quizId, isCollect);
+                    view.displayResult(choiceNo, isCollect);
                 });
     }
 

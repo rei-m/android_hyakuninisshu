@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,7 +39,11 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private static final String KEY_VIEW_MODEL = "viewModel";
 
+    private static final String KEY_SELECTED_CHOICE_NO = "selectedChoiceNo";
+
     private static final String KEY_QUIZ_STATE = "quizState";
+
+    private static final int CHOICE_NO_NOT_SELECTED = -1;
 
     public static QuizFragment newInstance() {
         return new QuizFragment();
@@ -58,6 +63,8 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private QuizViewModel viewModel;
 
+    private int selectedChoiceNo = CHOICE_NO_NOT_SELECTED;
+
     private QuizState state = QuizState.UNANSWERED;
 
     public QuizFragment() {
@@ -69,6 +76,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             viewModel = (QuizViewModel) savedInstanceState.getSerializable(KEY_VIEW_MODEL);
+            selectedChoiceNo = savedInstanceState.getInt(KEY_SELECTED_CHOICE_NO, CHOICE_NO_NOT_SELECTED);
             state = (QuizState) savedInstanceState.getSerializable(KEY_QUIZ_STATE);
         }
         presenter.onCreate(this);
@@ -96,7 +104,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume(viewModel, state);
+        presenter.onResume(viewModel, selectedChoiceNo, state);
     }
 
     @Override
@@ -129,6 +137,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_VIEW_MODEL, viewModel);
+        outState.putInt(KEY_SELECTED_CHOICE_NO, selectedChoiceNo);
         outState.putSerializable(KEY_QUIZ_STATE, state);
     }
 
@@ -200,7 +209,26 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     }
 
     @Override
-    public void displayResult(@NonNull String quizId, boolean isCollect) {
+    public void displayResult(int selectedChoiceNo, boolean isCollect) {
+
+        this.selectedChoiceNo = selectedChoiceNo;
+
+        if (selectedChoiceNo != CHOICE_NO_NOT_SELECTED) {
+
+            final List<LinearLayout> choiceList = new ArrayList<>(Arrays.asList(
+                    binding.layoutChoice1,
+                    binding.layoutChoice2,
+                    binding.layoutChoice3,
+                    binding.layoutChoice4
+            ));
+
+            choiceList.remove(selectedChoiceNo - 1);
+
+            Observable.fromIterable(choiceList).subscribe(linearLayout -> {
+                linearLayout.setVisibility(View.INVISIBLE);
+            });
+        }
+
         if (isCollect) {
             state = QuizState.ANSWERED_COLLECT;
             binding.imageQuizResult.setImageResource(R.drawable.check_correct);

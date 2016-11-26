@@ -10,7 +10,7 @@ public interface QuizContact {
 
         void startDisplayQuizAnimation(QuizViewModel viewModel);
 
-        void displayResult(String quizId, boolean isCollect);
+        void displayResult(int selectedChoiceNo, boolean isCollect);
 
         void displayAnswer(String quizId);
     }
@@ -18,7 +18,7 @@ public interface QuizContact {
     interface Actions {
         void onCreate(View view);
 
-        void onResume(QuizViewModel viewModel, QuizState state);
+        void onResume(QuizViewModel viewModel, int selectedChoiceNo, QuizState state);
 
         void onClickChoice(String quizId, int choiceNo);
 
