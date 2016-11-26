@@ -1,10 +1,9 @@
 package me.rei_m.hyakuninisshu.module;
 
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import javax.inject.Qualifier;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.inject.Scope;
 
 /**
  * Custom annotation for getting application context
@@ -13,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * or
  * <code>public Myconstructor(@ForApplication Context context)</code>
  */
-@Qualifier
-@Retention(RUNTIME)
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ForApplication {
 }

@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -21,7 +22,6 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
@@ -30,10 +30,13 @@ import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
+import me.rei_m.hyakuninisshu.presentation.manager.DeviceManager;
 
 public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
+
+    private static final String KEY_VIEW_MODEL = "viewModel";
 
     private static final String KEY_QUIZ_STATE = "quizState";
 
@@ -44,11 +47,16 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Inject
     QuizContact.Actions presenter;
 
+    @Inject
+    DeviceManager deviceManager;
+
     private FragmentQuizBinding binding;
 
     private OnFragmentInteractionListener listener;
 
     private Disposable disposable;
+
+    private QuizViewModel viewModel;
 
     private QuizState state = QuizState.UNANSWERED;
 
@@ -60,6 +68,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
+            viewModel = (QuizViewModel) savedInstanceState.getSerializable(KEY_VIEW_MODEL);
             state = (QuizState) savedInstanceState.getSerializable(KEY_QUIZ_STATE);
         }
         presenter.onCreate(this);
@@ -68,7 +77,13 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
+
+        Point windowSize = deviceManager.getWindowSize();
+        RelativeViewSize relativeViewSize = new RelativeViewSize(windowSize);
+
         binding.setPresenter(presenter);
+        binding.setViewSize(relativeViewSize);
+
         return binding.getRoot();
     }
 
@@ -81,7 +96,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume(state);
+        presenter.onResume(viewModel, state);
     }
 
     @Override
@@ -113,6 +128,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_VIEW_MODEL, viewModel);
         outState.putSerializable(KEY_QUIZ_STATE, state);
     }
 
@@ -124,9 +140,15 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     }
 
     @Override
-    public void initialize(QuizViewModel viewModel) {
-        binding.setViewModel(viewModel);
+    public void initialize(@NonNull QuizViewModel viewModel) {
 
+        this.viewModel = viewModel;
+
+        binding.setViewModel(viewModel);
+    }
+
+    @Override
+    public void startDisplayQuizAnimation(@NonNull QuizViewModel viewModel) {
         final List<TextView> firstLine = new ArrayList<>(Arrays.asList(
                 binding.phrase11,
                 binding.phrase12,
@@ -157,35 +179,23 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         ));
 
         final List<TextView> totalKarutaTextViewList = new ArrayList<>();
-        final StringBuilder totalKarutaStringBuilder = new StringBuilder();
-
-        totalKarutaStringBuilder.append(viewModel.firstPhrase);
         Observable.fromIterable(firstLine).take(viewModel.firstPhrase.length()).subscribe(totalKarutaTextViewList::add);
-
-        totalKarutaStringBuilder.append(viewModel.secondPhrase);
         Observable.fromIterable(secondLine).take(viewModel.secondPhrase.length()).subscribe(totalKarutaTextViewList::add);
-
-        totalKarutaStringBuilder.append(viewModel.thirdPhrase);
         Observable.fromIterable(thirdLine).take(viewModel.thirdPhrase.length()).subscribe(totalKarutaTextViewList::add);
 
         Observable.fromIterable(totalKarutaTextViewList).subscribe(textView -> {
             textView.setVisibility(View.INVISIBLE);
         });
 
-        String totalKarutaString = totalKarutaStringBuilder.toString();
-
-        disposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS).take(totalKarutaString.length())
-                .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(indexL -> {
-                    final int index = indexL.intValue();
+        disposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS)
+                .zipWith(totalKarutaTextViewList, (aLong, textView) -> textView)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(textView -> {
                     final Animation fadeIn = new AlphaAnimation(0, 1);
                     fadeIn.setInterpolator(new DecelerateInterpolator());
                     fadeIn.setDuration(SPEED_DISPLAY_ANIMATION_MILL_SEC);
-
-                    final TextView currentPhraseView = totalKarutaTextViewList.get(index);
-                    currentPhraseView.setText(totalKarutaString.substring(index, index + 1));
-                    currentPhraseView.setVisibility(View.VISIBLE);
-                    currentPhraseView.startAnimation(fadeIn);
+                    textView.setVisibility(View.VISIBLE);
+                    textView.startAnimation(fadeIn);
                 });
     }
 
@@ -219,5 +229,22 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     public interface OnFragmentInteractionListener {
         void onAnswered(String quizId);
+    }
+
+    public static class RelativeViewSize {
+
+        public final int quizTextSize;
+        public final int choiceTextSize;
+
+        RelativeViewSize(@NonNull Point windowSize) {
+            int windowWidth = windowSize.x;
+            int windowHeight = windowSize.y;
+
+            int phraseHeight = windowHeight / 2;
+            quizTextSize = phraseHeight / 13;
+
+            int choiceWidth = windowWidth / 4;
+            choiceTextSize = choiceWidth / 5;
+        }
     }
 }

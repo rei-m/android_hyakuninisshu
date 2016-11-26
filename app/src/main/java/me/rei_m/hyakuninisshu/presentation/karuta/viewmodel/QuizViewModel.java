@@ -2,9 +2,11 @@ package me.rei_m.hyakuninisshu.presentation.karuta.viewmodel;
 
 import android.support.annotation.NonNull;
 
-public class QuizViewModel {
+import java.io.Serializable;
 
-    public static class QuizChoiceViewModel {
+public class QuizViewModel implements Serializable {
+
+    public static class QuizChoiceViewModel implements Serializable {
 
         public final String fourthPhrase;
 
@@ -57,7 +59,7 @@ public class QuizViewModel {
 
         this.quizCount = quizCount;
     }
-    
+
     @Override
     public String toString() {
         return "QuizViewModel{" +

@@ -2,8 +2,6 @@ package me.rei_m.hyakuninisshu.domain.karuta.module;
 
 import android.content.Context;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
@@ -17,20 +15,20 @@ import me.rei_m.hyakuninisshu.module.ForApplication;
 @Module
 public class KarutaDomainModule {
 
-    @Singleton
     @Provides
-    KarutaRepository provideKarutaRepository(@ForApplication Context context, OrmaDatabase orma) {
+    @ForApplication
+    KarutaRepository provideKarutaRepository(Context context, OrmaDatabase orma) {
         return new KarutaRepositoryImpl(context, orma);
     }
 
-    @Singleton
     @Provides
+    @ForApplication
     KarutaQuizRepository provideKarutaQuizRepository() {
         return new KarutaQuizRepositoryImpl();
     }
 
-    @Singleton
     @Provides
+    @ForApplication
     KarutaQuizListFactory provideKarutaQuizListFactory(KarutaRepository karutaRepository) {
         return new KarutaQuizListFactory(karutaRepository);
     }

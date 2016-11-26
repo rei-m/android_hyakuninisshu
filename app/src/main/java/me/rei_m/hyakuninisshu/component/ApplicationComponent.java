@@ -1,12 +1,11 @@
 package me.rei_m.hyakuninisshu.component;
 
-import javax.inject.Singleton;
-
 import dagger.Component;
 import me.rei_m.hyakuninisshu.App;
-import me.rei_m.hyakuninisshu.module.ApplicationModule;
 import me.rei_m.hyakuninisshu.domain.karuta.module.KarutaDomainModule;
 import me.rei_m.hyakuninisshu.infrastructure.module.InfrastructureModule;
+import me.rei_m.hyakuninisshu.module.ApplicationModule;
+import me.rei_m.hyakuninisshu.module.ForApplication;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.SplashActivityComponent;
@@ -15,7 +14,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModul
 import me.rei_m.hyakuninisshu.presentation.karuta.module.SplashActivityModule;
 import me.rei_m.hyakuninisshu.usecase.karuta.module.KarutaUsecaseModule;
 
-@Singleton
+@ForApplication
 @Component(modules = {ApplicationModule.class, KarutaDomainModule.class, KarutaUsecaseModule.class, InfrastructureModule.class})
 public interface ApplicationComponent {
 

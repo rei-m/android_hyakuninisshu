@@ -34,7 +34,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
 
     private String quizId;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener listener;
 
     public QuizAnswerFragment() {
         // Required empty public constructor
@@ -71,7 +71,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -81,7 +81,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     @Override
@@ -98,15 +98,15 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
 
     @Override
     public void goToNext() {
-        if (mListener != null) {
-            mListener.onClickGoToNext();
+        if (listener != null) {
+            listener.onClickGoToNext();
         }
     }
 
     @Override
     public void goToResult() {
-        if (mListener != null) {
-            mListener.onClickGoToResult();
+        if (listener != null) {
+            listener.onClickGoToResult();
         }
     }
 

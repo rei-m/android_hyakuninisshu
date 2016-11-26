@@ -1,10 +1,12 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
+import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
 
@@ -28,10 +30,17 @@ public class QuizPresenter implements QuizContact.Actions {
     }
 
     @Override
-    public void onResume(@NonNull QuizState state) {
-        if (state == QuizState.UNANSWERED) {
+    public void onResume(@Nullable QuizViewModel viewModel,
+                         @NonNull QuizState state) {
+        if (viewModel == null || state == QuizState.UNANSWERED) {
             displayKarutaQuizUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(view::initialize);
+                    .subscribe(quizViewModel -> {
+                        view.initialize(quizViewModel);
+                        view.startDisplayQuizAnimation(quizViewModel);
+                    });
+        } else {
+            view.initialize(viewModel);
+            view.displayResult(viewModel.quizId, state == QuizState.ANSWERED_COLLECT);
         }
     }
 

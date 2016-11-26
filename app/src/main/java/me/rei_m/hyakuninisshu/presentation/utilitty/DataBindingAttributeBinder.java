@@ -5,8 +5,10 @@ import android.databinding.ObservableField;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
@@ -15,6 +17,22 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLine
 public class DataBindingAttributeBinder {
 
     private DataBindingAttributeBinder() {
+    }
+
+    @BindingAdapter({"textForQuiz", "textPosition"})
+    public static void setTextForQuiz(@NonNull TextView view,
+                                      @Nullable String text,
+                                      int textPosition) {
+        if (text == null || text.length() < textPosition) {
+            return;
+        }
+        view.setText(text.substring(textPosition - 1, textPosition));
+    }
+
+    @BindingAdapter({"textSizeByPx"})
+    public static void setTextSizeByPx(@NonNull TextView view,
+                                       int textSize) {
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
     }
 
     @BindingAdapter({"verticalText"})
@@ -27,6 +45,12 @@ public class DataBindingAttributeBinder {
     public static void setVerticalTextSize(@NonNull VerticalSingleLineTextView view,
                                            @DimenRes int dimenId) {
         view.setTextSize(dimenId);
+    }
+
+    @BindingAdapter({"verticalTextSizeByPx"})
+    public static void setVerticalTextSizeByPx(@NonNull VerticalSingleLineTextView view,
+                                               int textSize) {
+        view.setTextSizeByPx(textSize);
     }
 
     @BindingAdapter({"stringDrawableId"})
