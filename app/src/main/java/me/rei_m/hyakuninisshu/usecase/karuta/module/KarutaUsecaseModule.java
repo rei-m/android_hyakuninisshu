@@ -1,5 +1,7 @@
 package me.rei_m.hyakuninisshu.usecase.karuta.module;
 
+import android.content.Context;
+
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
@@ -37,9 +39,10 @@ public class KarutaUsecaseModule {
     }
 
     @Provides
-    DisplayKarutaQuizAnswerUsecase provideDisplayKarutaQuizAnswerUsecase(KarutaRepository karutaRepository,
+    DisplayKarutaQuizAnswerUsecase provideDisplayKarutaQuizAnswerUsecase(Context context,
+                                                                         KarutaRepository karutaRepository,
                                                                          KarutaQuizRepository karutaQuizRepository) {
-        return new DisplayKarutaQuizAnswerUsecaseImpl(karutaRepository, karutaQuizRepository);
+        return new DisplayKarutaQuizAnswerUsecaseImpl(context, karutaRepository, karutaQuizRepository);
     }
 
     @Provides

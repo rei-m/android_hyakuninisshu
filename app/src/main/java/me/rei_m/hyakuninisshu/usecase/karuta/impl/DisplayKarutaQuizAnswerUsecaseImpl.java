@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import io.reactivex.MaybeSource;
@@ -12,16 +13,21 @@ import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel;
+import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizAnswerUsecase;
 
 public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnswerUsecase {
+
+    private final Context context;
 
     private final KarutaRepository karutaRepository;
 
     private final KarutaQuizRepository karutaQuizRepository;
 
-    public DisplayKarutaQuizAnswerUsecaseImpl(@NonNull KarutaRepository karutaRepository,
+    public DisplayKarutaQuizAnswerUsecaseImpl(@NonNull Context context,
+                                              @NonNull KarutaRepository karutaRepository,
                                               @NonNull KarutaQuizRepository karutaQuizRepository) {
+        this.context = context;
         this.karutaRepository = karutaRepository;
         this.karutaQuizRepository = karutaQuizRepository;
     }
@@ -42,16 +48,23 @@ public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnsw
             }
         });
 
-        return Observable.zip(existNextQuizObservable, karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) ->
-                new QuizAnswerViewModel("第" + karuta.getIdentifier().getValue() + "首",
-                        karuta.getCreator(),
-                        karuta.getTopPhrase().getFirst().getKanji(),
-                        karuta.getTopPhrase().getSecond().getKanji(),
-                        karuta.getTopPhrase().getThird().getKanji(),
-                        karuta.getBottomPhrase().getFourth().getKanji(),
-                        karuta.getBottomPhrase().getFifth().getKanji(),
-                        "karuta_" + karuta.getImageNo(),
-                        karutaQuiz.getResult().isCollect,
-                        existNextQuiz)).singleOrError();
+        return Observable.zip(existNextQuizObservable, karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) -> {
+
+            String karutaIdentifierString = KarutaDisplayUtil.convertNumberToString(context, (int) karuta.getIdentifier().getValue());
+
+            String kimariji = KarutaDisplayUtil.convertKimarijiToString(context, karuta.getKimariji());
+
+            return new QuizAnswerViewModel(karutaIdentifierString + " / " + kimariji,
+                    karuta.getCreator(),
+                    karuta.getTopPhrase().getFirst().getKanji(),
+                    karuta.getTopPhrase().getSecond().getKanji(),
+                    karuta.getTopPhrase().getThird().getKanji(),
+                    karuta.getBottomPhrase().getFourth().getKanji(),
+                    karuta.getBottomPhrase().getFifth().getKanji(),
+                    "karuta_" + karuta.getImageNo(),
+                    karutaQuiz.getResult().isCollect,
+                    existNextQuiz);
+
+        }).singleOrError();
     }
 }
