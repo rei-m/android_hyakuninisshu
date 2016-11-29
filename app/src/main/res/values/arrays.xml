@@ -20,4 +20,10 @@
         <item>@string/kimariji_5</item>
         <item>@string/kimariji_6</item>
     </array>
+
+    <array name="display_style">
+        <item>@string/display_style_kanji</item>
+        <item>@string/display_style_kana</item>
+    </array>
+
 </resources>

@@ -44,4 +44,7 @@
     <string name="kimariji_4">四字決まり</string>
     <string name="kimariji_5">五字決まり</string>
     <string name="kimariji_6">六字決まり</string>
+
+    <string name="display_style_kana">仮名で表示</string>
+    <string name="display_style_kanji">漢字と仮名で表示</string>
 </resources>
