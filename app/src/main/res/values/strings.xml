@@ -12,6 +12,8 @@
     <string name="range_question">出題範囲</string>
     <string name="kimariji">決まり字</string>
     <string name="karuta_number">第%1$s首</string>
+    <string name="topPhrase">上の句</string>
+    <string name="bottomPhrase">下の句</string>
 
     <string name="one">一</string>
     <string name="two">二</string>
@@ -44,4 +46,7 @@
     <string name="kimariji_4">四字決まり</string>
     <string name="kimariji_5">五字決まり</string>
     <string name="kimariji_6">六字決まり</string>
+
+    <string name="display_style_kana">すべて仮名で表示</string>
+    <string name="display_style_kanji">漢字と仮名で表示</string>
 </resources>
