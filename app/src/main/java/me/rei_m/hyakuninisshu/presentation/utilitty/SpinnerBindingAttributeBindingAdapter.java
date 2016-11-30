@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 
 public class SpinnerBindingAttributeBindingAdapter {
 
@@ -71,5 +72,31 @@ public class SpinnerBindingAttributeBindingAdapter {
     @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
     public static Kimariji captureSelectedKimariji(Spinner spinner) {
         return (Kimariji) spinner.getSelectedItem();
+    }
+
+    @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
+    public static void bindKarutaStyle(Spinner spinner,
+                                       KarutaStyle newSelectedValue,
+                                       final InverseBindingListener newTextAttrChanged) {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                newTextAttrChanged.onChange();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        if (newSelectedValue != null) {
+            int pos = ((SpinnerAdapter) spinner.getAdapter()).getPosition(newSelectedValue);
+            spinner.setSelection(pos, true);
+        }
+    }
+
+    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    public static KarutaStyle captureSelectedKarutaStyle(Spinner spinner) {
+        return (KarutaStyle) spinner.getSelectedItem();
     }
 }

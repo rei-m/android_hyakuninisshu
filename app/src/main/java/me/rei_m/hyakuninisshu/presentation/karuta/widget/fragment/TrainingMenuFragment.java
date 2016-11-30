@@ -12,6 +12,7 @@ import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel;
@@ -58,8 +59,14 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
         SpinnerAdapter kimarijiAdapter = SpinnerAdapter.newInstance(context, Kimariji.values(), false);
         binding.setKimarijiAdapter(kimarijiAdapter);
 
+        SpinnerAdapter karutaStyleAdapter = SpinnerAdapter.newInstance(context, KarutaStyle.values(), false);
+        binding.setKarutaStyleAdapter(karutaStyleAdapter);
+
         binding.setPresenter(presenter);
-        binding.setViewModel(new TrainingMenuViewModel());
+        binding.setViewModel(new TrainingMenuViewModel(TrainingRange.ALL,
+                Kimariji.ALL,
+                KarutaStyle.KANJI,
+                KarutaStyle.KANA));
 
         return binding.getRoot();
     }

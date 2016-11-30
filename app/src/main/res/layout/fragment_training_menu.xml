@@ -7,16 +7,20 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel" />
-
-        <variable
             name="trainingRangeAdapter"
             type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="kimarijiAdapter"
             type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+
+        <variable
+            name="karutaStyleAdapter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel" />
 
         <variable
             name="presenter"
@@ -36,22 +40,23 @@
                 android:id="@+id/text_title_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/setting" />
 
             <TextView
                 android:id="@+id/text_title_range_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/range_question" />
 
             <Spinner
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
                 app:selectedValue="@={viewModel.trainingRange}"
                 app:spinnerAdapter="@{trainingRangeAdapter}" />
 
@@ -59,39 +64,62 @@
                 android:id="@+id/text_title_kimariji"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/kimariji" />
 
             <Spinner
                 android:id="@+id/spinner_kimariji"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
                 app:selectedValue="@={viewModel.kimariji}"
                 app:spinnerAdapter="@{kimarijiAdapter}" />
 
             <TextView
-                android:id="@+id/text_title_kaminoku_style"
+                android:id="@+id/text_title_top_phrase_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="上の句の形式" />
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/topPhrase" />
 
             <Spinner
-                android:id="@+id/spinner_display_style"
-                android:layout_width="wrap_content"
+                android:id="@+id/spinner_top_phrase_style"
+                android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginStart="16dp" />
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                app:selectedValue="@={viewModel.topPhraseStyle}"
+                app:spinnerAdapter="@{karutaStyleAdapter}" />
+
+            <TextView
+                android:id="@+id/text_title_bottom_phrase_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/bottomPhrase" />
+
+            <Spinner
+                android:id="@+id/spinner_shimonoku_style"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                app:selectedValue="@={viewModel.bottomPhraseStyle}"
+                app:spinnerAdapter="@{karutaStyleAdapter}" />
 
             <Button
                 android:id="@+id/button_start_training"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_m"
                 android:onClick="@{() -> presenter.onClickStartTraining(viewModel.getTrainingRange().get(), viewModel.getKimariji().get())}"
                 android:text="@string/start_training" />
 
         </LinearLayout>
-
     </ScrollView>
 </layout>
