@@ -85,8 +85,15 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     }
 
     @Override
-    public void navigateToTraining(TrainingRange trainingRange, Kimariji kimariji) {
-        navigator.navigateToQuizMaster(getActivity(), trainingRange, kimariji);
+    public void navigateToTraining(TrainingRange trainingRange,
+                                   Kimariji kimariji,
+                                   KarutaStyle topPhraseStyle,
+                                   KarutaStyle bottomPhraseStyle) {
+        navigator.navigateToQuizMaster(getActivity(),
+                trainingRange,
+                kimariji,
+                topPhraseStyle,
+                bottomPhraseStyle);
     }
 
     public interface Injector {

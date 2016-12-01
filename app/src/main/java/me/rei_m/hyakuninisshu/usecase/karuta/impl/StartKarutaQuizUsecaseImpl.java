@@ -20,7 +20,9 @@ public class StartKarutaQuizUsecaseImpl implements StartKarutaQuizUsecase {
     }
 
     @Override
-    public Completable execute(int fromKarutaId, int toKarutaId, int kimarijiPosition) {
+    public Completable execute(int fromKarutaId,
+                               int toKarutaId,
+                               int kimarijiPosition) {
         return karutaQuizListFactory.create(fromKarutaId, toKarutaId, kimarijiPosition).flatMapCompletable(karutaQuizList -> {
             if (karutaQuizList.isEmpty()) {
                 return Completable.error(new IllegalArgumentException("This condition is not valid."));

@@ -12,6 +12,8 @@ public interface QuizMasterContact {
     }
 
     interface Actions {
-        void onCreate(View view, TrainingRange trainingRange, Kimariji kimariji);
+        void onCreate(View view,
+                      TrainingRange trainingRange,
+                      Kimariji kimariji);
     }
 }

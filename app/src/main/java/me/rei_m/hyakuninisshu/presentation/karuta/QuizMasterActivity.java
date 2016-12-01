@@ -17,6 +17,7 @@ import me.rei_m.hyakuninisshu.databinding.ActivityQuizMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
@@ -29,11 +30,17 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener {
 
-    public static Intent createIntent(@NonNull Context context, TrainingRange trainingRange, Kimariji kimariji) {
+    public static Intent createIntent(@NonNull Context context,
+                                      @NonNull TrainingRange trainingRange,
+                                      @NonNull Kimariji kimariji,
+                                      @NonNull KarutaStyle topPhraseStyle,
+                                      @NonNull KarutaStyle bottomPhraseStyle) {
         Intent intent = new Intent(context, QuizMasterActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_TRAINING_RANGE, trainingRange);
         bundle.putSerializable(ARG_KIMARIJI, kimariji);
+        bundle.putSerializable(ARG_TOP_PHRASE_STYLE, topPhraseStyle);
+        bundle.putSerializable(ARG_BOTTOM_PHRASE_STYLE, bottomPhraseStyle);
         intent.putExtras(bundle);
         return intent;
     }
@@ -41,6 +48,10 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     private static final String ARG_TRAINING_RANGE = "trainingRange";
 
     private static final String ARG_KIMARIJI = "kimarij";
+
+    private static final String ARG_TOP_PHRASE_STYLE = "topPhraseStyle";
+
+    private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";
 
     private QuizMasterActivityComponent component;
 
@@ -61,7 +72,9 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
         Kimariji kimariji = (Kimariji) getIntent().getSerializableExtra(ARG_KIMARIJI);
 
         if (savedInstanceState == null) {
-            presenter.onCreate(this, trainingRange, kimariji);
+            presenter.onCreate(this,
+                    trainingRange,
+                    kimariji);
         }
     }
 
@@ -81,9 +94,13 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
 
     @Override
     public void startQuiz() {
+
+        KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
+        KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.content, QuizFragment.newInstance(), QuizFragment.class.getSimpleName())
+                .add(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.class.getSimpleName())
                 .commit();
     }
 
@@ -103,10 +120,14 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
 
     @Override
     public void onClickGoToNext() {
+
+        KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
+        KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .replace(R.id.content, QuizFragment.newInstance(), QuizFragment.class.getSimpleName())
+                .replace(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.class.getSimpleName())
                 .commit();
     }
 
