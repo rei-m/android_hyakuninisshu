@@ -6,11 +6,17 @@ public interface QuizResultContact {
 
     interface View {
         void initialize(QuizResultViewModel viewModel);
+
+        void finishTraining();
     }
 
     interface Actions {
         void onCreate(View view);
 
         void onCreateView();
+
+        void onClickPracticeWrongKarutas();
+
+        void onClickBackMenu();
     }
 }

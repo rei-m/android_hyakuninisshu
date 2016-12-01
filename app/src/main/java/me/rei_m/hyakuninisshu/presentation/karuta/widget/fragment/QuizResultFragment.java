@@ -22,13 +22,13 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
         QuizResultFragment fragment = new QuizResultFragment();
         return fragment;
     }
-    
+
     @Inject
     QuizResultContact.Actions presenter;
 
     private FragmentQuizResultBinding binding;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener listener;
 
     public QuizResultFragment() {
         // Required empty public constructor
@@ -55,7 +55,7 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
@@ -65,7 +65,7 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     @Override
@@ -78,6 +78,11 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     @Override
     public void initialize(QuizResultViewModel viewModel) {
         binding.setViewModel(viewModel);
+    }
+
+    @Override
+    public void finishTraining() {
+        getActivity().finish();
     }
 
     public interface Injector {

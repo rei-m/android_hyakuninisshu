@@ -46,7 +46,8 @@ public class KarutaUsecaseModule {
     }
 
     @Provides
-    DisplayKarutaQuizResultUsecase provideDisplayKarutaQuizResultUsecase(KarutaQuizRepository karutaQuizRepository) {
-        return new DisplayKarutaQuizResultUsecaseImpl(karutaQuizRepository);
+    DisplayKarutaQuizResultUsecase provideDisplayKarutaQuizResultUsecase(Context context,
+                                                                         KarutaQuizRepository karutaQuizRepository) {
+        return new DisplayKarutaQuizResultUsecaseImpl(context, karutaQuizRepository);
     }
 }

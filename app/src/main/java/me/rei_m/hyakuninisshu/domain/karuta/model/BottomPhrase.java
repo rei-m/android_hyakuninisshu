@@ -9,8 +9,7 @@ public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier>
     private final Phrase fourth;
 
     private final Phrase fifth;
-
-
+    
     BottomPhrase(@NonNull KarutaIdentifier identifier,
                  @NonNull Phrase fourth,
                  @NonNull Phrase fifth) {
