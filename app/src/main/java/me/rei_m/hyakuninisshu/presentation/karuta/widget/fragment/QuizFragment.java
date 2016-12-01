@@ -27,6 +27,7 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
@@ -34,6 +35,10 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFra
 import me.rei_m.hyakuninisshu.presentation.manager.DeviceManager;
 
 public class QuizFragment extends BaseFragment implements QuizContact.View {
+
+    private static final String ARG_TOP_PHRASE_STYLE = "topPhraseStyle";
+
+    private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
 
@@ -45,8 +50,17 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private static final int CHOICE_NO_NOT_SELECTED = -1;
 
-    public static QuizFragment newInstance() {
-        return new QuizFragment();
+    public static QuizFragment newInstance(@NonNull KarutaStyle topPhraseStyle,
+                                           @NonNull KarutaStyle bottomPhraseStyle) {
+
+        QuizFragment fragment = new QuizFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_TOP_PHRASE_STYLE, topPhraseStyle);
+        args.putSerializable(ARG_BOTTOM_PHRASE_STYLE, bottomPhraseStyle);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
     @Inject
@@ -62,6 +76,10 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     private Disposable disposable;
 
     private QuizViewModel viewModel;
+
+    private KarutaStyle topPhraseStyle;
+
+    private KarutaStyle bottomPhraseStyle;
 
     private int selectedChoiceNo = CHOICE_NO_NOT_SELECTED;
 
@@ -79,6 +97,9 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
             selectedChoiceNo = savedInstanceState.getInt(KEY_SELECTED_CHOICE_NO, CHOICE_NO_NOT_SELECTED);
             state = (QuizState) savedInstanceState.getSerializable(KEY_QUIZ_STATE);
         }
+        Bundle args = getArguments();
+        topPhraseStyle = (KarutaStyle) args.getSerializable(ARG_TOP_PHRASE_STYLE);
+        bottomPhraseStyle = (KarutaStyle) args.getSerializable(ARG_BOTTOM_PHRASE_STYLE);
         presenter.onCreate(this);
     }
 
@@ -104,7 +125,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume(viewModel, selectedChoiceNo, state);
+        presenter.onResume(viewModel, topPhraseStyle, bottomPhraseStyle, selectedChoiceNo, state);
     }
 
     @Override

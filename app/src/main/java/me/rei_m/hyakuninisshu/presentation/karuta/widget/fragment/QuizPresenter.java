@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
@@ -31,10 +32,15 @@ public class QuizPresenter implements QuizContact.Actions {
 
     @Override
     public void onResume(@Nullable QuizViewModel viewModel,
+                         @NonNull KarutaStyle topPhraseStyle,
+                         @NonNull KarutaStyle bottomPhraseStyle,
                          int selectedChoiceNo,
                          @NonNull QuizState state) {
+
         if (viewModel == null || state == QuizState.UNANSWERED) {
-            displayKarutaQuizUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+            displayKarutaQuizUsecase.execute(topPhraseStyle, bottomPhraseStyle)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(quizViewModel -> {
                         view.initialize(quizViewModel);
                         view.startDisplayQuizAnimation(quizViewModel);

@@ -45,7 +45,7 @@ public class QuizViewModel implements Serializable {
                          @NonNull QuizChoiceViewModel choiceSecond,
                          @NonNull QuizChoiceViewModel choiceThird,
                          @NonNull QuizChoiceViewModel choiceFourth,
-                         String quizCount) {
+                         @NonNull String quizCount) {
 
         this.quizId = quizId;
         this.firstPhrase = firstPhrase;
