@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.viewmodel;
 
 import android.databinding.ObservableField;
+import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
@@ -16,10 +17,11 @@ public class TrainingMenuViewModel {
 
     private final ObservableField<KarutaStyle> bottomPhraseStyle;
 
-    public TrainingMenuViewModel(TrainingRange trainingRange,
-                                 Kimariji kimariji,
-                                 KarutaStyle topPhraseStyle,
-                                 KarutaStyle bottomPhraseStyle) {
+    public TrainingMenuViewModel(@NonNull TrainingRange trainingRange,
+                                 @NonNull Kimariji kimariji,
+                                 @NonNull KarutaStyle topPhraseStyle,
+                                 @NonNull KarutaStyle bottomPhraseStyle) {
+
         this.trainingRange = new ObservableField<>();
         this.trainingRange.set(trainingRange);
 

@@ -26,4 +26,14 @@ public class QuizResultPresenter implements QuizResultContact.Actions {
         displayKarutaQuizResultUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::initialize);
     }
+
+    @Override
+    public void onClickPracticeWrongKarutas() {
+        
+    }
+
+    @Override
+    public void onClickBackMenu() {
+        view.finishTraining();
+    }
 }
