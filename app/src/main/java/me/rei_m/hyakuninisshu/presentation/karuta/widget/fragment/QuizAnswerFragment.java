@@ -26,7 +26,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @Inject
     QuizAnswerContact.Actions presenter;
 
@@ -54,8 +54,6 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        presenter.onCreateView(quizId);
         binding = FragmentQuizAnswerBinding.inflate(inflater, container, false);
         binding.setPresenter(presenter);
         return binding.getRoot();
@@ -65,6 +63,18 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume(quizId);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.onPause();
     }
 
     @Override

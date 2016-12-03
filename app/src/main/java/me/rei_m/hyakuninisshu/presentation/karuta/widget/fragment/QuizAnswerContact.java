@@ -15,7 +15,9 @@ public interface QuizAnswerContact {
     interface Actions {
         void onCreate(View view);
 
-        void onCreateView(String quizId);
+        void onResume(String quizId);
+
+        void onPause();
 
         void onClickNextQuiz();
 

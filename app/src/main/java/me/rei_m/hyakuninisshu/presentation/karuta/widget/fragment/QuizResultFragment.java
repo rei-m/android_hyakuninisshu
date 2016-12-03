@@ -40,11 +40,27 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        presenter.onCreateView();
         binding = FragmentQuizResultBinding.inflate(inflater, container, false);
         binding.setPresenter(presenter);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.onPause();
     }
 
     @Override

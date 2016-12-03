@@ -15,7 +15,9 @@ public interface QuizResultContact {
     interface Actions {
         void onCreate(View view);
 
-        void onCreateView();
+        void onResume();
+
+        void onPause();
 
         void onClickPracticeWrongKarutas();
 

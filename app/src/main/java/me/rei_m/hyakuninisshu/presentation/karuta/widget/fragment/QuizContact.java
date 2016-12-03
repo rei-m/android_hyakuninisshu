@@ -25,6 +25,8 @@ public interface QuizContact {
                       int selectedChoiceNo,
                       QuizState state);
 
+        void onPause();
+
         void onClickChoice(String quizId, int choiceNo);
 
         void onClickResult(String quizId);
