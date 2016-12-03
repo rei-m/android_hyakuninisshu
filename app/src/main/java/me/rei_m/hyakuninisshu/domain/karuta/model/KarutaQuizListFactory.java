@@ -14,36 +14,18 @@ public class KarutaQuizListFactory {
     public KarutaQuizListFactory(KarutaRepository karutaRepository) {
         this.karutaRepository = karutaRepository;
     }
-
-    public Single<List<KarutaQuiz>> create(int fromKarutaId, int toKarutaId, int kimariji) {
-
-        List<Karuta> correctKarutaList = new ArrayList<>();
-
-        int quizSize = toKarutaId - fromKarutaId + 1;
-
-        Single<List<Karuta>> karutaListObservable = (kimariji == 0) ?
-                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId)) :
-                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), kimariji);
-
-        karutaListObservable.subscribe(karutaList -> {
-
-            int size = (karutaList.size() < quizSize) ? karutaList.size() : quizSize;
-            int[] collectKarutaIndexList = ArrayUtil.generateRandomArray(karutaList.size(), size);
-
-            for (int i : collectKarutaIndexList) {
-                correctKarutaList.add(karutaList.get(i));
-            }
-        });
+    
+    public Single<List<KarutaQuiz>> create(List<KarutaIdentifier> correctKarutaIdList) {
 
         return karutaRepository.asEntityList().map(karutaList -> {
 
             List<KarutaQuiz> karutaQuizList = new ArrayList<>();
 
-            for (Karuta correctKaruta : correctKarutaList) {
+            for (KarutaIdentifier correctKarutaId : correctKarutaIdList) {
 
                 List<KarutaIdentifier> choiceList = new ArrayList<>();
 
-                long correctIndex = correctKaruta.getIdentifier().getValue() - 1;
+                long correctIndex = correctKarutaId.getValue() - 1;
 
                 for (int targetIndex : ArrayUtil.generateRandomArray(karutaList.size() - 1, 3)) {
                     if (targetIndex == correctIndex) {
@@ -55,9 +37,9 @@ public class KarutaQuizListFactory {
 
                 int[] correctPosition = ArrayUtil.generateRandomArray(4, 1);
 
-                choiceList.add(correctPosition[0], correctKaruta.getIdentifier());
+                choiceList.add(correctPosition[0], correctKarutaId);
 
-                KarutaQuiz karutaQuiz = new KarutaQuiz(new KarutaQuizIdentifier(), choiceList, correctKaruta.getIdentifier());
+                KarutaQuiz karutaQuiz = new KarutaQuiz(new KarutaQuizIdentifier(), choiceList, correctKarutaId);
                 karutaQuizList.add(karutaQuiz);
             }
 

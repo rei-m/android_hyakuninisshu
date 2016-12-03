@@ -131,6 +131,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onPause() {
         super.onPause();
+        presenter.onPause();
         if (disposable != null) {
             disposable.dispose();
             disposable = null;

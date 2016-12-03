@@ -28,7 +28,8 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFrag
 public class QuizMasterActivity extends BaseActivity implements QuizMasterContact.View,
         HasComponent<QuizMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
-        QuizAnswerFragment.OnFragmentInteractionListener {
+        QuizAnswerFragment.OnFragmentInteractionListener,
+        QuizResultFragment.OnFragmentInteractionListener {
 
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull TrainingRange trainingRange,
@@ -138,5 +139,15 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.class.getSimpleName())
                 .commit();
+    }
+
+    @Override
+    public void onRestartTraining() {
+        startQuiz();
+    }
+
+    @Override
+    public void onFinishTraining() {
+        finish();
     }
 }

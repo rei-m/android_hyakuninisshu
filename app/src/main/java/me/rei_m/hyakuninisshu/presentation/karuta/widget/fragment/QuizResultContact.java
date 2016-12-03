@@ -7,13 +7,17 @@ public interface QuizResultContact {
     interface View {
         void initialize(QuizResultViewModel viewModel);
 
+        void onRestartTraining();
+
         void finishTraining();
     }
 
     interface Actions {
         void onCreate(View view);
 
-        void onCreateView();
+        void onResume();
+
+        void onPause();
 
         void onClickPracticeWrongKarutas();
 

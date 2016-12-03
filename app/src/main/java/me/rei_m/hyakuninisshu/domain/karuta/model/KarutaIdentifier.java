@@ -8,7 +8,7 @@ public class KarutaIdentifier implements EntityIdentifier<Karuta> {
 
     private final long value;
 
-    KarutaIdentifier(long value) {
+    public KarutaIdentifier(long value) {
         this.value = value;
     }
 
