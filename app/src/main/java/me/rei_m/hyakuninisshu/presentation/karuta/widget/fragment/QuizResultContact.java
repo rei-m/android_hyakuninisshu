@@ -7,6 +7,8 @@ public interface QuizResultContact {
     interface View {
         void initialize(QuizResultViewModel viewModel);
 
+        void onRestartTraining();
+
         void finishTraining();
     }
 

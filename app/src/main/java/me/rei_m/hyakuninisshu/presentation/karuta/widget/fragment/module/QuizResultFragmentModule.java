@@ -8,6 +8,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultCont
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultPresenter;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizResultUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.RestartWrongKarutaQuizUsecase;
 
 @Module
 public class QuizResultFragmentModule {
@@ -23,9 +24,10 @@ public class QuizResultFragmentModule {
     Context provideContext() {
         return context;
     }
-    
+
     @Provides
-    QuizResultContact.Actions provideQuizResultPresenter(DisplayKarutaQuizResultUsecase displayKarutaQuizResultUsecase) {
-        return new QuizResultPresenter(displayKarutaQuizResultUsecase);
+    QuizResultContact.Actions provideQuizResultPresenter(DisplayKarutaQuizResultUsecase displayKarutaQuizResultUsecase,
+                                                         RestartWrongKarutaQuizUsecase restartWrongKarutaQuizUsecase) {
+        return new QuizResultPresenter(displayKarutaQuizResultUsecase, restartWrongKarutaQuizUsecase);
     }
 }

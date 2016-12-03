@@ -1,7 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizRes
 public class QuizResultFragment extends BaseFragment implements QuizResultContact.View {
 
     public static QuizResultFragment newInstance() {
-        QuizResultFragment fragment = new QuizResultFragment();
-        return fragment;
+        return new QuizResultFragment();
     }
 
     @Inject
@@ -38,8 +36,6 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter.onCreate(this);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
@@ -57,8 +53,8 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
         } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -81,8 +77,17 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     }
 
     @Override
+    public void onRestartTraining() {
+        if (listener != null) {
+            listener.onRestartTraining();
+        }
+    }
+
+    @Override
     public void finishTraining() {
-        getActivity().finish();
+        if (listener != null) {
+            listener.onFinishTraining();
+        }
     }
 
     public interface Injector {
@@ -90,7 +95,9 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+
+        void onRestartTraining();
+
+        void onFinishTraining();
     }
 }
