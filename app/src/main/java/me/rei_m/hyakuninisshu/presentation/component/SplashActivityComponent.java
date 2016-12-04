@@ -1,8 +1,8 @@
-package me.rei_m.hyakuninisshu.presentation.karuta.component;
+package me.rei_m.hyakuninisshu.presentation.component;
 
 import dagger.Subcomponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.SplashActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.SplashActivityModule;
+import me.rei_m.hyakuninisshu.presentation.SplashActivity;
+import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 
 @Subcomponent(modules = {ActivityModule.class, SplashActivityModule.class})

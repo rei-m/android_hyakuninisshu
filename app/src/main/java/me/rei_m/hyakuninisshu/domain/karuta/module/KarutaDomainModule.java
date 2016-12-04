@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.domain.karuta.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import dagger.Module;
 import dagger.Provides;
@@ -17,8 +18,10 @@ public class KarutaDomainModule {
 
     @Provides
     @ForApplication
-    KarutaRepository provideKarutaRepository(Context context, OrmaDatabase orma) {
-        return new KarutaRepositoryImpl(context, orma);
+    KarutaRepository provideKarutaRepository(Context context,
+                                             SharedPreferences preferences,
+                                             OrmaDatabase orma) {
+        return new KarutaRepositoryImpl(context, preferences, orma);
     }
 
     @Provides

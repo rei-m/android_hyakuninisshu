@@ -27,7 +27,7 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     public static TrainingMenuFragment newInstance() {
         return new TrainingMenuFragment();
     }
-
+    
     @Inject
     TrainingMenuContact.Actions presenter;
 

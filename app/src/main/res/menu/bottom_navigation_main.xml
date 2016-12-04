@@ -2,21 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_favorites"
+        android:id="@+id/bottom_navigation_training"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
         android:title="てすと１"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_schedules"
+        android:id="@+id/bottom_navigation_exam"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
         android:title="てすと２"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_music"
+        android:id="@+id/bottom_navigation_document"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
         android:title="てすと３"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/bottom_navigation_support"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:title="てすと４"
         app:showAsAction="ifRoom" />
 </menu>

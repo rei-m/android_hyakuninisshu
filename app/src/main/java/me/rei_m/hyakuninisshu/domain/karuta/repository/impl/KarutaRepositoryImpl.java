@@ -1,9 +1,8 @@
 package me.rei_m.hyakuninisshu.domain.karuta.repository.impl;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-
-import com.github.gfx.android.orma.Inserter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,40 +18,59 @@ import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonConstant;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
 public class KarutaRepositoryImpl implements KarutaRepository {
 
-    private Context context;
+    private final Context context;
 
-    private OrmaDatabase orma;
+    private final SharedPreferences preferences;
 
-    public KarutaRepositoryImpl(@NonNull Context context, @NonNull OrmaDatabase orma) {
+    private final OrmaDatabase orma;
+
+    public KarutaRepositoryImpl(@NonNull Context context,
+                                @NonNull SharedPreferences preferences,
+                                @NonNull OrmaDatabase orma) {
+        this.preferences = preferences;
         this.context = context;
         this.orma = orma;
     }
 
     @Override
     public Completable initializeEntityList() {
-        try {
-            InputStream inputStream = context.getAssets().open("karuta_list.json");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
+
+        int karutaJsonVersion = preferences.getInt(KarutaJsonConstant.KEY_KARUTA_JSON_VERSION, 0);
+
+        if (karutaJsonVersion < KarutaJsonConstant.KARUTA_VERSION) {
+            try {
+                InputStream inputStream = context.getAssets().open("karuta_list.json");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                reader.close();
+
+                List<KarutaSchema> karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString());
+
+                return orma.transactionAsCompletable(() -> {
+
+                    KarutaSchema.relation(orma).deleter().execute();
+
+                    KarutaSchema.relation(orma).inserter().executeAll(karutaSchemaList);
+
+                    preferences.edit()
+                            .putInt(KarutaJsonConstant.KEY_KARUTA_JSON_VERSION, KarutaJsonConstant.KARUTA_VERSION)
+                            .apply();
+                });
+            } catch (IOException e) {
+                return Completable.error(e);
             }
-            reader.close();
-
-            List<KarutaSchema> karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString());
-
-            return orma.transactionAsCompletable(() -> {
-                Inserter<KarutaSchema> inserter = KarutaSchema.relation(orma).inserter();
-                inserter.executeAll(karutaSchemaList);
-            });
-        } catch (IOException e) {
-            return Completable.error(e);
+        } else {
+            return Completable.complete();
         }
     }
 
