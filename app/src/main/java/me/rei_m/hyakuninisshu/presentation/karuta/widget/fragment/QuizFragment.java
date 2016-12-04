@@ -36,6 +36,8 @@ import me.rei_m.hyakuninisshu.presentation.manager.DeviceManager;
 
 public class QuizFragment extends BaseFragment implements QuizContact.View {
 
+    public static final String TAG = "QuizFragment";
+
     private static final String ARG_TOP_PHRASE_STYLE = "topPhraseStyle";
 
     private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";

@@ -2,6 +2,7 @@ package me.rei_m.hyakuninisshu.infrastructure.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,13 +16,13 @@ public class InfrastructureModule {
 
     @Provides
     @ForApplication
-    SharedPreferences provideSharedPreferences(Context context) {
+    SharedPreferences provideSharedPreferences(@NonNull Context context) {
         return context.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Provides
     @ForApplication
-    OrmaDatabase provideOrmaDatabase(Context context) {
+    OrmaDatabase provideOrmaDatabase(@NonNull Context context) {
         return OrmaDatabase.builder(context).build();
     }
 }

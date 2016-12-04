@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.karuta.module;
+package me.rei_m.hyakuninisshu.presentation.module;
 
 import android.content.Context;
 
@@ -7,11 +7,11 @@ import dagger.Provides;
 import me.rei_m.hyakuninisshu.presentation.module.ForActivity;
 
 @Module
-public class EntranceActivityModule {
+public class SplashActivityModule {
 
     private final Context context;
 
-    public EntranceActivityModule(Context context) {
+    public SplashActivityModule(Context context) {
         this.context = context;
     }
 

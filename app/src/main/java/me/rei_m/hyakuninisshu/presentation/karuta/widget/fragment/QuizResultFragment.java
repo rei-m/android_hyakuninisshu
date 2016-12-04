@@ -17,6 +17,8 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizRes
 
 public class QuizResultFragment extends BaseFragment implements QuizResultContact.View {
 
+    public static final String TAG = "QuizResultFragment";
+
     public static QuizResultFragment newInstance() {
         return new QuizResultFragment();
     }

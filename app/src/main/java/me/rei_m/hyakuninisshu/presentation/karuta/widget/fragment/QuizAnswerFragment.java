@@ -17,6 +17,8 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizAns
 
 public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContact.View {
 
+    public static final String TAG = "QuizAnswerFragment";
+
     private static final String ARG_QUIZ_ID = "quizId";
 
     public static QuizAnswerFragment newInstance(String quizId) {

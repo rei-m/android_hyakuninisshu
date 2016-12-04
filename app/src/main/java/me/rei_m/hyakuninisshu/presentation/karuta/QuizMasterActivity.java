@@ -54,13 +54,13 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
 
     private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";
 
-    private QuizMasterActivityComponent component;
-
     @Inject
     ActivityNavigator activityNavigator;
 
     @Inject
     QuizMasterContact.Actions presenter;
+
+    private QuizMasterActivityComponent component;
 
     private ActivityQuizMasterBinding binding;
 
@@ -68,6 +68,8 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_quiz_master);
+
+        setSupportActionBar(binding.toolbar);
 
         TrainingRange trainingRange = (TrainingRange) getIntent().getSerializableExtra(ARG_TRAINING_RANGE);
         Kimariji kimariji = (Kimariji) getIntent().getSerializableExtra(ARG_KIMARIJI);
@@ -77,6 +79,13 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
                     trainingRange,
                     kimariji);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+        component = null;
     }
 
     @Override
@@ -101,7 +110,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.class.getSimpleName())
+                .add(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.TAG)
                 .commit();
     }
 
@@ -115,7 +124,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.class.getSimpleName())
+                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
                 .commit();
     }
 
@@ -128,7 +137,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .replace(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.class.getSimpleName())
+                .replace(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.TAG)
                 .commit();
     }
 
@@ -137,7 +146,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.class.getSimpleName())
+                .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
                 .commit();
     }
 
