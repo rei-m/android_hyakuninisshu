@@ -7,6 +7,7 @@ import dagger.Provides;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterPresenter;
 import me.rei_m.hyakuninisshu.presentation.module.ForActivity;
+import me.rei_m.hyakuninisshu.usecase.karuta.FinishExamUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartExamUsecase;
 
 @Module
@@ -25,7 +26,8 @@ public class ExamMasterActivityModule {
     }
 
     @Provides
-    ExamMasterContact.Actions provideQuizMasterPresenter(StartExamUsecase startExamUsecase) {
-        return new ExamMasterPresenter(startExamUsecase);
+    ExamMasterContact.Actions provideQuizMasterPresenter(StartExamUsecase startExamUsecase,
+                                                         FinishExamUsecase finishExamUsecase) {
+        return new ExamMasterPresenter(startExamUsecase, finishExamUsecase);
     }
 }

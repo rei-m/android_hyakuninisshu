@@ -13,6 +13,7 @@ import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
+import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivityComponent;
@@ -20,6 +21,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.ExamMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 
 public class ExamMasterActivity extends BaseActivity implements ExamMasterContact.View,
         HasComponent<ExamMasterActivityComponent>,
@@ -102,5 +104,15 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
     @Override
     public void onClickGoToResult() {
         presenter.onClickGoToResult();
+    }
+
+    @Override
+    public void navigateToResult(ExamIdentifier examIdentifier) {
+        System.out.println("navogate");
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
+                .commit();
     }
 }

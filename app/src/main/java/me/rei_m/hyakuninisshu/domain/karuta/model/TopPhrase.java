@@ -35,6 +35,26 @@ public class TopPhrase extends AbstractEntity<TopPhrase, KarutaIdentifier> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        TopPhrase topPhrase = (TopPhrase) o;
+
+        return first.equals(topPhrase.first) && second.equals(topPhrase.second) && third.equals(topPhrase.third);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + first.hashCode();
+        result = 31 * result + second.hashCode();
+        result = 31 * result + third.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "FirstHalf{" +
                 "first=" + first +

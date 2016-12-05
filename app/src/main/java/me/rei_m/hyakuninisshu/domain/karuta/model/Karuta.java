@@ -55,6 +55,32 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Karuta karuta = (Karuta) o;
+
+        return kimariji == karuta.kimariji &&
+                creator.equals(karuta.creator) &&
+                topPhrase.equals(karuta.topPhrase) &&
+                bottomPhrase.equals(karuta.bottomPhrase) &&
+                imageNo.equals(karuta.imageNo);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + creator.hashCode();
+        result = 31 * result + topPhrase.hashCode();
+        result = 31 * result + bottomPhrase.hashCode();
+        result = 31 * result + kimariji;
+        result = 31 * result + imageNo.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Karuta{" +
                 "firstHalf=" + topPhrase +

@@ -9,7 +9,7 @@ public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier>
     private final Phrase fourth;
 
     private final Phrase fifth;
-    
+
     BottomPhrase(@NonNull KarutaIdentifier identifier,
                  @NonNull Phrase fourth,
                  @NonNull Phrase fifth) {
@@ -24,6 +24,26 @@ public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier>
 
     public Phrase getFifth() {
         return fifth;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        BottomPhrase that = (BottomPhrase) o;
+
+        return fourth.equals(that.fourth) && fifth.equals(that.fifth);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + fourth.hashCode();
+        result = 31 * result + fifth.hashCode();
+        return result;
     }
 
     @Override
