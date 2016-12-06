@@ -4,24 +4,33 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import me.rei_m.hyakuninisshu.usecase.karuta.StartExamUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.FinishKarutaExamUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaExamUsecase;
 
 public class ExamMasterPresenter implements ExamMasterContact.Actions {
 
-    private final StartExamUsecase startExamUsecase;
+    private final StartKarutaExamUsecase startKarutaExamUsecase;
 
-    public ExamMasterPresenter(@NonNull StartExamUsecase startExamUsecase) {
-        this.startExamUsecase = startExamUsecase;
+    private final FinishKarutaExamUsecase finishKarutaExamUsecase;
+
+    private ExamMasterContact.View view;
+
+    public ExamMasterPresenter(@NonNull StartKarutaExamUsecase startKarutaExamUsecase,
+                               @NonNull FinishKarutaExamUsecase finishKarutaExamUsecase) {
+        this.startKarutaExamUsecase = startKarutaExamUsecase;
+        this.finishKarutaExamUsecase = finishKarutaExamUsecase;
     }
 
     @Override
     public void onCreate(@NonNull ExamMasterContact.View view) {
-        startExamUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+        this.view = view;
+        startKarutaExamUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::startExam);
     }
 
     @Override
     public void onClickGoToResult() {
-        
+        finishKarutaExamUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(view::navigateToResult);
     }
 }

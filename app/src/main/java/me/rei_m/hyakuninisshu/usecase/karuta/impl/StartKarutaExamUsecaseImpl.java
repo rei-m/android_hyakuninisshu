@@ -9,9 +9,9 @@ import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
-import me.rei_m.hyakuninisshu.usecase.karuta.StartExamUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaExamUsecase;
 
-public class StartExamUsecaseImpl implements StartExamUsecase {
+public class StartKarutaExamUsecaseImpl implements StartKarutaExamUsecase {
 
     private final KarutaRepository karutaRepository;
 
@@ -19,9 +19,9 @@ public class StartExamUsecaseImpl implements StartExamUsecase {
 
     private final KarutaQuizListFactory karutaQuizListFactory;
 
-    public StartExamUsecaseImpl(@NonNull KarutaRepository karutaRepository,
-                                @NonNull KarutaQuizRepository karutaQuizRepository,
-                                @NonNull KarutaQuizListFactory karutaQuizListFactory) {
+    public StartKarutaExamUsecaseImpl(@NonNull KarutaRepository karutaRepository,
+                                      @NonNull KarutaQuizRepository karutaQuizRepository,
+                                      @NonNull KarutaQuizListFactory karutaQuizListFactory) {
         this.karutaRepository = karutaRepository;
         this.karutaQuizRepository = karutaQuizRepository;
         this.karutaQuizListFactory = karutaQuizListFactory;
