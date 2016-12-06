@@ -14,16 +14,16 @@ import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.ExamRepository;
+import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.ExamSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.ExamWrongKarutaSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
-public class ExamRepositoryImpl implements ExamRepository {
+public class KarutaExamRepositoryImpl implements KarutaExamRepository {
 
     private final OrmaDatabase orma;
 
-    public ExamRepositoryImpl(@NonNull OrmaDatabase orma) {
+    public KarutaExamRepositoryImpl(@NonNull OrmaDatabase orma) {
         this.orma = orma;
     }
 
@@ -33,7 +33,7 @@ public class ExamRepositoryImpl implements ExamRepository {
 
         ExamSchema examSchema = new ExamSchema();
 
-        return orma.transactionAsCompletable(() -> {
+        orma.transactionSync(() -> {
 
             List<KarutaIdentifier> wrongKarutaIdList = new ArrayList<>();
 
@@ -54,9 +54,8 @@ public class ExamRepositoryImpl implements ExamRepository {
                 examWrongKarutaSchema.karutaId = identifier.getValue();
                 examWrongKarutaSchemaInserter.execute(examWrongKarutaSchema);
             });
-        }).toMaybe().map(o -> {
-            System.out.println("hgoe");
-            return new ExamIdentifier(examSchema.id);
         });
+
+        return Maybe.just(new ExamIdentifier(examSchema.id));
     }
 }

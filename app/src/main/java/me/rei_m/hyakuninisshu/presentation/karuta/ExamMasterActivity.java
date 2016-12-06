@@ -19,14 +19,15 @@ import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.ExamMasterActivityModule;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 
 public class ExamMasterActivity extends BaseActivity implements ExamMasterContact.View,
         HasComponent<ExamMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
-        QuizAnswerFragment.OnFragmentInteractionListener {
+        QuizAnswerFragment.OnFragmentInteractionListener,
+        ExamResultFragment.OnFragmentInteractionListener {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
@@ -108,11 +109,15 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
 
     @Override
     public void navigateToResult(ExamIdentifier examIdentifier) {
-        System.out.println("navogate");
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
+                .replace(R.id.content, ExamResultFragment.newInstance(), ExamResultFragment.TAG)
                 .commit();
+    }
+
+    @Override
+    public void onFinishExam() {
+        finish();
     }
 }

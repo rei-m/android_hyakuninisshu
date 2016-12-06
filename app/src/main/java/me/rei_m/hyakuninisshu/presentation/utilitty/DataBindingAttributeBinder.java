@@ -66,9 +66,6 @@ public class DataBindingAttributeBinder {
     @BindingAdapter({"visibilityByQuizState"})
     public static void setVisibilityByQuizState(@NonNull ImageView imageView,
                                                 @Nullable ObservableField<QuizState> quizState) {
-
-        System.out.println(quizState);
-
         if (quizState == null) {
             imageView.setVisibility(View.GONE);
             return;
@@ -88,25 +85,4 @@ public class DataBindingAttributeBinder {
                 break;
         }
     }
-
-//    @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
-//    public static void bindTrainingRangeData(Spinner spinner,
-//                                             TrainingRange newSelectedValue,
-//                                             final InverseBindingListener newTextAttrChanged) {
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                newTextAttrChanged.onChange();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
-//
-//        if (newSelectedValue != null) {
-//            int pos = ((SpinnerAdapter) spinner.getAdapter()).getPosition(newSelectedValue);
-//            spinner.setSelection(pos, true);
-//        }
-//    }
 }

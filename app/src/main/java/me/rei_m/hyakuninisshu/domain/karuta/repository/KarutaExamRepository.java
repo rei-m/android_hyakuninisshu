@@ -7,7 +7,6 @@ import io.reactivex.Maybe;
 import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
 
-public interface ExamRepository {
-    Maybe<ExamIdentifier> store(List<KarutaQuizResult> karutaQuizResultList,
-                                Date tookExamDate);
+public interface KarutaExamRepository {
+    Maybe<ExamIdentifier> store(List<KarutaQuizResult> karutaQuizResultList, Date tookExamDate);
 }

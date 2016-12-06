@@ -5,24 +5,26 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.ExamRepository;
+import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.usecase.karuta.AnswerKarutaQuizUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaExamResultUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizAnswerUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizResultUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
-import me.rei_m.hyakuninisshu.usecase.karuta.FinishExamUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.FinishKarutaExamUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.RestartWrongKarutaQuizUsecase;
-import me.rei_m.hyakuninisshu.usecase.karuta.StartExamUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaExamUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.AnswerKarutaQuizUsecaseImpl;
+import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaExamResultUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizAnswerUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizResultUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizUsecaseImpl;
-import me.rei_m.hyakuninisshu.usecase.karuta.impl.FinishExamUsecaseImpl;
+import me.rei_m.hyakuninisshu.usecase.karuta.impl.FinishKarutaExamUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.RestartWrongKarutaQuizUsecaseImpl;
-import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartExamUsecaseImpl;
+import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartKarutaExamUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartKarutaQuizUsecaseImpl;
 
 @Module
@@ -33,19 +35,6 @@ public class KarutaUsecaseModule {
                                                          KarutaQuizRepository karutaQuizRepository,
                                                          KarutaQuizListFactory karutaQuizListFactory) {
         return new StartKarutaQuizUsecaseImpl(karutaRepository, karutaQuizRepository, karutaQuizListFactory);
-    }
-
-    @Provides
-    StartExamUsecase provideStartExamUsecase(KarutaRepository karutaRepository,
-                                             KarutaQuizRepository karutaQuizRepository,
-                                             KarutaQuizListFactory karutaQuizListFactory) {
-        return new StartExamUsecaseImpl(karutaRepository, karutaQuizRepository, karutaQuizListFactory);
-    }
-
-    @Provides
-    FinishExamUsecase provideFinishExamUsecase(KarutaQuizRepository karutaQuizRepository,
-                                               ExamRepository examRepository) {
-        return new FinishExamUsecaseImpl(karutaQuizRepository, examRepository);
     }
 
     @Provides
@@ -76,5 +65,24 @@ public class KarutaUsecaseModule {
     DisplayKarutaQuizResultUsecase provideDisplayKarutaQuizResultUsecase(Context context,
                                                                          KarutaQuizRepository karutaQuizRepository) {
         return new DisplayKarutaQuizResultUsecaseImpl(context, karutaQuizRepository);
+    }
+
+    @Provides
+    StartKarutaExamUsecase provideStartExamUsecase(KarutaRepository karutaRepository,
+                                                   KarutaQuizRepository karutaQuizRepository,
+                                                   KarutaQuizListFactory karutaQuizListFactory) {
+        return new StartKarutaExamUsecaseImpl(karutaRepository, karutaQuizRepository, karutaQuizListFactory);
+    }
+
+    @Provides
+    FinishKarutaExamUsecase provideFinishExamUsecase(KarutaQuizRepository karutaQuizRepository,
+                                                     KarutaExamRepository karutaExamRepository) {
+        return new FinishKarutaExamUsecaseImpl(karutaQuizRepository, karutaExamRepository);
+    }
+
+    @Provides
+    DisplayKarutaExamResultUsecase provideDisplayKarutaExamResultUsecase(Context context,
+                                                                         KarutaQuizRepository karutaQuizRepository) {
+        return new DisplayKarutaExamResultUsecaseImpl(context, karutaQuizRepository);
     }
 }

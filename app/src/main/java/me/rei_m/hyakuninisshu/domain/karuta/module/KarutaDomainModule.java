@@ -6,10 +6,10 @@ import android.content.SharedPreferences;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.ExamRepository;
+import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.impl.ExamRepositoryImpl;
+import me.rei_m.hyakuninisshu.domain.karuta.repository.impl.KarutaExamRepositoryImpl;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.impl.KarutaQuizRepositoryImpl;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.impl.KarutaRepositoryImpl;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
@@ -34,8 +34,8 @@ public class KarutaDomainModule {
 
     @Provides
     @ForApplication
-    ExamRepository provideExamRepository(OrmaDatabase orma) {
-        return new ExamRepositoryImpl(orma);
+    KarutaExamRepository provideExamRepository(OrmaDatabase orma) {
+        return new KarutaExamRepositoryImpl(orma);
     }
 
     @Provides

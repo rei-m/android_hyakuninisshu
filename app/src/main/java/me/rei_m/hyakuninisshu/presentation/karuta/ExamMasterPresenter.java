@@ -4,33 +4,33 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import me.rei_m.hyakuninisshu.usecase.karuta.FinishExamUsecase;
-import me.rei_m.hyakuninisshu.usecase.karuta.StartExamUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.FinishKarutaExamUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaExamUsecase;
 
 public class ExamMasterPresenter implements ExamMasterContact.Actions {
 
-    private final StartExamUsecase startExamUsecase;
+    private final StartKarutaExamUsecase startKarutaExamUsecase;
 
-    private final FinishExamUsecase finishExamUsecase;
+    private final FinishKarutaExamUsecase finishKarutaExamUsecase;
 
     private ExamMasterContact.View view;
 
-    public ExamMasterPresenter(@NonNull StartExamUsecase startExamUsecase,
-                               @NonNull FinishExamUsecase finishExamUsecase) {
-        this.startExamUsecase = startExamUsecase;
-        this.finishExamUsecase = finishExamUsecase;
+    public ExamMasterPresenter(@NonNull StartKarutaExamUsecase startKarutaExamUsecase,
+                               @NonNull FinishKarutaExamUsecase finishKarutaExamUsecase) {
+        this.startKarutaExamUsecase = startKarutaExamUsecase;
+        this.finishKarutaExamUsecase = finishKarutaExamUsecase;
     }
 
     @Override
     public void onCreate(@NonNull ExamMasterContact.View view) {
         this.view = view;
-        startExamUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+        startKarutaExamUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::startExam);
     }
 
     @Override
     public void onClickGoToResult() {
-        finishExamUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+        finishKarutaExamUsecase.execute().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::navigateToResult);
     }
 }

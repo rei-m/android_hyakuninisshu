@@ -1,0 +1,60 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.karuta.widget.fragment.QuizResultFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamResultViewModel" />
+
+        <variable
+            name="presenter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultContact.Actions" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/tatami"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_m"
+            android:layout_marginTop="@dimen/margin_m"
+            android:text="@string/number_of_correct_answers" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@{viewModel.result}"
+            android:textSize="@dimen/text_xl" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_m"
+            android:layout_marginTop="@dimen/margin_m"
+            android:text="@string/average_response_time" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin_l"
+            android:text="@{viewModel.averageAnswerTime}"
+            android:textSize="@dimen/text_xl" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="@{() -> presenter.onClickBackMenu()}"
+            android:text="@string/back_menu" />
+
+    </LinearLayout>
+
+</layout>
