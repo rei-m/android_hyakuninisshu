@@ -29,13 +29,14 @@ public class FinishKarutaExamUsecaseImpl implements FinishKarutaExamUsecase {
     }
 
     @Override
-    public Maybe<ExamIdentifier> execute() {
+    public Maybe<Long> execute() {
         return karutaQuizRepository.asEntityList()
                 .flatMap(new Function<List<KarutaQuiz>, SingleSource<List<KarutaQuizResult>>>() {
                     @Override
                     public SingleSource<List<KarutaQuizResult>> apply(List<KarutaQuiz> karutaQuizList) throws Exception {
                         return Observable.fromIterable(karutaQuizList).map(KarutaQuiz::getResult).toList();
                     }
-                }).flatMapMaybe(karutaQuizResultList -> karutaExamRepository.store(karutaQuizResultList, new Date()));
+                }).flatMapMaybe(karutaQuizResultList -> karutaExamRepository.store(karutaQuizResultList, new Date()))
+                .map(ExamIdentifier::getValue);
     }
 }

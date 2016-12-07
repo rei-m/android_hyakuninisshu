@@ -25,9 +25,9 @@ public class ExamResultPresenter implements ExamResultContact.Actions {
     }
 
     @Override
-    public void onResume() {
+    public void onResume(@NonNull Long examId) {
         disposable = new CompositeDisposable();
-        disposable.add(displayKarutaExamResultUsecase.execute()
+        disposable.add(displayKarutaExamResultUsecase.execute(examId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::initialize));

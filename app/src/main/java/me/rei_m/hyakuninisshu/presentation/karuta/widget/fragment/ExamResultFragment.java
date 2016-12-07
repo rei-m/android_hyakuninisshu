@@ -2,6 +2,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamResultViewModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizResultViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.ExamResultFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.ExamResultFragmentModule;
 
@@ -20,8 +20,14 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
 
     public static final String TAG = "ExamResultFragment";
 
-    public static ExamResultFragment newInstance() {
-        return new ExamResultFragment();
+    private static final String ARG_EXAM_ID = "examId";
+
+    public static ExamResultFragment newInstance(@NonNull Long examId) {
+        ExamResultFragment fragment = new ExamResultFragment();
+        Bundle args = new Bundle();
+        args.putLong(ARG_EXAM_ID, examId);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Inject
@@ -31,6 +37,8 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
 
     private OnFragmentInteractionListener listener;
 
+    private Long examId;
+
     public ExamResultFragment() {
         // Required empty public constructor
     }
@@ -38,6 +46,10 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            // TODO: エラーチェック.
+            examId = getArguments().getLong(ARG_EXAM_ID);
+        }
         presenter.onCreate(this);
     }
 
@@ -57,7 +69,7 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume();
+        presenter.onResume(examId);
     }
 
     @Override

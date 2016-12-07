@@ -13,7 +13,7 @@ public interface ExamResultContact {
     interface Actions {
         void onCreate(View view);
 
-        void onResume();
+        void onResume(Long examId);
 
         void onPause();
 

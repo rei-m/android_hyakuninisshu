@@ -11,7 +11,10 @@ import java.util.List;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import me.rei_m.hyakuninisshu.domain.karuta.model.Exam;
 import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
@@ -57,5 +60,22 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
         });
 
         return Maybe.just(new ExamIdentifier(examSchema.id));
+    }
+
+    @Override
+    public Single<Exam> resolve(@NonNull ExamIdentifier identifier) {
+        return ExamSchema.relation(orma)
+                .idEq(identifier.getValue())
+                .selector()
+                .executeAsObservable()
+                .firstOrError()
+                .map(examSchema -> {
+                    List<ExamWrongKarutaSchema> examWrongKarutaSchemaList = new ArrayList<>();
+                    examSchema.getWrongKarutas(orma)
+                            .selector()
+                            .executeAsObservable()
+                            .subscribe(examWrongKarutaSchemaList::add);
+                    return KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList);
+                });
     }
 }
