@@ -13,7 +13,6 @@ import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
-import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivityComponent;
@@ -108,11 +107,11 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
     }
 
     @Override
-    public void navigateToResult(ExamIdentifier examIdentifier) {
+    public void navigateToResult(Long examId) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, ExamResultFragment.newInstance(), ExamResultFragment.TAG)
+                .replace(R.id.content, ExamResultFragment.newInstance(examId), ExamResultFragment.TAG)
                 .commit();
     }
 

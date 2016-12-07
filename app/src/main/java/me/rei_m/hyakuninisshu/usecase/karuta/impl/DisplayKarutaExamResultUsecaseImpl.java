@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamResultViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaExamResultUsecase;
 
@@ -17,33 +17,24 @@ public class DisplayKarutaExamResultUsecaseImpl implements DisplayKarutaExamResu
 
     private final Context context;
 
-    private final KarutaQuizRepository karutaQuizRepository;
+    private final KarutaExamRepository karutaExamRepository;
 
     public DisplayKarutaExamResultUsecaseImpl(@NonNull Context context,
-                                              @NonNull KarutaQuizRepository karutaQuizRepository) {
+                                              @NonNull KarutaExamRepository karutaExamRepository) {
         this.context = context;
-        this.karutaQuizRepository = karutaQuizRepository;
+        this.karutaExamRepository = karutaExamRepository;
     }
 
     @Override
-    public Single<ExamResultViewModel> execute() {
+    public Single<ExamResultViewModel> execute(@NonNull Long examId) {
 
-        return karutaQuizRepository.asEntityList().map(karutaQuizList -> {
+        return karutaExamRepository.resolve(new ExamIdentifier(examId)).map(exam -> {
 
-            final int quizCount = karutaQuizList.size();
+            final int quizCount = exam.totalQuizCount;
 
             long totalAnswerTimeMillSec = 0;
 
-            int collectCount = 0;
-
-            for (KarutaQuiz karutaQuiz : karutaQuizList) {
-                totalAnswerTimeMillSec += karutaQuiz.getResult().answerTime;
-                if (karutaQuiz.getResult().isCollect) {
-                    collectCount++;
-                }
-            }
-
-            final String result = collectCount + "/" + quizCount;
+            final String result = (quizCount - exam.wrongKarutaIdList.size()) + "/" + quizCount;
 
             final float averageAnswerTime = totalAnswerTimeMillSec / (float) quizCount / (float) TimeUnit.SECONDS.toMillis(1);
 

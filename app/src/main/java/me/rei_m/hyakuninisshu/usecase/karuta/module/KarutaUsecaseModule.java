@@ -82,7 +82,7 @@ public class KarutaUsecaseModule {
 
     @Provides
     DisplayKarutaExamResultUsecase provideDisplayKarutaExamResultUsecase(Context context,
-                                                                         KarutaQuizRepository karutaQuizRepository) {
-        return new DisplayKarutaExamResultUsecaseImpl(context, karutaQuizRepository);
+                                                                         KarutaExamRepository karutaExamRepository) {
+        return new DisplayKarutaExamResultUsecaseImpl(context, karutaExamRepository);
     }
 }

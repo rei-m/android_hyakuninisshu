@@ -45,12 +45,12 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter.onCreate(this);
         if (getArguments() != null) {
             // TODO: エラーチェック.
 
             quizId = getArguments().getString(ARG_QUIZ_ID);
         }
+        presenter.onCreate(this);
     }
 
     @Override
