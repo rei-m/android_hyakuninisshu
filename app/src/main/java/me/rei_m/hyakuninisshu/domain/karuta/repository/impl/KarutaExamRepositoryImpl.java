@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamFactory;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
@@ -32,8 +32,8 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
     }
 
     @Override
-    public Maybe<ExamIdentifier> store(@NonNull List<KarutaQuizResult> karutaQuizResultList,
-                                       @NonNull Date tookExamDate) {
+    public Maybe<KarutaExamIdentifier> store(@NonNull List<KarutaQuizResult> karutaQuizResultList,
+                                             @NonNull Date tookExamDate) {
 
         KarutaExamSchema karutaExamSchema = new KarutaExamSchema();
 
@@ -66,11 +66,11 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
             });
         });
 
-        return Maybe.just(new ExamIdentifier(karutaExamSchema.id));
+        return Maybe.just(new KarutaExamIdentifier(karutaExamSchema.id));
     }
 
     @Override
-    public Single<KarutaExam> resolve(@NonNull ExamIdentifier identifier) {
+    public Single<KarutaExam> resolve(@NonNull KarutaExamIdentifier identifier) {
         return KarutaExamSchema.relation(orma)
                 .idEq(identifier.getValue())
                 .selector()

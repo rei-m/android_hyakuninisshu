@@ -2,13 +2,13 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class ExamIdentifier implements EntityIdentifier<KarutaExam> {
+public class KarutaExamIdentifier implements EntityIdentifier<KarutaExam> {
 
     private final String kind = "KarutaExam";
 
     private final long value;
 
-    public ExamIdentifier(long value) {
+    public KarutaExamIdentifier(long value) {
         this.value = value;
     }
 
@@ -26,7 +26,7 @@ public class ExamIdentifier implements EntityIdentifier<KarutaExam> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ExamIdentifier that = (ExamIdentifier) o;
+        KarutaExamIdentifier that = (KarutaExamIdentifier) o;
 
         return value == that.value && kind.equals(that.kind);
 
