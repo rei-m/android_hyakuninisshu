@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.R;
@@ -32,13 +31,9 @@ public class DisplayKarutaExamResultUsecaseImpl implements DisplayKarutaExamResu
 
             final int quizCount = exam.totalQuizCount;
 
-            long totalAnswerTimeMillSec = 0;
-
             final String result = (quizCount - exam.wrongKarutaIdList.size()) + "/" + quizCount;
 
-            final float averageAnswerTime = totalAnswerTimeMillSec / (float) quizCount / (float) TimeUnit.SECONDS.toMillis(1);
-
-            final String averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerTime);
+            final String averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", exam.averageAnswerTime);
 
             return new ExamResultViewModel(result, context.getString(R.string.seconds, averageAnswerTimeString));
         });
