@@ -13,4 +13,6 @@
 
     <dimen name="text_karuta_quiz">28sp</dimen>
 
+    <dimen name="size_karuta_exam_result_mark">48dp</dimen>
+
 </resources>
