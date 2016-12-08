@@ -2,9 +2,9 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class ExamIdentifier implements EntityIdentifier<Exam> {
+public class ExamIdentifier implements EntityIdentifier<KarutaExam> {
 
-    private final String kind = "Exam";
+    private final String kind = "KarutaExam";
 
     private final long value;
 

@@ -7,10 +7,10 @@ import com.github.gfx.android.orma.annotation.Table;
 import java.util.Date;
 
 @Table
-public class ExamSchema {
+public class KarutaExamSchema {
 
-    public static ExamSchema_Relation relation(OrmaDatabase orma) {
-        return orma.relationOfExamSchema();
+    public static KarutaExamSchema_Relation relation(OrmaDatabase orma) {
+        return orma.relationOfKarutaExamSchema();
     }
 
     @PrimaryKey(autoincrement = true)
@@ -21,6 +21,9 @@ public class ExamSchema {
 
     @Column
     public int totalQuizCount;
+
+    @Column
+    public float averageAnswerTime;
 
     public ExamWrongKarutaSchema_Relation getWrongKarutas(OrmaDatabase orma) {
         return orma.relationOfExamWrongKarutaSchema().examSchemaEq(this);

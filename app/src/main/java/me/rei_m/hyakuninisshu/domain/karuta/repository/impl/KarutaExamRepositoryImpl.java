@@ -8,18 +8,19 @@ import com.github.gfx.android.orma.SingleAssociation;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import me.rei_m.hyakuninisshu.domain.karuta.model.Exam;
 import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
-import me.rei_m.hyakuninisshu.infrastructure.database.ExamSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.ExamWrongKarutaSchema;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaExamSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
 public class KarutaExamRepositoryImpl implements KarutaExamRepository {
@@ -34,37 +35,43 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
     public Maybe<ExamIdentifier> store(@NonNull List<KarutaQuizResult> karutaQuizResultList,
                                        @NonNull Date tookExamDate) {
 
-        ExamSchema examSchema = new ExamSchema();
+        KarutaExamSchema karutaExamSchema = new KarutaExamSchema();
 
         orma.transactionSync(() -> {
 
             List<KarutaIdentifier> wrongKarutaIdList = new ArrayList<>();
 
-            Observable.fromIterable(karutaQuizResultList)
-                    .filter(karutaQuizResult -> !karutaQuizResult.isCollect)
-                    .subscribe(karutaQuizResult -> {
-                        wrongKarutaIdList.add(karutaQuizResult.collectKarutaId);
-                    });
+            long totalAnswerTimeMillSec = 0;
 
-            examSchema.tookExamDate = tookExamDate;
-            examSchema.totalQuizCount = karutaQuizResultList.size();
-            examSchema.id = ExamSchema.relation(orma).inserter().execute(examSchema);
+            for (KarutaQuizResult karutaQuizResult : karutaQuizResultList) {
+                totalAnswerTimeMillSec += karutaQuizResult.answerTime;
+                if (!karutaQuizResult.isCollect) {
+                    wrongKarutaIdList.add(karutaQuizResult.collectKarutaId);
+                }
+            }
+
+            final float averageAnswerTime = totalAnswerTimeMillSec / (float) karutaQuizResultList.size() / (float) TimeUnit.SECONDS.toMillis(1);
+
+            karutaExamSchema.tookExamDate = tookExamDate;
+            karutaExamSchema.totalQuizCount = karutaQuizResultList.size();
+            karutaExamSchema.averageAnswerTime = averageAnswerTime;
+            karutaExamSchema.id = KarutaExamSchema.relation(orma).inserter().execute(karutaExamSchema);
 
             Inserter<ExamWrongKarutaSchema> examWrongKarutaSchemaInserter = ExamWrongKarutaSchema.relation(orma).inserter();
             Observable.fromIterable(wrongKarutaIdList).subscribe(identifier -> {
                 ExamWrongKarutaSchema examWrongKarutaSchema = new ExamWrongKarutaSchema();
-                examWrongKarutaSchema.examSchema = SingleAssociation.just(examSchema);
+                examWrongKarutaSchema.examSchema = SingleAssociation.just(karutaExamSchema);
                 examWrongKarutaSchema.karutaId = identifier.getValue();
                 examWrongKarutaSchemaInserter.execute(examWrongKarutaSchema);
             });
         });
 
-        return Maybe.just(new ExamIdentifier(examSchema.id));
+        return Maybe.just(new ExamIdentifier(karutaExamSchema.id));
     }
 
     @Override
-    public Single<Exam> resolve(@NonNull ExamIdentifier identifier) {
-        return ExamSchema.relation(orma)
+    public Single<KarutaExam> resolve(@NonNull ExamIdentifier identifier) {
+        return KarutaExamSchema.relation(orma)
                 .idEq(identifier.getValue())
                 .selector()
                 .executeAsObservable()

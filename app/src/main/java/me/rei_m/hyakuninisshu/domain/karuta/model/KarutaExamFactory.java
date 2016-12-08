@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import me.rei_m.hyakuninisshu.infrastructure.database.ExamSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.ExamWrongKarutaSchema;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaExamSchema;
 
 public class KarutaExamFactory {
 
     private KarutaExamFactory() {
     }
 
-    public static Exam create(@NonNull ExamSchema schema,
-                              @NonNull List<ExamWrongKarutaSchema> examWrongKarutaSchemaList) {
+    public static KarutaExam create(@NonNull KarutaExamSchema schema,
+                                    @NonNull List<ExamWrongKarutaSchema> examWrongKarutaSchemaList) {
 
         ExamIdentifier identifier = new ExamIdentifier(schema.id);
 
@@ -24,6 +24,10 @@ public class KarutaExamFactory {
             wrongKarutaIdentifierList.add(new KarutaIdentifier(examWrongKarutaSchema.karutaId));
         });
 
-        return new Exam(identifier, schema.tookExamDate, schema.totalQuizCount, wrongKarutaIdentifierList);
+        return new KarutaExam(identifier,
+                schema.tookExamDate,
+                schema.totalQuizCount,
+                schema.averageAnswerTime,
+                wrongKarutaIdentifierList);
     }
 }

@@ -12,7 +12,7 @@ public class ExamWrongKarutaSchema {
     }
 
     @Column(indexed = true)
-    public SingleAssociation<ExamSchema> examSchema;
+    public SingleAssociation<KarutaExamSchema> examSchema;
 
     @Column
     public long karutaId;
