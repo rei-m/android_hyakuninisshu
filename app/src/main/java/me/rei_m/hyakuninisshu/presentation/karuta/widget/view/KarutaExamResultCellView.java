@@ -1,7 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.view;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
 
 public class KarutaExamResultCellView extends RelativeLayout {
 
@@ -40,8 +40,8 @@ public class KarutaExamResultCellView extends RelativeLayout {
         imageIncorrect = (ImageView) view.findViewById(R.id.image_quiz_result_incorrect);
     }
 
-    public void setResult(@NonNull String karutaNo, boolean isCorrect) {
-        textKarutaNo.setText(karutaNo);
+    public void setResult(int karutaNo, boolean isCorrect) {
+        textKarutaNo.setText(KarutaDisplayUtil.convertNumberToString(getContext(), karutaNo));
         if (isCorrect) {
             imageCorrect.setVisibility(VISIBLE);
         } else {

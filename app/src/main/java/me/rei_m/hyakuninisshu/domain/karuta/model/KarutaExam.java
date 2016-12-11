@@ -7,9 +7,9 @@ import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-public class KarutaExam extends AbstractEntity<KarutaExam, ExamIdentifier> {
+public class KarutaExam extends AbstractEntity<KarutaExam, KarutaExamIdentifier> {
 
-    public KarutaExam(@NonNull ExamIdentifier identifier,
+    public KarutaExam(@NonNull KarutaExamIdentifier identifier,
                       @NonNull Date tookExamDate,
                       int totalQuizCount,
                       float averageAnswerTime,

@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
 
 public class KarutaDisplayUtil {
 
@@ -24,8 +25,8 @@ public class KarutaDisplayUtil {
 
     public static String convertNumberToString(@NonNull Context context, int number) {
 
-        if (number == 100) {
-            return context.getString(R.string.hundred);
+        if (number == KarutaConstant.NUMBER_OF_KARUTA) {
+            return context.getString(R.string.karuta_number, context.getString(R.string.hundred));
         }
 
         Resources resources = context.getResources();
@@ -41,7 +42,7 @@ public class KarutaDisplayUtil {
             }
             sb.append(resources.getString(R.string.ten));
         }
-        
+
         if (0 < singleDigits) {
             sb.append(numArray[singleDigits - 1]);
         }

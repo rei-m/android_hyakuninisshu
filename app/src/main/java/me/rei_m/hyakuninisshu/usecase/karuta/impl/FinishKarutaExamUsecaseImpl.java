@@ -9,7 +9,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
-import me.rei_m.hyakuninisshu.domain.karuta.model.ExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
@@ -37,6 +37,6 @@ public class FinishKarutaExamUsecaseImpl implements FinishKarutaExamUsecase {
                         return Observable.fromIterable(karutaQuizList).map(KarutaQuiz::getResult).toList();
                     }
                 }).flatMapMaybe(karutaQuizResultList -> karutaExamRepository.store(karutaQuizResultList, new Date()))
-                .map(ExamIdentifier::getValue);
+                .map(KarutaExamIdentifier::getValue);
     }
 }

@@ -13,7 +13,7 @@
     <string name="setting">設定</string>
     <string name="range_question">出題範囲</string>
     <string name="kimariji">決まり字</string>
-    <string name="karuta_number">第%1$s首</string>
+    <string name="karuta_number">%1$s首</string>
     <string name="seconds">%1$s秒</string>
     <string name="topPhrase">上の句</string>
     <string name="bottomPhrase">下の句</string>

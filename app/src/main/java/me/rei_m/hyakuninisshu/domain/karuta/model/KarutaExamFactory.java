@@ -17,7 +17,7 @@ public class KarutaExamFactory {
     public static KarutaExam create(@NonNull KarutaExamSchema schema,
                                     @NonNull List<ExamWrongKarutaSchema> examWrongKarutaSchemaList) {
 
-        ExamIdentifier identifier = new ExamIdentifier(schema.id);
+        KarutaExamIdentifier identifier = new KarutaExamIdentifier(schema.id);
 
         List<KarutaIdentifier> wrongKarutaIdentifierList = new ArrayList<>();
         Observable.fromIterable(examWrongKarutaSchemaList).subscribe(examWrongKarutaSchema -> {

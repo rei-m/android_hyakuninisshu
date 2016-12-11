@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
 
 public class DataBindingAttributeBinder {
@@ -84,5 +85,14 @@ public class DataBindingAttributeBinder {
                 imageView.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    @BindingAdapter({"examResultList"})
+    public static void setKarutaExamResult(@NonNull KarutaExamResultView view,
+                                           @Nullable boolean[] karutaQuizResultList) {
+        if (karutaQuizResultList == null) {
+            return;
+        }
+        view.setResult(karutaQuizResultList);
     }
 }
