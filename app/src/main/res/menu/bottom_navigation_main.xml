@@ -14,7 +14,7 @@
         android:title="てすと２"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/bottom_navigation_document"
+        android:id="@+id/bottom_navigation_material"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
         android:title="てすと３"

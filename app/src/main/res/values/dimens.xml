@@ -34,6 +34,7 @@
     <dimen name="elevation_level_w">3dp</dimen>
     <dimen name="elevation_level_xs">2dp</dimen>
     <dimen name="elevation_level_xxs">1dp</dimen>
+    <dimen name="elevation_level_none">0dp</dimen>
 
     <dimen name="text_xxl">52sp</dimen>
     <dimen name="text_xl">34sp</dimen>
