@@ -14,7 +14,7 @@ import me.rei_m.hyakuninisshu.usecase.StartApplicationUsecase;
 public class SplashActivity extends BaseActivity {
 
     @Inject
-    ActivityNavigator activityNavigator;
+    ActivityNavigator navigator;
 
     @Inject
     StartApplicationUsecase startApplicationUsecase;
@@ -28,7 +28,7 @@ public class SplashActivity extends BaseActivity {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
-                    activityNavigator.navigateToEntrance(this);
+                    navigator.navigateToEntrance(this);
                     finish();
                 });
     }

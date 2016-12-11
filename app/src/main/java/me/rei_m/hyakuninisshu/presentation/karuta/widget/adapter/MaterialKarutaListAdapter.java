@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -25,12 +26,18 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<MaterialKaru
 
     private List<MaterialViewModel.KarutaViewModel> karutaViewModelList = new ArrayList<>();
 
+    private OnRecyclerViewInteractionListener listener;
+
     public MaterialKarutaListAdapter() {
 
     }
 
     public void setKarutaViewModelList(@NonNull List<MaterialViewModel.KarutaViewModel> karutaViewModelList) {
         this.karutaViewModelList = karutaViewModelList;
+    }
+
+    public void setListener(@Nullable OnRecyclerViewInteractionListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -45,11 +52,16 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<MaterialKaru
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         MaterialViewModel.KarutaViewModel viewModel = karutaViewModelList.get(position);
         holder.binding.setViewModel(viewModel);
+        holder.binding.setListener(listener);
         holder.binding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
         return karutaViewModelList.size();
+    }
+
+    public interface OnRecyclerViewInteractionListener {
+        void onItemClicked(int karutaNo);
     }
 }

@@ -33,7 +33,7 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
     }
 
     @Inject
-    ActivityNavigator activityNavigator;
+    ActivityNavigator navigator;
 
     @Inject
     ExamMasterContact.Actions presenter;

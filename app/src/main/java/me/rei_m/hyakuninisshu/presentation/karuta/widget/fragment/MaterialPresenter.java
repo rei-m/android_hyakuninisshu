@@ -40,4 +40,9 @@ public class MaterialPresenter implements MaterialContact.Actions {
             disposable = null;
         }
     }
+
+    @Override
+    public void onItemClicked(int karutaNo) {
+        view.navigateToMaterialDetail(karutaNo);
+    }
 }

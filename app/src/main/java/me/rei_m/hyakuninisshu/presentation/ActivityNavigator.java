@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
@@ -33,6 +34,12 @@ public class ActivityNavigator {
 
     public void navigateToExamMaster(@NonNull Activity activity) {
         Intent intentToLaunch = ExamMasterActivity.createIntent(activity);
+        activity.startActivity(intentToLaunch);
+    }
+
+    public void navigateToMaterialDetail(@NonNull Activity activity,
+                                         int karutaNo) {
+        Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, karutaNo);
         activity.startActivity(intentToLaunch);
     }
 }

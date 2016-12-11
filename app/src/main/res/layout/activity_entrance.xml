@@ -38,7 +38,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="@dimen/elevation_level_l"
                 android:layout_above="@+id/bottom_navigation"
                 android:background="@drawable/shadow_bottom_navigation" />
 

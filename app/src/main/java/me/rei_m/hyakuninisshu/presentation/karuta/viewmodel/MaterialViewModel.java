@@ -12,36 +12,28 @@ public class MaterialViewModel {
 
         public final int karutaNo;
 
+        public final String karutaNoText;
+
         public final String karutaImageNo;
 
         public final String creator;
 
-        public final String firstPhrase;
+        public final String topPhrase;
 
-        public final String secondPhrase;
-
-        public final String thirdPhrase;
-
-        public final String fourthPhrase;
-
-        public final String fifthPhrase;
+        public final String bottomPhrase;
 
         public KarutaViewModel(int karutaNo,
+                               @NonNull String karutaNoText,
                                @NonNull String karutaImageNo,
                                @NonNull String creator,
-                               @NonNull String firstPhrase,
-                               @NonNull String secondPhrase,
-                               @NonNull String thirdPhrase,
-                               @NonNull String fourthPhrase,
-                               @NonNull String fifthPhrase) {
+                               @NonNull String topPhrase,
+                               @NonNull String bottomPhrase) {
             this.karutaNo = karutaNo;
+            this.karutaNoText = karutaNoText;
             this.karutaImageNo = karutaImageNo;
             this.creator = creator;
-            this.firstPhrase = firstPhrase;
-            this.secondPhrase = secondPhrase;
-            this.thirdPhrase = thirdPhrase;
-            this.fourthPhrase = fourthPhrase;
-            this.fifthPhrase = fifthPhrase;
+            this.topPhrase = topPhrase;
+            this.bottomPhrase = bottomPhrase;
         }
     }
 

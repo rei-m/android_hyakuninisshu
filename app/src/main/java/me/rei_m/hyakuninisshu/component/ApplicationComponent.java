@@ -9,8 +9,10 @@ import me.rei_m.hyakuninisshu.module.ForApplication;
 import me.rei_m.hyakuninisshu.presentation.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.component.SplashActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivityComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialDetailActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.ExamMasterActivityModule;
+import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
@@ -34,4 +36,6 @@ public interface ApplicationComponent {
     QuizMasterActivityComponent plus(QuizMasterActivityModule activityModule);
 
     ExamMasterActivityComponent plus(ExamMasterActivityModule activityModule);
+
+    MaterialDetailActivityComponent plus(MaterialDetailActivityModule activityModule);
 }

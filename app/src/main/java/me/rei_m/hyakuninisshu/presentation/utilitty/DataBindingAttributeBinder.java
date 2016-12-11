@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.utilitty;
 
+import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.support.annotation.DimenRes;
@@ -101,5 +102,17 @@ public class DataBindingAttributeBinder {
     public static void setElevation(@NonNull View view,
                                     @DimenRes int elevation) {
         ViewCompat.setElevation(view, view.getContext().getResources().getDimension(elevation));
+    }
+
+    @BindingAdapter({"karutaSrc"})
+    public static void setKarutaSrc(@NonNull ImageView view,
+                                    @Nullable String resIdString) {
+        if (resIdString == null) {
+            return;
+        }
+
+        Context context = view.getContext().getApplicationContext();
+        int resId = context.getResources().getIdentifier("karuta_" + resIdString, "drawable", context.getPackageName());
+        view.setImageResource(resId);
     }
 }
