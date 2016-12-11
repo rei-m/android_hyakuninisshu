@@ -5,6 +5,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -94,5 +95,11 @@ public class DataBindingAttributeBinder {
             return;
         }
         view.setResult(karutaQuizResultList);
+    }
+
+    @BindingAdapter({"elevation"})
+    public static void setElevation(@NonNull View view,
+                                    @DimenRes int elevation) {
+        ViewCompat.setElevation(view, view.getContext().getResources().getDimension(elevation));
     }
 }

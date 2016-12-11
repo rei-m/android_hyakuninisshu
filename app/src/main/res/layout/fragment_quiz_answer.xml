@@ -44,13 +44,13 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_karuta"
-            android:elevation="@dimen/elevation_level_ms"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/padding_xl"
             android:paddingEnd="@dimen/padding_m"
             android:paddingStart="@dimen/padding_m"
-            android:paddingTop="@dimen/padding_xl">
+            android:paddingTop="@dimen/padding_xl"
+            app:elevation="@{@dimen/elevation_level_ms}">
 
             <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"

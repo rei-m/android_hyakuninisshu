@@ -54,7 +54,8 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentQuizAnswerBinding.inflate(inflater, container, false);
         binding.setPresenter(presenter);

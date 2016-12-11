@@ -14,6 +14,7 @@ import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding;
 import me.rei_m.hyakuninisshu.presentation.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 
@@ -97,15 +98,15 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
                 return ExamFragment.TAG;
             }
         },
-        DOCUMENT(R.id.bottom_navigation_document) {
+        MATERIAL(R.id.bottom_navigation_material) {
             @Override
             Fragment newInstance() {
-                return TrainingMenuFragment.newInstance();
+                return MaterialFragment.newInstance();
             }
 
             @Override
             String getTag() {
-                return TrainingMenuFragment.TAG;
+                return MaterialFragment.TAG;
             }
         },
         SUPPORT(R.id.bottom_navigation_support) {
