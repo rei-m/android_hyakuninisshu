@@ -55,7 +55,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";
 
     @Inject
-    ActivityNavigator activityNavigator;
+    ActivityNavigator navigator;
 
     @Inject
     QuizMasterContact.Actions presenter;

@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
+import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.MaterialViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
@@ -23,6 +24,9 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     public static MaterialFragment newInstance() {
         return new MaterialFragment();
     }
+
+    @Inject
+    ActivityNavigator navigator;
 
     @Inject
     MaterialContact.Actions presenter;
@@ -50,6 +54,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
         binding = FragmentMaterialBinding.inflate(inflater, container, false);
         binding.setPresenter(presenter);
         MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter();
+        adapter.setListener(presenter);
         binding.recyclerKarutaList.setAdapter(adapter);
         return binding.getRoot();
     }
@@ -57,6 +62,8 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        MaterialKarutaListAdapter adapter = (MaterialKarutaListAdapter) binding.recyclerKarutaList.getAdapter();
+        adapter.setListener(null);
         binding = null;
     }
 
@@ -84,6 +91,11 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
         MaterialKarutaListAdapter adapter = (MaterialKarutaListAdapter) binding.recyclerKarutaList.getAdapter();
         adapter.setKarutaViewModelList(viewModel.karutaList);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void navigateToMaterialDetail(int karutaNo) {
+        navigator.navigateToMaterialDetail(getActivity(), karutaNo);
     }
 
     public interface Injector {

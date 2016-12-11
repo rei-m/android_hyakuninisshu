@@ -7,13 +7,14 @@
     <string name="correct">正解</string>
     <string name="incorrect">不正解</string>
 
+    <string name="karuta">かるた</string>
     <string name="start_training">練習をはじめる</string>
     <string name="go_to_next">次に進む</string>
     <string name="confirm_result">結果を見る</string>
     <string name="setting">設定</string>
     <string name="range_question">出題範囲</string>
     <string name="kimariji">決まり字</string>
-    <string name="karuta_number">%1$s首</string>
+    <string name="karuta_number">%1$s番</string>
     <string name="seconds">%1$s秒</string>
     <string name="topPhrase">上の句</string>
     <string name="bottomPhrase">下の句</string>

@@ -26,7 +26,7 @@ public class ExamFragment extends BaseFragment implements ExamContact.View {
     ExamContact.Actions presenter;
 
     @Inject
-    ActivityNavigator activityNavigator;
+    ActivityNavigator navigator;
 
     private FragmentExamBinding binding;
 
@@ -62,7 +62,7 @@ public class ExamFragment extends BaseFragment implements ExamContact.View {
 
     @Override
     public void navigateToExamMaster() {
-        activityNavigator.navigateToExamMaster(getActivity());
+        navigator.navigateToExamMaster(getActivity());
     }
 
     public interface Injector {
