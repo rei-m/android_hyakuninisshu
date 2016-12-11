@@ -3,12 +3,15 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamResultViewModel;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaExamResultUsecase;
 
@@ -35,7 +38,18 @@ public class DisplayKarutaExamResultUsecaseImpl implements DisplayKarutaExamResu
 
             final String averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", exam.averageAnswerTime);
 
-            return new ExamResultViewModel(result, context.getString(R.string.seconds, averageAnswerTimeString));
+            final boolean[] karutaQuizResultList = new boolean[KarutaConstant.NUMBER_OF_KARUTA];
+
+            Arrays.fill(karutaQuizResultList, true);
+
+            for (KarutaIdentifier wrongKarutaIdentifier : exam.wrongKarutaIdList) {
+                int wrongKarutaIndex = (int) wrongKarutaIdentifier.getValue() - 1;
+                karutaQuizResultList[wrongKarutaIndex] = false;
+            }
+
+            return new ExamResultViewModel(result,
+                    context.getString(R.string.seconds, averageAnswerTimeString),
+                    karutaQuizResultList);
         });
     }
 }

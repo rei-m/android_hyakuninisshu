@@ -72,8 +72,10 @@ public class KarutaExamResultView extends LinearLayout {
         return linearLayout;
     }
 
-    public void setResult(int karutaNo, boolean isCorrect) {
-        KarutaExamResultCellView cellView = (KarutaExamResultCellView) findViewById(cellViewIdList[karutaNo - 1]);
-        cellView.setResult(karutaNo, isCorrect);
+    public void setResult(boolean[] karutaQuizResultList) {
+        for (int i = 0; i < karutaQuizResultList.length; i++) {
+            KarutaExamResultCellView cellView = (KarutaExamResultCellView) findViewById(cellViewIdList[i]);
+            cellView.setResult(i + 1, karutaQuizResultList[i]);
+        }
     }
 }
