@@ -58,7 +58,6 @@ public class MaterialDetailFragment extends BaseFragment implements MaterialDeta
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialDetailBinding.inflate(inflater, container, false);
-        binding.hoge.setText(String.valueOf(getArguments().getInt(ARG_KARUTA_NO)));
         return binding.getRoot();
     }
 
@@ -66,6 +65,18 @@ public class MaterialDetailFragment extends BaseFragment implements MaterialDeta
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume(karutaNo);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.onPause();
     }
 
     @Override
@@ -77,7 +88,7 @@ public class MaterialDetailFragment extends BaseFragment implements MaterialDeta
 
     @Override
     public void initialize(MaterialDetailViewModel viewModel) {
-
+        binding.setViewModel(viewModel);
     }
 
     public interface Injector {

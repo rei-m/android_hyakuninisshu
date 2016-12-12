@@ -19,8 +19,18 @@ public class DisplayMaterialDetailUsecaseImpl implements DisplayMaterialDetailUs
     @Override
     public Maybe<MaterialDetailViewModel> execute(int karutaNo) {
         return karutaRepository.resolve(new KarutaIdentifier(karutaNo))
-                .map(karuta -> {
-                    return new MaterialDetailViewModel();
-                });
+                .map(karuta -> new MaterialDetailViewModel(karuta.getImageNo(),
+                        karuta.getCreator(),
+                        karuta.getKimariji(),
+                        karuta.getTopPhrase().getFirst().getKana(),
+                        karuta.getTopPhrase().getFirst().getKanji(),
+                        karuta.getTopPhrase().getSecond().getKana(),
+                        karuta.getTopPhrase().getSecond().getKanji(),
+                        karuta.getTopPhrase().getThird().getKana(),
+                        karuta.getTopPhrase().getThird().getKanji(),
+                        karuta.getBottomPhrase().getFourth().getKana(),
+                        karuta.getBottomPhrase().getFourth().getKanji(),
+                        karuta.getBottomPhrase().getFifth().getKana(),
+                        karuta.getBottomPhrase().getFifth().getKanji()));
     }
 }
