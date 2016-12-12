@@ -13,6 +13,7 @@ import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaExamResultUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizAnswerUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizResultUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.DisplayMaterialDetailUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayMaterialUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.FinishKarutaExamUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.RestartWrongKarutaQuizUsecase;
@@ -23,6 +24,7 @@ import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaExamResultUsecase
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizAnswerUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizResultUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaQuizUsecaseImpl;
+import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayMaterialDetailUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayMaterialUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.FinishKarutaExamUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.RestartWrongKarutaQuizUsecaseImpl;
@@ -92,5 +94,10 @@ public class KarutaUsecaseModule {
     DisplayMaterialUsecase provideDisplayMaterialUsecase(Context context,
                                                          KarutaRepository karutaRepository) {
         return new DisplayMaterialUsecaseImpl(context, karutaRepository);
+    }
+
+    @Provides
+    DisplayMaterialDetailUsecase provideDisplayMaterialDetailUsecase(KarutaRepository karutaRepository) {
+        return new DisplayMaterialDetailUsecaseImpl(karutaRepository);
     }
 }
