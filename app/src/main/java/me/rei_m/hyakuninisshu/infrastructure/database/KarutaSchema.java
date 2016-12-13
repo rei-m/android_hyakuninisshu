@@ -65,6 +65,9 @@ public class KarutaSchema {
     @Json(name = "image_no")
     public String imageNo;
 
+    @Column
+    public String translation;
+
     @Override
     public String toString() {
         return "KarutaSchema{" +
@@ -82,6 +85,7 @@ public class KarutaSchema {
                 ", fifthKanji='" + fifthKanji + '\'' +
                 ", kimariji=" + kimariji +
                 ", imageNo='" + imageNo + '\'' +
+                ", translation='" + translation + '\'' +
                 '}';
     }
 }

@@ -1,0 +1,67 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.karuta.widget.fragment.MaterialDetailFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.MaterialDetailViewModel" />
+
+        <variable
+            name="presenter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailContact.Actions" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.karutaNo}" />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/karuta"
+            app:karutaSrc="@{viewModel.karutaImageNo}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.creator}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.topPhraseKanji}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.bottomPhraseKanji}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:kimariji="@{viewModel.kimariji}"
+            app:textTopPhraseKana="@{viewModel.topPhraseKana}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.bottomPhraseKana}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.translation}" />
+
+    </LinearLayout>
+
+</layout>

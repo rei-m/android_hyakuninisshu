@@ -15,8 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:onClick="@{() -> listener.onItemClicked(viewModel.karutaNo)}"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/padding_m"
         android:paddingRight="@dimen/padding_m">
 

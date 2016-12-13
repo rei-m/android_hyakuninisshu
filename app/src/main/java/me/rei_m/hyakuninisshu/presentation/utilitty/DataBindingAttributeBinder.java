@@ -3,10 +3,14 @@ package me.rei_m.hyakuninisshu.presentation.utilitty;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.graphics.Color;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +20,8 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
+
+import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant.SPACE;
 
 public class DataBindingAttributeBinder {
 
@@ -114,5 +120,25 @@ public class DataBindingAttributeBinder {
         Context context = view.getContext().getApplicationContext();
         int resId = context.getResources().getIdentifier("karuta_" + resIdString, "drawable", context.getPackageName());
         view.setImageResource(resId);
+    }
+
+    @BindingAdapter({"textTopPhraseKana", "kimariji"})
+    public static void setTextTopPhraseKana(@NonNull TextView view,
+                                            @Nullable String topPhrase,
+                                            int kimariji) {
+        if (topPhrase == null) {
+            return;
+        }
+
+        int finallyKimariji = 0;
+        for (int i = 0; i < topPhrase.length() - 1; i++) {
+            if (!topPhrase.substring(i, i + 1).equals(SPACE) && kimariji < i) {
+                break;
+            }
+            finallyKimariji++;
+        }
+        SpannableStringBuilder ssb = new SpannableStringBuilder().append(topPhrase);
+        ssb.setSpan(new ForegroundColorSpan(Color.RED), 0, finallyKimariji - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        view.setText(ssb);
     }
 }
