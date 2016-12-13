@@ -6,4 +6,6 @@ public class KarutaConstant {
     }
 
     public static final int NUMBER_OF_KARUTA = 100;
+
+    public static final String SPACE = "　";
 }

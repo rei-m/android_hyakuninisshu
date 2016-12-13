@@ -53,6 +53,7 @@ public class MaterialDetailFragment extends BaseFragment implements MaterialDeta
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter = null;
     }
 
     @Override

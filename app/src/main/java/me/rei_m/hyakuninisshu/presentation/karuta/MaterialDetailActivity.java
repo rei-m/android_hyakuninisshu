@@ -44,7 +44,7 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
         int initialDisplayKarutaNo = getIntent().getIntExtra(ARG_KARUTA_NO, UNKNOWN_KARUTA_NO);
 
         binding.pager.setAdapter(new MaterialDetailPagerAdapter(getSupportFragmentManager()));
-        binding.pager.setCurrentItem(initialDisplayKarutaNo);
+        binding.pager.setCurrentItem(initialDisplayKarutaNo - 1);
     }
 
     @Override

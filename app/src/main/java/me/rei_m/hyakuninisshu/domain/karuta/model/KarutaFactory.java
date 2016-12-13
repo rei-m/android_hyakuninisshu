@@ -21,7 +21,13 @@ public class KarutaFactory {
 
         TopPhrase topPhrase = new TopPhrase(identifier, firstPart, secondPart, thirdPart);
         BottomPhrase bottomPhrase = new BottomPhrase(identifier, fourthPart, fifthPart);
-        
-        return new Karuta(identifier, schema.creator, topPhrase, bottomPhrase, schema.kimariji, schema.imageNo);
+
+        return new Karuta(identifier,
+                schema.creator,
+                topPhrase,
+                bottomPhrase,
+                schema.kimariji,
+                schema.imageNo,
+                schema.translation);
     }
 }

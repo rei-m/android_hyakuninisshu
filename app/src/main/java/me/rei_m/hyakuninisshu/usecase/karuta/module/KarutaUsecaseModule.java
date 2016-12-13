@@ -97,7 +97,8 @@ public class KarutaUsecaseModule {
     }
 
     @Provides
-    DisplayMaterialDetailUsecase provideDisplayMaterialDetailUsecase(KarutaRepository karutaRepository) {
-        return new DisplayMaterialDetailUsecaseImpl(karutaRepository);
+    DisplayMaterialDetailUsecase provideDisplayMaterialDetailUsecase(Context context,
+                                                                     KarutaRepository karutaRepository) {
+        return new DisplayMaterialDetailUsecaseImpl(context, karutaRepository);
     }
 }

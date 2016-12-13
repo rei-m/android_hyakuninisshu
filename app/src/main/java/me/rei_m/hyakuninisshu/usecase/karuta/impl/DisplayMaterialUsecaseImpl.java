@@ -10,6 +10,8 @@ import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.MaterialViewModel;
 import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayMaterialUsecase;
 
+import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant.SPACE;
+
 public class DisplayMaterialUsecaseImpl implements DisplayMaterialUsecase {
 
     private final Context context;
@@ -27,11 +29,11 @@ public class DisplayMaterialUsecaseImpl implements DisplayMaterialUsecase {
         return karutaRepository.asEntityList().flatMap(karutaList -> Observable.fromIterable(karutaList)
                 .map(karuta -> {
 
-                    String topPhrase = karuta.getTopPhrase().getFirst().getKanji() + " " +
-                            karuta.getTopPhrase().getSecond().getKanji() + " " +
+                    String topPhrase = karuta.getTopPhrase().getFirst().getKanji() + SPACE +
+                            karuta.getTopPhrase().getSecond().getKanji() + SPACE +
                             karuta.getTopPhrase().getThird().getKanji();
 
-                    String bottomPhrase = karuta.getBottomPhrase().getFourth().getKanji() + " " +
+                    String bottomPhrase = karuta.getBottomPhrase().getFourth().getKanji() + SPACE +
                             karuta.getBottomPhrase().getFifth().getKanji();
 
                     int karutaNo = (int) karuta.getIdentifier().getValue();
