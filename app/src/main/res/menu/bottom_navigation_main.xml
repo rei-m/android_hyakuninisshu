@@ -5,24 +5,24 @@
         android:id="@+id/bottom_navigation_training"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
-        android:title="てすと１"
+        android:title="@string/function_training"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_navigation_exam"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
-        android:title="てすと２"
+        android:title="@string/function_exam"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_navigation_material"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
-        android:title="てすと３"
+        android:title="@string/function_material"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_navigation_support"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
-        android:title="てすと４"
+        android:title="@string/function_support"
         app:showAsAction="ifRoom" />
 </menu>
