@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
@@ -118,8 +120,13 @@ public class DataBindingAttributeBinder {
         }
 
         Context context = view.getContext().getApplicationContext();
+
         int resId = context.getResources().getIdentifier("karuta_" + resIdString, "drawable", context.getPackageName());
-        view.setImageResource(resId);
+
+        Glide.with(view.getContext())
+                .load(resId)
+                .crossFade()
+                .into(view);
     }
 
     @BindingAdapter({"textTopPhraseKana", "kimariji"})

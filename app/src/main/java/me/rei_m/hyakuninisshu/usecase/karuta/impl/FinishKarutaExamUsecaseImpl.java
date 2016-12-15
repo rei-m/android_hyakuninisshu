@@ -7,11 +7,8 @@ import java.util.List;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.SingleSource;
-import io.reactivex.functions.Function;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.usecase.karuta.FinishKarutaExamUsecase;
@@ -31,12 +28,17 @@ public class FinishKarutaExamUsecaseImpl implements FinishKarutaExamUsecase {
     @Override
     public Maybe<Long> execute() {
         return karutaQuizRepository.asEntityList()
-                .flatMap(new Function<List<KarutaQuiz>, SingleSource<List<KarutaQuizResult>>>() {
-                    @Override
-                    public SingleSource<List<KarutaQuizResult>> apply(List<KarutaQuiz> karutaQuizList) throws Exception {
-                        return Observable.fromIterable(karutaQuizList).map(KarutaQuiz::getResult).toList();
+                .flatMap(karutaQuizList -> Observable.fromIterable(karutaQuizList).map(KarutaQuiz::getResult).toList())
+                .flatMapMaybe(karutaQuizResultList -> karutaExamRepository.store(karutaQuizResultList, new Date()))
+                .flatMap(karutaExamIdentifier -> {
+                    List<KarutaExam> karutaExamList = karutaExamRepository.asEntityList().blockingGet();
+                    int currentExamCount = karutaExamList.size();
+                    if (KarutaExam.MAX_HISTORY_COUNT < currentExamCount) {
+                        for (KarutaExam karutaExam : karutaExamList.subList(KarutaExam.MAX_HISTORY_COUNT - 1, currentExamCount - 1)) {
+                            karutaExamRepository.delete(karutaExam.getIdentifier()).subscribe();
+                        }
                     }
-                }).flatMapMaybe(karutaQuizResultList -> karutaExamRepository.store(karutaQuizResultList, new Date()))
-                .map(KarutaExamIdentifier::getValue);
+                    return Maybe.just(karutaExamIdentifier.getValue());
+                });
     }
 }

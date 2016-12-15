@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -84,5 +85,31 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
                             .subscribe(examWrongKarutaSchemaList::add);
                     return KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList);
                 });
+    }
+
+    @Override
+    public Single<List<KarutaExam>> asEntityList() {
+        return KarutaExamSchema.relation(orma)
+                .selector()
+                .orderByIdDesc()
+                .executeAsObservable()
+                .map(examSchema -> {
+                    List<ExamWrongKarutaSchema> examWrongKarutaSchemaList = new ArrayList<>();
+                    examSchema.getWrongKarutas(orma)
+                            .selector()
+                            .executeAsObservable()
+                            .subscribe(examWrongKarutaSchemaList::add);
+                    return KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList);
+                }).toList();
+    }
+
+    @Override
+    public Completable delete(@NonNull KarutaExamIdentifier identifier) {
+        return orma.transactionAsCompletable(() -> {
+            KarutaExamSchema.relation(orma)
+                    .deleter()
+                    .idEq(identifier.getValue())
+                    .execute();
+        });
     }
 }
