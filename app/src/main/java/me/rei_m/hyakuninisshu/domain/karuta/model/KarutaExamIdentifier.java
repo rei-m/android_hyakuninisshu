@@ -39,5 +39,11 @@ public class KarutaExamIdentifier implements EntityIdentifier<KarutaExam> {
         return result;
     }
 
-
+    @Override
+    public String toString() {
+        return "KarutaExamIdentifier{" +
+                "kind='" + kind + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }

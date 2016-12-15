@@ -9,6 +9,8 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
 public class KarutaExam extends AbstractEntity<KarutaExam, KarutaExamIdentifier> {
 
+    public static final int MAX_HISTORY_COUNT = 10;
+
     public KarutaExam(@NonNull KarutaExamIdentifier identifier,
                       @NonNull Date tookExamDate,
                       int totalQuizCount,

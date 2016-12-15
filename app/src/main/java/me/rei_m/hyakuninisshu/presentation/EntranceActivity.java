@@ -17,6 +17,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
+import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
 
 public class EntranceActivity extends BaseActivity implements HasComponent<EntranceActivityComponent> {
 
@@ -112,12 +113,12 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
         SUPPORT(R.id.bottom_navigation_support) {
             @Override
             Fragment newInstance() {
-                return TrainingMenuFragment.newInstance();
+                return SupportFragment.newInstance();
             }
 
             @Override
             String getTag() {
-                return TrainingMenuFragment.TAG;
+                return SupportFragment.TAG;
             }
         };
 
