@@ -5,24 +5,40 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".presentation.SplashActivity">
+        <activity
+            android:name=".presentation.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.EntranceActivity" />
-        <activity android:name=".presentation.karuta.TrainingMasterActivity" />
+        <activity
+            android:name=".presentation.EntranceActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.karuta.TrainingMasterActivity"
+            android:label="@string/function_training"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.karuta.ExamMasterActivity"
-            android:label="@string/title_activity_exam_master" />
-        <activity android:name=".presentation.karuta.TrainingExamMasterActivity" />
-        <activity android:name=".presentation.karuta.MaterialDetailActivity" />
+            android:label="@string/function_exam"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.karuta.TrainingExamMasterActivity"
+            android:label="@string/function_training"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.karuta.MaterialDetailActivity"
+            android:label="@string/function_material"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

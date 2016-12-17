@@ -25,9 +25,13 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
         return new Intent(context, EntranceActivity.class);
     }
 
+    private static String KEY_PAGE_INDEX = "pageIndex";
+
     private EntranceActivityComponent component;
 
     private ActivityEntranceBinding binding;
+
+    private int currentPageIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,7 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             Page page = Page.forBottomNavigationId(item.getItemId());
+            currentPageIndex = page.ordinal();
             getSupportFragmentManager()
                     .beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -48,10 +53,14 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
 
         if (savedInstanceState == null) {
             Page initialPage = Page.forBottomNavigationId(R.id.bottom_navigation_training);
+            currentPageIndex = initialPage.ordinal();
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.content, initialPage.newInstance(), initialPage.getTag())
                     .commit();
+        } else {
+            currentPageIndex = savedInstanceState.getInt(KEY_PAGE_INDEX, 0);
+            binding.bottomNavigation.getMenu().getItem(currentPageIndex).setChecked(true);
         }
     }
 
@@ -60,6 +69,12 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
         super.onDestroy();
         binding = null;
         component = null;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_PAGE_INDEX, currentPageIndex);
     }
 
     @Override
