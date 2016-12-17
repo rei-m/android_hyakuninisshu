@@ -42,6 +42,9 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             Page page = Page.forBottomNavigationId(item.getItemId());
+            if (currentPageIndex == page.ordinal()) {
+                return false;
+            }
             currentPageIndex = page.ordinal();
             getSupportFragmentManager()
                     .beginTransaction()
