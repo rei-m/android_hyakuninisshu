@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.ExamFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.ExamFragmentModule;
 
@@ -54,10 +56,27 @@ public class ExamFragment extends BaseFragment implements ExamContact.View {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.onPause();
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
         ((HasComponent<Injector>) getActivity()).getComponent()
                 .plus(new ExamFragmentModule(getContext())).inject(this);
+    }
+
+    @Override
+    public void initialize(@NonNull ExamViewModel viewModel) {
+        binding.setViewModel(viewModel);
     }
 
     @Override
