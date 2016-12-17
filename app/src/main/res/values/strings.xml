@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">覚える百人一首</string>
+    <string name="app_name">さくさく覚える百人一首</string>
 
     <string name="function_training">練習</string>
 
@@ -76,6 +76,4 @@
 
     <string name="text_explain_app_material">百人一首の資料を閲覧します。決まり字や歌の現代語訳を見ることができます。</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_exam_master">ExamMasterActivity</string>
 </resources>

@@ -4,25 +4,25 @@
     <item
         android:id="@+id/bottom_navigation_training"
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_mode_edit_white_24dp"
         android:title="@string/function_training"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_navigation_exam"
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_note_white_24dp"
         android:title="@string/function_exam"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_navigation_material"
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_library_books_white_24dp"
         android:title="@string/function_material"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/bottom_navigation_support"
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_settings_white_24dp"
         android:title="@string/function_support"
         app:showAsAction="ifRoom" />
 </menu>
