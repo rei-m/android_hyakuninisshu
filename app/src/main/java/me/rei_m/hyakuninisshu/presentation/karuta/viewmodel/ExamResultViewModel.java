@@ -4,16 +4,16 @@ import android.support.annotation.NonNull;
 
 public class ExamResultViewModel {
 
-    public final String result;
+    public final String score;
 
     public final String averageAnswerTime;
 
     public final boolean[] karutaQuizResultList;
 
-    public ExamResultViewModel(@NonNull String result,
+    public ExamResultViewModel(@NonNull String score,
                                @NonNull String averageAnswerTime,
                                @NonNull boolean[] karutaQuizResultList) {
-        this.result = result;
+        this.score = score;
         this.averageAnswerTime = averageAnswerTime;
         this.karutaQuizResultList = karutaQuizResultList;
     }

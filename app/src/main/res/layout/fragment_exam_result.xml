@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@{viewModel.result}"
+                android:text="@{viewModel.score}"
                 android:textSize="@dimen/text_xl" />
 
             <TextView

@@ -400,7 +400,7 @@
                 android:layout_width="@dimen/size_karuta_quiz_result_mark"
                 android:layout_height="@dimen/size_karuta_quiz_result_mark"
                 android:layout_gravity="center"
-                android:contentDescription="@string/result" />
+                android:contentDescription="@string/score" />
 
         </FrameLayout>
 
