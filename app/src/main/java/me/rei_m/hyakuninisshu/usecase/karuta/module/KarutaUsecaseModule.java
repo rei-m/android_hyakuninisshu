@@ -20,6 +20,7 @@ import me.rei_m.hyakuninisshu.usecase.karuta.FinishKarutaExamUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.RestartWrongKarutaQuizUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaExamUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
+import me.rei_m.hyakuninisshu.usecase.karuta.StartTrainingForKarutaExamUsecase;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.AnswerKarutaQuizUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayExamUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.DisplayKarutaExamResultUsecaseImpl;
@@ -32,6 +33,7 @@ import me.rei_m.hyakuninisshu.usecase.karuta.impl.FinishKarutaExamUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.RestartWrongKarutaQuizUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartKarutaExamUsecaseImpl;
 import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartKarutaQuizUsecaseImpl;
+import me.rei_m.hyakuninisshu.usecase.karuta.impl.StartTrainingForKarutaExamUsecaseImpl;
 
 @Module
 public class KarutaUsecaseModule {
@@ -90,6 +92,13 @@ public class KarutaUsecaseModule {
     FinishKarutaExamUsecase provideFinishExamUsecase(KarutaQuizRepository karutaQuizRepository,
                                                      KarutaExamRepository karutaExamRepository) {
         return new FinishKarutaExamUsecaseImpl(karutaQuizRepository, karutaExamRepository);
+    }
+
+    @Provides
+    StartTrainingForKarutaExamUsecase provideStartTrainingForKarutaExamUsecase(KarutaQuizRepository karutaQuizRepository,
+                                                                               KarutaQuizListFactory karutaQuizListFactory,
+                                                                               KarutaExamRepository KarutaExamRepository) {
+        return new StartTrainingForKarutaExamUsecaseImpl(karutaQuizRepository, karutaQuizListFactory, KarutaExamRepository);
     }
 
     @Provides

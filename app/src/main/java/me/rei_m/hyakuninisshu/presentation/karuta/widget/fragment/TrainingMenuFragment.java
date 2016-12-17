@@ -89,7 +89,7 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
                                    Kimariji kimariji,
                                    KarutaStyle topPhraseStyle,
                                    KarutaStyle bottomPhraseStyle) {
-        navigator.navigateToQuizMaster(getActivity(),
+        navigator.navigateToTrainingMaster(getActivity(),
                 trainingRange,
                 kimariji,
                 topPhraseStyle,

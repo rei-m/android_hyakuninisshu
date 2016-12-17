@@ -84,6 +84,11 @@ public class ExamFragment extends BaseFragment implements ExamContact.View {
         navigator.navigateToExamMaster(getActivity());
     }
 
+    @Override
+    public void navigateToTraining() {
+        navigator.navigateToExamTrainingMaster(getActivity());
+    }
+
     public interface Injector {
         ExamFragmentComponent plus(ExamFragmentModule fragmentModule);
     }

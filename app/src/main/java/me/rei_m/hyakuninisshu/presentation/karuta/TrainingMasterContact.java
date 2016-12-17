@@ -3,10 +3,10 @@ package me.rei_m.hyakuninisshu.presentation.karuta;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
 
-public interface QuizMasterContact {
+public interface TrainingMasterContact {
 
     interface View {
-        void startQuiz();
+        void startTraining();
 
         void showEmpty();
     }

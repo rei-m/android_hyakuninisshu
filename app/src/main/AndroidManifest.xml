@@ -17,10 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.EntranceActivity" />
-        <activity android:name=".presentation.karuta.QuizMasterActivity" />
+        <activity android:name=".presentation.karuta.TrainingMasterActivity" />
         <activity
             android:name=".presentation.karuta.ExamMasterActivity"
             android:label="@string/title_activity_exam_master" />
+        <activity android:name=".presentation.karuta.TrainingExamMasterActivity" />
         <activity android:name=".presentation.karuta.MaterialDetailActivity" />
     </application>
 

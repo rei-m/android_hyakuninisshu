@@ -8,6 +8,8 @@ public interface ExamContact {
         void initialize(ExamViewModel viewModel);
 
         void navigateToExamMaster();
+
+        void navigateToTraining();
     }
 
     interface Actions {
@@ -18,5 +20,7 @@ public interface ExamContact {
         void onPause();
 
         void onClickStartExam();
+
+        void onClickStartTraining();
     }
 }

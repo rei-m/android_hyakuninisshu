@@ -77,7 +77,9 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="過去間違えた問題を練習する" />
+                android:onClick="@{() -> presenter.onClickStartTraining()}"
+                android:text="過去間違えた問題を練習する"
+                android:visibility="@{viewModel.hasResult ? View.VISIBLE : View.GONE}" />
 
         </LinearLayout>
 
