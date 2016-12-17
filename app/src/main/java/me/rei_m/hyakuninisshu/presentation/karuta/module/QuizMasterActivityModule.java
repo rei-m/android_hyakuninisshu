@@ -4,8 +4,8 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterContact;
-import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterPresenter;
+import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterContact;
+import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterPresenter;
 import me.rei_m.hyakuninisshu.presentation.module.ForActivity;
 import me.rei_m.hyakuninisshu.usecase.karuta.StartKarutaQuizUsecase;
 
@@ -25,7 +25,7 @@ public class QuizMasterActivityModule {
     }
     
     @Provides
-    QuizMasterContact.Actions provideQuizMasterPresenter(StartKarutaQuizUsecase startKarutaQuizUsecase) {
-        return new QuizMasterPresenter(startKarutaQuizUsecase);
+    TrainingMasterContact.Actions provideQuizMasterPresenter(StartKarutaQuizUsecase startKarutaQuizUsecase) {
+        return new TrainingMasterPresenter(startKarutaQuizUsecase);
     }
 }

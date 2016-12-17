@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
-import me.rei_m.hyakuninisshu.databinding.ActivityQuizMasterBinding;
+import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFrag
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 
-public class QuizMasterActivity extends BaseActivity implements QuizMasterContact.View,
+public class TrainingMasterActivity extends BaseActivity implements TrainingMasterContact.View,
         HasComponent<QuizMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
@@ -36,7 +36,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
                                       @NonNull Kimariji kimariji,
                                       @NonNull KarutaStyle topPhraseStyle,
                                       @NonNull KarutaStyle bottomPhraseStyle) {
-        Intent intent = new Intent(context, QuizMasterActivity.class);
+        Intent intent = new Intent(context, TrainingMasterActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_TRAINING_RANGE, trainingRange);
         bundle.putSerializable(ARG_KIMARIJI, kimariji);
@@ -58,16 +58,16 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     ActivityNavigator navigator;
 
     @Inject
-    QuizMasterContact.Actions presenter;
+    TrainingMasterContact.Actions presenter;
 
     private QuizMasterActivityComponent component;
 
-    private ActivityQuizMasterBinding binding;
+    private ActivityTrainingMasterBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_quiz_master);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_training_master);
 
         setSupportActionBar(binding.toolbar);
 
@@ -103,7 +103,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
     }
 
     @Override
-    public void startQuiz() {
+    public void startTraining() {
 
         KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
         KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
@@ -152,7 +152,7 @@ public class QuizMasterActivity extends BaseActivity implements QuizMasterContac
 
     @Override
     public void onRestartTraining() {
-        startQuiz();
+        startTraining();
     }
 
     @Override

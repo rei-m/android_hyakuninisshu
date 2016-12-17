@@ -6,7 +6,8 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.QuizMasterActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.TrainingExamMasterActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
@@ -19,12 +20,12 @@ public class ActivityNavigator {
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToQuizMaster(@NonNull Activity activity,
-                                     @NonNull TrainingRange trainingRange,
-                                     @NonNull Kimariji kimariji,
-                                     @NonNull KarutaStyle topPhraseStyle,
-                                     @NonNull KarutaStyle bottomPhraseStyle) {
-        Intent intentToLaunch = QuizMasterActivity.createIntent(activity,
+    public void navigateToTrainingMaster(@NonNull Activity activity,
+                                         @NonNull TrainingRange trainingRange,
+                                         @NonNull Kimariji kimariji,
+                                         @NonNull KarutaStyle topPhraseStyle,
+                                         @NonNull KarutaStyle bottomPhraseStyle) {
+        Intent intentToLaunch = TrainingMasterActivity.createIntent(activity,
                 trainingRange,
                 kimariji,
                 topPhraseStyle,
@@ -34,6 +35,11 @@ public class ActivityNavigator {
 
     public void navigateToExamMaster(@NonNull Activity activity) {
         Intent intentToLaunch = ExamMasterActivity.createIntent(activity);
+        activity.startActivity(intentToLaunch);
+    }
+
+    public void navigateToExamTrainingMaster(@NonNull Activity activity) {
+        Intent intentToLaunch = TrainingExamMasterActivity.createIntent(activity);
         activity.startActivity(intentToLaunch);
     }
 

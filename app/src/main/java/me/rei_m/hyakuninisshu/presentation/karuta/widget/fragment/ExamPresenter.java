@@ -45,4 +45,9 @@ public class ExamPresenter implements ExamContact.Actions {
     public void onClickStartExam() {
         view.navigateToExamMaster();
     }
+
+    @Override
+    public void onClickStartTraining() {
+        view.navigateToTraining();
+    }
 }

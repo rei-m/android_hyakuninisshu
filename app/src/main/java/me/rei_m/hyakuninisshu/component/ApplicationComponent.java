@@ -11,9 +11,11 @@ import me.rei_m.hyakuninisshu.presentation.component.SplashActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialDetailActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.component.TrainingExamMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.ExamMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
+import me.rei_m.hyakuninisshu.presentation.karuta.module.TrainingExamMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
 import me.rei_m.hyakuninisshu.usecase.karuta.module.KarutaUsecaseModule;
@@ -36,6 +38,8 @@ public interface ApplicationComponent {
     QuizMasterActivityComponent plus(QuizMasterActivityModule activityModule);
 
     ExamMasterActivityComponent plus(ExamMasterActivityModule activityModule);
+
+    TrainingExamMasterActivityComponent plus(TrainingExamMasterActivityModule activityModule);
 
     MaterialDetailActivityComponent plus(MaterialDetailActivityModule activityModule);
 }
