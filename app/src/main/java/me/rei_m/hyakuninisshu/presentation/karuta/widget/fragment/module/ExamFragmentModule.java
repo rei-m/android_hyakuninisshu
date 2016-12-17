@@ -7,6 +7,7 @@ import dagger.Provides;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamPresenter;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
+import me.rei_m.hyakuninisshu.usecase.karuta.DisplayExamUsecase;
 
 @Module
 public class ExamFragmentModule {
@@ -23,7 +24,7 @@ public class ExamFragmentModule {
     }
 
     @Provides
-    ExamContact.Actions provideQuizAnswerPresenter() {
-        return new ExamPresenter();
+    ExamContact.Actions provideQuizAnswerPresenter(DisplayExamUsecase displayExamUsecase) {
+        return new ExamPresenter(displayExamUsecase);
     }
 }

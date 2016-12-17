@@ -1,5 +1,7 @@
 package me.rei_m.hyakuninisshu.infrastructure.database;
 
+import android.support.annotation.Nullable;
+
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
@@ -66,6 +68,7 @@ public class KarutaSchema {
     public String imageNo;
 
     @Column
+    @Nullable
     public String translation;
 
     @Override
