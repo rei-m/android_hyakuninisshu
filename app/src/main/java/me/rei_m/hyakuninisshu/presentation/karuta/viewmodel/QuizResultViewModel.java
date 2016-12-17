@@ -4,21 +4,26 @@ import android.support.annotation.NonNull;
 
 public class QuizResultViewModel {
 
-    public final String result;
+    public final String score;
 
     public final String averageAnswerTime;
 
-    public QuizResultViewModel(@NonNull String result,
-                               @NonNull String averageAnswerTime) {
-        this.result = result;
+    public final boolean canRestartTraining;
+
+    public QuizResultViewModel(@NonNull String score,
+                               @NonNull String averageAnswerTime,
+                               boolean canRestartTraining) {
+        this.score = score;
         this.averageAnswerTime = averageAnswerTime;
+        this.canRestartTraining = canRestartTraining;
     }
 
     @Override
     public String toString() {
         return "QuizResultViewModel{" +
-                "result='" + result + '\'' +
+                "score='" + score + '\'' +
                 ", averageAnswerTime='" + averageAnswerTime + '\'' +
+                ", canRestartTraining=" + canRestartTraining +
                 '}';
     }
 }

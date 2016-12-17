@@ -69,7 +69,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         return "KarutaQuiz{" +
                 "contents=" + contents +
                 ", startDate=" + startDate +
-                ", result=" + result +
+                ", score=" + result +
                 "} " + super.toString();
     }
 }

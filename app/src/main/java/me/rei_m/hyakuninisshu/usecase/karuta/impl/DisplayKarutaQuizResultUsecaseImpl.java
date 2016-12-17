@@ -49,7 +49,9 @@ public class DisplayKarutaQuizResultUsecaseImpl implements DisplayKarutaQuizResu
 
             final String averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerTime);
 
-            return new QuizResultViewModel(result, context.getString(R.string.seconds, averageAnswerTimeString));
+            final boolean canRestartTraining = collectCount != quizCount;
+
+            return new QuizResultViewModel(result, context.getString(R.string.seconds, averageAnswerTimeString), canRestartTraining);
         });
     }
 }
