@@ -5,7 +5,6 @@ import android.support.v4.util.Pair;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
@@ -14,9 +13,9 @@ public interface KarutaQuizRepository {
 
     Completable initialize(List<KarutaQuiz> karutaQuizList);
 
-    Maybe<KarutaQuiz> pop();
+    Single<KarutaQuiz> pop();
 
-    Maybe<KarutaQuiz> resolve(KarutaQuizIdentifier identifier);
+    Single<KarutaQuiz> resolve(KarutaQuizIdentifier identifier);
 
     Completable store(KarutaQuiz karutaQuiz);
 

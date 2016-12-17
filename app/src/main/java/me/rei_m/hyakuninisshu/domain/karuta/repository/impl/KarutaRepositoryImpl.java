@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
@@ -110,11 +109,11 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Maybe<Karuta> resolve(KarutaIdentifier identifier) {
-        return Maybe.fromSingle(KarutaSchema.relation(orma).selector()
+    public Single<Karuta> resolve(KarutaIdentifier identifier) {
+        return KarutaSchema.relation(orma).selector()
                 .idEq(identifier.getValue())
                 .executeAsObservable()
                 .map(KarutaFactory::create)
-                .singleOrError());
+                .singleOrError();
     }
 }

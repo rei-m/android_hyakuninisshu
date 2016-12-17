@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import java.util.Date;
 
-import io.reactivex.Maybe;
-import io.reactivex.MaybeSource;
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
@@ -21,13 +21,13 @@ public class AnswerKarutaQuizUsecaseImpl implements AnswerKarutaQuizUsecase {
     }
 
     @Override
-    public Maybe<Boolean> execute(String quizId, int choiceNo) {
-        return karutaQuizRepository.resolve(new KarutaQuizIdentifier(quizId)).concatMap(new Function<KarutaQuiz, MaybeSource<Boolean>>() {
+    public Single<Boolean> execute(String quizId, int choiceNo) {
+        return karutaQuizRepository.resolve(new KarutaQuizIdentifier(quizId)).flatMap(new Function<KarutaQuiz, SingleSource<Boolean>>() {
             @Override
-            public MaybeSource<Boolean> apply(KarutaQuiz karutaQuiz) {
+            public SingleSource<Boolean> apply(KarutaQuiz karutaQuiz) {
                 karutaQuiz.verify(choiceNo, new Date());
                 karutaQuizRepository.store(karutaQuiz);
-                return Maybe.just(karutaQuiz.getResult().isCollect);
+                return Single.just(karutaQuiz.getResult().isCollect);
             }
         });
     }

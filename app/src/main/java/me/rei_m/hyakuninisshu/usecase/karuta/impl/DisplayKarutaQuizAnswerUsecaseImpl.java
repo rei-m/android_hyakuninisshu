@@ -3,10 +3,8 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
@@ -41,12 +39,8 @@ public class DisplayKarutaQuizAnswerUsecaseImpl implements DisplayKarutaQuizAnsw
                 .toObservable()
                 .share();
 
-        Observable<Karuta> karutaObservable = karutaQuizObservable.flatMapMaybe(new Function<KarutaQuiz, MaybeSource<Karuta>>() {
-            @Override
-            public MaybeSource<Karuta> apply(KarutaQuiz karutaQuiz) {
-                return karutaRepository.resolve(karutaQuiz.getResult().collectKarutaId);
-            }
-        });
+        Observable<Karuta> karutaObservable = karutaQuizObservable.flatMapSingle(karutaQuiz ->
+                karutaRepository.resolve(karutaQuiz.getResult().collectKarutaId));
 
         return Observable.zip(existNextQuizObservable, karutaQuizObservable, karutaObservable, (existNextQuiz, karutaQuiz, karuta) -> {
 

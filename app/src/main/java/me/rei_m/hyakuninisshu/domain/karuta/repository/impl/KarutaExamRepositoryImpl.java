@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExam;
@@ -33,8 +32,8 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
     }
 
     @Override
-    public Maybe<KarutaExamIdentifier> store(@NonNull List<KarutaQuizResult> karutaQuizResultList,
-                                             @NonNull Date tookExamDate) {
+    public Single<KarutaExamIdentifier> store(@NonNull List<KarutaQuizResult> karutaQuizResultList,
+                                              @NonNull Date tookExamDate) {
 
         KarutaExamSchema karutaExamSchema = new KarutaExamSchema();
 
@@ -67,7 +66,7 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
             });
         });
 
-        return Maybe.just(new KarutaExamIdentifier(karutaExamSchema.id));
+        return Single.just(new KarutaExamIdentifier(karutaExamSchema.id));
     }
 
     @Override
@@ -105,11 +104,9 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
 
     @Override
     public Completable delete(@NonNull KarutaExamIdentifier identifier) {
-        return orma.transactionAsCompletable(() -> {
-            KarutaExamSchema.relation(orma)
-                    .deleter()
-                    .idEq(identifier.getValue())
-                    .execute();
-        });
+        return orma.transactionAsCompletable(() -> KarutaExamSchema.relation(orma)
+                .deleter()
+                .idEq(identifier.getValue())
+                .execute());
     }
 }

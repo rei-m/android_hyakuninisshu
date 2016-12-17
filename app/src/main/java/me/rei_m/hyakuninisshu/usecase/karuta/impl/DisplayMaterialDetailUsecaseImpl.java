@@ -3,7 +3,7 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import io.reactivex.Maybe;
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.MaterialDetailViewModel;
@@ -25,7 +25,7 @@ public class DisplayMaterialDetailUsecaseImpl implements DisplayMaterialDetailUs
     }
 
     @Override
-    public Maybe<MaterialDetailViewModel> execute(int karutaNo) {
+    public Single<MaterialDetailViewModel> execute(int karutaNo) {
         return karutaRepository.resolve(new KarutaIdentifier(karutaNo)).map(karuta -> {
 
             String karutaIdentifierString = KarutaDisplayUtil.convertNumberToString(context, (int) karuta.getIdentifier().getValue());
