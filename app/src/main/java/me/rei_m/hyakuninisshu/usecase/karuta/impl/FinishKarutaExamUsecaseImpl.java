@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
@@ -26,10 +26,10 @@ public class FinishKarutaExamUsecaseImpl implements FinishKarutaExamUsecase {
     }
 
     @Override
-    public Maybe<Long> execute() {
+    public Single<Long> execute() {
         return karutaQuizRepository.asEntityList()
                 .flatMap(karutaQuizList -> Observable.fromIterable(karutaQuizList).map(KarutaQuiz::getResult).toList())
-                .flatMapMaybe(karutaQuizResultList -> karutaExamRepository.store(karutaQuizResultList, new Date()))
+                .flatMap(karutaQuizResultList -> karutaExamRepository.store(karutaQuizResultList, new Date()))
                 .flatMap(karutaExamIdentifier -> {
                     List<KarutaExam> karutaExamList = karutaExamRepository.asEntityList().blockingGet();
                     int currentExamCount = karutaExamList.size();
@@ -38,7 +38,7 @@ public class FinishKarutaExamUsecaseImpl implements FinishKarutaExamUsecase {
                             karutaExamRepository.delete(karutaExam.getIdentifier()).subscribe();
                         }
                     }
-                    return Maybe.just(karutaExamIdentifier.getValue());
+                    return Single.just(karutaExamIdentifier.getValue());
                 });
     }
 }

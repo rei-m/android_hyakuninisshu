@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
@@ -29,15 +28,15 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     }
 
     @Override
-    public Maybe<KarutaQuiz> pop() {
+    public Single<KarutaQuiz> pop() {
         return Observable.fromIterable(karutaQuizCollection.values())
                 .filter(karutaQuiz -> karutaQuiz.getResult() == null)
-                .firstElement();
+                .firstOrError();
     }
 
     @Override
-    public Maybe<KarutaQuiz> resolve(KarutaQuizIdentifier identifier) {
-        return Maybe.just(karutaQuizCollection.get(identifier));
+    public Single<KarutaQuiz> resolve(KarutaQuizIdentifier identifier) {
+        return Single.just(karutaQuizCollection.get(identifier));
     }
 
     @Override

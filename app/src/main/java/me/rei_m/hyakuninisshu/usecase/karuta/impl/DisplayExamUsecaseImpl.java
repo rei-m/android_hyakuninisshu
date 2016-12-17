@@ -41,7 +41,7 @@ public class DisplayExamUsecaseImpl implements DisplayExamUsecase {
 
                 viewModel = new ExamViewModel(true, score, context.getString(R.string.seconds, averageAnswerTimeString));
             }
-            
+
             return viewModel;
         });
     }

@@ -1,7 +1,7 @@
 package me.rei_m.hyakuninisshu.usecase.karuta;
 
-import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 public interface AnswerKarutaQuizUsecase {
-    Maybe<Boolean> execute(String quizId, int choiceNo);
+    Single<Boolean> execute(String quizId, int choiceNo);
 }
