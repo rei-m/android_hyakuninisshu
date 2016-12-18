@@ -3,6 +3,8 @@ package me.rei_m.hyakuninisshu;
 import android.app.Application;
 import android.support.annotation.VisibleForTesting;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import me.rei_m.hyakuninisshu.component.ApplicationComponent;
 import me.rei_m.hyakuninisshu.component.DaggerApplicationComponent;
 import me.rei_m.hyakuninisshu.module.ApplicationModule;
@@ -25,6 +27,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // LeakCanaryの設定
+        if (BuildConfig.DEBUG) {
+            LeakCanary.install(this);
+        }
+
         this.component = createApplicationComponent();
         this.component.inject(this);
     }

@@ -28,7 +28,8 @@ public class StartKarutaExamUsecaseImpl implements StartKarutaExamUsecase {
 
     @Override
     public Completable execute() {
-        return karutaRepository.asEntityList().flatMap(karutaList -> Observable.fromIterable(karutaList).map(AbstractEntity::getIdentifier).toList())
+        return karutaRepository.asEntityList()
+                .flatMap(karutaList -> Observable.fromIterable(karutaList).map(AbstractEntity::getIdentifier).toList())
                 .flatMap(karutaQuizListFactory::create)
                 .flatMapCompletable(karutaQuizRepository::initialize);
     }
