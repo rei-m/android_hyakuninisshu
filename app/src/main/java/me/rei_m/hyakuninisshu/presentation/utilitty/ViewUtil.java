@@ -1,5 +1,10 @@
 package me.rei_m.hyakuninisshu.presentation.utilitty;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ViewUtil {
@@ -24,5 +29,10 @@ public class ViewUtil {
                 return result;
             }
         }
+    }
+
+    public static void loadAd(@NonNull AdView adView) {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 }

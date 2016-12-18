@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import javax.inject.Inject;
 
@@ -21,6 +22,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.module.ExamMasterActivityModul
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
+import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
 public class ExamMasterActivity extends BaseActivity implements ExamMasterContact.View,
         HasComponent<ExamMasterActivityComponent>,
@@ -113,6 +115,9 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content, ExamResultFragment.newInstance(examId), ExamResultFragment.TAG)
                 .commit();
+
+        binding.adView.setVisibility(View.VISIBLE);
+        ViewUtil.loadAd(binding.adView);
     }
 
     @Override

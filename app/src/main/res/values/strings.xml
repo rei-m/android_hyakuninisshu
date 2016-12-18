@@ -87,6 +87,8 @@
 
     <string name="text_explain_app_material">百人一首の資料を閲覧します。決まり字や歌の現代語訳を見ることができます。</string>
 
+    <string name="text_empty_training">指定した条件の歌はありませんでした。</string>
+
     <string name="url_credit">file:///android_asset/licenses.html</string>
 
     <string name="app_font_file">Hannari.otf</string>

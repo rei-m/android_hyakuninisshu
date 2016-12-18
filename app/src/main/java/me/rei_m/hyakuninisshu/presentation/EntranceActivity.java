@@ -18,6 +18,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragme
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
+import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
 public class EntranceActivity extends BaseActivity implements HasComponent<EntranceActivityComponent> {
 
@@ -65,6 +66,8 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
             currentPageIndex = savedInstanceState.getInt(KEY_PAGE_INDEX, 0);
             binding.bottomNavigation.getMenu().getItem(currentPageIndex).setChecked(true);
         }
+
+        ViewUtil.loadAd(binding.adView);
     }
 
     @Override

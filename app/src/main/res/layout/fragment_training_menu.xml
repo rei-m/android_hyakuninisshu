@@ -121,6 +121,10 @@
                 android:onClick="@{() -> presenter.onClickStartTraining(viewModel.getTrainingRange().get(), viewModel.getKimariji().get(), viewModel.getTopPhraseStyle().get(), viewModel.getBottomPhraseStyle().get())}"
                 android:text="@string/start_training" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_ad_banner" />
+
         </LinearLayout>
     </ScrollView>
 </layout>

@@ -109,6 +109,10 @@
                 android:layout_height="16dp"
                 android:background="@color/black33" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_ad_banner" />
+            
         </LinearLayout>
 
     </ScrollView>
