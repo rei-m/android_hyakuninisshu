@@ -6,3 +6,6 @@
 /build
 /captures
 /script/
+/app/keystore/
+/app/src/debug/AndroidManifest.xml
+/app/src/release/

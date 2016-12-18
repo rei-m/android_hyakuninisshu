@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.rei_m.hyakuninisshu">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -39,6 +41,12 @@
             android:name=".presentation.karuta.MaterialDetailActivity"
             android:label="@string/function_material"
             android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="ecc83f65a70cf5ece7098c14db2e752539a14b34"
+            />
+
     </application>
 
 </manifest>

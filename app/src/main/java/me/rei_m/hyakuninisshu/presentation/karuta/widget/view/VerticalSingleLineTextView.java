@@ -1,8 +1,10 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.annotation.DimenRes;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
@@ -35,11 +37,14 @@ public class VerticalSingleLineTextView extends View {
     }
 
     private void initialize(Context context) {
+        Resources resources = context.getResources();
         text = "";
         textSize = context.getResources().getDimensionPixelOffset(R.dimen.text_l);
         paint.setAntiAlias(true);
         paint.setTextSize(textSize);
-        paint.setColor(ResourcesCompat.getColor(getContext().getResources(), R.color.black8a, null));
+        paint.setColor(ResourcesCompat.getColor(resources, R.color.black8a, null));
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), resources.getString(R.string.app_font_file));
+        paint.setTypeface(typeface);
     }
 
     public void setTextSize(@DimenRes int dimenId) {
