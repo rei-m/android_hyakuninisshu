@@ -25,30 +25,46 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
+                android:background="@color/white99"
+                android:gravity="start"
+                android:padding="@dimen/padding_xs"
                 android:text="@string/number_of_correct_answers" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:background="@color/white99"
+                android:gravity="center"
                 android:text="@{viewModel.score}"
                 android:textSize="@dimen/text_xl" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
+                android:background="@color/white99"
+                android:gravity="start"
+                android:padding="@dimen/padding_xs"
                 android:text="@string/average_response_time" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:background="@color/white99"
+                android:gravity="center"
                 android:text="@{viewModel.averageAnswerTime}"
                 android:textSize="@dimen/text_xl" />
 
@@ -59,12 +75,16 @@
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
+                android:background="@color/white99"
+                android:paddingBottom="@dimen/padding_s"
+                android:paddingTop="@dimen/padding_s"
                 app:examResultList="@{viewModel.karutaQuizResultList}" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_l"
                 android:onClick="@{() -> presenter.onClickBackMenu()}"
                 android:text="@string/back_menu" />
 

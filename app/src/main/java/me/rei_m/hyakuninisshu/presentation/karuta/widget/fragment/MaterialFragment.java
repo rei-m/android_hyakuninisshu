@@ -2,6 +2,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     @Override
     public void onDestroy() {
         super.onDestroy();
+        navigator = null;
         presenter = null;
     }
 
@@ -56,6 +58,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
         MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter();
         adapter.setListener(presenter);
         binding.recyclerKarutaList.setAdapter(adapter);
+        binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
     }
 

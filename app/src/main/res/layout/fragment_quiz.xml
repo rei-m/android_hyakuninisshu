@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:background="@color/white66"
             android:padding="@dimen/padding_m"
             android:text="@{viewModel.quizCount}" />
 

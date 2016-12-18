@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/setting" />
+                android:text="@string/training_setting" />
 
             <TextView
                 android:id="@+id/text_title_range_question"
@@ -88,7 +88,7 @@
             <Spinner
                 android:id="@+id/spinner_top_phrase_style"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 app:selectedValue="@={viewModel.topPhraseStyle}"
@@ -105,7 +105,7 @@
             <Spinner
                 android:id="@+id/spinner_shimonoku_style"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 app:selectedValue="@={viewModel.bottomPhraseStyle}"
@@ -113,10 +113,11 @@
 
             <Button
                 android:id="@+id/button_start_training"
+                style="@style/AccentButton"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_l"
                 android:onClick="@{() -> presenter.onClickStartTraining(viewModel.getTrainingRange().get(), viewModel.getKimariji().get(), viewModel.getTopPhraseStyle().get(), viewModel.getBottomPhraseStyle().get())}"
                 android:text="@string/start_training" />
 

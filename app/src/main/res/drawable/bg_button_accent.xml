@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <nine-patch android:src="@drawable/bg_shadow_rectangle_2" />
+    </item>
+    <item>
+        <selector>
+            <item android:state_enabled="false">
+                <shape>
+                    <solid android:color="@color/colorAccent" />
+                </shape>
+            </item>
+            <item android:state_enabled="true">
+                <shape>
+                    <solid android:color="@color/colorAccent66" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</layer-list>

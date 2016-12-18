@@ -27,23 +27,32 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="百首すべてが出題されます。出題順は毎回変わります。" />
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/text_exam_about"
+                android:textSize="@dimen/text_m" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:background="#F1F8E9"
                 android:orientation="vertical"
+                android:padding="@dimen/padding_s"
                 android:visibility="@{viewModel.hasResult ? View.VISIBLE : View.GONE}">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="前回の力試しの結果" />
+                    android:text="@string/previous_result_of_exam" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="正解数" />
+                    android:layout_marginTop="@dimen/margin_s"
+                    android:text="@string/number_of_correct" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,7 +62,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="平均回答時間" />
+                    android:layout_marginTop="@dimen/margin_s"
+                    android:text="@string/average_response_time" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,21 +74,24 @@
 
             <Button
                 android:id="@+id/button_start_exam"
+                style="@style/AccentButton"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_l"
                 android:onClick="@{() -> presenter.onClickStartExam()}"
-                android:text="力試しをはじめる" />
+                android:text="@string/start_exam" />
 
             <Button
                 android:id="@+id/button_start_training_failed_quiz"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_m"
                 android:onClick="@{() -> presenter.onClickStartTraining()}"
-                android:text="過去間違えた問題を練習する"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:text="@string/start_training_of_exam"
                 android:visibility="@{viewModel.hasResult ? View.VISIBLE : View.GONE}" />
 
         </LinearLayout>

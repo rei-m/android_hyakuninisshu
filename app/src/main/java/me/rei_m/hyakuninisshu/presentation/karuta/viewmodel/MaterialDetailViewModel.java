@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 
 public class MaterialDetailViewModel {
 
-    public final String karutaNo;
-
     public final String karutaImageNo;
 
     public final String creator;
@@ -22,8 +20,7 @@ public class MaterialDetailViewModel {
 
     public final String translation;
 
-    public MaterialDetailViewModel(@NonNull String karutaNo,
-                                   @NonNull String karutaImageNo,
+    public MaterialDetailViewModel(@NonNull String karutaImageNo,
                                    @NonNull String creator,
                                    int kimariji,
                                    @NonNull String topPhraseKanji,
@@ -31,7 +28,6 @@ public class MaterialDetailViewModel {
                                    @NonNull String topPhraseKana,
                                    @NonNull String bottomPhraseKana,
                                    @NonNull String translation) {
-        this.karutaNo = karutaNo;
         this.karutaImageNo = karutaImageNo;
         this.creator = creator;
         this.kimariji = kimariji;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.DimenRes;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,11 @@ public class VerticalSingleLineTextView extends View {
     }
 
     private void initialize(Context context) {
-
         text = "";
         textSize = context.getResources().getDimensionPixelOffset(R.dimen.text_l);
         paint.setAntiAlias(true);
         paint.setTextSize(textSize);
+        paint.setColor(ResourcesCompat.getColor(getContext().getResources(), R.color.black8a, null));
     }
 
     public void setTextSize(@DimenRes int dimenId) {

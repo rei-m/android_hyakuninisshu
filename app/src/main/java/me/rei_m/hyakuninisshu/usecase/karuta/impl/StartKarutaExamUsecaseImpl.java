@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
@@ -29,8 +28,7 @@ public class StartKarutaExamUsecaseImpl implements StartKarutaExamUsecase {
 
     @Override
     public Completable execute() {
-        // TODO: あとで戻す
-        return karutaRepository.asEntityList(new KarutaIdentifier(1), new KarutaIdentifier(5)).flatMap(karutaList -> Observable.fromIterable(karutaList).map(AbstractEntity::getIdentifier).toList())
+        return karutaRepository.asEntityList().flatMap(karutaList -> Observable.fromIterable(karutaList).map(AbstractEntity::getIdentifier).toList())
                 .flatMap(karutaQuizListFactory::create)
                 .flatMapCompletable(karutaQuizRepository::initialize);
     }
