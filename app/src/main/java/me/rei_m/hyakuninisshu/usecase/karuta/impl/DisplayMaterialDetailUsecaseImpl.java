@@ -44,9 +44,8 @@ public class DisplayMaterialDetailUsecaseImpl implements DisplayMaterialDetailUs
             String bottomPhraseKana = karuta.getBottomPhrase().getFourth().getKana() + SPACE +
                     karuta.getBottomPhrase().getFifth().getKana();
 
-            return new MaterialDetailViewModel(karutaIdentifierString,
-                    karuta.getImageNo(),
-                    karuta.getCreator(),
+            return new MaterialDetailViewModel(karuta.getImageNo(),
+                    karutaIdentifierString + " / " + karuta.getCreator(),
                     karuta.getKimariji(),
                     topPhraseKanji,
                     bottomPhraseKanji,

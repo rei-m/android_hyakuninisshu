@@ -16,6 +16,16 @@
         <item name="android:paddingTop">@dimen/padding_m</item>
     </style>
 
+    <style name="AccentButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_button_accent</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/text_ml</item>
+        <item name="android:paddingBottom">@dimen/padding_s</item>
+        <item name="android:paddingLeft">@dimen/padding_m</item>
+        <item name="android:paddingRight">@dimen/padding_m</item>
+        <item name="android:paddingTop">@dimen/padding_s</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

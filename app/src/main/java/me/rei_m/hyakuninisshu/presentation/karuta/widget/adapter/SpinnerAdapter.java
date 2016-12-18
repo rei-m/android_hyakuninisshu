@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.SpinnerItem;
 
 public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
@@ -28,9 +29,9 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
             List<SpinnerItem> values = new ArrayList<>();
             values.add(null);
             values.addAll(Arrays.asList(objects));
-            return new SpinnerAdapter(context, android.R.layout.simple_list_item_1, android.R.layout.simple_spinner_dropdown_item, values);
+            return new SpinnerAdapter(context, R.layout.item_spinner, R.layout.item_spinner_dropdown, values);
         } else {
-            return new SpinnerAdapter(context, android.R.layout.simple_list_item_1, android.R.layout.simple_spinner_dropdown_item, objects);
+            return new SpinnerAdapter(context, R.layout.item_spinner, R.layout.item_spinner_dropdown, objects);
         }
     }
 
@@ -39,9 +40,9 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
             List<SpinnerItem> values = new ArrayList<>();
             values.add(null);
             values.addAll(objects);
-            return new SpinnerAdapter(context, android.R.layout.simple_list_item_1, android.R.layout.simple_spinner_dropdown_item, values);
+            return new SpinnerAdapter(context, R.layout.item_spinner, R.layout.item_spinner_dropdown, values);
         } else {
-            return new SpinnerAdapter(context, android.R.layout.simple_list_item_1, android.R.layout.simple_spinner_dropdown_item, objects);
+            return new SpinnerAdapter(context, R.layout.item_spinner, R.layout.item_spinner_dropdown, objects);
         }
     }
 
@@ -63,7 +64,7 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(resource, null);
         }
-        TextView view = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView view = (TextView) convertView.findViewById(R.id.text_spinner_item);
         SpinnerItem item = getItem(position);
         if (item != null) {
             view.setText(item.getLabel(getContext().getResources()));
@@ -78,7 +79,7 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(dropDownResource, null);
         }
-        TextView view = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView view = (TextView) convertView.findViewById(R.id.text_spinner_item);
         SpinnerItem item = getItem(position);
         if (item != null) {
             view.setText(item.getLabel(getContext().getResources()));

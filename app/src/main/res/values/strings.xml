@@ -14,14 +14,19 @@
     <string name="score">結果</string>
     <string name="correct">正解</string>
     <string name="incorrect">不正解</string>
+    <string name="number_of_correct">正解数</string>
+    <string name="about_app">このアプリについて</string>
     <string name="license">ライセンス</string>
     <string name="version">version: %1$s</string>
 
     <string name="karuta">かるた</string>
+    <string name="creator">歌人</string>
+    <string name="translation">訳</string>
+    <string name="original_text">原文</string>
     <string name="start_training">練習をはじめる</string>
     <string name="go_to_next">次に進む</string>
     <string name="confirm_result">結果を見る</string>
-    <string name="setting">設定</string>
+    <string name="training_setting">出題設定</string>
     <string name="range_question">出題範囲</string>
     <string name="kimariji">決まり字</string>
     <string name="karuta_number">%1$s番</string>
@@ -32,6 +37,9 @@
     <string name="number_of_correct_answers">正解数</string>
     <string name="average_response_time">平均回答時間</string>
     <string name="practice_wrong_karutas">間違えた歌の練習をする</string>
+    <string name="previous_result_of_exam">前回の力試しの結果</string>
+    <string name="start_exam">力試しをはじめる</string>
+    <string name="start_training_of_exam">過去間違えた問題を練習する</string>
 
     <string name="one">一</string>
     <string name="two">二</string>
@@ -68,7 +76,9 @@
     <string name="display_style_kana">すべて仮名で表示</string>
     <string name="display_style_kanji">漢字と仮名で表示</string>
 
-    <string name="text_explain_app">このアプリは百人一首の学習用アプリです。</string>
+    <string name="text_exam_about">全百首から出題されます。出題順は毎回変わります。</string>
+
+    <string name="text_explain_app">このアプリは百人一首を覚えるためのアプリです。簡単に繰り返し練習して使ってもらえることを目標に作成しました。</string>
 
     <string name="text_explain_app_training">出題条件を設定して繰り返し練習できます。</string>
 
