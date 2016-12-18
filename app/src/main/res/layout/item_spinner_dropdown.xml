@@ -6,4 +6,5 @@
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
     android:maxLines="1"
-    android:padding="@dimen/padding_s" />
+    android:padding="@dimen/padding_s"
+    android:textColor="@color/black8a" />
