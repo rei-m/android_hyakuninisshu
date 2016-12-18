@@ -18,6 +18,7 @@
     <string name="about_app">このアプリについて</string>
     <string name="license">ライセンス</string>
     <string name="version">version: %1$s</string>
+    <string name="back">戻る</string>
 
     <string name="karuta">かるた</string>
     <string name="creator">歌人</string>
@@ -85,5 +86,7 @@
     <string name="text_explain_app_exam">百首通しで出題されます。結果は過去10回分が保存され、間違えた問題は振り返りで練習することができます。</string>
 
     <string name="text_explain_app_material">百人一首の資料を閲覧します。決まり字や歌の現代語訳を見ることができます。</string>
+
+    <string name="url_credit">file:///android_asset/licenses.html</string>
 
 </resources>

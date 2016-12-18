@@ -2,6 +2,7 @@ package me.rei_m.hyakuninisshu.presentation.support.widget.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +40,11 @@ public class SupportFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSupportBinding.inflate(inflater, container, false);
         binding.textVersion.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
-        binding.textLicense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                
+        binding.textLicense.setOnClickListener(view -> {
+            FragmentManager manager = getFragmentManager();
+            if (manager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
+                LicenceDialogFragment dialog = LicenceDialogFragment.newInstance();
+                dialog.show(manager, LicenceDialogFragment.TAG);
             }
         });
         return binding.getRoot();
