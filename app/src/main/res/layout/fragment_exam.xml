@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_l"
+                android:layout_marginTop="@dimen/margin_xxl"
                 android:onClick="@{() -> presenter.onClickStartExam()}"
                 android:text="@string/start_exam" />
 
@@ -93,6 +93,10 @@
                 android:paddingRight="@dimen/padding_m"
                 android:text="@string/start_training_of_exam"
                 android:visibility="@{viewModel.hasResult ? View.VISIBLE : View.GONE}" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_ad_banner" />
 
         </LinearLayout>
 

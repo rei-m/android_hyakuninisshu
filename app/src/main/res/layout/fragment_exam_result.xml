@@ -88,6 +88,10 @@
                 android:onClick="@{() -> presenter.onClickBackMenu()}"
                 android:text="@string/back_menu" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_ad_banner" />
+
         </LinearLayout>
 
     </ScrollView>

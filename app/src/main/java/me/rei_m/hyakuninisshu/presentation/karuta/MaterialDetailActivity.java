@@ -15,6 +15,7 @@ import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialDetailActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
+import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
 public class MaterialDetailActivity extends BaseActivity implements HasComponent<MaterialDetailActivityComponent> {
 
@@ -45,6 +46,7 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
 
         binding.pager.setAdapter(new MaterialDetailPagerAdapter(getSupportFragmentManager()));
         binding.pager.setCurrentItem(initialDisplayKarutaNo - 1);
+        ViewUtil.loadAd(binding.adView);
     }
 
     @Override

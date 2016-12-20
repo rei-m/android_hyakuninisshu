@@ -63,6 +63,7 @@ dependencies {
     compile "com.android.support:percent:$android_support_lib_version"
     compile "com.android.support:design:$android_support_lib_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.google.android.gms:play-services:6.+'
 
     provided 'javax.annotation:jsr250-api:1.0'
     compile "com.google.dagger:dagger:$dagger_version"

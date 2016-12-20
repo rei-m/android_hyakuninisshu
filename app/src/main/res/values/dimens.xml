@@ -50,4 +50,6 @@
 
     <dimen name="margin_karuta_text_bottom">8dp</dimen>
 
+    <dimen name="height_ad_banner">76dp</dimen>
+
 </resources>

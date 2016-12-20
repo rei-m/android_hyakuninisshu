@@ -24,6 +24,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModul
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
+import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
 public class TrainingMasterActivity extends BaseActivity implements TrainingMasterContact.View,
         HasComponent<QuizMasterActivityComponent>,
@@ -116,7 +117,9 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
 
     @Override
     public void showEmpty() {
-        binding.layoutEmpty.setVisibility(View.VISIBLE);
+        binding.textEmpty.setVisibility(View.VISIBLE);
+        binding.adView.setVisibility(View.VISIBLE);
+        ViewUtil.loadAd(binding.adView);
     }
 
     @Override
@@ -148,11 +151,16 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
                 .commit();
+
+        binding.adView.setVisibility(View.VISIBLE);
+        ViewUtil.loadAd(binding.adView);
     }
 
     @Override
     public void onRestartTraining() {
         startTraining();
+        binding.adView.destroy();
+        binding.adView.setVisibility(View.GONE);
     }
 
     @Override
