@@ -63,7 +63,7 @@ dependencies {
     compile "com.android.support:percent:$android_support_lib_version"
     compile "com.android.support:design:$android_support_lib_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
-    compile 'com.google.android.gms:play-services:6.+'
+    compile 'com.google.android.gms:play-services-ads:10.0.1'
 
     provided 'javax.annotation:jsr250-api:1.0'
     compile "com.google.dagger:dagger:$dagger_version"
@@ -81,7 +81,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.1.4'
     testCompile 'org.robolectric:shadows-support-v4:3.1.4'
-    testCompile 'org.mockito:mockito-core:2.3.7'
+    testCompile 'org.mockito:mockito-core:2.4.0'
     testCompile('com.android.support.test:runner:0.5') {
         exclude module: 'support-annotations'
     }
