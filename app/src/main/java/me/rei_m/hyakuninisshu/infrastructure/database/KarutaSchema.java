@@ -15,11 +15,13 @@ public class KarutaSchema {
     }
 
     @PrimaryKey(auto = false)
+    @Json(name = "id")
     public long id;
 
     @Column
+    @Json(name = "creator")
     public String creator;
-
+    
     @Column
     @Json(name = "first_kana")
     public String firstKana;
@@ -61,6 +63,7 @@ public class KarutaSchema {
     public String fifthKanji;
 
     @Column
+    @Json(name = "kimariji")
     public int kimariji;
 
     @Column
@@ -68,6 +71,7 @@ public class KarutaSchema {
     public String imageNo;
 
     @Column
+    @Json(name = "translation")
     @Nullable
     public String translation;
 

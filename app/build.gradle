@@ -7,9 +7,25 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        releaseConfig
+    }
+
+    if (project.hasProperty('storeFile')) {
+        android.signingConfigs.releaseConfig.storeFile = file(storeFile)
+    }
+    if (project.hasProperty('storePassword')) {
+        android.signingConfigs.releaseConfig.storePassword = storePassword
+    }
+    if (project.hasProperty('keyAlias')) {
+        android.signingConfigs.releaseConfig.keyAlias = keyAlias
+    }
+    if (project.hasProperty('keyPassword')) {
+        android.signingConfigs.releaseConfig.keyPassword = keyPassword
+    }
+
     compileSdkVersion 25
     buildToolsVersion "24.0.2"
-
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 18
@@ -25,7 +41,9 @@ android {
             versionNameSuffix "d"
         }
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+            debuggable false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -54,9 +72,7 @@ dependencies {
     ext.rxjava_version = '2.0.1'
     ext.dagger_version = '2.8'
     ext.leakcanary_version = '1.5'
-
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "com.android.support:support-annotations:$android_support_lib_version"
     compile "com.android.support:appcompat-v7:$android_support_lib_version"
     compile "com.android.support:support-v4:$android_support_lib_version"

@@ -15,3 +15,31 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keepattributes SourceFile,LineNumberTable,Signature,Exceptions,*Annotation*,*Table
+-keepnames class * extends java.lang.Throwable
+
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+
+-keep class **.R$*
+
+# Android Support Library
+-dontwarn android.support.**
+-dontwarn android.databinding.**
+-keep class android.support.** { *; }
+-keep class android.databinding.** { *; }
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+
+-dontwarn org.antlr.**
+-dontwarn okio.**
+-dontwarn java.lang.invoke.**
+
+-dontnote android.**
+-dontnote com.google.**
+-dontnote com.squareup.moshi.**
+-dontnote org.antlr.**
+-dontnote org.apache.**
