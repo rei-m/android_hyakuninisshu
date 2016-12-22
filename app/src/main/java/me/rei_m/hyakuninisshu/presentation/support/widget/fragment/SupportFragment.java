@@ -1,5 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.support.widget.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -40,6 +42,11 @@ public class SupportFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSupportBinding.inflate(inflater, container, false);
         binding.textVersion.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
+        binding.textReview.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getActivity().startActivity(intent);
+        });
         binding.textLicense.setOnClickListener(view -> {
             FragmentManager manager = getFragmentManager();
             if (manager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {

@@ -40,7 +40,9 @@
                 android:layout_width="@dimen/width_karuta_thumbnail_small"
                 android:layout_height="@dimen/height_karuta_thumbnail_small"
                 android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginRight="@dimen/margin_m"
                 android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
                 android:contentDescription="@string/karuta"
                 app:karutaSrc="@{viewModel.karutaImageNo}" />
 
