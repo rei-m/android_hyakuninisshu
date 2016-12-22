@@ -57,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginEnd="@dimen/margin_ms"
+                android:layout_marginRight="@dimen/margin_ms"
                 app:verticalText="@{viewModel.creator}"
                 app:verticalTextSize="@{R.dimen.text_m}" />
 
@@ -70,6 +71,7 @@
             <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_s"
                 android:layout_marginStart="@dimen/margin_s"
                 android:layout_marginTop="@dimen/margin_m"
                 app:verticalText="@{viewModel.fourthPhrase}"
@@ -88,6 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_s"
+                android:layout_marginRight="@dimen/margin_s"
                 android:layout_marginTop="@dimen/margin_l"
                 app:verticalText="@{viewModel.secondPhrase}"
                 app:verticalTextSize="@{R.dimen.text_ll}" />

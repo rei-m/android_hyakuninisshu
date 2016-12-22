@@ -19,6 +19,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/about_app"
@@ -34,6 +35,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_xs"
                 android:text="@string/function_training"
@@ -49,6 +51,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_xs"
                 android:text="@string/function_exam"
@@ -64,6 +67,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_xs"
                 android:text="@string/function_material"
@@ -83,12 +87,31 @@
                 android:background="@color/black33" />
 
             <TextView
+                android:id="@+id/text_review"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_line"
+                android:background="@drawable/bg_ripple"
+                android:gravity="center_vertical"
+                android:paddingEnd="0dp"
+                android:paddingLeft="@dimen/margin_m"
+                android:paddingRight="0dp"
+                android:paddingStart="@dimen/margin_m"
+                android:text="@string/post_review" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/black33" />
+
+            <TextView
                 android:id="@+id/text_license"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_line"
                 android:background="@drawable/bg_ripple"
                 android:gravity="center_vertical"
                 android:paddingEnd="0dp"
+                android:paddingLeft="@dimen/margin_m"
+                android:paddingRight="0dp"
                 android:paddingStart="@dimen/margin_m"
                 android:text="@string/license" />
 
@@ -101,6 +124,7 @@
                 android:id="@+id/text_version"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_line"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:gravity="center_vertical" />
 
@@ -112,7 +136,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_ad_banner" />
-            
+
         </LinearLayout>
 
     </ScrollView>

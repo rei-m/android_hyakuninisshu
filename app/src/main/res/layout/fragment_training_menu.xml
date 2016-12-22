@@ -40,6 +40,7 @@
                 android:id="@+id/text_title_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/training_setting" />
@@ -48,6 +49,7 @@
                 android:id="@+id/text_title_range_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/range_question" />
@@ -64,6 +66,7 @@
                 android:id="@+id/text_title_kimariji"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/kimariji" />
@@ -81,6 +84,7 @@
                 android:id="@+id/text_title_top_phrase_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/topPhrase" />
@@ -98,6 +102,7 @@
                 android:id="@+id/text_title_bottom_phrase_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/bottomPhrase" />

@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">さくさく覚える百人一首</string>
 
+    <string name="app_url">https://play.google.com/store/apps/details?id=me.rei_m.hyakuninisshu</string>
+
     <string name="function_training">練習</string>
 
     <string name="function_exam">力試し</string>
@@ -16,6 +18,7 @@
     <string name="incorrect">不正解</string>
     <string name="number_of_correct">正解数</string>
     <string name="about_app">このアプリについて</string>
+    <string name="post_review">レビューを書く</string>
     <string name="license">ライセンス</string>
     <string name="version">version: %1$s</string>
     <string name="back">戻る</string>
