@@ -7,8 +7,4 @@ gradle.properties
 /build
 /captures
 /script/
-/app/keystore/
-/app/src/debug/AndroidManifest.xml
-/app/src/release/
-/app/app-release.apk
 /keystores/
