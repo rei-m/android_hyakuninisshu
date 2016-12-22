@@ -53,6 +53,7 @@ public class VerticalSingleLineTextView extends View {
     }
 
     public void setTextSizeByPx(int textSize) {
+        this.textSize = textSize;
         paint.setTextSize(textSize);
     }
 
