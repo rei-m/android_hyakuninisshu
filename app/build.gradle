@@ -72,6 +72,8 @@ dependencies {
     ext.rxjava_version = '2.0.1'
     ext.dagger_version = '2.8'
     ext.leakcanary_version = '1.5'
+    ext.play_services_version = '10.0.1'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "com.android.support:support-annotations:$android_support_lib_version"
     compile "com.android.support:appcompat-v7:$android_support_lib_version"
@@ -79,7 +81,8 @@ dependencies {
     compile "com.android.support:percent:$android_support_lib_version"
     compile "com.android.support:design:$android_support_lib_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
-    compile 'com.google.android.gms:play-services-ads:10.0.1'
+    compile "com.google.firebase:firebase-core:$play_services_version"
+    compile "com.google.android.gms:play-services-ads:$play_services_version"
 
     provided 'javax.annotation:jsr250-api:1.0'
     compile "com.google.dagger:dagger:$dagger_version"

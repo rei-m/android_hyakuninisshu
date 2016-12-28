@@ -164,7 +164,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         outState.putInt(KEY_SELECTED_CHOICE_NO, selectedChoiceNo);
         outState.putSerializable(KEY_QUIZ_STATE, state);
     }
-
+    
     @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {

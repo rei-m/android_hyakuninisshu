@@ -10,6 +10,8 @@ public interface TrainingMenuContact {
 
         void onCreate(View view);
 
+        void onResume();
+
         void onClickStartTraining(TrainingRange trainingRange,
                                   Kimariji kimariji,
                                   KarutaStyle topPhraseStyle,

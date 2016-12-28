@@ -81,7 +81,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
         super.onPause();
         presenter.onPause();
     }
-
+    
     @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
