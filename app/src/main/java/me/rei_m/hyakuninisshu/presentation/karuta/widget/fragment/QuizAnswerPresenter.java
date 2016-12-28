@@ -30,7 +30,7 @@ public class QuizAnswerPresenter implements QuizAnswerContact.Actions {
         disposable.add(displayKarutaQuizAnswerUsecase.execute(quizId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::initialize));
+                .subscribe(view::initialize, e -> view.displayError()));
     }
 
     @Override
