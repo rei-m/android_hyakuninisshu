@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamMasterBinding;
+import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.TrainingExamMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
@@ -27,7 +29,8 @@ public class TrainingExamMasterActivity extends BaseActivity implements Training
         HasComponent<TrainingExamMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        QuizResultFragment.OnFragmentInteractionListener {
+        QuizResultFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnClickPositiveButtonListener {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, TrainingExamMasterActivity.class);
@@ -98,6 +101,14 @@ public class TrainingExamMasterActivity extends BaseActivity implements Training
     }
 
     @Override
+    public void onErrorQuiz() {
+        DialogFragment newFragment = AlertDialogFragment.newInstance(
+                R.string.text_title_error,
+                R.string.text_message_quiz_error);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
     public void onClickGoToNext() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -127,6 +138,11 @@ public class TrainingExamMasterActivity extends BaseActivity implements Training
 
     @Override
     public void onFinishTraining() {
+        finish();
+    }
+
+    @Override
+    public void onClickPositiveButton() {
         finish();
     }
 }

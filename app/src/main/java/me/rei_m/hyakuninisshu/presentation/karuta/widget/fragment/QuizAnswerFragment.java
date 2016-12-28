@@ -96,7 +96,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         super.onDetach();
         listener = null;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
@@ -123,6 +123,13 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         }
     }
 
+    @Override
+    public void displayError() {
+        if (listener != null) {
+            listener.onErrorQuiz();
+        }
+    }
+
     public interface Injector {
         QuizAnswerFragmentComponent plus(QuizAnswerFragmentModule fragmentModule);
     }
@@ -131,5 +138,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         void onClickGoToNext();
 
         void onClickGoToResult();
+
+        void onErrorQuiz();
     }
 }

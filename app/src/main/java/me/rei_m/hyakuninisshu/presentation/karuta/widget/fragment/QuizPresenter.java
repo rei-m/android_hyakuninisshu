@@ -49,6 +49,8 @@ public class QuizPresenter implements QuizContact.Actions {
                     .subscribe(quizViewModel -> {
                         view.initialize(quizViewModel);
                         view.startDisplayQuizAnimation(quizViewModel);
+                    }, e -> {
+                        view.displayError();
                     }));
         } else {
             view.initialize(viewModel);
