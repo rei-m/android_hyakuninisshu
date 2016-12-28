@@ -96,7 +96,7 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         super.onDetach();
         listener = null;
     }
-
+    
     @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {

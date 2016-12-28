@@ -4,8 +4,10 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamPresenter;
+import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayExamUsecase;
 
@@ -25,6 +27,7 @@ public class ExamFragmentModule {
 
     @Provides
     ExamContact.Actions provideQuizAnswerPresenter(DisplayExamUsecase displayExamUsecase) {
-        return new ExamPresenter(displayExamUsecase);
+        AnalyticsManager analyticsManager = ((App) context.getApplicationContext()).getAnalyticsManager();
+        return new ExamPresenter(displayExamUsecase, analyticsManager);
     }
 }

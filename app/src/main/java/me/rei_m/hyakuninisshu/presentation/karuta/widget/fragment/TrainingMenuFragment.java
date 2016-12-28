@@ -27,7 +27,7 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     public static TrainingMenuFragment newInstance() {
         return new TrainingMenuFragment();
     }
-    
+
     @Inject
     TrainingMenuContact.Actions presenter;
 
@@ -75,6 +75,12 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
     }
 
     @Override

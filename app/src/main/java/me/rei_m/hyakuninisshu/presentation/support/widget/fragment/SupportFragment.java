@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.BuildConfig;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
 
 public class SupportFragment extends BaseFragment {
 
@@ -61,6 +63,13 @@ public class SupportFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AnalyticsManager analyticsManager = ((App) getContext().getApplicationContext()).getAnalyticsManager();
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.SUPPORT);
     }
 
     @Override
