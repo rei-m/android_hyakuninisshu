@@ -4,8 +4,10 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuPresenter;
+import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
 
 @Module
@@ -22,9 +24,10 @@ public class TrainingMenuFragmentModule {
     Context provideContext() {
         return context;
     }
-    
+
     @Provides
     TrainingMenuContact.Actions provideTrainingMenuPresenter() {
-        return new TrainingMenuPresenter();
+        AnalyticsManager analyticsManager = ((App) context.getApplicationContext()).getAnalyticsManager();
+        return new TrainingMenuPresenter(analyticsManager);
     }
 }

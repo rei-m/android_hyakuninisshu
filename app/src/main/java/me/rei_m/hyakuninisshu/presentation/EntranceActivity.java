@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
+import hotchemi.android.rate.AppRate;
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
@@ -68,6 +69,16 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
         }
 
         ViewUtil.loadAd(binding.adView);
+
+        AppRate.with(this)
+                .setInstallDays(1)
+                .setLaunchTimes(3)
+                .setRemindInterval(10)
+                .setShowLaterButton(true)
+                .setDebug(false)
+                .monitor();
+
+        AppRate.showRateDialogIfMeetsConditions(this);
     }
 
     @Override

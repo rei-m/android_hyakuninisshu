@@ -5,18 +5,23 @@ import android.support.annotation.NonNull;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayMaterialUsecase;
 
 public class MaterialPresenter implements MaterialContact.Actions {
 
     private final DisplayMaterialUsecase displayMaterialUsecase;
 
+    private final AnalyticsManager analyticsManager;
+
     private MaterialContact.View view;
 
     private CompositeDisposable disposable;
 
-    public MaterialPresenter(@NonNull DisplayMaterialUsecase displayMaterialUsecase) {
+    public MaterialPresenter(@NonNull DisplayMaterialUsecase displayMaterialUsecase,
+                             @NonNull AnalyticsManager analyticsManager) {
         this.displayMaterialUsecase = displayMaterialUsecase;
+        this.analyticsManager = analyticsManager;
     }
 
     @Override
@@ -26,6 +31,7 @@ public class MaterialPresenter implements MaterialContact.Actions {
 
     @Override
     public void onResume() {
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
         disposable = new CompositeDisposable();
         disposable.add(displayMaterialUsecase.execute()
                 .subscribeOn(Schedulers.newThread())

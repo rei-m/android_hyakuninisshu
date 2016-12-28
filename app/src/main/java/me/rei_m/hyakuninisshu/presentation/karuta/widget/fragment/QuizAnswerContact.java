@@ -10,6 +10,8 @@ public interface QuizAnswerContact {
         void goToNext();
 
         void goToResult();
+
+        void displayError();
     }
 
     interface Actions {

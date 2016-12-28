@@ -4,8 +4,10 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialContact;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialPresenter;
+import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
 import me.rei_m.hyakuninisshu.usecase.karuta.DisplayMaterialUsecase;
 
@@ -26,6 +28,7 @@ public class MaterialFragmentModule {
 
     @Provides
     MaterialContact.Actions provideTrainingMenuPresenter(DisplayMaterialUsecase displayMaterialUsecase) {
-        return new MaterialPresenter(displayMaterialUsecase);
+        AnalyticsManager analyticsManager = ((App) context.getApplicationContext()).getAnalyticsManager();
+        return new MaterialPresenter(displayMaterialUsecase, analyticsManager);
     }
 }

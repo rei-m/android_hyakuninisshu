@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
+import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
@@ -28,7 +30,8 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
         HasComponent<ExamMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        ExamResultFragment.OnFragmentInteractionListener {
+        ExamResultFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnClickPositiveButtonListener {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
@@ -95,6 +98,14 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
     }
 
     @Override
+    public void onErrorQuiz() {
+        DialogFragment newFragment = AlertDialogFragment.newInstance(
+                R.string.text_title_error,
+                R.string.text_message_quiz_error);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
     public void onClickGoToNext() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -122,6 +133,11 @@ public class ExamMasterActivity extends BaseActivity implements ExamMasterContac
 
     @Override
     public void onFinishExam() {
+        finish();
+    }
+
+    @Override
+    public void onClickPositiveButton() {
         finish();
     }
 }

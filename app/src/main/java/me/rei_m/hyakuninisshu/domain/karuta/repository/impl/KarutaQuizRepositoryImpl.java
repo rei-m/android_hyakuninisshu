@@ -29,6 +29,11 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
     @Override
     public Single<KarutaQuiz> pop() {
+
+        if (karutaQuizCollection == null) {
+            return Single.error(new IllegalStateException("quiz is not initialized"));
+        }
+
         return Observable.fromIterable(karutaQuizCollection.values())
                 .filter(karutaQuiz -> karutaQuiz.getResult() == null)
                 .firstOrError();
@@ -48,6 +53,11 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
     @Override
     public Single<Boolean> existNextQuiz() {
+
+        if (karutaQuizCollection == null) {
+            return Single.error(new IllegalStateException("quiz is not initialized"));
+        }
+
         return Observable.fromIterable(karutaQuizCollection.values())
                 .filter(karutaQuiz -> karutaQuiz.getResult() == null)
                 .count()

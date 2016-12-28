@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
+import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
@@ -30,7 +32,8 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
         HasComponent<QuizMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        QuizResultFragment.OnFragmentInteractionListener {
+        QuizResultFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnClickPositiveButtonListener {
 
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull TrainingRange trainingRange,
@@ -132,6 +135,14 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
     }
 
     @Override
+    public void onErrorQuiz() {
+        DialogFragment newFragment = AlertDialogFragment.newInstance(
+                R.string.text_title_error,
+                R.string.text_message_quiz_error);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
     public void onClickGoToNext() {
 
         KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
@@ -165,6 +176,11 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
 
     @Override
     public void onFinishTraining() {
+        finish();
+    }
+
+    @Override
+    public void onClickPositiveButton() {
         finish();
     }
 }

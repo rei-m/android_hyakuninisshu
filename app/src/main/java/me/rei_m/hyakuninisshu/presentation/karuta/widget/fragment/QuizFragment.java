@@ -275,12 +275,21 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         }
     }
 
+    @Override
+    public void displayError() {
+        if (listener != null) {
+            listener.onErrorQuiz();
+        }
+    }
+
     public interface Injector {
         QuizFragmentComponent plus(QuizFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {
         void onAnswered(String quizId);
+
+        void onErrorQuiz();
     }
 
     public static class RelativeViewSize {
