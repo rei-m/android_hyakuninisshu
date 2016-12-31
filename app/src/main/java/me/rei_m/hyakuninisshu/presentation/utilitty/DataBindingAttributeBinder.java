@@ -87,11 +87,11 @@ public class DataBindingAttributeBinder {
                 imageView.setVisibility(View.GONE);
                 break;
             case ANSWERED_COLLECT:
-                Glide.with(imageView.getContext()).load(R.drawable.check_correct).into(imageView);
+                Glide.with(imageView.getContext()).load(R.drawable.check_correct).dontAnimate().into(imageView);
                 imageView.setVisibility(View.VISIBLE);
                 break;
             case ANSWERED_INCORRECT:
-                Glide.with(imageView.getContext()).load(R.drawable.check_incorrect).into(imageView);
+                Glide.with(imageView.getContext()).load(R.drawable.check_incorrect).dontAnimate().into(imageView);
                 imageView.setVisibility(View.VISIBLE);
                 break;
         }

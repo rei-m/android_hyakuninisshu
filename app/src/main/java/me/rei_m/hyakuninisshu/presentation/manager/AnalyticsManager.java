@@ -62,6 +62,7 @@ public class AnalyticsManager {
         }
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, ITEM_CATEGORY_SCREEN);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, event.name);
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, event.name);
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }

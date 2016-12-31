@@ -257,10 +257,10 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
         if (isCollect) {
             state = QuizState.ANSWERED_COLLECT;
-            Glide.with(this).load(R.drawable.check_correct).into(binding.imageQuizResult);
+            Glide.with(this).load(R.drawable.check_correct).dontAnimate().into(binding.imageQuizResult);
         } else {
             state = QuizState.ANSWERED_INCORRECT;
-            Glide.with(this).load(R.drawable.check_incorrect).into(binding.imageQuizResult);
+            Glide.with(this).load(R.drawable.check_incorrect).dontAnimate().into(binding.imageQuizResult);
         }
         binding.layoutQuizResult.setVisibility(View.VISIBLE);
 
