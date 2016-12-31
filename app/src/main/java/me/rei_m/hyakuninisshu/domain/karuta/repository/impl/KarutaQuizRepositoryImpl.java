@@ -41,6 +41,11 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
     @Override
     public Single<KarutaQuiz> resolve(KarutaQuizIdentifier identifier) {
+
+        if (karutaQuizCollection == null) {
+            return Single.error(new IllegalStateException("quiz is not initialized"));
+        }
+
         return Single.just(karutaQuizCollection.get(identifier));
     }
 

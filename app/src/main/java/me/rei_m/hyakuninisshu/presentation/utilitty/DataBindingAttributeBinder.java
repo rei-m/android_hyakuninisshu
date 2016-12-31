@@ -71,7 +71,7 @@ public class DataBindingAttributeBinder {
             return;
         }
         int resId = view.getResources().getIdentifier(drawableId, "drawable", view.getContext().getApplicationContext().getPackageName());
-        view.setImageResource(resId);
+        Glide.with(view.getContext()).load(resId).into(view);
     }
 
     @BindingAdapter({"visibilityByQuizState"})
@@ -87,11 +87,11 @@ public class DataBindingAttributeBinder {
                 imageView.setVisibility(View.GONE);
                 break;
             case ANSWERED_COLLECT:
-                imageView.setImageResource(R.drawable.check_correct);
+                Glide.with(imageView.getContext()).load(R.drawable.check_correct).into(imageView);
                 imageView.setVisibility(View.VISIBLE);
                 break;
             case ANSWERED_INCORRECT:
-                imageView.setImageResource(R.drawable.check_incorrect);
+                Glide.with(imageView.getContext()).load(R.drawable.check_incorrect).into(imageView);
                 imageView.setVisibility(View.VISIBLE);
                 break;
         }
