@@ -49,9 +49,7 @@ public class QuizPresenter implements QuizContact.Actions {
                     .subscribe(quizViewModel -> {
                         view.initialize(quizViewModel);
                         view.startDisplayQuizAnimation(quizViewModel);
-                    }, e -> {
-                        view.displayError();
-                    }));
+                    }, e -> view.displayError()));
         } else {
             view.initialize(viewModel);
             view.displayResult(selectedChoiceNo, state == QuizState.ANSWERED_COLLECT);
@@ -71,9 +69,7 @@ public class QuizPresenter implements QuizContact.Actions {
         disposable.add(answerKarutaQuizUsecase.execute(quizId, choiceNo)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isCollect -> {
-                    view.displayResult(choiceNo, isCollect);
-                }));
+                .subscribe(isCollect -> view.displayResult(choiceNo, isCollect), e -> view.displayError()));
     }
 
     @Override

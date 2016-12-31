@@ -13,6 +13,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -255,10 +257,10 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
         if (isCollect) {
             state = QuizState.ANSWERED_COLLECT;
-            binding.imageQuizResult.setImageResource(R.drawable.check_correct);
+            Glide.with(this).load(R.drawable.check_correct).dontAnimate().into(binding.imageQuizResult);
         } else {
             state = QuizState.ANSWERED_INCORRECT;
-            binding.imageQuizResult.setImageResource(R.drawable.check_incorrect);
+            Glide.with(this).load(R.drawable.check_incorrect).dontAnimate().into(binding.imageQuizResult);
         }
         binding.layoutQuizResult.setVisibility(View.VISIBLE);
 
