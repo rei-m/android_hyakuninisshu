@@ -1,12 +1,9 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.view;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
-import me.rei_m.hyakuninisshu.R;
 
 public class KarutaTextView extends TextView {
 
@@ -25,9 +22,7 @@ public class KarutaTextView extends TextView {
         initialize(context);
     }
 
-    private void initialize(Context context) {
-        Resources resources = context.getResources();
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), resources.getString(R.string.app_font_file));
-        setTypeface(typeface);
+    private void initialize(@NonNull Context context) {
+        setTypeface(KarutaFontHolder.INSTANCE.getTypeFace(context));
     }
 }

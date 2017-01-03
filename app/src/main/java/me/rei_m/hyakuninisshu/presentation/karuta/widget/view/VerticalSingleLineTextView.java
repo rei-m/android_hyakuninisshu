@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.support.annotation.DimenRes;
+import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -36,15 +36,14 @@ public class VerticalSingleLineTextView extends View {
         initialize(context);
     }
 
-    private void initialize(Context context) {
+    private void initialize(@NonNull Context context) {
         Resources resources = context.getResources();
         text = "";
         textSize = context.getResources().getDimensionPixelOffset(R.dimen.text_l);
         paint.setAntiAlias(true);
         paint.setTextSize(textSize);
         paint.setColor(ResourcesCompat.getColor(resources, R.color.black8a, null));
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), resources.getString(R.string.app_font_file));
-        paint.setTypeface(typeface);
+        paint.setTypeface(KarutaFontHolder.INSTANCE.getTypeFace(context));
     }
 
     public void setTextSize(@DimenRes int dimenId) {

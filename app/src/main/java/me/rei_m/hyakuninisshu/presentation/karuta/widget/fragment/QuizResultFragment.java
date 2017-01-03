@@ -81,7 +81,7 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
         super.onDetach();
         listener = null;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
@@ -108,6 +108,13 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
         }
     }
 
+    @Override
+    public void displayError() {
+        if (listener != null) {
+            listener.onErrorQuiz();
+        }
+    }
+
     public interface Injector {
         QuizResultFragmentComponent plus(QuizResultFragmentModule fragmentModule);
     }
@@ -117,5 +124,7 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
         void onRestartTraining();
 
         void onFinishTraining();
+
+        void onErrorQuiz();
     }
 }
