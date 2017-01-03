@@ -10,6 +10,8 @@ public interface QuizResultContact {
         void onRestartTraining();
 
         void finishTraining();
+
+        void displayError();
     }
 
     interface Actions {

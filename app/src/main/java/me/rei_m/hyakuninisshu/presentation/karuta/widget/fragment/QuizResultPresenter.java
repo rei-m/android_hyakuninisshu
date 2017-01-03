@@ -58,7 +58,7 @@ public class QuizResultPresenter implements QuizResultContact.Actions {
         disposable.add(restartWrongKarutaQuizUsecase.execute()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::onRestartTraining));
+                .subscribe(view::onRestartTraining, e -> view.displayError()));
     }
 
     @Override
