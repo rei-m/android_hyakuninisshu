@@ -9,7 +9,7 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
 public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier> {
 
-    private final KarutaQuizContents contents;
+    protected final KarutaQuizContents contents;
 
     private Date startDate;
 
@@ -20,6 +20,18 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
                       @NonNull KarutaIdentifier collectId) {
         super(identifier);
         contents = new KarutaQuizContents(choiceList, collectId);
+    }
+
+    void setStartDate(@NonNull Date startDate) {
+        this.startDate = startDate;
+    }
+
+    Date getStartDate() {
+        return startDate;
+    }
+
+    void setResult(KarutaQuizResult result) {
+        this.result = result;
     }
 
     public KarutaQuizResult getResult() {
