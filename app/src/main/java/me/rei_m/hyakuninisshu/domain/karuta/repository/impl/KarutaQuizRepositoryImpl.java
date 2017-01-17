@@ -1,83 +1,131 @@
 package me.rei_m.hyakuninisshu.domain.karuta.repository.impl;
 
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
+import com.github.gfx.android.orma.Inserter;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizChoiceSchema;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizSchema;
+import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
 public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
-    private Map<KarutaQuizIdentifier, KarutaQuiz> karutaQuizCollection;
+    private final OrmaDatabase orma;
+
+    public KarutaQuizRepositoryImpl(@NonNull OrmaDatabase orma) {
+        this.orma = orma;
+    }
 
     @Override
     public Completable initialize(List<KarutaQuiz> karutaQuizList) {
-        this.karutaQuizCollection = new HashMap<>();
-        for (KarutaQuiz karutaQuiz : karutaQuizList) {
-            this.karutaQuizCollection.put(karutaQuiz.getIdentifier(), karutaQuiz);
-        }
-        return Completable.complete();
+        return orma.transactionAsCompletable(() -> {
+            KarutaQuizSchema.relation(orma).deleter().execute();
+            KarutaQuizChoiceSchema.relation(orma).deleter().execute();
+
+            Inserter<KarutaQuizSchema> karutaQuizSchemaInserter = KarutaQuizSchema.relation(orma).inserter();
+            Inserter<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaInserter = KarutaQuizChoiceSchema.relation(orma).inserter();
+
+            for (KarutaQuiz karutaQuiz : karutaQuizList) {
+                KarutaQuizSchema karutaQuizSchema = karutaQuiz.toSchema();
+                karutaQuizSchema.id = karutaQuizSchemaInserter.execute(karutaQuizSchema);
+                karutaQuizChoiceSchemaInserter.executeAll(karutaQuiz.toSchema(karutaQuizSchema));
+            }
+        });
     }
 
     @Override
     public Single<KarutaQuiz> pop() {
-
-        if (karutaQuizCollection == null) {
-            return Single.error(new IllegalStateException("quiz is not initialized"));
-        }
-
-        return Observable.fromIterable(karutaQuizCollection.values())
-                .filter(karutaQuiz -> karutaQuiz.getResult() == null)
-                .firstOrError();
+        return KarutaQuizSchema.relation(orma)
+                .where("answerTime = ?", 0)
+                .selector()
+                .executeAsObservable()
+                .firstOrError()
+                .map(karutaQuizSchema -> {
+                    List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList = new ArrayList<>();
+                    karutaQuizSchema.getChoices(orma)
+                            .selector()
+                            .executeAsObservable()
+                            .subscribe(karutaQuizChoiceSchemaList::add);
+                    return KarutaQuiz.create(karutaQuizSchema, karutaQuizChoiceSchemaList);
+                });
     }
 
     @Override
     public Single<KarutaQuiz> resolve(KarutaQuizIdentifier identifier) {
-
-        if (karutaQuizCollection == null) {
-            return Single.error(new IllegalStateException("quiz is not initialized"));
-        }
-
-        return Single.just(karutaQuizCollection.get(identifier));
+        return KarutaQuizSchema.relation(orma)
+                .quizIdEq(identifier.getValue())
+                .selector()
+                .executeAsObservable()
+                .firstOrError()
+                .map(karutaQuizSchema -> {
+                    List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList = new ArrayList<>();
+                    karutaQuizSchema.getChoices(orma)
+                            .selector()
+                            .executeAsObservable()
+                            .subscribe(karutaQuizChoiceSchemaList::add);
+                    return KarutaQuiz.create(karutaQuizSchema, karutaQuizChoiceSchemaList);
+                });
     }
 
     @Override
     public Completable store(KarutaQuiz karutaQuiz) {
-        karutaQuizCollection.remove(karutaQuiz.getIdentifier());
-        karutaQuizCollection.put(karutaQuiz.getIdentifier(), karutaQuiz);
-        return Completable.complete();
+        return orma.transactionAsCompletable(() -> {
+            KarutaQuizSchema karutaQuizSchema = karutaQuiz.toSchema();
+            KarutaQuizSchema.relation(orma).quizIdEq(karutaQuizSchema.quizId).updater()
+                    .startDate(karutaQuizSchema.startDate)
+                    .isCollect(karutaQuizSchema.isCollect)
+                    .answerTime(karutaQuizSchema.answerTime)
+                    .execute();
+        });
     }
 
     @Override
     public Single<Boolean> existNextQuiz() {
-
-        if (karutaQuizCollection == null) {
-            return Single.error(new IllegalStateException("quiz is not initialized"));
-        }
-
-        return Observable.fromIterable(karutaQuizCollection.values())
-                .filter(karutaQuiz -> karutaQuiz.getResult() == null)
-                .count()
-                .map(count -> (0 < count));
+        return KarutaQuizSchema.relation(orma)
+                .where("answerTime = ?", 0)
+                .selector()
+                .executeAsObservable().count()
+                .map(count -> 0 < count);
     }
 
     @Override
     public Single<List<KarutaQuiz>> asEntityList() {
-        return Single.just(new ArrayList<>(karutaQuizCollection.values()));
+        return KarutaQuizSchema.relation(orma)
+                .selector()
+                .executeAsObservable()
+                .map(karutaQuizSchema -> {
+                    List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList = new ArrayList<>();
+                    karutaQuizSchema.getChoices(orma)
+                            .selector()
+                            .executeAsObservable()
+                            .subscribe(karutaQuizChoiceSchemaList::add);
+                    return KarutaQuiz.create(karutaQuizSchema, karutaQuizChoiceSchemaList);
+                }).toList();
     }
 
     @Override
     public Single<Pair<Integer, Integer>> countQuizByAnswered() {
-        return Observable.fromIterable(karutaQuizCollection.values())
-                .reduce(0, (answeredCount, karutaQuiz) -> (karutaQuiz.getResult() != null) ? answeredCount + 1 : answeredCount)
-                .map(answeredCount -> new Pair<>(karutaQuizCollection.size(), answeredCount));
+        Single<Long> totalCountSingle = KarutaQuizSchema.relation(orma)
+                .selector()
+                .executeAsObservable()
+                .count();
+
+        Single<Long> answeredCountSingle = KarutaQuizSchema.relation(orma)
+                .where("answerTime > ?", 0)
+                .selector()
+                .executeAsObservable()
+                .count();
+
+        return Single.zip(totalCountSingle, answeredCountSingle, (totalCount, answeredCount) ->
+                new Pair<>(totalCount.intValue(), answeredCount.intValue()));
     }
 }
