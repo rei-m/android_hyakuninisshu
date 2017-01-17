@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -241,7 +241,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
         if (selectedChoiceNo != CHOICE_NO_NOT_SELECTED) {
 
-            final List<LinearLayout> choiceList = new ArrayList<>(Arrays.asList(
+            final List<FrameLayout> choiceList = new ArrayList<>(Arrays.asList(
                     binding.layoutChoice1,
                     binding.layoutChoice2,
                     binding.layoutChoice3,
