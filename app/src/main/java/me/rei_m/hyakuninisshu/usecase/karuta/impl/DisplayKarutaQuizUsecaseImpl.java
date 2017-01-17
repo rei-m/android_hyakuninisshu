@@ -34,14 +34,15 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
                                          @NonNull KarutaStyle bottomPhraseStyle) {
 
         return karutaQuizRepository.pop().flatMap(karutaQuiz -> {
-
             KarutaQuizContents quizContents = karutaQuiz.start(new Date());
-
-            Single<List<Karuta>> choiceObservable = Observable.fromIterable(quizContents.choiceList)
+            return karutaQuizRepository.store(karutaQuiz)
+                    .toSingleDefault(new Pair<>(karutaQuiz.getIdentifier(), quizContents));
+        }).flatMap(pair -> {
+            Single<List<Karuta>> choiceObservable = Observable.fromIterable(pair.second.choiceList)
                     .flatMapSingle(karutaRepository::resolve)
                     .toList();
 
-            Single<Karuta> collectObservable = karutaRepository.resolve(quizContents.collectId);
+            Single<Karuta> collectObservable = karutaRepository.resolve(pair.second.collectId);
 
             Single<Pair<Integer, Integer>> countObservable = karutaQuizRepository.countQuizByAnswered();
 
@@ -84,7 +85,7 @@ public class DisplayKarutaQuizUsecaseImpl implements DisplayKarutaQuizUsecase {
                     choiceFourthViewModel = new QuizViewModel.QuizChoiceViewModel(choiceFourth.getFourth().getKana(), choiceFourth.getFifth().getKana());
                 }
 
-                return new QuizViewModel(karutaQuiz.getIdentifier().getValue(),
+                return new QuizViewModel(pair.first.getValue(),
                         firstPhrase,
                         secondPhrase,
                         thirdPhrase,
