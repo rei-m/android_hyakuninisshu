@@ -28,8 +28,8 @@ public class KarutaDomainModule {
 
     @Provides
     @ForApplication
-    KarutaQuizRepository provideKarutaQuizRepository() {
-        return new KarutaQuizRepositoryImpl();
+    KarutaQuizRepository provideKarutaQuizRepository(OrmaDatabase orma) {
+        return new KarutaQuizRepositoryImpl(orma);
     }
 
     @Provides

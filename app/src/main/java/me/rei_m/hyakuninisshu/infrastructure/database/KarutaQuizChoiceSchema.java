@@ -16,4 +16,7 @@ public class KarutaQuizChoiceSchema {
 
     @Column
     public long karutaId;
+
+    @Column(indexed = true)
+    public long orderNo;
 }

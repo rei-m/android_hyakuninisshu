@@ -26,8 +26,8 @@ public class AnswerKarutaQuizUsecaseImpl implements AnswerKarutaQuizUsecase {
             @Override
             public SingleSource<Boolean> apply(KarutaQuiz karutaQuiz) {
                 karutaQuiz.verify(choiceNo, new Date());
-                karutaQuizRepository.store(karutaQuiz);
-                return Single.just(karutaQuiz.getResult().isCollect);
+                return karutaQuizRepository.store(karutaQuiz)
+                        .toSingleDefault(karutaQuiz.getResult().isCollect);
             }
         });
     }
