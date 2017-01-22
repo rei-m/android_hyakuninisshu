@@ -1,40 +1,16 @@
 package me.rei_m.hyakuninisshu.domain.karuta.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import com.github.gfx.android.orma.SingleAssociation;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
-import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizChoiceSchema;
-import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizSchema;
 
 public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier> {
 
-    public static KarutaQuiz create(@NonNull KarutaQuizSchema karutaQuizSchema,
-                                    @NonNull List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList) {
-        KarutaQuizIdentifier karutaQuizIdentifier = new KarutaQuizIdentifier(karutaQuizSchema.quizId);
-        List<KarutaIdentifier> choiceList = new ArrayList<>();
-        for (KarutaQuizChoiceSchema karutaQuizChoiceSchema : karutaQuizChoiceSchemaList) {
-            choiceList.add(new KarutaIdentifier(karutaQuizChoiceSchema.karutaId));
-        }
-        KarutaIdentifier collectKarutaIdentifier = new KarutaIdentifier(karutaQuizSchema.collectId);
-        KarutaQuiz karutaQuiz = new KarutaQuiz(karutaQuizIdentifier,
-                choiceList,
-                collectKarutaIdentifier);
-        karutaQuiz.startDate = karutaQuizSchema.startDate;
-        if (0 < karutaQuizSchema.answerTime) {
-            karutaQuiz.result = new KarutaQuizResult(collectKarutaIdentifier,
-                    karutaQuizSchema.isCollect,
-                    karutaQuizSchema.answerTime);
-        }
-        return karutaQuiz;
-    }
-
-    private final KarutaQuizContents contents;
+    public final KarutaQuizContents contents;
 
     private Date startDate;
 
@@ -44,7 +20,26 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
                       @NonNull List<KarutaIdentifier> choiceList,
                       @NonNull KarutaIdentifier collectId) {
         super(identifier);
-        contents = new KarutaQuizContents(choiceList, collectId);
+        this.contents = new KarutaQuizContents(choiceList, collectId);
+    }
+
+    public KarutaQuiz(@NonNull KarutaQuizIdentifier identifier,
+                      @NonNull List<KarutaIdentifier> choiceList,
+                      @NonNull KarutaIdentifier collectId,
+                      @Nullable Date startDate,
+                      long answerTime,
+                      boolean isCollect) {
+        this(identifier, choiceList, collectId);
+        this.startDate = startDate;
+        if (0 < answerTime) {
+            this.result = new KarutaQuizResult(collectId,
+                    isCollect,
+                    answerTime);
+        }
+    }
+
+    public Date getStartDate() {
+        return startDate;
     }
 
     public KarutaQuizResult getResult() {
@@ -64,35 +59,6 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         boolean isCollect = contents.collectId.equals(selectedId);
         long answerTime = answerDate.getTime() - startDate.getTime();
         this.result = new KarutaQuizResult(contents.collectId, isCollect, answerTime);
-    }
-
-    // TODO: Domain層の作りを見直す。EntityがOrmaObjectを持つ形にする.
-    public KarutaQuizSchema toSchema() {
-
-        KarutaQuizSchema karutaQuizSchema = new KarutaQuizSchema();
-        karutaQuizSchema.quizId = getIdentifier().getValue();
-        karutaQuizSchema.collectId = contents.collectId.getValue();
-        karutaQuizSchema.startDate = startDate;
-        if (result != null) {
-            karutaQuizSchema.answerTime = result.answerTime;
-            karutaQuizSchema.isCollect = result.isCollect;
-        } else {
-            karutaQuizSchema.answerTime = 0;
-            karutaQuizSchema.isCollect = false;
-        }
-        return karutaQuizSchema;
-    }
-
-    public List<KarutaQuizChoiceSchema> toSchema(@NonNull KarutaQuizSchema karutaQuizSchema) {
-        List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList = new ArrayList<>();
-        for (KarutaIdentifier karutaIdentifier : contents.choiceList) {
-            KarutaQuizChoiceSchema karutaQuizChoiceSchema = new KarutaQuizChoiceSchema();
-            karutaQuizChoiceSchema.karutaQuizSchema = SingleAssociation.just(karutaQuizSchema);
-            karutaQuizChoiceSchema.karutaId = karutaIdentifier.getValue();
-            karutaQuizChoiceSchema.orderNo = contents.choiceList.indexOf(karutaIdentifier);
-            karutaQuizChoiceSchemaList.add(karutaQuizChoiceSchema);
-        }
-        return karutaQuizChoiceSchemaList;
     }
 
     @Override

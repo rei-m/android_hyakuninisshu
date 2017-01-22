@@ -11,11 +11,11 @@ public class KarutaExam extends AbstractEntity<KarutaExam, KarutaExamIdentifier>
 
     public static final int MAX_HISTORY_COUNT = 10;
 
-    public KarutaExam(@NonNull KarutaExamIdentifier identifier,
-                      @NonNull Date tookExamDate,
-                      int totalQuizCount,
-                      float averageAnswerTime,
-                      @NonNull List<KarutaIdentifier> wrongKarutaIdList) {
+    KarutaExam(@NonNull KarutaExamIdentifier identifier,
+               @NonNull Date tookExamDate,
+               int totalQuizCount,
+               float averageAnswerTime,
+               @NonNull List<KarutaIdentifier> wrongKarutaIdList) {
         super(identifier);
         this.tookExamDate = tookExamDate;
         this.totalQuizCount = totalQuizCount;

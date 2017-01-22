@@ -12,9 +12,9 @@ public class KarutaQuizResult implements ValueObject {
 
     public final long answerTime;
 
-    public KarutaQuizResult(@NonNull KarutaIdentifier collectKarutaId,
-                            boolean isCollect,
-                            long answerTime) {
+    KarutaQuizResult(@NonNull KarutaIdentifier collectKarutaId,
+                     boolean isCollect,
+                     long answerTime) {
         this.collectKarutaId = collectKarutaId;
         this.isCollect = isCollect;
         this.answerTime = answerTime;
