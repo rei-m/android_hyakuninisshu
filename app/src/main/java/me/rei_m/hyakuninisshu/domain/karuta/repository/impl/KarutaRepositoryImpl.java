@@ -85,6 +85,22 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
+    public Single<List<Karuta>> asEntityList(@Nullable String color) {
+
+        KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector();
+
+        if (color != null) {
+            selector = selector.where("color = ?", color);
+        }
+
+        return selector
+                .orderByIdAsc()
+                .executeAsObservable()
+                .map(KarutaFactory::create)
+                .toList();
+    }
+
+    @Override
     public Single<List<Karuta>> asEntityList(@NonNull KarutaIdentifier fromIdentifier,
                                              @NonNull KarutaIdentifier toIdentifier,
                                              @Nullable String color) {

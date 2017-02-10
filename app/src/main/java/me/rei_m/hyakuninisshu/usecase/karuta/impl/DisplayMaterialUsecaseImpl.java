@@ -2,6 +2,7 @@ package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -25,27 +26,26 @@ public class DisplayMaterialUsecaseImpl implements DisplayMaterialUsecase {
     }
 
     @Override
-    public Single<MaterialViewModel> execute() {
-        return karutaRepository.asEntityList().flatMap(karutaList -> Observable.fromIterable(karutaList)
-                .map(karuta -> {
+    public Single<MaterialViewModel> execute(@Nullable String color) {
+        return karutaRepository.asEntityList(color).flatMap(karutaList -> Observable.fromIterable(karutaList).map(karuta -> {
 
-                    String topPhrase = karuta.getTopPhrase().getFirst().getKanji() + SPACE +
-                            karuta.getTopPhrase().getSecond().getKanji() + SPACE +
-                            karuta.getTopPhrase().getThird().getKanji();
+            String topPhrase = karuta.getTopPhrase().getFirst().getKanji() + SPACE +
+                    karuta.getTopPhrase().getSecond().getKanji() + SPACE +
+                    karuta.getTopPhrase().getThird().getKanji();
 
-                    String bottomPhrase = karuta.getBottomPhrase().getFourth().getKanji() + SPACE +
-                            karuta.getBottomPhrase().getFifth().getKanji();
+            String bottomPhrase = karuta.getBottomPhrase().getFourth().getKanji() + SPACE +
+                    karuta.getBottomPhrase().getFifth().getKanji();
 
-                    int karutaNo = (int) karuta.getIdentifier().getValue();
+            int karutaNo = (int) karuta.getIdentifier().getValue();
 
-                    return new MaterialViewModel.KarutaViewModel(
-                            karutaNo,
-                            KarutaDisplayUtil.convertNumberToString(context, karutaNo),
-                            karuta.getImageNo(),
-                            karuta.getCreator(),
-                            topPhrase,
-                            bottomPhrase);
-                })
+            return new MaterialViewModel.KarutaViewModel(
+                    karutaNo,
+                    KarutaDisplayUtil.convertNumberToString(context, karutaNo),
+                    karuta.getImageNo(),
+                    karuta.getCreator(),
+                    topPhrase,
+                    bottomPhrase);
+        })
                 .toList()
                 .map(MaterialViewModel::new));
     }
