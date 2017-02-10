@@ -22,12 +22,17 @@ public class KarutaFactory {
         TopPhrase topPhrase = new TopPhrase(identifier, firstPart, secondPart, thirdPart);
         BottomPhrase bottomPhrase = new BottomPhrase(identifier, fourthPart, fifthPart);
 
+        String translation = (schema.translation != null) ? schema.translation : "";
+
+        String color = (schema.color != null) ? schema.color : "";
+
         return new Karuta(identifier,
                 schema.creator,
                 topPhrase,
                 bottomPhrase,
                 schema.kimariji,
                 schema.imageNo,
-                schema.translation);
+                translation,
+                color);
     }
 }

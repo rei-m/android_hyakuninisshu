@@ -18,13 +18,16 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     private final String translation;
 
+    private final String color;
+
     Karuta(@NonNull KarutaIdentifier identifier,
            @NonNull String creator,
            @NonNull TopPhrase topPhrase,
            @NonNull BottomPhrase bottomPhrase,
            int kimariji,
            @NonNull String imageNo,
-           @NonNull String translation) {
+           @NonNull String translation,
+           @NonNull String color) {
         super(identifier);
         this.creator = creator;
         this.topPhrase = topPhrase;
@@ -32,6 +35,7 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         this.kimariji = kimariji;
         this.imageNo = imageNo;
         this.translation = translation;
+        this.color = color;
     }
 
     public String getCreator() {
@@ -56,6 +60,10 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     public String getTranslation() {
         return translation;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public boolean isCollect(BottomPhrase bottomPhrase) {

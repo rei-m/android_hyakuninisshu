@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
@@ -14,6 +15,7 @@ public interface TrainingMenuContact {
 
         void onClickStartTraining(TrainingRange trainingRange,
                                   Kimariji kimariji,
+                                  Color color,
                                   KarutaStyle topPhraseStyle,
                                   KarutaStyle bottomPhraseStyle);
     }
@@ -22,6 +24,7 @@ public interface TrainingMenuContact {
 
         void navigateToTraining(TrainingRange trainingRange,
                                 Kimariji kimariji,
+                                Color color,
                                 KarutaStyle topPhraseStyle,
                                 KarutaStyle bottomPhraseStyle);
     }
