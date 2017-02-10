@@ -32,6 +32,7 @@
     <string name="confirm_result">結果を見る</string>
     <string name="training_setting">出題設定</string>
     <string name="range_question">出題範囲</string>
+    <string name="color">五色</string>
     <string name="kimariji">決まり字</string>
     <string name="karuta_number">%1$s番</string>
     <string name="seconds">%1$s秒</string>
@@ -79,6 +80,13 @@
 
     <string name="display_style_kana">すべて仮名で表示</string>
     <string name="display_style_kanji">漢字と仮名で表示</string>
+
+    <string name="color_not_select">指定しない</string>
+    <string name="color_blue">青色</string>
+    <string name="color_pink">桃色</string>
+    <string name="color_yellow">黄色</string>
+    <string name="color_green">緑色</string>
+    <string name="color_orange">橙色</string>
 
     <string name="text_exam_about">全百首から出題されます。出題順は毎回変わります。</string>
 

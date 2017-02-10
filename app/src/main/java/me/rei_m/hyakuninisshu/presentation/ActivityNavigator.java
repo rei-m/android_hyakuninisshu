@@ -8,6 +8,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
@@ -23,11 +24,13 @@ public class ActivityNavigator {
     public void navigateToTrainingMaster(@NonNull Activity activity,
                                          @NonNull TrainingRange trainingRange,
                                          @NonNull Kimariji kimariji,
+                                         @NonNull Color color,
                                          @NonNull KarutaStyle topPhraseStyle,
                                          @NonNull KarutaStyle bottomPhraseStyle) {
         Intent intentToLaunch = TrainingMasterActivity.createIntent(activity,
                 trainingRange,
                 kimariji,
+                color,
                 topPhraseStyle,
                 bottomPhraseStyle);
         activity.startActivity(intentToLaunch);

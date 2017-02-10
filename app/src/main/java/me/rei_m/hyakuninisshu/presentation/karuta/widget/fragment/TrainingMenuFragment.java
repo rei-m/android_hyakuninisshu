@@ -12,6 +12,7 @@ import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
@@ -62,11 +63,15 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
         SpinnerAdapter karutaStyleAdapter = SpinnerAdapter.newInstance(context, KarutaStyle.values(), false);
         binding.setKarutaStyleAdapter(karutaStyleAdapter);
 
+        SpinnerAdapter colorAdapter = SpinnerAdapter.newInstance(context, Color.values(), false);
+        binding.setColorAdapter(colorAdapter);
+
         binding.setPresenter(presenter);
         binding.setViewModel(new TrainingMenuViewModel(TrainingRange.ALL,
                 Kimariji.ALL,
                 KarutaStyle.KANJI,
-                KarutaStyle.KANA));
+                KarutaStyle.KANA,
+                Color.ALL));
 
         return binding.getRoot();
     }
@@ -93,11 +98,13 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     @Override
     public void navigateToTraining(TrainingRange trainingRange,
                                    Kimariji kimariji,
+                                   Color color,
                                    KarutaStyle topPhraseStyle,
                                    KarutaStyle bottomPhraseStyle) {
         navigator.navigateToTrainingMaster(getActivity(),
                 trainingRange,
                 kimariji,
+                color,
                 topPhraseStyle,
                 bottomPhraseStyle);
     }

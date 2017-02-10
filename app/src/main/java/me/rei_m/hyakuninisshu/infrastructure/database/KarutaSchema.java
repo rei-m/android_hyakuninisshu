@@ -21,7 +21,7 @@ public class KarutaSchema {
     @Column
     @Json(name = "creator")
     public String creator;
-    
+
     @Column
     @Json(name = "first_kana")
     public String firstKana;
@@ -75,6 +75,16 @@ public class KarutaSchema {
     @Nullable
     public String translation;
 
+    @Column
+    @Json(name = "color")
+    @Nullable
+    public String color;
+
+    @Column
+    @Json(name = "color_no")
+    @Nullable
+    public int colorNo;
+
     @Override
     public String toString() {
         return "KarutaSchema{" +
@@ -93,6 +103,8 @@ public class KarutaSchema {
                 ", kimariji=" + kimariji +
                 ", imageNo='" + imageNo + '\'' +
                 ", translation='" + translation + '\'' +
+                ", color='" + color + '\'' +
+                ", colorNo=" + colorNo +
                 '}';
     }
 }
