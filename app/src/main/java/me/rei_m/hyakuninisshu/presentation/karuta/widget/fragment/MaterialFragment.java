@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,6 +16,7 @@ import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.MaterialViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.MaterialFragmentComponent;
@@ -41,6 +45,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         presenter.onCreate(this);
     }
 
@@ -65,6 +70,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDestroyView();
         MaterialKarutaListAdapter adapter = (MaterialKarutaListAdapter) binding.recyclerKarutaList.getAdapter();
         adapter.setListener(null);
         binding = null;
@@ -81,7 +87,20 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
         super.onPause();
         presenter.onPause();
     }
-    
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        for (Color color : Color.values()) {
+            MenuItem menuItem = menu.add(Menu.NONE, color.ordinal(), Menu.NONE, color.getLabel(getResources()));
+            menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menuItem.setOnMenuItemClickListener(menuColor -> {
+                presenter.onOptionItemSelected(color);
+                return false;
+            });
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
@@ -94,6 +113,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
         MaterialKarutaListAdapter adapter = (MaterialKarutaListAdapter) binding.recyclerKarutaList.getAdapter();
         adapter.setKarutaViewModelList(viewModel.karutaList);
         adapter.notifyDataSetChanged();
+        binding.recyclerKarutaList.scrollToPosition(0);
     }
 
     @Override

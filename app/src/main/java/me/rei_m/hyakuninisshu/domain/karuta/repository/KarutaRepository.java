@@ -16,6 +16,8 @@ public interface KarutaRepository {
 
     Single<List<Karuta>> asEntityList();
 
+    Single<List<Karuta>> asEntityList(@Nullable String color);
+
     Single<List<Karuta>> asEntityList(@NonNull KarutaIdentifier fromIdentifier,
                                       @NonNull KarutaIdentifier toIdentifier,
                                       @Nullable String color);
