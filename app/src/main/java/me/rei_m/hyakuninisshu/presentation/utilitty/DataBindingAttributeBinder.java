@@ -139,8 +139,12 @@ public class DataBindingAttributeBinder {
 
         int finallyKimariji = 0;
         for (int i = 0; i < topPhrase.length() - 1; i++) {
-            if (!topPhrase.substring(i, i + 1).equals(SPACE) && kimariji < i) {
-                break;
+            if (topPhrase.substring(i, i + 1).equals(SPACE)) {
+                finallyKimariji++;
+            } else {
+                if (kimariji < i) {
+                    break;
+                }
             }
             finallyKimariji++;
         }
