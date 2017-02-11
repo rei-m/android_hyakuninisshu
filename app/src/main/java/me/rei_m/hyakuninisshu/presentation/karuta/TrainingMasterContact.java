@@ -4,7 +4,8 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 
 public interface TrainingMasterContact {
 
@@ -16,7 +17,8 @@ public interface TrainingMasterContact {
 
     interface Actions {
         void onCreate(@NonNull View view,
-                      @NonNull TrainingRange trainingRange,
+                      @NonNull TrainingRangeFrom trainingRangeFrom,
+                      @NonNull TrainingRangeTo trainingRangeTo,
                       @NonNull Kimariji kimariji,
                       @NonNull Color color);
 
