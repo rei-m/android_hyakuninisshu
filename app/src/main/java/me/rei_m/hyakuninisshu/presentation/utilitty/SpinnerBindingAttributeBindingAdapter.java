@@ -11,7 +11,8 @@ import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.SpinnerItem;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 
 public class SpinnerBindingAttributeBindingAdapter {
@@ -46,14 +47,26 @@ public class SpinnerBindingAttributeBindingAdapter {
 
     @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
     public static void bindTrainingRangeData(Spinner spinner,
-                                             TrainingRange newSelectedValue,
+                                             TrainingRangeFrom newSelectedValue,
                                              final InverseBindingListener newTextAttrChanged) {
         bindSpinner(spinner, newSelectedValue, newTextAttrChanged);
     }
 
     @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-    public static TrainingRange captureSelectedTrainingRange(Spinner spinner) {
-        return (TrainingRange) spinner.getSelectedItem();
+    public static TrainingRangeFrom captureSelectedTrainingRangeFrom(Spinner spinner) {
+        return (TrainingRangeFrom) spinner.getSelectedItem();
+    }
+
+    @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
+    public static void bindTrainingRangeData(Spinner spinner,
+                                             TrainingRangeTo newSelectedValue,
+                                             final InverseBindingListener newTextAttrChanged) {
+        bindSpinner(spinner, newSelectedValue, newTextAttrChanged);
+    }
+
+    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    public static TrainingRangeTo captureSelectedTrainingRangeTo(Spinner spinner) {
+        return (TrainingRangeTo) spinner.getSelectedItem();
     }
 
     @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
