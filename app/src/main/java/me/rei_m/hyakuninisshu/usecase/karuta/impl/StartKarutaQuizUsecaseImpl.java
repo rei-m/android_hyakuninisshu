@@ -1,6 +1,7 @@
 package me.rei_m.hyakuninisshu.usecase.karuta.impl;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +35,14 @@ public class StartKarutaQuizUsecaseImpl implements StartKarutaQuizUsecase {
     @Override
     public Completable execute(int fromKarutaId,
                                int toKarutaId,
-                               int kimarijiPosition) {
+                               int kimarijiPosition,
+                               @Nullable String color) {
 
         int quizSize = toKarutaId - fromKarutaId + 1;
 
         Single<List<Karuta>> karutaListObservable = (kimarijiPosition == 0) ?
-                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId)) :
-                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), kimarijiPosition);
+                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), color) :
+                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), color, kimarijiPosition);
 
         return karutaListObservable.map(karutaList -> {
             List<KarutaIdentifier> correctKarutaIdList = new ArrayList<>();

@@ -10,7 +10,7 @@ public class KarutaQuizContents implements ValueObject {
 
     public final KarutaIdentifier collectId;
 
-    public KarutaQuizContents(List<KarutaIdentifier> choiceList, KarutaIdentifier collectId) {
+    KarutaQuizContents(List<KarutaIdentifier> choiceList, KarutaIdentifier collectId) {
         this.choiceList = choiceList;
         this.collectId = collectId;
     }

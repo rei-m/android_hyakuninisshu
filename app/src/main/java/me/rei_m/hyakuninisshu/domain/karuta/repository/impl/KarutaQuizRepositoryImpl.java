@@ -4,17 +4,21 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
 import com.github.gfx.android.orma.Inserter;
+import com.github.gfx.android.orma.SingleAssociation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
+import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizChoiceSchema;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizSchema;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizSchema_Updater;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
 public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
@@ -28,6 +32,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     @Override
     public Completable initialize(List<KarutaQuiz> karutaQuizList) {
         return orma.transactionAsCompletable(() -> {
+
             KarutaQuizSchema.relation(orma).deleter().execute();
             KarutaQuizChoiceSchema.relation(orma).deleter().execute();
 
@@ -35,9 +40,18 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
             Inserter<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaInserter = KarutaQuizChoiceSchema.relation(orma).inserter();
 
             for (KarutaQuiz karutaQuiz : karutaQuizList) {
-                KarutaQuizSchema karutaQuizSchema = karutaQuiz.toSchema();
+                KarutaQuizSchema karutaQuizSchema = new KarutaQuizSchema();
+                karutaQuizSchema.quizId = karutaQuiz.getIdentifier().getValue();
+                karutaQuizSchema.collectId = karutaQuiz.contents.collectId.getValue();
                 karutaQuizSchema.id = karutaQuizSchemaInserter.execute(karutaQuizSchema);
-                karutaQuizChoiceSchemaInserter.executeAll(karutaQuiz.toSchema(karutaQuizSchema));
+                List<KarutaIdentifier> choiceList = karutaQuiz.contents.choiceList;
+                for (KarutaIdentifier karutaIdentifier : choiceList) {
+                    KarutaQuizChoiceSchema karutaQuizChoiceSchema = new KarutaQuizChoiceSchema();
+                    karutaQuizChoiceSchema.karutaQuizSchema = SingleAssociation.just(karutaQuizSchema);
+                    karutaQuizChoiceSchema.karutaId = karutaIdentifier.getValue();
+                    karutaQuizChoiceSchema.orderNo = choiceList.indexOf(karutaIdentifier);
+                    karutaQuizChoiceSchemaInserter.execute(karutaQuizChoiceSchema);
+                }
             }
         });
     }
@@ -50,12 +64,15 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                 .executeAsObservable()
                 .firstOrError()
                 .map(karutaQuizSchema -> {
-                    List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList = new ArrayList<>();
+                    List<KarutaIdentifier> karutaIdentifierList = new ArrayList<>();
                     karutaQuizSchema.getChoices(orma)
                             .selector()
                             .executeAsObservable()
-                            .subscribe(karutaQuizChoiceSchemaList::add);
-                    return KarutaQuiz.create(karutaQuizSchema, karutaQuizChoiceSchemaList);
+                            .map(karutaQuizChoiceSchema -> new KarutaIdentifier(karutaQuizChoiceSchema.karutaId))
+                            .subscribe(karutaIdentifierList::add);
+                    return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                            karutaIdentifierList,
+                            new KarutaIdentifier(karutaQuizSchema.collectId));
                 });
     }
 
@@ -66,25 +83,22 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                 .selector()
                 .executeAsObservable()
                 .firstOrError()
-                .map(karutaQuizSchema -> {
-                    List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList = new ArrayList<>();
-                    karutaQuizSchema.getChoices(orma)
-                            .selector()
-                            .executeAsObservable()
-                            .subscribe(karutaQuizChoiceSchemaList::add);
-                    return KarutaQuiz.create(karutaQuizSchema, karutaQuizChoiceSchemaList);
-                });
+                .map(funcConvertEntity);
     }
 
     @Override
     public Completable store(KarutaQuiz karutaQuiz) {
         return orma.transactionAsCompletable(() -> {
-            KarutaQuizSchema karutaQuizSchema = karutaQuiz.toSchema();
-            KarutaQuizSchema.relation(orma).quizIdEq(karutaQuizSchema.quizId).updater()
-                    .startDate(karutaQuizSchema.startDate)
-                    .isCollect(karutaQuizSchema.isCollect)
-                    .answerTime(karutaQuizSchema.answerTime)
-                    .execute();
+            KarutaQuizSchema_Updater updater = KarutaQuizSchema.relation(orma)
+                    .quizIdEq(karutaQuiz.getIdentifier().getValue())
+                    .updater();
+
+            updater.startDate(karutaQuiz.getStartDate());
+            if (karutaQuiz.getResult() != null) {
+                updater.isCollect(karutaQuiz.getResult().isCollect)
+                        .answerTime(karutaQuiz.getResult().answerTime);
+            }
+            updater.execute();
         });
     }
 
@@ -102,14 +116,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
         return KarutaQuizSchema.relation(orma)
                 .selector()
                 .executeAsObservable()
-                .map(karutaQuizSchema -> {
-                    List<KarutaQuizChoiceSchema> karutaQuizChoiceSchemaList = new ArrayList<>();
-                    karutaQuizSchema.getChoices(orma)
-                            .selector()
-                            .executeAsObservable()
-                            .subscribe(karutaQuizChoiceSchemaList::add);
-                    return KarutaQuiz.create(karutaQuizSchema, karutaQuizChoiceSchemaList);
-                }).toList();
+                .map(funcConvertEntity).toList();
     }
 
     @Override
@@ -128,4 +135,22 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
         return Single.zip(totalCountSingle, answeredCountSingle, (totalCount, answeredCount) ->
                 new Pair<>(totalCount.intValue(), answeredCount.intValue()));
     }
+
+    private Function<KarutaQuizSchema, KarutaQuiz> funcConvertEntity = new Function<KarutaQuizSchema, KarutaQuiz>() {
+        @Override
+        public KarutaQuiz apply(KarutaQuizSchema karutaQuizSchema) {
+            List<KarutaIdentifier> karutaIdentifierList = new ArrayList<>();
+            karutaQuizSchema.getChoices(orma)
+                    .selector()
+                    .executeAsObservable()
+                    .map(karutaQuizChoiceSchema -> new KarutaIdentifier(karutaQuizChoiceSchema.karutaId))
+                    .subscribe(karutaIdentifierList::add);
+            return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                    karutaIdentifierList,
+                    new KarutaIdentifier(karutaQuizSchema.collectId),
+                    karutaQuizSchema.startDate,
+                    karutaQuizSchema.answerTime,
+                    karutaQuizSchema.isCollect);
+        }
+    };
 }

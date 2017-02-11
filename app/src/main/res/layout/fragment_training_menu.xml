@@ -7,7 +7,15 @@
     <data>
 
         <variable
-            name="trainingRangeAdapter"
+            name="trainingRangeFromAdapter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+
+        <variable
+            name="trainingRangeToAdapter"
+            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+
+        <variable
+            name="colorAdapter"
             type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
 
         <variable
@@ -54,13 +62,36 @@
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/range_question" />
 
-            <Spinner
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                app:selectedValue="@={viewModel.trainingRange}"
-                app:spinnerAdapter="@{trainingRangeAdapter}" />
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:selectedValue="@={viewModel.trainingRangeFrom}"
+                    app:spinnerAdapter="@{trainingRangeFromAdapter}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/margin_m"
+                    android:layout_marginRight="@dimen/margin_m"
+                    android:text="@string/training_range_separate" />
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:selectedValue="@={viewModel.trainingRangeTo}"
+                    app:spinnerAdapter="@{trainingRangeToAdapter}" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/text_title_kimariji"
@@ -79,6 +110,23 @@
                 android:layout_marginStart="@dimen/margin_m"
                 app:selectedValue="@={viewModel.kimariji}"
                 app:spinnerAdapter="@{kimarijiAdapter}" />
+
+            <TextView
+                android:id="@+id/text_title_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/color" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                app:selectedValue="@={viewModel.color}"
+                app:spinnerAdapter="@{colorAdapter}" />
 
             <TextView
                 android:id="@+id/text_title_top_phrase_style"
@@ -123,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_l"
-                android:onClick="@{() -> presenter.onClickStartTraining(viewModel.getTrainingRange().get(), viewModel.getKimariji().get(), viewModel.getTopPhraseStyle().get(), viewModel.getBottomPhraseStyle().get())}"
+                android:onClick="@{() -> presenter.onClickStartTraining(viewModel.getTrainingRangeFrom().get(), viewModel.getTrainingRangeTo().get(), viewModel.getKimariji().get(), viewModel.getColor().get(), viewModel.getTopPhraseStyle().get(), viewModel.getBottomPhraseStyle().get())}"
                 android:text="@string/start_training" />
 
             <View

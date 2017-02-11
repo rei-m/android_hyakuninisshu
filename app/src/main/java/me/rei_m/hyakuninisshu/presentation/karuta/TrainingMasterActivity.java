@@ -19,9 +19,11 @@ import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
@@ -36,23 +38,31 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
         AlertDialogFragment.OnClickPositiveButtonListener {
 
     public static Intent createIntent(@NonNull Context context,
-                                      @NonNull TrainingRange trainingRange,
+                                      @NonNull TrainingRangeFrom trainingRangeFrom,
+                                      @NonNull TrainingRangeTo trainingRangeTo,
                                       @NonNull Kimariji kimariji,
+                                      @NonNull Color color,
                                       @NonNull KarutaStyle topPhraseStyle,
                                       @NonNull KarutaStyle bottomPhraseStyle) {
         Intent intent = new Intent(context, TrainingMasterActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARG_TRAINING_RANGE, trainingRange);
+        bundle.putSerializable(ARG_TRAINING_RANGE_FROM, trainingRangeFrom);
+        bundle.putSerializable(ARG_TRAINING_RANGE_TO, trainingRangeTo);
         bundle.putSerializable(ARG_KIMARIJI, kimariji);
+        bundle.putSerializable(ARG_COLOR, color);
         bundle.putSerializable(ARG_TOP_PHRASE_STYLE, topPhraseStyle);
         bundle.putSerializable(ARG_BOTTOM_PHRASE_STYLE, bottomPhraseStyle);
         intent.putExtras(bundle);
         return intent;
     }
 
-    private static final String ARG_TRAINING_RANGE = "trainingRange";
+    private static final String ARG_TRAINING_RANGE_FROM = "trainingRangeFrom";
+
+    private static final String ARG_TRAINING_RANGE_TO = "trainingRangeTo";
 
     private static final String ARG_KIMARIJI = "kimarij";
+
+    private static final String ARG_COLOR = "color";
 
     private static final String ARG_TOP_PHRASE_STYLE = "topPhraseStyle";
 
@@ -75,19 +85,24 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
 
         setSupportActionBar(binding.toolbar);
 
-        TrainingRange trainingRange = (TrainingRange) getIntent().getSerializableExtra(ARG_TRAINING_RANGE);
+        TrainingRangeFrom trainingRangeFrom = (TrainingRangeFrom) getIntent().getSerializableExtra(ARG_TRAINING_RANGE_FROM);
+        TrainingRangeTo trainingRangeTo = (TrainingRangeTo) getIntent().getSerializableExtra(ARG_TRAINING_RANGE_TO);
         Kimariji kimariji = (Kimariji) getIntent().getSerializableExtra(ARG_KIMARIJI);
+        Color color = (Color) getIntent().getSerializableExtra(ARG_COLOR);
 
         if (savedInstanceState == null) {
             presenter.onCreate(this,
-                    trainingRange,
-                    kimariji);
+                    trainingRangeFrom,
+                    trainingRangeTo,
+                    kimariji,
+                    color);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        presenter.onDestroy();
         binding = null;
         component = null;
     }

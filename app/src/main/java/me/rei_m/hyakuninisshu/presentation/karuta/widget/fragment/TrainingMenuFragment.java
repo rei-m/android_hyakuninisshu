@@ -2,19 +2,24 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
 import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRange;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.TrainingMenuFragmentComponent;
@@ -53,8 +58,11 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
 
         Context context = getActivity().getApplicationContext();
 
-        SpinnerAdapter trainingRangeAdapter = SpinnerAdapter.newInstance(context, TrainingRange.values(), false);
-        binding.setTrainingRangeAdapter(trainingRangeAdapter);
+        SpinnerAdapter trainingRangeFromAdapter = SpinnerAdapter.newInstance(context, TrainingRangeFrom.values(), false);
+        binding.setTrainingRangeFromAdapter(trainingRangeFromAdapter);
+
+        SpinnerAdapter trainingRangeToAdapter = SpinnerAdapter.newInstance(context, TrainingRangeTo.values(), false);
+        binding.setTrainingRangeToAdapter(trainingRangeToAdapter);
 
         SpinnerAdapter kimarijiAdapter = SpinnerAdapter.newInstance(context, Kimariji.values(), false);
         binding.setKimarijiAdapter(kimarijiAdapter);
@@ -62,11 +70,16 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
         SpinnerAdapter karutaStyleAdapter = SpinnerAdapter.newInstance(context, KarutaStyle.values(), false);
         binding.setKarutaStyleAdapter(karutaStyleAdapter);
 
+        SpinnerAdapter colorAdapter = SpinnerAdapter.newInstance(context, Color.values(), false);
+        binding.setColorAdapter(colorAdapter);
+
         binding.setPresenter(presenter);
-        binding.setViewModel(new TrainingMenuViewModel(TrainingRange.ALL,
+        binding.setViewModel(new TrainingMenuViewModel(TrainingRangeFrom.ONE,
+                TrainingRangeTo.ONE_HUNDRED,
                 Kimariji.ALL,
                 KarutaStyle.KANJI,
-                KarutaStyle.KANA));
+                KarutaStyle.KANA,
+                Color.ALL));
 
         return binding.getRoot();
     }
@@ -91,13 +104,22 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     }
 
     @Override
-    public void navigateToTraining(TrainingRange trainingRange,
-                                   Kimariji kimariji,
-                                   KarutaStyle topPhraseStyle,
-                                   KarutaStyle bottomPhraseStyle) {
+    public void showInvalidTrainingRangeMessage() {
+        Snackbar.make(binding.getRoot(), R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void navigateToTraining(@NonNull TrainingRangeFrom trainingRangeFrom,
+                                   @NonNull TrainingRangeTo trainingRangeTo,
+                                   @NonNull Kimariji kimariji,
+                                   @NonNull Color color,
+                                   @NonNull KarutaStyle topPhraseStyle,
+                                   @NonNull KarutaStyle bottomPhraseStyle) {
         navigator.navigateToTrainingMaster(getActivity(),
-                trainingRange,
+                trainingRangeFrom,
+                trainingRangeTo,
                 kimariji,
+                color,
                 topPhraseStyle,
                 bottomPhraseStyle);
     }

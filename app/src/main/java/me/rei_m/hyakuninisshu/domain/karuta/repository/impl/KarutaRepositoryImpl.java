@@ -3,6 +3,7 @@ package me.rei_m.hyakuninisshu.domain.karuta.repository.impl;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonConstant;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema;
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema_Selector;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
 
 public class KarutaRepositoryImpl implements KarutaRepository {
@@ -83,11 +85,15 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Single<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier) {
-        return KarutaSchema.relation(orma).selector()
-                .idGe(fromIdentifier.getValue())
-                .and()
-                .idLe(toIdentifier.getValue())
+    public Single<List<Karuta>> asEntityList(@Nullable String color) {
+
+        KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector();
+
+        if (color != null) {
+            selector = selector.where("color = ?", color);
+        }
+
+        return selector
                 .orderByIdAsc()
                 .executeAsObservable()
                 .map(KarutaFactory::create)
@@ -95,13 +101,20 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Single<List<Karuta>> asEntityList(KarutaIdentifier fromIdentifier, KarutaIdentifier toIdentifier, int kimariji) {
-        return KarutaSchema.relation(orma).selector()
+    public Single<List<Karuta>> asEntityList(@NonNull KarutaIdentifier fromIdentifier,
+                                             @NonNull KarutaIdentifier toIdentifier,
+                                             @Nullable String color) {
+
+        KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector()
                 .idGe(fromIdentifier.getValue())
                 .and()
-                .idLe(toIdentifier.getValue())
-                .and()
-                .where("kimariji = ?", kimariji)
+                .idLe(toIdentifier.getValue());
+
+        if (color != null) {
+            selector = selector.where("color = ?", color);
+        }
+
+        return selector
                 .orderByIdAsc()
                 .executeAsObservable()
                 .map(KarutaFactory::create)
@@ -109,7 +122,32 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Single<Karuta> resolve(KarutaIdentifier identifier) {
+    public Single<List<Karuta>> asEntityList(@NonNull KarutaIdentifier fromIdentifier,
+                                             @NonNull KarutaIdentifier toIdentifier,
+                                             @Nullable String color,
+                                             int kimariji) {
+
+        KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector()
+                .idGe(fromIdentifier.getValue())
+                .and()
+                .idLe(toIdentifier.getValue())
+                .and()
+                .where("kimariji = ?", kimariji);
+
+        if (color != null) {
+            selector = selector.and().where("color = ?", color);
+        }
+
+
+        return selector
+                .orderByIdAsc()
+                .executeAsObservable()
+                .map(KarutaFactory::create)
+                .toList();
+    }
+
+    @Override
+    public Single<Karuta> resolve(@NonNull KarutaIdentifier identifier) {
         return KarutaSchema.relation(orma).selector()
                 .idEq(identifier.getValue())
                 .executeAsObservable()
