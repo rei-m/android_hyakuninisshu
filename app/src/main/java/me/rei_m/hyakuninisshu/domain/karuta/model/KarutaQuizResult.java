@@ -8,14 +8,18 @@ public class KarutaQuizResult implements ValueObject {
 
     public final KarutaIdentifier collectKarutaId;
 
+    public final int choiceNo;
+
     public final boolean isCollect;
 
     public final long answerTime;
 
     KarutaQuizResult(@NonNull KarutaIdentifier collectKarutaId,
+                     int choiceNo,
                      boolean isCollect,
                      long answerTime) {
         this.collectKarutaId = collectKarutaId;
+        this.choiceNo = choiceNo;
         this.isCollect = isCollect;
         this.answerTime = answerTime;
     }
@@ -25,17 +29,18 @@ public class KarutaQuizResult implements ValueObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        KarutaQuizResult result = (KarutaQuizResult) o;
+        KarutaQuizResult that = (KarutaQuizResult) o;
 
-        return isCollect == result.isCollect &&
-                answerTime == result.answerTime &&
-                collectKarutaId.equals(result.collectKarutaId);
-
+        return choiceNo == that.choiceNo &&
+                isCollect == that.isCollect &&
+                answerTime == that.answerTime &&
+                collectKarutaId.equals(that.collectKarutaId);
     }
 
     @Override
     public int hashCode() {
         int result = collectKarutaId.hashCode();
+        result = 31 * result + choiceNo;
         result = 31 * result + (isCollect ? 1 : 0);
         result = 31 * result + (int) (answerTime ^ (answerTime >>> 32));
         return result;
@@ -45,6 +50,7 @@ public class KarutaQuizResult implements ValueObject {
     public String toString() {
         return "KarutaQuizResult{" +
                 "collectKarutaId=" + collectKarutaId +
+                ", choiceNo=" + choiceNo +
                 ", isCollect=" + isCollect +
                 ", answerTime=" + answerTime +
                 '}';

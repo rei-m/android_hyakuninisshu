@@ -5,6 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.karuta.ExamMasterActivity">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel" />
+
+    </data>
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,11 +51,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:visibility="gone"
                 ads:adSize="SMART_BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id" />
+                ads:adUnitId="@string/banner_ad_unit_id"
+                app:visibilityWithAd="@{viewModel.isVisibleAd}" />
 
         </RelativeLayout>
-        
+
     </android.support.design.widget.CoordinatorLayout>
 </layout>

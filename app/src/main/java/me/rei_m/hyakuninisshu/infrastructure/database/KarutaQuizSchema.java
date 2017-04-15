@@ -29,6 +29,10 @@ public class KarutaQuizSchema {
     public Date startDate;
 
     @Column
+    @Nullable
+    public int choiceNo;
+
+    @Column
     public boolean isCollect;
 
     @Column

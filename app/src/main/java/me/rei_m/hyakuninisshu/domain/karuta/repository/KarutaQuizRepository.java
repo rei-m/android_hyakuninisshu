@@ -22,6 +22,6 @@ public interface KarutaQuizRepository {
     Single<Boolean> existNextQuiz();
 
     Single<List<KarutaQuiz>> asEntityList();
-
+    
     Single<Pair<Integer, Integer>> countQuizByAnswered();
 }

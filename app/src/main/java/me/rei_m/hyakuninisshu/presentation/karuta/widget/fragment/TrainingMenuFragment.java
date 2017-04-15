@@ -2,7 +2,6 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,22 +9,22 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
-import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.TrainingMenuViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.TrainingMenuFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.TrainingMenuFragmentModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragmentViewModel;
 
-public class TrainingMenuFragment extends BaseFragment implements TrainingMenuContact.View {
+public class TrainingMenuFragment extends BaseFragment {
 
     public static final String TAG = "TrainingMenuFragment";
 
@@ -34,21 +33,14 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     }
 
     @Inject
-    TrainingMenuContact.Actions presenter;
-
-    @Inject
-    ActivityNavigator navigator;
+    TrainingMenuFragmentViewModel viewModel;
 
     private FragmentTrainingMenuBinding binding;
 
+    private CompositeDisposable disposable;
+
     public TrainingMenuFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        presenter.onCreate(this);
     }
 
     @Override
@@ -73,13 +65,7 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
         SpinnerAdapter colorAdapter = SpinnerAdapter.newInstance(context, Color.values(), false);
         binding.setColorAdapter(colorAdapter);
 
-        binding.setPresenter(presenter);
-        binding.setViewModel(new TrainingMenuViewModel(TrainingRangeFrom.ONE,
-                TrainingRangeTo.ONE_HUNDRED,
-                Kimariji.ALL,
-                KarutaStyle.KANJI,
-                KarutaStyle.KANA,
-                Color.ALL));
+        binding.setViewModel(viewModel);
 
         return binding.getRoot();
     }
@@ -91,9 +77,35 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.addAll(viewModel.invalidTrainingRangeEvent.subscribe(v -> {
+            Snackbar.make(binding.getRoot(), R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show();
+        }));
+        viewModel.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        viewModel.onStop();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume();
+        viewModel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.onPause();
     }
 
     @Override
@@ -102,28 +114,7 @@ public class TrainingMenuFragment extends BaseFragment implements TrainingMenuCo
         ((HasComponent<Injector>) getActivity()).getComponent()
                 .plus(new TrainingMenuFragmentModule(getContext())).inject(this);
     }
-
-    @Override
-    public void showInvalidTrainingRangeMessage() {
-        Snackbar.make(binding.getRoot(), R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void navigateToTraining(@NonNull TrainingRangeFrom trainingRangeFrom,
-                                   @NonNull TrainingRangeTo trainingRangeTo,
-                                   @NonNull Kimariji kimariji,
-                                   @NonNull Color color,
-                                   @NonNull KarutaStyle topPhraseStyle,
-                                   @NonNull KarutaStyle bottomPhraseStyle) {
-        navigator.navigateToTrainingMaster(getActivity(),
-                trainingRangeFrom,
-                trainingRangeTo,
-                kimariji,
-                color,
-                topPhraseStyle,
-                bottomPhraseStyle);
-    }
-
+    
     public interface Injector {
         TrainingMenuFragmentComponent plus(TrainingMenuFragmentModule fragmentModule);
     }

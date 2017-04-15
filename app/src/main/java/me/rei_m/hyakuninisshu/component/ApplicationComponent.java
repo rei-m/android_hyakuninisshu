@@ -16,30 +16,27 @@ import me.rei_m.hyakuninisshu.presentation.karuta.module.ExamMasterActivityModul
 import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.TrainingExamMasterActivityModule;
+import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
-import me.rei_m.hyakuninisshu.usecase.karuta.module.KarutaUsecaseModule;
-import me.rei_m.hyakuninisshu.usecase.module.UsecaseModule;
 
 @ForApplication
 @Component(modules = {ApplicationModule.class,
         InfrastructureModule.class,
-        KarutaDomainModule.class,
-        UsecaseModule.class,
-        KarutaUsecaseModule.class})
+        KarutaDomainModule.class})
 public interface ApplicationComponent {
 
     void inject(App application);
 
-    SplashActivityComponent plus(SplashActivityModule activityModule);
+    SplashActivityComponent plus(ActivityModule activityModule, SplashActivityModule splashActivityModule);
 
-    EntranceActivityComponent plus(EntranceActivityModule activityModule);
+    EntranceActivityComponent plus(ActivityModule activityModule, EntranceActivityModule entranceActivityModule);
 
-    QuizMasterActivityComponent plus(QuizMasterActivityModule activityModule);
+    QuizMasterActivityComponent plus(ActivityModule activityModule, QuizMasterActivityModule quizMasterActivityModule);
 
-    ExamMasterActivityComponent plus(ExamMasterActivityModule activityModule);
+    ExamMasterActivityComponent plus(ActivityModule activityModule, ExamMasterActivityModule examMasterActivityModule);
 
-    TrainingExamMasterActivityComponent plus(TrainingExamMasterActivityModule activityModule);
+    TrainingExamMasterActivityComponent plus(ActivityModule activityModule, TrainingExamMasterActivityModule trainingExamMasterActivityModule);
 
-    MaterialDetailActivityComponent plus(MaterialDetailActivityModule activityModule);
+    MaterialDetailActivityComponent plus(ActivityModule activityModule, MaterialDetailActivityModule materialDetailActivityModule);
 }

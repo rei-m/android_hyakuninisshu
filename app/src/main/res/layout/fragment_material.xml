@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialContact.Actions" />
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel" />
     </data>
 
     <RelativeLayout
