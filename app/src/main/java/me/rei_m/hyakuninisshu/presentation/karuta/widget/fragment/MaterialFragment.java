@@ -14,15 +14,15 @@ import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
-import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.MaterialViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.MaterialFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.MaterialFragmentModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
 
-public class MaterialFragment extends BaseFragment implements MaterialContact.View {
+public class MaterialFragment extends BaseFragment {
 
     public static final String TAG = "MaterialFragment";
 
@@ -31,10 +31,12 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     }
 
     @Inject
-    ActivityNavigator navigator;
+    Navigator navigator;
 
     @Inject
-    MaterialContact.Actions presenter;
+    MaterialFragmentViewModel viewModel;
+
+    private MaterialFragmentComponent component;
 
     private FragmentMaterialBinding binding;
 
@@ -46,22 +48,19 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        presenter.onCreate(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         navigator = null;
-        presenter = null;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialBinding.inflate(inflater, container, false);
-        binding.setPresenter(presenter);
-        MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter();
-        adapter.setListener(presenter);
+        binding.setViewModel(viewModel);
+        MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter(viewModel.karutaList, component);
         binding.recyclerKarutaList.setAdapter(adapter);
         binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
@@ -70,22 +69,31 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.onDestroyView();
-        MaterialKarutaListAdapter adapter = (MaterialKarutaListAdapter) binding.recyclerKarutaList.getAdapter();
-        adapter.setListener(null);
         binding = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        viewModel.onStop();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume();
+        viewModel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        presenter.onPause();
+        viewModel.onPause();
     }
 
     @Override
@@ -95,7 +103,7 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
             MenuItem menuItem = menu.add(Menu.NONE, color.ordinal(), Menu.NONE, color.getLabel(getResources()));
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             menuItem.setOnMenuItemClickListener(menuColor -> {
-                presenter.onOptionItemSelected(color);
+                viewModel.onOptionItemSelected(color);
                 return false;
             });
         }
@@ -104,21 +112,9 @@ public class MaterialFragment extends BaseFragment implements MaterialContact.Vi
     @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new MaterialFragmentModule(getContext())).inject(this);
-    }
-
-    @Override
-    public void initialize(MaterialViewModel viewModel) {
-        MaterialKarutaListAdapter adapter = (MaterialKarutaListAdapter) binding.recyclerKarutaList.getAdapter();
-        adapter.setKarutaViewModelList(viewModel.karutaList);
-        adapter.notifyDataSetChanged();
-        binding.recyclerKarutaList.scrollToPosition(0);
-    }
-
-    @Override
-    public void navigateToMaterialDetail(int karutaNo) {
-        navigator.navigateToMaterialDetail(getActivity(), karutaNo);
+        component = ((HasComponent<Injector>) getActivity()).getComponent()
+                .plus(new MaterialFragmentModule(getContext()));
+        component.inject(this);
     }
 
     public interface Injector {

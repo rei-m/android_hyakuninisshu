@@ -28,11 +28,13 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
                       @NonNull KarutaIdentifier collectId,
                       @Nullable Date startDate,
                       long answerTime,
+                      int choiceNo,
                       boolean isCollect) {
         this(identifier, choiceList, collectId);
         this.startDate = startDate;
         if (0 < answerTime) {
             this.result = new KarutaQuizResult(collectId,
+                    choiceNo,
                     isCollect,
                     answerTime);
         }
@@ -42,13 +44,17 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         return startDate;
     }
 
+    public KarutaQuizContents getContents() {
+        return contents;
+    }
+
     public KarutaQuizResult getResult() {
         return result;
     }
 
-    public KarutaQuizContents start(@NonNull Date startDate) {
+    public KarutaQuiz start(@NonNull Date startDate) {
         this.startDate = startDate;
-        return contents;
+        return this;
     }
 
     public void verify(int choiceNo, @NonNull Date answerDate) {
@@ -58,7 +64,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         KarutaIdentifier selectedId = contents.choiceList.get(choiceNo - 1);
         boolean isCollect = contents.collectId.equals(selectedId);
         long answerTime = answerDate.getTime() - startDate.getTime();
-        this.result = new KarutaQuizResult(contents.collectId, isCollect, answerTime);
+        this.result = new KarutaQuizResult(contents.collectId, choiceNo, isCollect, answerTime);
     }
 
     @Override

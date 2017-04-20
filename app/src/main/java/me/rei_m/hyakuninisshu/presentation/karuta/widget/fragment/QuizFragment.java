@@ -10,10 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,19 +21,18 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
 import me.rei_m.hyakuninisshu.presentation.manager.DeviceManager;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
 
-public class QuizFragment extends BaseFragment implements QuizContact.View {
+public class QuizFragment extends BaseFragment {
 
     public static final String TAG = "QuizFragment";
 
@@ -46,13 +42,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
 
-    private static final String KEY_VIEW_MODEL = "viewModel";
-
-    private static final String KEY_SELECTED_CHOICE_NO = "selectedChoiceNo";
-
-    private static final String KEY_QUIZ_STATE = "quizState";
-
-    private static final int CHOICE_NO_NOT_SELECTED = -1;
+    private static final String KEY_QUIZ_ID = "quizId";
 
     public static QuizFragment newInstance(@NonNull KarutaStyle topPhraseStyle,
                                            @NonNull KarutaStyle bottomPhraseStyle) {
@@ -60,15 +50,15 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         QuizFragment fragment = new QuizFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TOP_PHRASE_STYLE, topPhraseStyle);
-        args.putSerializable(ARG_BOTTOM_PHRASE_STYLE, bottomPhraseStyle);
+        args.putInt(ARG_TOP_PHRASE_STYLE, topPhraseStyle.ordinal());
+        args.putInt(ARG_BOTTOM_PHRASE_STYLE, bottomPhraseStyle.ordinal());
         fragment.setArguments(args);
 
         return fragment;
     }
 
     @Inject
-    QuizContact.Actions presenter;
+    QuizFragmentViewModel viewModel;
 
     @Inject
     DeviceManager deviceManager;
@@ -77,17 +67,9 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
 
     private OnFragmentInteractionListener listener;
 
-    private Disposable disposable;
+    private CompositeDisposable disposable;
 
-    private QuizViewModel viewModel;
-
-    private KarutaStyle topPhraseStyle;
-
-    private KarutaStyle bottomPhraseStyle;
-
-    private int selectedChoiceNo = CHOICE_NO_NOT_SELECTED;
-
-    private QuizState state = QuizState.UNANSWERED;
+    private Disposable animationDisposable;
 
     public QuizFragment() {
         // Required empty public constructor
@@ -96,15 +78,17 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            viewModel = (QuizViewModel) savedInstanceState.getSerializable(KEY_VIEW_MODEL);
-            selectedChoiceNo = savedInstanceState.getInt(KEY_SELECTED_CHOICE_NO, CHOICE_NO_NOT_SELECTED);
-            state = (QuizState) savedInstanceState.getSerializable(KEY_QUIZ_STATE);
-        }
+
         Bundle args = getArguments();
-        topPhraseStyle = (KarutaStyle) args.getSerializable(ARG_TOP_PHRASE_STYLE);
-        bottomPhraseStyle = (KarutaStyle) args.getSerializable(ARG_BOTTOM_PHRASE_STYLE);
-        presenter.onCreate(this);
+        KarutaStyle topPhraseStyle = KarutaStyle.get(args.getInt(ARG_TOP_PHRASE_STYLE));
+        KarutaStyle bottomPhraseStyle = KarutaStyle.get(args.getInt(ARG_BOTTOM_PHRASE_STYLE));
+
+        if (savedInstanceState == null) {
+            viewModel.onCreate(topPhraseStyle, bottomPhraseStyle);
+        } else {
+            String quizId = savedInstanceState.getString(KEY_QUIZ_ID, "");
+            viewModel.onReCreate(quizId, topPhraseStyle, bottomPhraseStyle);
+        }
     }
 
     @Override
@@ -114,7 +98,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         Point windowSize = deviceManager.getWindowSize();
         RelativeViewSize relativeViewSize = new RelativeViewSize(windowSize);
 
-        binding.setPresenter(presenter);
+        binding.setViewModel(viewModel);
         binding.setViewSize(relativeViewSize);
 
         return binding.getRoot();
@@ -123,23 +107,62 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        viewModel = null;
         binding = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        disposable = new CompositeDisposable();
+
+        disposable.addAll(viewModel.startDisplayAnimationEvent.subscribe(v -> {
+            startDisplayQuizAnimation(viewModel.firstPhrase.get(),
+                    viewModel.secondPhrase.get(),
+                    viewModel.thirdPhrase.get());
+        }), viewModel.stopDisplayAnimationEvent.subscribe(v -> {
+            if (animationDisposable != null) {
+                animationDisposable.dispose();
+                animationDisposable = null;
+            }
+        }), viewModel.onClickResultEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onAnswered(viewModel.getCollectKarutaId(), viewModel.existNextQuiz());
+            }
+        }), viewModel.errorEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onErrorQuiz();
+            }
+        }));
+
+        viewModel.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        viewModel.onStop();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume(viewModel, topPhraseStyle, bottomPhraseStyle, selectedChoiceNo, state);
+        viewModel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        presenter.onPause();
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
+        if (animationDisposable != null) {
+            animationDisposable.dispose();
+            animationDisposable = null;
         }
+        viewModel.onPause();
     }
 
     @Override
@@ -162,9 +185,7 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_VIEW_MODEL, viewModel);
-        outState.putInt(KEY_SELECTED_CHOICE_NO, selectedChoiceNo);
-        outState.putSerializable(KEY_QUIZ_STATE, state);
+        outState.putSerializable(KEY_QUIZ_ID, viewModel.getKarutaQuizId());
     }
 
     @Override
@@ -174,16 +195,15 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
                 .plus(new QuizFragmentModule(getContext())).inject(this);
     }
 
-    @Override
-    public void initialize(@NonNull QuizViewModel viewModel) {
+    // TODO: DataBindingに寄せることができるはず.
+    private void startDisplayQuizAnimation(@NonNull String firstPhrase,
+                                           @NonNull String secondPhrase,
+                                           @NonNull String thirdPhrase) {
 
-        this.viewModel = viewModel;
+        if (animationDisposable != null) {
+            return;
+        }
 
-        binding.setViewModel(viewModel);
-    }
-
-    @Override
-    public void startDisplayQuizAnimation(@NonNull QuizViewModel viewModel) {
         final List<TextView> firstLine = new ArrayList<>(Arrays.asList(
                 binding.phrase11,
                 binding.phrase12,
@@ -214,15 +234,13 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
         ));
 
         final List<TextView> totalKarutaTextViewList = new ArrayList<>();
-        Observable.fromIterable(firstLine).take(viewModel.firstPhrase.length()).subscribe(totalKarutaTextViewList::add);
-        Observable.fromIterable(secondLine).take(viewModel.secondPhrase.length()).subscribe(totalKarutaTextViewList::add);
-        Observable.fromIterable(thirdLine).take(viewModel.thirdPhrase.length()).subscribe(totalKarutaTextViewList::add);
+        Observable.fromIterable(firstLine).take(firstPhrase.length()).subscribe(totalKarutaTextViewList::add);
+        Observable.fromIterable(secondLine).take(secondPhrase.length()).subscribe(totalKarutaTextViewList::add);
+        Observable.fromIterable(thirdLine).take(thirdPhrase.length()).subscribe(totalKarutaTextViewList::add);
 
-        Observable.fromIterable(totalKarutaTextViewList).subscribe(textView -> {
-            textView.setVisibility(View.INVISIBLE);
-        });
+        Observable.fromIterable(totalKarutaTextViewList).subscribe(textView -> textView.setVisibility(View.INVISIBLE));
 
-        disposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS)
+        animationDisposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS)
                 .zipWith(totalKarutaTextViewList, (aLong, textView) -> textView)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textView -> {
@@ -234,62 +252,12 @@ public class QuizFragment extends BaseFragment implements QuizContact.View {
                 });
     }
 
-    @Override
-    public void displayResult(int selectedChoiceNo, boolean isCollect) {
-
-        this.selectedChoiceNo = selectedChoiceNo;
-
-        if (selectedChoiceNo != CHOICE_NO_NOT_SELECTED) {
-
-            final List<FrameLayout> choiceList = new ArrayList<>(Arrays.asList(
-                    binding.layoutChoice1,
-                    binding.layoutChoice2,
-                    binding.layoutChoice3,
-                    binding.layoutChoice4
-            ));
-
-            choiceList.remove(selectedChoiceNo - 1);
-
-            Observable.fromIterable(choiceList).subscribe(linearLayout -> {
-                linearLayout.setVisibility(View.INVISIBLE);
-            });
-        }
-
-        if (isCollect) {
-            state = QuizState.ANSWERED_COLLECT;
-            Glide.with(this).load(R.drawable.check_correct).dontAnimate().into(binding.imageQuizResult);
-        } else {
-            state = QuizState.ANSWERED_INCORRECT;
-            Glide.with(this).load(R.drawable.check_incorrect).dontAnimate().into(binding.imageQuizResult);
-        }
-        binding.layoutQuizResult.setVisibility(View.VISIBLE);
-
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
-    }
-
-    @Override
-    public void displayAnswer(@NonNull String quizId) {
-        if (listener != null) {
-            listener.onAnswered(quizId);
-        }
-    }
-
-    @Override
-    public void displayError() {
-        if (listener != null) {
-            listener.onErrorQuiz();
-        }
-    }
-
     public interface Injector {
         QuizFragmentComponent plus(QuizFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {
-        void onAnswered(String quizId);
+        void onAnswered(long karutaId, boolean existNextQuiz);
 
         void onErrorQuiz();
     }

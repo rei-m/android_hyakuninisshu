@@ -7,11 +7,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamResultViewModel" />
-
-        <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultContact.Actions" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel" />
     </data>
 
     <ScrollView
@@ -65,8 +61,8 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:background="@color/white99"
                 android:gravity="center"
-                android:text="@{viewModel.averageAnswerTime}"
-                android:textSize="@dimen/text_xl" />
+                android:textSize="@dimen/text_xl"
+                app:averageAnswerTime="@{viewModel.averageAnswerTime}" />
 
             <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView
                 android:layout_width="match_parent"
@@ -85,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/margin_l"
-                android:onClick="@{() -> presenter.onClickBackMenu()}"
+                android:onClick="@{viewModel::onClickBackMenu}"
                 android:text="@string/back_menu" />
 
             <View

@@ -17,6 +17,7 @@ import me.rei_m.hyakuninisshu.presentation.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
+import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
 import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
@@ -96,7 +97,7 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
 
     @Override
     protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new EntranceActivityModule(this));
+        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new EntranceActivityModule());
         component.inject(this);
     }
 

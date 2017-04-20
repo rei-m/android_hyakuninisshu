@@ -11,11 +11,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel" />
-
-        <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerContact.Actions" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel" />
     </data>
 
     <RelativeLayout
@@ -36,8 +32,9 @@
             android:paddingRight="@dimen/padding_m"
             android:paddingStart="@dimen/padding_m"
             android:paddingTop="@dimen/padding_s"
-            android:text="@{viewModel.karutaNo}"
-            android:textSize="@dimen/text_s" />
+            android:textSize="@dimen/text_s"
+            app:karutaNo="@{viewModel.karutaNo}"
+            app:kimariji="@{viewModel.kimariji}" />
 
         <FrameLayout
             android:id="@+id/layout_karuta"
@@ -122,7 +119,7 @@
             android:layout_below="@id/layout_karuta"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
-            android:onClick="@{() -> presenter.onClickNextQuiz()}"
+            android:onClick="@{viewModel::onClickNextQuiz}"
             android:paddingEnd="@dimen/padding_m"
             android:paddingStart="@dimen/padding_m"
             android:text="@string/go_to_next"
@@ -135,7 +132,7 @@
             android:layout_below="@id/layout_karuta"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
-            android:onClick="@{() -> presenter.onClickConfirmResult()}"
+            android:onClick="@{viewModel::onClickConfirmResult}"
             android:text="@string/confirm_result"
             android:textSize="@dimen/text_m"
             android:visibility="@{viewModel.existNextQuiz ? View.GONE : View.VISIBLE}" />

@@ -15,6 +15,7 @@ import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialDetailActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
+import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
 public class MaterialDetailActivity extends BaseActivity implements HasComponent<MaterialDetailActivityComponent> {
@@ -58,7 +59,7 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
 
     @Override
     protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new MaterialDetailActivityModule(this));
+        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialDetailActivityModule());
         component.inject(this);
     }
 

@@ -4,10 +4,9 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerContact;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerPresenter;
+import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
-import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizAnswerUsecase;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 
 @Module
 public class QuizAnswerFragmentModule {
@@ -23,9 +22,9 @@ public class QuizAnswerFragmentModule {
     Context provideContext() {
         return context;
     }
-    
+
     @Provides
-    QuizAnswerContact.Actions provideQuizAnswerPresenter(DisplayKarutaQuizAnswerUsecase displayKarutaQuizAnswerUsecase) {
-        return new QuizAnswerPresenter(displayKarutaQuizAnswerUsecase);
+    QuizAnswerFragmentViewModel provideQuizAnswerFragmentViewModel(KarutaModel karutaModel) {
+        return new QuizAnswerFragmentViewModel(karutaModel);
     }
 }

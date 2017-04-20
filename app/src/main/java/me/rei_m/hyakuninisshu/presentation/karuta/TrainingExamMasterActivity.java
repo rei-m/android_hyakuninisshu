@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
@@ -23,10 +23,10 @@ import me.rei_m.hyakuninisshu.presentation.karuta.module.TrainingExamMasterActiv
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
-import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
+import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingExamMasterActivityViewModel;
 
-public class TrainingExamMasterActivity extends BaseActivity implements TrainingExamMasterContact.View,
-        HasComponent<TrainingExamMasterActivityComponent>,
+public class TrainingExamMasterActivity extends BaseActivity implements HasComponent<TrainingExamMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
@@ -36,35 +36,78 @@ public class TrainingExamMasterActivity extends BaseActivity implements Training
         return new Intent(context, TrainingExamMasterActivity.class);
     }
 
+    private static final String KEY_IS_STARTED = "isStarted";
+
     @Inject
-    TrainingExamMasterContact.Actions presenter;
+    TrainingExamMasterActivityViewModel viewModel;
 
     private TrainingExamMasterActivityComponent component;
 
     private ActivityTrainingExamMasterBinding binding;
 
+    private CompositeDisposable disposable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_exam_master);
+        binding.setViewModel(viewModel);
 
         setSupportActionBar(binding.toolbar);
 
-        if (savedInstanceState == null) {
-            presenter.onCreate(this);
+        if (savedInstanceState != null) {
+            boolean isStarted = savedInstanceState.getBoolean(KEY_IS_STARTED, false);
+            viewModel.onReCreate(isStarted);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        viewModel = null;
         binding = null;
         component = null;
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.addAll(viewModel.startTrainingEvent.subscribe(v -> startTraining()));
+        viewModel.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        viewModel.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        viewModel.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
+    }
+
+    @Override
     protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new TrainingExamMasterActivityModule(this));
+        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new TrainingExamMasterActivityModule());
         component.inject(this);
     }
 
@@ -77,26 +120,11 @@ public class TrainingExamMasterActivity extends BaseActivity implements Training
     }
 
     @Override
-    public void startTraining() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
-                .commit();
-    }
-
-    @Override
-    public void showEmpty() {
-        binding.textEmpty.setVisibility(View.VISIBLE);
-        binding.adView.setVisibility(View.VISIBLE);
-        ViewUtil.loadAd(binding.adView);
-    }
-
-    @Override
-    public void onAnswered(@NonNull String quizId) {
+    public void onAnswered(long karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
+                .replace(R.id.content, QuizAnswerFragment.newInstance(karutaId, existNextQuiz), QuizAnswerFragment.TAG)
                 .commit();
     }
 
@@ -119,21 +147,18 @@ public class TrainingExamMasterActivity extends BaseActivity implements Training
 
     @Override
     public void onClickGoToResult() {
+        viewModel.onClickGoToResult();
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
                 .commit();
-
-        binding.adView.setVisibility(View.VISIBLE);
-        ViewUtil.loadAd(binding.adView);
     }
 
     @Override
     public void onRestartTraining() {
+        viewModel.onRestartTraining();
         startTraining();
-        binding.adView.destroy();
-        binding.adView.setVisibility(View.GONE);
     }
 
     @Override
@@ -144,5 +169,12 @@ public class TrainingExamMasterActivity extends BaseActivity implements Training
     @Override
     public void onClickPositiveButton() {
         finish();
+    }
+
+    private void startTraining() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                .commit();
     }
 }

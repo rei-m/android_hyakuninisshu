@@ -4,10 +4,9 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailContact;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailPresenter;
+import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
-import me.rei_m.hyakuninisshu.usecase.karuta.DisplayMaterialDetailUsecase;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
 
 @Module
 public class MaterialDetailFragmentModule {
@@ -25,7 +24,7 @@ public class MaterialDetailFragmentModule {
     }
 
     @Provides
-    MaterialDetailContact.Actions provideTrainingMenuPresenter(DisplayMaterialDetailUsecase displayMaterialDetailUsecase) {
-        return new MaterialDetailPresenter(displayMaterialDetailUsecase);
+    MaterialDetailFragmentViewModel provideTrainingMenuPresenter(KarutaModel karutaModel) {
+        return new MaterialDetailFragmentViewModel(karutaModel);
     }
 }

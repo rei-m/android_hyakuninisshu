@@ -21,9 +21,12 @@ public class KarutaExamResultView extends LinearLayout {
 
     static {
         for (int i = 0; i < KarutaConstant.NUMBER_OF_KARUTA; i++) {
-            int viewId = (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) ?
-                    ViewUtil.generateViewId() :
-                    View.generateViewId();
+            int viewId;
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                viewId = View.generateViewId();
+            } else {
+                viewId = ViewUtil.generateViewId();
+            }
             cellViewIdList[i] = viewId;
         }
     }

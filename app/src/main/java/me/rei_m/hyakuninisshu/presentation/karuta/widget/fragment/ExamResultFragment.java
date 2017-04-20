@@ -10,14 +10,15 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamResultViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.ExamResultFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.ExamResultFragmentModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel;
 
-public class ExamResultFragment extends BaseFragment implements ExamResultContact.View {
+public class ExamResultFragment extends BaseFragment {
 
     public static final String TAG = "ExamResultFragment";
 
@@ -32,13 +33,13 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
     }
 
     @Inject
-    ExamResultContact.Actions presenter;
+    ExamResultFragmentViewModel viewModel;
 
     private FragmentExamResultBinding binding;
 
     private OnFragmentInteractionListener listener;
 
-    private Long examId;
+    private CompositeDisposable disposable;
 
     public ExamResultFragment() {
         // Required empty public constructor
@@ -49,15 +50,15 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             // TODO: エラーチェック.
-            examId = getArguments().getLong(ARG_EXAM_ID);
+            long examId = getArguments().getLong(ARG_EXAM_ID);
+            viewModel.onCreate(examId);
         }
-        presenter.onCreate(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentExamResultBinding.inflate(inflater, container, false);
-        binding.setPresenter(presenter);
+        binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
@@ -68,15 +69,36 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.addAll(viewModel.onClickBackMenuEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onFinishExam();
+            }
+        }));
+        viewModel.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+        }
+        viewModel.onStop();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume(examId);
+        viewModel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        presenter.onPause();
+        viewModel.onPause();
     }
 
     @Override
@@ -101,18 +123,6 @@ public class ExamResultFragment extends BaseFragment implements ExamResultContac
     protected void setupFragmentComponent() {
         ((HasComponent<Injector>) getActivity()).getComponent()
                 .plus(new ExamResultFragmentModule(getContext())).inject(this);
-    }
-
-    @Override
-    public void initialize(ExamResultViewModel viewModel) {
-        binding.setViewModel(viewModel);
-    }
-
-    @Override
-    public void finishExam() {
-        if (listener != null) {
-            listener.onFinishExam();
-        }
     }
 
     public interface Injector {

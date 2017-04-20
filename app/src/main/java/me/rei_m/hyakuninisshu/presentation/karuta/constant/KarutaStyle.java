@@ -8,6 +8,10 @@ public enum KarutaStyle implements SpinnerItem {
     KANA(R.string.display_style_kana, "kana"),
     KANJI(R.string.display_style_kanji, "kanji");
 
+    public static KarutaStyle get(int ordinal) {
+        return values()[ordinal];
+    }
+
     private final int resId;
 
     private final String code;

@@ -8,35 +8,40 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizAnswerFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizAnswerFragmentModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 
-public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContact.View {
+public class QuizAnswerFragment extends BaseFragment {
 
     public static final String TAG = "QuizAnswerFragment";
 
-    private static final String ARG_QUIZ_ID = "quizId";
+    private static final String ARG_KARUTA_ID = "karutaId";
 
-    public static QuizAnswerFragment newInstance(String quizId) {
+    private static final String ARG_EXIST_NEXT_QUIZ = "existNextQuiz";
+
+    public static QuizAnswerFragment newInstance(long karutaId,
+                                                 boolean existNextQuiz) {
         QuizAnswerFragment fragment = new QuizAnswerFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_QUIZ_ID, quizId);
+        args.putLong(ARG_KARUTA_ID, karutaId);
+        args.putBoolean(ARG_EXIST_NEXT_QUIZ, existNextQuiz);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Inject
-    QuizAnswerContact.Actions presenter;
+    QuizAnswerFragmentViewModel viewModel;
 
     private FragmentQuizAnswerBinding binding;
 
-    private String quizId;
-
     private OnFragmentInteractionListener listener;
+
+    private CompositeDisposable disposable;
 
     public QuizAnswerFragment() {
         // Required empty public constructor
@@ -48,36 +53,70 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
         if (getArguments() != null) {
             // TODO: エラーチェック.
 
-            quizId = getArguments().getString(ARG_QUIZ_ID);
+            long karutaId = getArguments().getLong(ARG_KARUTA_ID);
+            boolean existNextQuiz = getArguments().getBoolean(ARG_EXIST_NEXT_QUIZ);
+            viewModel.onCreate(karutaId, existNextQuiz);
         }
-        presenter.onCreate(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentQuizAnswerBinding.inflate(inflater, container, false);
-        binding.setPresenter(presenter);
+        binding.setViewModel(viewModel);
+
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        viewModel = null;
         binding = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.addAll(viewModel.onClickNextQuizEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onClickGoToNext();
+            }
+        }), viewModel.onClickConfirmResultEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onClickGoToResult();
+            }
+        }), viewModel.errorEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onErrorQuiz();
+            }
+        }));
+        viewModel.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        viewModel.onStop();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume(quizId);
+        viewModel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        presenter.onPause();
+        viewModel.onPause();
     }
 
     @Override
@@ -102,32 +141,6 @@ public class QuizAnswerFragment extends BaseFragment implements QuizAnswerContac
     protected void setupFragmentComponent() {
         ((HasComponent<Injector>) getActivity()).getComponent()
                 .plus(new QuizAnswerFragmentModule(getContext())).inject(this);
-    }
-
-    @Override
-    public void initialize(QuizAnswerViewModel viewModel) {
-        binding.setViewModel(viewModel);
-    }
-
-    @Override
-    public void goToNext() {
-        if (listener != null) {
-            listener.onClickGoToNext();
-        }
-    }
-
-    @Override
-    public void goToResult() {
-        if (listener != null) {
-            listener.onClickGoToResult();
-        }
-    }
-
-    @Override
-    public void displayError() {
-        if (listener != null) {
-            listener.onErrorQuiz();
-        }
     }
 
     public interface Injector {

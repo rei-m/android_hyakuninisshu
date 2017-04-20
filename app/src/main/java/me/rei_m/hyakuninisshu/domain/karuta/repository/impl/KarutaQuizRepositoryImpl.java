@@ -96,6 +96,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
             updater.startDate(karutaQuiz.getStartDate());
             if (karutaQuiz.getResult() != null) {
                 updater.isCollect(karutaQuiz.getResult().isCollect)
+                        .choiceNo(karutaQuiz.getResult().choiceNo)
                         .answerTime(karutaQuiz.getResult().answerTime);
             }
             updater.execute();
@@ -118,7 +119,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                 .executeAsObservable()
                 .map(funcConvertEntity).toList();
     }
-
+    
     @Override
     public Single<Pair<Integer, Integer>> countQuizByAnswered() {
         Single<Long> totalCountSingle = KarutaQuizSchema.relation(orma)
@@ -150,6 +151,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                     new KarutaIdentifier(karutaQuizSchema.collectId),
                     karutaQuizSchema.startDate,
                     karutaQuizSchema.answerTime,
+                    karutaQuizSchema.choiceNo,
                     karutaQuizSchema.isCollect);
         }
     };
