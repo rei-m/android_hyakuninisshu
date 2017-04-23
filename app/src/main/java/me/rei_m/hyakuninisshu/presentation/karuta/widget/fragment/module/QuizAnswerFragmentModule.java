@@ -5,6 +5,7 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 
@@ -24,7 +25,8 @@ public class QuizAnswerFragmentModule {
     }
 
     @Provides
-    QuizAnswerFragmentViewModel provideQuizAnswerFragmentViewModel(KarutaModel karutaModel) {
-        return new QuizAnswerFragmentViewModel(karutaModel);
+    QuizAnswerFragmentViewModel provideQuizAnswerFragmentViewModel(KarutaModel karutaModel,
+                                                                   Navigator navigator) {
+        return new QuizAnswerFragmentViewModel(karutaModel, navigator);
     }
 }

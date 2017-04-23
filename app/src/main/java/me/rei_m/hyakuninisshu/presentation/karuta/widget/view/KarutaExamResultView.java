@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
 import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
@@ -30,6 +32,9 @@ public class KarutaExamResultView extends LinearLayout {
             cellViewIdList[i] = viewId;
         }
     }
+
+    private PublishSubject<Integer> onClickKarutaEventSubject = PublishSubject.create();
+    public Observable<Integer> onClickKarutaEvent = onClickKarutaEventSubject;
 
     public KarutaExamResultView(Context context) {
         super(context);
@@ -78,7 +83,9 @@ public class KarutaExamResultView extends LinearLayout {
     public void setResult(boolean[] karutaQuizResultList) {
         for (int i = 0; i < karutaQuizResultList.length; i++) {
             KarutaExamResultCellView cellView = (KarutaExamResultCellView) findViewById(cellViewIdList[i]);
-            cellView.setResult(i + 1, karutaQuizResultList[i]);
+            int karutaNo = i + 1;
+            cellView.setResult(karutaNo, karutaQuizResultList[i]);
+            cellView.setOnClickListener(view -> onClickKarutaEventSubject.onNext(karutaNo));
         }
     }
 }

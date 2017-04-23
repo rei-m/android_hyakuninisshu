@@ -22,6 +22,7 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
     private final KarutaExamModel karutaExamModel;
 
     private boolean isStartedExam = false;
+    private boolean isFinishedExam = false;
 
     public ExamMasterActivityViewModel(@NonNull KarutaExamModel karutaExamModel) {
         this.karutaExamModel = karutaExamModel;
@@ -31,8 +32,15 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
         return isStartedExam;
     }
 
-    public void onReCreate(boolean isStartedExam) {
+    public boolean isFinishedExam() {
+        return isFinishedExam;
+    }
+
+    public void onReCreate(boolean isStartedExam,
+                           boolean isFinishedExam) {
         this.isStartedExam = isStartedExam;
+        this.isFinishedExam = isFinishedExam;
+        this.isVisibleAd.set(isFinishedExam);
     }
 
     @Override
@@ -43,6 +51,7 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
             isVisibleAd.set(false);
             startExamEventSubject.onNext(Unit.INSTANCE);
         }), karutaExamModel.completeAggregateResultsEvent.subscribe(karutaExamId -> {
+            isFinishedExam = true;
             isVisibleAd.set(true);
             aggregateExamResultsEventSubject.onNext(karutaExamId);
         }));

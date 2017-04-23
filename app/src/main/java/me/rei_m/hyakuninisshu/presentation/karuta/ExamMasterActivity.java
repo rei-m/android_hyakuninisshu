@@ -47,6 +47,8 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
 
     private static final String KEY_IS_STARTED = "isStarted";
 
+    private static final String KEY_IS_FINISHED = "isFinished";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,8 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
 
         if (savedInstanceState != null) {
             boolean isStarted = savedInstanceState.getBoolean(KEY_IS_STARTED, false);
-            viewModel.onReCreate(isStarted);
+            boolean isFinished = savedInstanceState.getBoolean(KEY_IS_FINISHED, false);
+            viewModel.onReCreate(isStarted, isFinished);
         }
     }
 
@@ -73,18 +76,17 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
     protected void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.startExamEvent.subscribe(v -> {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
-                    .commit();
-        }), viewModel.aggregateExamResultsEvent.subscribe(examId -> {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, ExamResultFragment.newInstance(examId), ExamResultFragment.TAG)
-                    .commit();
-        }));
+        disposable.addAll(
+                viewModel.startExamEvent.subscribe(v -> getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                        .commit()),
+                viewModel.aggregateExamResultsEvent.subscribe(examId -> getSupportFragmentManager()
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.content, ExamResultFragment.newInstance(examId), ExamResultFragment.TAG)
+                        .commit())
+        );
         viewModel.onStart();
     }
 
@@ -114,6 +116,7 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedExam());
+        outState.putBoolean(KEY_IS_FINISHED, viewModel.isFinishedExam());
     }
 
     @Override

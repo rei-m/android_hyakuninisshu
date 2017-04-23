@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -35,8 +36,6 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<String> fifthPhrase = new ObservableField<>("");
 
-    public final ObservableField<String> karutaImageNo = new ObservableField<>("");
-
     public final ObservableBoolean existNextQuiz = new ObservableBoolean(false);
 
     private PublishSubject<Unit> onClickNextQuizEventSubject = PublishSubject.create();
@@ -50,10 +49,14 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaModel karutaModel;
 
+    private final Navigator navigator;
+
     private KarutaIdentifier karutaIdentifier;
 
-    public QuizAnswerFragmentViewModel(@NonNull KarutaModel karutaModel) {
+    public QuizAnswerFragmentViewModel(@NonNull KarutaModel karutaModel,
+                                       @NonNull Navigator navigator) {
         this.karutaModel = karutaModel;
+        this.navigator = navigator;
     }
 
     public void onCreate(long karutaId,
@@ -74,10 +77,7 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
             thirdPhrase.set(karuta.getTopPhrase().getThird().getKanji());
             fourthPhrase.set(KarutaDisplayUtil.padSpace(karuta.getBottomPhrase().getFourth().getKanji(), 7));
             fifthPhrase.set(karuta.getBottomPhrase().getFifth().getKanji());
-            karutaImageNo.set("karuta_" + karuta.getImageNo());
-        }), karutaModel.error.subscribe(v -> {
-            errorEventSubject.onNext(Unit.INSTANCE);
-        }));
+        }), karutaModel.error.subscribe(v -> errorEventSubject.onNext(Unit.INSTANCE)));
     }
 
     @Override
@@ -86,10 +86,17 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
         karutaModel.getKaruta(karutaIdentifier);
     }
 
+    @SuppressWarnings("unused")
+    public void onClickAnswer(View view) {
+        navigator.navigateToMaterialDetail((int) karutaIdentifier.getValue());
+    }
+
+    @SuppressWarnings("unused")
     public void onClickNextQuiz(View view) {
         onClickNextQuizEventSubject.onNext(Unit.INSTANCE);
     }
 
+    @SuppressWarnings("unused")
     public void onClickConfirmResult(View view) {
         onClickConfirmResultEventSubject.onNext(Unit.INSTANCE);
     }
