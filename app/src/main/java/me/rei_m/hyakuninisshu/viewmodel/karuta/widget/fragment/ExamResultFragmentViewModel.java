@@ -68,6 +68,6 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
     }
 
     public void onClickResult(int karutaNo) {
-        navigator.navigateToMaterialDetail(karutaNo);
+        navigator.navigateToMaterialSingle(karutaNo);
     }
 }

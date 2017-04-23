@@ -1,0 +1,162 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.karuta.widget.dialog.ConfirmMaterialEditDialogFragment">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.dialog.ConfirmMaterialEditDialogFragmentViewModel" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/text_confirm_edit"
+                android:textSize="@dimen/text_xs" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@string/text_caution_edit"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="@dimen/text_xs" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_l"
+                android:text="@string/firstPhrase"
+                android:textSize="@dimen/text_xs" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.firstPhraseKanji}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.firstPhraseKana}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/secondPhrase"
+                android:textSize="@dimen/text_xs" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.secondPhraseKanji}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.secondPhraseKana}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/thirdPhrase"
+                android:textSize="@dimen/text_xs" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.thirdPhraseKanji}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.thirdPhraseKana}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/fourthPhrase"
+                android:textSize="@dimen/text_xs" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.fourthPhraseKanji}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.fourthPhraseKana}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/fifthPhrase"
+                android:textSize="@dimen/text_xs" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.fifthPhraseKanji}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_m"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:text="@{viewModel.fifthPhraseKana}" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>

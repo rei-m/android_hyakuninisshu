@@ -6,14 +6,14 @@ import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialEditFragmentViewModel;
 
 @Module
-public class MaterialDetailFragmentModule {
+public class MaterialEditFragmentModule {
 
     private final Context context;
 
-    public MaterialDetailFragmentModule(Context context) {
+    public MaterialEditFragmentModule(Context context) {
         this.context = context;
     }
 
@@ -24,7 +24,7 @@ public class MaterialDetailFragmentModule {
     }
 
     @Provides
-    MaterialDetailFragmentViewModel provideMaterialDetailFragmentViewModel(KarutaModel karutaModel) {
-        return new MaterialDetailFragmentViewModel(karutaModel);
+    MaterialEditFragmentViewModel provideMaterialEditFragmentViewModel(KarutaModel karutaModel) {
+        return new MaterialEditFragmentViewModel(karutaModel);
     }
 }

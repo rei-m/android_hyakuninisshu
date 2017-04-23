@@ -88,7 +88,7 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     @SuppressWarnings("unused")
     public void onClickAnswer(View view) {
-        navigator.navigateToMaterialDetail((int) karutaIdentifier.getValue());
+        navigator.navigateToMaterialSingle((int) karutaIdentifier.getValue());
     }
 
     @SuppressWarnings("unused")

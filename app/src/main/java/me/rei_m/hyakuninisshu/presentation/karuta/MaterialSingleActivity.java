@@ -5,26 +5,21 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.view.Menu;
 import android.view.MenuItem;
-
-import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
-import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding;
+import me.rei_m.hyakuninisshu.databinding.ActivityMaterialSingleBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialDetailActivityComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityModule;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
+import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialSingleActivityComponent;
+import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialSingleActivityModule;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
 import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
-public class MaterialDetailActivity extends BaseActivity implements HasComponent<MaterialDetailActivityComponent> {
+public class MaterialSingleActivity extends BaseActivity implements HasComponent<MaterialSingleActivityComponent> {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
 
@@ -32,22 +27,19 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
 
     public static Intent createIntent(@NonNull Context context,
                                       int karutaNo) {
-        Intent intent = new Intent(context, MaterialDetailActivity.class);
+        Intent intent = new Intent(context, MaterialSingleActivity.class);
         intent.putExtra(ARG_KARUTA_NO, karutaNo);
         return intent;
     }
 
-    @Inject
-    Navigator navigator;
+    private MaterialSingleActivityComponent component;
 
-    private MaterialDetailActivityComponent component;
-
-    private ActivityMaterialDetailBinding binding;
+    private ActivityMaterialSingleBinding binding;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_material_single);
 
         setSupportActionBar(binding.toolbar);
 
@@ -56,12 +48,16 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // TODO エラーチェック.
-        int initialDisplayKarutaNo = getIntent().getIntExtra(ARG_KARUTA_NO, UNKNOWN_KARUTA_NO);
-
-        binding.pager.setAdapter(new MaterialDetailPagerAdapter(getSupportFragmentManager()));
-        binding.pager.setCurrentItem(initialDisplayKarutaNo - 1);
         ViewUtil.loadAd(binding.adView);
+
+        // TODO エラーチェック.
+        if (savedInstanceState == null) {
+            int karutaNo = getIntent().getIntExtra(ARG_KARUTA_NO, UNKNOWN_KARUTA_NO);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.content, MaterialDetailFragment.newInstance(karutaNo), MaterialDetailFragment.TAG)
+                    .commit();
+        }
     }
 
     @Override
@@ -72,19 +68,10 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_material_detail, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
-            case R.id.activity_material_detail_edit:
-                navigator.navigateToMaterialEdit(binding.pager.getCurrentItem() + 1);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -92,12 +79,12 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
 
     @Override
     protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialDetailActivityModule());
+        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialSingleActivityModule());
         component.inject(this);
     }
 
     @Override
-    public MaterialDetailActivityComponent getComponent() {
+    public MaterialSingleActivityComponent getComponent() {
         if (component == null) {
             setupActivityComponent();
         }
