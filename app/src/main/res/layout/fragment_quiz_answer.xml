@@ -44,6 +44,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_karuta"
             android:gravity="center_horizontal"
+            android:onClick="@{viewModel::onClickAnswer}"
             android:padding="@dimen/padding_s"
             app:elevation="@{@dimen/elevation_level_ms}">
 
@@ -120,8 +121,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
             android:onClick="@{viewModel::onClickNextQuiz}"
+            android:paddingBottom="@dimen/padding_m"
             android:paddingEnd="@dimen/padding_m"
             android:paddingStart="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_m"
             android:text="@string/go_to_next"
             android:textSize="@dimen/text_m"
             android:visibility="@{viewModel.existNextQuiz ? View.VISIBLE : View.GONE}" />
@@ -133,6 +136,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
             android:onClick="@{viewModel::onClickConfirmResult}"
+            android:paddingBottom="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_m"
             android:text="@string/confirm_result"
             android:textSize="@dimen/text_m"
             android:visibility="@{viewModel.existNextQuiz ? View.GONE : View.VISIBLE}" />

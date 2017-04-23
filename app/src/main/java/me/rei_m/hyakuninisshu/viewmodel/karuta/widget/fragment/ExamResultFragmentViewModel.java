@@ -9,6 +9,7 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -26,13 +27,17 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaExamModel karutaExamModel;
 
+    private final Navigator navigator;
+
     private final AnalyticsManager analyticsManager;
 
     private KarutaExamIdentifier karutaExamIdentifier;
 
     public ExamResultFragmentViewModel(@NonNull KarutaExamModel karutaExamModel,
+                                       @NonNull Navigator navigator,
                                        @NonNull AnalyticsManager analyticsManager) {
         this.karutaExamModel = karutaExamModel;
+        this.navigator = navigator;
         this.analyticsManager = analyticsManager;
     }
 
@@ -57,7 +62,12 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
         karutaExamModel.getResult(karutaExamIdentifier);
     }
 
+    @SuppressWarnings("unused")
     public void onClickBackMenu(View view) {
         onClickBackMenuEventSubject.onNext(Unit.INSTANCE);
+    }
+
+    public void onClickResult(int karutaNo) {
+        navigator.navigateToMaterialDetail(karutaNo);
     }
 }

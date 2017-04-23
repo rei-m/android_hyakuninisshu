@@ -76,7 +76,7 @@ public class ExamResultFragment extends BaseFragment {
             if (listener != null) {
                 listener.onFinishExam();
             }
-        }));
+        }), binding.viewResult.onClickKarutaEvent.subscribe(karutaNo -> viewModel.onClickResult(karutaNo)));
         viewModel.onStart();
     }
 

@@ -20,9 +20,9 @@ public class KarutaExamFactory {
         KarutaExamIdentifier identifier = new KarutaExamIdentifier(schema.id);
 
         List<KarutaIdentifier> wrongKarutaIdentifierList = new ArrayList<>();
-        Observable.fromIterable(examWrongKarutaSchemaList).subscribe(examWrongKarutaSchema -> {
-            wrongKarutaIdentifierList.add(new KarutaIdentifier(examWrongKarutaSchema.karutaId));
-        });
+        Observable.fromIterable(examWrongKarutaSchemaList)
+                .map(examWrongKarutaSchema -> new KarutaIdentifier(examWrongKarutaSchema.karutaId))
+                .subscribe(wrongKarutaIdentifierList::add);
 
         return new KarutaExam(identifier,
                 schema.tookExamDate,
