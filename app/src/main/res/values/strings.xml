@@ -55,6 +55,7 @@
     <string name="explain_result">※表示は歌の番号順です。タップで詳細を確認できます</string>
     <string name="edit_karuta">歌を編集する</string>
     <string name="editing_material">資料編集</string>
+    <string name="char_material">資</string>
 
     <string name="one">一</string>
     <string name="two">二</string>
