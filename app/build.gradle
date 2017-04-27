@@ -80,7 +80,7 @@ dependencies {
     compile "com.android.support:support-v4:$android_support_lib_version"
     compile "com.android.support:percent:$android_support_lib_version"
     compile "com.android.support:design:$android_support_lib_version"
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "com.google.firebase:firebase-core:$play_services_version"
     compile "com.google.android.gms:play-services-ads:$play_services_version"
 

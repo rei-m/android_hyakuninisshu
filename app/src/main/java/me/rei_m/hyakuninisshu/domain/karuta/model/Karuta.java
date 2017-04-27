@@ -8,9 +8,9 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     private final String creator;
 
-    private final TopPhrase topPhrase;
+    private TopPhrase topPhrase;
 
-    private final BottomPhrase bottomPhrase;
+    private BottomPhrase bottomPhrase;
 
     private final int kimariji;
 
@@ -68,6 +68,36 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     public boolean isCollect(BottomPhrase bottomPhrase) {
         return this.bottomPhrase.equals(bottomPhrase);
+    }
+
+    public Karuta updatePhrase(@NonNull String firstPhraseKanji,
+                               @NonNull String firstPhraseKana,
+                               @NonNull String secondPhraseKanji,
+                               @NonNull String secondPhraseKana,
+                               @NonNull String thirdPhraseKanji,
+                               @NonNull String thirdPhraseKana,
+                               @NonNull String fourthPhraseKanji,
+                               @NonNull String fourthPhraseKana,
+                               @NonNull String fifthPhraseKanji,
+                               @NonNull String fifthPhraseKana) {
+
+        TopPhrase topPhrase = new TopPhrase(
+                this.getIdentifier(),
+                new Phrase(firstPhraseKana, firstPhraseKanji),
+                new Phrase(secondPhraseKana, secondPhraseKanji),
+                new Phrase(thirdPhraseKana, thirdPhraseKanji)
+        );
+
+        BottomPhrase bottomPhrase = new BottomPhrase(
+                this.getIdentifier(),
+                new Phrase(fourthPhraseKana, fourthPhraseKanji),
+                new Phrase(fifthPhraseKana, fifthPhraseKanji)
+        );
+
+        this.topPhrase = topPhrase;
+        this.bottomPhrase = bottomPhrase;
+
+        return this;
     }
 
     @Override

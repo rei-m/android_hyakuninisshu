@@ -22,6 +22,9 @@ public class KarutaModel {
     private PublishSubject<Karuta> completeGetKarutaEventSubject = PublishSubject.create();
     public Observable<Karuta> completeGetKarutaEvent = completeGetKarutaEventSubject;
 
+    private PublishSubject<Unit> completeEditKarutaEventSubject = PublishSubject.create();
+    public Observable<Unit> completeEditKarutaEvent = completeEditKarutaEventSubject;
+
     private PublishSubject<List<Karuta>> completeGetKarutaListEventSubject = PublishSubject.create();
     public Observable<List<Karuta>> completeGetKarutaListEvent = completeGetKarutaListEventSubject;
 
@@ -36,21 +39,40 @@ public class KarutaModel {
         karutaRepository.resolve(karutaIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karuta -> {
-                    completeGetKarutaEventSubject.onNext(karuta);
-                }, e -> {
-                    errorSubject.onNext(Unit.INSTANCE);
-                });
+                .subscribe(karuta -> completeGetKarutaEventSubject.onNext(karuta), e -> errorSubject.onNext(Unit.INSTANCE));
+    }
+
+    public void editKaruta(@NonNull KarutaIdentifier karutaIdentifier,
+                           @NonNull String firstPhraseKanji,
+                           @NonNull String firstPhraseKana,
+                           @NonNull String secondPhraseKanji,
+                           @NonNull String secondPhraseKana,
+                           @NonNull String thirdPhraseKanji,
+                           @NonNull String thirdPhraseKana,
+                           @NonNull String fourthPhraseKanji,
+                           @NonNull String fourthPhraseKana,
+                           @NonNull String fifthPhraseKanji,
+                           @NonNull String fifthPhraseKana) {
+        karutaRepository.resolve(karutaIdentifier).map(karuta -> karuta.updatePhrase(firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana))
+                .flatMapCompletable(karutaRepository::store)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> completeEditKarutaEventSubject.onNext(Unit.INSTANCE), e -> errorSubject.onNext(Unit.INSTANCE));
     }
 
     public void getKarutaList(@Nullable Color color) {
         karutaRepository.asEntityList(color != null ? color.getCode() : null)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karuta -> {
-                    completeGetKarutaListEventSubject.onNext(karuta);
-                }, e -> {
-                    errorSubject.onNext(Unit.INSTANCE);
-                });
+                .subscribe(karutaList -> completeGetKarutaListEventSubject.onNext(karutaList), e -> errorSubject.onNext(Unit.INSTANCE));
     }
 }

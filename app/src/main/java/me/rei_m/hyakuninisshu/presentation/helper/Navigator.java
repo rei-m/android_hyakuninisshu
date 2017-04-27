@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import me.rei_m.hyakuninisshu.presentation.EntranceActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.MaterialEditActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.MaterialSingleActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
@@ -57,6 +59,16 @@ public class Navigator {
 
     public void navigateToMaterialDetail(int karutaNo) {
         Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, karutaNo);
+        activity.startActivity(intentToLaunch);
+    }
+
+    public void navigateToMaterialSingle(int karutaNo) {
+        Intent intentToLaunch = MaterialSingleActivity.createIntent(activity, karutaNo);
+        activity.startActivity(intentToLaunch);
+    }
+
+    public void navigateToMaterialEdit(int karutaNo) {
+        Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karutaNo);
         activity.startActivity(intentToLaunch);
     }
 }

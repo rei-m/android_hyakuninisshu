@@ -17,6 +17,8 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
 
     private final AnalyticsManager analyticsManager;
 
+    private Color color = Color.ALL;
+
     public MaterialFragmentViewModel(@NonNull KarutaModel karutaModel,
                                      @NonNull AnalyticsManager analyticsManager) {
         this.karutaModel = karutaModel;
@@ -36,10 +38,11 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
-        karutaModel.getKarutaList(Color.ALL);
+        karutaModel.getKarutaList(color);
     }
 
     public void onOptionItemSelected(@NonNull Color color) {
         karutaModel.getKarutaList(color);
+        this.color = color;
     }
 }

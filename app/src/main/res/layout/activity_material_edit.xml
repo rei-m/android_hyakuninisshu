@@ -3,7 +3,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.EntranceActivity">
+    tools:context=".presentation.karuta.MaterialEditActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -27,43 +27,24 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:elevation="@{@dimen/elevation_level_none}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <FrameLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/bottom_navigation"
                 tools:ignore="MergeRootFrame" />
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/bottom_navigation"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 ads:adSize="SMART_BANNER"
                 ads:adUnitId="@string/banner_ad_unit_id" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/elevation_level_l"
-                android:layout_above="@+id/bottom_navigation"
-                android:background="@drawable/shadow_bottom_navigation" />
-
-            <android.support.design.widget.BottomNavigationView
-                android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                app:itemBackground="@color/colorPrimary"
-                app:itemIconTint="@android:color/white"
-                app:itemTextColor="@android:color/white"
-                app:menu="@menu/bottom_navigation_main" />
-
         </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
-
 </layout>
