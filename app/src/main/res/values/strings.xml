@@ -21,6 +21,7 @@
     <string name="post_review">レビューを書く</string>
     <string name="license">ライセンス</string>
     <string name="version">version: %1$s</string>
+    <string name="update">変更する</string>
     <string name="back">戻る</string>
 
     <string name="karuta">かるた</string>
@@ -38,6 +39,11 @@
     <string name="seconds">%1$s秒</string>
     <string name="topPhrase">上の句</string>
     <string name="bottomPhrase">下の句</string>
+    <string name="firstPhrase">初句</string>
+    <string name="secondPhrase">二句</string>
+    <string name="thirdPhrase">三句</string>
+    <string name="fourthPhrase">四句</string>
+    <string name="fifthPhrase">五句</string>
     <string name="back_menu">メニューに戻る</string>
     <string name="number_of_correct_answers">正解数</string>
     <string name="average_response_time">平均回答時間</string>
@@ -45,6 +51,11 @@
     <string name="previous_result_of_exam">前回の力試しの結果</string>
     <string name="start_exam">力試しをはじめる</string>
     <string name="start_training_of_exam">過去間違えた問題を練習する</string>
+    <string name="result_answer">回答結果</string>
+    <string name="explain_result">※表示は歌の番号順です。タップで詳細を確認できます</string>
+    <string name="edit_karuta">歌を編集する</string>
+    <string name="editing_material">資料編集</string>
+    <string name="char_material">資</string>
 
     <string name="one">一</string>
     <string name="two">二</string>
@@ -116,10 +127,20 @@
 
     <string name="text_message_quiz_error">回答の途中でエラーが発生しました。前の画面に戻ります。</string>
 
+    <string name="text_message_illegal_arguments">意図しない遷移をしました。前の画面に戻ります。</string>
+
     <string name="text_message_invalid_training_range">出題範囲の開始と終了の組み合わせが正しくありません。</string>
+
+    <string name="text_message_edit_error">未入力の句があります。</string>
+
+    <string name="text_explain_edit">お手持ちの教材に合わせて歌を編集できます。編集内容は練習や力試しの出題に反映されます。</string>
+
+    <string name="text_confirm_edit">以下の内容で変更します。よろしいですか？</string>
+    <string name="text_caution_edit">※この変更は取り消せません。取り消す場合は再度同じ内容で変更してください。</string>
 
     <string name="url_credit">file:///android_asset/licenses.html</string>
 
     <string name="app_font_file">Hannari.otf</string>
+    <string name="title_activity_material_single">MaterialSingleActivity</string>
 
 </resources>

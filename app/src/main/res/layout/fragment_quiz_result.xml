@@ -1,4 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.karuta.widget.fragment.QuizResultFragment">
 
@@ -8,11 +9,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizResultViewModel" />
-
-        <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultContact.Actions" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel" />
     </data>
 
     <LinearLayout
@@ -63,15 +60,15 @@
             android:layout_marginStart="@dimen/margin_m"
             android:background="@color/white99"
             android:gravity="center"
-            android:text="@{viewModel.averageAnswerTime}"
-            android:textSize="@dimen/text_xl" />
+            android:textSize="@dimen/text_xl"
+            app:averageAnswerTime="@{viewModel.averageAnswerTime}" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/margin_s"
-            android:onClick="@{() -> presenter.onClickPracticeWrongKarutas()}"
+            android:onClick="@{viewModel::onClickPracticeWrongKarutas}"
             android:text="@string/practice_wrong_karutas"
             android:visibility="@{viewModel.canRestartTraining ? View.VISIBLE : View.GONE}" />
 
@@ -79,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:onClick="@{() -> presenter.onClickBackMenu()}"
+            android:onClick="@{viewModel::onClickBackMenu}"
             android:text="@string/back_menu" />
 
     </LinearLayout>

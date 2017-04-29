@@ -13,9 +13,11 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import me.rei_m.hyakuninisshu.domain.karuta.model.BottomPhrase;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaFactory;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.karuta.model.TopPhrase;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonAdaptor;
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaJsonConstant;
@@ -59,9 +61,15 @@ public class KarutaRepositoryImpl implements KarutaRepository {
 
                 return orma.transactionAsCompletable(() -> {
 
-                    KarutaSchema.relation(orma).deleter().execute();
-
-                    KarutaSchema.relation(orma).inserter().executeAll(karutaSchemaList);
+                    for (KarutaSchema karutaSchema : karutaSchemaList){
+                        int count = KarutaSchema.relation(orma).selector().idEq(karutaSchema.id)
+                                .and()
+                                .where("isEdited = ?", true).count();
+                        if (count == 0) {
+                            KarutaSchema.relation(orma).deleter().idEq(karutaSchema.id).execute();
+                            KarutaSchema.relation(orma).inserter().execute(karutaSchema);
+                        }
+                    }
 
                     preferences.edit()
                             .putInt(KarutaJsonConstant.KEY_KARUTA_JSON_VERSION, KarutaJsonConstant.KARUTA_VERSION)
@@ -138,7 +146,6 @@ public class KarutaRepositoryImpl implements KarutaRepository {
             selector = selector.and().where("color = ?", color);
         }
 
-
         return selector
                 .orderByIdAsc()
                 .executeAsObservable()
@@ -153,5 +160,28 @@ public class KarutaRepositoryImpl implements KarutaRepository {
                 .executeAsObservable()
                 .map(KarutaFactory::create)
                 .singleOrError();
+    }
+
+    @Override
+    public Completable store(@NonNull Karuta karuta) {
+
+        TopPhrase topPhrase = karuta.getTopPhrase();
+        BottomPhrase bottomPhrase = karuta.getBottomPhrase();
+
+        return KarutaSchema.relation(orma).updater()
+                .idEq(karuta.getIdentifier().getValue())
+                .firstKana(topPhrase.getFirst().getKana())
+                .firstKanji(topPhrase.getFirst().getKanji())
+                .secondKana(topPhrase.getSecond().getKana())
+                .secondKanji(topPhrase.getSecond().getKanji())
+                .thirdKana(topPhrase.getThird().getKana())
+                .thirdKanji(topPhrase.getThird().getKanji())
+                .fourthKana(bottomPhrase.getFourth().getKana())
+                .fourthKanji(bottomPhrase.getFourth().getKanji())
+                .fifthKana(bottomPhrase.getFifth().getKana())
+                .fifthKanji(bottomPhrase.getFifth().getKanji())
+                .isEdited(true)
+                .executeAsSingle()
+                .toCompletable();
     }
 }

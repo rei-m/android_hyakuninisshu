@@ -1,4 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.karuta.widget.fragment.ExamFragment">
 
@@ -8,11 +9,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamViewModel" />
-
-        <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamContact.Actions" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewModel" />
     </data>
 
     <ScrollView
@@ -69,7 +66,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.averageAnswerTime}" />
+                    app:averageAnswerTime="@{viewModel.averageAnswerTime}" />
 
             </LinearLayout>
 
@@ -80,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_xxl"
-                android:onClick="@{() -> presenter.onClickStartExam()}"
+                android:onClick="@{viewModel::onClickStartExam}"
                 android:text="@string/start_exam" />
 
             <Button
@@ -89,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_m"
-                android:onClick="@{() -> presenter.onClickStartTraining()}"
+                android:onClick="@{viewModel::onClickStartTraining}"
                 android:paddingLeft="@dimen/padding_m"
                 android:paddingRight="@dimen/padding_m"
                 android:text="@string/start_training_of_exam"

@@ -4,11 +4,10 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.App;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuContact;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuPresenter;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragmentViewModel;
 
 @Module
 public class TrainingMenuFragmentModule {
@@ -26,8 +25,8 @@ public class TrainingMenuFragmentModule {
     }
 
     @Provides
-    TrainingMenuContact.Actions provideTrainingMenuPresenter() {
-        AnalyticsManager analyticsManager = ((App) context.getApplicationContext()).getAnalyticsManager();
-        return new TrainingMenuPresenter(analyticsManager);
+    TrainingMenuFragmentViewModel provideTrainingMenuFragmentViewModel(Navigator navigator,
+                                                                       AnalyticsManager analyticsManager) {
+        return new TrainingMenuFragmentViewModel(analyticsManager, navigator);
     }
 }

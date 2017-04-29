@@ -4,13 +4,10 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.App;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultContact;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultPresenter;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
-import me.rei_m.hyakuninisshu.usecase.karuta.DisplayKarutaQuizResultUsecase;
-import me.rei_m.hyakuninisshu.usecase.karuta.RestartWrongKarutaQuizUsecase;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel;
 
 @Module
 public class QuizResultFragmentModule {
@@ -28,9 +25,8 @@ public class QuizResultFragmentModule {
     }
 
     @Provides
-    QuizResultContact.Actions provideQuizResultPresenter(DisplayKarutaQuizResultUsecase displayKarutaQuizResultUsecase,
-                                                         RestartWrongKarutaQuizUsecase restartWrongKarutaQuizUsecase) {
-        AnalyticsManager analyticsManager = ((App) context.getApplicationContext()).getAnalyticsManager();
-        return new QuizResultPresenter(displayKarutaQuizResultUsecase, restartWrongKarutaQuizUsecase, analyticsManager);
+    QuizResultFragmentViewModel provideQuizResultFragmentViewModel(KarutaTrainingModel karutaTrainingModel,
+                                                                   AnalyticsManager analyticsManager) {
+        return new QuizResultFragmentViewModel(karutaTrainingModel, analyticsManager);
     }
 }

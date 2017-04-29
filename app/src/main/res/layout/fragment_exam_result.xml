@@ -7,11 +7,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.ExamResultViewModel" />
-
-        <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultContact.Actions" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel" />
     </data>
 
     <ScrollView
@@ -65,16 +61,39 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:background="@color/white99"
                 android:gravity="center"
-                android:text="@{viewModel.averageAnswerTime}"
-                android:textSize="@dimen/text_xl" />
+                android:textSize="@dimen/text_xl"
+                app:averageAnswerTime="@{viewModel.averageAnswerTime}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:background="@color/white99"
+                android:gravity="start"
+                android:padding="@dimen/padding_xs"
+                android:text="@string/result_answer" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
+                android:background="@color/white99"
+                android:gravity="start"
+                android:padding="@dimen/padding_xs"
+                android:paddingTop="@dimen/padding_s"
+                android:text="@string/explain_result"
+                android:textSize="@dimen/text_xs" />
 
             <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView
+                android:id="@+id/view_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
                 android:background="@color/white99"
                 android:paddingBottom="@dimen/padding_s"
                 android:paddingTop="@dimen/padding_s"
@@ -85,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/margin_l"
-                android:onClick="@{() -> presenter.onClickBackMenu()}"
+                android:onClick="@{viewModel::onClickBackMenu}"
                 android:text="@string/back_menu" />
 
             <View

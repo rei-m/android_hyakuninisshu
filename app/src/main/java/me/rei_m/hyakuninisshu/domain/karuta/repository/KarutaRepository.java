@@ -28,4 +28,6 @@ public interface KarutaRepository {
                                       int kimariji);
 
     Single<Karuta> resolve(@NonNull KarutaIdentifier identifier);
+
+    Completable store(@NonNull Karuta karuta);
 }

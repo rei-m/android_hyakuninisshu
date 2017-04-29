@@ -11,11 +11,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizAnswerViewModel" />
-
-        <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerContact.Actions" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel" />
     </data>
 
     <RelativeLayout
@@ -24,6 +20,7 @@
         android:background="@drawable/tatami">
 
         <TextView
+            android:id="@+id/karuta_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/layout_karuta"
@@ -36,7 +33,28 @@
             android:paddingRight="@dimen/padding_m"
             android:paddingStart="@dimen/padding_m"
             android:paddingTop="@dimen/padding_s"
-            android:text="@{viewModel.karutaNo}"
+            android:textSize="@dimen/text_s"
+            app:karutaNo="@{viewModel.karutaNo}"
+            app:kimariji="@{viewModel.kimariji}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/layout_karuta"
+            android:layout_marginBottom="@dimen/margin_m"
+            android:layout_marginLeft="@dimen/margin_s"
+            android:layout_marginStart="@dimen/margin_s"
+            android:layout_toEndOf="@id/karuta_no"
+            android:layout_toRightOf="@id/karuta_no"
+            android:background="@android:color/white"
+            android:onClick="@{viewModel::onClickAnswer}"
+            android:paddingBottom="@dimen/padding_s"
+            android:paddingEnd="@dimen/padding_s"
+            android:paddingLeft="@dimen/padding_s"
+            android:paddingRight="@dimen/padding_s"
+            android:paddingStart="@dimen/padding_s"
+            android:paddingTop="@dimen/padding_s"
+            android:text="@string/char_material"
             android:textSize="@dimen/text_s" />
 
         <FrameLayout
@@ -122,9 +140,11 @@
             android:layout_below="@id/layout_karuta"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
-            android:onClick="@{() -> presenter.onClickNextQuiz()}"
+            android:onClick="@{viewModel::onClickNextQuiz}"
+            android:paddingBottom="@dimen/padding_m"
             android:paddingEnd="@dimen/padding_m"
             android:paddingStart="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_m"
             android:text="@string/go_to_next"
             android:textSize="@dimen/text_m"
             android:visibility="@{viewModel.existNextQuiz ? View.VISIBLE : View.GONE}" />
@@ -135,7 +155,9 @@
             android:layout_below="@id/layout_karuta"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
-            android:onClick="@{() -> presenter.onClickConfirmResult()}"
+            android:onClick="@{viewModel::onClickConfirmResult}"
+            android:paddingBottom="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_m"
             android:text="@string/confirm_result"
             android:textSize="@dimen/text_m"
             android:visibility="@{viewModel.existNextQuiz ? View.GONE : View.VISIBLE}" />

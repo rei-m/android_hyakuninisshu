@@ -5,6 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.karuta.TrainingExamMasterActivity">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingExamMasterActivityViewModel" />
+
+    </data>
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -44,7 +54,7 @@
                 android:padding="@dimen/padding_xs"
                 android:text="@string/text_empty_training"
                 android:textSize="@dimen/text_m"
-                android:visibility="gone" />
+                android:visibility="@{viewModel.isVisibleEmpty ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
@@ -52,11 +62,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:visibility="gone"
                 ads:adSize="SMART_BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id" />
+                ads:adUnitId="@string/banner_ad_unit_id"
+                app:visibilityWithAd="@{viewModel.isVisibleAd}" />
 
         </RelativeLayout>
-        
+
     </android.support.design.widget.CoordinatorLayout>
 </layout>

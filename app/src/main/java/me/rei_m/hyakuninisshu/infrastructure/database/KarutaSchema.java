@@ -85,6 +85,10 @@ public class KarutaSchema {
     @Nullable
     public int colorNo;
 
+    @Column
+    @Nullable
+    public Boolean isEdited;
+
     @Override
     public String toString() {
         return "KarutaSchema{" +
@@ -105,6 +109,7 @@ public class KarutaSchema {
                 ", translation='" + translation + '\'' +
                 ", color='" + color + '\'' +
                 ", colorNo=" + colorNo +
+                ", isEdited=" + isEdited +
                 '}';
     }
 }

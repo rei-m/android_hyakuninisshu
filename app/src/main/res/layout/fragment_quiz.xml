@@ -5,17 +5,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizViewModel" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel" />
 
         <variable
             name="viewSize"
             type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment.RelativeViewSize" />
-
-        <variable
-            name="presenter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizContact.Actions" />
     </data>
 
     <RelativeLayout
@@ -316,8 +314,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginRight="@dimen/margin_m"
-                android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 1)}"
+                android:onClick="@{() -> viewModel.onClickChoice(1)}"
                 android:padding="@dimen/padding_xs"
+                android:visibility="@{viewModel.isVisibleChoiceList.get(0).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
                 app:elevation="@{@dimen/elevation_level_xs}">
 
                 <LinearLayout
@@ -331,7 +330,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceFirst.fifthPhrase}"
+                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(0)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
 
                     <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
@@ -339,7 +338,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_xs"
                         android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceFirst.fourthPhrase}"
+                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(0)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
 
                 </LinearLayout>
@@ -353,8 +352,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginRight="@dimen/margin_m"
-                android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 2)}"
+                android:onClick="@{() -> viewModel.onClickChoice(2)}"
                 android:padding="@dimen/padding_xs"
+                android:visibility="@{viewModel.isVisibleChoiceList.get(1).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
                 app:elevation="@{@dimen/elevation_level_xs}">
 
                 <LinearLayout
@@ -368,7 +368,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceSecond.fifthPhrase}"
+                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(1)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
 
                     <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
@@ -376,7 +376,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_xs"
                         android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceSecond.fourthPhrase}"
+                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(1)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
                 </LinearLayout>
             </FrameLayout>
@@ -388,8 +388,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginRight="@dimen/margin_m"
-                android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 3)}"
+                android:onClick="@{() -> viewModel.onClickChoice(3)}"
                 android:padding="@dimen/padding_xs"
+                android:visibility="@{viewModel.isVisibleChoiceList.get(2).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
                 app:elevation="@{@dimen/elevation_level_xs}">
 
                 <LinearLayout
@@ -403,7 +404,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceThird.fifthPhrase}"
+                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(2)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
 
                     <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
@@ -411,7 +412,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_xs"
                         android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceThird.fourthPhrase}"
+                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(2)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
                 </LinearLayout>
             </FrameLayout>
@@ -421,8 +422,9 @@
                 style="@style/KarutaChoicePhrase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> presenter.onClickChoice(viewModel.quizId, 4)}"
+                android:onClick="@{() -> viewModel.onClickChoice(4)}"
                 android:padding="@dimen/padding_xs"
+                android:visibility="@{viewModel.isVisibleChoiceList.get(3).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
                 app:elevation="@{@dimen/elevation_level_xs}">
 
                 <LinearLayout
@@ -436,7 +438,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceFourth.fifthPhrase}"
+                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(3)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
 
                     <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView
@@ -444,7 +446,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_xs"
                         android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceFourth.fourthPhrase}"
+                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(3)}"
                         app:verticalTextSizeByPx="@{viewSize.choiceTextSize}" />
                 </LinearLayout>
             </FrameLayout>
@@ -455,8 +457,8 @@
             android:id="@+id/layout_quiz_result"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{() -> presenter.onClickResult(viewModel.quizId)}"
-            android:visibility="gone"
+            android:onClick="@{() -> viewModel.onClickResult()}"
+            android:visibility="@{viewModel.isVisibleResult ? View.VISIBLE : View.GONE}"
             app:elevation="@{@dimen/elevation_level_ms}">
 
             <ImageView
@@ -464,7 +466,9 @@
                 android:layout_width="@dimen/size_karuta_quiz_result_mark"
                 android:layout_height="@dimen/size_karuta_quiz_result_mark"
                 android:layout_gravity="center"
-                android:contentDescription="@string/score" />
+                android:contentDescription="@string/score"
+                android:visibility="@{viewModel.isVisibleResult ? View.VISIBLE : View.GONE}"
+                app:isCollect="@{viewModel.isCollect}" />
 
         </FrameLayout>
 

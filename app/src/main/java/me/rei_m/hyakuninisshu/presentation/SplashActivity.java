@@ -4,37 +4,57 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.model.ApplicationModel;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
-import me.rei_m.hyakuninisshu.usecase.StartApplicationUsecase;
 
 public class SplashActivity extends BaseActivity {
 
     @Inject
-    ActivityNavigator navigator;
+    Navigator navigator;
 
     @Inject
-    StartApplicationUsecase startApplicationUsecase;
+    ApplicationModel applicationModel;
+
+    private CompositeDisposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+    }
 
-        startApplicationUsecase.execute()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    navigator.navigateToEntrance(this);
-                    finish();
-                });
+    @Override
+    protected void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.add(applicationModel.completeStartEvent.subscribe(v -> {
+            navigator.navigateToEntrance();
+            finish();
+        }));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applicationModel.start();
     }
 
     @Override
     protected void setupActivityComponent() {
-        ((App) getApplication()).getComponent().plus(new SplashActivityModule(this)).inject(this);
+        ((App) getApplication()).getComponent().plus(new ActivityModule(this), new SplashActivityModule()).inject(this);
     }
 }

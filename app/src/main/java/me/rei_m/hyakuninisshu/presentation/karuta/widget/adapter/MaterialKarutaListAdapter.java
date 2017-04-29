@@ -1,19 +1,18 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter;
 
 import android.content.Context;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.MaterialViewModel;
+import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemViewModel;
 
 public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -32,36 +31,52 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
         FOOTER;
 
         static ItemViewType forId(int id) {
-            for (ItemViewType value : values()) {
-                if (value.ordinal() == id) {
-                    return value;
-                }
-            }
-            throw new AssertionError("no enum found for the id. you forgot to implement?");
+            return values()[id];
         }
     }
 
     private static final int FOOTER_COUNT = 1;
 
-    private List<MaterialViewModel.KarutaViewModel> karutaViewModelList = new ArrayList<>();
+    private final ObservableArrayList<Karuta> karutaList;
 
-    private OnRecyclerViewInteractionListener listener;
+    private final Injector injector;
 
-    public MaterialKarutaListAdapter() {
+    public MaterialKarutaListAdapter(@NonNull ObservableArrayList<Karuta> karutaList,
+                                     @NonNull Injector injector) {
+        this.karutaList = karutaList;
+        this.injector = injector;
 
-    }
+        this.karutaList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Karuta>>() {
+            @Override
+            public void onChanged(ObservableList<Karuta> karutas) {
+                notifyDataSetChanged();
+            }
 
-    public void setKarutaViewModelList(@NonNull List<MaterialViewModel.KarutaViewModel> karutaViewModelList) {
-        this.karutaViewModelList = karutaViewModelList;
-    }
+            @Override
+            public void onItemRangeChanged(ObservableList<Karuta> karutas, int i, int i1) {
+                notifyDataSetChanged();
+            }
 
-    public void setListener(@Nullable OnRecyclerViewInteractionListener listener) {
-        this.listener = listener;
+            @Override
+            public void onItemRangeInserted(ObservableList<Karuta> karutas, int i, int i1) {
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onItemRangeMoved(ObservableList<Karuta> karutas, int i, int i1, int i2) {
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onItemRangeRemoved(ObservableList<Karuta> karutas, int i, int i1) {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position < karutaViewModelList.size()) ? ItemViewType.ITEM.ordinal() : ItemViewType.FOOTER.ordinal();
+        return (position < karutaList.size()) ? ItemViewType.ITEM.ordinal() : ItemViewType.FOOTER.ordinal();
     }
 
     @Override
@@ -72,6 +87,7 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
                 AdapterItemMaterialKarutaBinding binding = AdapterItemMaterialKarutaBinding.inflate(LayoutInflater.from(parent.getContext()),
                         parent,
                         false);
+                binding.setViewModel(injector.karutaListItemViewModel());
                 return new ItemViewHolder(binding);
             default:
                 Context context = parent.getContext();
@@ -88,19 +104,17 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-            MaterialViewModel.KarutaViewModel viewModel = karutaViewModelList.get(position);
-            itemViewHolder.binding.setViewModel(viewModel);
-            itemViewHolder.binding.setListener(listener);
+            itemViewHolder.binding.getViewModel().setKaruta(karutaList.get(position));
             itemViewHolder.binding.executePendingBindings();
         }
     }
 
     @Override
     public int getItemCount() {
-        return karutaViewModelList.size() + FOOTER_COUNT;
+        return karutaList.size() + FOOTER_COUNT;
     }
 
-    public interface OnRecyclerViewInteractionListener {
-        void onItemClicked(int karutaNo);
+    public interface Injector {
+        KarutaListItemViewModel karutaListItemViewModel();
     }
 }

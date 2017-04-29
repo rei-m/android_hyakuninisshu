@@ -7,15 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
-import me.rei_m.hyakuninisshu.presentation.ActivityNavigator;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
@@ -28,14 +27,14 @@ import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModul
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
-import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
+import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
 
-public class TrainingMasterActivity extends BaseActivity implements TrainingMasterContact.View,
-        HasComponent<QuizMasterActivityComponent>,
+public class TrainingMasterActivity extends BaseActivity implements HasComponent<QuizMasterActivityComponent>,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnClickPositiveButtonListener {
+        AlertDialogFragment.OnDialogInteractionListener {
 
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull TrainingRangeFrom trainingRangeFrom,
@@ -68,15 +67,16 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
 
     private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";
 
-    @Inject
-    ActivityNavigator navigator;
+    private static final String KEY_IS_STARTED = "isStarted";
 
     @Inject
-    TrainingMasterContact.Actions presenter;
+    TrainingMasterActivityViewModel viewModel;
 
     private QuizMasterActivityComponent component;
 
     private ActivityTrainingMasterBinding binding;
+
+    private CompositeDisposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,26 +90,76 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
         Kimariji kimariji = (Kimariji) getIntent().getSerializableExtra(ARG_KIMARIJI);
         Color color = (Color) getIntent().getSerializableExtra(ARG_COLOR);
 
+        binding.setViewModel(viewModel);
+
         if (savedInstanceState == null) {
-            presenter.onCreate(this,
-                    trainingRangeFrom,
+            viewModel.onCreate(trainingRangeFrom,
                     trainingRangeTo,
                     kimariji,
                     color);
+        } else {
+            boolean isStarted = savedInstanceState.getBoolean(KEY_IS_STARTED, false);
+            viewModel.onReCreate(trainingRangeFrom,
+                    trainingRangeTo,
+                    kimariji,
+                    color,
+                    isStarted);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.add(viewModel.startTrainingEvent.subscribe(unit -> {
+            KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
+            KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.TAG)
+                    .commit();
+        }));
+        viewModel.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        viewModel.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        viewModel.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.onDestroy();
         binding = null;
         component = null;
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
+    }
+
+    @Override
     protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new QuizMasterActivityModule(this));
+        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new QuizMasterActivityModule());
         component.inject(this);
     }
 
@@ -122,30 +172,11 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
     }
 
     @Override
-    public void startTraining() {
-
-        KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
-        KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.TAG)
-                .commit();
-    }
-
-    @Override
-    public void showEmpty() {
-        binding.textEmpty.setVisibility(View.VISIBLE);
-        binding.adView.setVisibility(View.VISIBLE);
-        ViewUtil.loadAd(binding.adView);
-    }
-
-    @Override
-    public void onAnswered(@NonNull String quizId) {
+    public void onAnswered(long karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
+                .replace(R.id.content, QuizAnswerFragment.newInstance(karutaId, existNextQuiz), QuizAnswerFragment.TAG)
                 .commit();
     }
 
@@ -153,8 +184,10 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
     public void onErrorQuiz() {
         DialogFragment newFragment = AlertDialogFragment.newInstance(
                 R.string.text_title_error,
-                R.string.text_message_quiz_error);
-        newFragment.show(getSupportFragmentManager(), "dialog");
+                R.string.text_message_quiz_error,
+                true,
+                false);
+        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
     }
 
     @Override
@@ -172,21 +205,36 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
 
     @Override
     public void onClickGoToResult() {
+        viewModel.onClickGoToResult();
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
                 .commit();
+    }
 
-        binding.adView.setVisibility(View.VISIBLE);
-        ViewUtil.loadAd(binding.adView);
+    @Override
+    public void onReceiveIllegalArguments() {
+        DialogFragment newFragment = AlertDialogFragment.newInstance(
+                R.string.text_title_error,
+                R.string.text_message_illegal_arguments,
+                true,
+                false);
+        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
     }
 
     @Override
     public void onRestartTraining() {
-        startTraining();
-        binding.adView.destroy();
-        binding.adView.setVisibility(View.GONE);
+        viewModel.onRestartTraining();
+
+        KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
+        KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.TAG)
+                .commit();
     }
 
     @Override
@@ -195,7 +243,12 @@ public class TrainingMasterActivity extends BaseActivity implements TrainingMast
     }
 
     @Override
-    public void onClickPositiveButton() {
+    public void onDialogPositiveClick() {
         finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+
     }
 }

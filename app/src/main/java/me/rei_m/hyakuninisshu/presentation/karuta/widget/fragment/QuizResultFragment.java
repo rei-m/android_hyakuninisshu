@@ -8,14 +8,15 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizResultBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.viewmodel.QuizResultViewModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizResultFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizResultFragmentModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel;
 
-public class QuizResultFragment extends BaseFragment implements QuizResultContact.View {
+public class QuizResultFragment extends BaseFragment {
 
     public static final String TAG = "QuizResultFragment";
 
@@ -24,26 +25,22 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     }
 
     @Inject
-    QuizResultContact.Actions presenter;
+    QuizResultFragmentViewModel viewModel;
 
     private FragmentQuizResultBinding binding;
 
     private OnFragmentInteractionListener listener;
+
+    private CompositeDisposable disposable;
 
     public QuizResultFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        presenter.onCreate(this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentQuizResultBinding.inflate(inflater, container, false);
-        binding.setPresenter(presenter);
+        binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
@@ -54,15 +51,45 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.addAll(viewModel.restartEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onRestartTraining();
+            }
+        }), viewModel.onClickBackMenuEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onFinishTraining();
+            }
+        }), viewModel.errorEvent.subscribe(v -> {
+            if (listener != null) {
+                listener.onErrorQuiz();
+            }
+        }));
+        viewModel.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        viewModel.onStop();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume();
+        viewModel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        presenter.onPause();
+        viewModel.onPause();
     }
 
     @Override
@@ -87,32 +114,6 @@ public class QuizResultFragment extends BaseFragment implements QuizResultContac
     protected void setupFragmentComponent() {
         ((HasComponent<Injector>) getActivity()).getComponent()
                 .plus(new QuizResultFragmentModule(getContext())).inject(this);
-    }
-
-    @Override
-    public void initialize(QuizResultViewModel viewModel) {
-        binding.setViewModel(viewModel);
-    }
-
-    @Override
-    public void onRestartTraining() {
-        if (listener != null) {
-            listener.onRestartTraining();
-        }
-    }
-
-    @Override
-    public void finishTraining() {
-        if (listener != null) {
-            listener.onFinishTraining();
-        }
-    }
-
-    @Override
-    public void displayError() {
-        if (listener != null) {
-            listener.onErrorQuiz();
-        }
     }
 
     public interface Injector {

@@ -2,12 +2,10 @@ package me.rei_m.hyakuninisshu.presentation.utilitty;
 
 import android.content.Context;
 import android.databinding.BindingAdapter;
-import android.databinding.ObservableField;
 import android.graphics.Color;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -17,9 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdView;
+
+import java.util.Locale;
 
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.QuizState;
+import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
 
@@ -28,16 +29,6 @@ import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant
 public class DataBindingAttributeBinder {
 
     private DataBindingAttributeBinder() {
-    }
-
-    @BindingAdapter({"textForQuiz", "textPosition"})
-    public static void setTextForQuiz(@NonNull TextView view,
-                                      @Nullable String text,
-                                      int textPosition) {
-        if (text == null || text.length() < textPosition) {
-            return;
-        }
-        view.setText(text.substring(textPosition - 1, textPosition));
     }
 
     @BindingAdapter({"textSizeByPx"})
@@ -64,39 +55,6 @@ public class DataBindingAttributeBinder {
         view.setTextSizeByPx(textSize);
     }
 
-    @BindingAdapter({"stringDrawableId"})
-    public static void setStringDrawableId(@NonNull ImageView view,
-                                           @Nullable String drawableId) {
-        if (drawableId == null) {
-            return;
-        }
-        int resId = view.getResources().getIdentifier(drawableId, "drawable", view.getContext().getApplicationContext().getPackageName());
-        Glide.with(view.getContext()).load(resId).into(view);
-    }
-
-    @BindingAdapter({"visibilityByQuizState"})
-    public static void setVisibilityByQuizState(@NonNull ImageView imageView,
-                                                @Nullable ObservableField<QuizState> quizState) {
-        if (quizState == null) {
-            imageView.setVisibility(View.GONE);
-            return;
-        }
-
-        switch (quizState.get()) {
-            case UNANSWERED:
-                imageView.setVisibility(View.GONE);
-                break;
-            case ANSWERED_COLLECT:
-                Glide.with(imageView.getContext()).load(R.drawable.check_correct).dontAnimate().into(imageView);
-                imageView.setVisibility(View.VISIBLE);
-                break;
-            case ANSWERED_INCORRECT:
-                Glide.with(imageView.getContext()).load(R.drawable.check_incorrect).dontAnimate().into(imageView);
-                imageView.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
     @BindingAdapter({"examResultList"})
     public static void setKarutaExamResult(@NonNull KarutaExamResultView view,
                                            @Nullable boolean[] karutaQuizResultList) {
@@ -104,12 +62,6 @@ public class DataBindingAttributeBinder {
             return;
         }
         view.setResult(karutaQuizResultList);
-    }
-
-    @BindingAdapter({"elevation"})
-    public static void setElevation(@NonNull View view,
-                                    @DimenRes int elevation) {
-        ViewCompat.setElevation(view, view.getContext().getResources().getDimension(elevation));
     }
 
     @BindingAdapter({"karutaSrc"})
@@ -133,7 +85,7 @@ public class DataBindingAttributeBinder {
     public static void setTextTopPhraseKana(@NonNull TextView view,
                                             @Nullable String topPhrase,
                                             int kimariji) {
-        if (topPhrase == null) {
+        if (topPhrase == null || kimariji < 1) {
             return;
         }
 
@@ -151,5 +103,37 @@ public class DataBindingAttributeBinder {
         SpannableStringBuilder ssb = new SpannableStringBuilder().append(topPhrase);
         ssb.setSpan(new ForegroundColorSpan(Color.RED), 0, finallyKimariji - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         view.setText(ssb);
+    }
+
+    @BindingAdapter({"averageAnswerTime"})
+    public static void setAverageAnswerTime(@NonNull TextView view,
+                                            float averageAnswerTime) {
+        Context context = view.getContext().getApplicationContext();
+        final String averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerTime);
+        view.setText(context.getString(R.string.seconds, averageAnswerTimeString));
+    }
+
+    @BindingAdapter({"karutaNo"})
+    public static void setKarutaNo(@NonNull TextView view,
+                                   int karutaNo) {
+        if (karutaNo < 1) {
+            return;
+        }
+
+        Context context = view.getContext().getApplicationContext();
+        String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo);
+        view.setText(text);
+    }
+
+    @BindingAdapter({"visibilityWithAd"})
+    public static void setVisibilityWithAd(@NonNull AdView view,
+                                           boolean isVisible) {
+        if (isVisible) {
+            view.setVisibility(View.VISIBLE);
+            ViewUtil.loadAd(view);
+        } else {
+            view.destroy();
+            view.setVisibility(View.GONE);
+        }
     }
 }

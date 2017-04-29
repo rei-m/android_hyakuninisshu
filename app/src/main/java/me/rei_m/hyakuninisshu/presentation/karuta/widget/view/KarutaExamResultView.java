@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
 import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
 
@@ -21,12 +23,18 @@ public class KarutaExamResultView extends LinearLayout {
 
     static {
         for (int i = 0; i < KarutaConstant.NUMBER_OF_KARUTA; i++) {
-            int viewId = (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) ?
-                    ViewUtil.generateViewId() :
-                    View.generateViewId();
+            int viewId;
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                viewId = View.generateViewId();
+            } else {
+                viewId = ViewUtil.generateViewId();
+            }
             cellViewIdList[i] = viewId;
         }
     }
+
+    private PublishSubject<Integer> onClickKarutaEventSubject = PublishSubject.create();
+    public Observable<Integer> onClickKarutaEvent = onClickKarutaEventSubject;
 
     public KarutaExamResultView(Context context) {
         super(context);
@@ -75,7 +83,9 @@ public class KarutaExamResultView extends LinearLayout {
     public void setResult(boolean[] karutaQuizResultList) {
         for (int i = 0; i < karutaQuizResultList.length; i++) {
             KarutaExamResultCellView cellView = (KarutaExamResultCellView) findViewById(cellViewIdList[i]);
-            cellView.setResult(i + 1, karutaQuizResultList[i]);
+            int karutaNo = i + 1;
+            cellView.setResult(karutaNo, karutaQuizResultList[i]);
+            cellView.setOnClickListener(view -> onClickKarutaEventSubject.onNext(karutaNo));
         }
     }
 }
