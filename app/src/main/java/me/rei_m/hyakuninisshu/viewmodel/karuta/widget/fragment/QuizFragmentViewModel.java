@@ -159,7 +159,6 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     }
 
     public void onClickResult() {
-        // TODO: 回答済みかチェック.
         onClickResultEventSubject.onNext(Unit.INSTANCE);
     }
 

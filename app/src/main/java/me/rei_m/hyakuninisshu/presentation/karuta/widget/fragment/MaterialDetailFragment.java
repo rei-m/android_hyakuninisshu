@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ public class MaterialDetailFragment extends BaseFragment {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
 
+    private static final int INVALID_KARUTA_NO = -1;
+
     public static MaterialDetailFragment newInstance(int karutaNo) {
         MaterialDetailFragment fragment = new MaterialDetailFragment();
         Bundle args = new Bundle();
@@ -34,7 +37,9 @@ public class MaterialDetailFragment extends BaseFragment {
 
     private FragmentMaterialDetailBinding binding;
 
-    private int karutaNo;
+    private OnFragmentInteractionListener listener;
+
+    private int karutaNo = INVALID_KARUTA_NO;
 
     public MaterialDetailFragment() {
         // Required empty public constructor
@@ -44,8 +49,14 @@ public class MaterialDetailFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            // TODO: エラーチェック.
-            karutaNo = getArguments().getInt(ARG_KARUTA_NO);
+            karutaNo = getArguments().getInt(ARG_KARUTA_NO, INVALID_KARUTA_NO);
+        }
+
+        if (karutaNo == INVALID_KARUTA_NO) {
+            if (listener != null) {
+                listener.onReceiveIllegalArguments();
+            }
+            return;
         }
         viewModel.onCreate(karutaNo);
     }
@@ -93,6 +104,23 @@ public class MaterialDetailFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            listener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
         ((HasComponent<Injector>) getActivity()).getComponent()
@@ -101,5 +129,9 @@ public class MaterialDetailFragment extends BaseFragment {
 
     public interface Injector {
         MaterialDetailFragmentComponent plus(MaterialDetailFragmentModule fragmentModule);
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onReceiveIllegalArguments();
     }
 }

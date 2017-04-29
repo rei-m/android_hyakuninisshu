@@ -24,6 +24,8 @@ public class ExamResultFragment extends BaseFragment {
 
     private static final String ARG_EXAM_ID = "examId";
 
+    private static final long INVALID_EXAM_ID = -1;
+
     public static ExamResultFragment newInstance(@NonNull Long examId) {
         ExamResultFragment fragment = new ExamResultFragment();
         Bundle args = new Bundle();
@@ -48,11 +50,19 @@ public class ExamResultFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        long examId = INVALID_EXAM_ID;
         if (getArguments() != null) {
-            // TODO: エラーチェック.
-            long examId = getArguments().getLong(ARG_EXAM_ID);
-            viewModel.onCreate(examId);
+            examId = getArguments().getLong(ARG_EXAM_ID, INVALID_EXAM_ID);
         }
+
+        if (examId == INVALID_EXAM_ID) {
+            if (listener != null) {
+                listener.onReceiveIllegalArguments();
+            }
+            return;
+        }
+
+        viewModel.onCreate(examId);
     }
 
     @Override
@@ -131,5 +141,7 @@ public class ExamResultFragment extends BaseFragment {
 
     public interface OnFragmentInteractionListener {
         void onFinishExam();
+
+        void onReceiveIllegalArguments();
     }
 }

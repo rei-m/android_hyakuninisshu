@@ -30,7 +30,7 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnClickPositiveButtonListener {
+        AlertDialogFragment.OnDialogInteractionListener {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, TrainingExamMasterActivity.class);
@@ -132,8 +132,10 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
     public void onErrorQuiz() {
         DialogFragment newFragment = AlertDialogFragment.newInstance(
                 R.string.text_title_error,
-                R.string.text_message_quiz_error);
-        newFragment.show(getSupportFragmentManager(), "dialog");
+                R.string.text_message_quiz_error,
+                true,
+                false);
+        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
     }
 
     @Override
@@ -156,6 +158,16 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
     }
 
     @Override
+    public void onReceiveIllegalArguments() {
+        DialogFragment newFragment = AlertDialogFragment.newInstance(
+                R.string.text_title_error,
+                R.string.text_message_illegal_arguments,
+                true,
+                false);
+        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
+    }
+
+    @Override
     public void onRestartTraining() {
         viewModel.onRestartTraining();
         startTraining();
@@ -167,8 +179,13 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
     }
 
     @Override
-    public void onClickPositiveButton() {
+    public void onDialogPositiveClick() {
         finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+
     }
 
     private void startTraining() {

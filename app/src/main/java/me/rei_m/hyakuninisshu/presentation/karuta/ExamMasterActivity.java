@@ -30,7 +30,7 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         ExamResultFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnClickPositiveButtonListener {
+        AlertDialogFragment.OnDialogInteractionListener {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
@@ -146,7 +146,9 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
     public void onErrorQuiz() {
         DialogFragment newFragment = AlertDialogFragment.newInstance(
                 R.string.text_title_error,
-                R.string.text_message_quiz_error);
+                R.string.text_message_quiz_error,
+                true,
+                false);
         newFragment.show(getSupportFragmentManager(), "dialog");
     }
 
@@ -165,12 +167,27 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
     }
 
     @Override
+    public void onReceiveIllegalArguments() {
+        DialogFragment newFragment = AlertDialogFragment.newInstance(
+                R.string.text_title_error,
+                R.string.text_message_illegal_arguments,
+                true,
+                false);
+        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
+    }
+
+    @Override
     public void onFinishExam() {
         finish();
     }
 
     @Override
-    public void onClickPositiveButton() {
+    public void onDialogPositiveClick() {
         finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+
     }
 }

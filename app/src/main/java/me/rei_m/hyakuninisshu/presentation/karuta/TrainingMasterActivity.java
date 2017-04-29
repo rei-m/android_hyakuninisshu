@@ -34,7 +34,7 @@ public class TrainingMasterActivity extends BaseActivity implements HasComponent
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnClickPositiveButtonListener {
+        AlertDialogFragment.OnDialogInteractionListener {
 
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull TrainingRangeFrom trainingRangeFrom,
@@ -184,8 +184,10 @@ public class TrainingMasterActivity extends BaseActivity implements HasComponent
     public void onErrorQuiz() {
         DialogFragment newFragment = AlertDialogFragment.newInstance(
                 R.string.text_title_error,
-                R.string.text_message_quiz_error);
-        newFragment.show(getSupportFragmentManager(), "dialog");
+                R.string.text_message_quiz_error,
+                true,
+                false);
+        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
     }
 
     @Override
@@ -213,6 +215,16 @@ public class TrainingMasterActivity extends BaseActivity implements HasComponent
     }
 
     @Override
+    public void onReceiveIllegalArguments() {
+        DialogFragment newFragment = AlertDialogFragment.newInstance(
+                R.string.text_title_error,
+                R.string.text_message_illegal_arguments,
+                true,
+                false);
+        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
+    }
+
+    @Override
     public void onRestartTraining() {
         viewModel.onRestartTraining();
 
@@ -231,7 +243,12 @@ public class TrainingMasterActivity extends BaseActivity implements HasComponent
     }
 
     @Override
-    public void onClickPositiveButton() {
+    public void onDialogPositiveClick() {
         finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+
     }
 }

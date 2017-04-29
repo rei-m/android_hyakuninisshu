@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
+import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -72,10 +72,10 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
             karutaNo.set((int) karuta.getIdentifier().getValue());
             kimariji.set(karuta.getKimariji());
             creator.set(karuta.getCreator());
-            firstPhrase.set(KarutaDisplayUtil.padSpace(karuta.getTopPhrase().getFirst().getKanji(), 5));
+            firstPhrase.set(padSpace(karuta.getTopPhrase().getFirst().getKanji(), 5));
             secondPhrase.set(karuta.getTopPhrase().getSecond().getKanji());
             thirdPhrase.set(karuta.getTopPhrase().getThird().getKanji());
-            fourthPhrase.set(KarutaDisplayUtil.padSpace(karuta.getBottomPhrase().getFourth().getKanji(), 7));
+            fourthPhrase.set(padSpace(karuta.getBottomPhrase().getFourth().getKanji(), 7));
             fifthPhrase.set(karuta.getBottomPhrase().getFifth().getKanji());
         }), karutaModel.error.subscribe(v -> errorEventSubject.onNext(Unit.INSTANCE)));
     }
@@ -110,8 +110,19 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
         }
 
         Context context = view.getContext().getApplicationContext();
-        String text = KarutaDisplayUtil.convertNumberToString(context, karutaNo) + " / " +
-                KarutaDisplayUtil.convertKimarijiToString(context, kimariji);
+        String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo) + " / " +
+                KarutaDisplayHelper.convertKimarijiToString(context, kimariji);
         view.setText(text);
+    }
+
+    private static String padSpace(String text, int count) {
+
+        int finallyCount = (count < text.length()) ? text.length() : count;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < finallyCount; i++) {
+            builder.append("　");
+        }
+        return (text + builder.toString()).substring(0, finallyCount);
     }
 }

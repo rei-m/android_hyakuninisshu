@@ -1,7 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -10,19 +10,31 @@ import android.support.v7.app.AlertDialog;
 
 public class AlertDialogFragment extends DialogFragment {
 
+    public static final String TAG = "AlertDialogFragment";
+
     private static final String ARG_TITLE = "title";
 
     private static final String ARG_MESSAGE = "message";
 
+    private static final String ARG_HAS_POSITIVE_BUTTON = "hasPositiveButton";
+
+    private static final String ARG_HAS_NEGATIVE_BUTTON = "hasNegativeButton";
+
     public static AlertDialogFragment newInstance(@StringRes int title,
-                                                  @StringRes int message) {
+                                                  @StringRes int message,
+                                                  boolean hasPositiveButton,
+                                                  boolean hasNegativeButton) {
         AlertDialogFragment fragment = new AlertDialogFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_TITLE, title);
         args.putInt(ARG_MESSAGE, message);
+        args.putBoolean(ARG_HAS_POSITIVE_BUTTON, hasPositiveButton);
+        args.putBoolean(ARG_HAS_NEGATIVE_BUTTON, hasNegativeButton);
         fragment.setArguments(args);
         return fragment;
     }
+
+    private OnDialogInteractionListener listener;
 
     @NonNull
     @Override
@@ -32,33 +44,53 @@ public class AlertDialogFragment extends DialogFragment {
 
         int message = getArguments().getInt(ARG_MESSAGE);
 
-        Activity activity = getActivity();
+        boolean hasPositiveButton = getArguments().getBoolean(ARG_HAS_POSITIVE_BUTTON);
+
+        boolean hasNegativeButton = getArguments().getBoolean(ARG_HAS_NEGATIVE_BUTTON);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(title)
                 .setMessage(message)
                 .setCancelable(false);
 
-        if (activity instanceof OnClickPositiveButtonListener) {
+        if (hasPositiveButton) {
             builder.setPositiveButton(android.R.string.ok, (dialog, whichButton) -> {
-                ((OnClickPositiveButtonListener) activity).onClickPositiveButton();
+                if (listener != null) {
+                    listener.onDialogPositiveClick();
+                }
             });
         }
 
-        if (activity instanceof OnClickNegativeButtonListener) {
+        if (hasNegativeButton) {
             builder.setPositiveButton(android.R.string.cancel, (dialog, whichButton) -> {
-                ((OnClickNegativeButtonListener) activity).onClickNegativeButton();
+                if (listener != null) {
+                    listener.onDialogNegativeClick();
+                }
             });
         }
 
         return builder.create();
     }
 
-    public interface OnClickPositiveButtonListener {
-        void onClickPositiveButton();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnDialogInteractionListener) {
+            listener = (OnDialogInteractionListener) context;
+        } else if (getTargetFragment() instanceof OnDialogInteractionListener) {
+            listener = (OnDialogInteractionListener) getTargetFragment();
+        }
     }
 
-    public interface OnClickNegativeButtonListener {
-        void onClickNegativeButton();
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
+    public interface OnDialogInteractionListener {
+        void onDialogPositiveClick();
+
+        void onDialogNegativeClick();
     }
 }

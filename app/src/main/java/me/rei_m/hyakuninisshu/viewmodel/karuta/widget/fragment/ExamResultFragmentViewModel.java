@@ -10,7 +10,7 @@ import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 

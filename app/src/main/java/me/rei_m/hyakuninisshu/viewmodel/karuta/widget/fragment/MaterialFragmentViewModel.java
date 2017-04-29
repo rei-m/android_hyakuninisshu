@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
 public class MaterialFragmentViewModel extends AbsFragmentViewModel {

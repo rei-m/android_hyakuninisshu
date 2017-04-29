@@ -9,7 +9,7 @@ import android.view.View;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 

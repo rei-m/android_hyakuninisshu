@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,8 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
 
     private static final String ARG_KARUTA_NO = "karutaNo";
 
+    private static final int INVALID_KARUTA_NO = -1;
+
     public static MaterialEditFragment newInstance(int karutaNo) {
         MaterialEditFragment fragment = new MaterialEditFragment();
         Bundle args = new Bundle();
@@ -38,9 +41,11 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
 
     private FragmentMaterialEditBinding binding;
 
+    private OnFragmentInteractionListener listener;
+
     private CompositeDisposable disposable;
 
-    private int karutaNo;
+    private int karutaNo = INVALID_KARUTA_NO;
 
     public MaterialEditFragment() {
         // Required empty public constructor
@@ -50,9 +55,16 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            // TODO: エラーチェック.
-            karutaNo = getArguments().getInt(ARG_KARUTA_NO);
+            karutaNo = getArguments().getInt(ARG_KARUTA_NO, INVALID_KARUTA_NO);
         }
+
+        if (karutaNo == INVALID_KARUTA_NO) {
+            if (listener != null) {
+                listener.onReceiveIllegalArguments();
+            }
+            return;
+        }
+
         viewModel.onCreate(karutaNo);
     }
 
@@ -127,6 +139,23 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            listener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     protected void setupFragmentComponent() {
         ((HasComponent<Injector>) getActivity()).getComponent()
@@ -134,16 +163,20 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
     }
 
     @Override
-    public void onDialogPositiveClick() {
+    public void onConfirmMaterialEditDialogPositiveClick() {
         viewModel.onClickDialogPositive();
     }
 
     @Override
-    public void onDialogNegativeClick() {
+    public void onConfirmMaterialEditDialogNegativeClick() {
 
     }
-
+    
     public interface Injector {
         MaterialEditFragmentComponent plus(MaterialEditFragmentModule fragmentModule);
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onReceiveIllegalArguments();
     }
 }

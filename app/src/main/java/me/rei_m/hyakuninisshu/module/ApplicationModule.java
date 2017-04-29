@@ -15,6 +15,7 @@ import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 
 @Module
 public class ApplicationModule {
@@ -29,6 +30,12 @@ public class ApplicationModule {
     @ForApplication
     Context provideContext() {
         return context;
+    }
+
+    @Provides
+    @ForApplication
+    AnalyticsManager provideAnalyticsManager() {
+        return new AnalyticsManager(context);
     }
 
     @Provides

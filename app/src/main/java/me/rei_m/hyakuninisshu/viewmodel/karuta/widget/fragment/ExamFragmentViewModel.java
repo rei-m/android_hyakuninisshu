@@ -8,7 +8,7 @@ import android.view.View;
 
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
 public class ExamFragmentViewModel extends AbsFragmentViewModel {

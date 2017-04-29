@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.presentation.utilitty.KarutaDisplayUtil;
+import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
 import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant.SPACE;
@@ -95,7 +95,7 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
         Context context = view.getContext().getApplicationContext();
 
-        String text = KarutaDisplayUtil.convertNumberToString(context, karutaNo) + " / " + creator;
+        String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo) + " / " + creator;
         view.setText(text);
     }
 }
