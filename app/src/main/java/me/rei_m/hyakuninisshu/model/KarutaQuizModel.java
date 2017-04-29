@@ -89,7 +89,10 @@ public class KarutaQuizModel {
 
     public void answer(int choiceNo) {
 
-        // TODO: IDなかったらエラーにする.
+        if (quizId == null) {
+            errorSubject.onNext(Unit.INSTANCE);
+            return;
+        }
 
         karutaQuizRepository.resolve(quizId).flatMap(new Function<KarutaQuiz, SingleSource<KarutaQuizResult>>() {
             @Override

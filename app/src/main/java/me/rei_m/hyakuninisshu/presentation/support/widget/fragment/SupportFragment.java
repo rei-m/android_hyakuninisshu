@@ -1,7 +1,5 @@
 package me.rei_m.hyakuninisshu.presentation.support.widget.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -9,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.rei_m.hyakuninisshu.App;
-import me.rei_m.hyakuninisshu.BuildConfig;
-import me.rei_m.hyakuninisshu.R;
+import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
+import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding;
 import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.component.SupportFragmentComponent;
+import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.module.SupportFragmentModule;
+import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.SupportFragmentViewModel;
 
 public class SupportFragment extends BaseFragment {
 
@@ -24,38 +25,21 @@ public class SupportFragment extends BaseFragment {
         return new SupportFragment();
     }
 
+    @Inject
+    SupportFragmentViewModel viewModel;
+
     private FragmentSupportBinding binding;
+
+    private CompositeDisposable disposable;
 
     public SupportFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSupportBinding.inflate(inflater, container, false);
-        binding.textVersion.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
-        binding.textReview.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getActivity().startActivity(intent);
-        });
-        binding.textLicense.setOnClickListener(view -> {
-            FragmentManager manager = getFragmentManager();
-            if (manager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
-                LicenceDialogFragment dialog = LicenceDialogFragment.newInstance();
-                dialog.show(manager, LicenceDialogFragment.TAG);
-            }
-        });
+        binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
@@ -66,14 +50,49 @@ public class SupportFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        AnalyticsManager analyticsManager = ((App) getContext().getApplicationContext()).getAnalyticsManager();
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.SUPPORT);
+    public void onStart() {
+        super.onStart();
+        disposable = new CompositeDisposable();
+        disposable.add(viewModel.onClickLicenseEvent.subscribe(v -> {
+            FragmentManager manager = getFragmentManager();
+            if (manager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
+                LicenceDialogFragment dialog = LicenceDialogFragment.newInstance();
+                dialog.show(manager, LicenceDialogFragment.TAG);
+            }
+        }));
+        viewModel.onStart();
     }
 
     @Override
-    protected void setupFragmentComponent() {
+    public void onStop() {
+        super.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        viewModel.onStop();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.onPause();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void setupFragmentComponent() {
+        ((HasComponent<Injector>) getActivity()).getComponent()
+                .plus(new SupportFragmentModule(getContext())).inject(this);
+    }
+
+    public interface Injector {
+        SupportFragmentComponent plus(SupportFragmentModule fragmentModule);
     }
 }

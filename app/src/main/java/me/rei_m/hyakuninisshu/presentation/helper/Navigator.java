@@ -2,8 +2,10 @@ package me.rei_m.hyakuninisshu.presentation.helper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.EntranceActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
@@ -70,5 +72,11 @@ public class Navigator {
     public void navigateToMaterialEdit(int karutaNo) {
         Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karutaNo);
         activity.startActivity(intentToLaunch);
+    }
+
+    public void navigateToAppStore() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.app_url)));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
     }
 }

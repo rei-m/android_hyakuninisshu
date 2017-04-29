@@ -4,10 +4,9 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewModel;
 
@@ -27,8 +26,8 @@ public class ExamFragmentModule {
 
     @Provides
     ExamFragmentViewModel provideExamFragmentViewModel(KarutaExamModel karutaExamModel,
-                                                       Navigator navigator) {
-        AnalyticsManager analyticsManager = ((App) context.getApplicationContext()).getAnalyticsManager();
+                                                       Navigator navigator,
+                                                       AnalyticsManager analyticsManager) {
         return new ExamFragmentViewModel(karutaExamModel, navigator, analyticsManager);
     }
 }

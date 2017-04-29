@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -21,6 +20,7 @@ import com.google.android.gms.ads.AdView;
 import java.util.Locale;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
 
@@ -55,16 +55,6 @@ public class DataBindingAttributeBinder {
         view.setTextSizeByPx(textSize);
     }
 
-    @BindingAdapter({"stringDrawableId"})
-    public static void setStringDrawableId(@NonNull ImageView view,
-                                           @Nullable String drawableId) {
-        if (drawableId == null) {
-            return;
-        }
-        int resId = view.getResources().getIdentifier(drawableId, "drawable", view.getContext().getApplicationContext().getPackageName());
-        Glide.with(view.getContext()).load(resId).into(view);
-    }
-
     @BindingAdapter({"examResultList"})
     public static void setKarutaExamResult(@NonNull KarutaExamResultView view,
                                            @Nullable boolean[] karutaQuizResultList) {
@@ -72,12 +62,6 @@ public class DataBindingAttributeBinder {
             return;
         }
         view.setResult(karutaQuizResultList);
-    }
-
-    @BindingAdapter({"elevation"})
-    public static void setElevation(@NonNull View view,
-                                    @DimenRes int elevation) {
-        ViewCompat.setElevation(view, view.getContext().getResources().getDimension(elevation));
     }
 
     @BindingAdapter({"karutaSrc"})
@@ -137,7 +121,7 @@ public class DataBindingAttributeBinder {
         }
 
         Context context = view.getContext().getApplicationContext();
-        String text = KarutaDisplayUtil.convertNumberToString(context, karutaNo);
+        String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo);
         view.setText(text);
     }
 

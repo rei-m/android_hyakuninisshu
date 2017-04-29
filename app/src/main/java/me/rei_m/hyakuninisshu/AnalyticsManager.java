@@ -1,11 +1,10 @@
-package me.rei_m.hyakuninisshu.presentation.manager;
+package me.rei_m.hyakuninisshu;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-
-import me.rei_m.hyakuninisshu.App;
 
 public class AnalyticsManager {
 
@@ -52,8 +51,8 @@ public class AnalyticsManager {
 
     private FirebaseAnalytics analytics;
 
-    public void initialize(@NonNull App app) {
-        analytics = FirebaseAnalytics.getInstance(app);
+    public AnalyticsManager(@NonNull Context context) {
+        analytics = FirebaseAnalytics.getInstance(context);
     }
 
     public void logScreenEvent(@NonNull ScreenEvent event) {

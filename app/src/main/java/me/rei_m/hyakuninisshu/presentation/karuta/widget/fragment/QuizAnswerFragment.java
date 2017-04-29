@@ -24,6 +24,8 @@ public class QuizAnswerFragment extends BaseFragment {
 
     private static final String ARG_EXIST_NEXT_QUIZ = "existNextQuiz";
 
+    private static final long INVALID_KARUTA_ID = -1;
+
     public static QuizAnswerFragment newInstance(long karutaId,
                                                  boolean existNextQuiz) {
         QuizAnswerFragment fragment = new QuizAnswerFragment();
@@ -50,13 +52,22 @@ public class QuizAnswerFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            // TODO: エラーチェック.
+        long karutaId = INVALID_KARUTA_ID;
+        boolean existNextQuiz = false;
 
-            long karutaId = getArguments().getLong(ARG_KARUTA_ID);
-            boolean existNextQuiz = getArguments().getBoolean(ARG_EXIST_NEXT_QUIZ);
-            viewModel.onCreate(karutaId, existNextQuiz);
+        if (getArguments() != null) {
+            karutaId = getArguments().getLong(ARG_KARUTA_ID);
+            existNextQuiz = getArguments().getBoolean(ARG_EXIST_NEXT_QUIZ);
         }
+
+        if (karutaId == INVALID_KARUTA_ID) {
+            if (listener != null) {
+                listener.onReceiveIllegalArguments();
+            }
+            return;
+        }
+
+        viewModel.onCreate(karutaId, existNextQuiz);
     }
 
     @Override
@@ -153,5 +164,7 @@ public class QuizAnswerFragment extends BaseFragment {
         void onClickGoToResult();
 
         void onErrorQuiz();
+
+        void onReceiveIllegalArguments();
     }
 }

@@ -2,6 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.support.widget.fragment.SupportFragment">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.SupportFragmentViewModel" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -92,6 +99,7 @@
                 android:layout_height="@dimen/height_line"
                 android:background="@drawable/bg_ripple"
                 android:gravity="center_vertical"
+                android:onClick="@{viewModel::onClickReview}"
                 android:paddingEnd="0dp"
                 android:paddingLeft="@dimen/margin_m"
                 android:paddingRight="0dp"
@@ -109,6 +117,7 @@
                 android:layout_height="@dimen/height_line"
                 android:background="@drawable/bg_ripple"
                 android:gravity="center_vertical"
+                android:onClick="@{viewModel::onClickLicense}"
                 android:paddingEnd="0dp"
                 android:paddingLeft="@dimen/margin_m"
                 android:paddingRight="0dp"
@@ -126,7 +135,8 @@
                 android:layout_height="@dimen/height_line"
                 android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:text="@{viewModel.version}" />
 
             <View
                 android:layout_width="match_parent"

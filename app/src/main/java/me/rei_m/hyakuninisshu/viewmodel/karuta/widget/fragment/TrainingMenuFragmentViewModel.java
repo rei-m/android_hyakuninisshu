@@ -12,7 +12,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
-import me.rei_m.hyakuninisshu.presentation.manager.AnalyticsManager;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -49,6 +49,7 @@ public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.TRAINING_MENU);
     }
 
+    @SuppressWarnings("unused")
     public void onClickStartTraining(View view) {
 
         if (trainingRangeFrom.get().ordinal() > trainingRangeTo.get().ordinal()) {

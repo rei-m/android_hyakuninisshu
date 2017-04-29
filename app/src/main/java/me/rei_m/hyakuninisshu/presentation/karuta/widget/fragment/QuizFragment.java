@@ -29,7 +29,7 @@ import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
-import me.rei_m.hyakuninisshu.presentation.manager.DeviceManager;
+import me.rei_m.hyakuninisshu.presentation.helper.Device;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
 
 public class QuizFragment extends BaseFragment {
@@ -61,7 +61,7 @@ public class QuizFragment extends BaseFragment {
     QuizFragmentViewModel viewModel;
 
     @Inject
-    DeviceManager deviceManager;
+    Device device;
 
     private FragmentQuizBinding binding;
 
@@ -95,7 +95,7 @@ public class QuizFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
 
-        Point windowSize = deviceManager.getWindowSize();
+        Point windowSize = device.getWindowSize();
         RelativeViewSize relativeViewSize = new RelativeViewSize(windowSize);
 
         binding.setViewModel(viewModel);

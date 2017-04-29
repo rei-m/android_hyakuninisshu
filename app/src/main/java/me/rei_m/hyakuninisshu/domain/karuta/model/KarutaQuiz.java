@@ -57,10 +57,13 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         return this;
     }
 
-    public void verify(int choiceNo, @NonNull Date answerDate) {
-        // TODO: startをチェックしてnullならエラー
-        // TODO: startよりanswerが小さかったらエラー
-        // TODO: choiceNoがリストの数より大きかったらエラー
+    public void verify(int choiceNo, @NonNull Date answerDate) throws IllegalStateException, IllegalArgumentException {
+        if (contents.choiceList.size() < choiceNo) {
+            throw new IllegalArgumentException("Invalid choiceNo. " + choiceNo);
+        }
+        if (startDate == null) {
+            throw new IllegalStateException("Quiz is not started. Call start.");
+        }
         KarutaIdentifier selectedId = contents.choiceList.get(choiceNo - 1);
         boolean isCollect = contents.collectId.equals(selectedId);
         long answerTime = answerDate.getTime() - startDate.getTime();
@@ -78,7 +81,6 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         return contents.equals(that.contents) &&
                 (startDate != null ? startDate.equals(that.startDate) : that.startDate == null
                         && (result != null ? result.equals(that.result) : that.result == null));
-
     }
 
     @Override

@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.manager;
+package me.rei_m.hyakuninisshu.presentation.helper;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -9,12 +9,12 @@ import javax.inject.Inject;
 import me.rei_m.hyakuninisshu.module.ForApplication;
 
 @ForApplication
-public class DeviceManager {
+public class Device {
 
     private final Context context;
 
     @Inject
-    public DeviceManager(@ForApplication Context context) {
+    public Device(@ForApplication Context context) {
         this.context = context;
     }
 

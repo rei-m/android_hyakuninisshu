@@ -79,12 +79,12 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
         builder.setView(binding.getRoot())
                 .setPositiveButton(R.string.update, (dialog, id) -> {
                     if (listener != null) {
-                        listener.onDialogPositiveClick();
+                        listener.onConfirmMaterialEditDialogPositiveClick();
                     }
                 })
                 .setNegativeButton(R.string.back, (dialog, id) -> {
                     if (listener != null) {
-                        listener.onDialogNegativeClick();
+                        listener.onConfirmMaterialEditDialogNegativeClick();
                     }
                 });
         return builder.create();
@@ -157,8 +157,8 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
     }
 
     public interface OnDialogInteractionListener {
-        void onDialogPositiveClick();
+        void onConfirmMaterialEditDialogPositiveClick();
 
-        void onDialogNegativeClick();
+        void onConfirmMaterialEditDialogNegativeClick();
     }
 }

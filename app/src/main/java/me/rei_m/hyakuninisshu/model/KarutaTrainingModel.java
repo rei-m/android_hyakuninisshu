@@ -134,8 +134,11 @@ public class KarutaTrainingModel {
 
             int collectCount = 0;
 
-            // TODO: 未回答の問題があったらエラー.
             for (KarutaQuiz karutaQuiz : karutaQuizList) {
+                if (karutaQuiz.getResult() == null) {
+                    throw new IllegalStateException("Training is not finished.");
+                }
+
                 totalAnswerTimeMillSec += karutaQuiz.getResult().answerTime;
                 if (karutaQuiz.getResult().isCollect) {
                     collectCount++;
