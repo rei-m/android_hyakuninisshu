@@ -20,7 +20,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFr
 import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
-import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
+import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class EntranceActivity extends BaseActivity implements HasComponent<EntranceActivityComponent> {
 

@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.presentation.utilitty;
+package me.rei_m.hyakuninisshu.presentation.utility;
 
 import android.support.annotation.NonNull;
 

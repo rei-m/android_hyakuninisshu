@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
-import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
+import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class KarutaExamResultView extends LinearLayout {
 
