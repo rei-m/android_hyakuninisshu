@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityM
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
 import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
+import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class MaterialDetailActivity extends BaseActivity implements HasComponent<MaterialDetailActivityComponent>,
         MaterialDetailFragment.OnFragmentInteractionListener,
