@@ -37,9 +37,14 @@
 -dontwarn org.antlr.**
 -dontwarn okio.**
 -dontwarn java.lang.invoke.**
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
 
 -dontnote android.**
 -dontnote com.google.**
--dontnote com.squareup.moshi.**
 -dontnote org.antlr.**
 -dontnote org.apache.**
+
+-keepclasseswithmembers class * {
+    @com.squareup.moshi.* <methods>;
+}

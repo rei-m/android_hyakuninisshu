@@ -20,7 +20,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialEditActivity
 import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialEditActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialEditFragment;
 import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
+import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class MaterialEditActivity extends BaseActivity implements HasComponent<MaterialEditActivityComponent>,
         MaterialEditFragment.OnFragmentInteractionListener,

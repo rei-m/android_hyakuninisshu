@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialSingleActivi
 import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialSingleActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
 import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.utilitty.ViewUtil;
+import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class MaterialSingleActivity extends BaseActivity implements HasComponent<MaterialSingleActivityComponent>,
         MaterialDetailFragment.OnFragmentInteractionListener,
