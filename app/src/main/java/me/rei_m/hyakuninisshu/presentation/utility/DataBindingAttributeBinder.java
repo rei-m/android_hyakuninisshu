@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.ads.AdView;
 
 import java.util.Locale;
@@ -23,6 +23,7 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
+import me.rei_m.hyakuninisshu.util.GlideApp;
 
 import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant.SPACE;
 
@@ -75,9 +76,9 @@ public class DataBindingAttributeBinder {
 
         int resId = context.getResources().getIdentifier("karuta_" + resIdString, "drawable", context.getPackageName());
 
-        Glide.with(view.getContext())
+        GlideApp.with(view.getContext())
                 .load(resId)
-                .crossFade()
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(view);
     }
 
