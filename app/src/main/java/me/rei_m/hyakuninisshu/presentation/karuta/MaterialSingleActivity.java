@@ -6,22 +6,24 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import me.rei_m.hyakuninisshu.App;
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialSingleBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialSingleActivityComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialSingleActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class MaterialSingleActivity extends BaseActivity implements HasComponent<MaterialSingleActivityComponent>,
+public class MaterialSingleActivity extends AppCompatActivity implements HasSupportFragmentInjector,
         MaterialDetailFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
@@ -36,13 +38,16 @@ public class MaterialSingleActivity extends BaseActivity implements HasComponent
         return intent;
     }
 
-    private MaterialSingleActivityComponent component;
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
 
     private ActivityMaterialSingleBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_single);
 
         setSupportActionBar(binding.toolbar);
@@ -72,7 +77,7 @@ public class MaterialSingleActivity extends BaseActivity implements HasComponent
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        component = null;
+        fragmentInjector = null;
         binding = null;
     }
 
@@ -87,17 +92,8 @@ public class MaterialSingleActivity extends BaseActivity implements HasComponent
     }
 
     @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialSingleActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public MaterialSingleActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 
     @Override

@@ -1,15 +1,19 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.module;
 
+import android.app.Activity;
+
+import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
-import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel;
+import dagger.android.ActivityKey;
+import dagger.android.AndroidInjector;
+import dagger.multibindings.IntoMap;
+import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivitySubcomponent;
 
-@Module
-public class ExamMasterActivityModule {
-
-    @Provides
-    ExamMasterActivityViewModel provideExamMasterActivityViewModel(KarutaExamModel karutaExamModel) {
-        return new ExamMasterActivityViewModel(karutaExamModel);
-    }
+@Module(subcomponents = ExamMasterActivitySubcomponent.class)
+public abstract class ExamMasterActivityModule {
+    @Binds
+    @IntoMap
+    @ActivityKey(ExamMasterActivity.class)
+    abstract AndroidInjector.Factory<? extends Activity> bindExamMasterActivityInjectorFactory(ExamMasterActivitySubcomponent.Builder builder);
 }

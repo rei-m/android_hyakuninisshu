@@ -1,7 +1,10 @@
 package me.rei_m.hyakuninisshu.presentation.module;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,6 +17,13 @@ public class ActivityModule {
 
     public ActivityModule(@NonNull AppCompatActivity activity) {
         this.activity = activity;
+    }
+
+    @Provides
+    @ForActivity
+    @Named("activityContext")
+    Context provideContext() {
+        return activity;
     }
 
     @Provides

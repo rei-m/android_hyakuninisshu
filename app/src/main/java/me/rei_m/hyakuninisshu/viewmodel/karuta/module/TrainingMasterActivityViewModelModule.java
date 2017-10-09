@@ -1,15 +1,17 @@
-package me.rei_m.hyakuninisshu.presentation.karuta.module;
+package me.rei_m.hyakuninisshu.viewmodel.karuta.module;
 
 import android.support.annotation.NonNull;
 
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
+import me.rei_m.hyakuninisshu.presentation.module.ForActivity;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
 
 @Module
-public class QuizMasterActivityModule {
+public class TrainingMasterActivityViewModelModule {
     @Provides
+    @ForActivity
     TrainingMasterActivityViewModel provideTrainingMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
         return new TrainingMasterActivityViewModel(karutaTrainingModel);
     }

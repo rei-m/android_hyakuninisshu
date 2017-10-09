@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,6 +26,7 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 import me.rei_m.hyakuninisshu.util.Unit;
 
+@Singleton
 public class KarutaTrainingModel {
 
     private final PublishSubject<Unit> completeStartEventSubject = PublishSubject.create();
@@ -48,6 +52,7 @@ public class KarutaTrainingModel {
 
     private final KarutaExamRepository karutaExamRepository;
 
+    @Inject
     public KarutaTrainingModel(@NonNull KarutaRepository karutaRepository,
                                @NonNull KarutaQuizRepository karutaQuizRepository,
                                @NonNull KarutaQuizListFactory karutaQuizListFactory,

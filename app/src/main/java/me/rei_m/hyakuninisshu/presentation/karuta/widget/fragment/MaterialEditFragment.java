@@ -4,23 +4,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.dialog.ConfirmMaterialEditDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.MaterialEditFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.MaterialEditFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialEditFragmentViewModel;
 
-public class MaterialEditFragment extends BaseFragment implements ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
+public class MaterialEditFragment extends Fragment implements ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
 
     public static final String TAG = "MaterialEditFragment";
 
@@ -67,12 +65,7 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
 
         viewModel.onCreate(karutaNo);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false);
@@ -140,6 +133,7 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
@@ -152,14 +146,8 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
     @Override
     public void onDetach() {
         super.onDetach();
+        viewModel = null;
         listener = null;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new MaterialEditFragmentModule(getContext())).inject(this);
     }
 
     @Override
@@ -170,10 +158,6 @@ public class MaterialEditFragment extends BaseFragment implements ConfirmMateria
     @Override
     public void onConfirmMaterialEditDialogNegativeClick() {
 
-    }
-    
-    public interface Injector {
-        MaterialEditFragmentComponent plus(MaterialEditFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {

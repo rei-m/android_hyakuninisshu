@@ -3,20 +3,18 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import me.rei_m.hyakuninisshu.component.HasComponent;
+import dagger.android.support.AndroidSupportInjection;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.MaterialDetailFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.MaterialDetailFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
 
-public class MaterialDetailFragment extends BaseFragment {
+public class MaterialDetailFragment extends Fragment {
 
     public static final String TAG = "MaterialDetailFragment";
 
@@ -62,11 +60,6 @@ public class MaterialDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialDetailBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
@@ -105,6 +98,7 @@ public class MaterialDetailFragment extends BaseFragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
@@ -117,18 +111,8 @@ public class MaterialDetailFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        viewModel = null;
         listener = null;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new MaterialDetailFragmentModule(getContext())).inject(this);
-    }
-
-    public interface Injector {
-        MaterialDetailFragmentComponent plus(MaterialDetailFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {

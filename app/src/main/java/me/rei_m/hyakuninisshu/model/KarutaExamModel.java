@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,6 +29,7 @@ import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
 import me.rei_m.hyakuninisshu.util.Unit;
 
+@Singleton
 public class KarutaExamModel {
 
     private final PublishSubject<Unit> completeStartEventSubject = PublishSubject.create();
@@ -48,6 +52,7 @@ public class KarutaExamModel {
 
     private final KarutaExamRepository karutaExamRepository;
 
+    @Inject
     public KarutaExamModel(@NonNull KarutaRepository karutaRepository,
                            @NonNull KarutaQuizRepository karutaQuizRepository,
                            @NonNull KarutaQuizListFactory karutaQuizListFactory,
@@ -73,7 +78,7 @@ public class KarutaExamModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> completeStartEventSubject.onNext(Unit.INSTANCE));
     }
-    
+
     public void aggregateResults() {
         karutaQuizRepository.asEntityList()
                 .flatMap(karutaQuizList -> Observable.fromIterable(karutaQuizList).map(KarutaQuiz::getResult).toList())

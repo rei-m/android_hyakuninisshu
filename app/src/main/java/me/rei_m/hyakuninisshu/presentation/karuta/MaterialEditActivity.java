@@ -7,22 +7,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import me.rei_m.hyakuninisshu.App;
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialEditActivityComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialEditActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialEditFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class MaterialEditActivity extends BaseActivity implements HasComponent<MaterialEditActivityComponent>,
+public class MaterialEditActivity extends AppCompatActivity implements HasSupportFragmentInjector,
         MaterialEditFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
@@ -37,13 +39,16 @@ public class MaterialEditActivity extends BaseActivity implements HasComponent<M
         return intent;
     }
 
-    private MaterialEditActivityComponent component;
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
 
     private ActivityMaterialEditBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_edit);
 
         setSupportActionBar(binding.toolbar);
@@ -73,7 +78,7 @@ public class MaterialEditActivity extends BaseActivity implements HasComponent<M
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        component = null;
+        fragmentInjector = null;
         binding = null;
     }
 
@@ -87,19 +92,9 @@ public class MaterialEditActivity extends BaseActivity implements HasComponent<M
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialEditActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public MaterialEditActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 
     @Override

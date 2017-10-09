@@ -6,27 +6,27 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.TrainingExamMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.TrainingExamMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingExamMasterActivityViewModel;
 
-public class TrainingExamMasterActivity extends BaseActivity implements HasComponent<TrainingExamMasterActivityComponent>,
+public class TrainingExamMasterActivity extends AppCompatActivity implements HasSupportFragmentInjector,
         QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
@@ -39,9 +39,10 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
     private static final String KEY_IS_STARTED = "isStarted";
 
     @Inject
-    TrainingExamMasterActivityViewModel viewModel;
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
 
-    private TrainingExamMasterActivityComponent component;
+    @Inject
+    TrainingExamMasterActivityViewModel viewModel;
 
     private ActivityTrainingExamMasterBinding binding;
 
@@ -49,7 +50,9 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_exam_master);
         binding.setViewModel(viewModel);
 
@@ -66,7 +69,7 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
         super.onDestroy();
         viewModel = null;
         binding = null;
-        component = null;
+        fragmentInjector = null;
     }
 
     @Override
@@ -106,17 +109,8 @@ public class TrainingExamMasterActivity extends BaseActivity implements HasCompo
     }
 
     @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new TrainingExamMasterActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public TrainingExamMasterActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 
     @Override

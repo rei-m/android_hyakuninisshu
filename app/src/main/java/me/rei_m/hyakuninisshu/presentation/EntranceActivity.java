@@ -7,22 +7,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import hotchemi.android.rate.AppRate;
-import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding;
-import me.rei_m.hyakuninisshu.presentation.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class EntranceActivity extends BaseActivity implements HasComponent<EntranceActivityComponent> {
+public class EntranceActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, EntranceActivity.class);
@@ -30,7 +32,8 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
 
     private static String KEY_PAGE_INDEX = "pageIndex";
 
-    private EntranceActivityComponent component;
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
 
     private ActivityEntranceBinding binding;
 
@@ -38,7 +41,9 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_entrance);
 
         setSupportActionBar(binding.toolbar);
@@ -86,7 +91,7 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        component = null;
+        fragmentInjector = null;
     }
 
     @Override
@@ -96,17 +101,8 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
     }
 
     @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new EntranceActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public EntranceActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 
     enum Page {

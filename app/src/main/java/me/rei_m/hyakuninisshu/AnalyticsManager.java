@@ -6,6 +6,10 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class AnalyticsManager {
 
     public enum ScreenEvent {
@@ -51,6 +55,7 @@ public class AnalyticsManager {
 
     private FirebaseAnalytics analytics;
 
+    @Inject
     public AnalyticsManager(@NonNull Context context) {
         analytics = FirebaseAnalytics.getInstance(context);
     }

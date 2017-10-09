@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
@@ -27,6 +30,7 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.util.Unit;
 
+@Singleton
 public class KarutaQuizModel {
 
     private final KarutaRepository karutaRepository;
@@ -43,6 +47,7 @@ public class KarutaQuizModel {
 
     private boolean existNextQuiz;
 
+    @Inject
     public KarutaQuizModel(@NonNull KarutaRepository karutaRepository,
                            @NonNull KarutaQuizRepository karutaQuizRepository) {
         this.karutaRepository = karutaRepository;

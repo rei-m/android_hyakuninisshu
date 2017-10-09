@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -15,6 +18,7 @@ import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.util.Unit;
 
+@Singleton
 public class KarutaModel {
 
     private final KarutaRepository karutaRepository;
@@ -31,6 +35,7 @@ public class KarutaModel {
     private PublishSubject<Unit> errorSubject = PublishSubject.create();
     public Observable<Unit> error = errorSubject;
 
+    @Inject
     public KarutaModel(@NonNull KarutaRepository karutaRepository) {
         this.karutaRepository = karutaRepository;
     }

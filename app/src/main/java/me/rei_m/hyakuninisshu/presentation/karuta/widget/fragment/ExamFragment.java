@@ -1,20 +1,19 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import me.rei_m.hyakuninisshu.component.HasComponent;
+import dagger.android.support.AndroidSupportInjection;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.ExamFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.ExamFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewModel;
 
-public class ExamFragment extends BaseFragment {
+public class ExamFragment extends Fragment {
 
     public static final String TAG = "ExamFragment";
 
@@ -69,13 +68,14 @@ public class ExamFragment extends BaseFragment {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new ExamFragmentModule(getContext())).inject(this);
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 
-    public interface Injector {
-        ExamFragmentComponent plus(ExamFragmentModule fragmentModule);
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        viewModel = null;
     }
 }

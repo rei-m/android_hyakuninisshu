@@ -1,7 +1,9 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,17 +14,14 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import me.rei_m.hyakuninisshu.component.HasComponent;
+import dagger.android.support.AndroidSupportInjection;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.MaterialFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.MaterialFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
 
-public class MaterialFragment extends BaseFragment {
+public class MaterialFragment extends Fragment {
 
     public static final String TAG = "MaterialFragment";
 
@@ -36,7 +35,8 @@ public class MaterialFragment extends BaseFragment {
     @Inject
     MaterialFragmentViewModel viewModel;
 
-    private MaterialFragmentComponent component;
+    @Inject
+    MaterialKarutaListAdapter.Injector injector;
 
     private FragmentMaterialBinding binding;
 
@@ -51,16 +51,10 @@ public class MaterialFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        navigator = null;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
-        MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter(viewModel.karutaList, component);
+        MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter(viewModel.karutaList, injector);
         binding.recyclerKarutaList.setAdapter(adapter);
         binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
@@ -97,6 +91,20 @@ public class MaterialFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        navigator = null;
+        viewModel = null;
+        injector = null;
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         for (Color color : Color.values()) {
@@ -107,17 +115,5 @@ public class MaterialFragment extends BaseFragment {
                 return false;
             });
         }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        component = ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new MaterialFragmentModule(getContext()));
-        component.inject(this);
-    }
-
-    public interface Injector {
-        MaterialFragmentComponent plus(MaterialFragmentModule fragmentModule);
     }
 }

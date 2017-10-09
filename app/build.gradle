@@ -30,6 +30,7 @@ android {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 16
         targetSdkVersion 26
+        multiDexEnabled true
         versionCode 11
         versionName "1.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -81,12 +82,16 @@ dependencies {
     compile "com.android.support:percent:$android_support_lib_version"
     compile "com.android.support:design:$android_support_lib_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
     compile "com.google.firebase:firebase-core:$play_services_version"
     compile "com.google.android.gms:play-services-ads:$play_services_version"
 
     provided 'javax.annotation:jsr250-api:1.0'
     compile "com.google.dagger:dagger:$dagger_version"
+    compile "com.google.dagger:dagger-android:$dagger_version"
+    compile "com.google.dagger:dagger-android-support:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
 
     compile "io.reactivex.rxjava2:rxjava:$rxjava_version"
     compile "io.reactivex.rxjava2:rxandroid:2.0.1"
@@ -112,9 +117,11 @@ dependencies {
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.1') {
         exclude module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     }
     androidTestCompile('com.android.support.test.espresso:espresso-intents:3.0.1') {
         exclude module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     }
     androidTestCompile('com.android.support.test:runner:1.0.1') {
         exclude module: 'support-annotations'

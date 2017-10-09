@@ -1,7 +1,9 @@
 package me.rei_m.hyakuninisshu.presentation.support.widget.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +11,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.component.SupportFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.module.SupportFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.SupportFragmentViewModel;
 
-public class SupportFragment extends BaseFragment {
+public class SupportFragment extends Fragment {
 
     public static final String TAG = "SupportFragment";
 
@@ -86,13 +85,14 @@ public class SupportFragment extends BaseFragment {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new SupportFragmentModule(getContext())).inject(this);
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 
-    public interface Injector {
-        SupportFragmentComponent plus(SupportFragmentModule fragmentModule);
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        viewModel = null;
     }
 }

@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaDatabase;
-import me.rei_m.hyakuninisshu.module.ForApplication;
 
 @Module
 public class InfrastructureModule {
@@ -15,13 +16,13 @@ public class InfrastructureModule {
     private static final String KEY_PREFERENCES = "B84UqpLA7W";
 
     @Provides
-    @ForApplication
+    @Singleton
     SharedPreferences provideSharedPreferences(@NonNull Context context) {
         return context.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Provides
-    @ForApplication
+    @Singleton
     OrmaDatabase provideOrmaDatabase(@NonNull Context context) {
         return OrmaDatabase.builder(context).build();
     }

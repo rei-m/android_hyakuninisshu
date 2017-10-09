@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +20,17 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizFragmentModule;
 import me.rei_m.hyakuninisshu.presentation.helper.Device;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
 
-public class QuizFragment extends BaseFragment {
+public class QuizFragment extends Fragment {
 
     public static final String TAG = "QuizFragment";
 
@@ -167,6 +165,7 @@ public class QuizFragment extends BaseFragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
@@ -179,6 +178,8 @@ public class QuizFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        viewModel = null;
+        device = null;
         listener = null;
     }
 
@@ -186,13 +187,6 @@ public class QuizFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_QUIZ_ID, viewModel.getKarutaQuizId());
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new QuizFragmentModule(getContext())).inject(this);
     }
 
     // TODO: DataBindingに寄せることができるはず.
@@ -250,10 +244,6 @@ public class QuizFragment extends BaseFragment {
                     textView.setVisibility(View.VISIBLE);
                     textView.startAnimation(fadeIn);
                 });
-    }
-
-    public interface Injector {
-        QuizFragmentComponent plus(QuizFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {
