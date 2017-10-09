@@ -14,8 +14,6 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import io.fabric.sdk.android.Fabric;
 import me.rei_m.hyakuninisshu.component.DaggerApplicationComponent;
-import me.rei_m.hyakuninisshu.domain.karuta.module.KarutaDomainModule;
-import me.rei_m.hyakuninisshu.infrastructure.module.InfrastructureModule;
 import me.rei_m.hyakuninisshu.module.ApplicationModule;
 
 public class App extends MultiDexApplication implements HasActivityInjector {
@@ -28,8 +26,6 @@ public class App extends MultiDexApplication implements HasActivityInjector {
         super.onCreate();
         DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-                .infrastructureModule(new InfrastructureModule())
-                .karutaDomainModule(new KarutaDomainModule())
                 .build()
                 .inject(this);
 

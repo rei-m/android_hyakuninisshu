@@ -50,6 +50,8 @@
 -dontnote org.antlr.**
 -dontnote org.apache.**
 
+-dontwarn com.google.errorprone.annotations.*
+
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
 }
