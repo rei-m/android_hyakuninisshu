@@ -6,16 +6,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
@@ -26,8 +21,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFrag
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel;
 
-public class ExamMasterActivity extends AppCompatActivity implements HasSupportFragmentInjector,
-        QuizFragment.OnFragmentInteractionListener,
+public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         ExamResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
@@ -35,9 +29,6 @@ public class ExamMasterActivity extends AppCompatActivity implements HasSupportF
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
     }
-
-    @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
 
     @Inject
     ExamMasterActivityViewModel viewModel;
@@ -52,7 +43,6 @@ public class ExamMasterActivity extends AppCompatActivity implements HasSupportF
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exam_master);
@@ -72,7 +62,6 @@ public class ExamMasterActivity extends AppCompatActivity implements HasSupportF
         super.onDestroy();
         viewModel = null;
         binding = null;
-        fragmentInjector = null;
     }
 
     @Override
@@ -121,12 +110,7 @@ public class ExamMasterActivity extends AppCompatActivity implements HasSupportF
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedExam());
         outState.putBoolean(KEY_IS_FINISHED, viewModel.isFinishedExam());
     }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
-    }
-
+    
     @Override
     public void onAnswered(long karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()

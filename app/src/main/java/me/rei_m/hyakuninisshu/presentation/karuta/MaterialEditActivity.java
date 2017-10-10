@@ -7,25 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import javax.inject.Inject;
-
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.support.DaggerAppCompatActivity;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialEditFragment;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class MaterialEditActivity extends AppCompatActivity implements HasSupportFragmentInjector,
-        MaterialEditFragment.OnFragmentInteractionListener,
+public class MaterialEditActivity extends DaggerAppCompatActivity implements MaterialEditFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
@@ -39,14 +31,10 @@ public class MaterialEditActivity extends AppCompatActivity implements HasSuppor
         return intent;
     }
 
-    @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
-
     private ActivityMaterialEditBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_edit);
@@ -78,7 +66,6 @@ public class MaterialEditActivity extends AppCompatActivity implements HasSuppor
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        fragmentInjector = null;
         binding = null;
     }
 
@@ -90,11 +77,6 @@ public class MaterialEditActivity extends AppCompatActivity implements HasSuppor
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
     }
 
     @Override

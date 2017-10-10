@@ -7,18 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.support.DaggerAppCompatActivity;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
@@ -27,8 +22,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailP
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class MaterialDetailActivity extends AppCompatActivity implements HasSupportFragmentInjector,
-        MaterialDetailFragment.OnFragmentInteractionListener,
+public class MaterialDetailActivity extends DaggerAppCompatActivity implements MaterialDetailFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
@@ -43,16 +37,12 @@ public class MaterialDetailActivity extends AppCompatActivity implements HasSupp
     }
 
     @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
-
-    @Inject
     Navigator navigator;
 
     private ActivityMaterialDetailBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail);
@@ -79,7 +69,6 @@ public class MaterialDetailActivity extends AppCompatActivity implements HasSupp
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        fragmentInjector = null;
         binding = null;
     }
 
@@ -100,11 +89,6 @@ public class MaterialDetailActivity extends AppCompatActivity implements HasSupp
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
     }
 
     @Override

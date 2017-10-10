@@ -6,16 +6,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamMasterBinding;
@@ -26,8 +21,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingExamMasterActivityViewModel;
 
-public class TrainingExamMasterActivity extends AppCompatActivity implements HasSupportFragmentInjector,
-        QuizFragment.OnFragmentInteractionListener,
+public class TrainingExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
@@ -39,9 +33,6 @@ public class TrainingExamMasterActivity extends AppCompatActivity implements Has
     private static final String KEY_IS_STARTED = "isStarted";
 
     @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
-
-    @Inject
     TrainingExamMasterActivityViewModel viewModel;
 
     private ActivityTrainingExamMasterBinding binding;
@@ -50,7 +41,6 @@ public class TrainingExamMasterActivity extends AppCompatActivity implements Has
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_exam_master);
@@ -69,7 +59,6 @@ public class TrainingExamMasterActivity extends AppCompatActivity implements Has
         super.onDestroy();
         viewModel = null;
         binding = null;
-        fragmentInjector = null;
     }
 
     @Override
@@ -107,12 +96,7 @@ public class TrainingExamMasterActivity extends AppCompatActivity implements Has
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
     }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
-    }
-
+    
     @Override
     public void onAnswered(long karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()

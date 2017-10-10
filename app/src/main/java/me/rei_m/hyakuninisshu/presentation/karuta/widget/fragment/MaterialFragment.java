@@ -1,9 +1,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,14 +12,14 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
 
-public class MaterialFragment extends Fragment {
+public class MaterialFragment extends DaggerFragment {
 
     public static final String TAG = "MaterialFragment";
 
@@ -88,12 +86,6 @@ public class MaterialFragment extends Fragment {
     public void onPause() {
         super.onPause();
         viewModel.onPause();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
     }
 
     @Override

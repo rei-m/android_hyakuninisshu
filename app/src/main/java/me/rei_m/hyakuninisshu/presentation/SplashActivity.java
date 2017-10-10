@@ -1,17 +1,16 @@
 package me.rei_m.hyakuninisshu.presentation;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.model.ApplicationModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends DaggerAppCompatActivity {
 
     @Inject
     Navigator navigator;
@@ -23,7 +22,6 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
     }

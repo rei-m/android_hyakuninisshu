@@ -3,6 +3,8 @@ package me.rei_m.hyakuninisshu.component;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjectionModule;
 import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.domain.karuta.module.KarutaDomainModule;
 import me.rei_m.hyakuninisshu.infrastructure.module.InfrastructureModule;
@@ -18,6 +20,7 @@ import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
 
 @Singleton
 @Component(modules = {
+        AndroidSupportInjectionModule.class,
         ApplicationModule.class,
         InfrastructureModule.class,
         KarutaDomainModule.class,
@@ -30,6 +33,4 @@ import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
         TrainingExamMasterActivityModule.class,
         TrainingMasterActivityModule.class
 })
-public interface ApplicationComponent {
-    void inject(App application);
-}
+public interface ApplicationComponent extends AndroidInjector<App> {}

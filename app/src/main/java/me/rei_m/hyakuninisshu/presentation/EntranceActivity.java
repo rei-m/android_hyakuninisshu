@@ -7,14 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
-import javax.inject.Inject;
-
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.support.DaggerAppCompatActivity;
 import hotchemi.android.rate.AppRate;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding;
@@ -24,7 +18,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFr
 import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class EntranceActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class EntranceActivity extends DaggerAppCompatActivity {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, EntranceActivity.class);
@@ -32,16 +26,12 @@ public class EntranceActivity extends AppCompatActivity implements HasSupportFra
 
     private static String KEY_PAGE_INDEX = "pageIndex";
 
-    @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
-
     private ActivityEntranceBinding binding;
 
     private int currentPageIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_entrance);
@@ -91,18 +81,12 @@ public class EntranceActivity extends AppCompatActivity implements HasSupportFra
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        fragmentInjector = null;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_PAGE_INDEX, currentPageIndex);
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
     }
 
     enum Page {

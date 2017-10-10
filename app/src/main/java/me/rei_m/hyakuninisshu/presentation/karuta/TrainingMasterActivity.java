@@ -6,16 +6,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
@@ -30,8 +25,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
 
-public class TrainingMasterActivity extends AppCompatActivity implements HasSupportFragmentInjector,
-        QuizFragment.OnFragmentInteractionListener,
+public class TrainingMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
@@ -70,9 +64,6 @@ public class TrainingMasterActivity extends AppCompatActivity implements HasSupp
     private static final String KEY_IS_STARTED = "isStarted";
 
     @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
-
-    @Inject
     TrainingMasterActivityViewModel viewModel;
 
     private ActivityTrainingMasterBinding binding;
@@ -81,7 +72,6 @@ public class TrainingMasterActivity extends AppCompatActivity implements HasSupp
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_master);
@@ -151,18 +141,12 @@ public class TrainingMasterActivity extends AppCompatActivity implements HasSupp
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        fragmentInjector = null;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
     }
 
     @Override

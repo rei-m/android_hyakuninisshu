@@ -1,33 +1,23 @@
 package me.rei_m.hyakuninisshu;
 
-import android.app.Activity;
-import android.support.multidex.MultiDexApplication;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.squareup.leakcanary.LeakCanary;
 
-import javax.inject.Inject;
-
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
+import dagger.android.support.DaggerApplication;
 import io.fabric.sdk.android.Fabric;
 import me.rei_m.hyakuninisshu.component.DaggerApplicationComponent;
 import me.rei_m.hyakuninisshu.module.ApplicationModule;
 
-public class App extends MultiDexApplication implements HasActivityInjector {
-
-    @Inject
-    DispatchingAndroidInjector<Activity> dispatchingActivityInjector;
+public class App extends DaggerApplication {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this))
-                .build()
-                .inject(this);
 
         Fabric.with(this, new Crashlytics());
 
@@ -40,7 +30,15 @@ public class App extends MultiDexApplication implements HasActivityInjector {
     }
 
     @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return dispatchingActivityInjector;
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+    @Override
+    protected AndroidInjector<App> applicationInjector() {
+        return DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
     }
 }
