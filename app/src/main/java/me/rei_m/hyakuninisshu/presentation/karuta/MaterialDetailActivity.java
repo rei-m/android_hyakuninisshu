@@ -13,22 +13,16 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-import me.rei_m.hyakuninisshu.App;
+import dagger.android.support.DaggerAppCompatActivity;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialDetailActivityComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialDetailActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class MaterialDetailActivity extends BaseActivity implements HasComponent<MaterialDetailActivityComponent>,
-        MaterialDetailFragment.OnFragmentInteractionListener,
+public class MaterialDetailActivity extends DaggerAppCompatActivity implements MaterialDetailFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
@@ -45,13 +39,12 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
     @Inject
     Navigator navigator;
 
-    private MaterialDetailActivityComponent component;
-
     private ActivityMaterialDetailBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail);
 
         setSupportActionBar(binding.toolbar);
@@ -76,7 +69,6 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        component = null;
         binding = null;
     }
 
@@ -97,20 +89,6 @@ public class MaterialDetailActivity extends BaseActivity implements HasComponent
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialDetailActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public MaterialDetailActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
     }
 
     @Override

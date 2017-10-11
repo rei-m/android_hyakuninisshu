@@ -7,14 +7,11 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import me.rei_m.hyakuninisshu.component.HasComponent;
+import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.ExamFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.ExamFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewModel;
 
-public class ExamFragment extends BaseFragment {
+public class ExamFragment extends DaggerFragment {
 
     public static final String TAG = "ExamFragment";
 
@@ -69,13 +66,8 @@ public class ExamFragment extends BaseFragment {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new ExamFragmentModule(getContext())).inject(this);
-    }
-
-    public interface Injector {
-        ExamFragmentComponent plus(ExamFragmentModule fragmentModule);
+    public void onDetach() {
+        super.onDetach();
+        viewModel = null;
     }
 }

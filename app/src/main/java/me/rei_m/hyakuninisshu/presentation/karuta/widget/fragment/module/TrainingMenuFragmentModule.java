@@ -1,32 +1,14 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module;
 
-import android.content.Context;
-
 import dagger.Module;
-import dagger.Provides;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.AnalyticsManager;
+import dagger.android.ContributesAndroidInjector;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.module.TrainingMenuFragmentViewModelModule;
 
 @Module
-public class TrainingMenuFragmentModule {
-
-    private final Context context;
-
-    public TrainingMenuFragmentModule(Context context) {
-        this.context = context;
-    }
-
-    @Provides
+public abstract class TrainingMenuFragmentModule {
     @ForFragment
-    Context provideContext() {
-        return context;
-    }
-
-    @Provides
-    TrainingMenuFragmentViewModel provideTrainingMenuFragmentViewModel(Navigator navigator,
-                                                                       AnalyticsManager analyticsManager) {
-        return new TrainingMenuFragmentViewModel(analyticsManager, navigator);
-    }
+    @ContributesAndroidInjector(modules = TrainingMenuFragmentViewModelModule.class)
+    abstract TrainingMenuFragment contributeTrainingMenuFragmentInjector();
 }

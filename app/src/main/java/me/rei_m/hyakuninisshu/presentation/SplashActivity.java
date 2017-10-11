@@ -4,15 +4,13 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.model.ApplicationModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.module.SplashActivityModule;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends DaggerAppCompatActivity {
 
     @Inject
     Navigator navigator;
@@ -51,10 +49,5 @@ public class SplashActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         applicationModel.start();
-    }
-
-    @Override
-    protected void setupActivityComponent() {
-        ((App) getApplication()).getComponent().plus(new ActivityModule(this), new SplashActivityModule()).inject(this);
     }
 }

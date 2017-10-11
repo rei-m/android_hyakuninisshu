@@ -8,29 +8,23 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
+import dagger.android.support.DaggerAppCompatActivity;
 import hotchemi.android.rate.AppRate;
-import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding;
-import me.rei_m.hyakuninisshu.presentation.component.EntranceActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.module.EntranceActivityModule;
 import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class EntranceActivity extends BaseActivity implements HasComponent<EntranceActivityComponent> {
+public class EntranceActivity extends DaggerAppCompatActivity {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, EntranceActivity.class);
     }
 
     private static String KEY_PAGE_INDEX = "pageIndex";
-
-    private EntranceActivityComponent component;
 
     private ActivityEntranceBinding binding;
 
@@ -39,6 +33,7 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_entrance);
 
         setSupportActionBar(binding.toolbar);
@@ -86,27 +81,12 @@ public class EntranceActivity extends BaseActivity implements HasComponent<Entra
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        component = null;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_PAGE_INDEX, currentPageIndex);
-    }
-
-    @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new EntranceActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public EntranceActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
     }
 
     enum Page {

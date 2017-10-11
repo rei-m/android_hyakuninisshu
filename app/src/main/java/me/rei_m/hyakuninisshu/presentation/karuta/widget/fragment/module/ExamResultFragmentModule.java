@@ -1,34 +1,14 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module;
 
-import android.content.Context;
-
 import dagger.Module;
-import dagger.Provides;
-import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.AnalyticsManager;
+import dagger.android.ContributesAndroidInjector;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultFragment;
 import me.rei_m.hyakuninisshu.presentation.module.ForFragment;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.module.ExamResultFragmentViewModelModule;
 
 @Module
-public class ExamResultFragmentModule {
-
-    private final Context context;
-
-    public ExamResultFragmentModule(Context context) {
-        this.context = context;
-    }
-
-    @Provides
+public abstract class ExamResultFragmentModule {
     @ForFragment
-    Context provideContext() {
-        return context;
-    }
-
-    @Provides
-    ExamResultFragmentViewModel provideExamResultFragmentViewModel(KarutaExamModel karutaExamModel,
-                                                                   Navigator navigator,
-                                                                   AnalyticsManager analyticsManager) {
-        return new ExamResultFragmentViewModel(karutaExamModel, navigator, analyticsManager);
-    }
+    @ContributesAndroidInjector(modules = ExamResultFragmentViewModelModule.class)
+    abstract ExamResultFragment contributeExamResultFragmentInjector();
 }

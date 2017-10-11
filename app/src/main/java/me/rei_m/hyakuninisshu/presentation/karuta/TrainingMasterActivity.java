@@ -10,28 +10,22 @@ import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.QuizMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.QuizMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
 
-public class TrainingMasterActivity extends BaseActivity implements HasComponent<QuizMasterActivityComponent>,
-        QuizFragment.OnFragmentInteractionListener,
+public class TrainingMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         QuizResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
@@ -72,8 +66,6 @@ public class TrainingMasterActivity extends BaseActivity implements HasComponent
     @Inject
     TrainingMasterActivityViewModel viewModel;
 
-    private QuizMasterActivityComponent component;
-
     private ActivityTrainingMasterBinding binding;
 
     private CompositeDisposable disposable;
@@ -81,6 +73,7 @@ public class TrainingMasterActivity extends BaseActivity implements HasComponent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_master);
 
         setSupportActionBar(binding.toolbar);
@@ -148,27 +141,12 @@ public class TrainingMasterActivity extends BaseActivity implements HasComponent
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        component = null;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
-    }
-
-    @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new QuizMasterActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public QuizMasterActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
     }
 
     @Override

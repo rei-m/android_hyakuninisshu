@@ -10,15 +10,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.ExamResultFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.ExamResultFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel;
 
-public class ExamResultFragment extends BaseFragment {
+public class ExamResultFragment extends DaggerFragment {
 
     public static final String TAG = "ExamResultFragment";
 
@@ -125,18 +122,8 @@ public class ExamResultFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        viewModel = null;
         listener = null;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new ExamResultFragmentModule(getContext())).inject(this);
-    }
-
-    public interface Injector {
-        ExamResultFragmentComponent plus(ExamResultFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {

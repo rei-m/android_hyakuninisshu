@@ -3,18 +3,23 @@ package me.rei_m.hyakuninisshu.domain.karuta.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 
+@Singleton
 public class KarutaQuizListFactory {
 
     private final KarutaRepository karutaRepository;
 
+    @Inject
     public KarutaQuizListFactory(KarutaRepository karutaRepository) {
         this.karutaRepository = karutaRepository;
     }
-    
+
     public Single<List<KarutaQuiz>> create(List<KarutaIdentifier> correctKarutaIdList) {
 
         return karutaRepository.asEntityList().map(karutaList -> {

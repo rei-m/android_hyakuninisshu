@@ -11,11 +11,9 @@ import android.view.LayoutInflater;
 
 import javax.inject.Inject;
 
+import dagger.android.support.AndroidSupportInjection;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.DialogConfirmMaterialEditBinding;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.ConfirmMaterialEditDialogFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.ConfirmMaterialEditDialogFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.dialog.ConfirmMaterialEditDialogFragmentViewModel;
 
 public class ConfirmMaterialEditDialogFragment extends DialogFragment {
@@ -94,7 +92,6 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        setupFragmentComponent();
 
         viewModel.onCreate(args.getString(ARG_FIRST_KANJI, ""),
                 args.getString(ARG_FIRST_KANA, ""),
@@ -134,6 +131,7 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         if (getTargetFragment() instanceof OnDialogInteractionListener) {
             listener = (OnDialogInteractionListener) getTargetFragment();
@@ -143,17 +141,8 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        viewModel = null;
         listener = null;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new ConfirmMaterialEditDialogFragmentModule(getContext())).inject(this);
-    }
-
-    public interface Injector {
-        ConfirmMaterialEditDialogFragmentComponent plus(ConfirmMaterialEditDialogFragmentModule fragmentModule);
     }
 
     public interface OnDialogInteractionListener {

@@ -10,24 +10,18 @@ import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.App;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.ExamMasterActivityComponent;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.ExamMasterActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel;
 
-public class ExamMasterActivity extends BaseActivity implements HasComponent<ExamMasterActivityComponent>,
-        QuizFragment.OnFragmentInteractionListener,
+public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
         ExamResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
@@ -38,8 +32,6 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
 
     @Inject
     ExamMasterActivityViewModel viewModel;
-
-    private ExamMasterActivityComponent component;
 
     private ActivityExamMasterBinding binding;
 
@@ -52,6 +44,7 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exam_master);
         binding.setViewModel(viewModel);
 
@@ -69,7 +62,6 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
         super.onDestroy();
         viewModel = null;
         binding = null;
-        component = null;
     }
 
     @Override
@@ -118,21 +110,7 @@ public class ExamMasterActivity extends BaseActivity implements HasComponent<Exa
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedExam());
         outState.putBoolean(KEY_IS_FINISHED, viewModel.isFinishedExam());
     }
-
-    @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new ExamMasterActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public ExamMasterActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
-    }
-
+    
     @Override
     public void onAnswered(long karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()

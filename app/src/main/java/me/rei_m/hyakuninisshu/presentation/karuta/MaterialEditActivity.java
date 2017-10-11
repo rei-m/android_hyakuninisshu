@@ -10,20 +10,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
-import me.rei_m.hyakuninisshu.App;
+import dagger.android.support.DaggerAppCompatActivity;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialEditActivityComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialEditActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialEditFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class MaterialEditActivity extends BaseActivity implements HasComponent<MaterialEditActivityComponent>,
-        MaterialEditFragment.OnFragmentInteractionListener,
+public class MaterialEditActivity extends DaggerAppCompatActivity implements MaterialEditFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
@@ -37,13 +31,12 @@ public class MaterialEditActivity extends BaseActivity implements HasComponent<M
         return intent;
     }
 
-    private MaterialEditActivityComponent component;
-
     private ActivityMaterialEditBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_edit);
 
         setSupportActionBar(binding.toolbar);
@@ -73,7 +66,6 @@ public class MaterialEditActivity extends BaseActivity implements HasComponent<M
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        component = null;
         binding = null;
     }
 
@@ -85,21 +77,6 @@ public class MaterialEditActivity extends BaseActivity implements HasComponent<M
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialEditActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public MaterialEditActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
     }
 
     @Override

@@ -24,15 +24,27 @@ android {
         android.signingConfigs.releaseConfig.keyPassword = keyPassword
     }
 
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
+        multiDexEnabled true
         versionCode 11
         versionName "1.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    productFlavors {
+        dev {
+            // Enable pre-dexing to produce an APK that can be tested on
+            // Android 5.0+ without the time-consuming DEX build processes.
+            minSdkVersion 21
+        }
+        prod {
+            // The actual minSdkVersion for the production version.
+            minSdkVersion 16
+        }
     }
     buildTypes {
         debug {
@@ -65,14 +77,14 @@ android {
 }
 
 dependencies {
-    ext.android_support_lib_version = '25.3.1'
+    ext.android_support_lib_version = '26.1.0'
     ext.okhttp_version = '3.4.1'
     ext.retrofit_version = '2.1.0'
     ext.streamsupport_version = '1.5.2'
-    ext.rxjava_version = '2.0.1'
+    ext.rxjava_version = '2.1.4'
     ext.dagger_version = '2.11'
-    ext.leakcanary_version = '1.5.1'
-    ext.play_services_version = '11.0.2'
+    ext.leakcanary_version = '1.5.4'
+    ext.play_services_version = '11.4.2'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "com.android.support:support-annotations:$android_support_lib_version"
@@ -81,48 +93,54 @@ dependencies {
     compile "com.android.support:percent:$android_support_lib_version"
     compile "com.android.support:design:$android_support_lib_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
     compile "com.google.firebase:firebase-core:$play_services_version"
     compile "com.google.android.gms:play-services-ads:$play_services_version"
 
     provided 'javax.annotation:jsr250-api:1.0'
     compile "com.google.dagger:dagger:$dagger_version"
+    compile "com.google.dagger:dagger-android:$dagger_version"
+    compile "com.google.dagger:dagger-android-support:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
 
     compile "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    compile "io.reactivex.rxjava2:rxandroid:$rxjava_version"
+    compile "io.reactivex.rxjava2:rxandroid:2.0.1"
     compile 'com.squareup.moshi:moshi:1.5.0'
 
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:glide:4.2.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
 
     compile 'com.github.hotchemi:android-rate:1.0.1'
 
-    annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.4'
-    compile 'com.github.gfx.android.orma:orma:4.2.4'
+    annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
+    compile 'com.github.gfx.android.orma:orma:4.2.5'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.3.2'
-    testCompile 'org.robolectric:shadows-support-v4:3.3.2'
-    testCompile 'org.mockito:mockito-core:2.8.47'
-    testCompile('com.android.support.test:runner:0.5') {
+    testCompile 'org.robolectric:robolectric:3.4.2'
+    testCompile 'org.mockito:mockito-core:2.10.0'
+    testCompile('com.android.support.test:runner:1.0.1') {
         exclude module: 'support-annotations'
     }
-    testCompile('com.android.support.test:rules:0.5') {
+    testCompile('com.android.support.test:rules:1.0.1') {
         exclude module: 'support-annotations'
     }
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
+    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.1') {
+        exclude module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
+    }
+    androidTestCompile('com.android.support.test.espresso:espresso-intents:3.0.1') {
+        exclude module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
+    }
+    androidTestCompile('com.android.support.test:runner:1.0.1') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile('com.android.support.test.espresso:espresso-intents:2.2.2') {
+    androidTestCompile('com.android.support.test:rules:1.0.1') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile('com.android.support.test:runner:0.5') {
-        exclude module: 'support-annotations'
-    }
-    androidTestCompile('com.android.support.test:rules:0.5') {
-        exclude module: 'support-annotations'
-    }
-    androidTestCompile 'org.mockito:mockito-core:2.8.9'
+    androidTestCompile 'org.mockito:mockito-core:2.10.0'
     androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
     androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
 

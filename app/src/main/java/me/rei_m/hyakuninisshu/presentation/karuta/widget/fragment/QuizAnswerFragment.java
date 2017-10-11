@@ -8,15 +8,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.component.QuizAnswerFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.module.QuizAnswerFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 
-public class QuizAnswerFragment extends BaseFragment {
+public class QuizAnswerFragment extends DaggerFragment {
 
     public static final String TAG = "QuizAnswerFragment";
 
@@ -144,18 +141,8 @@ public class QuizAnswerFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        viewModel = null;
         listener = null;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new QuizAnswerFragmentModule(getContext())).inject(this);
-    }
-
-    public interface Injector {
-        QuizAnswerFragmentComponent plus(QuizAnswerFragmentModule fragmentModule);
     }
 
     public interface OnFragmentInteractionListener {

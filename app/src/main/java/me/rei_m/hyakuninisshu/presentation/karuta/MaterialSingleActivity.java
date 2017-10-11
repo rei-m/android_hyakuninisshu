@@ -9,20 +9,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
-import me.rei_m.hyakuninisshu.App;
+import dagger.android.support.DaggerAppCompatActivity;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialSingleBinding;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.BaseActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.component.MaterialSingleActivityComponent;
-import me.rei_m.hyakuninisshu.presentation.karuta.module.MaterialSingleActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
-import me.rei_m.hyakuninisshu.presentation.module.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
-public class MaterialSingleActivity extends BaseActivity implements HasComponent<MaterialSingleActivityComponent>,
-        MaterialDetailFragment.OnFragmentInteractionListener,
+public class MaterialSingleActivity extends DaggerAppCompatActivity implements MaterialDetailFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
@@ -36,13 +30,12 @@ public class MaterialSingleActivity extends BaseActivity implements HasComponent
         return intent;
     }
 
-    private MaterialSingleActivityComponent component;
-
     private ActivityMaterialSingleBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_single);
 
         setSupportActionBar(binding.toolbar);
@@ -72,7 +65,6 @@ public class MaterialSingleActivity extends BaseActivity implements HasComponent
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        component = null;
         binding = null;
     }
 
@@ -84,20 +76,6 @@ public class MaterialSingleActivity extends BaseActivity implements HasComponent
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void setupActivityComponent() {
-        component = ((App) getApplication()).getComponent().plus(new ActivityModule(this), new MaterialSingleActivityModule());
-        component.inject(this);
-    }
-
-    @Override
-    public MaterialSingleActivityComponent getComponent() {
-        if (component == null) {
-            setupActivityComponent();
-        }
-        return component;
     }
 
     @Override

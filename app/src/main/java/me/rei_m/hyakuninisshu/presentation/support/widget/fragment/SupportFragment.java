@@ -9,15 +9,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.component.HasComponent;
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding;
-import me.rei_m.hyakuninisshu.presentation.BaseFragment;
-import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.component.SupportFragmentComponent;
-import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.module.SupportFragmentModule;
 import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.SupportFragmentViewModel;
 
-public class SupportFragment extends BaseFragment {
+public class SupportFragment extends DaggerFragment {
 
     public static final String TAG = "SupportFragment";
 
@@ -86,13 +83,8 @@ public class SupportFragment extends BaseFragment {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected void setupFragmentComponent() {
-        ((HasComponent<Injector>) getActivity()).getComponent()
-                .plus(new SupportFragmentModule(getContext())).inject(this);
-    }
-
-    public interface Injector {
-        SupportFragmentComponent plus(SupportFragmentModule fragmentModule);
+    public void onDetach() {
+        super.onDetach();
+        viewModel = null;
     }
 }

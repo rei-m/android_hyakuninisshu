@@ -9,8 +9,6 @@ import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +20,7 @@ import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.karuta.model.ToriFuda;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.util.GlideApp;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -176,9 +175,9 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     public static void setIsCollect(@NonNull ImageView imageView,
                                     boolean isCollect) {
         if (isCollect) {
-            Glide.with(imageView.getContext()).load(R.drawable.check_correct).dontAnimate().into(imageView);
+            GlideApp.with(imageView.getContext()).load(R.drawable.check_correct).dontAnimate().into(imageView);
         } else {
-            Glide.with(imageView.getContext()).load(R.drawable.check_incorrect).dontAnimate().into(imageView);
+            GlideApp.with(imageView.getContext()).load(R.drawable.check_incorrect).dontAnimate().into(imageView);
         }
     }
 }
