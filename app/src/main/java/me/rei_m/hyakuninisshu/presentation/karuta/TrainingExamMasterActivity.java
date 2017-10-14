@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,16 +11,24 @@ import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import dagger.Binds;
+import dagger.android.ActivityKey;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
+import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamMasterBinding;
+import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
+import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingExamMasterActivityViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.di.TrainingExamMasterActivityViewModelModule;
 
 public class TrainingExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
@@ -31,6 +40,37 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     }
 
     private static final String KEY_IS_STARTED = "isStarted";
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            TrainingExamMasterActivityViewModelModule.class,
+            ExamFragment.Module.class,
+            QuizAnswerFragment.Module.class,
+            QuizFragment.Module.class,
+            QuizResultFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<TrainingExamMasterActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<TrainingExamMasterActivity> {
+
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(TrainingExamMasterActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @Binds
+        @IntoMap
+        @ActivityKey(TrainingExamMasterActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
+    }
 
     @Inject
     TrainingExamMasterActivityViewModel viewModel;
@@ -96,7 +136,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
     }
-    
+
     @Override
     public void onAnswered(long karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()

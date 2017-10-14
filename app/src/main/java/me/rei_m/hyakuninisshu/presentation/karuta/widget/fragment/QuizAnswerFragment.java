@@ -8,10 +8,13 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizAnswerFragmentViewModelModule;
 
 public class QuizAnswerFragment extends DaggerFragment {
 
@@ -31,6 +34,13 @@ public class QuizAnswerFragment extends DaggerFragment {
         args.putBoolean(ARG_EXIST_NEXT_QUIZ, existNextQuiz);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = QuizAnswerFragmentViewModelModule.class)
+        abstract QuizAnswerFragment contributeInjector();
     }
 
     @Inject

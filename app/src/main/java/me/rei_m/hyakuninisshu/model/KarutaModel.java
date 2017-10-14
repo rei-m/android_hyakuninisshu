@@ -12,9 +12,9 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.util.Unit;
 

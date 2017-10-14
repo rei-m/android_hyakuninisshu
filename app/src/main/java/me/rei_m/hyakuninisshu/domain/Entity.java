@@ -7,10 +7,10 @@ public interface Entity<T extends Entity<T, I>, I extends EntityIdentifier> exte
      *
      * @return {@link EntityIdentifier}
      */
-    I getIdentifier();
+    I identifier();
 
     /**
-     * compare equivalence of object. use identifier{@link #getIdentifier()}
+     * compare equivalence of object. use identifier{@link #identifier()}
      *
      * @param that target object
      * @return if target has same identifier{@code true}

@@ -7,7 +7,7 @@ import android.view.View;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.AnalyticsManager;

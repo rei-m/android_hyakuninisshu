@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,11 +11,17 @@ import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import dagger.Binds;
+import dagger.android.ActivityKey;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
+import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
+import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
+import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
@@ -24,6 +31,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFrag
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.di.TrainingMasterActivityViewModelModule;
 
 public class TrainingMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
@@ -62,6 +70,36 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";
 
     private static final String KEY_IS_STARTED = "isStarted";
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            TrainingMasterActivityViewModelModule.class,
+            QuizFragment.Module.class,
+            QuizAnswerFragment.Module.class,
+            QuizResultFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<TrainingMasterActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<TrainingMasterActivity> {
+
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(TrainingMasterActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @Binds
+        @IntoMap
+        @ActivityKey(TrainingMasterActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
+    }
 
     @Inject
     TrainingMasterActivityViewModel viewModel;

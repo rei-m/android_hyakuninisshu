@@ -17,16 +17,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.karuta.model.BottomPhrase;
-import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizResult;
-import me.rei_m.hyakuninisshu.domain.karuta.model.Phrase;
-import me.rei_m.hyakuninisshu.domain.karuta.model.ToriFuda;
-import me.rei_m.hyakuninisshu.domain.karuta.model.YomiFuda;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.BottomPhrase;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase;
+import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
+import me.rei_m.hyakuninisshu.domain.model.quiz.YomiFuda;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.util.Unit;
 
@@ -146,34 +146,34 @@ public class KarutaQuizModel {
 
             return Single.zip(choiceSingle, collectSingle, countSingle, existNextQuizSingle, (karutaList, karuta, count, existNextQuiz) -> {
 
-                this.quizId = karutaQuiz.getIdentifier();
+                this.quizId = karutaQuiz.identifier();
 
                 this.yomiFuda = (topPhraseStyle == KarutaStyle.KANJI) ?
-                        new YomiFuda(karuta.getTopPhrase().getFirst().getKanji(),
-                                karuta.getTopPhrase().getSecond().getKanji(),
-                                karuta.getTopPhrase().getThird().getKanji()) :
-                        new YomiFuda(karuta.getTopPhrase().getFirst().getKana(),
-                                karuta.getTopPhrase().getSecond().getKana(),
-                                karuta.getTopPhrase().getThird().getKana());
+                        new YomiFuda(karuta.topPhrase().first().kanji(),
+                                karuta.topPhrase().second().kanji(),
+                                karuta.topPhrase().third().kanji()) :
+                        new YomiFuda(karuta.topPhrase().first().kana(),
+                                karuta.topPhrase().second().kana(),
+                                karuta.topPhrase().third().kana());
 
                 Phrase[] fourthPhrases = new Phrase[karutaList.size()];
                 Phrase[] fifthPhrases = new Phrase[karutaList.size()];
 
                 for (int i = 0; i < karutaList.size(); i++) {
-                    BottomPhrase bottomPhrase = karutaList.get(i).getBottomPhrase();
-                    fourthPhrases[i] = bottomPhrase.getFourth();
-                    fifthPhrases[i] = bottomPhrase.getFifth();
+                    BottomPhrase bottomPhrase = karutaList.get(i).bottomPhrase();
+                    fourthPhrases[i] = bottomPhrase.fourth();
+                    fifthPhrases[i] = bottomPhrase.fifth();
                 }
 
                 List<ToriFuda> toriFudaList = new ArrayList<>();
 
                 if (bottomPhraseStyle == KarutaStyle.KANJI) {
                     for (int i = 0; i < karutaList.size(); i++) {
-                        toriFudaList.add(new ToriFuda(fourthPhrases[i].getKanji(), fifthPhrases[i].getKanji()));
+                        toriFudaList.add(new ToriFuda(fourthPhrases[i].kanji(), fifthPhrases[i].kanji()));
                     }
                 } else {
                     for (int i = 0; i < karutaList.size(); i++) {
-                        toriFudaList.add(new ToriFuda(fourthPhrases[i].getKana(), fifthPhrases[i].getKana()));
+                        toriFudaList.add(new ToriFuda(fourthPhrases[i].kana(), fifthPhrases[i].kana()));
                     }
                 }
 

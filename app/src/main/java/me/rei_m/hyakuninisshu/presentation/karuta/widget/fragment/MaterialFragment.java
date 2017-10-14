@@ -12,12 +12,16 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.di.KarutaListItemViewModelModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.MaterialFragmentViewModelModule;
 
 public class MaterialFragment extends DaggerFragment {
 
@@ -25,6 +29,16 @@ public class MaterialFragment extends DaggerFragment {
 
     public static MaterialFragment newInstance() {
         return new MaterialFragment();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = {
+                MaterialFragmentViewModelModule.class,
+                KarutaListItemViewModelModule.class
+        })
+        abstract MaterialFragment contributeInjector();
     }
 
     @Inject

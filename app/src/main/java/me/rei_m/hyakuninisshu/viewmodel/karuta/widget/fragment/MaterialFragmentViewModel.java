@@ -3,7 +3,7 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 import android.databinding.ObservableArrayList;
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.AnalyticsManager;

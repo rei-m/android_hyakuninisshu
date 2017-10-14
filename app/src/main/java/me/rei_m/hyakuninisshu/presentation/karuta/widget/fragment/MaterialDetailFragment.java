@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.MaterialDetailFragmentViewModelModule;
 
 public class MaterialDetailFragment extends DaggerFragment {
 
@@ -27,6 +30,13 @@ public class MaterialDetailFragment extends DaggerFragment {
         args.putInt(ARG_KARUTA_NO, karutaNo);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = MaterialDetailFragmentViewModelModule.class)
+        abstract MaterialDetailFragment contributeInjector();
     }
 
     @Inject

@@ -11,7 +11,7 @@ public abstract class AbstractEntity<T extends Entity<T, I>, I extends EntityIde
     }
 
     @Override
-    public I getIdentifier() {
+    public I identifier() {
         return identifier;
     }
 
@@ -33,6 +33,6 @@ public abstract class AbstractEntity<T extends Entity<T, I>, I extends EntityIde
     @Override
     public boolean equals(Object that) {
         return this == that ||
-                !(that == null || !(that instanceof Entity)) && identifier.equals(((Entity) that).getIdentifier());
+                !(that == null || !(that instanceof Entity)) && identifier.equals(((Entity) that).identifier());
     }
 }

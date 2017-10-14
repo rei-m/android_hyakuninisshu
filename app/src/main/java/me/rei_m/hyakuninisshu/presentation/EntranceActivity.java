@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -8,10 +9,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
+import dagger.Binds;
+import dagger.android.ActivityKey;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
+import dagger.multibindings.IntoMap;
 import hotchemi.android.rate.AppRate;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding;
+import me.rei_m.hyakuninisshu.di.ForActivity;
+import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
@@ -25,6 +32,35 @@ public class EntranceActivity extends DaggerAppCompatActivity {
     }
 
     private static String KEY_PAGE_INDEX = "pageIndex";
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            TrainingMenuFragment.Module.class,
+            ExamFragment.Module.class,
+            MaterialFragment.Module.class,
+            SupportFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<EntranceActivity> {
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<EntranceActivity> {
+
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(EntranceActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @Binds
+        @IntoMap
+        @ActivityKey(EntranceActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
+    }
 
     private ActivityEntranceBinding binding;
 

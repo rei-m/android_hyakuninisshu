@@ -7,7 +7,7 @@ import android.view.View;
 
 import javax.inject.Inject;
 
-import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 
 import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant.SPACE;
@@ -32,18 +32,18 @@ public class KarutaListItemViewModel {
     }
 
     public void setKaruta(@NonNull Karuta karuta) {
-        String topPhrase = karuta.getTopPhrase().getFirst().getKanji() + SPACE +
-                karuta.getTopPhrase().getSecond().getKanji() + SPACE +
-                karuta.getTopPhrase().getThird().getKanji();
+        String topPhrase = karuta.topPhrase().first().kanji() + SPACE +
+                karuta.topPhrase().second().kanji() + SPACE +
+                karuta.topPhrase().third().kanji();
 
-        String bottomPhrase = karuta.getBottomPhrase().getFourth().getKanji() + SPACE +
-                karuta.getBottomPhrase().getFifth().getKanji();
+        String bottomPhrase = karuta.bottomPhrase().fourth().kanji() + SPACE +
+                karuta.bottomPhrase().fifth().kanji();
 
-        int karutaNo = (int) karuta.getIdentifier().getValue();
+        int karutaNo = (int) karuta.identifier().value();
 
         this.karutaNo.set(karutaNo);
-        this.karutaImageNo.set(karuta.getImageNo());
-        this.creator.set(karuta.getCreator());
+        this.karutaImageNo.set(karuta.imageNo().value());
+        this.creator.set(karuta.creator());
         this.topPhrase.set(topPhrase);
         this.bottomPhrase.set(bottomPhrase);
     }

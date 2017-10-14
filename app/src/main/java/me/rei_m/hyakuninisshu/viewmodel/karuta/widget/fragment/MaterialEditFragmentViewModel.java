@@ -6,7 +6,7 @@ import android.view.View;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -65,23 +65,23 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaModel.completeGetKarutaEvent.subscribe(karuta -> {
 
-            if (!karutaIdentifier.equals(karuta.getIdentifier())) {
+            if (!karutaIdentifier.equals(karuta.identifier())) {
                 return;
             }
 
-            karutaNo.set((int) karuta.getIdentifier().getValue());
-            creator.set(karuta.getCreator());
-            kimariji.set(karuta.getKimariji());
-            firstPhraseKanji.set(karuta.getTopPhrase().getFirst().getKanji());
-            firstPhraseKana.set(karuta.getTopPhrase().getFirst().getKana());
-            secondPhraseKanji.set(karuta.getTopPhrase().getSecond().getKanji());
-            secondPhraseKana.set(karuta.getTopPhrase().getSecond().getKana());
-            thirdPhraseKanji.set(karuta.getTopPhrase().getThird().getKanji());
-            thirdPhraseKana.set(karuta.getTopPhrase().getThird().getKana());
-            fourthPhraseKanji.set(karuta.getBottomPhrase().getFourth().getKanji());
-            fourthPhraseKana.set(karuta.getBottomPhrase().getFourth().getKana());
-            fifthPhraseKanji.set(karuta.getBottomPhrase().getFifth().getKanji());
-            fifthPhraseKana.set(karuta.getBottomPhrase().getFifth().getKana());
+            karutaNo.set((int) karuta.identifier().value());
+            creator.set(karuta.creator());
+            kimariji.set(karuta.kimariji());
+            firstPhraseKanji.set(karuta.topPhrase().first().kanji());
+            firstPhraseKana.set(karuta.topPhrase().first().kana());
+            secondPhraseKanji.set(karuta.topPhrase().second().kanji());
+            secondPhraseKana.set(karuta.topPhrase().second().kana());
+            thirdPhraseKanji.set(karuta.topPhrase().third().kanji());
+            thirdPhraseKana.set(karuta.topPhrase().third().kana());
+            fourthPhraseKanji.set(karuta.bottomPhrase().fourth().kanji());
+            fourthPhraseKana.set(karuta.bottomPhrase().fourth().kana());
+            fifthPhraseKanji.set(karuta.bottomPhrase().fifth().kanji());
+            fifthPhraseKana.set(karuta.bottomPhrase().fifth().kana());
         }), karutaModel.completeEditKarutaEvent.subscribe(v -> {
             onUpdateMaterialEventSubject.onNext(Unit.INSTANCE);
         }));

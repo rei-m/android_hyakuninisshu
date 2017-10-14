@@ -8,10 +8,13 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizResultBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizResultFragmentViewModelModule;
 
 public class QuizResultFragment extends DaggerFragment {
 
@@ -19,6 +22,13 @@ public class QuizResultFragment extends DaggerFragment {
 
     public static QuizResultFragment newInstance() {
         return new QuizResultFragment();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = QuizResultFragmentViewModelModule.class)
+        abstract QuizResultFragment contributeInjector();
     }
 
     @Inject

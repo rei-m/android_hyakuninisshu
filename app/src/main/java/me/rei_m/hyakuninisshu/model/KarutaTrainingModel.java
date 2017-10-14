@@ -15,14 +15,14 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
-import me.rei_m.hyakuninisshu.domain.karuta.model.TrainingResult;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizListFactory;
+import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 import me.rei_m.hyakuninisshu.util.Unit;
 
@@ -79,7 +79,7 @@ public class KarutaTrainingModel {
             int size = (karutaList.size() < quizSize) ? karutaList.size() : quizSize;
             int[] collectKarutaIndexList = ArrayUtil.generateRandomArray(karutaList.size(), size);
             for (int i : collectKarutaIndexList) {
-                correctKarutaIdList.add(karutaList.get(i).getIdentifier());
+                correctKarutaIdList.add(karutaList.get(i).identifier());
             }
             return correctKarutaIdList;
         }).flatMap(karutaQuizListFactory::create).flatMap(karutaQuizList -> karutaQuizRepository.initialize(karutaQuizList).andThen(Single.just(!karutaQuizList.isEmpty())))

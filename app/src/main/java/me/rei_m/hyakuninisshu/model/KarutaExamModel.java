@@ -16,15 +16,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
-import me.rei_m.hyakuninisshu.domain.karuta.model.ExamResult;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExam;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizListFactory;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaExamRepository;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.domain.karuta.repository.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.quiz.ExamResult;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizListFactory;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
 import me.rei_m.hyakuninisshu.util.Unit;
@@ -65,7 +65,7 @@ public class KarutaExamModel {
 
     public void start() {
         karutaRepository.asEntityList()
-                .flatMap(karutaList -> Observable.fromIterable(karutaList).map(AbstractEntity::getIdentifier).toList())
+                .flatMap(karutaList -> Observable.fromIterable(karutaList).map(AbstractEntity::identifier).toList())
                 .flatMap(karutaQuizListFactory::create)
                 .flatMapCompletable(karutaQuizList -> {
                     List<KarutaQuiz> finallyKarutaQuizList = new ArrayList<>();
@@ -88,7 +88,7 @@ public class KarutaExamModel {
                     int currentExamCount = karutaExamList.size();
                     if (KarutaExam.MAX_HISTORY_COUNT < currentExamCount) {
                         for (KarutaExam karutaExam : karutaExamList.subList(KarutaExam.MAX_HISTORY_COUNT - 1, currentExamCount - 1)) {
-                            karutaExamRepository.delete(karutaExam.getIdentifier()).subscribe();
+                            karutaExamRepository.delete(karutaExam.identifier()).subscribe();
                         }
                     }
                     return Single.just(karutaExamIdentifier.getValue());
@@ -131,7 +131,7 @@ public class KarutaExamModel {
         Arrays.fill(karutaQuizResultList, true);
 
         for (KarutaIdentifier wrongKarutaIdentifier : karutaExam.wrongKarutaIdList) {
-            int wrongKarutaIndex = (int) wrongKarutaIdentifier.getValue() - 1;
+            int wrongKarutaIndex = (int) wrongKarutaIdentifier.value() - 1;
             karutaQuizResultList[wrongKarutaIndex] = false;
         }
 

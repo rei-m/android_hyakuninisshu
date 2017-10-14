@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
@@ -20,6 +22,7 @@ import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.TrainingMenuFragmentViewModelModule;
 
 public class TrainingMenuFragment extends DaggerFragment {
 
@@ -27,6 +30,13 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     public static TrainingMenuFragment newInstance() {
         return new TrainingMenuFragment();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = TrainingMenuFragmentViewModelModule.class)
+        abstract TrainingMenuFragment contributeInjector();
     }
 
     @Inject

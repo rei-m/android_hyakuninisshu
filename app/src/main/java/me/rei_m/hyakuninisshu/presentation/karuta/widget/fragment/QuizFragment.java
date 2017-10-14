@@ -19,15 +19,18 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Device;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizFragmentViewModelModule;
 
 public class QuizFragment extends DaggerFragment {
 
@@ -52,6 +55,13 @@ public class QuizFragment extends DaggerFragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = QuizFragmentViewModelModule.class)
+        abstract QuizFragment contributeInjector();
     }
 
     @Inject

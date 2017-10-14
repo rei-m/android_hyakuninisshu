@@ -7,7 +7,7 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -51,34 +51,34 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaModel.completeGetKarutaEvent.subscribe(karuta -> {
 
-            if (!karutaIdentifier.equals(karuta.getIdentifier())) {
+            if (!karutaIdentifier.equals(karuta.identifier())) {
                 return;
             }
 
-            karutaNo.set((int) karutaIdentifier.getValue());
+            karutaNo.set((int) karutaIdentifier.value());
 
-            karutaImageNo.set(karuta.getImageNo());
+            karutaImageNo.set(karuta.imageNo().value());
 
-            creator.set(karuta.getCreator());
+            creator.set(karuta.creator());
 
-            kimariji.set(karuta.getKimariji());
+            kimariji.set(karuta.kimariji());
 
-            topPhraseKanji.set(karuta.getTopPhrase().getFirst().getKanji() + SPACE +
-                    karuta.getTopPhrase().getSecond().getKanji() + SPACE +
-                    karuta.getTopPhrase().getThird().getKanji());
+            topPhraseKanji.set(karuta.topPhrase().first().kanji() + SPACE +
+                    karuta.topPhrase().second().kanji() + SPACE +
+                    karuta.topPhrase().third().kanji());
 
 
-            bottomPhraseKanji.set(karuta.getBottomPhrase().getFourth().getKanji() + SPACE +
-                    karuta.getBottomPhrase().getFifth().getKanji());
+            bottomPhraseKanji.set(karuta.bottomPhrase().fourth().kanji() + SPACE +
+                    karuta.bottomPhrase().fifth().kanji());
 
-            topPhraseKana.set(karuta.getTopPhrase().getFirst().getKana() + SPACE +
-                    karuta.getTopPhrase().getSecond().getKana() + SPACE +
-                    karuta.getTopPhrase().getThird().getKana());
+            topPhraseKana.set(karuta.topPhrase().first().kana() + SPACE +
+                    karuta.topPhrase().second().kana() + SPACE +
+                    karuta.topPhrase().third().kana());
 
-            bottomPhraseKana.set(karuta.getBottomPhrase().getFourth().getKana() + SPACE +
-                    karuta.getBottomPhrase().getFifth().getKana());
+            bottomPhraseKana.set(karuta.bottomPhrase().fourth().kana() + SPACE +
+                    karuta.bottomPhrase().fifth().kana());
 
-            translation.set(karuta.getTranslation());
+            translation.set(karuta.translation());
         }));
     }
 

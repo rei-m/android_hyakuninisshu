@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.dialog.ConfirmMaterialEditDialogFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialEditFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.MaterialEditFragmentViewModelModule;
 
 public class MaterialEditFragment extends DaggerFragment implements ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
 
@@ -31,6 +34,13 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
         args.putInt(ARG_KARUTA_NO, karutaNo);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = MaterialEditFragmentViewModelModule.class)
+        abstract MaterialEditFragment contributeInjector();
     }
 
     @Inject

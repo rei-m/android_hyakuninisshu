@@ -15,9 +15,9 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaQuizIdentifier;
-import me.rei_m.hyakuninisshu.domain.karuta.model.ToriFuda;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.util.GlideApp;
@@ -80,7 +80,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     }
 
     public long getCollectKarutaId() {
-        return collectKarutaIdentifier.getValue();
+        return collectKarutaIdentifier.value();
     }
 
     public boolean existNextQuiz() {

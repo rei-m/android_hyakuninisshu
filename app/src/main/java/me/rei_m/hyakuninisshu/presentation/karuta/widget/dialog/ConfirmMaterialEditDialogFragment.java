@@ -11,10 +11,13 @@ import android.view.LayoutInflater;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.DialogConfirmMaterialEditBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.dialog.ConfirmMaterialEditDialogFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.dialog.di.ConfirmMaterialEditDialogFragmentViewModelModule;
 
 public class ConfirmMaterialEditDialogFragment extends DialogFragment {
 
@@ -57,6 +60,13 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
         args.putString(ARG_FIFTH_KANA, fifthPhraseKana);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = ConfirmMaterialEditDialogFragmentViewModelModule.class)
+        abstract ConfirmMaterialEditDialogFragment contributeInjector();
     }
 
     @Inject
