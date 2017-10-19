@@ -17,7 +17,9 @@ import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
+import me.rei_m.hyakuninisshu.domain.model.quiz.YomiFuda;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
 import me.rei_m.hyakuninisshu.util.GlideApp;
@@ -76,7 +78,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     }
 
     public String getKarutaQuizId() {
-        return karutaQuizIdentifier.getValue();
+        return karutaQuizIdentifier.value();
     }
 
     public long getCollectKarutaId() {
@@ -104,28 +106,39 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        registerDisposable(karutaQuizModel.completeStartEvent.subscribe(isAnswered -> {
+        registerDisposable(karutaQuizModel.completeStartEvent.subscribe(karutaQuizContent -> {
 
-            karutaQuizIdentifier = karutaQuizModel.getQuizId();
+            karutaQuizIdentifier = karutaQuizContent.quizId();
 
-            quizCount.set(karutaQuizModel.getCurrentPosition());
+            quizCount.set(karutaQuizContent.currentPosition());
 
-            firstPhrase.set(karutaQuizModel.getYomiFuda().getFirstPhrase());
-            secondPhrase.set(karutaQuizModel.getYomiFuda().getSecondPhrase());
-            thirdPhrase.set(karutaQuizModel.getYomiFuda().getThirdPhrase());
+            YomiFuda yomiFuda = karutaQuizContent.yomiFuda(topPhraseStyle);
 
-            for (int i = 0; i < karutaQuizModel.getToriFudaList().size(); i++) {
-                ToriFuda toriFuda = karutaQuizModel.getToriFudaList().get(i);
+            firstPhrase.set(yomiFuda.getFirstPhrase());
+            secondPhrase.set(yomiFuda.getSecondPhrase());
+            thirdPhrase.set(yomiFuda.getThirdPhrase());
+
+            List<ToriFuda> toriFudas = karutaQuizContent.toriFudas(bottomPhraseStyle);
+
+            for (int i = 0; i < toriFudas.size(); i++) {
+                ToriFuda toriFuda = toriFudas.get(i);
                 choiceFourthPhraseList.set(i, toriFuda.getFourthPhrase());
                 choiceFifthPhraseList.set(i, toriFuda.getFifthPhrase());
             }
 
-            if (!isAnswered) {
+            if (!karutaQuizContent.isAnswered()) {
                 startDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
             }
-        }), karutaQuizModel.completeAnswerEvent.subscribe(result -> {
+        }), karutaQuizModel.completeAnswerEvent.subscribe(karutaQuizContent -> {
 
             stopDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
+
+            KarutaQuizResult result = karutaQuizContent.result();
+
+            if (result == null) {
+                errorEventSubject.onNext(Unit.INSTANCE);
+                return;
+            }
 
             List<Boolean> isVisibleChoiceList = Arrays.asList(false, false, false, false);
             isVisibleChoiceList.set(result.choiceNo - 1, true);
@@ -136,7 +149,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             this.isVisibleResult.set(true);
 
             this.collectKarutaIdentifier = result.collectKarutaId;
-            this.existNextQuiz = karutaQuizModel.existNextQuiz();
+            this.existNextQuiz = karutaQuizContent.existNext();
 
         }), karutaQuizModel.error.subscribe(v -> {
             errorEventSubject.onNext(Unit.INSTANCE);
@@ -147,14 +160,14 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         if (karutaQuizIdentifier == null) {
-            karutaQuizModel.start(topPhraseStyle, bottomPhraseStyle);
+            karutaQuizModel.start();
         } else {
-            karutaQuizModel.restart(karutaQuizIdentifier, topPhraseStyle, bottomPhraseStyle);
+            karutaQuizModel.restart(karutaQuizIdentifier);
         }
     }
 
     public void onClickChoice(int choiceNo) {
-        karutaQuizModel.answer(choiceNo);
+        karutaQuizModel.answer(karutaQuizIdentifier, choiceNo);
     }
 
     public void onClickResult() {

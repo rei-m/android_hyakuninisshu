@@ -10,9 +10,9 @@ public interface KarutaExamRepository {
 
     Single<KarutaExamIdentifier> store(List<KarutaQuizResult> karutaQuizResultList, Date tookExamDate);
 
-    Single<KarutaExam> resolve(KarutaExamIdentifier identifier);
+    Completable adjustHistory(int historySize);
 
-    Single<List<KarutaExam>> asEntityList();
+    Single<KarutaExam> findBy(KarutaExamIdentifier identifier);
 
-    Completable delete(KarutaExamIdentifier identifier);
+    Single<List<KarutaExam>> list();
 }

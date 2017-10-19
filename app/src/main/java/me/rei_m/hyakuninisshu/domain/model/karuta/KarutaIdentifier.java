@@ -17,7 +17,7 @@ public class KarutaIdentifier implements EntityIdentifier<Karuta> {
     }
 
     @Override
-    public String getKind() {
+    public String kind() {
         return kind;
     }
 

@@ -3,6 +3,7 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
 public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier> {
 
-    public final KarutaQuizContents contents;
+    private final List<KarutaIdentifier> choiceList;
+
+    private final KarutaIdentifier collectId;
 
     private Date startDate;
 
@@ -21,7 +24,8 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
                       @NonNull List<KarutaIdentifier> choiceList,
                       @NonNull KarutaIdentifier collectId) {
         super(identifier);
-        this.contents = new KarutaQuizContents(choiceList, collectId);
+        this.choiceList = choiceList;
+        this.collectId = collectId;
     }
 
     public KarutaQuiz(@NonNull KarutaQuizIdentifier identifier,
@@ -41,15 +45,19 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         }
     }
 
-    public Date getStartDate() {
+    public List<KarutaIdentifier> choiceList() {
+        return Collections.unmodifiableList(choiceList);
+    }
+
+    public KarutaIdentifier collectId() {
+        return collectId;
+    }
+
+    public Date startDate() {
         return startDate;
     }
 
-    public KarutaQuizContents getContents() {
-        return contents;
-    }
-
-    public KarutaQuizResult getResult() {
+    public KarutaQuizResult result() {
         return result;
     }
 
@@ -58,17 +66,18 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         return this;
     }
 
-    public void verify(int choiceNo, @NonNull Date answerDate) throws IllegalStateException, IllegalArgumentException {
-        if (contents.choiceList.size() < choiceNo) {
+    public KarutaQuiz verify(int choiceNo, @NonNull Date answerDate) throws IllegalStateException, IllegalArgumentException {
+        if (choiceList.size() < choiceNo) {
             throw new IllegalArgumentException("Invalid choiceNo. " + choiceNo);
         }
         if (startDate == null) {
             throw new IllegalStateException("Quiz is not started. Call start.");
         }
-        KarutaIdentifier selectedId = contents.choiceList.get(choiceNo - 1);
-        boolean isCollect = contents.collectId.equals(selectedId);
+        KarutaIdentifier selectedId = choiceList.get(choiceNo - 1);
+        boolean isCollect = collectId.equals(selectedId);
         long answerTime = answerDate.getTime() - startDate.getTime();
-        this.result = new KarutaQuizResult(contents.collectId, choiceNo, isCollect, answerTime);
+        this.result = new KarutaQuizResult(collectId, choiceNo, isCollect, answerTime);
+        return this;
     }
 
     @Override
@@ -79,15 +88,19 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
 
         KarutaQuiz that = (KarutaQuiz) o;
 
-        return contents.equals(that.contents) &&
-                (startDate != null ? startDate.equals(that.startDate) : that.startDate == null
-                        && (result != null ? result.equals(that.result) : that.result == null));
+        if (!choiceList.equals(that.choiceList)) return false;
+        if (!collectId.equals(that.collectId)) return false;
+        if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null)
+            return false;
+        return result != null ? result.equals(that.result) : that.result == null;
+
     }
 
     @Override
     public int hashCode() {
         int result1 = super.hashCode();
-        result1 = 31 * result1 + contents.hashCode();
+        result1 = 31 * result1 + choiceList.hashCode();
+        result1 = 31 * result1 + collectId.hashCode();
         result1 = 31 * result1 + (startDate != null ? startDate.hashCode() : 0);
         result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
         return result1;
@@ -96,7 +109,8 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
     @Override
     public String toString() {
         return "KarutaQuiz{" +
-                "contents=" + contents +
+                "choiceList=" + choiceList +
+                ", collectId=" + collectId +
                 ", startDate=" + startDate +
                 ", result=" + result +
                 "} " + super.toString();

@@ -71,7 +71,7 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
 
             karutaNo.set((int) karuta.identifier().value());
             creator.set(karuta.creator());
-            kimariji.set(karuta.kimariji());
+            kimariji.set(karuta.kimariji().value());
             firstPhraseKanji.set(karuta.topPhrase().first().kanji());
             firstPhraseKana.set(karuta.topPhrase().first().kana());
             secondPhraseKanji.set(karuta.topPhrase().second().kanji());

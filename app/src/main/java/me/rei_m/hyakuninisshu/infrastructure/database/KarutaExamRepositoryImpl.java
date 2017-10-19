@@ -13,12 +13,12 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamFactory;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 
 public class KarutaExamRepositoryImpl implements KarutaExamRepository {
 
@@ -67,9 +67,30 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
     }
 
     @Override
-    public Single<KarutaExam> resolve(@NonNull KarutaExamIdentifier identifier) {
+    public Completable adjustHistory(int historySize) {
+        Observable<KarutaExamSchema> karutaExamSchemaObservable = KarutaExamSchema.relation(orma)
+                .selector()
+                .orderByIdAsc()
+                .executeAsObservable();
+
+        long examCount = karutaExamSchemaObservable.count().blockingGet();
+
+        if (historySize < examCount) {
+            return orma.transactionAsCompletable(() -> {
+                KarutaExamSchema_Deleter deleter = KarutaExamSchema.relation(orma).deleter();
+                karutaExamSchemaObservable
+                        .take(examCount - historySize)
+                        .subscribe(karutaExamSchema -> deleter.idEq(karutaExamSchema.id).execute());
+            });
+        } else {
+            return Completable.complete();
+        }
+    }
+
+    @Override
+    public Single<KarutaExam> findBy(@NonNull KarutaExamIdentifier identifier) {
         return KarutaExamSchema.relation(orma)
-                .idEq(identifier.getValue())
+                .idEq(identifier.value())
                 .selector()
                 .executeAsObservable()
                 .firstOrError()
@@ -84,7 +105,7 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
     }
 
     @Override
-    public Single<List<KarutaExam>> asEntityList() {
+    public Single<List<KarutaExam>> list() {
         return KarutaExamSchema.relation(orma)
                 .selector()
                 .orderByIdDesc()
@@ -97,13 +118,5 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
                             .subscribe(examWrongKarutaSchemaList::add);
                     return KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList);
                 }).toList();
-    }
-
-    @Override
-    public Completable delete(@NonNull KarutaExamIdentifier identifier) {
-        return orma.transactionAsCompletable(() -> KarutaExamSchema.relation(orma)
-                .deleter()
-                .idEq(identifier.getValue())
-                .execute());
     }
 }

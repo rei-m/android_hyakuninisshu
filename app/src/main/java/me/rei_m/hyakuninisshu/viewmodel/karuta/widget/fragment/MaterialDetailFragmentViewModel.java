@@ -61,7 +61,7 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
             creator.set(karuta.creator());
 
-            kimariji.set(karuta.kimariji());
+            kimariji.set(karuta.kimariji().value());
 
             topPhraseKanji.set(karuta.topPhrase().first().kanji() + SPACE +
                     karuta.topPhrase().second().kanji() + SPACE +

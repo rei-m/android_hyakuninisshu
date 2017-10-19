@@ -3,10 +3,10 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 import android.databinding.ObservableArrayList;
 import android.support.annotation.NonNull;
 
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
 public class MaterialFragmentViewModel extends AbsFragmentViewModel {
@@ -38,11 +38,11 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
-        karutaModel.getKarutaList(color);
+        karutaModel.getKarutaList(color.getCode());
     }
 
     public void onOptionItemSelected(@NonNull Color color) {
-        karutaModel.getKarutaList(color);
+        karutaModel.getKarutaList(color.getCode());
         this.color = color;
     }
 }

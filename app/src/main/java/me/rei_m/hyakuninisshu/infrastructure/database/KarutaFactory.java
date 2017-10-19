@@ -2,12 +2,14 @@ package me.rei_m.hyakuninisshu.infrastructure.database;
 
 import android.support.annotation.NonNull;
 
+import me.rei_m.hyakuninisshu.domain.model.karuta.BottomPhrase;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.ImageNo;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase;
 import me.rei_m.hyakuninisshu.domain.model.karuta.TopPhrase;
-import me.rei_m.hyakuninisshu.domain.model.karuta.BottomPhrase;
 
 public class KarutaFactory {
 
@@ -35,9 +37,9 @@ public class KarutaFactory {
                 schema.creator,
                 topPhrase,
                 bottomPhrase,
-                schema.kimariji,
+                new Kimariji(schema.kimariji),
                 new ImageNo(schema.imageNo),
                 translation,
-                color);
+                new Color(color));
     }
 }

@@ -1,7 +1,6 @@
 package me.rei_m.hyakuninisshu.infrastructure.database;
 
 import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
 
 import com.github.gfx.android.orma.Inserter;
 import com.github.gfx.android.orma.SingleAssociation;
@@ -15,7 +14,9 @@ import io.reactivex.functions.Function;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizPosition;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 
 public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
@@ -37,10 +38,10 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
             for (KarutaQuiz karutaQuiz : karutaQuizList) {
                 KarutaQuizSchema karutaQuizSchema = new KarutaQuizSchema();
-                karutaQuizSchema.quizId = karutaQuiz.identifier().getValue();
-                karutaQuizSchema.collectId = karutaQuiz.contents.collectId.value();
+                karutaQuizSchema.quizId = karutaQuiz.identifier().value();
+                karutaQuizSchema.collectId = karutaQuiz.collectId().value();
                 karutaQuizSchema.id = karutaQuizSchemaInserter.execute(karutaQuizSchema);
-                List<KarutaIdentifier> choiceList = karutaQuiz.contents.choiceList;
+                List<KarutaIdentifier> choiceList = karutaQuiz.choiceList();
                 for (KarutaIdentifier karutaIdentifier : choiceList) {
                     KarutaQuizChoiceSchema karutaQuizChoiceSchema = new KarutaQuizChoiceSchema();
                     karutaQuizChoiceSchema.karutaQuizSchema = SingleAssociation.just(karutaQuizSchema);
@@ -75,7 +76,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     @Override
     public Single<KarutaQuiz> resolve(KarutaQuizIdentifier identifier) {
         return KarutaQuizSchema.relation(orma)
-                .quizIdEq(identifier.getValue())
+                .quizIdEq(identifier.value())
                 .selector()
                 .executeAsObservable()
                 .firstOrError()
@@ -86,14 +87,14 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     public Completable store(KarutaQuiz karutaQuiz) {
         return orma.transactionAsCompletable(() -> {
             KarutaQuizSchema_Updater updater = KarutaQuizSchema.relation(orma)
-                    .quizIdEq(karutaQuiz.identifier().getValue())
+                    .quizIdEq(karutaQuiz.identifier().value())
                     .updater();
 
-            updater.startDate(karutaQuiz.getStartDate());
-            if (karutaQuiz.getResult() != null) {
-                updater.isCollect(karutaQuiz.getResult().isCollect)
-                        .choiceNo(karutaQuiz.getResult().choiceNo)
-                        .answerTime(karutaQuiz.getResult().answerTime);
+            updater.startDate(karutaQuiz.startDate());
+            if (karutaQuiz.result() != null) {
+                updater.isCollect(karutaQuiz.result().isCollect)
+                        .choiceNo(karutaQuiz.result().choiceNo)
+                        .answerTime(karutaQuiz.result().answerTime);
             }
             updater.execute();
         });
@@ -109,15 +110,17 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
     }
 
     @Override
-    public Single<List<KarutaQuiz>> asEntityList() {
+    public Single<KarutaQuizzes> list() {
         return KarutaQuizSchema.relation(orma)
                 .selector()
                 .executeAsObservable()
-                .map(funcConvertEntity).toList();
+                .map(funcConvertEntity)
+                .toList()
+                .map(KarutaQuizzes::new);
     }
-    
+
     @Override
-    public Single<Pair<Integer, Integer>> countQuizByAnswered() {
+    public Single<KarutaQuizPosition> countQuizByAnswered() {
         Single<Long> totalCountSingle = KarutaQuizSchema.relation(orma)
                 .selector()
                 .executeAsObservable()
@@ -130,7 +133,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                 .count();
 
         return Single.zip(totalCountSingle, answeredCountSingle, (totalCount, answeredCount) ->
-                new Pair<>(totalCount.intValue(), answeredCount.intValue()));
+                new KarutaQuizPosition(totalCount.intValue(), answeredCount.intValue()));
     }
 
     private Function<KarutaQuizSchema, KarutaQuiz> funcConvertEntity = new Function<KarutaQuizSchema, KarutaQuiz>() {

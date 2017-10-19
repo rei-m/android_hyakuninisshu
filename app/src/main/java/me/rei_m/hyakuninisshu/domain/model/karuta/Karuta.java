@@ -12,22 +12,22 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     private BottomPhrase bottomPhrase;
 
-    private final int kimariji;
+    private final Kimariji kimariji;
 
     private final ImageNo imageNo;
 
     private final String translation;
 
-    private final String color;
+    private final Color color;
 
     public Karuta(@NonNull KarutaIdentifier identifier,
                   @NonNull String creator,
                   @NonNull TopPhrase topPhrase,
                   @NonNull BottomPhrase bottomPhrase,
-                  int kimariji,
+                  @NonNull Kimariji kimariji,
                   @NonNull ImageNo imageNo,
                   @NonNull String translation,
-                  @NonNull String color) {
+                  @NonNull Color color) {
         super(identifier);
         this.creator = creator;
         this.topPhrase = topPhrase;
@@ -50,7 +50,7 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         return bottomPhrase;
     }
 
-    public int kimariji() {
+    public Kimariji kimariji() {
         return kimariji;
     }
 
@@ -62,7 +62,7 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         return translation;
     }
 
-    public String color() {
+    public Color color() {
         return color;
     }
 
@@ -108,12 +108,13 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
         Karuta karuta = (Karuta) o;
 
-        return kimariji == karuta.kimariji &&
-                creator.equals(karuta.creator) &&
-                topPhrase.equals(karuta.topPhrase) &&
-                bottomPhrase.equals(karuta.bottomPhrase) &&
-                imageNo.equals(karuta.imageNo) &&
-                translation.equals(karuta.translation);
+        if (!creator.equals(karuta.creator)) return false;
+        if (!topPhrase.equals(karuta.topPhrase)) return false;
+        if (!bottomPhrase.equals(karuta.bottomPhrase)) return false;
+        if (!kimariji.equals(karuta.kimariji)) return false;
+        if (!imageNo.equals(karuta.imageNo)) return false;
+        if (!translation.equals(karuta.translation)) return false;
+        return color.equals(karuta.color);
     }
 
     @Override
@@ -122,9 +123,10 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         result = 31 * result + creator.hashCode();
         result = 31 * result + topPhrase.hashCode();
         result = 31 * result + bottomPhrase.hashCode();
-        result = 31 * result + kimariji;
+        result = 31 * result + kimariji.hashCode();
         result = 31 * result + imageNo.hashCode();
         result = 31 * result + translation.hashCode();
+        result = 31 * result + color.hashCode();
         return result;
     }
 
@@ -135,8 +137,9 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
                 ", topPhrase=" + topPhrase +
                 ", bottomPhrase=" + bottomPhrase +
                 ", kimariji=" + kimariji +
-                ", imageNo='" + imageNo + '\'' +
+                ", imageNo=" + imageNo +
                 ", translation='" + translation + '\'' +
+                ", color=" + color +
                 "} " + super.toString();
     }
 }

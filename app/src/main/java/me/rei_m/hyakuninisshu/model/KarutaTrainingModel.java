@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,15 +13,15 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizListFactory;
-import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
-import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
+import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
@@ -48,18 +46,14 @@ public class KarutaTrainingModel {
 
     private final KarutaQuizRepository karutaQuizRepository;
 
-    private final KarutaQuizListFactory karutaQuizListFactory;
-
     private final KarutaExamRepository karutaExamRepository;
 
     @Inject
     public KarutaTrainingModel(@NonNull KarutaRepository karutaRepository,
                                @NonNull KarutaQuizRepository karutaQuizRepository,
-                               @NonNull KarutaQuizListFactory karutaQuizListFactory,
                                @NonNull KarutaExamRepository karutaExamRepository) {
         this.karutaRepository = karutaRepository;
         this.karutaQuizRepository = karutaQuizRepository;
-        this.karutaQuizListFactory = karutaQuizListFactory;
         this.karutaExamRepository = karutaExamRepository;
     }
 
@@ -68,21 +62,17 @@ public class KarutaTrainingModel {
                       int kimarijiPosition,
                       @Nullable String color) {
 
-        int quizSize = toKarutaId - fromKarutaId + 1;
+        KarutaIdentifier fromId = new KarutaIdentifier(fromKarutaId);
+        KarutaIdentifier toId = new KarutaIdentifier(toKarutaId);
 
-        Single<List<Karuta>> karutaListObservable = (kimarijiPosition == 0) ?
-                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), color) :
-                karutaRepository.asEntityList(new KarutaIdentifier(fromKarutaId), new KarutaIdentifier(toKarutaId), color, kimarijiPosition);
+        Single<Karutas> karutasSingle = karutaRepository.findAll();
 
-        karutaListObservable.map(karutaList -> {
-            List<KarutaIdentifier> correctKarutaIdList = new ArrayList<>();
-            int size = (karutaList.size() < quizSize) ? karutaList.size() : quizSize;
-            int[] collectKarutaIndexList = ArrayUtil.generateRandomArray(karutaList.size(), size);
-            for (int i : collectKarutaIndexList) {
-                correctKarutaIdList.add(karutaList.get(i).identifier());
-            }
-            return correctKarutaIdList;
-        }).flatMap(karutaQuizListFactory::create).flatMap(karutaQuizList -> karutaQuizRepository.initialize(karutaQuizList).andThen(Single.just(!karutaQuizList.isEmpty())))
+        Single<KarutaIds> trainingKarutaIdsSingle = (kimarijiPosition == 0) ?
+                karutaRepository.findForTraining(fromId, toId, color) :
+                karutaRepository.findForTraining(fromId, toId, color, new Kimariji(kimarijiPosition));
+
+        Single.zip(karutasSingle, trainingKarutaIdsSingle, Karutas::createQuizSet)
+                .flatMap(karutaQuizList -> karutaQuizRepository.initialize(karutaQuizList).andThen(Single.just(!karutaQuizList.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
                         completeStartEventSubject.onNext(Unit.INSTANCE);
@@ -95,12 +85,10 @@ public class KarutaTrainingModel {
     }
 
     public void restartForPractice() {
-        karutaQuizRepository.asEntityList()
-                .flatMap(karutaQuizList -> Observable.fromIterable(karutaQuizList)
-                        .filter(karutaQuiz -> karutaQuiz.getResult() != null && !karutaQuiz.getResult().isCollect)
-                        .map(karutaQuiz -> karutaQuiz.getResult().collectKarutaId)
-                        .toList())
-                .flatMap(karutaQuizListFactory::create)
+        Single<Karutas> karutasSingle = karutaRepository.findAll();
+        Single<KarutaQuizzes> karutaQuizzesSingle = karutaQuizRepository.list();
+
+        Single.zip(karutasSingle, karutaQuizzesSingle, (karutas, karutaQuizzes) -> karutas.createQuizSet(karutaQuizzes.wrongKarutaIds()))
                 .flatMap(karutaQuizList -> karutaQuizRepository.initialize(karutaQuizList).andThen(Single.just(!karutaQuizList.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
@@ -113,7 +101,8 @@ public class KarutaTrainingModel {
     }
 
     public void startForExam() {
-        karutaExamRepository.asEntityList()
+        Single<Karutas> karutasSingle = karutaRepository.findAll();
+        Single<KarutaIds> trainingKarutaIdsSingle = karutaExamRepository.list()
                 .flatMap(karutaExamList -> Observable.fromIterable(karutaExamList)
                         .reduce(new ArrayList<KarutaIdentifier>(), (karutaIdList, karutaExam) -> {
                             for (KarutaIdentifier wrongKarutaId : karutaExam.wrongKarutaIdList) {
@@ -122,8 +111,10 @@ public class KarutaTrainingModel {
                                 }
                             }
                             return karutaIdList;
-                        }))
-                .flatMap(karutaQuizListFactory::create)
+                        })
+                        .map(KarutaIds::new));
+
+        Single.zip(karutasSingle, trainingKarutaIdsSingle, Karutas::createQuizSet)
                 .flatMapCompletable(karutaQuizRepository::initialize)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -131,33 +122,12 @@ public class KarutaTrainingModel {
     }
 
     public void aggregateResults() {
-        karutaQuizRepository.asEntityList().map(karutaQuizList -> {
-
-            final int quizCount = karutaQuizList.size();
-
-            long totalAnswerTimeMillSec = 0;
-
-            int collectCount = 0;
-
-            for (KarutaQuiz karutaQuiz : karutaQuizList) {
-                if (karutaQuiz.getResult() == null) {
-                    throw new IllegalStateException("Training is not finished.");
-                }
-
-                totalAnswerTimeMillSec += karutaQuiz.getResult().answerTime;
-                if (karutaQuiz.getResult().isCollect) {
-                    collectCount++;
-                }
-            }
-
-            final float averageAnswerTime = totalAnswerTimeMillSec / (float) quizCount / (float) TimeUnit.SECONDS.toMillis(1);
-
-            final boolean canRestartTraining = collectCount != quizCount;
-
-            return new TrainingResult(quizCount, collectCount, averageAnswerTime, canRestartTraining);
-        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                completeAggregateResultsEventSubject::onNext,
-                throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE)
-        );
+        karutaQuizRepository.list().map(KarutaQuizzes::resultSummary)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        completeAggregateResultsEventSubject::onNext,
+                        throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE)
+                );
     }
 }

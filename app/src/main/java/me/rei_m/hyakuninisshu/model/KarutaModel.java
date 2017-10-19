@@ -15,7 +15,6 @@ import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
@@ -41,7 +40,7 @@ public class KarutaModel {
     }
 
     public void getKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
-        karutaRepository.resolve(karutaIdentifier)
+        karutaRepository.findBy(karutaIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karuta -> completeGetKarutaEventSubject.onNext(karuta), e -> errorSubject.onNext(Unit.INSTANCE));
@@ -58,7 +57,7 @@ public class KarutaModel {
                            @NonNull String fourthPhraseKana,
                            @NonNull String fifthPhraseKanji,
                            @NonNull String fifthPhraseKana) {
-        karutaRepository.resolve(karutaIdentifier).map(karuta -> karuta.updatePhrase(firstPhraseKanji,
+        karutaRepository.findBy(karutaIdentifier).map(karuta -> karuta.updatePhrase(firstPhraseKanji,
                 firstPhraseKana,
                 secondPhraseKanji,
                 secondPhraseKana,
@@ -74,10 +73,10 @@ public class KarutaModel {
                 .subscribe(() -> completeEditKarutaEventSubject.onNext(Unit.INSTANCE), e -> errorSubject.onNext(Unit.INSTANCE));
     }
 
-    public void getKarutaList(@Nullable Color color) {
-        karutaRepository.asEntityList(color != null ? color.getCode() : null)
+    public void getKarutaList(@Nullable String color) {
+        karutaRepository.findAll()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaList -> completeGetKarutaListEventSubject.onNext(karutaList), e -> errorSubject.onNext(Unit.INSTANCE));
+                .subscribe(karutas -> completeGetKarutaListEventSubject.onNext(karutas.asList(color)), e -> errorSubject.onNext(Unit.INSTANCE));
     }
 }

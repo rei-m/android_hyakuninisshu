@@ -16,8 +16,11 @@ import io.reactivex.Single;
 import me.rei_m.hyakuninisshu.domain.model.karuta.BottomPhrase;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.model.karuta.TopPhrase;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji;
+import me.rei_m.hyakuninisshu.domain.model.karuta.TopPhrase;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
 
 public class KarutaRepositoryImpl implements KarutaRepository {
 
@@ -36,7 +39,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Completable initializeEntityList() {
+    public Completable initialize() {
 
         int karutaJsonVersion = preferences.getInt(KarutaJsonConstant.KEY_KARUTA_JSON_VERSION, 0);
 
@@ -55,7 +58,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
 
                 return orma.transactionAsCompletable(() -> {
 
-                    for (KarutaSchema karutaSchema : karutaSchemaList){
+                    for (KarutaSchema karutaSchema : karutaSchemaList) {
                         int count = KarutaSchema.relation(orma).selector().idEq(karutaSchema.id)
                                 .and()
                                 .where("isEdited = ?", true).count();
@@ -78,35 +81,19 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Single<List<Karuta>> asEntityList() {
+    public Single<Karutas> findAll() {
         return KarutaSchema.relation(orma).selector()
                 .orderByIdAsc()
                 .executeAsObservable()
                 .map(KarutaFactory::create)
-                .toList();
+                .toList()
+                .map(Karutas::new);
     }
 
     @Override
-    public Single<List<Karuta>> asEntityList(@Nullable String color) {
-
-        KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector();
-
-        if (color != null) {
-            selector = selector.where("color = ?", color);
-        }
-
-        return selector
-                .orderByIdAsc()
-                .executeAsObservable()
-                .map(KarutaFactory::create)
-                .toList();
-    }
-
-    @Override
-    public Single<List<Karuta>> asEntityList(@NonNull KarutaIdentifier fromIdentifier,
+    public Single<KarutaIds> findForTraining(@NonNull KarutaIdentifier fromIdentifier,
                                              @NonNull KarutaIdentifier toIdentifier,
                                              @Nullable String color) {
-
         KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector()
                 .idGe(fromIdentifier.value())
                 .and()
@@ -119,22 +106,22 @@ public class KarutaRepositoryImpl implements KarutaRepository {
         return selector
                 .orderByIdAsc()
                 .executeAsObservable()
-                .map(KarutaFactory::create)
-                .toList();
+                .map(karutaSchema -> new KarutaIdentifier(karutaSchema.id))
+                .toList()
+                .map(KarutaIds::new);
     }
 
     @Override
-    public Single<List<Karuta>> asEntityList(@NonNull KarutaIdentifier fromIdentifier,
+    public Single<KarutaIds> findForTraining(@NonNull KarutaIdentifier fromIdentifier,
                                              @NonNull KarutaIdentifier toIdentifier,
                                              @Nullable String color,
-                                             int kimariji) {
-
+                                             @NonNull Kimariji kimariji) {
         KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector()
                 .idGe(fromIdentifier.value())
                 .and()
                 .idLe(toIdentifier.value())
                 .and()
-                .where("kimariji = ?", kimariji);
+                .where("kimariji = ?", kimariji.value());
 
         if (color != null) {
             selector = selector.and().where("color = ?", color);
@@ -143,12 +130,23 @@ public class KarutaRepositoryImpl implements KarutaRepository {
         return selector
                 .orderByIdAsc()
                 .executeAsObservable()
-                .map(KarutaFactory::create)
-                .toList();
+                .map(karutaSchema -> new KarutaIdentifier(karutaSchema.id))
+                .toList()
+                .map(KarutaIds::new);
     }
 
     @Override
-    public Single<Karuta> resolve(@NonNull KarutaIdentifier identifier) {
+    public Single<KarutaIds> findForExam() {
+        return KarutaSchema.relation(orma).selector()
+                .orderByIdAsc()
+                .executeAsObservable()
+                .map(karutaSchema -> new KarutaIdentifier(karutaSchema.id))
+                .toList()
+                .map(KarutaIds::new);
+    }
+
+    @Override
+    public Single<Karuta> findBy(@NonNull KarutaIdentifier identifier) {
         return KarutaSchema.relation(orma).selector()
                 .idEq(identifier.value())
                 .executeAsObservable()

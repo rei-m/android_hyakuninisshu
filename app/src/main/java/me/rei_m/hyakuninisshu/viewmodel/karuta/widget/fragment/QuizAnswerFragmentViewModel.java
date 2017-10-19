@@ -13,8 +13,8 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -70,7 +70,7 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaModel.completeGetKarutaEvent.subscribe(karuta -> {
             karutaNo.set((int) karuta.identifier().value());
-            kimariji.set(karuta.kimariji());
+            kimariji.set(karuta.kimariji().value());
             creator.set(karuta.creator());
             firstPhrase.set(padSpace(karuta.topPhrase().first().kanji(), 5));
             secondPhrase.set(karuta.topPhrase().second().kanji());

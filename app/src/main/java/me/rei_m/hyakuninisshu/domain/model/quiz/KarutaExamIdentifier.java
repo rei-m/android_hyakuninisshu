@@ -12,12 +12,12 @@ public class KarutaExamIdentifier implements EntityIdentifier<KarutaExam> {
         this.value = value;
     }
 
-    public long getValue() {
+    public long value() {
         return value;
     }
 
     @Override
-    public String getKind() {
+    public String kind() {
         return kind;
     }
 

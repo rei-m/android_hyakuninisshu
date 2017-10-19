@@ -8,9 +8,9 @@ import me.rei_m.hyakuninisshu.domain.ValueObject;
 
 public class ImageNo implements ValueObject {
 
-    private static Pattern pattern = Pattern.compile("^(?!000)(0\\d\\d|001|100)$");
+    private static final Pattern pattern = Pattern.compile("^(?!000)(0\\d\\d|001|100)$");
 
-    private String value;
+    private final String value;
 
     public ImageNo(@NonNull String value) throws IllegalArgumentException {
         if (pattern.matcher(value).matches()) {

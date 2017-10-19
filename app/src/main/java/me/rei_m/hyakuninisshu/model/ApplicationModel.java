@@ -26,7 +26,7 @@ public class ApplicationModel {
     }
 
     public void start() {
-        karutaRepository.initializeEntityList()
+        karutaRepository.initialize()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {

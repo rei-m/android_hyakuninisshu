@@ -10,7 +10,7 @@ public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
 
     private final String value;
 
-    KarutaQuizIdentifier() {
+    public KarutaQuizIdentifier() {
         this.value = UUID.randomUUID().toString();
     }
 
@@ -18,12 +18,12 @@ public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
         this.value = value;
     }
 
-    public String getValue() {
+    public String value() {
         return value;
     }
 
     @Override
-    public String getKind() {
+    public String kind() {
         return kind;
     }
 
