@@ -72,16 +72,16 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
             karutaNo.set((int) karuta.identifier().value());
             creator.set(karuta.creator());
             kimariji.set(karuta.kimariji().value());
-            firstPhraseKanji.set(karuta.topPhrase().first().kanji());
-            firstPhraseKana.set(karuta.topPhrase().first().kana());
-            secondPhraseKanji.set(karuta.topPhrase().second().kanji());
-            secondPhraseKana.set(karuta.topPhrase().second().kana());
-            thirdPhraseKanji.set(karuta.topPhrase().third().kanji());
-            thirdPhraseKana.set(karuta.topPhrase().third().kana());
-            fourthPhraseKanji.set(karuta.bottomPhrase().fourth().kanji());
-            fourthPhraseKana.set(karuta.bottomPhrase().fourth().kana());
-            fifthPhraseKanji.set(karuta.bottomPhrase().fifth().kanji());
-            fifthPhraseKana.set(karuta.bottomPhrase().fifth().kana());
+            firstPhraseKanji.set(karuta.kamiNoKu().first().kanji());
+            firstPhraseKana.set(karuta.kamiNoKu().first().kana());
+            secondPhraseKanji.set(karuta.kamiNoKu().second().kanji());
+            secondPhraseKana.set(karuta.kamiNoKu().second().kana());
+            thirdPhraseKanji.set(karuta.kamiNoKu().third().kanji());
+            thirdPhraseKana.set(karuta.kamiNoKu().third().kana());
+            fourthPhraseKanji.set(karuta.shimoNoKu().fourth().kanji());
+            fourthPhraseKana.set(karuta.shimoNoKu().fourth().kana());
+            fifthPhraseKanji.set(karuta.shimoNoKu().fifth().kanji());
+            fifthPhraseKana.set(karuta.shimoNoKu().fifth().kana());
         }), karutaModel.completeEditKarutaEvent.subscribe(v -> {
             onUpdateMaterialEventSubject.onNext(Unit.INSTANCE);
         }));

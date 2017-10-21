@@ -14,10 +14,10 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
-import me.rei_m.hyakuninisshu.domain.model.quiz.ExamResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.util.Unit;
 
@@ -30,8 +30,8 @@ public class KarutaExamModel {
     private final PublishSubject<KarutaExamIdentifier> completeAggregateResultsEventSubject = PublishSubject.create();
     public final Observable<KarutaExamIdentifier> completeAggregateResultsEvent = completeAggregateResultsEventSubject;
 
-    private final PublishSubject<ExamResult> completeGetResultEventSubject = PublishSubject.create();
-    public final Observable<ExamResult> completeGetResultEvent = completeGetResultEventSubject;
+    private final PublishSubject<KarutaExamResult> completeFetchResultEventSubject = PublishSubject.create();
+    public final Observable<KarutaExamResult> completeFetchResultEvent = completeFetchResultEventSubject;
 
     private final PublishSubject<Unit> notFoundResultEventSubject = PublishSubject.create();
     public final Observable<Unit> norFoundResultEvent = notFoundResultEventSubject;
@@ -52,7 +52,7 @@ public class KarutaExamModel {
     }
 
     public void start() {
-        Single.zip(karutaRepository.findAll(), karutaRepository.findForExam(), Karutas::createQuizSet)
+        Single.zip(karutaRepository.list(), karutaRepository.findIds(), Karutas::createQuizSet)
                 .flatMapCompletable(karutaQuizRepository::initialize)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,33 +61,32 @@ public class KarutaExamModel {
 
     public void aggregateResults() {
         karutaQuizRepository.list()
-                .flatMap(karutaQuizzes -> karutaExamRepository
-                        .store(karutaQuizzes.results(), new Date()))
-                .flatMap(karutaExamIdentifier -> karutaExamRepository
-                        .adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
-                        .andThen(Single.just(karutaExamIdentifier)))
+                .map(karutaQuizzes -> new KarutaExamResult(karutaQuizzes.resultSummary(), karutaQuizzes.wrongKarutaIds()))
+                .flatMap(karutaExamResult -> karutaExamRepository.storeResult(karutaExamResult, new Date()))
+                .flatMap(karutaExamIdentifier -> karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(Single.just(karutaExamIdentifier)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(completeAggregateResultsEventSubject::onNext);
     }
 
-    public void getResult(KarutaExamIdentifier karutaExamIdentifier) {
+    public void fetchResult(KarutaExamIdentifier karutaExamIdentifier) {
         karutaExamRepository.findBy(karutaExamIdentifier)
                 .map(KarutaExam::result)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeGetResultEventSubject::onNext);
+                .subscribe(completeFetchResultEventSubject::onNext);
     }
 
-    public void getRecentlyResult() {
+    public void fetchRecentResult() {
         karutaExamRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karutaExams -> {
-                    if (karutaExams.isEmpty()) {
+                    KarutaExam recentKarutaExam = karutaExams.recent();
+                    if (recentKarutaExam == null) {
                         notFoundResultEventSubject.onNext(Unit.INSTANCE);
                     } else {
-                        completeGetResultEventSubject.onNext(karutaExams.get(0).result());
+                        completeFetchResultEventSubject.onNext(recentKarutaExam.result());
                     }
                 });
     }

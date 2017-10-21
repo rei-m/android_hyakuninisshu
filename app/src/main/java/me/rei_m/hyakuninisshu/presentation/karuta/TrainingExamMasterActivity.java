@@ -22,7 +22,7 @@ import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
@@ -161,7 +161,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .replace(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                .replace(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                 .commit();
     }
 
@@ -209,7 +209,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     private void startTraining() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                 .commit();
     }
 }

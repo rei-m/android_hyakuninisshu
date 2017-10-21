@@ -1,18 +1,19 @@
 package me.rei_m.hyakuninisshu.domain.model.quiz;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
-import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public interface KarutaExamRepository {
 
-    Single<KarutaExamIdentifier> store(List<KarutaQuizResult> karutaQuizResultList, Date tookExamDate);
+    Single<KarutaExamIdentifier> storeResult(@NonNull KarutaExamResult karutaExamResult, @NonNull Date tookExamDate);
 
     Completable adjustHistory(int historySize);
 
-    Single<KarutaExam> findBy(KarutaExamIdentifier identifier);
+    Single<KarutaExam> findBy(@NonNull KarutaExamIdentifier identifier);
 
-    Single<List<KarutaExam>> list();
+    Single<KarutaExams> list();
 }

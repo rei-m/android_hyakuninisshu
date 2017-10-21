@@ -6,11 +6,13 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
 public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
+    public static final int NUMBER_OF_KARUTA = 100;
+
     private final String creator;
 
-    private TopPhrase topPhrase;
+    private KamiNoKu kamiNoKu;
 
-    private BottomPhrase bottomPhrase;
+    private ShimoNoKu shimoNoKu;
 
     private final Kimariji kimariji;
 
@@ -22,16 +24,16 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     public Karuta(@NonNull KarutaIdentifier identifier,
                   @NonNull String creator,
-                  @NonNull TopPhrase topPhrase,
-                  @NonNull BottomPhrase bottomPhrase,
+                  @NonNull KamiNoKu kamiNoKu,
+                  @NonNull ShimoNoKu shimoNoKu,
                   @NonNull Kimariji kimariji,
                   @NonNull ImageNo imageNo,
                   @NonNull String translation,
                   @NonNull Color color) {
         super(identifier);
         this.creator = creator;
-        this.topPhrase = topPhrase;
-        this.bottomPhrase = bottomPhrase;
+        this.kamiNoKu = kamiNoKu;
+        this.shimoNoKu = shimoNoKu;
         this.kimariji = kimariji;
         this.imageNo = imageNo;
         this.translation = translation;
@@ -42,12 +44,12 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         return creator;
     }
 
-    public TopPhrase topPhrase() {
-        return topPhrase;
+    public KamiNoKu kamiNoKu() {
+        return kamiNoKu;
     }
 
-    public BottomPhrase bottomPhrase() {
-        return bottomPhrase;
+    public ShimoNoKu shimoNoKu() {
+        return shimoNoKu;
     }
 
     public Kimariji kimariji() {
@@ -66,10 +68,6 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         return color;
     }
 
-    public boolean isCollect(BottomPhrase bottomPhrase) {
-        return this.bottomPhrase.equals(bottomPhrase);
-    }
-
     public Karuta updatePhrase(@NonNull String firstPhraseKanji,
                                @NonNull String firstPhraseKana,
                                @NonNull String secondPhraseKanji,
@@ -81,21 +79,21 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
                                @NonNull String fifthPhraseKanji,
                                @NonNull String fifthPhraseKana) {
 
-        TopPhrase topPhrase = new TopPhrase(
-                this.identifier(),
+        KamiNoKu kamiNoKu = new KamiNoKu(
+                this.kamiNoKu.identifier(),
                 new Phrase(firstPhraseKana, firstPhraseKanji),
                 new Phrase(secondPhraseKana, secondPhraseKanji),
                 new Phrase(thirdPhraseKana, thirdPhraseKanji)
         );
 
-        BottomPhrase bottomPhrase = new BottomPhrase(
-                this.identifier(),
+        ShimoNoKu shimoNoKu = new ShimoNoKu(
+                this.shimoNoKu.identifier(),
                 new Phrase(fourthPhraseKana, fourthPhraseKanji),
                 new Phrase(fifthPhraseKana, fifthPhraseKanji)
         );
 
-        this.topPhrase = topPhrase;
-        this.bottomPhrase = bottomPhrase;
+        this.kamiNoKu = kamiNoKu;
+        this.shimoNoKu = shimoNoKu;
 
         return this;
     }
@@ -109,11 +107,12 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
         Karuta karuta = (Karuta) o;
 
         if (!creator.equals(karuta.creator)) return false;
-        if (!topPhrase.equals(karuta.topPhrase)) return false;
-        if (!bottomPhrase.equals(karuta.bottomPhrase)) return false;
+        if (!kamiNoKu.equals(karuta.kamiNoKu)) return false;
+        if (!shimoNoKu.equals(karuta.shimoNoKu)) return false;
         if (!kimariji.equals(karuta.kimariji)) return false;
         if (!imageNo.equals(karuta.imageNo)) return false;
         if (!translation.equals(karuta.translation)) return false;
+
         return color.equals(karuta.color);
     }
 
@@ -121,12 +120,13 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + creator.hashCode();
-        result = 31 * result + topPhrase.hashCode();
-        result = 31 * result + bottomPhrase.hashCode();
+        result = 31 * result + kamiNoKu.hashCode();
+        result = 31 * result + shimoNoKu.hashCode();
         result = 31 * result + kimariji.hashCode();
         result = 31 * result + imageNo.hashCode();
         result = 31 * result + translation.hashCode();
         result = 31 * result + color.hashCode();
+
         return result;
     }
 
@@ -134,8 +134,8 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
     public String toString() {
         return "Karuta{" +
                 "creator='" + creator + '\'' +
-                ", topPhrase=" + topPhrase +
-                ", bottomPhrase=" + bottomPhrase +
+                ", kamiNoKu=" + kamiNoKu +
+                ", shimoNoKu=" + shimoNoKu +
                 ", kimariji=" + kimariji +
                 ", imageNo=" + imageNo +
                 ", translation='" + translation + '\'' +

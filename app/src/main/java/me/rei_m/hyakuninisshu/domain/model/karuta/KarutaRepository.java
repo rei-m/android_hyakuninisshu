@@ -10,20 +10,16 @@ public interface KarutaRepository {
 
     Completable initialize();
 
-    Single<Karutas> findAll();
-
-    Single<KarutaIds> findForTraining(@NonNull KarutaIdentifier fromIdentifier,
-                                      @NonNull KarutaIdentifier toIdentifier,
-                                      @Nullable String color);
-
-    Single<KarutaIds> findForTraining(@NonNull KarutaIdentifier fromIdentifier,
-                                      @NonNull KarutaIdentifier toIdentifier,
-                                      @Nullable String color,
-                                      @NonNull Kimariji kimariji);
-
-    Single<KarutaIds> findForExam();
-
     Single<Karuta> findBy(@NonNull KarutaIdentifier identifier);
+
+    Single<Karutas> list();
+
+    Single<KarutaIds> findIds();
+
+    Single<KarutaIds> findIds(@NonNull KarutaIdentifier fromIdentifier,
+                              @NonNull KarutaIdentifier toIdentifier,
+                              @Nullable Color color,
+                              @Nullable Kimariji kimariji);
 
     Completable store(@NonNull Karuta karuta);
 }

@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
-import me.rei_m.hyakuninisshu.domain.model.karuta.BottomPhrase;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase;
-import me.rei_m.hyakuninisshu.domain.model.karuta.TopPhrase;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu;
 
 public class KarutaQuizContent implements ValueObject {
 
@@ -20,14 +20,14 @@ public class KarutaQuizContent implements ValueObject {
 
     private final List<Karuta> choices;
 
-    private final KarutaQuizPosition position;
+    private final KarutaQuizCounter position;
 
     private final boolean existNext;
 
     public KarutaQuizContent(@NonNull KarutaQuiz karutaQuiz,
                              @NonNull Karuta collect,
                              @NonNull List<Karuta> choices,
-                             @NonNull KarutaQuizPosition position,
+                             @NonNull KarutaQuizCounter position,
                              boolean existNext) {
         this.karutaQuiz = karutaQuiz;
         this.collect = collect;
@@ -41,7 +41,7 @@ public class KarutaQuizContent implements ValueObject {
     }
 
     public YomiFuda yomiFuda(@NonNull KarutaStyle karutaStyle) {
-        TopPhrase phrase = collect.topPhrase();
+        KamiNoKu phrase = collect.kamiNoKu();
         return (karutaStyle == KarutaStyle.KANJI) ?
                 new YomiFuda(phrase.first().kanji(), phrase.second().kanji(), phrase.third().kanji()) :
                 new YomiFuda(phrase.first().kana(), phrase.second().kana(), phrase.third().kana());
@@ -52,9 +52,9 @@ public class KarutaQuizContent implements ValueObject {
         Phrase[] fifthPhrases = new Phrase[choices.size()];
 
         for (int i = 0; i < choices.size(); i++) {
-            BottomPhrase bottomPhrase = choices.get(i).bottomPhrase();
-            fourthPhrases[i] = bottomPhrase.fourth();
-            fifthPhrases[i] = bottomPhrase.fifth();
+            ShimoNoKu shimoNoKu = choices.get(i).shimoNoKu();
+            fourthPhrases[i] = shimoNoKu.fourth();
+            fifthPhrases[i] = shimoNoKu.fifth();
         }
 
         List<ToriFuda> toriFudas = new ArrayList<>();
@@ -100,7 +100,6 @@ public class KarutaQuizContent implements ValueObject {
         if (!collect.equals(that.collect)) return false;
         if (!choices.equals(that.choices)) return false;
         return position.equals(that.position);
-
     }
 
     @Override

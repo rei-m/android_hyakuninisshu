@@ -4,7 +4,7 @@ import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
 public class KarutaExamIdentifier implements EntityIdentifier<KarutaExam> {
 
-    private final String kind = "KarutaExam";
+    private static final String kind = KarutaExam.class.getSimpleName();
 
     private final long value;
 
@@ -28,22 +28,18 @@ public class KarutaExamIdentifier implements EntityIdentifier<KarutaExam> {
 
         KarutaExamIdentifier that = (KarutaExamIdentifier) o;
 
-        return value == that.value && kind.equals(that.kind);
-
+        return value == that.value;
     }
 
     @Override
     public int hashCode() {
-        int result = kind.hashCode();
-        result = 31 * result + (int) (value ^ (value >>> 32));
-        return result;
+        return (int) (value ^ (value >>> 32));
     }
 
     @Override
     public String toString() {
         return "KarutaExamIdentifier{" +
-                "kind='" + kind + '\'' +
-                ", value=" + value +
+                "value=" + value +
                 '}';
     }
 }

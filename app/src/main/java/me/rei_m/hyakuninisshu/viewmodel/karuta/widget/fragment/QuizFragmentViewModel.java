@@ -16,12 +16,13 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
 import me.rei_m.hyakuninisshu.domain.model.quiz.YomiFuda;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.util.GlideApp;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -44,7 +45,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableBoolean isVisibleResult = new ObservableBoolean(false);
 
-    public final ObservableBoolean isCollect = new ObservableBoolean(false);
+    public final ObservableBoolean isCorrect = new ObservableBoolean(false);
 
     private PublishSubject<Unit> startDisplayAnimationEventSubject = PublishSubject.create();
     public Observable<Unit> startDisplayAnimationEvent = startDisplayAnimationEventSubject;
@@ -60,9 +61,9 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaQuizModel karutaQuizModel;
 
-    private KarutaStyle topPhraseStyle;
+    private KarutaStyleFilter topPhraseStyle;
 
-    private KarutaStyle bottomPhraseStyle;
+    private KarutaStyleFilter bottomPhraseStyle;
 
     private KarutaQuizIdentifier karutaQuizIdentifier;
 
@@ -89,15 +90,15 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         return existNextQuiz;
     }
 
-    public void onCreate(@NonNull KarutaStyle topPhraseStyle,
-                         @NonNull KarutaStyle bottomPhraseStyle) {
+    public void onCreate(@NonNull KarutaStyleFilter topPhraseStyle,
+                         @NonNull KarutaStyleFilter bottomPhraseStyle) {
         this.topPhraseStyle = topPhraseStyle;
         this.bottomPhraseStyle = bottomPhraseStyle;
     }
 
     public void onReCreate(@NonNull String quizId,
-                           @NonNull KarutaStyle topPhraseStyle,
-                           @NonNull KarutaStyle bottomPhraseStyle) {
+                           @NonNull KarutaStyleFilter topPhraseStyle,
+                           @NonNull KarutaStyleFilter bottomPhraseStyle) {
         this.karutaQuizIdentifier = new KarutaQuizIdentifier(quizId);
         this.topPhraseStyle = topPhraseStyle;
         this.bottomPhraseStyle = bottomPhraseStyle;
@@ -112,18 +113,18 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
 
             quizCount.set(karutaQuizContent.currentPosition());
 
-            YomiFuda yomiFuda = karutaQuizContent.yomiFuda(topPhraseStyle);
+            YomiFuda yomiFuda = karutaQuizContent.yomiFuda(topPhraseStyle.value());
 
-            firstPhrase.set(yomiFuda.getFirstPhrase());
-            secondPhrase.set(yomiFuda.getSecondPhrase());
-            thirdPhrase.set(yomiFuda.getThirdPhrase());
+            firstPhrase.set(yomiFuda.firstPhrase());
+            secondPhrase.set(yomiFuda.secondPhrase());
+            thirdPhrase.set(yomiFuda.thirdPhrase());
 
-            List<ToriFuda> toriFudas = karutaQuizContent.toriFudas(bottomPhraseStyle);
+            List<ToriFuda> toriFudas = karutaQuizContent.toriFudas(bottomPhraseStyle.value());
 
             for (int i = 0; i < toriFudas.size(); i++) {
                 ToriFuda toriFuda = toriFudas.get(i);
-                choiceFourthPhraseList.set(i, toriFuda.getFourthPhrase());
-                choiceFifthPhraseList.set(i, toriFuda.getFifthPhrase());
+                choiceFourthPhraseList.set(i, toriFuda.fourthPhrase());
+                choiceFifthPhraseList.set(i, toriFuda.fifthPhrase());
             }
 
             if (!karutaQuizContent.isAnswered()) {
@@ -141,14 +142,14 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             }
 
             List<Boolean> isVisibleChoiceList = Arrays.asList(false, false, false, false);
-            isVisibleChoiceList.set(result.choiceNo - 1, true);
+            isVisibleChoiceList.set(result.choiceNo().asIndex(), true);
             for (int i = 0; i < isVisibleChoiceList.size(); i++) {
                 this.isVisibleChoiceList.set(i, isVisibleChoiceList.get(i));
             }
-            this.isCollect.set(result.isCollect);
+            this.isCorrect.set(result.isCorrect());
             this.isVisibleResult.set(true);
 
-            this.collectKarutaIdentifier = result.collectKarutaId;
+            this.collectKarutaIdentifier = result.collectKarutaId();
             this.existNextQuiz = karutaQuizContent.existNext();
 
         }), karutaQuizModel.error.subscribe(v -> {
@@ -166,8 +167,8 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         }
     }
 
-    public void onClickChoice(int choiceNo) {
-        karutaQuizModel.answer(karutaQuizIdentifier, choiceNo);
+    public void onClickChoice(int choiceNoValue) {
+        karutaQuizModel.answer(karutaQuizIdentifier, ChoiceNo.forValue(choiceNoValue));
     }
 
     public void onClickResult() {
@@ -184,10 +185,10 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         view.setText(text.substring(textPosition - 1, textPosition));
     }
 
-    @BindingAdapter({"isCollect"})
-    public static void setIsCollect(@NonNull ImageView imageView,
-                                    boolean isCollect) {
-        if (isCollect) {
+    @BindingAdapter({"isCorrect"})
+    public static void setIsCorrect(@NonNull ImageView imageView,
+                                    boolean isCorrect) {
+        if (isCorrect) {
             GlideApp.with(imageView.getContext()).load(R.drawable.check_correct).dontAnimate().into(imageView);
         } else {
             GlideApp.with(imageView.getContext()).load(R.drawable.check_incorrect).dontAnimate().into(imageView);

@@ -18,15 +18,15 @@ public class YomiFuda implements ValueObject {
         this.thirdPhrase = thirdPhrase;
     }
 
-    public String getFirstPhrase() {
+    public String firstPhrase() {
         return firstPhrase;
     }
 
-    public String getSecondPhrase() {
+    public String secondPhrase() {
         return secondPhrase;
     }
 
-    public String getThirdPhrase() {
+    public String thirdPhrase() {
         return thirdPhrase;
     }
 

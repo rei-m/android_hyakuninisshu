@@ -25,13 +25,6 @@ public class ImageNo implements ValueObject {
     }
 
     @Override
-    public String toString() {
-        return "ImageNo{" +
-                "value='" + value + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -39,11 +32,17 @@ public class ImageNo implements ValueObject {
         ImageNo imageNo = (ImageNo) o;
 
         return value.equals(imageNo.value);
-
     }
 
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "ImageNo{" +
+                "value='" + value + '\'' +
+                '}';
     }
 }

@@ -8,17 +8,15 @@ import com.github.gfx.android.orma.SingleAssociation;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamFactory;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams;
 
 public class KarutaExamRepositoryImpl implements KarutaExamRepository {
 
@@ -29,33 +27,19 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
     }
 
     @Override
-    public Single<KarutaExamIdentifier> store(@NonNull List<KarutaQuizResult> karutaQuizResultList,
-                                              @NonNull Date tookExamDate) {
+    public Single<KarutaExamIdentifier> storeResult(@NonNull KarutaExamResult karutaExamResult,
+                                                    @NonNull Date tookExamDate) {
 
         KarutaExamSchema karutaExamSchema = new KarutaExamSchema();
 
         orma.transactionSync(() -> {
-
-            List<KarutaIdentifier> wrongKarutaIdList = new ArrayList<>();
-
-            long totalAnswerTimeMillSec = 0;
-
-            for (KarutaQuizResult karutaQuizResult : karutaQuizResultList) {
-                totalAnswerTimeMillSec += karutaQuizResult.answerTime;
-                if (!karutaQuizResult.isCollect) {
-                    wrongKarutaIdList.add(karutaQuizResult.collectKarutaId);
-                }
-            }
-
-            final float averageAnswerTime = totalAnswerTimeMillSec / (float) karutaQuizResultList.size() / (float) TimeUnit.SECONDS.toMillis(1);
-
             karutaExamSchema.tookExamDate = tookExamDate;
-            karutaExamSchema.totalQuizCount = karutaQuizResultList.size();
-            karutaExamSchema.averageAnswerTime = averageAnswerTime;
+            karutaExamSchema.totalQuizCount = karutaExamResult.quizCount();
+            karutaExamSchema.averageAnswerTime = karutaExamResult.averageAnswerTime();
             karutaExamSchema.id = KarutaExamSchema.relation(orma).inserter().execute(karutaExamSchema);
 
             Inserter<ExamWrongKarutaSchema> examWrongKarutaSchemaInserter = ExamWrongKarutaSchema.relation(orma).inserter();
-            Observable.fromIterable(wrongKarutaIdList).subscribe(identifier -> {
+            Observable.fromIterable(karutaExamResult.wrongKarutaIds().asList()).subscribe(identifier -> {
                 ExamWrongKarutaSchema examWrongKarutaSchema = new ExamWrongKarutaSchema();
                 examWrongKarutaSchema.examSchema = SingleAssociation.just(karutaExamSchema);
                 examWrongKarutaSchema.karutaId = identifier.value();
@@ -105,7 +89,7 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
     }
 
     @Override
-    public Single<List<KarutaExam>> list() {
+    public Single<KarutaExams> list() {
         return KarutaExamSchema.relation(orma)
                 .selector()
                 .orderByIdDesc()
@@ -117,6 +101,7 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
                             .executeAsObservable()
                             .subscribe(examWrongKarutaSchemaList::add);
                     return KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList);
-                }).toList();
+                }).toList()
+                .map(KarutaExams::new);
     }
 }

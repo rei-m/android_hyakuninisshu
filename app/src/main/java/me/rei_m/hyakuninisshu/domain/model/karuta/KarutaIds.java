@@ -3,6 +3,7 @@ package me.rei_m.hyakuninisshu.domain.model.karuta;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
@@ -15,9 +16,13 @@ public class KarutaIds {
         this.values = values;
     }
 
+    public List<KarutaIdentifier> asList() {
+        return Collections.unmodifiableList(values);
+    }
+
     public List<KarutaIdentifier> asRandomizedList() {
         List<KarutaIdentifier> correctKarutaIdList = new ArrayList<>();
-        int[] collectKarutaIndexList = ArrayUtil.generateRandomArray(values.size(), values.size());
+        int[] collectKarutaIndexList = ArrayUtil.generateRandomIndexArray(values.size(), values.size());
         for (int i : collectKarutaIndexList) {
             correctKarutaIdList.add(values.get(i));
         }
@@ -26,5 +31,27 @@ public class KarutaIds {
 
     public int size() {
         return values.size();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KarutaIds karutaIds = (KarutaIds) o;
+
+        return values.equals(karutaIds.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return values.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "KarutaIds{" +
+                "values=" + values +
+                '}';
     }
 }

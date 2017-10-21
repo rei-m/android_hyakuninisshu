@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 
 public class KarutaDisplayHelper {
 
@@ -14,7 +14,7 @@ public class KarutaDisplayHelper {
 
     public static String convertNumberToString(@NonNull Context context, int number) {
 
-        if (number == KarutaConstant.NUMBER_OF_KARUTA) {
+        if (number == Karuta.NUMBER_OF_KARUTA) {
             return context.getString(R.string.karuta_number, context.getString(R.string.hundred));
         }
 

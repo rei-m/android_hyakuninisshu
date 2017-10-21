@@ -72,11 +72,11 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
             karutaNo.set((int) karuta.identifier().value());
             kimariji.set(karuta.kimariji().value());
             creator.set(karuta.creator());
-            firstPhrase.set(padSpace(karuta.topPhrase().first().kanji(), 5));
-            secondPhrase.set(karuta.topPhrase().second().kanji());
-            thirdPhrase.set(karuta.topPhrase().third().kanji());
-            fourthPhrase.set(padSpace(karuta.bottomPhrase().fourth().kanji(), 7));
-            fifthPhrase.set(karuta.bottomPhrase().fifth().kanji());
+            firstPhrase.set(padSpace(karuta.kamiNoKu().first().kanji(), 5));
+            secondPhrase.set(karuta.kamiNoKu().second().kanji());
+            thirdPhrase.set(karuta.kamiNoKu().third().kanji());
+            fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
+            fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
         }), karutaModel.error.subscribe(v -> errorEventSubject.onNext(Unit.INSTANCE)));
     }
 

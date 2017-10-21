@@ -22,7 +22,7 @@ import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
@@ -108,7 +108,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         disposable.addAll(
                 viewModel.startExamEvent.subscribe(v -> getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                        .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                         .commit()),
                 viewModel.aggregateExamResultsEvent.subscribe(examId -> getSupportFragmentManager()
                         .beginTransaction()
@@ -172,7 +172,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .replace(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                .replace(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                 .commit();
     }
 

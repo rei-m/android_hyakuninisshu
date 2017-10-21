@@ -3,6 +3,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.constant;
 import android.content.res.Resources;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
 public enum TrainingRangeTo implements SpinnerItem {
     TEN(R.string.training_range_10, "10", 10),
@@ -20,25 +21,25 @@ public enum TrainingRangeTo implements SpinnerItem {
 
     private final String code;
 
-    private final int id;
+    private final KarutaIdentifier id;
 
     TrainingRangeTo(int resId, String code, int id) {
         this.resId = resId;
         this.code = code;
-        this.id = id;
+        this.id = new KarutaIdentifier(id);
     }
 
     @Override
-    public String getCode() {
+    public String code() {
         return code;
     }
 
     @Override
-    public String getLabel(Resources res) {
+    public String label(Resources res) {
         return res.getString(resId);
     }
 
-    public int getId() {
+    public KarutaIdentifier identifier() {
         return id;
     }
 }

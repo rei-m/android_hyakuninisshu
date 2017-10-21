@@ -12,6 +12,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
@@ -73,8 +74,8 @@ public class KarutaModel {
                 .subscribe(() -> completeEditKarutaEventSubject.onNext(Unit.INSTANCE), e -> errorSubject.onNext(Unit.INSTANCE));
     }
 
-    public void getKarutaList(@Nullable String color) {
-        karutaRepository.findAll()
+    public void getKarutaList(@Nullable Color color) {
+        karutaRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karutas -> completeGetKarutaListEventSubject.onNext(karutas.asList(color)), e -> errorSubject.onNext(Unit.INSTANCE));

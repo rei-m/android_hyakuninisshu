@@ -2,16 +2,18 @@ package me.rei_m.hyakuninisshu.infrastructure.database;
 
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.domain.model.karuta.BottomPhrase;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.ImageNo;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKuIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase;
-import me.rei_m.hyakuninisshu.domain.model.karuta.TopPhrase;
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu;
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKuIdentifier;
 
-public class KarutaFactory {
+class KarutaFactory {
 
     private KarutaFactory() {
     }
@@ -26,20 +28,22 @@ public class KarutaFactory {
         Phrase fourthPart = new Phrase(schema.fourthKana, schema.fourthKanji);
         Phrase fifthPart = new Phrase(schema.fifthKana, schema.fifthKanji);
 
-        TopPhrase topPhrase = new TopPhrase(identifier, firstPart, secondPart, thirdPart);
-        BottomPhrase bottomPhrase = new BottomPhrase(identifier, fourthPart, fifthPart);
+        KamiNoKu kamiNoKu = new KamiNoKu(new KamiNoKuIdentifier(), firstPart, secondPart, thirdPart);
+        ShimoNoKu shimoNoKu = new ShimoNoKu(new ShimoNoKuIdentifier(), fourthPart, fifthPart);
 
         String translation = (schema.translation != null) ? schema.translation : "";
 
-        String color = (schema.color != null) ? schema.color : "";
+        Kimariji kimariji = Kimariji.forValue(schema.kimariji);
+
+        Color color = Color.forValue(schema.color);
 
         return new Karuta(identifier,
                 schema.creator,
-                topPhrase,
-                bottomPhrase,
-                new Kimariji(schema.kimariji),
+                kamiNoKu,
+                shimoNoKu,
+                kimariji,
                 new ImageNo(schema.imageNo),
                 translation,
-                new Color(color));
+                color);
     }
 }

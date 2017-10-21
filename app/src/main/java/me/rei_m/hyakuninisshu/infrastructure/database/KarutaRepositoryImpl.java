@@ -13,14 +13,15 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import me.rei_m.hyakuninisshu.domain.model.karuta.BottomPhrase;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji;
-import me.rei_m.hyakuninisshu.domain.model.karuta.TopPhrase;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu;
 
 public class KarutaRepositoryImpl implements KarutaRepository {
 
@@ -81,7 +82,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Single<Karutas> findAll() {
+    public Single<Karutas> list() {
         return KarutaSchema.relation(orma).selector()
                 .orderByIdAsc()
                 .executeAsObservable()
@@ -89,18 +90,23 @@ public class KarutaRepositoryImpl implements KarutaRepository {
                 .toList()
                 .map(Karutas::new);
     }
-
+    
     @Override
-    public Single<KarutaIds> findForTraining(@NonNull KarutaIdentifier fromIdentifier,
-                                             @NonNull KarutaIdentifier toIdentifier,
-                                             @Nullable String color) {
+    public Single<KarutaIds> findIds(@NonNull KarutaIdentifier fromIdentifier,
+                                     @NonNull KarutaIdentifier toIdentifier,
+                                     @Nullable Color color,
+                                     @Nullable Kimariji kimariji) {
         KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector()
                 .idGe(fromIdentifier.value())
                 .and()
                 .idLe(toIdentifier.value());
 
         if (color != null) {
-            selector = selector.where("color = ?", color);
+            selector = selector.and().where("color = ?", color.value());
+        }
+
+        if (kimariji != null) {
+            selector = selector.and().where("kimariji = ?", kimariji.value());
         }
 
         return selector
@@ -112,31 +118,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     }
 
     @Override
-    public Single<KarutaIds> findForTraining(@NonNull KarutaIdentifier fromIdentifier,
-                                             @NonNull KarutaIdentifier toIdentifier,
-                                             @Nullable String color,
-                                             @NonNull Kimariji kimariji) {
-        KarutaSchema_Selector selector = KarutaSchema.relation(orma).selector()
-                .idGe(fromIdentifier.value())
-                .and()
-                .idLe(toIdentifier.value())
-                .and()
-                .where("kimariji = ?", kimariji.value());
-
-        if (color != null) {
-            selector = selector.and().where("color = ?", color);
-        }
-
-        return selector
-                .orderByIdAsc()
-                .executeAsObservable()
-                .map(karutaSchema -> new KarutaIdentifier(karutaSchema.id))
-                .toList()
-                .map(KarutaIds::new);
-    }
-
-    @Override
-    public Single<KarutaIds> findForExam() {
+    public Single<KarutaIds> findIds() {
         return KarutaSchema.relation(orma).selector()
                 .orderByIdAsc()
                 .executeAsObservable()
@@ -157,21 +139,21 @@ public class KarutaRepositoryImpl implements KarutaRepository {
     @Override
     public Completable store(@NonNull Karuta karuta) {
 
-        TopPhrase topPhrase = karuta.topPhrase();
-        BottomPhrase bottomPhrase = karuta.bottomPhrase();
+        KamiNoKu kamiNoKu = karuta.kamiNoKu();
+        ShimoNoKu shimoNoKu = karuta.shimoNoKu();
 
         return KarutaSchema.relation(orma).updater()
                 .idEq(karuta.identifier().value())
-                .firstKana(topPhrase.first().kana())
-                .firstKanji(topPhrase.first().kanji())
-                .secondKana(topPhrase.second().kana())
-                .secondKanji(topPhrase.second().kanji())
-                .thirdKana(topPhrase.third().kana())
-                .thirdKanji(topPhrase.third().kanji())
-                .fourthKana(bottomPhrase.fourth().kana())
-                .fourthKanji(bottomPhrase.fourth().kanji())
-                .fifthKana(bottomPhrase.fifth().kana())
-                .fifthKanji(bottomPhrase.fifth().kanji())
+                .firstKana(kamiNoKu.first().kana())
+                .firstKanji(kamiNoKu.first().kanji())
+                .secondKana(kamiNoKu.second().kana())
+                .secondKanji(kamiNoKu.second().kanji())
+                .thirdKana(kamiNoKu.third().kana())
+                .thirdKanji(kamiNoKu.third().kanji())
+                .fourthKana(shimoNoKu.fourth().kana())
+                .fourthKanji(shimoNoKu.fourth().kanji())
+                .fifthKana(shimoNoKu.fifth().kana())
+                .fifthKanji(shimoNoKu.fifth().kanji())
                 .isEdited(true)
                 .executeAsSingle()
                 .toCompletable();

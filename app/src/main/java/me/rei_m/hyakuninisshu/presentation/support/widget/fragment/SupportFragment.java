@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.di.SupportFragme
 
 public class SupportFragment extends DaggerFragment {
 
-    public static final String TAG = "SupportFragment";
+    public static final String TAG = SupportFragment.class.getSimpleName();
 
     public static SupportFragment newInstance() {
         return new SupportFragment();

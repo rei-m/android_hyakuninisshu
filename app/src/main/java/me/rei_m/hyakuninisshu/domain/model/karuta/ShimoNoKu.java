@@ -4,15 +4,15 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier> {
+public class ShimoNoKu extends AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier> {
 
     private final Phrase fourth;
 
     private final Phrase fifth;
 
-    public BottomPhrase(@NonNull KarutaIdentifier identifier,
-                        @NonNull Phrase fourth,
-                        @NonNull Phrase fifth) {
+    public ShimoNoKu(@NonNull ShimoNoKuIdentifier identifier,
+                     @NonNull Phrase fourth,
+                     @NonNull Phrase fifth) {
         super(identifier);
         this.fourth = fourth;
         this.fifth = fifth;
@@ -32,10 +32,10 @@ public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier>
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        BottomPhrase that = (BottomPhrase) o;
+        ShimoNoKu shimoNoKu = (ShimoNoKu) o;
 
-        return fourth.equals(that.fourth) && fifth.equals(that.fifth);
-
+        if (!fourth.equals(shimoNoKu.fourth)) return false;
+        return fifth.equals(shimoNoKu.fifth);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class BottomPhrase extends AbstractEntity<BottomPhrase, KarutaIdentifier>
 
     @Override
     public String toString() {
-        return "SecondHalf{" +
+        return "ShimoNoKu{" +
                 "fourth=" + fourth +
                 ", fifth=" + fifth +
                 "} " + super.toString();

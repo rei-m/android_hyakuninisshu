@@ -7,22 +7,38 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
 public class KarutaQuizResult implements ValueObject {
 
-    public final KarutaIdentifier collectKarutaId;
+    private final KarutaIdentifier collectKarutaId;
 
-    public final int choiceNo;
+    private final ChoiceNo choiceNo;
 
-    public final boolean isCollect;
+    private final boolean isCorrect;
 
-    public final long answerTime;
+    private final long answerTime;
 
     KarutaQuizResult(@NonNull KarutaIdentifier collectKarutaId,
-                     int choiceNo,
-                     boolean isCollect,
+                     @NonNull ChoiceNo choiceNo,
+                     boolean isCorrect,
                      long answerTime) {
         this.collectKarutaId = collectKarutaId;
         this.choiceNo = choiceNo;
-        this.isCollect = isCollect;
+        this.isCorrect = isCorrect;
         this.answerTime = answerTime;
+    }
+
+    public KarutaIdentifier collectKarutaId() {
+        return collectKarutaId;
+    }
+
+    public ChoiceNo choiceNo() {
+        return choiceNo;
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public long answerTime() {
+        return answerTime;
     }
 
     @Override
@@ -30,19 +46,20 @@ public class KarutaQuizResult implements ValueObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        KarutaQuizResult that = (KarutaQuizResult) o;
+        KarutaQuizResult result = (KarutaQuizResult) o;
 
-        return choiceNo == that.choiceNo &&
-                isCollect == that.isCollect &&
-                answerTime == that.answerTime &&
-                collectKarutaId.equals(that.collectKarutaId);
+        if (isCorrect != result.isCorrect) return false;
+        if (answerTime != result.answerTime) return false;
+        if (!collectKarutaId.equals(result.collectKarutaId)) return false;
+        return choiceNo == result.choiceNo;
+
     }
 
     @Override
     public int hashCode() {
         int result = collectKarutaId.hashCode();
-        result = 31 * result + choiceNo;
-        result = 31 * result + (isCollect ? 1 : 0);
+        result = 31 * result + choiceNo.hashCode();
+        result = 31 * result + (isCorrect ? 1 : 0);
         result = 31 * result + (int) (answerTime ^ (answerTime >>> 32));
         return result;
     }
@@ -52,7 +69,7 @@ public class KarutaQuizResult implements ValueObject {
         return "KarutaQuizResult{" +
                 "collectKarutaId=" + collectKarutaId +
                 ", choiceNo=" + choiceNo +
-                ", isCollect=" + isCollect +
+                ", isCorrect=" + isCorrect +
                 ", answerTime=" + answerTime +
                 '}';
     }

@@ -15,10 +15,10 @@ public class ViewUtil {
     }
 
     /**
-     * Generate a value suitable for use in [.setId].
-     * This value will not collide with ID values generated at build time by aapt for R.id.
+     * Generate a valueOrNull suitable for use in [.setId].
+     * This valueOrNull will not collide with ID values generated at build time by aapt for R.id.
      *
-     * @return a generated ID value
+     * @return a generated ID valueOrNull
      */
     public static int generateViewId() {
         while (true) {

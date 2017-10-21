@@ -21,15 +21,19 @@ public class KarutaQuizzes {
         return Collections.unmodifiableList(values);
     }
 
+    public boolean isEmpty() {
+        return values.isEmpty();
+    }
+
     public KarutaIds wrongKarutaIds() {
-        return Observable.fromIterable(values).filter(karutaQuiz -> karutaQuiz.result() != null && !karutaQuiz.result().isCollect)
-                .map(karutaQuiz -> karutaQuiz.result().collectKarutaId)
+        return Observable.fromIterable(values).filter(karutaQuiz -> karutaQuiz.result() != null && !karutaQuiz.result().isCorrect())
+                .map(karutaQuiz -> karutaQuiz.result().collectKarutaId())
                 .toList()
                 .map(KarutaIds::new)
                 .blockingGet();
     }
 
-    public TrainingResult resultSummary() throws IllegalStateException {
+    public KarutaQuizResultSummary resultSummary() throws IllegalStateException {
         final int quizCount = values.size();
 
         long totalAnswerTimeMillSec = 0;
@@ -41,20 +45,36 @@ public class KarutaQuizzes {
                 throw new IllegalStateException("Training is not finished.");
             }
 
-            totalAnswerTimeMillSec += karutaQuiz.result().answerTime;
-            if (karutaQuiz.result().isCollect) {
+            totalAnswerTimeMillSec += karutaQuiz.result().answerTime();
+            if (karutaQuiz.result().isCorrect()) {
                 collectCount++;
             }
         }
 
         final float averageAnswerTime = totalAnswerTimeMillSec / (float) quizCount / (float) TimeUnit.SECONDS.toMillis(1);
 
-        final boolean canRestartTraining = collectCount != quizCount;
-
-        return new TrainingResult(quizCount, collectCount, averageAnswerTime, canRestartTraining);
+        return new KarutaQuizResultSummary(quizCount, collectCount, averageAnswerTime);
     }
 
-    public List<KarutaQuizResult> results() {
-        return Observable.fromIterable(values).map(KarutaQuiz::result).toList().blockingGet();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KarutaQuizzes that = (KarutaQuizzes) o;
+
+        return values.equals(that.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return values.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "KarutaQuizzes{" +
+                "values=" + values +
+                '}';
     }
 }

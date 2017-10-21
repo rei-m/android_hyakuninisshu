@@ -4,7 +4,7 @@ import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
 public class KarutaIdentifier implements EntityIdentifier<Karuta> {
 
-    private final String kind = "Karuta";
+    private static final String kind = Karuta.class.getSimpleName();
 
     private final long value;
 
@@ -28,14 +28,12 @@ public class KarutaIdentifier implements EntityIdentifier<Karuta> {
 
         KarutaIdentifier that = (KarutaIdentifier) o;
 
-        return value == that.value && kind.equals(that.kind);
+        return value == that.value;
     }
 
     @Override
     public int hashCode() {
-        int result = kind.hashCode();
-        result = 31 * result + (int) (value ^ (value >>> 32));
-        return result;
+        return (int) (value ^ (value >>> 32));
     }
 
     @Override

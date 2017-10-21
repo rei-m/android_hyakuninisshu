@@ -1,21 +1,17 @@
-package me.rei_m.hyakuninisshu.domain.model.quiz;
+package me.rei_m.hyakuninisshu.domain.model.karuta;
 
 import java.util.UUID;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
+public class ShimoNoKuIdentifier implements EntityIdentifier<ShimoNoKu> {
 
-    private static final String kind = KarutaQuiz.class.getSimpleName();
+    private static final String kind = ShimoNoKu.class.getSimpleName();
 
     private final String value;
 
-    public KarutaQuizIdentifier() {
+    public ShimoNoKuIdentifier() {
         this.value = UUID.randomUUID().toString();
-    }
-
-    public KarutaQuizIdentifier(String value) {
-        this.value = value;
     }
 
     public String value() {
@@ -32,7 +28,7 @@ public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        KarutaQuizIdentifier that = (KarutaQuizIdentifier) o;
+        ShimoNoKuIdentifier that = (ShimoNoKuIdentifier) o;
 
         return value.equals(that.value);
     }
@@ -44,7 +40,7 @@ public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
 
     @Override
     public String toString() {
-        return "KarutaQuizIdentifier{" +
+        return "ShimoNoKuIdentifier{" +
                 "value='" + value + '\'' +
                 '}';
     }

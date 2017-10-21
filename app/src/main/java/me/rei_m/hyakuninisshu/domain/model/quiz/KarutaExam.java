@@ -2,51 +2,47 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import android.support.annotation.NonNull;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
 
 public class KarutaExam extends AbstractEntity<KarutaExam, KarutaExamIdentifier> {
 
     public static final int MAX_HISTORY_COUNT = 10;
 
+    private final KarutaExamResult result;
+
     public KarutaExam(@NonNull KarutaExamIdentifier identifier,
-                      @NonNull Date tookExamDate,
-                      int totalQuizCount,
-                      float averageAnswerTime,
-                      @NonNull List<KarutaIdentifier> wrongKarutaIdList) {
+                      @NonNull KarutaExamResult karutaExamResult) {
         super(identifier);
-        this.tookExamDate = tookExamDate;
-        this.totalQuizCount = totalQuizCount;
-        this.averageAnswerTime = averageAnswerTime;
-        this.wrongKarutaIdList = wrongKarutaIdList;
+        this.result = karutaExamResult;
     }
 
-    public final Date tookExamDate;
+    public KarutaExamResult result() {
+        return result;
+    }
 
-    public final int totalQuizCount;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
-    public final float averageAnswerTime;
+        KarutaExam that = (KarutaExam) o;
 
-    public final List<KarutaIdentifier> wrongKarutaIdList;
+        return result.equals(that.result);
 
-    public ExamResult result() {
-        final boolean[] karutaQuizResultList = new boolean[KarutaConstant.NUMBER_OF_KARUTA];
+    }
 
-        Arrays.fill(karutaQuizResultList, true);
+    @Override
+    public int hashCode() {
+        int result1 = super.hashCode();
+        result1 = 31 * result1 + result.hashCode();
+        return result1;
+    }
 
-        for (KarutaIdentifier wrongKarutaIdentifier : wrongKarutaIdList) {
-            int wrongKarutaIndex = (int) wrongKarutaIdentifier.value() - 1;
-            karutaQuizResultList[wrongKarutaIndex] = false;
-        }
-
-        return new ExamResult(totalQuizCount,
-                totalQuizCount - wrongKarutaIdList.size(),
-                averageAnswerTime,
-                karutaQuizResultList);
+    @Override
+    public String toString() {
+        return "KarutaExam{" +
+                "result=" + result +
+                "} " + super.toString();
     }
 }

@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
 
 public class MaterialDetailPagerAdapter extends FragmentStatePagerAdapter {
@@ -21,6 +21,6 @@ public class MaterialDetailPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return KarutaConstant.NUMBER_OF_KARUTA;
+        return Karuta.NUMBER_OF_KARUTA;
     }
 }

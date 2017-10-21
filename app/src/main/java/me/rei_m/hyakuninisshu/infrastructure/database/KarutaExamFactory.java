@@ -1,4 +1,4 @@
-package me.rei_m.hyakuninisshu.domain.model.quiz;
+package me.rei_m.hyakuninisshu.infrastructure.database;
 
 import android.support.annotation.NonNull;
 
@@ -7,8 +7,11 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.infrastructure.database.ExamWrongKarutaSchema;
-import me.rei_m.hyakuninisshu.infrastructure.database.KarutaExamSchema;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResultSummary;
 
 public class KarutaExamFactory {
 
@@ -25,10 +28,16 @@ public class KarutaExamFactory {
                 .map(examWrongKarutaSchema -> new KarutaIdentifier(examWrongKarutaSchema.karutaId))
                 .subscribe(wrongKarutaIdentifierList::add);
 
-        return new KarutaExam(identifier,
-                schema.tookExamDate,
+        KarutaIds wrongKarutaIds = new KarutaIds(wrongKarutaIdentifierList);
+
+        KarutaQuizResultSummary resultSummary = new KarutaQuizResultSummary(
                 schema.totalQuizCount,
-                schema.averageAnswerTime,
-                wrongKarutaIdentifierList);
+                schema.totalQuizCount - wrongKarutaIds.size(),
+                schema.averageAnswerTime
+        );
+
+        KarutaExamResult result = new KarutaExamResult(resultSummary, wrongKarutaIds);
+
+        return new KarutaExam(identifier, result);
     }
 }

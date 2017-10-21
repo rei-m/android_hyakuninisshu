@@ -32,12 +32,12 @@ public class KarutaListItemViewModel {
     }
 
     public void setKaruta(@NonNull Karuta karuta) {
-        String topPhrase = karuta.topPhrase().first().kanji() + SPACE +
-                karuta.topPhrase().second().kanji() + SPACE +
-                karuta.topPhrase().third().kanji();
+        String topPhrase = karuta.kamiNoKu().first().kanji() + SPACE +
+                karuta.kamiNoKu().second().kanji() + SPACE +
+                karuta.kamiNoKu().third().kanji();
 
-        String bottomPhrase = karuta.bottomPhrase().fourth().kanji() + SPACE +
-                karuta.bottomPhrase().fifth().kanji();
+        String bottomPhrase = karuta.shimoNoKu().fourth().kanji() + SPACE +
+                karuta.shimoNoKu().fifth().kanji();
 
         int karutaNo = (int) karuta.identifier().value();
 

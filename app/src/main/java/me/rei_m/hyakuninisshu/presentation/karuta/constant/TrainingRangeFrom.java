@@ -3,9 +3,9 @@ package me.rei_m.hyakuninisshu.presentation.karuta.constant;
 import android.content.res.Resources;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
 public enum TrainingRangeFrom implements SpinnerItem {
-
     ONE(R.string.training_range_1, "1", 1),
     ELEVEN(R.string.training_range_11, "11", 11),
     TWENTY_ONE(R.string.training_range_21, "21", 21),
@@ -21,25 +21,25 @@ public enum TrainingRangeFrom implements SpinnerItem {
 
     private final String code;
 
-    private final int id;
+    private final KarutaIdentifier id;
 
     TrainingRangeFrom(int resId, String code, int id) {
         this.resId = resId;
         this.code = code;
-        this.id = id;
+        this.id = new KarutaIdentifier(id);
     }
 
     @Override
-    public String getCode() {
+    public String code() {
         return code;
     }
 
     @Override
-    public String getLabel(Resources res) {
+    public String label(Resources res) {
         return res.getString(resId);
     }
 
-    public int getId() {
+    public KarutaIdentifier identifier() {
         return id;
     }
 }

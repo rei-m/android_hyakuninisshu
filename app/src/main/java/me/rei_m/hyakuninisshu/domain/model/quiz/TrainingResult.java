@@ -1,21 +1,53 @@
 package me.rei_m.hyakuninisshu.domain.model.quiz;
 
+import android.support.annotation.NonNull;
+
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
 public class TrainingResult implements ValueObject {
 
-    public final int quizCount;
+    private final KarutaQuizResultSummary resultSummary;
 
-    public final int collectCount;
+    public TrainingResult(@NonNull KarutaQuizResultSummary resultSummary) {
+        this.resultSummary = resultSummary;
+    }
 
-    public final float averageAnswerTime;
+    public int quizCount() {
+        return resultSummary.quizCount();
+    }
 
-    public final boolean canRestartTraining;
+    public int correctCount() {
+        return resultSummary.correctCount();
+    }
 
-    public TrainingResult(int quizCount, int collectCount, float averageAnswerTime, boolean canRestartTraining) {
-        this.quizCount = quizCount;
-        this.collectCount = collectCount;
-        this.averageAnswerTime = averageAnswerTime;
-        this.canRestartTraining = canRestartTraining;
+    public float averageAnswerTime() {
+        return resultSummary.averageAnswerTime();
+    }
+
+    public boolean canRestartTraining() {
+        return resultSummary.correctCount() != resultSummary.quizCount();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TrainingResult that = (TrainingResult) o;
+
+        return resultSummary.equals(that.resultSummary);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return resultSummary.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "TrainingResult{" +
+                "resultSummary=" + resultSummary +
+                '}';
     }
 }

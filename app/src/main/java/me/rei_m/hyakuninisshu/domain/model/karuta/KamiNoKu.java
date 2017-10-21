@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
-public class TopPhrase extends AbstractEntity<TopPhrase, KarutaIdentifier> {
+public class KamiNoKu extends AbstractEntity<KamiNoKu, KamiNoKuIdentifier> {
 
     private final Phrase first;
 
@@ -12,10 +12,10 @@ public class TopPhrase extends AbstractEntity<TopPhrase, KarutaIdentifier> {
 
     private final Phrase third;
 
-    public TopPhrase(@NonNull KarutaIdentifier identifier,
-                     @NonNull Phrase first,
-                     @NonNull Phrase second,
-                     @NonNull Phrase third) {
+    public KamiNoKu(@NonNull KamiNoKuIdentifier identifier,
+                    @NonNull Phrase first,
+                    @NonNull Phrase second,
+                    @NonNull Phrase third) {
         super(identifier);
         this.first = first;
         this.second = second;
@@ -40,9 +40,12 @@ public class TopPhrase extends AbstractEntity<TopPhrase, KarutaIdentifier> {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        TopPhrase topPhrase = (TopPhrase) o;
+        KamiNoKu kamiNoKu = (KamiNoKu) o;
 
-        return first.equals(topPhrase.first) && second.equals(topPhrase.second) && third.equals(topPhrase.third);
+        if (!first.equals(kamiNoKu.first)) return false;
+        if (!second.equals(kamiNoKu.second)) return false;
+
+        return third.equals(kamiNoKu.third);
     }
 
     @Override
@@ -56,7 +59,7 @@ public class TopPhrase extends AbstractEntity<TopPhrase, KarutaIdentifier> {
 
     @Override
     public String toString() {
-        return "FirstHalf{" +
+        return "KamiNoKu{" +
                 "first=" + first +
                 ", second=" + second +
                 ", third=" + third +

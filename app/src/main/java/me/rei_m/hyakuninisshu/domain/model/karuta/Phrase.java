@@ -25,14 +25,14 @@ public class Phrase implements ValueObject {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
-
         if (o == null || getClass() != o.getClass()) return false;
 
-        Phrase that = (Phrase) o;
+        Phrase phrase = (Phrase) o;
 
-        return kana.equals(that.kana) && kanji.equals(that.kanji);
+        if (!kana.equals(phrase.kana)) return false;
+
+        return kanji.equals(phrase.kanji);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Phrase implements ValueObject {
 
     @Override
     public String toString() {
-        return "KarutaPart{" +
+        return "Phrase{" +
                 "kana='" + kana + '\'' +
                 ", kanji='" + kanji + '\'' +
                 '}';

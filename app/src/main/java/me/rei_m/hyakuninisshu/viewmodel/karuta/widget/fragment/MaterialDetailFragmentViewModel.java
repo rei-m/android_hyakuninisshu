@@ -63,20 +63,20 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
             kimariji.set(karuta.kimariji().value());
 
-            topPhraseKanji.set(karuta.topPhrase().first().kanji() + SPACE +
-                    karuta.topPhrase().second().kanji() + SPACE +
-                    karuta.topPhrase().third().kanji());
+            topPhraseKanji.set(karuta.kamiNoKu().first().kanji() + SPACE +
+                    karuta.kamiNoKu().second().kanji() + SPACE +
+                    karuta.kamiNoKu().third().kanji());
 
 
-            bottomPhraseKanji.set(karuta.bottomPhrase().fourth().kanji() + SPACE +
-                    karuta.bottomPhrase().fifth().kanji());
+            bottomPhraseKanji.set(karuta.shimoNoKu().fourth().kanji() + SPACE +
+                    karuta.shimoNoKu().fifth().kanji());
 
-            topPhraseKana.set(karuta.topPhrase().first().kana() + SPACE +
-                    karuta.topPhrase().second().kana() + SPACE +
-                    karuta.topPhrase().third().kana());
+            topPhraseKana.set(karuta.kamiNoKu().first().kana() + SPACE +
+                    karuta.kamiNoKu().second().kana() + SPACE +
+                    karuta.kamiNoKu().third().kana());
 
-            bottomPhraseKana.set(karuta.bottomPhrase().fourth().kana() + SPACE +
-                    karuta.bottomPhrase().fifth().kana());
+            bottomPhraseKana.set(karuta.shimoNoKu().fourth().kana() + SPACE +
+                    karuta.shimoNoKu().fifth().kana());
 
             translation.set(karuta.translation());
         }));

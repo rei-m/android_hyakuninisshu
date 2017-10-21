@@ -2,39 +2,30 @@ package me.rei_m.hyakuninisshu.domain.model.karuta;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
-public class Kimariji implements ValueObject {
+public enum Kimariji implements ValueObject {
+    ONE(1),
+    TWO(2),
+    THREE(3),
+    FOUR(4),
+    FIVE(5),
+    SIX(6);
 
-    public static final int MAX = 6;
-
-    public static final int MIN = 1;
+    public static Kimariji forValue(int value) {
+        for(Kimariji kimariji : values()) {
+            if (kimariji.value() == value) {
+                return kimariji;
+            }
+        }
+        throw new AssertionError("no enum found. value is " + value);
+    }
 
     private int value;
 
-    public Kimariji(int value) {
-        if (MIN <= value && value <= MAX) {
-            this.value = value;
-        } else {
-            throw new IllegalArgumentException("Kimariji is Invalid, value is " + value);
-        }
+    Kimariji(int value) {
+        this.value = value;
     }
 
     public int value() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Kimariji kimariji = (Kimariji) o;
-
-        return value == kimariji.value;
-
-    }
-
-    @Override
-    public int hashCode() {
         return value;
     }
 

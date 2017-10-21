@@ -15,11 +15,11 @@ public class ToriFuda implements ValueObject {
         this.fifthPhrase = fifthPhrase;
     }
 
-    public String getFourthPhrase() {
+    public String fourthPhrase() {
         return fourthPhrase;
     }
 
-    public String getFifthPhrase() {
+    public String fifthPhrase() {
         return fifthPhrase;
     }
 

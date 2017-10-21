@@ -4,11 +4,25 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
-public class Color implements ValueObject {
+public enum Color implements ValueObject {
+    BLUE("blue"),
+    PINK("pink"),
+    YELLOW("yellow"),
+    GREEN("green"),
+    ORANGE("orange");
+
+    public static Color forValue(String value) {
+        for (Color color : values()) {
+            if (color.value().equals(value)) {
+                return color;
+            }
+        }
+        throw new AssertionError("no enum found. value is " + value);
+    }
 
     private final String value;
 
-    public Color(@NonNull String value) {
+    Color(@NonNull String value) {
         this.value = value;
     }
 
@@ -17,25 +31,9 @@ public class Color implements ValueObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Color color = (Color) o;
-
-        return value.equals(color.value);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
-
-    @Override
     public String toString() {
         return "Color{" +
                 "value='" + value + '\'' +
-                '}';
+                "} " + super.toString();
     }
 }

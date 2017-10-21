@@ -468,7 +468,7 @@
                 android:layout_gravity="center"
                 android:contentDescription="@string/score"
                 android:visibility="@{viewModel.isVisibleResult ? View.VISIBLE : View.GONE}"
-                app:isCollect="@{viewModel.isCollect}" />
+                app:isCorrect="@{viewModel.isCorrect}" />
 
         </FrameLayout>
 
