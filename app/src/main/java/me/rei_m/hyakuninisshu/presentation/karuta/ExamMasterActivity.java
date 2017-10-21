@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,16 +11,23 @@ import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import dagger.Binds;
+import dagger.android.ActivityKey;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
+import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
+import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.di.ExamMasterActivityViewModelModule;
 
 public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
@@ -28,6 +36,35 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            ExamMasterActivityViewModelModule.class,
+            QuizAnswerFragment.Module.class,
+            QuizFragment.Module.class,
+            ExamResultFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<ExamMasterActivity> {
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<ExamMasterActivity> {
+
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(ExamMasterActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @Binds
+        @IntoMap
+        @ActivityKey(ExamMasterActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 
     @Inject
@@ -71,7 +108,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         disposable.addAll(
                 viewModel.startExamEvent.subscribe(v -> getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                        .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                         .commit()),
                 viewModel.aggregateExamResultsEvent.subscribe(examId -> getSupportFragmentManager()
                         .beginTransaction()
@@ -110,7 +147,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedExam());
         outState.putBoolean(KEY_IS_FINISHED, viewModel.isFinishedExam());
     }
-    
+
     @Override
     public void onAnswered(long karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()
@@ -135,7 +172,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .replace(R.id.content, QuizFragment.newInstance(KarutaStyle.KANJI, KarutaStyle.KANA), QuizFragment.TAG)
+                .replace(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                 .commit();
     }
 

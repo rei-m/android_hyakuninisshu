@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding;
-import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemViewModel;
 
 public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

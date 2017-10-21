@@ -19,15 +19,18 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Device;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizFragmentViewModelModule;
 
 public class QuizFragment extends DaggerFragment {
 
@@ -41,8 +44,8 @@ public class QuizFragment extends DaggerFragment {
 
     private static final String KEY_QUIZ_ID = "quizId";
 
-    public static QuizFragment newInstance(@NonNull KarutaStyle topPhraseStyle,
-                                           @NonNull KarutaStyle bottomPhraseStyle) {
+    public static QuizFragment newInstance(@NonNull KarutaStyleFilter topPhraseStyle,
+                                           @NonNull KarutaStyleFilter bottomPhraseStyle) {
 
         QuizFragment fragment = new QuizFragment();
 
@@ -52,6 +55,13 @@ public class QuizFragment extends DaggerFragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = QuizFragmentViewModelModule.class)
+        abstract QuizFragment contributeInjector();
     }
 
     @Inject
@@ -77,8 +87,8 @@ public class QuizFragment extends DaggerFragment {
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-        KarutaStyle topPhraseStyle = KarutaStyle.get(args.getInt(ARG_TOP_PHRASE_STYLE));
-        KarutaStyle bottomPhraseStyle = KarutaStyle.get(args.getInt(ARG_BOTTOM_PHRASE_STYLE));
+        KarutaStyleFilter topPhraseStyle = KarutaStyleFilter.get(args.getInt(ARG_TOP_PHRASE_STYLE));
+        KarutaStyleFilter bottomPhraseStyle = KarutaStyleFilter.get(args.getInt(ARG_BOTTOM_PHRASE_STYLE));
 
         if (savedInstanceState == null) {
             viewModel.onCreate(topPhraseStyle, bottomPhraseStyle);

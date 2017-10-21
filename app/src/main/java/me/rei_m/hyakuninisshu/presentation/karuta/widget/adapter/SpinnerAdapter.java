@@ -67,7 +67,7 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         TextView view = (TextView) convertView.findViewById(R.id.text_spinner_item);
         SpinnerItem item = getItem(position);
         if (item != null) {
-            view.setText(item.getLabel(getContext().getResources()));
+            view.setText(item.label(getContext().getResources()));
         } else {
             view.setText("");
         }
@@ -82,7 +82,7 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         TextView view = (TextView) convertView.findViewById(R.id.text_spinner_item);
         SpinnerItem item = getItem(position);
         if (item != null) {
-            view.setText(item.getLabel(getContext().getResources()));
+            view.setText(item.label(getContext().getResources()));
         } else {
             view.setText("");
         }

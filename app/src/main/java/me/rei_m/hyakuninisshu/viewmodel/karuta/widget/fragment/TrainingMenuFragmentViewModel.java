@@ -7,9 +7,9 @@ import android.view.View;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
@@ -22,13 +22,13 @@ public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<TrainingRangeTo> trainingRangeTo = new ObservableField<>(TrainingRangeTo.ONE_HUNDRED);
 
-    public final ObservableField<Kimariji> kimariji = new ObservableField<>(Kimariji.ALL);
+    public final ObservableField<KimarijiFilter> kimariji = new ObservableField<>(KimarijiFilter.ALL);
 
-    public final ObservableField<KarutaStyle> topPhraseStyle = new ObservableField<>(KarutaStyle.KANJI);
+    public final ObservableField<KarutaStyleFilter> topPhraseStyle = new ObservableField<>(KarutaStyleFilter.KANJI);
 
-    public final ObservableField<KarutaStyle> bottomPhraseStyle = new ObservableField<>(KarutaStyle.KANA);
+    public final ObservableField<KarutaStyleFilter> bottomPhraseStyle = new ObservableField<>(KarutaStyleFilter.KANA);
 
-    public final ObservableField<Color> color = new ObservableField<>(Color.ALL);
+    public final ObservableField<ColorFilter> color = new ObservableField<>(ColorFilter.ALL);
 
     private final PublishSubject<Unit> invalidTrainingRangeEventSubject = PublishSubject.create();
     public final Observable<Unit> invalidTrainingRangeEvent = invalidTrainingRangeEventSubject;

@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.ExamFragmentViewModelModule;
 
 public class ExamFragment extends DaggerFragment {
 
@@ -17,6 +20,13 @@ public class ExamFragment extends DaggerFragment {
 
     public static ExamFragment newInstance() {
         return new ExamFragment();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = ExamFragmentViewModelModule.class)
+        abstract ExamFragment contributeInjector();
     }
 
     @Inject

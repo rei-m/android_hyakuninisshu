@@ -11,7 +11,7 @@ import me.rei_m.hyakuninisshu.R;
 
 public class LicenceDialogFragment extends DialogFragment {
 
-    public static final String TAG = "LicenceDialogFragment";
+    public static final String TAG = LicenceDialogFragment.class.getSimpleName();
 
     public static LicenceDialogFragment newInstance() {
         return new LicenceDialogFragment();

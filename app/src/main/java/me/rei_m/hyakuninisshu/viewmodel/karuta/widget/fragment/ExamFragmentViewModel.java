@@ -36,10 +36,10 @@ public class ExamFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        registerDisposable(karutaExamModel.completeGetResultEvent.subscribe(examResult -> {
+        registerDisposable(karutaExamModel.completeFetchResultEvent.subscribe(examResult -> {
             hasResult.set(true);
-            score.set(examResult.collectCount + "/" + examResult.quizCount);
-            averageAnswerTime.set(examResult.averageAnswerTime);
+            score.set(examResult.score());
+            averageAnswerTime.set(examResult.averageAnswerTime());
         }), karutaExamModel.norFoundResultEvent.subscribe(v -> {
             hasResult.set(false);
         }));
@@ -49,7 +49,7 @@ public class ExamFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM);
-        karutaExamModel.getRecentlyResult();
+        karutaExamModel.fetchRecentResult();
     }
 
     @SuppressWarnings("unused")

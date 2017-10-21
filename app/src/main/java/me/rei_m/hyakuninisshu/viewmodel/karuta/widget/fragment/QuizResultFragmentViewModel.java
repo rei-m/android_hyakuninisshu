@@ -8,8 +8,8 @@ import android.view.View;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -44,9 +44,9 @@ public class QuizResultFragmentViewModel extends AbsFragmentViewModel {
     public void onStart() {
         super.onStart();
         registerDisposable(karutaTrainingModel.completeAggregateResultsEvent.subscribe(trainingResult -> {
-            score.set(trainingResult.collectCount + "/" + trainingResult.quizCount);
-            averageAnswerTime.set(trainingResult.averageAnswerTime);
-            canRestartTraining.set(trainingResult.canRestartTraining);
+            score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
+            averageAnswerTime.set(trainingResult.averageAnswerTime());
+            canRestartTraining.set(trainingResult.canRestartTraining());
         }), karutaTrainingModel.completeRestartEvent.subscribe(v -> restartEventSubject.onNext(Unit.INSTANCE)));
     }
 

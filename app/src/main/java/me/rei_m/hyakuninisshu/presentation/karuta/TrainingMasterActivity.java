@@ -1,5 +1,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,20 +11,27 @@ import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import dagger.Binds;
+import dagger.android.ActivityKey;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
+import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
+import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.di.TrainingMasterActivityViewModelModule;
 
 public class TrainingMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
@@ -33,16 +41,16 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull TrainingRangeFrom trainingRangeFrom,
                                       @NonNull TrainingRangeTo trainingRangeTo,
-                                      @NonNull Kimariji kimariji,
-                                      @NonNull Color color,
-                                      @NonNull KarutaStyle topPhraseStyle,
-                                      @NonNull KarutaStyle bottomPhraseStyle) {
+                                      @NonNull KimarijiFilter kimarijiFilter,
+                                      @NonNull ColorFilter colorFilter,
+                                      @NonNull KarutaStyleFilter topPhraseStyle,
+                                      @NonNull KarutaStyleFilter bottomPhraseStyle) {
         Intent intent = new Intent(context, TrainingMasterActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_TRAINING_RANGE_FROM, trainingRangeFrom);
         bundle.putSerializable(ARG_TRAINING_RANGE_TO, trainingRangeTo);
-        bundle.putSerializable(ARG_KIMARIJI, kimariji);
-        bundle.putSerializable(ARG_COLOR, color);
+        bundle.putSerializable(ARG_KIMARIJI, kimarijiFilter);
+        bundle.putSerializable(ARG_COLOR, colorFilter);
         bundle.putSerializable(ARG_TOP_PHRASE_STYLE, topPhraseStyle);
         bundle.putSerializable(ARG_BOTTOM_PHRASE_STYLE, bottomPhraseStyle);
         intent.putExtras(bundle);
@@ -63,6 +71,36 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
 
     private static final String KEY_IS_STARTED = "isStarted";
 
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            TrainingMasterActivityViewModelModule.class,
+            QuizFragment.Module.class,
+            QuizAnswerFragment.Module.class,
+            QuizResultFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<TrainingMasterActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<TrainingMasterActivity> {
+
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(TrainingMasterActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @Binds
+        @IntoMap
+        @ActivityKey(TrainingMasterActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
+    }
+
     @Inject
     TrainingMasterActivityViewModel viewModel;
 
@@ -80,22 +118,22 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
 
         TrainingRangeFrom trainingRangeFrom = (TrainingRangeFrom) getIntent().getSerializableExtra(ARG_TRAINING_RANGE_FROM);
         TrainingRangeTo trainingRangeTo = (TrainingRangeTo) getIntent().getSerializableExtra(ARG_TRAINING_RANGE_TO);
-        Kimariji kimariji = (Kimariji) getIntent().getSerializableExtra(ARG_KIMARIJI);
-        Color color = (Color) getIntent().getSerializableExtra(ARG_COLOR);
+        KimarijiFilter kimarijiFilter = (KimarijiFilter) getIntent().getSerializableExtra(ARG_KIMARIJI);
+        ColorFilter colorFilter = (ColorFilter) getIntent().getSerializableExtra(ARG_COLOR);
 
         binding.setViewModel(viewModel);
 
         if (savedInstanceState == null) {
             viewModel.onCreate(trainingRangeFrom,
                     trainingRangeTo,
-                    kimariji,
-                    color);
+                    kimarijiFilter,
+                    colorFilter);
         } else {
             boolean isStarted = savedInstanceState.getBoolean(KEY_IS_STARTED, false);
             viewModel.onReCreate(trainingRangeFrom,
                     trainingRangeTo,
-                    kimariji,
-                    color,
+                    kimarijiFilter,
+                    colorFilter,
                     isStarted);
         }
     }
@@ -105,8 +143,8 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         super.onStart();
         disposable = new CompositeDisposable();
         disposable.add(viewModel.startTrainingEvent.subscribe(unit -> {
-            KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
-            KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
+            KarutaStyleFilter topPhraseStyle = (KarutaStyleFilter) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
+            KarutaStyleFilter bottomPhraseStyle = (KarutaStyleFilter) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.content, QuizFragment.newInstance(topPhraseStyle, bottomPhraseStyle), QuizFragment.TAG)
@@ -171,8 +209,8 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     @Override
     public void onClickGoToNext() {
 
-        KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
-        KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
+        KarutaStyleFilter topPhraseStyle = (KarutaStyleFilter) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
+        KarutaStyleFilter bottomPhraseStyle = (KarutaStyleFilter) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -206,8 +244,8 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     public void onRestartTraining() {
         viewModel.onRestartTraining();
 
-        KarutaStyle topPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
-        KarutaStyle bottomPhraseStyle = (KarutaStyle) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
+        KarutaStyleFilter topPhraseStyle = (KarutaStyleFilter) getIntent().getSerializableExtra(ARG_TOP_PHRASE_STYLE);
+        KarutaStyleFilter bottomPhraseStyle = (KarutaStyleFilter) getIntent().getSerializableExtra(ARG_BOTTOM_PHRASE_STYLE);
 
         getSupportFragmentManager()
                 .beginTransaction()

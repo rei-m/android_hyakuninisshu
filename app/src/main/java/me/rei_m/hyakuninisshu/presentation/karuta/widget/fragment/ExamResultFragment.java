@@ -10,10 +10,13 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.ExamResultFragmentViewModelModule;
 
 public class ExamResultFragment extends DaggerFragment {
 
@@ -29,6 +32,13 @@ public class ExamResultFragment extends DaggerFragment {
         args.putLong(ARG_EXAM_ID, examId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = ExamResultFragmentViewModelModule.class)
+        abstract ExamResultFragment contributeInjector();
     }
 
     @Inject

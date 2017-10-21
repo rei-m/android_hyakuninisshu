@@ -12,19 +12,33 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.di.KarutaListItemViewModelModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.MaterialFragmentViewModelModule;
 
 public class MaterialFragment extends DaggerFragment {
 
-    public static final String TAG = "MaterialFragment";
+    public static final String TAG = MaterialFragment.class.getSimpleName();
 
     public static MaterialFragment newInstance() {
         return new MaterialFragment();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = {
+                MaterialFragmentViewModelModule.class,
+                KarutaListItemViewModelModule.class
+        })
+        abstract MaterialFragment contributeInjector();
     }
 
     @Inject
@@ -99,11 +113,11 @@ public class MaterialFragment extends DaggerFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        for (Color color : Color.values()) {
-            MenuItem menuItem = menu.add(Menu.NONE, color.ordinal(), Menu.NONE, color.getLabel(getResources()));
+        for (ColorFilter colorFilter : ColorFilter.values()) {
+            MenuItem menuItem = menu.add(Menu.NONE, colorFilter.ordinal(), Menu.NONE, colorFilter.label(getResources()));
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             menuItem.setOnMenuItemClickListener(menuColor -> {
-                viewModel.onOptionItemSelected(color);
+                viewModel.onOptionItemSelected(colorFilter);
                 return false;
             });
         }

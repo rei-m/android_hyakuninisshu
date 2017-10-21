@@ -7,10 +7,10 @@ import android.view.View;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -48,10 +48,10 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        registerDisposable(karutaExamModel.completeGetResultEvent.subscribe(examResult -> {
-            score.set(examResult.collectCount + "/" + examResult.quizCount);
-            averageAnswerTime.set(examResult.averageAnswerTime);
-            karutaQuizResultList.set(examResult.resultList);
+        registerDisposable(karutaExamModel.completeFetchResultEvent.subscribe(examResult -> {
+            score.set(examResult.score());
+            averageAnswerTime.set(examResult.averageAnswerTime());
+            karutaQuizResultList.set(examResult.resultList());
         }));
     }
 
@@ -59,7 +59,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM_RESULT);
-        karutaExamModel.getResult(karutaExamIdentifier);
+        karutaExamModel.fetchResult(karutaExamIdentifier);
     }
 
     @SuppressWarnings("unused")

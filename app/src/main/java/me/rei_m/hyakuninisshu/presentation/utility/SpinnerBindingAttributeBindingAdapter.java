@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.SpinnerItem;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
@@ -71,37 +71,37 @@ public class SpinnerBindingAttributeBindingAdapter {
 
     @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
     public static void bindKimariji(Spinner spinner,
-                                    Kimariji newSelectedValue,
+                                    KimarijiFilter newSelectedValue,
                                     final InverseBindingListener newTextAttrChanged) {
         bindSpinner(spinner, newSelectedValue, newTextAttrChanged);
     }
 
     @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-    public static Kimariji captureSelectedKimariji(Spinner spinner) {
-        return (Kimariji) spinner.getSelectedItem();
+    public static KimarijiFilter captureSelectedKimariji(Spinner spinner) {
+        return (KimarijiFilter) spinner.getSelectedItem();
     }
 
     @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
     public static void bindKarutaStyle(Spinner spinner,
-                                       KarutaStyle newSelectedValue,
+                                       KarutaStyleFilter newSelectedValue,
                                        final InverseBindingListener newTextAttrChanged) {
         bindSpinner(spinner, newSelectedValue, newTextAttrChanged);
     }
 
     @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-    public static KarutaStyle captureSelectedKarutaStyle(Spinner spinner) {
-        return (KarutaStyle) spinner.getSelectedItem();
+    public static KarutaStyleFilter captureSelectedKarutaStyle(Spinner spinner) {
+        return (KarutaStyleFilter) spinner.getSelectedItem();
     }
 
     @BindingAdapter(value = {"selectedValue", "selectedValueAttrChanged"}, requireAll = false)
     public static void bindColor(Spinner spinner,
-                                 Color newSelectedValue,
+                                 ColorFilter newSelectedValue,
                                  final InverseBindingListener newTextAttrChanged) {
         bindSpinner(spinner, newSelectedValue, newTextAttrChanged);
     }
 
     @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-    public static Color captureSelectedColor(Spinner spinner) {
-        return (Color) spinner.getSelectedItem();
+    public static ColorFilter captureSelectedColor(Spinner spinner) {
+        return (ColorFilter) spinner.getSelectedItem();
     }
 }

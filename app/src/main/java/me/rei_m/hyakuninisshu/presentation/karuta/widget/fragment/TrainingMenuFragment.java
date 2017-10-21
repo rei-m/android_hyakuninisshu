@@ -9,17 +9,20 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyle;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.TrainingMenuFragmentViewModelModule;
 
 public class TrainingMenuFragment extends DaggerFragment {
 
@@ -27,6 +30,13 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     public static TrainingMenuFragment newInstance() {
         return new TrainingMenuFragment();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = TrainingMenuFragmentViewModelModule.class)
+        abstract TrainingMenuFragment contributeInjector();
     }
 
     @Inject
@@ -53,13 +63,13 @@ public class TrainingMenuFragment extends DaggerFragment {
         SpinnerAdapter trainingRangeToAdapter = SpinnerAdapter.newInstance(context, TrainingRangeTo.values(), false);
         binding.setTrainingRangeToAdapter(trainingRangeToAdapter);
 
-        SpinnerAdapter kimarijiAdapter = SpinnerAdapter.newInstance(context, Kimariji.values(), false);
+        SpinnerAdapter kimarijiAdapter = SpinnerAdapter.newInstance(context, KimarijiFilter.values(), false);
         binding.setKimarijiAdapter(kimarijiAdapter);
 
-        SpinnerAdapter karutaStyleAdapter = SpinnerAdapter.newInstance(context, KarutaStyle.values(), false);
+        SpinnerAdapter karutaStyleAdapter = SpinnerAdapter.newInstance(context, KarutaStyleFilter.values(), false);
         binding.setKarutaStyleAdapter(karutaStyleAdapter);
 
-        SpinnerAdapter colorAdapter = SpinnerAdapter.newInstance(context, Color.values(), false);
+        SpinnerAdapter colorAdapter = SpinnerAdapter.newInstance(context, ColorFilter.values(), false);
         binding.setColorAdapter(colorAdapter);
 
         binding.setViewModel(viewModel);

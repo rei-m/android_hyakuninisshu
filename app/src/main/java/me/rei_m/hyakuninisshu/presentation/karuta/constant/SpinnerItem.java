@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public interface SpinnerItem extends Serializable {
 
-    String getCode();
+    String code();
 
-    String getLabel(Resources res);
+    String label(Resources res);
 }

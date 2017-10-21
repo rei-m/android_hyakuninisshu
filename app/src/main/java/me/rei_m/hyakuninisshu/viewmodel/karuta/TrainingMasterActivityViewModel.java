@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Kimariji;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.util.Unit;
@@ -26,8 +26,8 @@ public class TrainingMasterActivityViewModel extends AbsActivityViewModel {
 
     private TrainingRangeFrom trainingRangeFrom;
     private TrainingRangeTo trainingRangeTo;
-    private Kimariji kimariji;
-    private Color color;
+    private KimarijiFilter kimarijiFilter;
+    private ColorFilter colorFilter;
 
     private boolean isStartedTraining = false;
 
@@ -41,23 +41,23 @@ public class TrainingMasterActivityViewModel extends AbsActivityViewModel {
 
     public void onCreate(@NonNull TrainingRangeFrom trainingRangeFrom,
                          @NonNull TrainingRangeTo trainingRangeTo,
-                         @NonNull Kimariji kimariji,
-                         @NonNull Color color) {
+                         @NonNull KimarijiFilter kimarijiFilter,
+                         @NonNull ColorFilter colorFilter) {
         this.trainingRangeFrom = trainingRangeFrom;
         this.trainingRangeTo = trainingRangeTo;
-        this.kimariji = kimariji;
-        this.color = color;
+        this.kimarijiFilter = kimarijiFilter;
+        this.colorFilter = colorFilter;
     }
 
     public void onReCreate(@NonNull TrainingRangeFrom trainingRangeFrom,
                            @NonNull TrainingRangeTo trainingRangeTo,
-                           @NonNull Kimariji kimariji,
-                           @NonNull Color color,
+                           @NonNull KimarijiFilter kimarijiFilter,
+                           @NonNull ColorFilter colorFilter,
                            boolean isStartedTraining) {
         this.trainingRangeFrom = trainingRangeFrom;
         this.trainingRangeTo = trainingRangeTo;
-        this.kimariji = kimariji;
-        this.color = color;
+        this.kimarijiFilter = kimarijiFilter;
+        this.colorFilter = colorFilter;
         this.isStartedTraining = isStartedTraining;
     }
 
@@ -75,10 +75,10 @@ public class TrainingMasterActivityViewModel extends AbsActivityViewModel {
         }));
 
         if (!isStartedTraining) {
-            karutaTrainingModel.start(trainingRangeFrom.getId(),
-                    trainingRangeTo.getId(),
-                    kimariji.getPosition(),
-                    color.getCode());
+            karutaTrainingModel.start(trainingRangeFrom.identifier(),
+                    trainingRangeTo.identifier(),
+                    kimarijiFilter.value(),
+                    colorFilter.value());
         }
     }
 

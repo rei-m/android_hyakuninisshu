@@ -3,10 +3,10 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 import android.databinding.ObservableArrayList;
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.domain.karuta.model.Karuta;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.Color;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
 public class MaterialFragmentViewModel extends AbsFragmentViewModel {
@@ -17,7 +17,7 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
 
     private final AnalyticsManager analyticsManager;
 
-    private Color color = Color.ALL;
+    private ColorFilter colorFilter = ColorFilter.ALL;
 
     public MaterialFragmentViewModel(@NonNull KarutaModel karutaModel,
                                      @NonNull AnalyticsManager analyticsManager) {
@@ -38,11 +38,11 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
-        karutaModel.getKarutaList(color);
+        karutaModel.getKarutaList(colorFilter.value());
     }
 
-    public void onOptionItemSelected(@NonNull Color color) {
-        karutaModel.getKarutaList(color);
-        this.color = color;
+    public void onOptionItemSelected(@NonNull ColorFilter colorFilter) {
+        karutaModel.getKarutaList(colorFilter.value());
+        this.colorFilter = colorFilter;
     }
 }

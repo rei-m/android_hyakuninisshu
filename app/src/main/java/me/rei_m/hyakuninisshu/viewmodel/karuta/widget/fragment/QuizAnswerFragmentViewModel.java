@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -69,14 +69,14 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
     public void onStart() {
         super.onStart();
         registerDisposable(karutaModel.completeGetKarutaEvent.subscribe(karuta -> {
-            karutaNo.set((int) karuta.getIdentifier().getValue());
-            kimariji.set(karuta.getKimariji());
-            creator.set(karuta.getCreator());
-            firstPhrase.set(padSpace(karuta.getTopPhrase().getFirst().getKanji(), 5));
-            secondPhrase.set(karuta.getTopPhrase().getSecond().getKanji());
-            thirdPhrase.set(karuta.getTopPhrase().getThird().getKanji());
-            fourthPhrase.set(padSpace(karuta.getBottomPhrase().getFourth().getKanji(), 7));
-            fifthPhrase.set(karuta.getBottomPhrase().getFifth().getKanji());
+            karutaNo.set((int) karuta.identifier().value());
+            kimariji.set(karuta.kimariji().value());
+            creator.set(karuta.creator());
+            firstPhrase.set(padSpace(karuta.kamiNoKu().first().kanji(), 5));
+            secondPhrase.set(karuta.kamiNoKu().second().kanji());
+            thirdPhrase.set(karuta.kamiNoKu().third().kanji());
+            fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
+            fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
         }), karutaModel.error.subscribe(v -> errorEventSubject.onNext(Unit.INSTANCE)));
     }
 
@@ -88,7 +88,7 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     @SuppressWarnings("unused")
     public void onClickAnswer(View view) {
-        navigator.navigateToMaterialSingle((int) karutaIdentifier.getValue());
+        navigator.navigateToMaterialSingle((int) karutaIdentifier.value());
     }
 
     @SuppressWarnings("unused")

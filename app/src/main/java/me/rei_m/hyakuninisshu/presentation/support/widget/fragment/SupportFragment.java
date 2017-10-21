@@ -9,17 +9,27 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding;
+import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.SupportFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.di.SupportFragmentViewModelModule;
 
 public class SupportFragment extends DaggerFragment {
 
-    public static final String TAG = "SupportFragment";
+    public static final String TAG = SupportFragment.class.getSimpleName();
 
     public static SupportFragment newInstance() {
         return new SupportFragment();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @ForFragment
+        @ContributesAndroidInjector(modules = SupportFragmentViewModelModule.class)
+        abstract SupportFragment contributeInjector();
     }
 
     @Inject
