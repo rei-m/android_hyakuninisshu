@@ -1,6 +1,8 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.constant;
 
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
@@ -23,7 +25,7 @@ public enum TrainingRangeTo implements SpinnerItem {
 
     private final KarutaIdentifier id;
 
-    TrainingRangeTo(int resId, String code, int id) {
+    TrainingRangeTo(@StringRes int resId, @NonNull String code, int id) {
         this.resId = resId;
         this.code = code;
         this.id = new KarutaIdentifier(id);
