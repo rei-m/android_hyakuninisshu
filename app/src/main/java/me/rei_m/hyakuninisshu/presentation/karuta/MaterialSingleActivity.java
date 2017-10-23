@@ -22,6 +22,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
+import com.google.android.gms.ads.AdView;
+
+import javax.inject.Inject;
 
 import dagger.Binds;
 import dagger.android.ActivityKey;
@@ -32,9 +38,10 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialSingleBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
+import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
+import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
-import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class MaterialSingleActivity extends DaggerAppCompatActivity implements MaterialDetailFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
@@ -77,7 +84,12 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity implements M
         abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 
+    @Inject
+    AdViewFactory adViewFactory;
+
     private ActivityMaterialSingleBinding binding;
+
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +104,6 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity implements M
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ViewUtil.loadAd(binding.adView);
-
         int karutaNo = getIntent().getIntExtra(ARG_KARUTA_NO, UNKNOWN_KARUTA_NO);
 
         if (karutaNo == UNKNOWN_KARUTA_NO) {
@@ -107,12 +117,42 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity implements M
                     .add(R.id.content, MaterialDetailFragment.newInstance(karutaNo), MaterialDetailFragment.TAG)
                     .commit();
         }
+
+        adView = adViewFactory.create();
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
+        adView.setLayoutParams(params);
+        binding.root.addView(adView);
+
+        AdViewHelper.loadAd(adView);
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        AdViewHelper.release(adView);
+
+        adView.destroy();
+        adView = null;
+
+        adViewFactory = null;
         binding = null;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
     }
 
     @Override

@@ -26,11 +26,11 @@ import me.rei_m.hyakuninisshu.presentation.karuta.MaterialEditActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialSingleActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 
 public class Navigator {
 
@@ -50,15 +50,15 @@ public class Navigator {
                                          @NonNull TrainingRangeTo trainingRangeTo,
                                          @NonNull KimarijiFilter kimarijiFilter,
                                          @NonNull ColorFilter colorFilter,
-                                         @NonNull KarutaStyleFilter topPhraseStyle,
-                                         @NonNull KarutaStyleFilter bottomPhraseStyle) {
+                                         @NonNull KarutaStyleFilter kamiNoKuStyle,
+                                         @NonNull KarutaStyleFilter shimoNoKuStyle) {
         Intent intentToLaunch = TrainingMasterActivity.createIntent(activity,
                 trainingRangeFrom,
                 trainingRangeTo,
                 kimarijiFilter,
                 colorFilter,
-                topPhraseStyle,
-                bottomPhraseStyle);
+                kamiNoKuStyle,
+                shimoNoKuStyle);
         activity.startActivity(intentToLaunch);
     }
 

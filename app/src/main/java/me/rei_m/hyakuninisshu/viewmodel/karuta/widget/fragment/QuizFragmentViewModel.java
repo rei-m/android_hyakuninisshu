@@ -25,8 +25,6 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo;
@@ -34,8 +32,9 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
 import me.rei_m.hyakuninisshu.domain.model.quiz.YomiFuda;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.util.GlideApp;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -60,23 +59,19 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableBoolean isCorrect = new ObservableBoolean(false);
 
-    private PublishSubject<Unit> startDisplayAnimationEventSubject = PublishSubject.create();
-    public Observable<Unit> startDisplayAnimationEvent = startDisplayAnimationEventSubject;
+    public EventObservable<Unit> startDisplayAnimationEvent = EventObservable.create();
 
-    private PublishSubject<Unit> stopDisplayAnimationEventSubject = PublishSubject.create();
-    public Observable<Unit> stopDisplayAnimationEvent = stopDisplayAnimationEventSubject;
+    public EventObservable<Unit> stopDisplayAnimationEvent = EventObservable.create();
 
-    private PublishSubject<Unit> onClickResultEventSubject = PublishSubject.create();
-    public Observable<Unit> onClickResultEvent = onClickResultEventSubject;
+    public EventObservable<Unit> onClickResultEvent = EventObservable.create();
 
-    private PublishSubject<Unit> errorEventSubject = PublishSubject.create();
-    public Observable<Unit> errorEvent = errorEventSubject;
+    public EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaQuizModel karutaQuizModel;
 
-    private KarutaStyleFilter topPhraseStyle;
+    private KarutaStyleFilter kamiNoKuStyle;
 
-    private KarutaStyleFilter bottomPhraseStyle;
+    private KarutaStyleFilter shimoNoKuStyle;
 
     private KarutaQuizIdentifier karutaQuizIdentifier;
 
@@ -103,18 +98,18 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         return existNextQuiz;
     }
 
-    public void onCreate(@NonNull KarutaStyleFilter topPhraseStyle,
-                         @NonNull KarutaStyleFilter bottomPhraseStyle) {
-        this.topPhraseStyle = topPhraseStyle;
-        this.bottomPhraseStyle = bottomPhraseStyle;
+    public void onCreate(@NonNull KarutaStyleFilter kamiNoKuStyle,
+                         @NonNull KarutaStyleFilter shimoNoKuStyle) {
+        this.kamiNoKuStyle = kamiNoKuStyle;
+        this.shimoNoKuStyle = shimoNoKuStyle;
     }
 
     public void onReCreate(@NonNull String quizId,
-                           @NonNull KarutaStyleFilter topPhraseStyle,
-                           @NonNull KarutaStyleFilter bottomPhraseStyle) {
+                           @NonNull KarutaStyleFilter kamiNoKuStyle,
+                           @NonNull KarutaStyleFilter shimoNoKuStyle) {
         this.karutaQuizIdentifier = new KarutaQuizIdentifier(quizId);
-        this.topPhraseStyle = topPhraseStyle;
-        this.bottomPhraseStyle = bottomPhraseStyle;
+        this.kamiNoKuStyle = kamiNoKuStyle;
+        this.shimoNoKuStyle = shimoNoKuStyle;
     }
 
     @Override
@@ -126,13 +121,13 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
 
             quizCount.set(karutaQuizContent.currentPosition());
 
-            YomiFuda yomiFuda = karutaQuizContent.yomiFuda(topPhraseStyle.value());
+            YomiFuda yomiFuda = karutaQuizContent.yomiFuda(kamiNoKuStyle.value());
 
             firstPhrase.set(yomiFuda.firstPhrase());
             secondPhrase.set(yomiFuda.secondPhrase());
             thirdPhrase.set(yomiFuda.thirdPhrase());
 
-            List<ToriFuda> toriFudas = karutaQuizContent.toriFudas(bottomPhraseStyle.value());
+            List<ToriFuda> toriFudas = karutaQuizContent.toriFudas(shimoNoKuStyle.value());
 
             for (int i = 0; i < toriFudas.size(); i++) {
                 ToriFuda toriFuda = toriFudas.get(i);
@@ -141,16 +136,16 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             }
 
             if (!karutaQuizContent.isAnswered()) {
-                startDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
+                startDisplayAnimationEvent.onNext(Unit.INSTANCE);
             }
         }), karutaQuizModel.completeAnswerEvent.subscribe(karutaQuizContent -> {
 
-            stopDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
+            stopDisplayAnimationEvent.onNext(Unit.INSTANCE);
 
             KarutaQuizResult result = karutaQuizContent.result();
 
             if (result == null) {
-                errorEventSubject.onNext(Unit.INSTANCE);
+                errorEvent.onNext(Unit.INSTANCE);
                 return;
             }
 
@@ -165,8 +160,8 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             this.collectKarutaIdentifier = result.collectKarutaId();
             this.existNextQuiz = karutaQuizContent.existNext();
 
-        }), karutaQuizModel.error.subscribe(v -> {
-            errorEventSubject.onNext(Unit.INSTANCE);
+        }), karutaQuizModel.errorEvent.subscribe(v -> {
+            errorEvent.onNext(Unit.INSTANCE);
         }));
     }
 
@@ -185,7 +180,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     }
 
     public void onClickResult() {
-        onClickResultEventSubject.onNext(Unit.INSTANCE);
+        onClickResultEvent.onNext(Unit.INSTANCE);
     }
 
     @BindingAdapter({"textForQuiz", "textPosition"})

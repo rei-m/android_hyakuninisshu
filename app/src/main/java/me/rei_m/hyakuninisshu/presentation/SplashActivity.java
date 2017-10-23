@@ -71,6 +71,14 @@ public class SplashActivity extends DaggerAppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        navigator = null;
+        applicationModel = null;
+        super.onDestroy();
+    }
+
+
+    @Override
     protected void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
@@ -82,11 +90,11 @@ public class SplashActivity extends DaggerAppCompatActivity {
 
     @Override
     protected void onStop() {
-        super.onStop();
         if (disposable != null) {
             disposable.dispose();
             disposable = null;
         }
+        super.onStop();
     }
 
     @Override

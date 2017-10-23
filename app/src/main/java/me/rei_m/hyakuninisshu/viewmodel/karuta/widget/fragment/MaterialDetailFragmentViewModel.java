@@ -25,8 +25,6 @@ import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant.SPACE;
-
 public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableInt karutaNo = new ObservableInt();
@@ -37,13 +35,13 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableInt kimariji = new ObservableInt();
 
-    public final ObservableField<String> topPhraseKanji = new ObservableField<>();
+    public final ObservableField<String> kamiNoKuKanji = new ObservableField<>();
 
-    public final ObservableField<String> bottomPhraseKanji = new ObservableField<>();
+    public final ObservableField<String> shimoNoKuKanji = new ObservableField<>();
 
-    public final ObservableField<String> topPhraseKana = new ObservableField<>();
+    public final ObservableField<String> kamiNoKuKana = new ObservableField<>();
 
-    public final ObservableField<String> bottomPhraseKana = new ObservableField<>();
+    public final ObservableField<String> shimoNoKuKana = new ObservableField<>();
 
     public final ObservableField<String> translation = new ObservableField<>();
 
@@ -62,7 +60,7 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        registerDisposable(karutaModel.completeGetKarutaEvent.subscribe(karuta -> {
+        registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
 
             if (!karutaIdentifier.equals(karuta.identifier())) {
                 return;
@@ -76,20 +74,13 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
             kimariji.set(karuta.kimariji().value());
 
-            topPhraseKanji.set(karuta.kamiNoKu().first().kanji() + SPACE +
-                    karuta.kamiNoKu().second().kanji() + SPACE +
-                    karuta.kamiNoKu().third().kanji());
+            kamiNoKuKanji.set(karuta.kamiNoKu().kanji());
 
+            shimoNoKuKanji.set(karuta.shimoNoKu().kanji());
 
-            bottomPhraseKanji.set(karuta.shimoNoKu().fourth().kanji() + SPACE +
-                    karuta.shimoNoKu().fifth().kanji());
+            kamiNoKuKana.set(karuta.kamiNoKu().kana());
 
-            topPhraseKana.set(karuta.kamiNoKu().first().kana() + SPACE +
-                    karuta.kamiNoKu().second().kana() + SPACE +
-                    karuta.kamiNoKu().third().kana());
-
-            bottomPhraseKana.set(karuta.shimoNoKu().fourth().kana() + SPACE +
-                    karuta.shimoNoKu().fifth().kana());
+            shimoNoKuKana.set(karuta.shimoNoKu().kana());
 
             translation.set(karuta.translation());
         }));
@@ -98,7 +89,7 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onResume() {
         super.onResume();
-        karutaModel.getKaruta(karutaIdentifier);
+        karutaModel.fetchKaruta(karutaIdentifier);
     }
 
     @BindingAdapter({"karutaNo", "creator"})

@@ -11,15 +11,12 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.karuta.constant;
+package me.rei_m.hyakuninisshu.util;
 
-import android.content.res.Resources;
+public class Constants {
 
-import java.io.Serializable;
-
-public interface SpinnerItem extends Serializable {
-
-    String code();
-
-    String label(Resources res);
+    private Constants() {
+    }
+    
+    public static final String SPACE = "　";
 }

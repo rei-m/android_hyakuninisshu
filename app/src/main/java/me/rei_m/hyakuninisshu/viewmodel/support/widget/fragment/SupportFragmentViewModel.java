@@ -17,9 +17,8 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -28,8 +27,7 @@ public class SupportFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<String> version = new ObservableField<>();
 
-    private PublishSubject<Unit> onClickLicenseEventSubject = PublishSubject.create();
-    public Observable<Unit> onClickLicenseEvent = onClickLicenseEventSubject;
+    public EventObservable<Unit> onClickLicenseEvent = EventObservable.create();
 
     private final Navigator navigator;
 
@@ -56,6 +54,6 @@ public class SupportFragmentViewModel extends AbsFragmentViewModel {
 
     @SuppressWarnings("unused")
     public void onClickLicense(View view) {
-        onClickLicenseEventSubject.onNext(Unit.INSTANCE);
+        onClickLicenseEvent.onNext(Unit.INSTANCE);
     }
 }

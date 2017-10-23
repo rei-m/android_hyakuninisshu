@@ -16,13 +16,12 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsActivityViewModel;
 
@@ -30,10 +29,9 @@ public class TrainingMasterActivityViewModel extends AbsActivityViewModel {
 
     public final ObservableBoolean isVisibleEmpty = new ObservableBoolean(false);
 
-    public final ObservableBoolean isVisibleAd = new ObservableBoolean(false);
+    public final EventObservable<Unit> startTrainingEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> startTrainingEventSubject = PublishSubject.create();
-    public final Observable<Unit> startTrainingEvent = startTrainingEventSubject;
+    public final EventObservable<Boolean> toggleAdEvent = EventObservable.create();
 
     private final KarutaTrainingModel karutaTrainingModel;
 
@@ -80,11 +78,11 @@ public class TrainingMasterActivityViewModel extends AbsActivityViewModel {
         registerDisposable(karutaTrainingModel.completeStartEvent.subscribe(v -> {
             isStartedTraining = true;
             isVisibleEmpty.set(false);
-            isVisibleAd.set(false);
-            startTrainingEventSubject.onNext(Unit.INSTANCE);
+            toggleAdEvent.onNext(false);
+            startTrainingEvent.onNext(Unit.INSTANCE);
         }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
-            isVisibleAd.set(true);
+            toggleAdEvent.onNext(true);
         }));
 
         if (!isStartedTraining) {
@@ -96,10 +94,10 @@ public class TrainingMasterActivityViewModel extends AbsActivityViewModel {
     }
 
     public void onClickGoToResult() {
-        isVisibleAd.set(true);
+        toggleAdEvent.onNext(true);
     }
 
     public void onRestartTraining() {
-        isVisibleAd.set(false);
+        toggleAdEvent.onNext(false);
     }
 }

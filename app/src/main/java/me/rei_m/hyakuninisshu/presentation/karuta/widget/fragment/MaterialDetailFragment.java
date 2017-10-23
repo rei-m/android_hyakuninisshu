@@ -90,8 +90,8 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         binding = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -102,8 +102,8 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         viewModel.onStop();
+        super.onStop();
     }
 
     @Override
@@ -114,8 +114,8 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         viewModel.onPause();
+        super.onPause();
     }
 
     @Override
@@ -131,9 +131,9 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         viewModel = null;
         listener = null;
+        super.onDetach();
     }
 
     public interface OnFragmentInteractionListener {

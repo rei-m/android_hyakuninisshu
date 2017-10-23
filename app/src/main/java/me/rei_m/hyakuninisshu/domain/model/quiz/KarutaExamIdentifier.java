@@ -15,9 +15,7 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaExamIdentifier implements EntityIdentifier<KarutaExam> {
-
-    private static final String kind = KarutaExam.class.getSimpleName();
+public class KarutaExamIdentifier implements EntityIdentifier {
 
     private final long value;
 
@@ -27,11 +25,6 @@ public class KarutaExamIdentifier implements EntityIdentifier<KarutaExam> {
 
     public long value() {
         return value;
-    }
-
-    @Override
-    public String kind() {
-        return kind;
     }
 
     @Override

@@ -17,9 +17,8 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -52,14 +51,11 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<String> fifthPhraseKana = new ObservableField<>();
 
-    private final PublishSubject<Unit> onClickEditEventSubject = PublishSubject.create();
-    public final Observable<Unit> onClickEditEvent = onClickEditEventSubject;
+    public final EventObservable<Unit> onClickEditEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> onErrorEditEventSubject = PublishSubject.create();
-    public final Observable<Unit> onErrorEditEvent = onErrorEditEventSubject;
+    public final EventObservable<Unit> onErrorEditEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> onUpdateMaterialEventSubject = PublishSubject.create();
-    public final Observable<Unit> onUpdateMaterialEvent = onUpdateMaterialEventSubject;
+    public final EventObservable<Unit> onUpdateMaterialEvent = EventObservable.create();
 
     private final KarutaModel karutaModel;
 
@@ -76,7 +72,7 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        registerDisposable(karutaModel.completeGetKarutaEvent.subscribe(karuta -> {
+        registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
 
             if (!karutaIdentifier.equals(karuta.identifier())) {
                 return;
@@ -96,14 +92,14 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
             fifthPhraseKanji.set(karuta.shimoNoKu().fifth().kanji());
             fifthPhraseKana.set(karuta.shimoNoKu().fifth().kana());
         }), karutaModel.completeEditKarutaEvent.subscribe(v -> {
-            onUpdateMaterialEventSubject.onNext(Unit.INSTANCE);
+            onUpdateMaterialEvent.onNext(Unit.INSTANCE);
         }));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        karutaModel.getKaruta(karutaIdentifier);
+        karutaModel.fetchKaruta(karutaIdentifier);
     }
 
     @SuppressWarnings("unused")
@@ -118,10 +114,10 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
                 fourthPhraseKana.get().isEmpty() ||
                 fifthPhraseKanji.get().isEmpty() ||
                 firstPhraseKana.get().isEmpty()) {
-            onErrorEditEventSubject.onNext(Unit.INSTANCE);
+            onErrorEditEvent.onNext(Unit.INSTANCE);
             return;
         }
-        onClickEditEventSubject.onNext(Unit.INSTANCE);
+        onClickEditEvent.onNext(Unit.INSTANCE);
     }
 
     public void onClickDialogPositive() {

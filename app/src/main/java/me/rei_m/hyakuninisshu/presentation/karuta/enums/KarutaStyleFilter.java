@@ -11,7 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.karuta.constant;
+package me.rei_m.hyakuninisshu.presentation.karuta.enums;
 
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
@@ -38,12 +38,7 @@ public enum KarutaStyleFilter implements SpinnerItem {
     }
 
     @Override
-    public String code() {
-        return value.value();
-    }
-
-    @Override
-    public String label(Resources res) {
+    public String label(@NonNull Resources res) {
         return res.getString(resId);
     }
 

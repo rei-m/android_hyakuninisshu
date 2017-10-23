@@ -11,9 +11,10 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.karuta.constant;
+package me.rei_m.hyakuninisshu.presentation.karuta.enums;
 
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
@@ -28,6 +29,10 @@ public enum ColorFilter implements SpinnerItem {
     GREEN(R.string.color_green, Color.GREEN),
     ORANGE(R.string.color_orange, Color.ORANGE);
 
+    public static ColorFilter get(int ordinal) {
+        return values()[ordinal];
+    }
+
     private final int resId;
 
     private final Color color;
@@ -38,12 +43,7 @@ public enum ColorFilter implements SpinnerItem {
     }
 
     @Override
-    public String code() {
-        return (color == null) ? null : color.value();
-    }
-
-    @Override
-    public String label(Resources res) {
+    public String label(@NonNull Resources res) {
         return res.getString(resId);
     }
 

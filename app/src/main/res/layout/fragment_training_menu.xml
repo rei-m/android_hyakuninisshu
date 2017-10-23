@@ -131,7 +131,7 @@
                 android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/topPhrase" />
+                android:text="@string/kami_no_ku" />
 
             <Spinner
                 android:id="@+id/spinner_top_phrase_style"
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                app:selectedValue="@={viewModel.topPhraseStyle}"
+                app:selectedValue="@={viewModel.kamiNoKuStyle}"
                 app:spinnerAdapter="@{karutaStyleAdapter}" />
 
             <TextView
@@ -149,7 +149,7 @@
                 android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/bottomPhrase" />
+                android:text="@string/shimo_no_ku" />
 
             <Spinner
                 android:id="@+id/spinner_shimonoku_style"
@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                app:selectedValue="@={viewModel.bottomPhraseStyle}"
+                app:selectedValue="@={viewModel.shimoNoKuStyle}"
                 app:spinnerAdapter="@{karutaStyleAdapter}" />
 
             <Button

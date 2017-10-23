@@ -17,9 +17,7 @@ import java.util.UUID;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
-
-    private static final String kind = KarutaQuiz.class.getSimpleName();
+public class KarutaQuizIdentifier implements EntityIdentifier {
 
     private final String value;
 
@@ -33,11 +31,6 @@ public class KarutaQuizIdentifier implements EntityIdentifier<KarutaQuiz> {
 
     public String value() {
         return value;
-    }
-
-    @Override
-    public String kind() {
-        return kind;
     }
 
     @Override

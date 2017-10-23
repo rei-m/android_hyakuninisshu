@@ -19,11 +19,9 @@ import android.support.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
@@ -35,25 +33,21 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
 public class KarutaTrainingModel {
 
-    private final PublishSubject<Unit> completeStartEventSubject = PublishSubject.create();
-    public final Observable<Unit> completeStartEvent = completeStartEventSubject;
+    public final EventObservable<Unit> completeStartEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> completeRestartEventSubject = PublishSubject.create();
-    public final Observable<Unit> completeRestartEvent = completeRestartEventSubject;
+    public final EventObservable<Unit> completeRestartEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> completeStartForExamEventSubject = PublishSubject.create();
-    public final Observable<Unit> completeStartForExamEvent = completeStartForExamEventSubject;
+    public final EventObservable<Unit> completeStartForExamEvent = EventObservable.create();
 
-    private final PublishSubject<TrainingResult> completeAggregateResultsEventSubject = PublishSubject.create();
-    public final Observable<TrainingResult> completeAggregateResultsEvent = completeAggregateResultsEventSubject;
+    public final EventObservable<TrainingResult> completeAggregateResultsEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> notFoundErrorEventSubject = PublishSubject.create();
-    public final Observable<Unit> notFoundErrorEvent = notFoundErrorEventSubject;
+    public final EventObservable<Unit> notFoundErrorEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -81,12 +75,12 @@ public class KarutaTrainingModel {
                 .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
-                        completeStartEventSubject.onNext(Unit.INSTANCE);
+                        completeStartEvent.onNext(Unit.INSTANCE);
                     } else {
-                        notFoundErrorEventSubject.onNext(Unit.INSTANCE);
+                        notFoundErrorEvent.onNext(Unit.INSTANCE);
                     }
                 },
-                throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE)
+                throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE)
         );
     }
 
@@ -98,12 +92,12 @@ public class KarutaTrainingModel {
                 .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
-                        completeRestartEventSubject.onNext(Unit.INSTANCE);
+                        completeRestartEvent.onNext(Unit.INSTANCE);
                     } else {
-                        notFoundErrorEventSubject.onNext(Unit.INSTANCE);
+                        notFoundErrorEvent.onNext(Unit.INSTANCE);
                     }
                 },
-                throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE));
+                throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE));
     }
 
     public void startForExam() {
@@ -114,7 +108,7 @@ public class KarutaTrainingModel {
                 .flatMapCompletable(karutaQuizRepository::initialize)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> completeStartForExamEventSubject.onNext(Unit.INSTANCE));
+                .subscribe(() -> completeStartForExamEvent.onNext(Unit.INSTANCE));
     }
 
     public void aggregateResults() {
@@ -123,8 +117,8 @@ public class KarutaTrainingModel {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        completeAggregateResultsEventSubject::onNext,
-                        throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE)
+                        completeAggregateResultsEvent::onNext,
+                        throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE)
                 );
     }
 }

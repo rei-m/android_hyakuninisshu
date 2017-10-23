@@ -19,9 +19,8 @@ import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -34,14 +33,11 @@ public class QuizResultFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableBoolean canRestartTraining = new ObservableBoolean();
 
-    private final PublishSubject<Unit> restartEventSubject = PublishSubject.create();
-    public final Observable<Unit> restartEvent = restartEventSubject;
+    public final EventObservable<Unit> restartEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> onClickBackMenuEventSubject = PublishSubject.create();
-    public final Observable<Unit> onClickBackMenuEvent = onClickBackMenuEventSubject;
+    public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> errorEventSubject = PublishSubject.create();
-    public final Observable<Unit> errorEvent = errorEventSubject;
+    public final EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaTrainingModel karutaTrainingModel;
 
@@ -60,7 +56,7 @@ public class QuizResultFragmentViewModel extends AbsFragmentViewModel {
             score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
             averageAnswerTime.set(trainingResult.averageAnswerTime());
             canRestartTraining.set(trainingResult.canRestartTraining());
-        }), karutaTrainingModel.completeRestartEvent.subscribe(v -> restartEventSubject.onNext(Unit.INSTANCE)));
+        }), karutaTrainingModel.completeRestartEvent.subscribe(v -> restartEvent.onNext(Unit.INSTANCE)));
     }
 
     @Override
@@ -79,6 +75,6 @@ public class QuizResultFragmentViewModel extends AbsFragmentViewModel {
     @SuppressWarnings("unused")
     public void onClickBackMenu(View view) {
         analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.FINISH_TRAINING);
-        onClickBackMenuEventSubject.onNext(Unit.INSTANCE);
+        onClickBackMenuEvent.onNext(Unit.INSTANCE);
     }
 }
