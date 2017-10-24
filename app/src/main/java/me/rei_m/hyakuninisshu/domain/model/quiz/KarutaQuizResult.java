@@ -20,26 +20,23 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
 public class KarutaQuizResult implements ValueObject {
 
-    private final KarutaIdentifier collectKarutaId;
+    private final KarutaQuizJudgement judgement;
 
     private final ChoiceNo choiceNo;
 
-    private final boolean isCorrect;
-
     private final long answerTime;
 
-    KarutaQuizResult(@NonNull KarutaIdentifier collectKarutaId,
+    KarutaQuizResult(@NonNull KarutaIdentifier correctKarutaId,
                      @NonNull ChoiceNo choiceNo,
                      boolean isCorrect,
                      long answerTime) {
-        this.collectKarutaId = collectKarutaId;
+        this.judgement = new KarutaQuizJudgement(correctKarutaId, isCorrect);
         this.choiceNo = choiceNo;
-        this.isCorrect = isCorrect;
         this.answerTime = answerTime;
     }
 
-    public KarutaIdentifier collectKarutaId() {
-        return collectKarutaId;
+    public KarutaIdentifier correctKarutaId() {
+        return judgement.karutaId();
     }
 
     public ChoiceNo choiceNo() {
@@ -47,7 +44,7 @@ public class KarutaQuizResult implements ValueObject {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return judgement.isCorrect();
     }
 
     public long answerTime() {
@@ -61,18 +58,16 @@ public class KarutaQuizResult implements ValueObject {
 
         KarutaQuizResult result = (KarutaQuizResult) o;
 
-        if (isCorrect != result.isCorrect) return false;
         if (answerTime != result.answerTime) return false;
-        if (!collectKarutaId.equals(result.collectKarutaId)) return false;
+        if (!judgement.equals(result.judgement)) return false;
         return choiceNo == result.choiceNo;
 
     }
 
     @Override
     public int hashCode() {
-        int result = collectKarutaId.hashCode();
+        int result = judgement.hashCode();
         result = 31 * result + choiceNo.hashCode();
-        result = 31 * result + (isCorrect ? 1 : 0);
         result = 31 * result + (int) (answerTime ^ (answerTime >>> 32));
         return result;
     }
@@ -80,9 +75,8 @@ public class KarutaQuizResult implements ValueObject {
     @Override
     public String toString() {
         return "KarutaQuizResult{" +
-                "collectKarutaId=" + collectKarutaId +
+                "judgement=" + judgement +
                 ", choiceNo=" + choiceNo +
-                ", isCorrect=" + isCorrect +
                 ", answerTime=" + answerTime +
                 '}';
     }

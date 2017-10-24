@@ -18,9 +18,12 @@ import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import java.util.List;
+
 import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
@@ -33,7 +36,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableFloat averageAnswerTime = new ObservableFloat();
 
-    public final ObservableField<boolean[]> karutaQuizResultList = new ObservableField<>();
+    public final ObservableField<List<KarutaQuizJudgement>> karutaQuizJudgements = new ObservableField<>();
 
     public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
 
@@ -63,7 +66,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
         registerDisposable(karutaExamModel.completeFetchResultEvent.subscribe(examResult -> {
             score.set(examResult.score());
             averageAnswerTime.set(examResult.averageAnswerTime());
-            karutaQuizResultList.set(examResult.resultList());
+            karutaQuizJudgements.set(examResult.judgements());
         }));
     }
 

@@ -28,9 +28,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
+import java.util.List;
 import java.util.Locale;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
@@ -67,13 +69,13 @@ public class DataBindingAttributeBinder {
         view.setTextSizeByPx(textSize);
     }
 
-    @BindingAdapter({"examResultList"})
+    @BindingAdapter({"examJudgements"})
     public static void setKarutaExamResult(@NonNull KarutaExamResultView view,
-                                           @Nullable boolean[] karutaQuizResultList) {
-        if (karutaQuizResultList == null) {
+                                           @Nullable List<KarutaQuizJudgement> judgements) {
+        if (judgements == null) {
             return;
         }
-        view.setResult(karutaQuizResultList);
+        view.setResult(judgements);
     }
 
     @BindingAdapter({"karutaSrc"})

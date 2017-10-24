@@ -22,8 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.List;
+
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.presentation.util.ViewUtil;
 
@@ -93,12 +96,12 @@ public class KarutaExamResultView extends LinearLayout {
         return linearLayout;
     }
 
-    public void setResult(@NonNull boolean[] karutaQuizResultList) {
-        for (int i = 0; i < karutaQuizResultList.length; i++) {
+    public void setResult(@NonNull List<KarutaQuizJudgement> judgements) {
+        for (int i = 0; i < judgements.size(); i++) {
             KarutaExamResultCellView cellView = findViewById(cellViewIdList[i]);
-            int karutaNo = i + 1;
-            cellView.setResult(karutaNo, karutaQuizResultList[i]);
-            cellView.setOnClickListener(view -> onClickKarutaEvent.onNext(new KarutaIdentifier(karutaNo)));
+            KarutaQuizJudgement judgement = judgements.get(i);
+            cellView.setResult(judgement.karutaId().value(), judgement.isCorrect());
+            cellView.setOnClickListener(view -> onClickKarutaEvent.onNext(judgement.karutaId()));
         }
     }
 }

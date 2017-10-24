@@ -97,7 +97,7 @@
                 android:background="@color/white99"
                 android:paddingBottom="@dimen/padding_s"
                 android:paddingTop="@dimen/padding_s"
-                app:examResultList="@{viewModel.karutaQuizResultList}" />
+                app:examJudgements="@{viewModel.karutaQuizJudgements}" />
 
             <Button
                 android:layout_width="wrap_content"

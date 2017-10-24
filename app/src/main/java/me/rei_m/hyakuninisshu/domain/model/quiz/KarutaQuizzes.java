@@ -40,7 +40,7 @@ public class KarutaQuizzes {
 
     public KarutaIds wrongKarutaIds() {
         return Observable.fromIterable(values).filter(karutaQuiz -> karutaQuiz.result() != null && !karutaQuiz.result().isCorrect())
-                .map(karutaQuiz -> karutaQuiz.result().collectKarutaId())
+                .map(karutaQuiz -> karutaQuiz.result().correctKarutaId())
                 .toList()
                 .map(KarutaIds::new)
                 .blockingGet();

@@ -15,7 +15,9 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import android.support.annotation.NonNull;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
@@ -28,23 +30,19 @@ public class KarutaExamResult implements ValueObject {
 
     private final KarutaIds wrongKarutaIds;
 
-    private final boolean[] resultList;
+    private final List<KarutaQuizJudgement> judgements;
 
     public KarutaExamResult(@NonNull KarutaQuizResultSummary resultSummary,
                             @NonNull KarutaIds wrongKarutaIds) {
         this.resultSummary = resultSummary;
         this.wrongKarutaIds = wrongKarutaIds;
+        this.judgements = new ArrayList<>();
 
-        final boolean[] karutaQuizResultList = new boolean[Karuta.NUMBER_OF_KARUTA];
-
-        Arrays.fill(karutaQuizResultList, true);
-
-        for (KarutaIdentifier wrongKarutaIdentifier : wrongKarutaIds.asList()) {
-            int wrongKarutaIndex = (int) wrongKarutaIdentifier.value() - 1;
-            karutaQuizResultList[wrongKarutaIndex] = false;
+        for (int i = 1; i <= Karuta.NUMBER_OF_KARUTA; i++) {
+            KarutaIdentifier karutaId = new KarutaIdentifier(i);
+            boolean isCorrect = !wrongKarutaIds.contains(karutaId);
+            this.judgements.add(new KarutaQuizJudgement(karutaId, isCorrect));
         }
-
-        this.resultList = karutaQuizResultList;
     }
 
     public int quizCount() {
@@ -63,8 +61,8 @@ public class KarutaExamResult implements ValueObject {
         return wrongKarutaIds;
     }
 
-    public boolean[] resultList() {
-        return resultList.clone();
+    public List<KarutaQuizJudgement> judgements() {
+        return Collections.unmodifiableList(judgements);
     }
 
     @Override
@@ -76,7 +74,7 @@ public class KarutaExamResult implements ValueObject {
 
         if (!resultSummary.equals(result.resultSummary)) return false;
         if (!wrongKarutaIds.equals(result.wrongKarutaIds)) return false;
-        return Arrays.equals(resultList, result.resultList);
+        return judgements.equals(result.judgements);
 
     }
 
@@ -84,7 +82,7 @@ public class KarutaExamResult implements ValueObject {
     public int hashCode() {
         int result = resultSummary.hashCode();
         result = 31 * result + wrongKarutaIds.hashCode();
-        result = 31 * result + Arrays.hashCode(resultList);
+        result = 31 * result + judgements.hashCode();
         return result;
     }
 
@@ -93,7 +91,7 @@ public class KarutaExamResult implements ValueObject {
         return "KarutaExamResult{" +
                 "resultSummary=" + resultSummary +
                 ", wrongKarutaIds=" + wrongKarutaIds +
-                ", resultList=" + Arrays.toString(resultList) +
+                ", judgements=" + judgements +
                 '}';
     }
 }
