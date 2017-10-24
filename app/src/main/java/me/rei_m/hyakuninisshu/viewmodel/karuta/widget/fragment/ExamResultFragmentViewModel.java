@@ -18,10 +18,9 @@ import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.util.Unit;
@@ -35,8 +34,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<boolean[]> karutaQuizResultList = new ObservableField<>();
 
-    private final PublishSubject<Unit> onClickBackMenuEventSubject = PublishSubject.create();
-    public final Observable<Unit> onClickBackMenuEvent = onClickBackMenuEventSubject;
+    public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
 
     private final KarutaExamModel karutaExamModel;
 
@@ -77,7 +75,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     @SuppressWarnings("unused")
     public void onClickBackMenu(View view) {
-        onClickBackMenuEventSubject.onNext(Unit.INSTANCE);
+        onClickBackMenuEvent.onNext(Unit.INSTANCE);
     }
 
     public void onClickResult(int karutaNo) {

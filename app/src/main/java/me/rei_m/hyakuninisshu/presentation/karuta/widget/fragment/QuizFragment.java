@@ -41,7 +41,7 @@ import io.reactivex.disposables.Disposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Device;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizFragmentViewModelModule;
 
@@ -49,22 +49,22 @@ public class QuizFragment extends DaggerFragment {
 
     public static final String TAG = QuizFragment.class.getSimpleName();
 
-    private static final String ARG_TOP_PHRASE_STYLE = "topPhraseStyle";
+    private static final String ARG_KAMI_NO_KU_STYLE = "kamiNoKuStyle";
 
-    private static final String ARG_BOTTOM_PHRASE_STYLE = "bottomPhraseStyle";
+    private static final String ARG_SHIMO_NO_KU_STYLE = "shimoNoKuStyle";
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
 
     private static final String KEY_QUIZ_ID = "quizId";
 
-    public static QuizFragment newInstance(@NonNull KarutaStyleFilter topPhraseStyle,
-                                           @NonNull KarutaStyleFilter bottomPhraseStyle) {
+    public static QuizFragment newInstance(@NonNull KarutaStyleFilter kamiNoKuStyle,
+                                           @NonNull KarutaStyleFilter shimoNoKuStyle) {
 
         QuizFragment fragment = new QuizFragment();
 
         Bundle args = new Bundle();
-        args.putInt(ARG_TOP_PHRASE_STYLE, topPhraseStyle.ordinal());
-        args.putInt(ARG_BOTTOM_PHRASE_STYLE, bottomPhraseStyle.ordinal());
+        args.putInt(ARG_KAMI_NO_KU_STYLE, kamiNoKuStyle.ordinal());
+        args.putInt(ARG_SHIMO_NO_KU_STYLE, shimoNoKuStyle.ordinal());
         fragment.setArguments(args);
 
         return fragment;
@@ -100,14 +100,14 @@ public class QuizFragment extends DaggerFragment {
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-        KarutaStyleFilter topPhraseStyle = KarutaStyleFilter.get(args.getInt(ARG_TOP_PHRASE_STYLE));
-        KarutaStyleFilter bottomPhraseStyle = KarutaStyleFilter.get(args.getInt(ARG_BOTTOM_PHRASE_STYLE));
+        KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_KAMI_NO_KU_STYLE));
+        KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_SHIMO_NO_KU_STYLE));
 
         if (savedInstanceState == null) {
-            viewModel.onCreate(topPhraseStyle, bottomPhraseStyle);
+            viewModel.onCreate(kamiNoKuStyle, shimoNoKuStyle);
         } else {
             String quizId = savedInstanceState.getString(KEY_QUIZ_ID, "");
-            viewModel.onReCreate(quizId, topPhraseStyle, bottomPhraseStyle);
+            viewModel.onReCreate(quizId, kamiNoKuStyle, shimoNoKuStyle);
         }
     }
 
@@ -126,9 +126,9 @@ public class QuizFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         viewModel = null;
         binding = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -161,12 +161,12 @@ public class QuizFragment extends DaggerFragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         if (disposable != null) {
             disposable.dispose();
             disposable = null;
         }
         viewModel.onStop();
+        super.onStop();
     }
 
     @Override
@@ -177,12 +177,12 @@ public class QuizFragment extends DaggerFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         if (animationDisposable != null) {
             animationDisposable.dispose();
             animationDisposable = null;
         }
         viewModel.onPause();
+        super.onPause();
     }
 
     @Override
@@ -198,10 +198,10 @@ public class QuizFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         viewModel = null;
         device = null;
         listener = null;
+        super.onDetach();
     }
 
     @Override

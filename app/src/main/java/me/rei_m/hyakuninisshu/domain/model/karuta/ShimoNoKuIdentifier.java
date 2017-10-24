@@ -17,9 +17,7 @@ import java.util.UUID;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class ShimoNoKuIdentifier implements EntityIdentifier<ShimoNoKu> {
-
-    private static final String kind = ShimoNoKu.class.getSimpleName();
+public class ShimoNoKuIdentifier implements EntityIdentifier {
 
     private final String value;
 
@@ -30,12 +28,7 @@ public class ShimoNoKuIdentifier implements EntityIdentifier<ShimoNoKu> {
     public String value() {
         return value;
     }
-
-    @Override
-    public String kind() {
-        return kind;
-    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

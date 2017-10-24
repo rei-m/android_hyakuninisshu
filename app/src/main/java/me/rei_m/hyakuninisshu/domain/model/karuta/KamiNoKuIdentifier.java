@@ -17,9 +17,7 @@ import java.util.UUID;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KamiNoKuIdentifier implements EntityIdentifier<KamiNoKu> {
-
-    private static final String kind = KamiNoKu.class.getSimpleName();
+public class KamiNoKuIdentifier implements EntityIdentifier {
 
     private final String value;
 
@@ -29,11 +27,6 @@ public class KamiNoKuIdentifier implements EntityIdentifier<KamiNoKu> {
 
     public String value() {
         return value;
-    }
-
-    @Override
-    public String kind() {
-        return kind;
     }
 
     @Override

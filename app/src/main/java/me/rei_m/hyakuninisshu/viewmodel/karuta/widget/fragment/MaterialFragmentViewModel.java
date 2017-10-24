@@ -19,7 +19,7 @@ import android.support.annotation.NonNull;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
 public class MaterialFragmentViewModel extends AbsFragmentViewModel {
@@ -41,7 +41,7 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        registerDisposable(karutaModel.completeGetKarutaListEvent.subscribe(karutaList -> {
+        registerDisposable(karutaModel.completeFetchKarutasEvent.subscribe(karutaList -> {
             this.karutaList.clear();
             this.karutaList.addAll(karutaList);
         }));
@@ -51,11 +51,11 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
-        karutaModel.getKarutaList(colorFilter.value());
+        karutaModel.fetchKarutas(colorFilter.value());
     }
 
     public void onOptionItemSelected(@NonNull ColorFilter colorFilter) {
-        karutaModel.getKarutaList(colorFilter.value());
+        karutaModel.fetchKarutas(colorFilter.value());
         this.colorFilter = colorFilter;
     }
 }

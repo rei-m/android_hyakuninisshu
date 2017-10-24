@@ -70,14 +70,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.topPhraseKanji}" />
+                    android:text="@{viewModel.kamiNoKuKanji}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.bottomPhraseKanji}" />
+                    android:text="@{viewModel.shimoNoKuKanji}" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -85,14 +85,14 @@
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
                     app:kimariji="@{viewModel.kimariji}"
-                    app:textTopPhraseKana="@{viewModel.topPhraseKana}" />
+                    app:textKamiNoKuKana="@{viewModel.kamiNoKuKana}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.bottomPhraseKana}" />
+                    android:text="@{viewModel.shimoNoKuKana}" />
 
             </LinearLayout>
 

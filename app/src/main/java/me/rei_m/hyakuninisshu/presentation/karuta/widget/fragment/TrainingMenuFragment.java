@@ -28,11 +28,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.TrainingMenuFragmentViewModelModule;
@@ -92,8 +92,8 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         binding = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -108,12 +108,12 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         if (disposable != null) {
             disposable.dispose();
             disposable = null;
         }
         viewModel.onStop();
+        super.onStop();
     }
 
     @Override
@@ -124,13 +124,13 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         viewModel.onPause();
+        super.onPause();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         viewModel = null;
+        super.onDetach();
     }
 }

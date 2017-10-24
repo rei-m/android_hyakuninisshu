@@ -23,8 +23,6 @@ import javax.inject.Inject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 
-import static me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaConstant.SPACE;
-
 public class KarutaListItemViewModel {
 
     public final ObservableInt karutaNo = new ObservableInt(0);
@@ -33,9 +31,9 @@ public class KarutaListItemViewModel {
 
     public final ObservableField<String> creator = new ObservableField<>("");
 
-    public final ObservableField<String> topPhrase = new ObservableField<>("");
+    public final ObservableField<String> kamiNoKu = new ObservableField<>("");
 
-    public final ObservableField<String> bottomPhrase = new ObservableField<>("");
+    public final ObservableField<String> shimoNoKu = new ObservableField<>("");
 
     private final Navigator navigator;
 
@@ -45,20 +43,13 @@ public class KarutaListItemViewModel {
     }
 
     public void setKaruta(@NonNull Karuta karuta) {
-        String topPhrase = karuta.kamiNoKu().first().kanji() + SPACE +
-                karuta.kamiNoKu().second().kanji() + SPACE +
-                karuta.kamiNoKu().third().kanji();
-
-        String bottomPhrase = karuta.shimoNoKu().fourth().kanji() + SPACE +
-                karuta.shimoNoKu().fifth().kanji();
-
         int karutaNo = (int) karuta.identifier().value();
 
         this.karutaNo.set(karutaNo);
         this.karutaImageNo.set(karuta.imageNo().value());
         this.creator.set(karuta.creator());
-        this.topPhrase.set(topPhrase);
-        this.bottomPhrase.set(bottomPhrase);
+        this.kamiNoKu.set(karuta.kamiNoKu().kanji());
+        this.shimoNoKu.set(karuta.shimoNoKu().kanji());
     }
 
     @SuppressWarnings("unused")

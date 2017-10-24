@@ -94,8 +94,8 @@ public class ExamResultFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         binding = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -112,11 +112,11 @@ public class ExamResultFragment extends DaggerFragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         if (disposable != null) {
             disposable.dispose();
         }
         viewModel.onStop();
+        super.onStop();
     }
 
     @Override
@@ -127,8 +127,8 @@ public class ExamResultFragment extends DaggerFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         viewModel.onPause();
+        super.onPause();
     }
 
     @Override
@@ -144,9 +144,9 @@ public class ExamResultFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         viewModel = null;
         listener = null;
+        super.onDetach();
     }
 
     public interface OnFragmentInteractionListener {

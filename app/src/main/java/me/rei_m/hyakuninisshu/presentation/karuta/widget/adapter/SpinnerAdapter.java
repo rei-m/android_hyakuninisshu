@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.SpinnerItem;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.SpinnerItem;
 
 public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
 
@@ -77,7 +77,7 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(resource, null);
         }
-        TextView view = (TextView) convertView.findViewById(R.id.text_spinner_item);
+        TextView view = convertView.findViewById(R.id.text_spinner_item);
         SpinnerItem item = getItem(position);
         if (item != null) {
             view.setText(item.label(getContext().getResources()));
@@ -92,7 +92,7 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(dropDownResource, null);
         }
-        TextView view = (TextView) convertView.findViewById(R.id.text_spinner_item);
+        TextView view = convertView.findViewById(R.id.text_spinner_item);
         SpinnerItem item = getItem(position);
         if (item != null) {
             view.setText(item.label(getContext().getResources()));

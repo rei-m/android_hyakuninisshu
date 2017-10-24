@@ -11,7 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.utility;
+package me.rei_m.hyakuninisshu.presentation.util;
 
 import android.databinding.BindingAdapter;
 import android.databinding.InverseBindingAdapter;
@@ -20,12 +20,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.SpinnerItem;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.SpinnerItem;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter;
 
 public class SpinnerBindingAttributeBindingAdapter {

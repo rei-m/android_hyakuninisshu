@@ -30,7 +30,7 @@ import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.di.KarutaListItemViewModelModule;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
@@ -87,8 +87,8 @@ public class MaterialFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         binding = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -99,8 +99,8 @@ public class MaterialFragment extends DaggerFragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         viewModel.onStop();
+        super.onStop();
     }
 
     @Override
@@ -111,16 +111,16 @@ public class MaterialFragment extends DaggerFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         viewModel.onPause();
+        super.onPause();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         navigator = null;
         viewModel = null;
         injector = null;
+        super.onDetach();
     }
 
     @Override

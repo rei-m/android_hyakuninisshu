@@ -15,9 +15,7 @@ package me.rei_m.hyakuninisshu.domain.model.karuta;
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaIdentifier implements EntityIdentifier<Karuta> {
-
-    private static final String kind = Karuta.class.getSimpleName();
+public class KarutaIdentifier implements EntityIdentifier {
 
     private final long value;
 
@@ -30,11 +28,6 @@ public class KarutaIdentifier implements EntityIdentifier<Karuta> {
     }
 
     @Override
-    public String kind() {
-        return kind;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -42,6 +35,7 @@ public class KarutaIdentifier implements EntityIdentifier<Karuta> {
         KarutaIdentifier that = (KarutaIdentifier) o;
 
         return value == that.value;
+
     }
 
     @Override
@@ -52,8 +46,7 @@ public class KarutaIdentifier implements EntityIdentifier<Karuta> {
     @Override
     public String toString() {
         return "KarutaIdentifier{" +
-                "kind='" + kind + '\'' +
-                ", value=" + value +
+                "value=" + value +
                 '}';
     }
 }

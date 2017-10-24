@@ -21,43 +21,38 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
 public class KarutaModel {
 
+    public EventObservable<Karuta> completeFetchKarutaEvent = EventObservable.create();
+
+    public EventObservable<Unit> completeEditKarutaEvent = EventObservable.create();
+
+    public EventObservable<List<Karuta>> completeFetchKarutasEvent = EventObservable.create();
+
+    public EventObservable<Unit> errorEvent = EventObservable.create();
+
     private final KarutaRepository karutaRepository;
-
-    private PublishSubject<Karuta> completeGetKarutaEventSubject = PublishSubject.create();
-    public Observable<Karuta> completeGetKarutaEvent = completeGetKarutaEventSubject;
-
-    private PublishSubject<Unit> completeEditKarutaEventSubject = PublishSubject.create();
-    public Observable<Unit> completeEditKarutaEvent = completeEditKarutaEventSubject;
-
-    private PublishSubject<List<Karuta>> completeGetKarutaListEventSubject = PublishSubject.create();
-    public Observable<List<Karuta>> completeGetKarutaListEvent = completeGetKarutaListEventSubject;
-
-    private PublishSubject<Unit> errorSubject = PublishSubject.create();
-    public Observable<Unit> error = errorSubject;
 
     @Inject
     public KarutaModel(@NonNull KarutaRepository karutaRepository) {
         this.karutaRepository = karutaRepository;
     }
 
-    public void getKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
+    public void fetchKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
         karutaRepository.findBy(karutaIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karuta -> completeGetKarutaEventSubject.onNext(karuta), e -> errorSubject.onNext(Unit.INSTANCE));
+                .subscribe(karuta -> completeFetchKarutaEvent.onNext(karuta), e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
     public void editKaruta(@NonNull KarutaIdentifier karutaIdentifier,
@@ -84,13 +79,13 @@ public class KarutaModel {
                 .flatMapCompletable(karutaRepository::store)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> completeEditKarutaEventSubject.onNext(Unit.INSTANCE), e -> errorSubject.onNext(Unit.INSTANCE));
+                .subscribe(() -> completeEditKarutaEvent.onNext(Unit.INSTANCE), e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
-    public void getKarutaList(@Nullable Color color) {
+    public void fetchKarutas(@Nullable Color color) {
         karutaRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutas -> completeGetKarutaListEventSubject.onNext(karutas.asList(color)), e -> errorSubject.onNext(Unit.INSTANCE));
+                .subscribe(karutas -> completeFetchKarutasEvent.onNext(karutas.asList(color)), e -> errorEvent.onNext(Unit.INSTANCE));
     }
 }

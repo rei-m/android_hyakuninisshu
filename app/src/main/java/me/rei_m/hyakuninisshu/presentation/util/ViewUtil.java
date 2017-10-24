@@ -11,12 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.utility;
-
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+package me.rei_m.hyakuninisshu.presentation.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -42,10 +37,5 @@ public class ViewUtil {
                 return result;
             }
         }
-    }
-
-    public static void loadAd(@NonNull AdView adView) {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
     }
 }

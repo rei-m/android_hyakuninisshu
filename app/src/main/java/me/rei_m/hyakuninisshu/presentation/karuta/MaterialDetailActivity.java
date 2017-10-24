@@ -24,6 +24,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
+import com.google.android.gms.ads.AdView;
 
 import javax.inject.Inject;
 
@@ -36,11 +41,12 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
+import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
+import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
-import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class MaterialDetailActivity extends DaggerAppCompatActivity implements MaterialDetailFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
@@ -84,9 +90,14 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity implements M
     }
 
     @Inject
+    AdViewFactory adViewFactory;
+
+    @Inject
     Navigator navigator;
 
     private ActivityMaterialDetailBinding binding;
+
+    private AdView adView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,13 +121,42 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity implements M
 
         binding.pager.setAdapter(new MaterialDetailPagerAdapter(getSupportFragmentManager()));
         binding.pager.setCurrentItem(initialDisplayKarutaNo - 1);
-        ViewUtil.loadAd(binding.adView);
+
+        adView = adViewFactory.create();
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
+        adView.setLayoutParams(params);
+        binding.root.addView(adView);
+
+        AdViewHelper.loadAd(adView);
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        AdViewHelper.release(adView);
+
+        adView.destroy();
+        adView = null;
+
+        adViewFactory = null;
         binding = null;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
     }
 
     @Override

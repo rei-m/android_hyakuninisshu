@@ -21,6 +21,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
+import com.google.android.gms.ads.AdView;
+
+import javax.inject.Inject;
 
 import dagger.Binds;
 import dagger.android.ActivityKey;
@@ -31,12 +37,13 @@ import hotchemi.android.rate.AppRate;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
+import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
+import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingMenuFragment;
 import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragment;
-import me.rei_m.hyakuninisshu.presentation.utility.ViewUtil;
 
 public class EntranceActivity extends DaggerAppCompatActivity {
 
@@ -44,7 +51,7 @@ public class EntranceActivity extends DaggerAppCompatActivity {
         return new Intent(context, EntranceActivity.class);
     }
 
-    private static String KEY_PAGE_INDEX = "pageIndex";
+    private static final String KEY_PAGE_INDEX = "pageIndex";
 
     @ForActivity
     @dagger.Subcomponent(modules = {
@@ -75,7 +82,12 @@ public class EntranceActivity extends DaggerAppCompatActivity {
         abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 
+    @Inject
+    AdViewFactory adViewFactory;
+
     private ActivityEntranceBinding binding;
+
+    private AdView adView;
 
     private int currentPageIndex = 0;
 
@@ -113,7 +125,17 @@ public class EntranceActivity extends DaggerAppCompatActivity {
             binding.bottomNavigation.getMenu().getItem(currentPageIndex).setChecked(true);
         }
 
-        ViewUtil.loadAd(binding.adView);
+        adView = adViewFactory.create();
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.addRule(RelativeLayout.ABOVE, R.id.bottom_navigation);
+        adView.setLayoutParams(params);
+        binding.root.addView(adView);
+
+        AdViewHelper.loadAd(adView);
 
         AppRate.with(this)
                 .setInstallDays(1)
@@ -128,8 +150,26 @@ public class EntranceActivity extends DaggerAppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        AdViewHelper.release(adView);
+
+        adView.destroy();
+        adView = null;
+
+        adViewFactory = null;
         binding = null;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
     }
 
     @Override

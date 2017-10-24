@@ -20,11 +20,9 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
@@ -32,22 +30,19 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
 public class KarutaExamModel {
 
-    private final PublishSubject<Unit> completeStartEventSubject = PublishSubject.create();
-    public final Observable<Unit> completeStartEvent = completeStartEventSubject;
+    public final EventObservable<Unit> completeStartEvent = EventObservable.create();
 
-    private final PublishSubject<KarutaExamIdentifier> completeAggregateResultsEventSubject = PublishSubject.create();
-    public final Observable<KarutaExamIdentifier> completeAggregateResultsEvent = completeAggregateResultsEventSubject;
+    public final EventObservable<KarutaExamIdentifier> completeAggregateResultsEvent = EventObservable.create();
 
-    private final PublishSubject<KarutaExamResult> completeFetchResultEventSubject = PublishSubject.create();
-    public final Observable<KarutaExamResult> completeFetchResultEvent = completeFetchResultEventSubject;
+    public final EventObservable<KarutaExamResult> completeFetchResultEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> notFoundResultEventSubject = PublishSubject.create();
-    public final Observable<Unit> norFoundResultEvent = notFoundResultEventSubject;
+    public final EventObservable<Unit> notFoundResultEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -69,7 +64,7 @@ public class KarutaExamModel {
                 .flatMapCompletable(karutaQuizRepository::initialize)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> completeStartEventSubject.onNext(Unit.INSTANCE));
+                .subscribe(() -> completeStartEvent.onNext(Unit.INSTANCE));
     }
 
     public void aggregateResults() {
@@ -79,7 +74,7 @@ public class KarutaExamModel {
                 .flatMap(karutaExamIdentifier -> karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(Single.just(karutaExamIdentifier)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeAggregateResultsEventSubject::onNext);
+                .subscribe(completeAggregateResultsEvent::onNext);
     }
 
     public void fetchResult(KarutaExamIdentifier karutaExamIdentifier) {
@@ -87,7 +82,7 @@ public class KarutaExamModel {
                 .map(KarutaExam::result)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeFetchResultEventSubject::onNext);
+                .subscribe(completeFetchResultEvent::onNext);
     }
 
     public void fetchRecentResult() {
@@ -97,9 +92,9 @@ public class KarutaExamModel {
                 .subscribe(karutaExams -> {
                     KarutaExam recentKarutaExam = karutaExams.recent();
                     if (recentKarutaExam == null) {
-                        notFoundResultEventSubject.onNext(Unit.INSTANCE);
+                        notFoundResultEvent.onNext(Unit.INSTANCE);
                     } else {
-                        completeFetchResultEventSubject.onNext(recentKarutaExam.result());
+                        completeFetchResultEvent.onNext(recentKarutaExam.result());
                     }
                 });
     }

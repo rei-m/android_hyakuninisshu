@@ -152,8 +152,8 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         viewModel.onPause();
+        super.onPause();
     }
 
     @Override
@@ -167,9 +167,9 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         viewModel = null;
         listener = null;
+        super.onDetach();
     }
 
     public interface OnDialogInteractionListener {

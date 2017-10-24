@@ -53,7 +53,7 @@ public class ExamFragmentViewModel extends AbsFragmentViewModel {
             hasResult.set(true);
             score.set(examResult.score());
             averageAnswerTime.set(examResult.averageAnswerTime());
-        }), karutaExamModel.norFoundResultEvent.subscribe(v -> {
+        }), karutaExamModel.notFoundResultEvent.subscribe(v -> {
             hasResult.set(false);
         }));
     }

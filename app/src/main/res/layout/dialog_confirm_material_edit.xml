@@ -45,7 +45,7 @@
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_l"
-                android:text="@string/firstPhrase"
+                android:text="@string/first_phrase"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -68,7 +68,7 @@
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/secondPhrase"
+                android:text="@string/second_phrase"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -91,7 +91,7 @@
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/thirdPhrase"
+                android:text="@string/third_phrase"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -114,7 +114,7 @@
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/fourthPhrase"
+                android:text="@string/fourth_phrase"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -137,7 +137,7 @@
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/fifthPhrase"
+                android:text="@string/fifth_phrase"
                 android:textSize="@dimen/text_xs" />
 
             <TextView

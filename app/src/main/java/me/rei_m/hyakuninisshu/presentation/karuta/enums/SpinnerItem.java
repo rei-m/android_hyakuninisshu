@@ -11,12 +11,13 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.karuta.constant;
+package me.rei_m.hyakuninisshu.presentation.karuta.enums;
 
-public class KarutaConstant {
+import android.content.res.Resources;
+import android.support.annotation.NonNull;
 
-    private KarutaConstant() {
-    }
-    
-    public static final String SPACE = "　";
+import java.io.Serializable;
+
+public interface SpinnerItem extends Serializable {
+    String label(@NonNull Resources res);
 }

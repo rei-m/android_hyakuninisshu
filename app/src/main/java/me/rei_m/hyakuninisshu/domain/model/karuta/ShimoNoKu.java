@@ -17,6 +17,8 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
+import static me.rei_m.hyakuninisshu.util.Constants.SPACE;
+
 public class ShimoNoKu extends AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier> {
 
     private final Phrase fourth;
@@ -38,7 +40,15 @@ public class ShimoNoKu extends AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier> {
     public Phrase fifth() {
         return fifth;
     }
-    
+
+    public String kanji() {
+        return fourth.kanji() + SPACE + fifth.kanji();
+    }
+
+    public String kana() {
+        return fourth.kana() + SPACE + fifth.kana();
+    }
+
     @Override
     public String toString() {
         return "ShimoNoKu{" +

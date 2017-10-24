@@ -17,15 +17,14 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.ColorFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KarutaStyleFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.KimarijiFilter;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeFrom;
-import me.rei_m.hyakuninisshu.presentation.karuta.constant.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.event.EventObservable;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -37,14 +36,13 @@ public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<KimarijiFilter> kimariji = new ObservableField<>(KimarijiFilter.ALL);
 
-    public final ObservableField<KarutaStyleFilter> topPhraseStyle = new ObservableField<>(KarutaStyleFilter.KANJI);
+    public final ObservableField<KarutaStyleFilter> kamiNoKuStyle = new ObservableField<>(KarutaStyleFilter.KANJI);
 
-    public final ObservableField<KarutaStyleFilter> bottomPhraseStyle = new ObservableField<>(KarutaStyleFilter.KANA);
+    public final ObservableField<KarutaStyleFilter> shimoNoKuStyle = new ObservableField<>(KarutaStyleFilter.KANA);
 
     public final ObservableField<ColorFilter> color = new ObservableField<>(ColorFilter.ALL);
 
-    private final PublishSubject<Unit> invalidTrainingRangeEventSubject = PublishSubject.create();
-    public final Observable<Unit> invalidTrainingRangeEvent = invalidTrainingRangeEventSubject;
+    public final EventObservable<Unit> invalidTrainingRangeEvent = EventObservable.create();
 
     private final AnalyticsManager analyticsManager;
 
@@ -66,7 +64,7 @@ public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
     public void onClickStartTraining(View view) {
 
         if (trainingRangeFrom.get().ordinal() > trainingRangeTo.get().ordinal()) {
-            invalidTrainingRangeEventSubject.onNext(Unit.INSTANCE);
+            invalidTrainingRangeEvent.onNext(Unit.INSTANCE);
             return;
         }
 
@@ -75,7 +73,7 @@ public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
                 trainingRangeTo.get(),
                 kimariji.get(),
                 color.get(),
-                topPhraseStyle.get(),
-                bottomPhraseStyle.get());
+                kamiNoKuStyle.get(),
+                shimoNoKuStyle.get());
     }
 }

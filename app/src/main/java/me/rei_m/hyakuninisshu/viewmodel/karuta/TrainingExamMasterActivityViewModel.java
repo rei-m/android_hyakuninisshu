@@ -15,8 +15,7 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
 import android.databinding.ObservableBoolean;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
+import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsActivityViewModel;
@@ -25,10 +24,9 @@ public class TrainingExamMasterActivityViewModel extends AbsActivityViewModel {
 
     public final ObservableBoolean isVisibleEmpty = new ObservableBoolean(false);
 
-    public final ObservableBoolean isVisibleAd = new ObservableBoolean(false);
+    public final EventObservable<Unit> startTrainingEvent = EventObservable.create();
 
-    private final PublishSubject<Unit> startTrainingEventSubject = PublishSubject.create();
-    public final Observable<Unit> startTrainingEvent = startTrainingEventSubject;
+    public final EventObservable<Boolean> toggleAdEvent = EventObservable.create();
 
     private final KarutaTrainingModel karutaTrainingModel;
 
@@ -51,10 +49,10 @@ public class TrainingExamMasterActivityViewModel extends AbsActivityViewModel {
         super.onStart();
         registerDisposable(karutaTrainingModel.completeStartForExamEvent.subscribe(v -> {
             isStartedTraining = true;
-            startTrainingEventSubject.onNext(Unit.INSTANCE);
+            startTrainingEvent.onNext(Unit.INSTANCE);
         }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
-            isVisibleAd.set(true);
+            toggleAdEvent.onNext(true);
         }));
 
         if (!isStartedTraining) {
@@ -63,10 +61,10 @@ public class TrainingExamMasterActivityViewModel extends AbsActivityViewModel {
     }
 
     public void onClickGoToResult() {
-        isVisibleAd.set(true);
+        toggleAdEvent.onNext(true);
     }
 
     public void onRestartTraining() {
-        isVisibleAd.set(false);
+        toggleAdEvent.onNext(false);
     }
 }

@@ -60,8 +60,8 @@ public class ExamFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         binding = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -72,8 +72,8 @@ public class ExamFragment extends DaggerFragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         viewModel.onStop();
+        super.onStop();
     }
 
     @Override
@@ -84,13 +84,13 @@ public class ExamFragment extends DaggerFragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         viewModel.onPause();
+        super.onPause();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         viewModel = null;
+        super.onDetach();
     }
 }
