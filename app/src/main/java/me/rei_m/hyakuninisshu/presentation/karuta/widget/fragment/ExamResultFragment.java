@@ -28,6 +28,7 @@ import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.ExamResultFragmentViewModelModule;
 
@@ -37,12 +38,10 @@ public class ExamResultFragment extends DaggerFragment {
 
     private static final String ARG_EXAM_ID = "examId";
 
-    private static final long INVALID_EXAM_ID = -1;
-
-    public static ExamResultFragment newInstance(@NonNull Long examId) {
+    public static ExamResultFragment newInstance(@NonNull KarutaExamIdentifier karutaExamId) {
         ExamResultFragment fragment = new ExamResultFragment();
         Bundle args = new Bundle();
-        args.putLong(ARG_EXAM_ID, examId);
+        args.putParcelable(ARG_EXAM_ID, karutaExamId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,19 +69,19 @@ public class ExamResultFragment extends DaggerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long examId = INVALID_EXAM_ID;
+        KarutaExamIdentifier karutaExamId = null;
         if (getArguments() != null) {
-            examId = getArguments().getLong(ARG_EXAM_ID, INVALID_EXAM_ID);
+            karutaExamId = getArguments().getParcelable(ARG_EXAM_ID);
         }
 
-        if (examId == INVALID_EXAM_ID) {
+        if (karutaExamId == null) {
             if (listener != null) {
                 listener.onReceiveIllegalArguments();
             }
             return;
         }
 
-        viewModel.onCreate(examId);
+        viewModel.onCreate(karutaExamId);
     }
 
     @Override

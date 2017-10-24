@@ -79,11 +79,11 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                     karutaQuizSchema.getChoices(orma)
                             .selector()
                             .executeAsObservable()
-                            .map(karutaQuizChoiceSchema -> new KarutaIdentifier(karutaQuizChoiceSchema.karutaId))
+                            .map(karutaQuizChoiceSchema -> new KarutaIdentifier((int) karutaQuizChoiceSchema.karutaId))
                             .subscribe(karutaIdentifierList::add);
                     return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
                             karutaIdentifierList,
-                            new KarutaIdentifier(karutaQuizSchema.collectId));
+                            new KarutaIdentifier((int) karutaQuizSchema.collectId));
                 });
     }
 
@@ -157,18 +157,18 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
             karutaQuizSchema.getChoices(orma)
                     .selector()
                     .executeAsObservable()
-                    .map(karutaQuizChoiceSchema -> new KarutaIdentifier(karutaQuizChoiceSchema.karutaId))
+                    .map(karutaQuizChoiceSchema -> new KarutaIdentifier((int) karutaQuizChoiceSchema.karutaId))
                     .subscribe(karutaIdentifierList::add);
 
             if (karutaQuizSchema.startDate == null) {
                 return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
                         karutaIdentifierList,
-                        new KarutaIdentifier(karutaQuizSchema.collectId));
+                        new KarutaIdentifier((int) karutaQuizSchema.collectId));
             } else {
                 if (karutaQuizSchema.answerTime > 0) {
                     return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
                             karutaIdentifierList,
-                            new KarutaIdentifier(karutaQuizSchema.collectId),
+                            new KarutaIdentifier((int) karutaQuizSchema.collectId),
                             karutaQuizSchema.startDate,
                             karutaQuizSchema.answerTime,
                             ChoiceNo.forValue(karutaQuizSchema.choiceNo),
@@ -176,7 +176,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                 } else {
                     return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
                             karutaIdentifierList,
-                            new KarutaIdentifier(karutaQuizSchema.collectId),
+                            new KarutaIdentifier((int) karutaQuizSchema.collectId),
                             karutaQuizSchema.startDate);
                 }
             }

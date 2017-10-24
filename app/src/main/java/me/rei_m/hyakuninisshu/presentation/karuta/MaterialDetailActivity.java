@@ -24,7 +24,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -40,6 +39,7 @@ import dagger.multibindings.IntoMap;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
@@ -51,14 +51,12 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetail
 public class MaterialDetailActivity extends DaggerAppCompatActivity implements MaterialDetailFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
-    private static final String ARG_KARUTA_NO = "karutaNo";
-
-    private static final int UNKNOWN_KARUTA_NO = -1;
+    private static final String ARG_KARUTA_ID = "karutaId";
 
     public static Intent createIntent(@NonNull Context context,
-                                      int karutaNo) {
+                                      @NonNull KarutaIdentifier karutaId) {
         Intent intent = new Intent(context, MaterialDetailActivity.class);
-        intent.putExtra(ARG_KARUTA_NO, karutaNo);
+        intent.putExtra(ARG_KARUTA_ID, karutaId);
         return intent;
     }
 
@@ -112,15 +110,10 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity implements M
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        int initialDisplayKarutaNo = getIntent().getIntExtra(ARG_KARUTA_NO, UNKNOWN_KARUTA_NO);
-
-        if (initialDisplayKarutaNo == UNKNOWN_KARUTA_NO) {
-            onReceiveIllegalArguments();
-            return;
-        }
+        KarutaIdentifier initialDisplayKarutaId = getIntent().getParcelableExtra(ARG_KARUTA_ID);
 
         binding.pager.setAdapter(new MaterialDetailPagerAdapter(getSupportFragmentManager()));
-        binding.pager.setCurrentItem(initialDisplayKarutaNo - 1);
+        binding.pager.setCurrentItem(initialDisplayKarutaId.position());
 
         adView = adViewFactory.create();
 
@@ -172,7 +165,7 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity implements M
                 finish();
                 return true;
             case R.id.activity_material_detail_edit:
-                navigator.navigateToMaterialEdit(binding.pager.getCurrentItem() + 1);
+                navigator.navigateToMaterialEdit(new KarutaIdentifier(binding.pager.getCurrentItem() + 1));
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -13,18 +13,25 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaIdentifier implements EntityIdentifier {
+public class KarutaIdentifier implements EntityIdentifier, Parcelable {
 
-    private final long value;
+    private final int value;
 
-    public KarutaIdentifier(long value) {
+    public KarutaIdentifier(int value) {
         this.value = value;
     }
 
-    public long value() {
+    public int value() {
         return value;
+    }
+
+    public int position() {
+        return value - 1;
     }
 
     @Override
@@ -40,7 +47,7 @@ public class KarutaIdentifier implements EntityIdentifier {
 
     @Override
     public int hashCode() {
-        return (int) (value ^ (value >>> 32));
+        return value;
     }
 
     @Override
@@ -49,4 +56,30 @@ public class KarutaIdentifier implements EntityIdentifier {
                 "value=" + value +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.value);
+    }
+
+    protected KarutaIdentifier(Parcel in) {
+        this.value = in.readInt();
+    }
+
+    public static final Creator<KarutaIdentifier> CREATOR = new Creator<KarutaIdentifier>() {
+        @Override
+        public KarutaIdentifier createFromParcel(Parcel source) {
+            return new KarutaIdentifier(source);
+        }
+
+        @Override
+        public KarutaIdentifier[] newArray(int size) {
+            return new KarutaIdentifier[size];
+        }
+    };
 }

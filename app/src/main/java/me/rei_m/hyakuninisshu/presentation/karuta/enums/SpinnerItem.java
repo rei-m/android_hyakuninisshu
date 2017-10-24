@@ -16,8 +16,6 @@ package me.rei_m.hyakuninisshu.presentation.karuta.enums;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
-import java.io.Serializable;
-
-public interface SpinnerItem extends Serializable {
+public interface SpinnerItem {
     String label(@NonNull Resources res);
 }

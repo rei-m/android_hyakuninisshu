@@ -13,9 +13,12 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KarutaExamIdentifier implements EntityIdentifier {
+public class KarutaExamIdentifier implements EntityIdentifier, Parcelable {
 
     private final long value;
 
@@ -48,4 +51,30 @@ public class KarutaExamIdentifier implements EntityIdentifier {
                 "value=" + value +
                 '}';
     }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.value);
+    }
+
+    protected KarutaExamIdentifier(Parcel in) {
+        this.value = in.readLong();
+    }
+
+    public static final Parcelable.Creator<KarutaExamIdentifier> CREATOR = new Parcelable.Creator<KarutaExamIdentifier>() {
+        @Override
+        public KarutaExamIdentifier createFromParcel(Parcel source) {
+            return new KarutaExamIdentifier(source);
+        }
+
+        @Override
+        public KarutaExamIdentifier[] newArray(int size) {
+            return new KarutaExamIdentifier[size];
+        }
+    };
 }

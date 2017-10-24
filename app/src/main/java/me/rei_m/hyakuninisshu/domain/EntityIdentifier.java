@@ -13,7 +13,5 @@
 
 package me.rei_m.hyakuninisshu.domain;
 
-import java.io.Serializable;
-
-public interface EntityIdentifier extends ValueObject, Serializable {
+public interface EntityIdentifier extends ValueObject {
 }

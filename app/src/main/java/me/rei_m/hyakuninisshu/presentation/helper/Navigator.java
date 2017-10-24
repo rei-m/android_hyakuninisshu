@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.EntranceActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
@@ -72,18 +73,18 @@ public class Navigator {
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialDetail(int karutaNo) {
-        Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, karutaNo);
+    public void navigateToMaterialDetail(@NonNull KarutaIdentifier karutaId) {
+        Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, karutaId);
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialSingle(int karutaNo) {
-        Intent intentToLaunch = MaterialSingleActivity.createIntent(activity, karutaNo);
+    public void navigateToMaterialSingle(@NonNull KarutaIdentifier karutaId) {
+        Intent intentToLaunch = MaterialSingleActivity.createIntent(activity, karutaId);
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialEdit(int karutaNo) {
-        Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karutaNo);
+    public void navigateToMaterialEdit(@NonNull KarutaIdentifier karutaId) {
+        Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karutaId);
         activity.startActivity(intentToLaunch);
     }
 

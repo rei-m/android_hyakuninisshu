@@ -27,7 +27,7 @@ public class SupportFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<String> version = new ObservableField<>();
 
-    public EventObservable<Unit> onClickLicenseEvent = EventObservable.create();
+    public final EventObservable<Unit> onClickLicenseEvent = EventObservable.create();
 
     private final Navigator navigator;
 

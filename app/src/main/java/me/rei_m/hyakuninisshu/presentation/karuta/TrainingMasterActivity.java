@@ -38,6 +38,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
@@ -241,7 +242,7 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     }
 
     @Override
-    public void onAnswered(long karutaId, boolean existNextQuiz) {
+    public void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

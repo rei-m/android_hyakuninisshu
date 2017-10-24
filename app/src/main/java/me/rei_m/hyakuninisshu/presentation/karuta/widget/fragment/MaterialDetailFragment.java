@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.MaterialDetailFragmentViewModelModule;
 
@@ -35,12 +37,10 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     private static final String ARG_KARUTA_NO = "karutaNo";
 
-    private static final int INVALID_KARUTA_NO = -1;
-
-    public static MaterialDetailFragment newInstance(int karutaNo) {
+    public static MaterialDetailFragment newInstance(@NonNull KarutaIdentifier karutaId) {
         MaterialDetailFragment fragment = new MaterialDetailFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_KARUTA_NO, karutaNo);
+        args.putParcelable(ARG_KARUTA_NO, karutaId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,7 +59,7 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     private OnFragmentInteractionListener listener;
 
-    private int karutaNo = INVALID_KARUTA_NO;
+    private KarutaIdentifier karutaId;
 
     public MaterialDetailFragment() {
         // Required empty public constructor
@@ -69,16 +69,16 @@ public class MaterialDetailFragment extends DaggerFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            karutaNo = getArguments().getInt(ARG_KARUTA_NO, INVALID_KARUTA_NO);
+            karutaId = getArguments().getParcelable(ARG_KARUTA_NO);
         }
 
-        if (karutaNo == INVALID_KARUTA_NO) {
+        if (karutaId == null) {
             if (listener != null) {
                 listener.onReceiveIllegalArguments();
             }
             return;
         }
-        viewModel.onCreate(karutaNo);
+        viewModel.onCreate(karutaId);
     }
 
     @Override

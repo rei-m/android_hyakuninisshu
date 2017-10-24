@@ -125,7 +125,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
         return selector
                 .orderByIdAsc()
                 .executeAsObservable()
-                .map(karutaSchema -> new KarutaIdentifier(karutaSchema.id))
+                .map(karutaSchema -> new KarutaIdentifier((int) karutaSchema.id))
                 .toList()
                 .map(KarutaIds::new);
     }
@@ -135,7 +135,7 @@ public class KarutaRepositoryImpl implements KarutaRepository {
         return KarutaSchema.relation(orma).selector()
                 .orderByIdAsc()
                 .executeAsObservable()
-                .map(karutaSchema -> new KarutaIdentifier(karutaSchema.id))
+                .map(karutaSchema -> new KarutaIdentifier((int) karutaSchema.id))
                 .toList()
                 .map(KarutaIds::new);
     }

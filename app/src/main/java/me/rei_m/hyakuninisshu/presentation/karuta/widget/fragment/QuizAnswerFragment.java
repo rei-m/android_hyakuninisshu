@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizAnswerFragmentViewModelModule;
 
@@ -37,13 +39,11 @@ public class QuizAnswerFragment extends DaggerFragment {
 
     private static final String ARG_EXIST_NEXT_QUIZ = "existNextQuiz";
 
-    private static final long INVALID_KARUTA_ID = -1;
-
-    public static QuizAnswerFragment newInstance(long karutaId,
+    public static QuizAnswerFragment newInstance(@NonNull KarutaIdentifier karutaId,
                                                  boolean existNextQuiz) {
         QuizAnswerFragment fragment = new QuizAnswerFragment();
         Bundle args = new Bundle();
-        args.putLong(ARG_KARUTA_ID, karutaId);
+        args.putParcelable(ARG_KARUTA_ID, karutaId);
         args.putBoolean(ARG_EXIST_NEXT_QUIZ, existNextQuiz);
         fragment.setArguments(args);
         return fragment;
@@ -72,15 +72,15 @@ public class QuizAnswerFragment extends DaggerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long karutaId = INVALID_KARUTA_ID;
+        KarutaIdentifier karutaId = null;
         boolean existNextQuiz = false;
 
         if (getArguments() != null) {
-            karutaId = getArguments().getLong(ARG_KARUTA_ID);
+            karutaId = getArguments().getParcelable(ARG_KARUTA_ID);
             existNextQuiz = getArguments().getBoolean(ARG_EXIST_NEXT_QUIZ);
         }
 
-        if (karutaId == INVALID_KARUTA_ID) {
+        if (karutaId == null) {
             if (listener != null) {
                 listener.onReceiveIllegalArguments();
             }

@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
@@ -42,7 +43,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     private final AnalyticsManager analyticsManager;
 
-    private KarutaExamIdentifier karutaExamIdentifier;
+    private KarutaExamIdentifier karutaExamId;
 
     public ExamResultFragmentViewModel(@NonNull KarutaExamModel karutaExamModel,
                                        @NonNull Navigator navigator,
@@ -52,8 +53,8 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
         this.analyticsManager = analyticsManager;
     }
 
-    public void onCreate(long karutaExamId) {
-        karutaExamIdentifier = new KarutaExamIdentifier(karutaExamId);
+    public void onCreate(@NonNull KarutaExamIdentifier karutaExamId) {
+        this.karutaExamId = karutaExamId;
     }
 
     @Override
@@ -70,7 +71,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM_RESULT);
-        karutaExamModel.fetchResult(karutaExamIdentifier);
+        karutaExamModel.fetchResult(karutaExamId);
     }
 
     @SuppressWarnings("unused")
@@ -78,7 +79,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
         onClickBackMenuEvent.onNext(Unit.INSTANCE);
     }
 
-    public void onClickResult(int karutaNo) {
-        navigator.navigateToMaterialSingle(karutaNo);
+    public void onClickResult(@NonNull KarutaIdentifier karutaId) {
+        navigator.navigateToMaterialSingle(karutaId);
     }
 }
