@@ -40,6 +40,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.presentation.helper.Device;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
@@ -103,12 +105,14 @@ public class QuizFragment extends DaggerFragment {
         KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_KAMI_NO_KU_STYLE));
         KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_SHIMO_NO_KU_STYLE));
 
-        if (savedInstanceState == null) {
-            viewModel.onCreate(kamiNoKuStyle, shimoNoKuStyle);
-        } else {
-            String quizId = savedInstanceState.getString(KEY_QUIZ_ID, "");
-            viewModel.onReCreate(quizId, kamiNoKuStyle, shimoNoKuStyle);
+        if (savedInstanceState != null) {
+            KarutaQuizIdentifier quizId = savedInstanceState.getParcelable(KEY_QUIZ_ID);
+            if (quizId != null) {
+                viewModel.onReCreate(quizId, kamiNoKuStyle, shimoNoKuStyle);
+                return;
+            }
         }
+        viewModel.onCreate(kamiNoKuStyle, shimoNoKuStyle);
     }
 
     @Override
@@ -148,7 +152,7 @@ public class QuizFragment extends DaggerFragment {
             }
         }), viewModel.onClickResultEvent.subscribe(v -> {
             if (listener != null) {
-                listener.onAnswered(viewModel.getCollectKarutaId(), viewModel.existNextQuiz());
+                listener.onAnswered(viewModel.correctKarutaId(), viewModel.existNextQuiz());
             }
         }), viewModel.errorEvent.subscribe(v -> {
             if (listener != null) {
@@ -207,7 +211,7 @@ public class QuizFragment extends DaggerFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_QUIZ_ID, viewModel.getKarutaQuizId());
+        outState.putParcelable(KEY_QUIZ_ID, viewModel.karutaQuizId());
     }
 
     // TODO: DataBindingに寄せることができるはず.
@@ -268,7 +272,7 @@ public class QuizFragment extends DaggerFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onAnswered(long karutaId, boolean existNextQuiz);
+        void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz);
 
         void onErrorQuiz();
     }

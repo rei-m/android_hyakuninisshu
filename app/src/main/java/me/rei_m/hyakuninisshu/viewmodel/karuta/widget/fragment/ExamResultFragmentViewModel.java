@@ -18,8 +18,12 @@ import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import java.util.List;
+
 import me.rei_m.hyakuninisshu.AnalyticsManager;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
@@ -32,7 +36,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableFloat averageAnswerTime = new ObservableFloat();
 
-    public final ObservableField<boolean[]> karutaQuizResultList = new ObservableField<>();
+    public final ObservableField<List<KarutaQuizJudgement>> karutaQuizJudgements = new ObservableField<>();
 
     public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
 
@@ -42,7 +46,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     private final AnalyticsManager analyticsManager;
 
-    private KarutaExamIdentifier karutaExamIdentifier;
+    private KarutaExamIdentifier karutaExamId;
 
     public ExamResultFragmentViewModel(@NonNull KarutaExamModel karutaExamModel,
                                        @NonNull Navigator navigator,
@@ -52,8 +56,8 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
         this.analyticsManager = analyticsManager;
     }
 
-    public void onCreate(long karutaExamId) {
-        karutaExamIdentifier = new KarutaExamIdentifier(karutaExamId);
+    public void onCreate(@NonNull KarutaExamIdentifier karutaExamId) {
+        this.karutaExamId = karutaExamId;
     }
 
     @Override
@@ -62,7 +66,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
         registerDisposable(karutaExamModel.completeFetchResultEvent.subscribe(examResult -> {
             score.set(examResult.score());
             averageAnswerTime.set(examResult.averageAnswerTime());
-            karutaQuizResultList.set(examResult.resultList());
+            karutaQuizJudgements.set(examResult.judgements());
         }));
     }
 
@@ -70,7 +74,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM_RESULT);
-        karutaExamModel.fetchResult(karutaExamIdentifier);
+        karutaExamModel.fetchResult(karutaExamId);
     }
 
     @SuppressWarnings("unused")
@@ -78,7 +82,7 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
         onClickBackMenuEvent.onNext(Unit.INSTANCE);
     }
 
-    public void onClickResult(int karutaNo) {
-        navigator.navigateToMaterialSingle(karutaNo);
+    public void onClickResult(@NonNull KarutaIdentifier karutaId) {
+        navigator.navigateToMaterialSingle(karutaId);
     }
 }

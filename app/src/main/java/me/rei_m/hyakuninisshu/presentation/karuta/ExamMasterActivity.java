@@ -38,6 +38,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
@@ -154,10 +155,10 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
                         .beginTransaction()
                         .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                         .commit()),
-                viewModel.aggregateExamResultsEvent.subscribe(examId -> getSupportFragmentManager()
+                viewModel.aggregateExamResultsEvent.subscribe(karutaExamId -> getSupportFragmentManager()
                         .beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .replace(R.id.content, ExamResultFragment.newInstance(examId), ExamResultFragment.TAG)
+                        .replace(R.id.content, ExamResultFragment.newInstance(karutaExamId), ExamResultFragment.TAG)
                         .commit()),
                 viewModel.toggleAdEvent.subscribe(isVisible -> {
                     if (isVisible) {
@@ -202,7 +203,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     }
 
     @Override
-    public void onAnswered(long karutaId, boolean existNextQuiz) {
+    public void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

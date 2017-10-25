@@ -38,6 +38,7 @@ import dagger.multibindings.IntoMap;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
@@ -48,14 +49,12 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialEditFr
 public class MaterialEditActivity extends DaggerAppCompatActivity implements MaterialEditFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
-    private static final String ARG_KARUTA_NO = "karutaNo";
-
-    private static final int UNKNOWN_KARUTA_NO = -1;
+    private static final String ARG_KARUTA_ID = "karutaId";
 
     public static Intent createIntent(@NonNull Context context,
-                                      int karutaNo) {
+                                      @NonNull KarutaIdentifier karutaId) {
         Intent intent = new Intent(context, MaterialEditActivity.class);
-        intent.putExtra(ARG_KARUTA_NO, karutaNo);
+        intent.putExtra(ARG_KARUTA_ID, karutaId);
         return intent;
     }
 
@@ -107,17 +106,12 @@ public class MaterialEditActivity extends DaggerAppCompatActivity implements Mat
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        int karutaNo = getIntent().getIntExtra(ARG_KARUTA_NO, UNKNOWN_KARUTA_NO);
-
-        if (karutaNo == UNKNOWN_KARUTA_NO) {
-            onReceiveIllegalArguments();
-            return;
-        }
+        KarutaIdentifier karutaId = getIntent().getParcelableExtra(ARG_KARUTA_ID);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.content, MaterialEditFragment.newInstance(karutaNo), MaterialEditFragment.TAG)
+                    .add(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
                     .commit();
         }
 

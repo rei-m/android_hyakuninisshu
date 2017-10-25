@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
@@ -59,14 +60,14 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaModel karutaModel;
 
-    private KarutaIdentifier karutaIdentifier;
+    private KarutaIdentifier karutaId;
 
-    public MaterialEditFragmentViewModel(KarutaModel karutaModel) {
+    public MaterialEditFragmentViewModel(@NonNull KarutaModel karutaModel) {
         this.karutaModel = karutaModel;
     }
 
-    public void onCreate(int karutaNo) {
-        karutaIdentifier = new KarutaIdentifier(karutaNo);
+    public void onCreate(@NonNull KarutaIdentifier karutaId) {
+        this.karutaId = karutaId;
     }
 
     @Override
@@ -74,7 +75,7 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
 
-            if (!karutaIdentifier.equals(karuta.identifier())) {
+            if (!karutaId.equals(karuta.identifier())) {
                 return;
             }
 
@@ -99,7 +100,7 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onResume() {
         super.onResume();
-        karutaModel.fetchKaruta(karutaIdentifier);
+        karutaModel.fetchKaruta(karutaId);
     }
 
     @SuppressWarnings("unused")
@@ -121,7 +122,7 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
     }
 
     public void onClickDialogPositive() {
-        karutaModel.editKaruta(karutaIdentifier,
+        karutaModel.editKaruta(karutaId,
                 firstPhraseKanji.get(),
                 firstPhraseKana.get(),
                 secondPhraseKanji.get(),

@@ -33,7 +33,7 @@ class KarutaFactory {
 
     public static Karuta create(@NonNull KarutaSchema schema) {
 
-        KarutaIdentifier identifier = new KarutaIdentifier(schema.id);
+        KarutaIdentifier identifier = new KarutaIdentifier((int) schema.id);
 
         Phrase firstPart = new Phrase(schema.firstKana, schema.firstKanji);
         Phrase secondPart = new Phrase(schema.secondKana, schema.secondKanji);

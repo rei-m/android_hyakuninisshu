@@ -46,6 +46,10 @@ public class KarutaIds {
         return values.size();
     }
 
+    public boolean contains(@NonNull KarutaIdentifier karutaId) {
+        return values.contains(karutaId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

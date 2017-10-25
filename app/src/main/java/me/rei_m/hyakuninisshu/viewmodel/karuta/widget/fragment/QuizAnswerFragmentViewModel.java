@@ -60,7 +60,7 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     private final Navigator navigator;
 
-    private KarutaIdentifier karutaIdentifier;
+    private KarutaIdentifier karutaId;
 
     public QuizAnswerFragmentViewModel(@NonNull KarutaModel karutaModel,
                                        @NonNull Navigator navigator) {
@@ -68,9 +68,9 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
         this.navigator = navigator;
     }
 
-    public void onCreate(long karutaId,
+    public void onCreate(@NonNull KarutaIdentifier karutaId,
                          boolean existNextQuiz) {
-        karutaIdentifier = new KarutaIdentifier(karutaId);
+        this.karutaId = karutaId;
         this.existNextQuiz.set(existNextQuiz);
     }
 
@@ -78,7 +78,7 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
     public void onStart() {
         super.onStart();
         registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
-            karutaNo.set((int) karuta.identifier().value());
+            karutaNo.set(karuta.identifier().value());
             kimariji.set(karuta.kimariji().value());
             creator.set(karuta.creator());
             firstPhrase.set(padSpace(karuta.kamiNoKu().first().kanji(), 5));
@@ -92,12 +92,12 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onResume() {
         super.onResume();
-        karutaModel.fetchKaruta(karutaIdentifier);
+        karutaModel.fetchKaruta(karutaId);
     }
 
     @SuppressWarnings("unused")
     public void onClickAnswer(View view) {
-        navigator.navigateToMaterialSingle((int) karutaIdentifier.value());
+        navigator.navigateToMaterialSingle(karutaId);
     }
 
     @SuppressWarnings("unused")

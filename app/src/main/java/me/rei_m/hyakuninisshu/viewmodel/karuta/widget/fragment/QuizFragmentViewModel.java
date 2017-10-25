@@ -73,9 +73,9 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
 
     private KarutaStyleFilter shimoNoKuStyle;
 
-    private KarutaQuizIdentifier karutaQuizIdentifier;
+    private KarutaQuizIdentifier karutaQuizId;
 
-    private KarutaIdentifier collectKarutaIdentifier;
+    private KarutaIdentifier correctKarutaId;
 
     private boolean existNextQuiz = false;
 
@@ -86,12 +86,12 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         isVisibleChoiceList.addAll(Arrays.asList(true, true, true, true));
     }
 
-    public String getKarutaQuizId() {
-        return karutaQuizIdentifier.value();
+    public KarutaQuizIdentifier karutaQuizId() {
+        return karutaQuizId;
     }
 
-    public long getCollectKarutaId() {
-        return collectKarutaIdentifier.value();
+    public KarutaIdentifier correctKarutaId() {
+        return correctKarutaId;
     }
 
     public boolean existNextQuiz() {
@@ -104,10 +104,10 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         this.shimoNoKuStyle = shimoNoKuStyle;
     }
 
-    public void onReCreate(@NonNull String quizId,
+    public void onReCreate(@NonNull KarutaQuizIdentifier quizId,
                            @NonNull KarutaStyleFilter kamiNoKuStyle,
                            @NonNull KarutaStyleFilter shimoNoKuStyle) {
-        this.karutaQuizIdentifier = new KarutaQuizIdentifier(quizId);
+        this.karutaQuizId = quizId;
         this.kamiNoKuStyle = kamiNoKuStyle;
         this.shimoNoKuStyle = shimoNoKuStyle;
     }
@@ -117,7 +117,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaQuizModel.completeStartEvent.subscribe(karutaQuizContent -> {
 
-            karutaQuizIdentifier = karutaQuizContent.quizId();
+            karutaQuizId = karutaQuizContent.quizId();
 
             quizCount.set(karutaQuizContent.currentPosition());
 
@@ -157,7 +157,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             this.isCorrect.set(result.isCorrect());
             this.isVisibleResult.set(true);
 
-            this.collectKarutaIdentifier = result.collectKarutaId();
+            this.correctKarutaId = result.correctKarutaId();
             this.existNextQuiz = karutaQuizContent.existNext();
 
         }), karutaQuizModel.errorEvent.subscribe(v -> {
@@ -168,15 +168,15 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onResume() {
         super.onResume();
-        if (karutaQuizIdentifier == null) {
+        if (karutaQuizId == null) {
             karutaQuizModel.start();
         } else {
-            karutaQuizModel.restart(karutaQuizIdentifier);
+            karutaQuizModel.restart(karutaQuizId);
         }
     }
 
     public void onClickChoice(int choiceNoValue) {
-        karutaQuizModel.answer(karutaQuizIdentifier, ChoiceNo.forValue(choiceNoValue));
+        karutaQuizModel.answer(karutaQuizId, ChoiceNo.forValue(choiceNoValue));
     }
 
     public void onClickResult() {

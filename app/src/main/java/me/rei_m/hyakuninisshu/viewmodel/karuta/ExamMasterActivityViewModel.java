@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
 import android.support.annotation.NonNull;
 
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.util.Unit;
@@ -24,7 +25,7 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
 
     public final EventObservable<Unit> startExamEvent = EventObservable.create();
 
-    public final EventObservable<Long> aggregateExamResultsEvent = EventObservable.create();
+    public final EventObservable<KarutaExamIdentifier> aggregateExamResultsEvent = EventObservable.create();
 
     public final EventObservable<Boolean> toggleAdEvent = EventObservable.create();
 
@@ -62,7 +63,7 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
         }), karutaExamModel.completeAggregateResultsEvent.subscribe(karutaExamId -> {
             isFinishedExam = true;
             toggleAdEvent.onNext(true);
-            aggregateExamResultsEvent.onNext(karutaExamId.value());
+            aggregateExamResultsEvent.onNext(karutaExamId);
         }));
 
         if (!isStartedExam) {

@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.dialog.ConfirmMaterialEditDialogFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialEditFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.MaterialEditFragmentViewModelModule;
@@ -37,14 +39,12 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
     public static final String TAG = MaterialEditFragment.class.getSimpleName();
 
-    private static final String ARG_KARUTA_NO = "karutaNo";
+    private static final String ARG_KARUTA_ID = "karutaId";
 
-    private static final int INVALID_KARUTA_NO = -1;
-
-    public static MaterialEditFragment newInstance(int karutaNo) {
+    public static MaterialEditFragment newInstance(@NonNull KarutaIdentifier karutaId) {
         MaterialEditFragment fragment = new MaterialEditFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_KARUTA_NO, karutaNo);
+        args.putParcelable(ARG_KARUTA_ID, karutaId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +65,7 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
     private CompositeDisposable disposable;
 
-    private int karutaNo = INVALID_KARUTA_NO;
+    private KarutaIdentifier karutaId;
 
     public MaterialEditFragment() {
         // Required empty public constructor
@@ -75,17 +75,17 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            karutaNo = getArguments().getInt(ARG_KARUTA_NO, INVALID_KARUTA_NO);
+            karutaId = getArguments().getParcelable(ARG_KARUTA_ID);
         }
 
-        if (karutaNo == INVALID_KARUTA_NO) {
+        if (karutaId == null) {
             if (listener != null) {
                 listener.onReceiveIllegalArguments();
             }
             return;
         }
 
-        viewModel.onCreate(karutaNo);
+        viewModel.onCreate(karutaId);
     }
 
     @Override

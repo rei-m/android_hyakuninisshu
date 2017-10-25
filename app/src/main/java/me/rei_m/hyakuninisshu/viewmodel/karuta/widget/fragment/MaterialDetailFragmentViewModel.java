@@ -47,14 +47,14 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaModel karutaModel;
 
-    private KarutaIdentifier karutaIdentifier;
+    private KarutaIdentifier karutaId;
 
-    public MaterialDetailFragmentViewModel(KarutaModel karutaModel) {
+    public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel) {
         this.karutaModel = karutaModel;
     }
 
-    public void onCreate(int karutaNo) {
-        karutaIdentifier = new KarutaIdentifier(karutaNo);
+    public void onCreate(@NonNull KarutaIdentifier karutaId) {
+        this.karutaId = karutaId;
     }
 
     @Override
@@ -62,11 +62,11 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
 
-            if (!karutaIdentifier.equals(karuta.identifier())) {
+            if (!karutaId.equals(karuta.identifier())) {
                 return;
             }
 
-            karutaNo.set((int) karutaIdentifier.value());
+            karutaNo.set(karutaId.value());
 
             karutaImageNo.set(karuta.imageNo().value());
 
@@ -89,7 +89,7 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onResume() {
         super.onResume();
-        karutaModel.fetchKaruta(karutaIdentifier);
+        karutaModel.fetchKaruta(karutaId);
     }
 
     @BindingAdapter({"karutaNo", "creator"})
