@@ -33,7 +33,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult;
-import me.rei_m.hyakuninisshu.event.EventObservable;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton

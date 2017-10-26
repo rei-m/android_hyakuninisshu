@@ -46,13 +46,6 @@ public class ExamResultFragment extends DaggerFragment {
         return fragment;
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = ExamResultFragmentViewModelModule.class)
-        abstract ExamResultFragment contributeInjector();
-    }
-
     @Inject
     ExamResultFragmentViewModel viewModel;
 
@@ -85,7 +78,7 @@ public class ExamResultFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentExamResultBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         return binding.getRoot();
@@ -152,5 +145,13 @@ public class ExamResultFragment extends DaggerFragment {
         void onFinishExam();
 
         void onReceiveIllegalArguments();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = ExamResultFragmentViewModelModule.class)
+        abstract ExamResultFragment contributeInjector();
     }
 }

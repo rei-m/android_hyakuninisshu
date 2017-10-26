@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.support.widget.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -38,13 +39,6 @@ public class SupportFragment extends DaggerFragment {
         return new SupportFragment();
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = SupportFragmentViewModelModule.class)
-        abstract SupportFragment contributeInjector();
-    }
-
     @Inject
     SupportFragmentViewModel viewModel;
 
@@ -57,7 +51,7 @@ public class SupportFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSupportBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         return binding.getRoot();
@@ -75,7 +69,7 @@ public class SupportFragment extends DaggerFragment {
         disposable = new CompositeDisposable();
         disposable.add(viewModel.onClickLicenseEvent.subscribe(v -> {
             FragmentManager manager = getFragmentManager();
-            if (manager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
+            if (manager != null && manager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
                 LicenceDialogFragment dialog = LicenceDialogFragment.newInstance();
                 dialog.show(manager, LicenceDialogFragment.TAG);
             }
@@ -109,5 +103,13 @@ public class SupportFragment extends DaggerFragment {
     public void onDetach() {
         viewModel = null;
         super.onDetach();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = SupportFragmentViewModelModule.class)
+        abstract SupportFragment contributeInjector();
     }
 }

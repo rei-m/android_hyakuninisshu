@@ -21,13 +21,13 @@ import javax.inject.Singleton;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
-import me.rei_m.hyakuninisshu.event.EventObservable;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
 public class ApplicationModel {
 
-    public EventObservable<Unit> completeStartEvent = EventObservable.create();
+    public final EventObservable<Unit> completeStartEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -40,8 +40,6 @@ public class ApplicationModel {
         karutaRepository.initialize()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    completeStartEvent.onNext(Unit.INSTANCE);
-                });
+                .subscribe(() -> completeStartEvent.onNext(Unit.INSTANCE));
     }
 }

@@ -44,9 +44,8 @@ public class KarutaQuizJudgement implements ValueObject {
 
         KarutaQuizJudgement that = (KarutaQuizJudgement) o;
 
-        if (isCorrect != that.isCorrect) return false;
-        return karutaId.equals(that.karutaId);
-
+        return isCorrect == that.isCorrect &&
+                karutaId.equals(that.karutaId);
     }
 
     @Override

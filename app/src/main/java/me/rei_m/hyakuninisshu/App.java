@@ -39,23 +39,6 @@ import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
 
 public class App extends DaggerApplication {
 
-    @Singleton
-    @dagger.Component(modules = {
-            AndroidSupportInjectionModule.class,
-            ApplicationModule.class,
-            InfrastructureModule.class,
-            SplashActivity.Module.class,
-            EntranceActivity.Module.class,
-            ExamMasterActivity.Module.class,
-            MaterialDetailActivity.Module.class,
-            MaterialEditActivity.Module.class,
-            MaterialSingleActivity.Module.class,
-            TrainingExamMasterActivity.Module.class,
-            TrainingMasterActivity.Module.class
-    })
-    interface Component extends AndroidInjector<App> {
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -79,5 +62,22 @@ public class App extends DaggerApplication {
         return DaggerApp_Component.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
+    }
+
+    @Singleton
+    @dagger.Component(modules = {
+            AndroidSupportInjectionModule.class,
+            ApplicationModule.class,
+            InfrastructureModule.class,
+            SplashActivity.Module.class,
+            EntranceActivity.Module.class,
+            ExamMasterActivity.Module.class,
+            MaterialDetailActivity.Module.class,
+            MaterialEditActivity.Module.class,
+            MaterialSingleActivity.Module.class,
+            TrainingExamMasterActivity.Module.class,
+            TrainingMasterActivity.Module.class
+    })
+    interface Component extends AndroidInjector<App> {
     }
 }

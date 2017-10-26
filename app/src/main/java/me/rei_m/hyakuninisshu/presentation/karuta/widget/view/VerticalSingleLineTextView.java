@@ -29,7 +29,7 @@ import me.rei_m.hyakuninisshu.R;
 
 public class VerticalSingleLineTextView extends View {
 
-    private Paint paint = new Paint();
+    private final Paint paint = new Paint();
 
     private String text;
 

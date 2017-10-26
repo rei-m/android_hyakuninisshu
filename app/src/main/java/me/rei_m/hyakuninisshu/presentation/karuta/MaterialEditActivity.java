@@ -58,34 +58,6 @@ public class MaterialEditActivity extends DaggerAppCompatActivity implements Mat
         return intent;
     }
 
-    @ForActivity
-    @dagger.Subcomponent(modules = {
-            ActivityModule.class,
-            MaterialEditFragment.Module.class,
-            ConfirmMaterialEditDialogFragment.Module.class
-    })
-    public interface Subcomponent extends AndroidInjector<MaterialEditActivity> {
-
-        @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<MaterialEditActivity> {
-
-            public abstract Builder activityModule(ActivityModule module);
-
-            @Override
-            public void seedInstance(MaterialEditActivity instance) {
-                activityModule(new ActivityModule(instance));
-            }
-        }
-    }
-
-    @dagger.Module(subcomponents = Subcomponent.class)
-    public abstract class Module {
-        @Binds
-        @IntoMap
-        @ActivityKey(MaterialEditActivity.class)
-        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
-    }
-
     @Inject
     AdViewFactory adViewFactory;
 
@@ -180,5 +152,35 @@ public class MaterialEditActivity extends DaggerAppCompatActivity implements Mat
     @Override
     public void onDialogNegativeClick() {
 
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            MaterialEditFragment.Module.class,
+            ConfirmMaterialEditDialogFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<MaterialEditActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<MaterialEditActivity> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(MaterialEditActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @Binds
+        @IntoMap
+        @ActivityKey(MaterialEditActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

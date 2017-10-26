@@ -58,7 +58,6 @@ public class KarutaQuizIdentifier implements EntityIdentifier, Parcelable {
                 '}';
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -73,7 +72,8 @@ public class KarutaQuizIdentifier implements EntityIdentifier, Parcelable {
         this.value = in.readString();
     }
 
-    public static final Parcelable.Creator<KarutaQuizIdentifier> CREATOR = new Parcelable.Creator<KarutaQuizIdentifier>() {
+    @SuppressWarnings("unused")
+    public static final Creator<KarutaQuizIdentifier> CREATOR = new Creator<KarutaQuizIdentifier>() {
         @Override
         public KarutaQuizIdentifier createFromParcel(Parcel source) {
             return new KarutaQuizIdentifier(source);

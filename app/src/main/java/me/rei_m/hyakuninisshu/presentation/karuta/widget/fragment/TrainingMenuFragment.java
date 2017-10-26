@@ -15,6 +15,8 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,12 +47,8 @@ public class TrainingMenuFragment extends DaggerFragment {
         return new TrainingMenuFragment();
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = TrainingMenuFragmentViewModelModule.class)
-        abstract TrainingMenuFragment contributeInjector();
-    }
+    @Inject
+    Context context;
 
     @Inject
     TrainingMenuFragmentViewModel viewModel;
@@ -64,11 +62,9 @@ public class TrainingMenuFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = FragmentTrainingMenuBinding.inflate(inflater, container, false);
-
-        Context context = getActivity().getApplicationContext();
 
         SpinnerAdapter trainingRangeFromAdapter = SpinnerAdapter.newInstance(context, TrainingRangeFrom.values(), false);
         binding.setTrainingRangeFromAdapter(trainingRangeFromAdapter);
@@ -100,9 +96,9 @@ public class TrainingMenuFragment extends DaggerFragment {
     public void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.invalidTrainingRangeEvent.subscribe(v -> {
-            Snackbar.make(binding.getRoot(), R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show();
-        }));
+        disposable.addAll(viewModel.invalidTrainingRangeEvent.subscribe(v ->
+                Snackbar.make(binding.getRoot(), R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show())
+        );
         viewModel.onStart();
     }
 
@@ -130,7 +126,16 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
+        context = null;
         viewModel = null;
         super.onDetach();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = TrainingMenuFragmentViewModelModule.class)
+        abstract TrainingMenuFragment contributeInjector();
     }
 }

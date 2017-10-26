@@ -47,49 +47,16 @@ import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragme
 
 public class EntranceActivity extends DaggerAppCompatActivity {
 
+    private static final String KEY_PAGE_INDEX = "pageIndex";
+    @Inject
+    AdViewFactory adViewFactory;
+    private ActivityEntranceBinding binding;
+    private AdView adView;
+    private int currentPageIndex = 0;
+
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, EntranceActivity.class);
     }
-
-    private static final String KEY_PAGE_INDEX = "pageIndex";
-
-    @ForActivity
-    @dagger.Subcomponent(modules = {
-            ActivityModule.class,
-            TrainingMenuFragment.Module.class,
-            ExamFragment.Module.class,
-            MaterialFragment.Module.class,
-            SupportFragment.Module.class
-    })
-    public interface Subcomponent extends AndroidInjector<EntranceActivity> {
-        @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<EntranceActivity> {
-
-            public abstract Builder activityModule(ActivityModule module);
-
-            @Override
-            public void seedInstance(EntranceActivity instance) {
-                activityModule(new ActivityModule(instance));
-            }
-        }
-    }
-
-    @dagger.Module(subcomponents = Subcomponent.class)
-    public abstract class Module {
-        @Binds
-        @IntoMap
-        @ActivityKey(EntranceActivity.class)
-        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
-    }
-
-    @Inject
-    AdViewFactory adViewFactory;
-
-    private ActivityEntranceBinding binding;
-
-    private AdView adView;
-
-    private int currentPageIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,6 +191,12 @@ public class EntranceActivity extends DaggerAppCompatActivity {
             }
         };
 
+        private final int bottomNavigationId;
+
+        Page(int bottomNavigationId) {
+            this.bottomNavigationId = bottomNavigationId;
+        }
+
         public static Page forBottomNavigationId(int bottomNavigationId) {
             for (Page page : values()) {
                 if (page.bottomNavigationId == bottomNavigationId) {
@@ -234,14 +207,39 @@ public class EntranceActivity extends DaggerAppCompatActivity {
             throw new AssertionError("no navigation enum found for the id. you forgot to implement?");
         }
 
-        private final int bottomNavigationId;
-
-        Page(int bottomNavigationId) {
-            this.bottomNavigationId = bottomNavigationId;
-        }
-
         abstract Fragment newInstance();
 
         abstract String getTag();
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            TrainingMenuFragment.Module.class,
+            ExamFragment.Module.class,
+            MaterialFragment.Module.class,
+            SupportFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<EntranceActivity> {
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<EntranceActivity> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(EntranceActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @Binds
+        @IntoMap
+        @ActivityKey(EntranceActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

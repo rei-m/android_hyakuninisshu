@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'io.fabric'
 
 repositories {
@@ -24,28 +23,18 @@ android {
         android.signingConfigs.releaseConfig.keyPassword = keyPassword
     }
 
-    compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    compileSdkVersion 27
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         multiDexEnabled true
         versionCode 11
         versionName "1.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    productFlavors {
-        dev {
-            // Enable pre-dexing to produce an APK that can be tested on
-            // Android 5.0+ without the time-consuming DEX build processes.
-            minSdkVersion 21
-        }
-        prod {
-            // The actual minSdkVersion for the production version.
-            minSdkVersion 16
-        }
-    }
+
     buildTypes {
         debug {
             debuggable true
@@ -77,7 +66,7 @@ android {
 }
 
 dependencies {
-    ext.android_support_lib_version = '26.1.0'
+    ext.android_support_lib_version = '27.0.0'
     ext.okhttp_version = '3.4.1'
     ext.retrofit_version = '2.1.0'
     ext.streamsupport_version = '1.5.2'
@@ -86,71 +75,71 @@ dependencies {
     ext.leakcanary_version = '1.5.4'
     ext.play_services_version = '11.4.2'
 
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:support-annotations:$android_support_lib_version"
-    compile "com.android.support:appcompat-v7:$android_support_lib_version"
-    compile "com.android.support:support-v4:$android_support_lib_version"
-    compile "com.android.support:percent:$android_support_lib_version"
-    compile "com.android.support:design:$android_support_lib_version"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:multidex:1.0.1'
-    compile "com.google.firebase:firebase-core:$play_services_version"
-    compile "com.google.android.gms:play-services-ads:$play_services_version"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:support-annotations:$android_support_lib_version"
+    implementation "com.android.support:appcompat-v7:$android_support_lib_version"
+    implementation "com.android.support:support-v4:$android_support_lib_version"
+    implementation "com.android.support:percent:$android_support_lib_version"
+    implementation "com.android.support:design:$android_support_lib_version"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:multidex:1.0.2'
+    implementation "com.google.firebase:firebase-core:$play_services_version"
+    implementation "com.google.android.gms:play-services-ads:$play_services_version"
 
-    provided 'javax.annotation:jsr250-api:1.0'
-    compile "com.google.dagger:dagger:$dagger_version"
-    compile "com.google.dagger:dagger-android:$dagger_version"
-    compile "com.google.dagger:dagger-android-support:$dagger_version"
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
 
-    compile "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    compile "io.reactivex.rxjava2:rxandroid:2.0.1"
-    compile 'com.squareup.moshi:moshi:1.5.0'
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
+    implementation 'com.squareup.moshi:moshi:1.5.0'
 
-    compile 'com.github.bumptech.glide:glide:4.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.2.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
 
-    compile 'com.github.hotchemi:android-rate:1.0.1'
+    implementation 'com.github.hotchemi:android-rate:1.0.1'
 
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
-    compile 'com.github.gfx.android.orma:orma:4.2.5'
+    implementation 'com.github.gfx.android.orma:orma:4.2.5'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.4.2'
-    testCompile 'org.mockito:mockito-core:2.10.0'
-    testCompile('com.android.support.test:runner:1.0.1') {
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.4.2'
+    testImplementation 'org.mockito:mockito-core:2.10.0'
+    testImplementation('com.android.support.test:runner:1.0.1') {
         exclude module: 'support-annotations'
     }
-    testCompile('com.android.support.test:rules:1.0.1') {
+    testImplementation('com.android.support.test:rules:1.0.1') {
         exclude module: 'support-annotations'
     }
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.1') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1') {
         exclude module: 'support-annotations'
         exclude group: 'com.google.code.findbugs'
     }
-    androidTestCompile('com.android.support.test.espresso:espresso-intents:3.0.1') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-intents:3.0.1') {
         exclude module: 'support-annotations'
         exclude group: 'com.google.code.findbugs'
     }
-    androidTestCompile('com.android.support.test:runner:1.0.1') {
+    androidTestImplementation('com.android.support.test:runner:1.0.1') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile('com.android.support.test:rules:1.0.1') {
+    androidTestImplementation('com.android.support.test:rules:1.0.1') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile 'org.mockito:mockito-core:2.10.0'
-    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
-    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestImplementation 'org.mockito:mockito-core:2.10.0'
+    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
+    androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
-    androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
+    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true
     }
 }
 

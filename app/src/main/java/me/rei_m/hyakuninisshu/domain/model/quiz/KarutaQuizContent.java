@@ -108,11 +108,11 @@ public class KarutaQuizContent implements ValueObject {
 
         KarutaQuizContent that = (KarutaQuizContent) o;
 
-        if (existNext != that.existNext) return false;
-        if (!karutaQuiz.equals(that.karutaQuiz)) return false;
-        if (!collect.equals(that.collect)) return false;
-        if (!choices.equals(that.choices)) return false;
-        return position.equals(that.position);
+        return existNext == that.existNext &&
+                karutaQuiz.equals(that.karutaQuiz) &&
+                collect.equals(that.collect) &&
+                choices.equals(that.choices) &&
+                position.equals(that.position);
     }
 
     @Override

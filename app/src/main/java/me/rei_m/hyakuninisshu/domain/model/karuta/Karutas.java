@@ -44,7 +44,7 @@ public class Karutas {
 
     public List<Karuta> asList(@Nullable Color color) {
         if (color == null) {
-            return Collections.unmodifiableList(values);
+            return asList();
         } else {
             return Observable.fromIterable(values).filter(karuta -> karuta.color().equals(color)).toList().blockingGet();
         }
@@ -84,9 +84,8 @@ public class Karutas {
 
         Karutas karutas = (Karutas) o;
 
-        if (!values.equals(karutas.values)) return false;
-
-        return ids.equals(karutas.ids);
+        return values.equals(karutas.values) &&
+                ids.equals(karutas.ids);
     }
 
     @Override

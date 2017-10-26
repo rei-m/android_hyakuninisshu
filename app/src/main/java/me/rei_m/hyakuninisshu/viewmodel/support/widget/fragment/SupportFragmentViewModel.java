@@ -18,8 +18,8 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import me.rei_m.hyakuninisshu.AnalyticsManager;
-import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 

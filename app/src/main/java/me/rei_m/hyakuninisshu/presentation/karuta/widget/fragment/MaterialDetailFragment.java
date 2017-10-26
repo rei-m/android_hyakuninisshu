@@ -45,13 +45,6 @@ public class MaterialDetailFragment extends DaggerFragment {
         return fragment;
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = MaterialDetailFragmentViewModelModule.class)
-        abstract MaterialDetailFragment contributeInjector();
-    }
-
     @Inject
     MaterialDetailFragmentViewModel viewModel;
 
@@ -82,7 +75,7 @@ public class MaterialDetailFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialDetailBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         return binding.getRoot();
@@ -138,5 +131,13 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     public interface OnFragmentInteractionListener {
         void onReceiveIllegalArguments();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = MaterialDetailFragmentViewModelModule.class)
+        abstract MaterialDetailFragment contributeInjector();
     }
 }

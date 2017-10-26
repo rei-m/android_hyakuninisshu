@@ -15,8 +15,8 @@ package me.rei_m.hyakuninisshu.util;
 
 public class Constants {
 
+    public static final String SPACE = "　";
+
     private Constants() {
     }
-    
-    public static final String SPACE = "　";
 }

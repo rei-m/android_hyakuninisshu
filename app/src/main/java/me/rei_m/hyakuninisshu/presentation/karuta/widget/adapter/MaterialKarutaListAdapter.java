@@ -29,25 +29,6 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemView
 
 public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static class ItemViewHolder extends RecyclerView.ViewHolder {
-
-        public final AdapterItemMaterialKarutaBinding binding;
-
-        ItemViewHolder(@NonNull AdapterItemMaterialKarutaBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-    }
-
-    private enum ItemViewType {
-        ITEM,
-        FOOTER;
-
-        static ItemViewType forId(int id) {
-            return values()[id];
-        }
-    }
-
     private static final int FOOTER_COUNT = 1;
 
     private final ObservableArrayList<Karuta> karutaList;
@@ -127,7 +108,26 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
         return karutaList.size() + FOOTER_COUNT;
     }
 
+    private enum ItemViewType {
+        ITEM,
+        FOOTER;
+
+        static ItemViewType forId(int id) {
+            return values()[id];
+        }
+    }
+
     public interface Injector {
         KarutaListItemViewModel karutaListItemViewModel();
+    }
+
+    private static class ItemViewHolder extends RecyclerView.ViewHolder {
+
+        public final AdapterItemMaterialKarutaBinding binding;
+
+        ItemViewHolder(@NonNull AdapterItemMaterialKarutaBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
     }
 }

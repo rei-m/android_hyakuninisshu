@@ -58,10 +58,9 @@ public class KarutaQuizResult implements ValueObject {
 
         KarutaQuizResult result = (KarutaQuizResult) o;
 
-        if (answerTime != result.answerTime) return false;
-        if (!judgement.equals(result.judgement)) return false;
-        return choiceNo == result.choiceNo;
-
+        return answerTime == result.answerTime &&
+                judgement.equals(result.judgement) &&
+                choiceNo == result.choiceNo;
     }
 
     @Override

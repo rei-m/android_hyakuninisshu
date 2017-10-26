@@ -16,12 +16,12 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsActivityViewModel;
 
@@ -36,8 +36,11 @@ public class TrainingMasterActivityViewModel extends AbsActivityViewModel {
     private final KarutaTrainingModel karutaTrainingModel;
 
     private TrainingRangeFrom trainingRangeFrom;
+
     private TrainingRangeTo trainingRangeTo;
+
     private KimarijiFilter kimarijiFilter;
+
     private ColorFilter colorFilter;
 
     private boolean isStartedTraining = false;

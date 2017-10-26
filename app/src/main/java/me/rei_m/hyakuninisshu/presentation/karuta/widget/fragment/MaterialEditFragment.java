@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +48,6 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
         args.putParcelable(ARG_KARUTA_ID, karutaId);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = MaterialEditFragmentViewModelModule.class)
-        abstract MaterialEditFragment contributeInjector();
     }
 
     @Inject
@@ -89,7 +83,7 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         return binding.getRoot();
@@ -106,6 +100,10 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
         super.onStart();
         disposable = new CompositeDisposable();
         disposable.addAll(viewModel.onClickEditEvent.subscribe(v -> {
+                    FragmentManager manger = getFragmentManager();
+                    if (manger == null) {
+                        return;
+                    }
                     ConfirmMaterialEditDialogFragment fragment = ConfirmMaterialEditDialogFragment.newInstance(
                             viewModel.firstPhraseKanji.get(),
                             viewModel.firstPhraseKana.get(),
@@ -119,7 +117,7 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
                             viewModel.fifthPhraseKana.get()
                     );
                     fragment.setTargetFragment(this, 0);
-                    fragment.show(getFragmentManager(), ConfirmMaterialEditDialogFragment.TAG);
+                    fragment.show(manger, ConfirmMaterialEditDialogFragment.TAG);
                 }), viewModel.onErrorEditEvent.subscribe(v -> {
                     if (getView() != null) {
                         Snackbar.make(getView(), getString(R.string.text_message_edit_error), Snackbar.LENGTH_SHORT)
@@ -127,7 +125,11 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
                                 .show();
                     }
                 }),
-                viewModel.onUpdateMaterialEvent.subscribe(v -> getActivity().finish()));
+                viewModel.onUpdateMaterialEvent.subscribe(v -> {
+                    if (getActivity() != null) {
+                        getActivity().finish();
+                    }
+                }));
         viewModel.onStart();
     }
 
@@ -183,5 +185,13 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
     public interface OnFragmentInteractionListener {
         void onReceiveIllegalArguments();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = MaterialEditFragmentViewModelModule.class)
+        abstract MaterialEditFragment contributeInjector();
     }
 }

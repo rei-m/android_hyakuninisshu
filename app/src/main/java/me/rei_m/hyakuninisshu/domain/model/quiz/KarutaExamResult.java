@@ -72,10 +72,9 @@ public class KarutaExamResult implements ValueObject {
 
         KarutaExamResult result = (KarutaExamResult) o;
 
-        if (!resultSummary.equals(result.resultSummary)) return false;
-        if (!wrongKarutaIds.equals(result.wrongKarutaIds)) return false;
-        return judgements.equals(result.judgements);
-
+        return resultSummary.equals(result.resultSummary) &&
+                wrongKarutaIds.equals(result.wrongKarutaIds) &&
+                judgements.equals(result.judgements);
     }
 
     @Override

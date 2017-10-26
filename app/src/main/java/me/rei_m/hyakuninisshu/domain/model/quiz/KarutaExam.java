@@ -32,7 +32,7 @@ public class KarutaExam extends AbstractEntity<KarutaExam, KarutaExamIdentifier>
     public KarutaExamResult result() {
         return result;
     }
-    
+
     @Override
     public String toString() {
         return "KarutaExam{" +

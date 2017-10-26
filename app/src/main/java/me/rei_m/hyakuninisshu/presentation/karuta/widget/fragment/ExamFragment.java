@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +36,6 @@ public class ExamFragment extends DaggerFragment {
         return new ExamFragment();
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = ExamFragmentViewModelModule.class)
-        abstract ExamFragment contributeInjector();
-    }
-
     @Inject
     ExamFragmentViewModel viewModel;
 
@@ -52,7 +46,7 @@ public class ExamFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentExamBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         return binding.getRoot();
@@ -92,5 +86,13 @@ public class ExamFragment extends DaggerFragment {
     public void onDetach() {
         viewModel = null;
         super.onDetach();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = ExamFragmentViewModelModule.class)
+        abstract ExamFragment contributeInjector();
     }
 }

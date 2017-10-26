@@ -42,7 +42,6 @@ public class KarutaIdentifier implements EntityIdentifier, Parcelable {
         KarutaIdentifier that = (KarutaIdentifier) o;
 
         return value == that.value;
-
     }
 
     @Override
@@ -71,6 +70,7 @@ public class KarutaIdentifier implements EntityIdentifier, Parcelable {
         this.value = in.readInt();
     }
 
+    @SuppressWarnings("unused")
     public static final Creator<KarutaIdentifier> CREATOR = new Creator<KarutaIdentifier>() {
         @Override
         public KarutaIdentifier createFromParcel(Parcel source) {

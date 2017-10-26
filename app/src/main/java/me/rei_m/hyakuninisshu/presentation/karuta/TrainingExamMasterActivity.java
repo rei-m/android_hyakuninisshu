@@ -56,41 +56,10 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         QuizResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
-    public static Intent createIntent(@NonNull Context context) {
-        return new Intent(context, TrainingExamMasterActivity.class);
-    }
-
     private static final String KEY_IS_STARTED = "isStarted";
 
-    @ForActivity
-    @dagger.Subcomponent(modules = {
-            ActivityModule.class,
-            TrainingExamMasterActivityViewModelModule.class,
-            ExamFragment.Module.class,
-            QuizAnswerFragment.Module.class,
-            QuizFragment.Module.class,
-            QuizResultFragment.Module.class
-    })
-    public interface Subcomponent extends AndroidInjector<TrainingExamMasterActivity> {
-
-        @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<TrainingExamMasterActivity> {
-
-            public abstract Builder activityModule(ActivityModule module);
-
-            @Override
-            public void seedInstance(TrainingExamMasterActivity instance) {
-                activityModule(new ActivityModule(instance));
-            }
-        }
-    }
-
-    @dagger.Module(subcomponents = Subcomponent.class)
-    public abstract class Module {
-        @Binds
-        @IntoMap
-        @ActivityKey(TrainingExamMasterActivity.class)
-        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
+    public static Intent createIntent(@NonNull Context context) {
+        return new Intent(context, TrainingExamMasterActivity.class);
     }
 
     @Inject
@@ -266,5 +235,38 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
                 .beginTransaction()
                 .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                 .commit();
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            TrainingExamMasterActivityViewModelModule.class,
+            ExamFragment.Module.class,
+            QuizAnswerFragment.Module.class,
+            QuizFragment.Module.class,
+            QuizResultFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<TrainingExamMasterActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<TrainingExamMasterActivity> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(TrainingExamMasterActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @Binds
+        @IntoMap
+        @ActivityKey(TrainingExamMasterActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

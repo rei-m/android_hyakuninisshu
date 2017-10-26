@@ -11,7 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.event;
+package me.rei_m.hyakuninisshu.util;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.CheckReturnValue;
@@ -21,17 +21,18 @@ import io.reactivex.subjects.PublishSubject;
 
 public final class EventObservable<T> {
 
-    @CheckReturnValue
-    public static <T> EventObservable<T> create() {
-        return new EventObservable<>();
-    }
-
     private final PublishSubject<T> publishSubject;
+
     private final Observable<T> observable;
 
     private EventObservable() {
         this.publishSubject = PublishSubject.create();
         this.observable = this.publishSubject;
+    }
+
+    @CheckReturnValue
+    public static <T> EventObservable<T> create() {
+        return new EventObservable<>();
     }
 
     public void onNext(T t) {

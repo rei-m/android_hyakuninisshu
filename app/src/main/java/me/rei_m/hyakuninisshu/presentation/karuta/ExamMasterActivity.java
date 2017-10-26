@@ -55,37 +55,12 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         ExamResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
+    private static final String KEY_IS_STARTED = "isStarted";
+
+    private static final String KEY_IS_FINISHED = "isFinished";
+
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
-    }
-
-    @ForActivity
-    @dagger.Subcomponent(modules = {
-            ActivityModule.class,
-            ExamMasterActivityViewModelModule.class,
-            QuizAnswerFragment.Module.class,
-            QuizFragment.Module.class,
-            ExamResultFragment.Module.class
-    })
-    public interface Subcomponent extends AndroidInjector<ExamMasterActivity> {
-        @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<ExamMasterActivity> {
-
-            public abstract Builder activityModule(ActivityModule module);
-
-            @Override
-            public void seedInstance(ExamMasterActivity instance) {
-                activityModule(new ActivityModule(instance));
-            }
-        }
-    }
-
-    @dagger.Module(subcomponents = Subcomponent.class)
-    public abstract class Module {
-        @Binds
-        @IntoMap
-        @ActivityKey(ExamMasterActivity.class)
-        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 
     @Inject
@@ -99,10 +74,6 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     private AdView adView;
 
     private CompositeDisposable disposable;
-
-    private static final String KEY_IS_STARTED = "isStarted";
-
-    private static final String KEY_IS_FINISHED = "isFinished";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,5 +229,36 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     @Override
     public void onDialogNegativeClick() {
 
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            ExamMasterActivityViewModelModule.class,
+            QuizAnswerFragment.Module.class,
+            QuizFragment.Module.class,
+            ExamResultFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<ExamMasterActivity> {
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<ExamMasterActivity> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(ExamMasterActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @Binds
+        @IntoMap
+        @ActivityKey(ExamMasterActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

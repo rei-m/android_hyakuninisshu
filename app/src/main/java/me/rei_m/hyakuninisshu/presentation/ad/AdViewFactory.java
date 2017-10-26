@@ -27,7 +27,7 @@ import me.rei_m.hyakuninisshu.R;
 @Singleton
 public class AdViewFactory {
 
-    private Context context;
+    private final Context context;
 
     @Inject
     public AdViewFactory(@NonNull Context context) {
