@@ -32,9 +32,9 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
 import me.rei_m.hyakuninisshu.domain.model.quiz.YomiFuda;
-import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.GlideApp;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
@@ -59,13 +59,13 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableBoolean isCorrect = new ObservableBoolean(false);
 
-    public EventObservable<Unit> startDisplayAnimationEvent = EventObservable.create();
+    public final EventObservable<Unit> startDisplayAnimationEvent = EventObservable.create();
 
-    public EventObservable<Unit> stopDisplayAnimationEvent = EventObservable.create();
+    public final EventObservable<Unit> stopDisplayAnimationEvent = EventObservable.create();
 
-    public EventObservable<Unit> onClickResultEvent = EventObservable.create();
+    public final EventObservable<Unit> onClickResultEvent = EventObservable.create();
 
-    public EventObservable<Unit> errorEvent = EventObservable.create();
+    public final EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaQuizModel karutaQuizModel;
 
@@ -160,9 +160,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             this.correctKarutaId = result.correctKarutaId();
             this.existNextQuiz = karutaQuizContent.existNext();
 
-        }), karutaQuizModel.errorEvent.subscribe(v -> {
-            errorEvent.onNext(Unit.INSTANCE);
-        }));
+        }), karutaQuizModel.errorEvent.subscribe(v -> errorEvent.onNext(Unit.INSTANCE)));
     }
 
     @Override

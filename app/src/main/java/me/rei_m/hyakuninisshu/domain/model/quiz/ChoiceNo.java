@@ -29,7 +29,7 @@ public enum ChoiceNo implements ValueObject {
         }
         throw new AssertionError("no enum found. value is " + value);
     }
-
+    
     private final int value;
 
     ChoiceNo(int value) {

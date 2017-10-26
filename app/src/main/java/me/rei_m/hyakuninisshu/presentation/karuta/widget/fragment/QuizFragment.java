@@ -17,6 +17,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,13 +73,6 @@ public class QuizFragment extends DaggerFragment {
         return fragment;
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = QuizFragmentViewModelModule.class)
-        abstract QuizFragment contributeInjector();
-    }
-
     @Inject
     QuizFragmentViewModel viewModel;
 
@@ -116,7 +110,7 @@ public class QuizFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
 
         Point windowSize = device.getWindowSize();
@@ -141,11 +135,13 @@ public class QuizFragment extends DaggerFragment {
 
         disposable = new CompositeDisposable();
 
-        disposable.addAll(viewModel.startDisplayAnimationEvent.subscribe(v -> {
-            startDisplayQuizAnimation(viewModel.firstPhrase.get(),
-                    viewModel.secondPhrase.get(),
-                    viewModel.thirdPhrase.get());
-        }), viewModel.stopDisplayAnimationEvent.subscribe(v -> {
+        disposable.addAll(viewModel.startDisplayAnimationEvent.subscribe(v ->
+                startDisplayQuizAnimation(
+                        viewModel.firstPhrase.get(),
+                        viewModel.secondPhrase.get(),
+                        viewModel.thirdPhrase.get()
+                )
+        ), viewModel.stopDisplayAnimationEvent.subscribe(v -> {
             if (animationDisposable != null) {
                 animationDisposable.dispose();
                 animationDisposable = null;
@@ -209,7 +205,7 @@ public class QuizFragment extends DaggerFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_QUIZ_ID, viewModel.karutaQuizId());
     }
@@ -292,5 +288,13 @@ public class QuizFragment extends DaggerFragment {
             int choiceWidth = windowWidth / 4;
             choiceTextSize = choiceWidth / 5;
         }
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = QuizFragmentViewModelModule.class)
+        abstract QuizFragment contributeInjector();
     }
 }

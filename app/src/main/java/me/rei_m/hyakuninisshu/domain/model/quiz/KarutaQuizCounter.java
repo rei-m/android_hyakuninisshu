@@ -37,9 +37,8 @@ public class KarutaQuizCounter implements ValueObject {
 
         KarutaQuizCounter that = (KarutaQuizCounter) o;
 
-        if (totalCount != that.totalCount) return false;
-
-        return answeredCount == that.answeredCount;
+        return totalCount == that.totalCount &&
+                answeredCount == that.answeredCount;
     }
 
     @Override

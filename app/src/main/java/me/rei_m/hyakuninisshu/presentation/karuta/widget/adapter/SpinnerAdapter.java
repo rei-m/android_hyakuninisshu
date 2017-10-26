@@ -32,10 +32,22 @@ import me.rei_m.hyakuninisshu.presentation.karuta.enums.SpinnerItem;
 public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
 
     @LayoutRes
-    private int resource;
+    private final int resource;
 
     @LayoutRes
-    private int dropDownResource;
+    private final int dropDownResource;
+
+    private SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, SpinnerItem[] objects) {
+        super(context, resource, objects);
+        this.resource = resource;
+        this.dropDownResource = dropDownResource;
+    }
+
+    private SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, List<SpinnerItem> objects) {
+        super(context, resource, objects);
+        this.resource = resource;
+        this.dropDownResource = dropDownResource;
+    }
 
     public static SpinnerAdapter newInstance(Context context, SpinnerItem[] objects, boolean withNullValue) {
         if (withNullValue) {
@@ -57,18 +69,6 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerItem> {
         } else {
             return new SpinnerAdapter(context, R.layout.item_spinner, R.layout.item_spinner_dropdown, objects);
         }
-    }
-
-    private SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, SpinnerItem[] objects) {
-        super(context, resource, objects);
-        this.resource = resource;
-        this.dropDownResource = dropDownResource;
-    }
-
-    private SpinnerAdapter(Context context, @LayoutRes int resource, @LayoutRes int dropDownResource, List<SpinnerItem> objects) {
-        super(context, resource, objects);
-        this.resource = resource;
-        this.dropDownResource = dropDownResource;
     }
 
     @NonNull

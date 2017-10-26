@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -27,10 +26,6 @@ public class KarutaExams {
 
     public KarutaExams(final List<KarutaExam> values) {
         this.values = values;
-    }
-
-    public List<KarutaExam> asList() {
-        return Collections.unmodifiableList(values);
     }
 
     public KarutaExam recent() {

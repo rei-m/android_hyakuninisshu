@@ -23,10 +23,6 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     private final String creator;
 
-    private KamiNoKu kamiNoKu;
-
-    private ShimoNoKu shimoNoKu;
-
     private final Kimariji kimariji;
 
     private final ImageNo imageNo;
@@ -34,6 +30,10 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
     private final String translation;
 
     private final Color color;
+
+    private KamiNoKu kamiNoKu;
+
+    private ShimoNoKu shimoNoKu;
 
     public Karuta(@NonNull KarutaIdentifier identifier,
                   @NonNull String creator,

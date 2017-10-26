@@ -50,10 +50,9 @@ public class KarutaQuizResultSummary implements ValueObject {
 
         KarutaQuizResultSummary that = (KarutaQuizResultSummary) o;
 
-        if (quizCount != that.quizCount) return false;
-        if (correctCount != that.correctCount) return false;
-        return Float.compare(that.averageAnswerTime, averageAnswerTime) == 0;
-
+        return quizCount == that.quizCount &&
+                correctCount == that.correctCount &&
+                Float.compare(that.averageAnswerTime, averageAnswerTime) == 0;
     }
 
     @Override

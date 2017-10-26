@@ -36,6 +36,39 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
 
     private final OrmaDatabase orma;
 
+    private final Function<KarutaQuizSchema, KarutaQuiz> funcConvertEntity = new Function<KarutaQuizSchema, KarutaQuiz>() {
+        @Override
+        public KarutaQuiz apply(KarutaQuizSchema karutaQuizSchema) {
+            List<KarutaIdentifier> karutaIdentifierList = new ArrayList<>();
+            karutaQuizSchema.getChoices(orma)
+                    .selector()
+                    .executeAsObservable()
+                    .map(karutaQuizChoiceSchema -> new KarutaIdentifier((int) karutaQuizChoiceSchema.karutaId))
+                    .subscribe(karutaIdentifierList::add);
+
+            if (karutaQuizSchema.startDate == null) {
+                return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                        karutaIdentifierList,
+                        new KarutaIdentifier((int) karutaQuizSchema.collectId));
+            } else {
+                if (karutaQuizSchema.answerTime > 0) {
+                    return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                            karutaIdentifierList,
+                            new KarutaIdentifier((int) karutaQuizSchema.collectId),
+                            karutaQuizSchema.startDate,
+                            karutaQuizSchema.answerTime,
+                            ChoiceNo.forValue(karutaQuizSchema.choiceNo),
+                            karutaQuizSchema.isCollect);
+                } else {
+                    return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                            karutaIdentifierList,
+                            new KarutaIdentifier((int) karutaQuizSchema.collectId),
+                            karutaQuizSchema.startDate);
+                }
+            }
+        }
+    };
+
     public KarutaQuizRepositoryImpl(@NonNull OrmaDatabase orma) {
         this.orma = orma;
     }
@@ -149,37 +182,4 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
         return Single.zip(totalCountSingle, answeredCountSingle, (totalCount, answeredCount) ->
                 new KarutaQuizCounter(totalCount.intValue(), answeredCount.intValue()));
     }
-
-    private Function<KarutaQuizSchema, KarutaQuiz> funcConvertEntity = new Function<KarutaQuizSchema, KarutaQuiz>() {
-        @Override
-        public KarutaQuiz apply(KarutaQuizSchema karutaQuizSchema) {
-            List<KarutaIdentifier> karutaIdentifierList = new ArrayList<>();
-            karutaQuizSchema.getChoices(orma)
-                    .selector()
-                    .executeAsObservable()
-                    .map(karutaQuizChoiceSchema -> new KarutaIdentifier((int) karutaQuizChoiceSchema.karutaId))
-                    .subscribe(karutaIdentifierList::add);
-
-            if (karutaQuizSchema.startDate == null) {
-                return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                        karutaIdentifierList,
-                        new KarutaIdentifier((int) karutaQuizSchema.collectId));
-            } else {
-                if (karutaQuizSchema.answerTime > 0) {
-                    return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                            karutaIdentifierList,
-                            new KarutaIdentifier((int) karutaQuizSchema.collectId),
-                            karutaQuizSchema.startDate,
-                            karutaQuizSchema.answerTime,
-                            ChoiceNo.forValue(karutaQuizSchema.choiceNo),
-                            karutaQuizSchema.isCollect);
-                } else {
-                    return new KarutaQuiz(new KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                            karutaIdentifierList,
-                            new KarutaIdentifier((int) karutaQuizSchema.collectId),
-                            karutaQuizSchema.startDate);
-                }
-            }
-        }
-    };
 }

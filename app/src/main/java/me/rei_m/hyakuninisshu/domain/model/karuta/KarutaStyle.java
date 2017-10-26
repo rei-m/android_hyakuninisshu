@@ -21,14 +21,10 @@ public enum KarutaStyle implements ValueObject {
     KANA("kana"),
     KANJI("kanji");
 
-    KarutaStyle(@NonNull String value) {
-        this.value = value;
-    }
-
     private final String value;
 
-    public String value() {
-        return value;
+    KarutaStyle(@NonNull String value) {
+        this.value = value;
     }
 
     @Override

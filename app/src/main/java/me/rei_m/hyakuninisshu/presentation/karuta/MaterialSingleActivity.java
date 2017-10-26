@@ -56,33 +56,6 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity implements M
         return intent;
     }
 
-    @ForActivity
-    @dagger.Subcomponent(modules = {
-            ActivityModule.class,
-            MaterialDetailFragment.Module.class
-    })
-    public interface Subcomponent extends AndroidInjector<MaterialSingleActivity> {
-
-        @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<MaterialSingleActivity> {
-
-            public abstract Builder activityModule(ActivityModule module);
-
-            @Override
-            public void seedInstance(MaterialSingleActivity instance) {
-                activityModule(new ActivityModule(instance));
-            }
-        }
-    }
-
-    @dagger.Module(subcomponents = Subcomponent.class)
-    public abstract class Module {
-        @Binds
-        @IntoMap
-        @ActivityKey(MaterialSingleActivity.class)
-        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
-    }
-
     @Inject
     AdViewFactory adViewFactory;
 
@@ -177,5 +150,34 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity implements M
     @Override
     public void onDialogNegativeClick() {
 
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            MaterialDetailFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<MaterialSingleActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<MaterialSingleActivity> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(MaterialSingleActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @Binds
+        @IntoMap
+        @ActivityKey(MaterialSingleActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

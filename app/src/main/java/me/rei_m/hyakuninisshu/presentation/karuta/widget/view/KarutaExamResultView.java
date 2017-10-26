@@ -27,8 +27,8 @@ import java.util.List;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
-import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.presentation.util.ViewUtil;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 
 public class KarutaExamResultView extends LinearLayout {
 
@@ -50,7 +50,7 @@ public class KarutaExamResultView extends LinearLayout {
         }
     }
 
-    public EventObservable<KarutaIdentifier> onClickKarutaEvent = EventObservable.create();
+    public final EventObservable<KarutaIdentifier> onClickKarutaEvent = EventObservable.create();
 
     public KarutaExamResultView(@NonNull Context context) {
         super(context);

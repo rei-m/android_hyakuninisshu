@@ -27,19 +27,19 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
-import me.rei_m.hyakuninisshu.event.EventObservable;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
 public class KarutaModel {
 
-    public EventObservable<Karuta> completeFetchKarutaEvent = EventObservable.create();
+    public final EventObservable<Karuta> completeFetchKarutaEvent = EventObservable.create();
 
-    public EventObservable<Unit> completeEditKarutaEvent = EventObservable.create();
+    public final EventObservable<Unit> completeEditKarutaEvent = EventObservable.create();
 
-    public EventObservable<List<Karuta>> completeFetchKarutasEvent = EventObservable.create();
+    public final EventObservable<List<Karuta>> completeFetchKarutasEvent = EventObservable.create();
 
-    public EventObservable<Unit> errorEvent = EventObservable.create();
+    public final EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -52,7 +52,7 @@ public class KarutaModel {
         karutaRepository.findBy(karutaIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karuta -> completeFetchKarutaEvent.onNext(karuta), e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(completeFetchKarutaEvent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
     public void editKaruta(@NonNull KarutaIdentifier karutaIdentifier,

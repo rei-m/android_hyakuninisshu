@@ -75,13 +75,6 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
         return fragment;
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = ConfirmMaterialEditDialogFragmentViewModelModule.class)
-        abstract ConfirmMaterialEditDialogFragment contributeInjector();
-    }
-
     @Inject
     ConfirmMaterialEditDialogFragmentViewModel viewModel;
 
@@ -176,5 +169,13 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
         void onConfirmMaterialEditDialogPositiveClick();
 
         void onConfirmMaterialEditDialogNegativeClick();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = ConfirmMaterialEditDialogFragmentViewModelModule.class)
+        abstract ConfirmMaterialEditDialogFragment contributeInjector();
     }
 }

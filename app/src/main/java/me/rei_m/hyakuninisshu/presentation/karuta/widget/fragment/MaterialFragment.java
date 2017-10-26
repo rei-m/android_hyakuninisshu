@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
@@ -44,16 +45,6 @@ public class MaterialFragment extends DaggerFragment {
         return new MaterialFragment();
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = {
-                MaterialFragmentViewModelModule.class,
-                KarutaListItemViewModelModule.class
-        })
-        abstract MaterialFragment contributeInjector();
-    }
-
     @Inject
     Navigator navigator;
 
@@ -76,12 +67,12 @@ public class MaterialFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter(viewModel.karutaList, injector);
         binding.recyclerKarutaList.setAdapter(adapter);
-        binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(inflater.getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
     }
 
@@ -134,5 +125,16 @@ public class MaterialFragment extends DaggerFragment {
                 return false;
             });
         }
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = {
+                MaterialFragmentViewModelModule.class,
+                KarutaListItemViewModelModule.class
+        })
+        abstract MaterialFragment contributeInjector();
     }
 }

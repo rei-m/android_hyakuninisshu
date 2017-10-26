@@ -32,36 +32,10 @@ import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 
 public class SplashActivity extends DaggerAppCompatActivity {
 
-    @ForActivity
-    @dagger.Subcomponent(modules = {ActivityModule.class})
-    public interface Subcomponent extends AndroidInjector<SplashActivity> {
-
-        @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<SplashActivity> {
-
-            public abstract Builder activityModule(ActivityModule module);
-
-            @Override
-            public void seedInstance(SplashActivity instance) {
-                activityModule(new ActivityModule(instance));
-            }
-        }
-    }
-
-    @dagger.Module(subcomponents = Subcomponent.class)
-    public abstract class Module {
-        @Binds
-        @IntoMap
-        @ActivityKey(SplashActivity.class)
-        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
-    }
-
     @Inject
     Navigator navigator;
-
     @Inject
     ApplicationModel applicationModel;
-
     private CompositeDisposable disposable;
 
     @Override
@@ -76,7 +50,6 @@ public class SplashActivity extends DaggerAppCompatActivity {
         applicationModel = null;
         super.onDestroy();
     }
-
 
     @Override
     protected void onStart() {
@@ -101,5 +74,31 @@ public class SplashActivity extends DaggerAppCompatActivity {
     protected void onResume() {
         super.onResume();
         applicationModel.start();
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {ActivityModule.class})
+    public interface Subcomponent extends AndroidInjector<SplashActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<SplashActivity> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(SplashActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @Binds
+        @IntoMap
+        @ActivityKey(SplashActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

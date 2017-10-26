@@ -25,10 +25,6 @@ public class ShimoNoKuIdentifier implements EntityIdentifier {
         this.value = UUID.randomUUID().toString();
     }
 
-    public String value() {
-        return value;
-    }
-    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

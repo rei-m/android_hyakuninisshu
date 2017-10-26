@@ -16,8 +16,8 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
-import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsActivityViewModel;
 
@@ -32,6 +32,7 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
     private final KarutaExamModel karutaExamModel;
 
     private boolean isStartedExam = false;
+
     private boolean isFinishedExam = false;
 
     public ExamMasterActivityViewModel(@NonNull KarutaExamModel karutaExamModel) {

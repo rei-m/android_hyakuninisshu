@@ -19,8 +19,8 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -79,7 +79,7 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
                 return;
             }
 
-            karutaNo.set((int) karuta.identifier().value());
+            karutaNo.set(karuta.identifier().value());
             creator.set(karuta.creator());
             kimariji.set(karuta.kimariji().value());
             firstPhraseKanji.set(karuta.kamiNoKu().first().kanji());
@@ -92,9 +92,7 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
             fourthPhraseKana.set(karuta.shimoNoKu().fourth().kana());
             fifthPhraseKanji.set(karuta.shimoNoKu().fifth().kanji());
             fifthPhraseKana.set(karuta.shimoNoKu().fifth().kana());
-        }), karutaModel.completeEditKarutaEvent.subscribe(v -> {
-            onUpdateMaterialEvent.onNext(Unit.INSTANCE);
-        }));
+        }), karutaModel.completeEditKarutaEvent.subscribe(v -> onUpdateMaterialEvent.onNext(Unit.INSTANCE)));
     }
 
     @Override

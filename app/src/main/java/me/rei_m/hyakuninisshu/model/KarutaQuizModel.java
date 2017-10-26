@@ -33,17 +33,17 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizCounter;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.event.EventObservable;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 @Singleton
 public class KarutaQuizModel {
 
-    public EventObservable<KarutaQuizContent> completeStartEvent = EventObservable.create();
+    public final EventObservable<KarutaQuizContent> completeStartEvent = EventObservable.create();
 
-    public EventObservable<KarutaQuizContent> completeAnswerEvent = EventObservable.create();
+    public final EventObservable<KarutaQuizContent> completeAnswerEvent = EventObservable.create();
 
-    public EventObservable<Unit> errorEvent = EventObservable.create();
+    public final EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -62,7 +62,7 @@ public class KarutaQuizModel {
                 .flatMap(this::createContent)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(v -> completeStartEvent.onNext(v), e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(completeStartEvent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
     public void answer(@NonNull KarutaQuizIdentifier quizId, @NonNull ChoiceNo choiceNo) {
@@ -71,10 +71,7 @@ public class KarutaQuizModel {
                 .flatMap(this::createContent)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(v -> completeAnswerEvent.onNext(v), e -> {
-                    e.printStackTrace();
-                    errorEvent.onNext(Unit.INSTANCE);
-                });
+                .subscribe(completeAnswerEvent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
     public void restart(@NonNull KarutaQuizIdentifier quizId) {

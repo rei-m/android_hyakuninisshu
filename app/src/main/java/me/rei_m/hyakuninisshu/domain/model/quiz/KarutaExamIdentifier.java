@@ -66,7 +66,8 @@ public class KarutaExamIdentifier implements EntityIdentifier, Parcelable {
         this.value = in.readLong();
     }
 
-    public static final Parcelable.Creator<KarutaExamIdentifier> CREATOR = new Parcelable.Creator<KarutaExamIdentifier>() {
+    @SuppressWarnings("unused")
+    public static final Creator<KarutaExamIdentifier> CREATOR = new Creator<KarutaExamIdentifier>() {
         @Override
         public KarutaExamIdentifier createFromParcel(Parcel source) {
             return new KarutaExamIdentifier(source);

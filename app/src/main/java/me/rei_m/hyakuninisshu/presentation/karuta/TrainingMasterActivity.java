@@ -59,6 +59,20 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         QuizResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
+    private static final String ARG_TRAINING_RANGE_FROM = "trainingRangeFrom";
+
+    private static final String ARG_TRAINING_RANGE_TO = "trainingRangeTo";
+
+    private static final String ARG_KIMARIJI = "kimarij";
+
+    private static final String ARG_COLOR = "color";
+
+    private static final String ARG_KAMI_NO_KU_STYLE = "kamiNoKuStyle";
+
+    private static final String ARG_SHIMO_NO_KU_STYLE = "shimoNoKuStyle";
+
+    private static final String KEY_IS_STARTED = "isStarted";
+
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull TrainingRangeFrom trainingRangeFrom,
                                       @NonNull TrainingRangeTo trainingRangeTo,
@@ -76,50 +90,6 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         bundle.putInt(ARG_SHIMO_NO_KU_STYLE, shimoNoKuStyle.ordinal());
         intent.putExtras(bundle);
         return intent;
-    }
-
-    private static final String ARG_TRAINING_RANGE_FROM = "trainingRangeFrom";
-
-    private static final String ARG_TRAINING_RANGE_TO = "trainingRangeTo";
-
-    private static final String ARG_KIMARIJI = "kimarij";
-
-    private static final String ARG_COLOR = "color";
-
-    private static final String ARG_KAMI_NO_KU_STYLE = "kamiNoKuStyle";
-
-    private static final String ARG_SHIMO_NO_KU_STYLE = "shimoNoKuStyle";
-
-    private static final String KEY_IS_STARTED = "isStarted";
-
-    @ForActivity
-    @dagger.Subcomponent(modules = {
-            ActivityModule.class,
-            TrainingMasterActivityViewModelModule.class,
-            QuizFragment.Module.class,
-            QuizAnswerFragment.Module.class,
-            QuizResultFragment.Module.class
-    })
-    public interface Subcomponent extends AndroidInjector<TrainingMasterActivity> {
-
-        @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<TrainingMasterActivity> {
-
-            public abstract Builder activityModule(ActivityModule module);
-
-            @Override
-            public void seedInstance(TrainingMasterActivity instance) {
-                activityModule(new ActivityModule(instance));
-            }
-        }
-    }
-
-    @dagger.Module(subcomponents = Subcomponent.class)
-    public abstract class Module {
-        @Binds
-        @IntoMap
-        @ActivityKey(TrainingMasterActivity.class)
-        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 
     @Inject
@@ -320,5 +290,37 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     @Override
     public void onDialogNegativeClick() {
 
+    }
+
+    @ForActivity
+    @dagger.Subcomponent(modules = {
+            ActivityModule.class,
+            TrainingMasterActivityViewModelModule.class,
+            QuizFragment.Module.class,
+            QuizAnswerFragment.Module.class,
+            QuizResultFragment.Module.class
+    })
+    public interface Subcomponent extends AndroidInjector<TrainingMasterActivity> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<TrainingMasterActivity> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder activityModule(ActivityModule module);
+
+            @Override
+            public void seedInstance(TrainingMasterActivity instance) {
+                activityModule(new ActivityModule(instance));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @Binds
+        @IntoMap
+        @ActivityKey(TrainingMasterActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

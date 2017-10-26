@@ -15,6 +15,8 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +39,6 @@ public class QuizResultFragment extends DaggerFragment {
         return new QuizResultFragment();
     }
 
-    @dagger.Module
-    public abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector(modules = QuizResultFragmentViewModelModule.class)
-        abstract QuizResultFragment contributeInjector();
-    }
-
     @Inject
     QuizResultFragmentViewModel viewModel;
 
@@ -58,7 +53,7 @@ public class QuizResultFragment extends DaggerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentQuizResultBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         return binding.getRoot();
@@ -137,5 +132,13 @@ public class QuizResultFragment extends DaggerFragment {
         void onFinishTraining();
 
         void onErrorQuiz();
+    }
+
+    @dagger.Module
+    public abstract class Module {
+        @SuppressWarnings("unused")
+        @ForFragment
+        @ContributesAndroidInjector(modules = QuizResultFragmentViewModelModule.class)
+        abstract QuizResultFragment contributeInjector();
     }
 }

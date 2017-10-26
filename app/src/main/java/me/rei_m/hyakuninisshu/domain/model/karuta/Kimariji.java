@@ -23,19 +23,19 @@ public enum Kimariji implements ValueObject {
     FIVE(5),
     SIX(6);
 
+    private final int value;
+
+    Kimariji(int value) {
+        this.value = value;
+    }
+
     public static Kimariji forValue(int value) {
-        for(Kimariji kimariji : values()) {
+        for (Kimariji kimariji : values()) {
             if (kimariji.value() == value) {
                 return kimariji;
             }
         }
         throw new AssertionError("no enum found. value is " + value);
-    }
-
-    private int value;
-
-    Kimariji(int value) {
-        this.value = value;
     }
 
     public int value() {

@@ -43,9 +43,8 @@ public class Phrase implements ValueObject {
 
         Phrase phrase = (Phrase) o;
 
-        if (!kana.equals(phrase.kana)) return false;
-
-        return kanji.equals(phrase.kanji);
+        return kana.equals(phrase.kana) &&
+                kanji.equals(phrase.kanji);
     }
 
     @Override

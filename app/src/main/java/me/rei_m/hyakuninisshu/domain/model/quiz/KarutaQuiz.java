@@ -85,7 +85,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         return this;
     }
 
-    public KarutaQuiz verify(@NonNull ChoiceNo choiceNo, @NonNull Date answerDate) throws IllegalStateException, IllegalArgumentException {
+    public KarutaQuiz verify(@NonNull ChoiceNo choiceNo, @NonNull Date answerDate) throws IllegalStateException {
         if (startDate == null) {
             throw new IllegalStateException("Quiz is not started. Call start.");
         }
@@ -95,7 +95,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
         this.result = new KarutaQuizResult(correctId, choiceNo, isCorrect, answerTime);
         return this;
     }
-    
+
     @Override
     public String toString() {
         return "KarutaQuiz{" +

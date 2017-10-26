@@ -23,10 +23,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.event.EventObservable;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
@@ -50,11 +50,11 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableBoolean existNextQuiz = new ObservableBoolean(false);
 
-    public EventObservable<Unit> onClickNextQuizEvent = EventObservable.create();
+    public final EventObservable<Unit> onClickNextQuizEvent = EventObservable.create();
 
-    public EventObservable<Unit> onClickConfirmResultEvent = EventObservable.create();
+    public final EventObservable<Unit> onClickConfirmResultEvent = EventObservable.create();
 
-    public EventObservable<Unit> errorEvent = EventObservable.create();
+    public final EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaModel karutaModel;
 
@@ -66,6 +66,17 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
                                        @NonNull Navigator navigator) {
         this.karutaModel = karutaModel;
         this.navigator = navigator;
+    }
+
+    private static String padSpace(String text, int count) {
+
+        int finallyCount = (count < text.length()) ? text.length() : count;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < finallyCount; i++) {
+            builder.append("　");
+        }
+        return (text + builder.toString()).substring(0, finallyCount);
     }
 
     public void onCreate(@NonNull KarutaIdentifier karutaId,
@@ -122,16 +133,5 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
         String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo) + " / " +
                 KarutaDisplayHelper.convertKimarijiToString(context, kimariji);
         view.setText(text);
-    }
-
-    private static String padSpace(String text, int count) {
-
-        int finallyCount = (count < text.length()) ? text.length() : count;
-
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < finallyCount; i++) {
-            builder.append("　");
-        }
-        return (text + builder.toString()).substring(0, finallyCount);
     }
 }
