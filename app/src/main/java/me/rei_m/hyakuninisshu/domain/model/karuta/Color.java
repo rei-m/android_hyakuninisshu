@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 歌の色.
+ */
 public enum Color implements ValueObject {
     BLUE("blue"),
     PINK("pink"),

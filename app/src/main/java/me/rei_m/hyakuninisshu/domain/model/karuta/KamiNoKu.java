@@ -19,6 +19,9 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
 import static me.rei_m.hyakuninisshu.util.Constants.SPACE;
 
+/**
+ * 上の句.
+ */
 public class KamiNoKu extends AbstractEntity<KamiNoKu, KamiNoKuIdentifier> {
 
     private final Phrase first;
