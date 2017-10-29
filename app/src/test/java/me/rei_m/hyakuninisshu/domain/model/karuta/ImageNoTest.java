@@ -55,7 +55,7 @@ public class ImageNoTest {
     }
 
     @Test
-    public void equalsNot() throws Exception {
+    public void notEquals() throws Exception {
         ImageNo imageNo1 = new ImageNo("100");
         ImageNo imageNo2 = new ImageNo("001");
         assertThat(imageNo1.equals(imageNo2), is(false));

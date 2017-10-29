@@ -28,7 +28,7 @@ public class KamiNoKuTest {
 
     @Before
     public void setUp() throws Exception {
-        KamiNoKuIdentifier identifier = new KamiNoKuIdentifier();
+        KamiNoKuIdentifier identifier = new KamiNoKuIdentifier(1);
         first = new Phrase("しょく", "初句");
         second = new Phrase("にく", "二句");
         third = new Phrase("さんく", "三句");

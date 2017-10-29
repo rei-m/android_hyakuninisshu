@@ -41,8 +41,8 @@ class KarutaFactory {
         Phrase fourthPart = new Phrase(schema.fourthKana, schema.fourthKanji);
         Phrase fifthPart = new Phrase(schema.fifthKana, schema.fifthKanji);
 
-        KamiNoKu kamiNoKu = new KamiNoKu(new KamiNoKuIdentifier(), firstPart, secondPart, thirdPart);
-        ShimoNoKu shimoNoKu = new ShimoNoKu(new ShimoNoKuIdentifier(), fourthPart, fifthPart);
+        KamiNoKu kamiNoKu = new KamiNoKu(new KamiNoKuIdentifier(identifier.value()), firstPart, secondPart, thirdPart);
+        ShimoNoKu shimoNoKu = new ShimoNoKu(new ShimoNoKuIdentifier(identifier.value()), fourthPart, fifthPart);
 
         String translation = (schema.translation != null) ? schema.translation : "";
 

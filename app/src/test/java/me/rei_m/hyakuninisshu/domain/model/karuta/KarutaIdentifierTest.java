@@ -13,24 +13,40 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThat;
 
-public class KamiNoKuIdentifierTest {
+public class KarutaIdentifierTest {
+
+    private KarutaIdentifier karutaIdentifier;
+
+    @Before
+    public void setUp() throws Exception {
+        karutaIdentifier = new KarutaIdentifier(1);
+    }
+
+    @Test
+    public void value() throws Exception {
+        assertThat(karutaIdentifier.value(), is(1));
+    }
+
+    @Test
+    public void position() throws Exception {
+        assertThat(karutaIdentifier.position(), is(0));
+    }
 
     @Test
     public void equals() throws Exception {
-        KamiNoKuIdentifier thisValue = new KamiNoKuIdentifier(1);
-        KamiNoKuIdentifier thatValue = new KamiNoKuIdentifier(1);
-        assertEquals(thisValue, thatValue);
+        assertEquals(karutaIdentifier, new KarutaIdentifier(1));
     }
 
     @Test
     public void notEquals() throws Exception {
-        KamiNoKuIdentifier thisValue = new KamiNoKuIdentifier(1);
-        KamiNoKuIdentifier thatValue = new KamiNoKuIdentifier(2);
-        assertNotEquals(thisValue, thatValue);
+        assertNotEquals(karutaIdentifier, new KarutaIdentifier(2));
     }
 }

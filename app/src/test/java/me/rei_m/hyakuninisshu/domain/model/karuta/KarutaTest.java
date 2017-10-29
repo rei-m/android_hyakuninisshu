@@ -15,8 +15,6 @@ package me.rei_m.hyakuninisshu.domain.model.karuta;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.theories.Theories;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -35,13 +33,13 @@ public class KarutaTest {
         KarutaIdentifier identifier = new KarutaIdentifier(1);
         creator = "creator";
         kamiNoKu = new KamiNoKu(
-                new KamiNoKuIdentifier(),
+                new KamiNoKuIdentifier(1),
                 new Phrase("しょく", "初句"),
                 new Phrase("にく", "二句"),
                 new Phrase("さんく", "三句")
         );
         shimoNoKu = new ShimoNoKu(
-                new ShimoNoKuIdentifier(),
+                new ShimoNoKuIdentifier(1),
                 new Phrase("よんく", "四句"),
                 new Phrase("ごく", "五句")
         );
@@ -83,11 +81,6 @@ public class KarutaTest {
     @Test
     public void color() throws Exception {
         assertThat(karuta.color(), is(Color.BLUE));
-    }
-
-    @RunWith(Theories.class)
-    public static class UpdatePhrase {
-
     }
 
     @Test

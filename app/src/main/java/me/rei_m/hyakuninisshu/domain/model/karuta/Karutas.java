@@ -27,6 +27,9 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 
+/**
+ * 全ての歌のコレクション.
+ */
 public class Karutas {
 
     private final List<Karuta> values;
@@ -38,10 +41,19 @@ public class Karutas {
         this.ids = Observable.fromIterable(values).map(AbstractEntity::identifier).toList().blockingGet();
     }
 
+    /**
+     * @return 歌のリスト
+     */
     public List<Karuta> asList() {
         return Collections.unmodifiableList(values);
     }
 
+    /**
+     * 保持している歌を色で絞り込む.
+     *
+     * @param color 歌の色
+     * @return 歌のリスト
+     */
     public List<Karuta> asList(@Nullable Color color) {
         if (color == null) {
             return asList();
@@ -50,7 +62,13 @@ public class Karutas {
         }
     }
 
-    public KarutaQuizzes createQuizSet(KarutaIds karutaIds) {
+    /**
+     * 指定された歌のIDを元に問題を作成する.
+     *
+     * @param karutaIds 歌IDコレクション。渡されたIDが正解となる問題を作成する。
+     * @return 問題のコレクション
+     */
+    public KarutaQuizzes createQuizSet(@NonNull KarutaIds karutaIds) {
 
         List<KarutaQuiz> quizzes = new ArrayList<>();
 
