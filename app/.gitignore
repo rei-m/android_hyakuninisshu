@@ -1,6 +1,4 @@
 /build
-google-services.json
 keystore/
-src/debug/AndroidManifest.xml
 src/release/
 app-release.apk
