@@ -15,6 +15,9 @@ package me.rei_m.hyakuninisshu.domain.model.karuta;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 歌の決まり字.
+ */
 public enum Kimariji implements ValueObject {
     ONE(1),
     TWO(2),

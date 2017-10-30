@@ -13,27 +13,19 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
-import android.support.annotation.NonNull;
+import org.junit.Test;
 
-import me.rei_m.hyakuninisshu.domain.ValueObject;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
 
-/**
- * 歌の表示形式.
- */
-public enum KarutaStyle implements ValueObject {
-    KANA("kana"),
-    KANJI("kanji");
-
-    private final String value;
-
-    KarutaStyle(@NonNull String value) {
-        this.value = value;
+public class KimarijiTest {
+    @Test
+    public void forValue() throws Exception {
+        assertThat(Kimariji.forValue(1), is(Kimariji.ONE));
     }
 
-    @Override
-    public String toString() {
-        return "KarutaStyle{" +
-                "value='" + value + '\'' +
-                "} " + super.toString();
+    @Test(expected = AssertionError.class)
+    public void forValueWithInvalidValue() throws Exception {
+        assertThat(Kimariji.forValue(0), is(Kimariji.ONE));
     }
 }

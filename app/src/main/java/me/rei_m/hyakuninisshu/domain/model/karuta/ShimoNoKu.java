@@ -19,6 +19,9 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
 import static me.rei_m.hyakuninisshu.util.Constants.SPACE;
 
+/**
+ * 下の句.
+ */
 public class ShimoNoKu extends AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier> {
 
     private final Phrase fourth;

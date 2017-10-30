@@ -13,27 +13,23 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
-import android.support.annotation.NonNull;
+import org.junit.Test;
 
-import me.rei_m.hyakuninisshu.domain.ValueObject;
+import static org.junit.Assert.*;
 
-/**
- * 歌の表示形式.
- */
-public enum KarutaStyle implements ValueObject {
-    KANA("kana"),
-    KANJI("kanji");
+public class ShimoNoKuIdentifierTest {
 
-    private final String value;
-
-    KarutaStyle(@NonNull String value) {
-        this.value = value;
+    @Test
+    public void equals() throws Exception {
+        ShimoNoKuIdentifier thisValue = new ShimoNoKuIdentifier(1);
+        ShimoNoKuIdentifier thatValue = new ShimoNoKuIdentifier(1);
+        assertEquals(thisValue, thatValue);
     }
 
-    @Override
-    public String toString() {
-        return "KarutaStyle{" +
-                "value='" + value + '\'' +
-                "} " + super.toString();
+    @Test
+    public void notEquals() throws Exception {
+        ShimoNoKuIdentifier thisValue = new ShimoNoKuIdentifier(1);
+        ShimoNoKuIdentifier thatValue = new ShimoNoKuIdentifier(2);
+        assertNotEquals(thisValue, thatValue);
     }
 }
