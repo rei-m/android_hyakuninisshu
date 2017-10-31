@@ -40,6 +40,7 @@ android {
             debuggable true
             applicationIdSuffix ".debug"
             versionNameSuffix "d"
+            testCoverageEnabled true
         }
         release {
             signingConfig signingConfigs.releaseConfig
