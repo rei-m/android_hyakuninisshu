@@ -43,6 +43,10 @@ public class KarutaQuizResultSummary implements ValueObject {
         return averageAnswerTime;
     }
 
+    public String score() {
+        return correctCount + "/" + quizCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

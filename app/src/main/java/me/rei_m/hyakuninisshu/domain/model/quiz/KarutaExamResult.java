@@ -24,6 +24,9 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
 
+/**
+ * 百人一首力試しの結果.
+ */
 public class KarutaExamResult implements ValueObject {
 
     private final KarutaQuizResultSummary resultSummary;
@@ -50,7 +53,7 @@ public class KarutaExamResult implements ValueObject {
     }
 
     public String score() {
-        return resultSummary.correctCount() + "/" + resultSummary.quizCount();
+        return resultSummary.score();
     }
 
     public float averageAnswerTime() {

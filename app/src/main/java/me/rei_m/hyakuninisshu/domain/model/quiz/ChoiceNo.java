@@ -15,6 +15,9 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 問題の選択肢.
+ */
 public enum ChoiceNo implements ValueObject {
     FIRST(1),
     SECOND(2),
@@ -29,7 +32,7 @@ public enum ChoiceNo implements ValueObject {
         }
         throw new AssertionError("no enum found. value is " + value);
     }
-    
+
     private final int value;
 
     ChoiceNo(int value) {
