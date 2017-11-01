@@ -48,22 +48,37 @@ public class KarutaExamResult implements ValueObject {
         }
     }
 
+    /**
+     * @return 問題の件数
+     */
     public int quizCount() {
         return resultSummary.quizCount();
     }
 
+    /**
+     * @return 力試しの結果
+     */
     public String score() {
         return resultSummary.score();
     }
 
+    /**
+     * @return 平均解答時間
+     */
     public float averageAnswerTime() {
         return resultSummary.averageAnswerTime();
     }
 
+    /**
+     * @return 間違えた問題の歌IDコレクション
+     */
     public KarutaIds wrongKarutaIds() {
         return wrongKarutaIds;
     }
 
+    /**
+     * @return 問題の正誤情報
+     */
     public List<KarutaQuizJudgement> judgements() {
         return Collections.unmodifiableList(judgements);
     }

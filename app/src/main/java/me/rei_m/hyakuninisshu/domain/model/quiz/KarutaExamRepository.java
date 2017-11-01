@@ -46,7 +46,7 @@ public interface KarutaExamRepository {
      * 力試しを取得する.
      *
      * @param identifier 力試しID
-     * @return 取得した力試し
+     * @return 力試し
      */
     Single<KarutaExam> findBy(@NonNull KarutaExamIdentifier identifier);
 
