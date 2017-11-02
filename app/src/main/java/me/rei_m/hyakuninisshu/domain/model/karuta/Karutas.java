@@ -22,6 +22,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
+import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
@@ -79,11 +80,11 @@ public class Karutas {
             List<KarutaIdentifier> dupIds = new ArrayList<>(this.ids);
             dupIds.remove(correctKarutaId);
 
-            for (int choiceIndex : ArrayUtil.generateRandomIndexArray(dupIds.size(), KarutaQuiz.CHOICE_SIZE - 1)) {
+            for (int choiceIndex : ArrayUtil.generateRandomIndexArray(dupIds.size(), ChoiceNo.values().length - 1)) {
                 choices.add(dupIds.get(choiceIndex));
             }
 
-            int correctPosition = ArrayUtil.generateRandomIndexArray(KarutaQuiz.CHOICE_SIZE, 1)[0];
+            int correctPosition = ArrayUtil.generateRandomIndexArray(ChoiceNo.values().length, 1)[0];
 
             choices.add(correctPosition, correctKarutaId);
 
