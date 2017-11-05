@@ -117,7 +117,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaQuizModel.completeStartEvent.subscribe(karutaQuizContent -> {
 
-            karutaQuizId = karutaQuizContent.quizId();
+            karutaQuizId = karutaQuizContent.quiz().identifier();
 
             quizCount.set(karutaQuizContent.currentPosition());
 
@@ -135,14 +135,14 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
                 choiceFifthPhraseList.set(i, toriFuda.fifthPhrase());
             }
 
-            if (!karutaQuizContent.isAnswered()) {
+            if (karutaQuizContent.quiz().result() == null) {
                 startDisplayAnimationEvent.onNext(Unit.INSTANCE);
             }
         }), karutaQuizModel.completeAnswerEvent.subscribe(karutaQuizContent -> {
 
             stopDisplayAnimationEvent.onNext(Unit.INSTANCE);
 
-            KarutaQuizResult result = karutaQuizContent.result();
+            KarutaQuizResult result = karutaQuizContent.quiz().result();
 
             if (result == null) {
                 errorEvent.onNext(Unit.INSTANCE);

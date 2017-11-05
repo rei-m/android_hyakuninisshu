@@ -25,11 +25,14 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase;
 import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu;
 
+/**
+ * 百人一首の問題内容.
+ */
 public class KarutaQuizContent implements ValueObject {
 
     private final KarutaQuiz karutaQuiz;
 
-    private final Karuta collect;
+    private final Karuta correct;
 
     private final List<Karuta> choices;
 
@@ -38,28 +41,39 @@ public class KarutaQuizContent implements ValueObject {
     private final boolean existNext;
 
     public KarutaQuizContent(@NonNull KarutaQuiz karutaQuiz,
-                             @NonNull Karuta collect,
+                             @NonNull Karuta correct,
                              @NonNull List<Karuta> choices,
                              @NonNull KarutaQuizCounter position,
                              boolean existNext) {
         this.karutaQuiz = karutaQuiz;
-        this.collect = collect;
+        this.correct = correct;
         this.choices = choices;
         this.position = position;
         this.existNext = existNext;
     }
 
-    public KarutaQuizIdentifier quizId() {
-        return karutaQuiz.identifier();
+    /**
+     * @return 問題
+     */
+    public KarutaQuiz quiz() {
+        return karutaQuiz;
     }
 
+    /**
+     * @param karutaStyle 表示スタイル
+     * @return 読み札
+     */
     public YomiFuda yomiFuda(@NonNull KarutaStyle karutaStyle) {
-        KamiNoKu phrase = collect.kamiNoKu();
+        KamiNoKu phrase = correct.kamiNoKu();
         return (karutaStyle == KarutaStyle.KANJI) ?
                 new YomiFuda(phrase.first().kanji(), phrase.second().kanji(), phrase.third().kanji()) :
                 new YomiFuda(phrase.first().kana(), phrase.second().kana(), phrase.third().kana());
     }
 
+    /**
+     * @param karutaStyle 表示スタイル
+     * @return 取り札
+     */
     public List<ToriFuda> toriFudas(@NonNull KarutaStyle karutaStyle) {
         Phrase[] fourthPhrases = new Phrase[choices.size()];
         Phrase[] fifthPhrases = new Phrase[choices.size()];
@@ -85,20 +99,18 @@ public class KarutaQuizContent implements ValueObject {
         return toriFudas;
     }
 
+    /**
+     * @return 現在が何問目か
+     */
     public String currentPosition() {
         return position.value();
     }
 
+    /**
+     * @return 次の問題は存在するか
+     */
     public boolean existNext() {
         return existNext;
-    }
-
-    public boolean isAnswered() {
-        return karutaQuiz.result() != null;
-    }
-
-    public KarutaQuizResult result() {
-        return karutaQuiz.result();
     }
 
     @Override
@@ -110,7 +122,7 @@ public class KarutaQuizContent implements ValueObject {
 
         return existNext == that.existNext &&
                 karutaQuiz.equals(that.karutaQuiz) &&
-                collect.equals(that.collect) &&
+                correct.equals(that.correct) &&
                 choices.equals(that.choices) &&
                 position.equals(that.position);
     }
@@ -118,7 +130,7 @@ public class KarutaQuizContent implements ValueObject {
     @Override
     public int hashCode() {
         int result = karutaQuiz.hashCode();
-        result = 31 * result + collect.hashCode();
+        result = 31 * result + correct.hashCode();
         result = 31 * result + choices.hashCode();
         result = 31 * result + position.hashCode();
         result = 31 * result + (existNext ? 1 : 0);
@@ -129,7 +141,7 @@ public class KarutaQuizContent implements ValueObject {
     public String toString() {
         return "KarutaQuizContent{" +
                 "karutaQuiz=" + karutaQuiz +
-                ", collect=" + collect +
+                ", correct=" + correct +
                 ", choices=" + choices +
                 ", position=" + position +
                 ", existNext=" + existNext +

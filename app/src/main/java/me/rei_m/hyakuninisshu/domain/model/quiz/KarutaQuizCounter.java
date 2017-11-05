@@ -15,6 +15,9 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 練習または力試しの中での問題のカウンター.
+ */
 public class KarutaQuizCounter implements ValueObject {
 
     private final int totalCount;

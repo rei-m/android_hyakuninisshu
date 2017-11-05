@@ -37,7 +37,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
     private KarutaQuizResult result;
 
     /**
-     * 問題作成時のコンストラクタ.
+     * 問題作成時の状態.
      *
      * @param identifier    問題ID
      * @param choiceList    選択肢
@@ -52,7 +52,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
     }
 
     /**
-     * 問題解答開始時のコンストラクタ.
+     * 問題解答開始時の状態.
      *
      * @param identifier    問題ID
      * @param choiceList    選択肢
@@ -68,7 +68,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
     }
 
     /**
-     * 解答完了時のコンストラクタ.
+     * 解答完了時の状態.
      *
      * @param identifier    問題ID
      * @param choiceList    選択肢
@@ -115,7 +115,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
     }
 
     /**
-     * @return 解答結果
+     * @return 解答結果. 未解答の場合はNullが返る
      */
     @Nullable
     public KarutaQuizResult result() {
