@@ -112,7 +112,7 @@ public class KarutaQuizTest {
             KarutaQuiz actual = karutaQuiz.verify(ChoiceNo.FIRST, answerDate);
             assertThat(actual, is(karutaQuiz));
             assertThat(actual.result().choiceNo(), is(ChoiceNo.FIRST));
-            assertThat(actual.result().isCorrect(), is(true));
+            assertThat(actual.result().judgement(), is(new KarutaQuizJudgement(correctId, true)));
             assertThat(actual.result().answerTime(), is(answerDate.getTime() - startDate.getTime()));
         }
 
@@ -123,7 +123,7 @@ public class KarutaQuizTest {
             KarutaQuiz actual = karutaQuiz.verify(ChoiceNo.SECOND, answerDate);
             assertThat(actual, is(karutaQuiz));
             assertThat(actual.result().choiceNo(), is(ChoiceNo.SECOND));
-            assertThat(actual.result().isCorrect(), is(false));
+            assertThat(actual.result().judgement(), is(new KarutaQuizJudgement(correctId, false)));
             assertThat(actual.result().answerTime(), is(answerDate.getTime() - startDate.getTime()));
         }
     }

@@ -19,9 +19,9 @@ import me.rei_m.hyakuninisshu.domain.ValueObject;
 
 public class TrainingResult implements ValueObject {
 
-    private final KarutaQuizResultSummary resultSummary;
+    private final KarutaQuizzesResultSummary resultSummary;
 
-    public TrainingResult(@NonNull KarutaQuizResultSummary resultSummary) {
+    public TrainingResult(@NonNull KarutaQuizzesResultSummary resultSummary) {
         this.resultSummary = resultSummary;
     }
 

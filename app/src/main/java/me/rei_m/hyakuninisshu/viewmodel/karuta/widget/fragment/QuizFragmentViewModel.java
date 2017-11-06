@@ -154,10 +154,10 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             for (int i = 0; i < isVisibleChoiceList.size(); i++) {
                 this.isVisibleChoiceList.set(i, isVisibleChoiceList.get(i));
             }
-            this.isCorrect.set(result.isCorrect());
+            this.isCorrect.set(result.judgement().isCorrect());
             this.isVisibleResult.set(true);
 
-            this.correctKarutaId = result.correctKarutaId();
+            this.correctKarutaId = result.judgement().karutaId();
             this.existNextQuiz = karutaQuizContent.existNext();
 
         }), karutaQuizModel.errorEvent.subscribe(v -> errorEvent.onNext(Unit.INSTANCE)));

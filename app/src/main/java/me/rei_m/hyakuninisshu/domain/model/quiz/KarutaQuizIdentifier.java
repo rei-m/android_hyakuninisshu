@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class KarutaQuizIdentifier implements EntityIdentifier, Parcelable {
         this.value = UUID.randomUUID().toString();
     }
 
-    public KarutaQuizIdentifier(String value) {
+    public KarutaQuizIdentifier(@NonNull String value) {
         this.value = value;
     }
 

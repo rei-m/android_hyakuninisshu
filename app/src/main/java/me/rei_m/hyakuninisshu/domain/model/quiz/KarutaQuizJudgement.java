@@ -18,6 +18,9 @@ import android.support.annotation.NonNull;
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
+/**
+ * 問題の正誤判定.
+ */
 public class KarutaQuizJudgement implements ValueObject {
 
     private final KarutaIdentifier karutaId;
@@ -29,10 +32,16 @@ public class KarutaQuizJudgement implements ValueObject {
         this.isCorrect = isCorrect;
     }
 
+    /**
+     * @return 判定対象の歌ID
+     */
     public KarutaIdentifier karutaId() {
         return karutaId;
     }
 
+    /**
+     * @return {@code true} 正解の場合, {@code false} 不正解の場合
+     */
     public boolean isCorrect() {
         return isCorrect;
     }

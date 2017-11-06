@@ -13,15 +13,33 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class KarutaQuizCounterTest {
+public class KarutaQuizJudgementTest {
+
+    private KarutaQuizJudgement karutaQuizJudgement;
+
+    private KarutaIdentifier karutaIdentifier;
+
+    @Before
+    public void setUp() throws Exception {
+        karutaIdentifier = new KarutaIdentifier(1);
+        karutaQuizJudgement = new KarutaQuizJudgement(karutaIdentifier, true);
+    }
+
     @Test
-    public void value() throws Exception {
-        KarutaQuizCounter counter = new KarutaQuizCounter(100, 0);
-        assertThat(counter.value(), is("1 / 100"));
+    public void karutaId() throws Exception {
+        assertThat(karutaQuizJudgement.karutaId(), is(karutaIdentifier));
+    }
+
+    @Test
+    public void isCorrect() throws Exception {
+        assertThat(karutaQuizJudgement.isCorrect(), is(true));
     }
 }

@@ -30,6 +30,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizCounter;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 
 public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
@@ -138,10 +139,11 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
                     .updater();
 
             updater.startDate(karutaQuiz.startDate());
-            if (karutaQuiz.result() != null) {
-                updater.isCollect(karutaQuiz.result().isCorrect())
-                        .choiceNo(karutaQuiz.result().choiceNo().value())
-                        .answerTime(karutaQuiz.result().answerTime());
+            KarutaQuizResult result = karutaQuiz.result();
+            if (result != null) {
+                updater.isCollect(result.judgement().isCorrect())
+                        .choiceNo(result.choiceNo().value())
+                        .answerTime(result.answerTime());
             }
             updater.execute();
         });

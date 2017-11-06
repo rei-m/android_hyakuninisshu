@@ -29,13 +29,13 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
  */
 public class KarutaExamResult implements ValueObject {
 
-    private final KarutaQuizResultSummary resultSummary;
+    private final KarutaQuizzesResultSummary resultSummary;
 
     private final KarutaIds wrongKarutaIds;
 
     private final List<KarutaQuizJudgement> judgements;
 
-    public KarutaExamResult(@NonNull KarutaQuizResultSummary resultSummary,
+    public KarutaExamResult(@NonNull KarutaQuizzesResultSummary resultSummary,
                             @NonNull KarutaIds wrongKarutaIds) {
         this.resultSummary = resultSummary;
         this.wrongKarutaIds = wrongKarutaIds;

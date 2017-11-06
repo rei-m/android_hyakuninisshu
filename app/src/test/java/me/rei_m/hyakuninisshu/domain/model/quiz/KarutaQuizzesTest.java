@@ -13,15 +13,37 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
-public class KarutaQuizCounterTest {
-    @Test
-    public void value() throws Exception {
-        KarutaQuizCounter counter = new KarutaQuizCounter(100, 0);
-        assertThat(counter.value(), is("1 / 100"));
+@RunWith(Enclosed.class)
+public class KarutaQuizzesTest {
+
+    public static class WhenNotEmpty {
+
+        @Before
+        public void setUp() throws Exception {
+
+        }
+
+        @Test
+        public void asList() throws Exception {
+        }
+
+        @Test
+        public void isEmpty() throws Exception {
+        }
+
+        @Test
+        public void wrongKarutaIds() throws Exception {
+        }
+
+        @Test
+        public void resultSummary() throws Exception {
+        }
     }
 }
