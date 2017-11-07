@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 取り札.
+ */
 public class ToriFuda implements ValueObject {
 
     private final String fourthPhrase;

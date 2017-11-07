@@ -15,7 +15,10 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
-public class KarutaQuizResultSummary implements ValueObject {
+/**
+ * 問題全体の解答結果集計.
+ */
+public class KarutaQuizzesResultSummary implements ValueObject {
 
     private final int quizCount;
 
@@ -23,24 +26,40 @@ public class KarutaQuizResultSummary implements ValueObject {
 
     private final float averageAnswerTime;
 
-    public KarutaQuizResultSummary(int quizCount,
-                                   int correctCount,
-                                   float averageAnswerTime) {
+    public KarutaQuizzesResultSummary(int quizCount,
+                                      int correctCount,
+                                      float averageAnswerTime) {
         this.quizCount = quizCount;
         this.correctCount = correctCount;
         this.averageAnswerTime = averageAnswerTime;
     }
 
+    /**
+     * @return 問題数
+     */
     public int quizCount() {
         return quizCount;
     }
 
+    /**
+     * @return 正解数
+     */
     public int correctCount() {
         return correctCount;
     }
 
+    /**
+     * @return 平均解答時間
+     */
     public float averageAnswerTime() {
         return averageAnswerTime;
+    }
+
+    /**
+     * @return 表示向けスコア
+     */
+    public String score() {
+        return correctCount + "/" + quizCount;
     }
 
     @Override
@@ -48,7 +67,7 @@ public class KarutaQuizResultSummary implements ValueObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        KarutaQuizResultSummary that = (KarutaQuizResultSummary) o;
+        KarutaQuizzesResultSummary that = (KarutaQuizzesResultSummary) o;
 
         return quizCount == that.quizCount &&
                 correctCount == that.correctCount &&

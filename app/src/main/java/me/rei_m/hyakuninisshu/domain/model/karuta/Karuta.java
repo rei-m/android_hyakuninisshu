@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
+/**
+ * 百人一首の歌.
+ */
 public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
 
     public static final int NUMBER_OF_KARUTA = 100;

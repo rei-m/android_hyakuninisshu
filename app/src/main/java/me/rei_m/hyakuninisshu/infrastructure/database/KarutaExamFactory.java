@@ -24,7 +24,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResultSummary;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzesResultSummary;
 
 public class KarutaExamFactory {
 
@@ -43,7 +43,7 @@ public class KarutaExamFactory {
 
         KarutaIds wrongKarutaIds = new KarutaIds(wrongKarutaIdentifierList);
 
-        KarutaQuizResultSummary resultSummary = new KarutaQuizResultSummary(
+        KarutaQuizzesResultSummary resultSummary = new KarutaQuizzesResultSummary(
                 schema.totalQuizCount,
                 schema.totalQuizCount - wrongKarutaIds.size(),
                 schema.averageAnswerTime

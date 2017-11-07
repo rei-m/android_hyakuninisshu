@@ -79,10 +79,10 @@ public class KarutaQuizModel {
                 .flatMap(this::createContent)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaQuiz -> {
-                    completeStartEvent.onNext(karutaQuiz);
-                    if (karutaQuiz.result() != null) {
-                        completeAnswerEvent.onNext(karutaQuiz);
+                .subscribe(karutaQuizContent -> {
+                    completeStartEvent.onNext(karutaQuizContent);
+                    if (karutaQuizContent.quiz().result() != null) {
+                        completeAnswerEvent.onNext(karutaQuizContent);
                     }
                 }, e -> errorEvent.onNext(Unit.INSTANCE));
     }

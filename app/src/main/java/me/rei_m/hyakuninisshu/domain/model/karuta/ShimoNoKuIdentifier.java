@@ -13,16 +13,14 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
-import java.util.UUID;
-
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
 public class ShimoNoKuIdentifier implements EntityIdentifier {
 
-    private final String value;
+    private final int value;
 
-    public ShimoNoKuIdentifier() {
-        this.value = UUID.randomUUID().toString();
+    public ShimoNoKuIdentifier(int value) {
+        this.value = value;
     }
 
     @Override
@@ -32,18 +30,18 @@ public class ShimoNoKuIdentifier implements EntityIdentifier {
 
         ShimoNoKuIdentifier that = (ShimoNoKuIdentifier) o;
 
-        return value.equals(that.value);
+        return value == that.value;
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value;
     }
 
     @Override
     public String toString() {
         return "ShimoNoKuIdentifier{" +
-                "value='" + value + '\'' +
+                "value=" + value +
                 '}';
     }
 }

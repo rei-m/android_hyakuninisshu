@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 読み札.
+ */
 public class YomiFuda implements ValueObject {
 
     private final String firstPhrase;

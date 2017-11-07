@@ -22,11 +22,15 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
+import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 
+/**
+ * 全ての歌のコレクション.
+ */
 public class Karutas {
 
     private final List<Karuta> values;
@@ -38,10 +42,19 @@ public class Karutas {
         this.ids = Observable.fromIterable(values).map(AbstractEntity::identifier).toList().blockingGet();
     }
 
+    /**
+     * @return 歌のリスト
+     */
     public List<Karuta> asList() {
         return Collections.unmodifiableList(values);
     }
 
+    /**
+     * 保持している歌を色で絞り込む.
+     *
+     * @param color 歌の色
+     * @return 歌のリスト
+     */
     public List<Karuta> asList(@Nullable Color color) {
         if (color == null) {
             return asList();
@@ -50,7 +63,13 @@ public class Karutas {
         }
     }
 
-    public KarutaQuizzes createQuizSet(KarutaIds karutaIds) {
+    /**
+     * 指定された歌のIDを元に問題を作成する.
+     *
+     * @param karutaIds 歌IDコレクション。渡されたIDが正解となる問題を作成する。
+     * @return 問題のコレクション
+     */
+    public KarutaQuizzes createQuizSet(@NonNull KarutaIds karutaIds) {
 
         List<KarutaQuiz> quizzes = new ArrayList<>();
 
@@ -61,11 +80,11 @@ public class Karutas {
             List<KarutaIdentifier> dupIds = new ArrayList<>(this.ids);
             dupIds.remove(correctKarutaId);
 
-            for (int choiceIndex : ArrayUtil.generateRandomIndexArray(dupIds.size(), KarutaQuiz.CHOICE_SIZE - 1)) {
+            for (int choiceIndex : ArrayUtil.generateRandomIndexArray(dupIds.size(), ChoiceNo.values().length - 1)) {
                 choices.add(dupIds.get(choiceIndex));
             }
 
-            int correctPosition = ArrayUtil.generateRandomIndexArray(KarutaQuiz.CHOICE_SIZE, 1)[0];
+            int correctPosition = ArrayUtil.generateRandomIndexArray(ChoiceNo.values().length, 1)[0];
 
             choices.add(correctPosition, correctKarutaId);
 

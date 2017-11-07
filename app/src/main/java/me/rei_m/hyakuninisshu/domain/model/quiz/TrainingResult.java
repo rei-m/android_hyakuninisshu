@@ -17,26 +17,41 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 百人一首練習の結果.
+ */
 public class TrainingResult implements ValueObject {
 
-    private final KarutaQuizResultSummary resultSummary;
+    private final KarutaQuizzesResultSummary resultSummary;
 
-    public TrainingResult(@NonNull KarutaQuizResultSummary resultSummary) {
+    public TrainingResult(@NonNull KarutaQuizzesResultSummary resultSummary) {
         this.resultSummary = resultSummary;
     }
 
+    /**
+     * @return 問題の件数
+     */
     public int quizCount() {
         return resultSummary.quizCount();
     }
 
+    /**
+     * @return 正解の件数
+     */
     public int correctCount() {
         return resultSummary.correctCount();
     }
 
+    /**
+     * @return 平均解答時間
+     */
     public float averageAnswerTime() {
         return resultSummary.averageAnswerTime();
     }
 
+    /**
+     * @return 練習を再開可能か
+     */
     public boolean canRestartTraining() {
         return resultSummary.correctCount() != resultSummary.quizCount();
     }

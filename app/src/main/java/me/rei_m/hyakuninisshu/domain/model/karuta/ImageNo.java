@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 歌の画像番号.
+ */
 public class ImageNo implements ValueObject {
 
     private static final Pattern pattern = Pattern.compile("^(?!000)(0\\d\\d|001|100)$");

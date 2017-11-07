@@ -21,6 +21,9 @@ import java.util.List;
 
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil;
 
+/**
+ * 歌IDのコレクション.
+ */
 public class KarutaIds {
 
     private final List<KarutaIdentifier> values;
@@ -29,10 +32,16 @@ public class KarutaIds {
         this.values = values;
     }
 
+    /**
+     * @return 歌IDのリスト
+     */
     public List<KarutaIdentifier> asList() {
         return Collections.unmodifiableList(values);
     }
 
+    /**
+     * @return ランダムにソートされた歌IDのリスト
+     */
     public List<KarutaIdentifier> asRandomizedList() {
         List<KarutaIdentifier> correctKarutaIdList = new ArrayList<>();
         int[] collectKarutaIndexList = ArrayUtil.generateRandomIndexArray(values.size(), values.size());
@@ -42,10 +51,19 @@ public class KarutaIds {
         return correctKarutaIdList;
     }
 
+    /**
+     * @return 保持している歌IDの数
+     */
     public int size() {
         return values.size();
     }
 
+    /**
+     * 指定の歌IDを含んでいるか確認する.
+     *
+     * @param karutaId 確認対象の歌ID
+     * @return {@code true} 含んでいる場合, {@code false} 含んでいない場合
+     */
     public boolean contains(@NonNull KarutaIdentifier karutaId) {
         return values.contains(karutaId);
     }

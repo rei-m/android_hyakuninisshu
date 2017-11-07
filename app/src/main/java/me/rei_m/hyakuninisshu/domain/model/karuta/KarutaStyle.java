@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 歌の表示形式.
+ */
 public enum KarutaStyle implements ValueObject {
     KANA("kana"),
     KANJI("kanji");

@@ -16,10 +16,15 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import io.reactivex.Observable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
 
+/**
+ * 力試しのコレクション.
+ */
 public class KarutaExams {
 
     private final List<KarutaExam> values;
@@ -28,10 +33,21 @@ public class KarutaExams {
         this.values = values;
     }
 
+    /**
+     * 直近の力試し.
+     *
+     * @return 力試しが0件の場合 {@code null}, そうで無い場合、最新の力試し
+     */
+    @Nullable
     public KarutaExam recent() {
         return (values.isEmpty()) ? null : values.get(0);
     }
 
+    /**
+     * 過去の力試しの結果から間違えた問題の歌のIDを取得する.
+     *
+     * @return 歌IDのコレクション.
+     */
     public KarutaIds totalWrongKarutaIds() {
         return Observable.fromIterable(values).reduce(new ArrayList<KarutaIdentifier>(), (karutaIdList, karutaExam) -> {
             for (KarutaIdentifier wrongKarutaId : karutaExam.result().wrongKarutaIds().asList()) {

@@ -15,13 +15,17 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
 
+/**
+ * 問題のコレクション.
+ */
 public class KarutaQuizzes {
 
     private final List<KarutaQuiz> values;
@@ -38,35 +42,50 @@ public class KarutaQuizzes {
         return values.isEmpty();
     }
 
+    /**
+     * @return 解答済みの問題のうち、間違えた問題の歌のID
+     */
     public KarutaIds wrongKarutaIds() {
-        return Observable.fromIterable(values).filter(karutaQuiz -> karutaQuiz.result() != null && !karutaQuiz.result().isCorrect())
-                .map(karutaQuiz -> karutaQuiz.result().correctKarutaId())
-                .toList()
-                .map(KarutaIds::new)
-                .blockingGet();
+        List<KarutaIdentifier> karutaIdentifiers = new ArrayList<>();
+        for (KarutaQuiz karutaQuiz : values) {
+            KarutaQuizResult result = karutaQuiz.result();
+            if (result != null && !result.judgement().isCorrect()) {
+                karutaIdentifiers.add(result.judgement().karutaId());
+            }
+        }
+        return new KarutaIds(karutaIdentifiers);
     }
 
-    public KarutaQuizResultSummary resultSummary() throws IllegalStateException {
+    /**
+     * @return 解答結果を集計する
+     * @throws IllegalStateException 未解答の問題があった場合
+     */
+    public KarutaQuizzesResultSummary resultSummary() throws IllegalStateException {
         final int quizCount = values.size();
+
+        if (quizCount == 0) {
+            return new KarutaQuizzesResultSummary(0, 0, 0);
+        }
 
         long totalAnswerTimeMillSec = 0;
 
         int collectCount = 0;
 
         for (KarutaQuiz karutaQuiz : values) {
-            if (karutaQuiz.result() == null) {
+            KarutaQuizResult result = karutaQuiz.result();
+            if (result == null) {
                 throw new IllegalStateException("Training is not finished.");
             }
 
-            totalAnswerTimeMillSec += karutaQuiz.result().answerTime();
-            if (karutaQuiz.result().isCorrect()) {
+            totalAnswerTimeMillSec += result.answerTime();
+            if (result.judgement().isCorrect()) {
                 collectCount++;
             }
         }
 
         final float averageAnswerTime = totalAnswerTimeMillSec / (float) quizCount / (float) TimeUnit.SECONDS.toMillis(1);
 
-        return new KarutaQuizResultSummary(quizCount, collectCount, averageAnswerTime);
+        return new KarutaQuizzesResultSummary(quizCount, collectCount, averageAnswerTime);
     }
 
     @Override

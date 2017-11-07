@@ -117,7 +117,7 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
         super.onStart();
         registerDisposable(karutaQuizModel.completeStartEvent.subscribe(karutaQuizContent -> {
 
-            karutaQuizId = karutaQuizContent.quizId();
+            karutaQuizId = karutaQuizContent.quiz().identifier();
 
             quizCount.set(karutaQuizContent.currentPosition());
 
@@ -135,14 +135,14 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
                 choiceFifthPhraseList.set(i, toriFuda.fifthPhrase());
             }
 
-            if (!karutaQuizContent.isAnswered()) {
+            if (karutaQuizContent.quiz().result() == null) {
                 startDisplayAnimationEvent.onNext(Unit.INSTANCE);
             }
         }), karutaQuizModel.completeAnswerEvent.subscribe(karutaQuizContent -> {
 
             stopDisplayAnimationEvent.onNext(Unit.INSTANCE);
 
-            KarutaQuizResult result = karutaQuizContent.result();
+            KarutaQuizResult result = karutaQuizContent.quiz().result();
 
             if (result == null) {
                 errorEvent.onNext(Unit.INSTANCE);
@@ -154,10 +154,10 @@ public class QuizFragmentViewModel extends AbsFragmentViewModel {
             for (int i = 0; i < isVisibleChoiceList.size(); i++) {
                 this.isVisibleChoiceList.set(i, isVisibleChoiceList.get(i));
             }
-            this.isCorrect.set(result.isCorrect());
+            this.isCorrect.set(result.judgement().isCorrect());
             this.isVisibleResult.set(true);
 
-            this.correctKarutaId = result.correctKarutaId();
+            this.correctKarutaId = result.judgement().karutaId();
             this.existNextQuiz = karutaQuizContent.existNext();
 
         }), karutaQuizModel.errorEvent.subscribe(v -> errorEvent.onNext(Unit.INSTANCE)));

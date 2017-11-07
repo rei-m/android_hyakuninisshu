@@ -19,20 +19,59 @@ import android.support.annotation.Nullable;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
+/**
+ * 歌リポジトリ.
+ */
 public interface KarutaRepository {
 
+    /**
+     * 歌セットを初期化する.
+     *
+     * @return Completable
+     */
     Completable initialize();
 
+    /**
+     * 歌を取得する.
+     *
+     * @param identifier 歌ID
+     * @return 歌
+     */
     Single<Karuta> findBy(@NonNull KarutaIdentifier identifier);
 
+    /**
+     * 歌コレクションを取得する.
+     *
+     * @return 歌コレクション
+     */
     Single<Karutas> list();
 
+    /**
+     * 歌IDコレクションを取得する.
+     *
+     * @return 歌IDコレクション
+     */
     Single<KarutaIds> findIds();
 
+    /**
+     * 歌IDコレクションを取得する.
+     *
+     * @param fromIdentifier 取得対象のIDのFrom
+     * @param toIdentifier   取得対象のIDのTo
+     * @param color          取得対象の歌の色
+     * @param kimariji       取得対象の決まり字
+     * @return 歌IDコレクション
+     */
     Single<KarutaIds> findIds(@NonNull KarutaIdentifier fromIdentifier,
                               @NonNull KarutaIdentifier toIdentifier,
                               @Nullable Color color,
                               @Nullable Kimariji kimariji);
 
+    /**
+     * 歌を永続化する,
+     *
+     * @param karuta 歌
+     * @return Completable
+     */
     Completable store(@NonNull Karuta karuta);
 }

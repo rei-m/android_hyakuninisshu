@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 
+/**
+ * 百人一首の力試し.
+ */
 public class KarutaExam extends AbstractEntity<KarutaExam, KarutaExamIdentifier> {
 
     public static final int MAX_HISTORY_COUNT = 10;

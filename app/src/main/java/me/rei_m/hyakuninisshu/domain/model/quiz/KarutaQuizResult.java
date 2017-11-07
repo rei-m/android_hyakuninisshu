@@ -18,6 +18,9 @@ import android.support.annotation.NonNull;
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 
+/**
+ * 問題の解答結果.
+ */
 public class KarutaQuizResult implements ValueObject {
 
     private final KarutaQuizJudgement judgement;
@@ -35,16 +38,12 @@ public class KarutaQuizResult implements ValueObject {
         this.answerTime = answerTime;
     }
 
-    public KarutaIdentifier correctKarutaId() {
-        return judgement.karutaId();
+    public KarutaQuizJudgement judgement() {
+        return judgement;
     }
 
     public ChoiceNo choiceNo() {
         return choiceNo;
-    }
-
-    public boolean isCorrect() {
-        return judgement.isCorrect();
     }
 
     public long answerTime() {

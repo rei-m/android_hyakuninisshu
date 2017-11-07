@@ -17,6 +17,9 @@ import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
 
+/**
+ * 歌の句.
+ */
 public class Phrase implements ValueObject {
 
     private final String kana;

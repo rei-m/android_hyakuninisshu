@@ -24,15 +24,18 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
 
+/**
+ * 百人一首力試しの結果.
+ */
 public class KarutaExamResult implements ValueObject {
 
-    private final KarutaQuizResultSummary resultSummary;
+    private final KarutaQuizzesResultSummary resultSummary;
 
     private final KarutaIds wrongKarutaIds;
 
     private final List<KarutaQuizJudgement> judgements;
 
-    public KarutaExamResult(@NonNull KarutaQuizResultSummary resultSummary,
+    public KarutaExamResult(@NonNull KarutaQuizzesResultSummary resultSummary,
                             @NonNull KarutaIds wrongKarutaIds) {
         this.resultSummary = resultSummary;
         this.wrongKarutaIds = wrongKarutaIds;
@@ -45,22 +48,37 @@ public class KarutaExamResult implements ValueObject {
         }
     }
 
+    /**
+     * @return 問題の件数
+     */
     public int quizCount() {
         return resultSummary.quizCount();
     }
 
+    /**
+     * @return 力試しの結果
+     */
     public String score() {
-        return resultSummary.correctCount() + "/" + resultSummary.quizCount();
+        return resultSummary.score();
     }
 
+    /**
+     * @return 平均解答時間
+     */
     public float averageAnswerTime() {
         return resultSummary.averageAnswerTime();
     }
 
+    /**
+     * @return 間違えた問題の歌IDコレクション
+     */
     public KarutaIds wrongKarutaIds() {
         return wrongKarutaIds;
     }
 
+    /**
+     * @return 問題の正誤情報
+     */
     public List<KarutaQuizJudgement> judgements() {
         return Collections.unmodifiableList(judgements);
     }

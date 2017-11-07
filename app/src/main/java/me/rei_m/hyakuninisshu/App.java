@@ -42,13 +42,8 @@ public class App extends DaggerApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (BuildConfig.DEBUG) {
-            LeakCanary.install(this);
-        }
-
-        CrashlyticsCore crashlyticsCore = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build();
-        Fabric.with(this, new Crashlytics.Builder().core(crashlyticsCore).build());
+        initLeakCanary();
+        initFabric();
     }
 
     @Override
@@ -62,6 +57,17 @@ public class App extends DaggerApplication {
         return DaggerApp_Component.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
+    }
+
+    protected void initLeakCanary() {
+        if (BuildConfig.DEBUG) {
+            LeakCanary.install(this);
+        }
+    }
+
+    protected void initFabric() {
+        CrashlyticsCore crashlyticsCore = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build();
+        Fabric.with(this, new Crashlytics.Builder().core(crashlyticsCore).build());
     }
 
     @Singleton
