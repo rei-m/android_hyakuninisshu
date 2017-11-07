@@ -15,8 +15,6 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +26,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-@RunWith(Enclosed.class)
 public class KarutaQuizTest {
 
     private static final List<KarutaIdentifier> choiceList = new ArrayList<KarutaIdentifier>() {{

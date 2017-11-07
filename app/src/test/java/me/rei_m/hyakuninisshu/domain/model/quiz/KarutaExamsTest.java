@@ -15,8 +15,6 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(Enclosed.class)
 public class KarutaExamsTest {
 
     public static class WhenNotEmpty {

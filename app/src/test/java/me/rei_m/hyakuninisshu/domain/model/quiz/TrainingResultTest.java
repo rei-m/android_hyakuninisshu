@@ -15,13 +15,10 @@ package me.rei_m.hyakuninisshu.domain.model.quiz;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-@RunWith(Enclosed.class)
 public class TrainingResultTest {
 
     public static class Common {
