@@ -8,3 +8,4 @@ gradle.properties
 /captures
 /script/
 /keystores/
+*.log
