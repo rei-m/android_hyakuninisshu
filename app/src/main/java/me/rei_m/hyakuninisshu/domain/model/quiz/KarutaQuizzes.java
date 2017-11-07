@@ -63,6 +63,10 @@ public class KarutaQuizzes {
     public KarutaQuizzesResultSummary resultSummary() throws IllegalStateException {
         final int quizCount = values.size();
 
+        if (quizCount == 0) {
+            return new KarutaQuizzesResultSummary(0, 0, 0);
+        }
+
         long totalAnswerTimeMillSec = 0;
 
         int collectCount = 0;
