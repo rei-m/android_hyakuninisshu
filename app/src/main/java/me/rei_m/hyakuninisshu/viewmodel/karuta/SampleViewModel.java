@@ -11,19 +11,15 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di;
+package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
-import dagger.Module;
-import dagger.Provides;
-import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewModel;
+import android.arch.lifecycle.ViewModel;
 
-@Module
-public class ExamFragmentViewModelModule {
-    @Provides
-    @ForFragment
-    ExamFragmentViewModel.Factory provideExamFragmentViewModelFactory(KarutaExamModel karutaExamModel) {
-        return new ExamFragmentViewModel.Factory(karutaExamModel);
+public class SampleViewModel extends ViewModel {
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        System.out.println("viewmodel cleared");
     }
 }

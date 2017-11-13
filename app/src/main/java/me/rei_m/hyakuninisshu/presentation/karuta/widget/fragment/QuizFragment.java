@@ -13,11 +13,13 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +35,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import dagger.android.ContributesAndroidInjector;
+import dagger.Binds;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerFragment;
+import dagger.android.support.FragmentKey;
+import dagger.multibindings.IntoMap;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -42,7 +47,7 @@ import io.reactivex.disposables.Disposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent;
 import me.rei_m.hyakuninisshu.presentation.helper.Device;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
@@ -58,8 +63,6 @@ public class QuizFragment extends DaggerFragment {
 
     private static final int SPEED_DISPLAY_ANIMATION_MILL_SEC = 500;
 
-    private static final String KEY_QUIZ_ID = "quizId";
-
     public static QuizFragment newInstance(@NonNull KarutaStyleFilter kamiNoKuStyle,
                                            @NonNull KarutaStyleFilter shimoNoKuStyle) {
 
@@ -74,10 +77,12 @@ public class QuizFragment extends DaggerFragment {
     }
 
     @Inject
-    QuizFragmentViewModel viewModel;
+    Device device;
 
     @Inject
-    Device device;
+    QuizFragmentViewModel.Factory viewModelFactory;
+
+    QuizFragmentViewModel viewModel;
 
     private FragmentQuizBinding binding;
 
@@ -94,19 +99,13 @@ public class QuizFragment extends DaggerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizFragmentViewModel.class);
+    }
 
-        Bundle args = getArguments();
-        KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_KAMI_NO_KU_STYLE));
-        KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_SHIMO_NO_KU_STYLE));
-
-        if (savedInstanceState != null) {
-            KarutaQuizIdentifier quizId = savedInstanceState.getParcelable(KEY_QUIZ_ID);
-            if (quizId != null) {
-                viewModel.onReCreate(quizId, kamiNoKuStyle, shimoNoKuStyle);
-                return;
-            }
-        }
-        viewModel.onCreate(kamiNoKuStyle, shimoNoKuStyle);
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -124,7 +123,6 @@ public class QuizFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
-        viewModel = null;
         binding = null;
         super.onDestroyView();
     }
@@ -147,16 +145,15 @@ public class QuizFragment extends DaggerFragment {
                 animationDisposable = null;
             }
         }), viewModel.onClickResultEvent.subscribe(v -> {
-            if (listener != null) {
-                listener.onAnswered(viewModel.correctKarutaId(), viewModel.existNextQuiz());
+            KarutaQuizContent karutaQuizContent = viewModel.karutaQuizContent();
+            if (listener != null && karutaQuizContent != null) {
+                listener.onAnswered(karutaQuizContent.quiz().correctId(), karutaQuizContent.existNext());
             }
         }), viewModel.errorEvent.subscribe(v -> {
             if (listener != null) {
                 listener.onErrorQuiz();
             }
         }));
-
-        viewModel.onStart();
     }
 
     @Override
@@ -165,7 +162,6 @@ public class QuizFragment extends DaggerFragment {
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
     }
 
@@ -177,10 +173,6 @@ public class QuizFragment extends DaggerFragment {
 
     @Override
     public void onPause() {
-        if (animationDisposable != null) {
-            animationDisposable.dispose();
-            animationDisposable = null;
-        }
         viewModel.onPause();
         super.onPause();
     }
@@ -198,16 +190,10 @@ public class QuizFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        viewModel = null;
+        viewModelFactory = null;
         device = null;
         listener = null;
         super.onDetach();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_QUIZ_ID, viewModel.karutaQuizId());
     }
 
     // TODO: DataBindingに寄せることができるはず.
@@ -290,11 +276,32 @@ public class QuizFragment extends DaggerFragment {
         }
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(modules = {QuizFragmentViewModelModule.class})
+    public interface Subcomponent extends AndroidInjector<QuizFragment> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<QuizFragment> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder fragmentModule(QuizFragmentViewModelModule module);
+
+            @Override
+            public void seedInstance(QuizFragment instance) {
+                Bundle args = instance.getArguments();
+                KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_KAMI_NO_KU_STYLE));
+                KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_SHIMO_NO_KU_STYLE));
+                fragmentModule(new QuizFragmentViewModelModule(kamiNoKuStyle, shimoNoKuStyle));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
     public abstract class Module {
         @SuppressWarnings("unused")
-        @ForFragment
-        @ContributesAndroidInjector(modules = QuizFragmentViewModelModule.class)
-        abstract QuizFragment contributeInjector();
+        @Binds
+        @IntoMap
+        @FragmentKey(QuizFragment.class)
+        abstract AndroidInjector.Factory<? extends Fragment> bind(Subcomponent.Builder builder);
     }
 }

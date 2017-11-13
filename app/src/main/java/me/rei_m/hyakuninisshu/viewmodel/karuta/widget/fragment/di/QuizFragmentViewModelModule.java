@@ -13,17 +13,31 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di;
 
+import android.support.annotation.NonNull;
+
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
 
 @Module
 public class QuizFragmentViewModelModule {
+
+    private final KarutaStyleFilter kamiNoKuStyle;
+
+    private final KarutaStyleFilter shimoNoKuStyle;
+
+    public QuizFragmentViewModelModule(@NonNull KarutaStyleFilter kamiNoKuStyle,
+                                       @NonNull KarutaStyleFilter shimoNoKuStyle) {
+        this.kamiNoKuStyle = kamiNoKuStyle;
+        this.shimoNoKuStyle = shimoNoKuStyle;
+    }
+
     @Provides
     @ForFragment
-    QuizFragmentViewModel provideQuizFragmentViewModel(KarutaQuizModel karutaQuizModel) {
-        return new QuizFragmentViewModel(karutaQuizModel);
+    QuizFragmentViewModel.Factory provideQuizFragmentViewModelFactory(@NonNull KarutaQuizModel karutaQuizModel) {
+        return new QuizFragmentViewModel.Factory(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
     }
 }

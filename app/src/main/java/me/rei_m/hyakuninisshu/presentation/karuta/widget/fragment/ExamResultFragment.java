@@ -13,22 +13,29 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import dagger.android.ContributesAndroidInjector;
+import dagger.Binds;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerFragment;
+import dagger.android.support.FragmentKey;
+import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.ExamResultFragmentViewModelModule;
 
@@ -47,6 +54,14 @@ public class ExamResultFragment extends DaggerFragment {
     }
 
     @Inject
+    AnalyticsManager analyticsManager;
+
+    @Inject
+    Navigator navigator;
+
+    @Inject
+    ExamResultFragmentViewModel.Factory viewModelFactory;
+
     ExamResultFragmentViewModel viewModel;
 
     private FragmentExamResultBinding binding;
@@ -62,19 +77,13 @@ public class ExamResultFragment extends DaggerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        KarutaExamIdentifier karutaExamId = null;
-        if (getArguments() != null) {
-            karutaExamId = getArguments().getParcelable(ARG_EXAM_ID);
-        }
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamResultFragmentViewModel.class);
+    }
 
-        if (karutaExamId == null) {
-            if (listener != null) {
-                listener.onReceiveIllegalArguments();
-            }
-            return;
-        }
-
-        viewModel.onCreate(karutaExamId);
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -98,8 +107,9 @@ public class ExamResultFragment extends DaggerFragment {
             if (listener != null) {
                 listener.onFinishExam();
             }
-        }), binding.viewResult.onClickKarutaEvent.subscribe(karutaNo -> viewModel.onClickResult(karutaNo)));
-        viewModel.onStart();
+        }), binding.viewResult.onClickKarutaEvent.subscribe(karutaId -> {
+            navigator.navigateToMaterialSingle(karutaId);
+        }));
     }
 
     @Override
@@ -107,20 +117,13 @@ public class ExamResultFragment extends DaggerFragment {
         if (disposable != null) {
             disposable.dispose();
         }
-        viewModel.onStop();
         super.onStop();
     }
 
     @Override
     public void onResume() {
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM_RESULT);
         super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
@@ -136,22 +139,42 @@ public class ExamResultFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        viewModel = null;
+        navigator = null;
+        analyticsManager = null;
+        viewModelFactory = null;
         listener = null;
         super.onDetach();
     }
 
     public interface OnFragmentInteractionListener {
         void onFinishExam();
-
-        void onReceiveIllegalArguments();
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(modules = {ExamResultFragmentViewModelModule.class})
+    public interface Subcomponent extends AndroidInjector<ExamResultFragment> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<ExamResultFragment> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Subcomponent.Builder fragmentModule(ExamResultFragmentViewModelModule module);
+
+            @Override
+            public void seedInstance(ExamResultFragment instance) {
+                Bundle args = instance.getArguments();
+                KarutaExamIdentifier karutaExamId = args.getParcelable(ARG_EXAM_ID);
+                fragmentModule(new ExamResultFragmentViewModelModule(karutaExamId));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
     public abstract class Module {
         @SuppressWarnings("unused")
-        @ForFragment
-        @ContributesAndroidInjector(modules = ExamResultFragmentViewModelModule.class)
-        abstract ExamResultFragment contributeInjector();
+        @Binds
+        @IntoMap
+        @FragmentKey(ExamResultFragment.class)
+        abstract AndroidInjector.Factory<? extends Fragment> bind(Subcomponent.Builder builder);
     }
 }

@@ -61,10 +61,10 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
             isStartedExam = true;
             toggleAdEvent.onNext(false);
             startExamEvent.onNext(Unit.INSTANCE);
-        }), karutaExamModel.completeAggregateResultsEvent.subscribe(karutaExamId -> {
+        }), karutaExamModel.finishedExamId.subscribe(karutaExamIdentifier -> {
             isFinishedExam = true;
             toggleAdEvent.onNext(true);
-            aggregateExamResultsEvent.onNext(karutaExamId);
+            aggregateExamResultsEvent.onNext(karutaExamIdentifier);
         }));
 
         if (!isStartedExam) {
