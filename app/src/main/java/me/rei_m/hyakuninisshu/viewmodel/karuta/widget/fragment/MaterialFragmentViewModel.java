@@ -51,11 +51,11 @@ public class MaterialFragmentViewModel extends AbsFragmentViewModel {
     public void onResume() {
         super.onResume();
         analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
-        karutaModel.fetchKarutas(colorFilter.value());
+        karutaModel.getKarutas(colorFilter.value());
     }
 
     public void onOptionItemSelected(@NonNull ColorFilter colorFilter) {
-        karutaModel.fetchKarutas(colorFilter.value());
+        karutaModel.getKarutas(colorFilter.value());
         this.colorFilter = colorFilter;
     }
 }

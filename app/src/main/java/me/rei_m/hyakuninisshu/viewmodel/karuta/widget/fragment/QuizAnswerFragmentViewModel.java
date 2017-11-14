@@ -88,22 +88,22 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
-            karutaNo.set(karuta.identifier().value());
-            kimariji.set(karuta.kimariji().value());
-            creator.set(karuta.creator());
-            firstPhrase.set(padSpace(karuta.kamiNoKu().first().kanji(), 5));
-            secondPhrase.set(karuta.kamiNoKu().second().kanji());
-            thirdPhrase.set(karuta.kamiNoKu().third().kanji());
-            fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
-            fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
-        }), karutaModel.errorEvent.subscribe(v -> errorEvent.onNext(Unit.INSTANCE)));
+//        registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
+//            karutaNo.set(karuta.identifier().value());
+//            kimariji.set(karuta.kimariji().value());
+//            creator.set(karuta.creator());
+//            firstPhrase.set(padSpace(karuta.kamiNoKu().first().kanji(), 5));
+//            secondPhrase.set(karuta.kamiNoKu().second().kanji());
+//            thirdPhrase.set(karuta.kamiNoKu().third().kanji());
+//            fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
+//            fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
+//        }), karutaModel.errorEvent.subscribe(v -> errorEvent.onNext(Unit.INSTANCE)));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        karutaModel.fetchKaruta(karutaId);
+//        karutaModel.fetchKaruta(karutaId);
     }
 
     @SuppressWarnings("unused")

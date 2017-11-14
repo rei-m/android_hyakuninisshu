@@ -13,11 +13,13 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +27,11 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import dagger.android.ContributesAndroidInjector;
+import dagger.Binds;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerFragment;
+import dagger.android.support.FragmentKey;
+import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding;
@@ -51,15 +56,15 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     }
 
     @Inject
-    MaterialEditFragmentViewModel viewModel;
+    MaterialEditFragmentViewModel.Factory viewModelFactory;
+
+    private MaterialEditFragmentViewModel viewModel;
 
     private FragmentMaterialEditBinding binding;
 
     private OnFragmentInteractionListener listener;
 
     private CompositeDisposable disposable;
-
-    private KarutaIdentifier karutaId;
 
     public MaterialEditFragment() {
         // Required empty public constructor
@@ -68,6 +73,9 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        KarutaIdentifier karutaId = null;
+
         if (getArguments() != null) {
             karutaId = getArguments().getParcelable(ARG_KARUTA_ID);
         }
@@ -79,7 +87,13 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
             return;
         }
 
-        viewModel.onCreate(karutaId);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialEditFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -130,7 +144,6 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
                         getActivity().finish();
                     }
                 }));
-        viewModel.onStart();
     }
 
     @Override
@@ -139,20 +152,7 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
@@ -168,7 +168,6 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
     @Override
     public void onDetach() {
-        viewModel = null;
         listener = null;
         super.onDetach();
     }
@@ -187,11 +186,31 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
         void onReceiveIllegalArguments();
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(modules = {MaterialEditFragmentViewModelModule.class})
+    public interface Subcomponent extends AndroidInjector<MaterialEditFragment> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<MaterialEditFragment> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Subcomponent.Builder fragmentModule(MaterialEditFragmentViewModelModule module);
+
+            @Override
+            public void seedInstance(MaterialEditFragment instance) {
+                Bundle args = instance.getArguments();
+                KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_ID);
+                fragmentModule(new MaterialEditFragmentViewModelModule(karutaId));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
     public abstract class Module {
         @SuppressWarnings("unused")
-        @ForFragment
-        @ContributesAndroidInjector(modules = MaterialEditFragmentViewModelModule.class)
-        abstract MaterialEditFragment contributeInjector();
+        @Binds
+        @IntoMap
+        @FragmentKey(MaterialEditFragment.class)
+        abstract AndroidInjector.Factory<? extends Fragment> bind(Subcomponent.Builder builder);
     }
 }

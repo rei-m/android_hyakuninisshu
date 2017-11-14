@@ -62,13 +62,15 @@ public class ExamResultFragment extends DaggerFragment {
     @Inject
     ExamResultFragmentViewModel.Factory viewModelFactory;
 
-    ExamResultFragmentViewModel viewModel;
+    private ExamResultFragmentViewModel viewModel;
 
     private FragmentExamResultBinding binding;
 
+    private CompositeDisposable disposable;
+
     private OnFragmentInteractionListener listener;
 
-    private CompositeDisposable disposable;
+    private KarutaExamIdentifier karutaExamId;
 
     public ExamResultFragment() {
         // Required empty public constructor
@@ -77,6 +79,18 @@ public class ExamResultFragment extends DaggerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            karutaExamId = getArguments().getParcelable(ARG_EXAM_ID);
+        }
+
+        if (karutaExamId == null) {
+            if (listener != null) {
+                listener.onReceiveIllegalArguments();
+            }
+            return;
+        }
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamResultFragmentViewModel.class);
     }
 
@@ -107,9 +121,7 @@ public class ExamResultFragment extends DaggerFragment {
             if (listener != null) {
                 listener.onFinishExam();
             }
-        }), binding.viewResult.onClickKarutaEvent.subscribe(karutaId -> {
-            navigator.navigateToMaterialSingle(karutaId);
-        }));
+        }), binding.viewResult.onClickKarutaEvent.subscribe(navigator::navigateToMaterialSingle));
     }
 
     @Override
@@ -148,6 +160,8 @@ public class ExamResultFragment extends DaggerFragment {
 
     public interface OnFragmentInteractionListener {
         void onFinishExam();
+
+        void onReceiveIllegalArguments();
     }
 
     @ForFragment

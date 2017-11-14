@@ -71,6 +71,7 @@ public class ExamResultFragmentViewModel extends ViewModel {
             averageAnswerTime.set(result.averageAnswerTime());
             karutaQuizJudgements.set(result.judgements());
         }));
+
         karutaExamModel.getKarutaExam(karutaExamId);
     }
 

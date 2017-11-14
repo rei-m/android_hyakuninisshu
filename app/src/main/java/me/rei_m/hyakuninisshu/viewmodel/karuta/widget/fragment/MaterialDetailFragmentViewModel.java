@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
@@ -20,12 +22,32 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
+public class MaterialDetailFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaModel karutaModel;
+
+        private final KarutaIdentifier karutaId;
+
+        public Factory(@NonNull KarutaModel karutaModel,
+                       @NonNull KarutaIdentifier karutaId) {
+            this.karutaModel = karutaModel;
+            this.karutaId = karutaId;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public MaterialDetailFragmentViewModel create(@NonNull Class modelClass) {
+            return new MaterialDetailFragmentViewModel(karutaModel, karutaId);
+        }
+    }
 
     public final ObservableInt karutaNo = new ObservableInt();
 
@@ -45,51 +67,35 @@ public class MaterialDetailFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<String> translation = new ObservableField<>();
 
-    private final KarutaModel karutaModel;
+    private CompositeDisposable disposable = null;
 
-    private KarutaIdentifier karutaId;
-
-    public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel) {
-        this.karutaModel = karutaModel;
-    }
-
-    public void onCreate(@NonNull KarutaIdentifier karutaId) {
-        this.karutaId = karutaId;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
-
-            if (!karutaId.equals(karuta.identifier())) {
+    public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel,
+                                           @NonNull KarutaIdentifier karutaId) {
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
+            if (!karuta.identifier().equals(karutaId)) {
                 return;
             }
-
             karutaNo.set(karutaId.value());
-
             karutaImageNo.set(karuta.imageNo().value());
-
             creator.set(karuta.creator());
-
             kimariji.set(karuta.kimariji().value());
-
             kamiNoKuKanji.set(karuta.kamiNoKu().kanji());
-
             shimoNoKuKanji.set(karuta.shimoNoKu().kanji());
-
             kamiNoKuKana.set(karuta.kamiNoKu().kana());
-
             shimoNoKuKana.set(karuta.shimoNoKu().kana());
-
             translation.set(karuta.translation());
         }));
+        karutaModel.getKaruta(karutaId);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        karutaModel.fetchKaruta(karutaId);
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        super.onCleared();
     }
 
     @BindingAdapter({"karutaNo", "creator"})

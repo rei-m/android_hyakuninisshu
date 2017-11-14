@@ -21,6 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
@@ -33,7 +34,7 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaModel {
 
-    public final EventObservable<Karuta> completeFetchKarutaEvent = EventObservable.create();
+    public final EventObservable<Karuta> karuta = EventObservable.create();
 
     public final EventObservable<Unit> completeEditKarutaEvent = EventObservable.create();
 
@@ -48,11 +49,11 @@ public class KarutaModel {
         this.karutaRepository = karutaRepository;
     }
 
-    public void fetchKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
+    public void getKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
         karutaRepository.findBy(karutaIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeFetchKarutaEvent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(karuta::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
     public void editKaruta(@NonNull KarutaIdentifier karutaIdentifier,
@@ -66,23 +67,30 @@ public class KarutaModel {
                            @NonNull String fourthPhraseKana,
                            @NonNull String fifthPhraseKanji,
                            @NonNull String fifthPhraseKana) {
-        karutaRepository.findBy(karutaIdentifier).map(karuta -> karuta.updatePhrase(firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana))
-                .flatMapCompletable(karutaRepository::store)
+        Single<Karuta> karutaSingle = karutaRepository.findBy(karutaIdentifier).map(karuta ->
+                karuta.updatePhrase(
+                        firstPhraseKanji,
+                        firstPhraseKana,
+                        secondPhraseKanji,
+                        secondPhraseKana,
+                        thirdPhraseKanji,
+                        thirdPhraseKana,
+                        fourthPhraseKanji,
+                        fourthPhraseKana,
+                        fifthPhraseKanji,
+                        fifthPhraseKana
+                )
+        );
+        karutaSingle.flatMap(karuta -> karutaRepository.store(karuta).andThen(Single.just(karuta)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> completeEditKarutaEvent.onNext(Unit.INSTANCE), e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(karuta -> {
+                    this.karuta.onNext(karuta);
+                    this.completeEditKarutaEvent.onNext(Unit.INSTANCE);
+                }, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
-    public void fetchKarutas(@Nullable Color color) {
+    public void getKarutas(@Nullable Color color) {
         karutaRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
