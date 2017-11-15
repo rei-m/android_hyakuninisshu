@@ -13,6 +13,7 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
@@ -46,13 +48,18 @@ public class MaterialFragment extends DaggerFragment {
     }
 
     @Inject
+    AnalyticsManager analyticsManager;
+
+    @Inject
     Navigator navigator;
 
     @Inject
-    MaterialFragmentViewModel viewModel;
+    MaterialFragmentViewModel.Factory viewModelFactory;
 
     @Inject
     MaterialKarutaListAdapter.Injector injector;
+
+    private MaterialFragmentViewModel viewModel;
 
     private FragmentMaterialBinding binding;
 
@@ -64,6 +71,13 @@ public class MaterialFragment extends DaggerFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -83,33 +97,16 @@ public class MaterialFragment extends DaggerFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        viewModel.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        viewModel.onStop();
-        super.onStop();
-    }
-
-    @Override
     public void onResume() {
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
         super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
     public void onDetach() {
+        analyticsManager = null;
         navigator = null;
-        viewModel = null;
+        viewModelFactory = null;
         injector = null;
         super.onDetach();
     }

@@ -22,7 +22,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
@@ -59,18 +58,13 @@ public class ExamFragmentViewModel extends ViewModel {
 
     public ExamFragmentViewModel(@NonNull KarutaExamModel karutaExamModel) {
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaExamModel.karutaExams.subscribe(karutaExams -> {
-            KarutaExam recentKarutaExam = karutaExams.recent();
-            if (recentKarutaExam == null) {
-                hasResult.set(false);
-            } else {
-                hasResult.set(true);
-                score.set(recentKarutaExam.result().score());
-                averageAnswerTime.set(recentKarutaExam.result().averageAnswerTime());
-            }
+        disposable.addAll(karutaExamModel.recentKarutaExam.subscribe(karutaExam -> {
+            hasResult.set(true);
+            score.set(karutaExam.result().score());
+            averageAnswerTime.set(karutaExam.result().averageAnswerTime());
         }));
 
-        karutaExamModel.getKarutaExams();
+        karutaExamModel.getRecentKarutaExam();
     }
 
     @Override

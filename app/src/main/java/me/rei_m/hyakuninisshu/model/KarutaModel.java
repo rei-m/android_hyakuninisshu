@@ -16,8 +16,6 @@ package me.rei_m.hyakuninisshu.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -37,9 +35,7 @@ public class KarutaModel {
     public final EventObservable<Karuta> karuta = EventObservable.create();
 
     public final EventObservable<Unit> completeEditKarutaEvent = EventObservable.create();
-
-    public final EventObservable<List<Karuta>> completeFetchKarutasEvent = EventObservable.create();
-
+    
     public final EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
@@ -94,6 +90,10 @@ public class KarutaModel {
         karutaRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutas -> completeFetchKarutasEvent.onNext(karutas.asList(color)), e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(karutas -> {
+                    for (Karuta karuta : karutas.asList(color)) {
+                        this.karuta.onNext(karuta);
+                    }
+                }, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 }

@@ -29,7 +29,6 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
@@ -38,10 +37,10 @@ import me.rei_m.hyakuninisshu.util.Unit;
 public class KarutaExamModel {
 
     public final EventObservable<Unit> completeStartEvent = EventObservable.create();
-    
+
     public final EventObservable<KarutaExam> karutaExam = EventObservable.create();
 
-    public final EventObservable<KarutaExams> karutaExams = EventObservable.create();
+    public final EventObservable<KarutaExam> recentKarutaExam = EventObservable.create();
 
     public final EventObservable<KarutaExamIdentifier> finishedExamId = EventObservable.create();
 
@@ -67,11 +66,16 @@ public class KarutaExamModel {
                 .subscribe(this.karutaExam::onNext);
     }
 
-    public void getKarutaExams() {
+    public void getRecentKarutaExam() {
         karutaExamRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this.karutaExams::onNext);
+                .subscribe(karutaExams -> {
+                    KarutaExam recent = karutaExams.recent();
+                    if (recent != null) {
+                        recentKarutaExam.onNext(recent);
+                    }
+                });
     }
 
     public void start() {
@@ -85,13 +89,16 @@ public class KarutaExamModel {
     public void aggregateResults() {
         karutaQuizRepository.list()
                 .map(karutaQuizzes -> new KarutaExamResult(karutaQuizzes.resultSummary(), karutaQuizzes.wrongKarutaIds()))
-                .flatMap(karutaExamResult -> karutaExamRepository.storeResult(karutaExamResult, new Date()))
-                .flatMap(karutaExamIdentifier -> karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(Single.just(karutaExamIdentifier)))
+                .flatMap(karutaExamResult -> karutaExamRepository
+                        .storeResult(karutaExamResult, new Date()))
+                .flatMap(karutaExamIdentifier -> karutaExamRepository
+                        .adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+                        .andThen(karutaExamRepository.findBy(karutaExamIdentifier)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaExamIdentifier -> {
-                    this.finishedExamId.onNext(karutaExamIdentifier);
-                    this.getKarutaExams();
+                .subscribe(karutaExam -> {
+                    this.finishedExamId.onNext(karutaExam.identifier());
+                    this.recentKarutaExam.onNext(karutaExam);
                 });
     }
 }
