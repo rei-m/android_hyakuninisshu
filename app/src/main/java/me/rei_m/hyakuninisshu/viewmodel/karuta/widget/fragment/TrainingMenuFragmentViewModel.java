@@ -13,12 +13,12 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import me.rei_m.hyakuninisshu.AnalyticsManager;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
@@ -26,9 +26,18 @@ import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
+public class TrainingMenuFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public TrainingMenuFragmentViewModel create(@NonNull Class modelClass) {
+            return new TrainingMenuFragmentViewModel();
+        }
+    }
 
     public final ObservableField<TrainingRangeFrom> trainingRangeFrom = new ObservableField<>(TrainingRangeFrom.ONE);
 
@@ -42,23 +51,9 @@ public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableField<ColorFilter> color = new ObservableField<>(ColorFilter.ALL);
 
+    public final EventObservable<Unit> onClickStartTrainingEvent = EventObservable.create();
+
     public final EventObservable<Unit> invalidTrainingRangeEvent = EventObservable.create();
-
-    private final AnalyticsManager analyticsManager;
-
-    private final Navigator navigator;
-
-    public TrainingMenuFragmentViewModel(@NonNull AnalyticsManager analyticsManager,
-                                         @NonNull Navigator navigator) {
-        this.analyticsManager = analyticsManager;
-        this.navigator = navigator;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.TRAINING_MENU);
-    }
 
     @SuppressWarnings("unused")
     public void onClickStartTraining(View view) {
@@ -68,12 +63,6 @@ public class TrainingMenuFragmentViewModel extends AbsFragmentViewModel {
             return;
         }
 
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING);
-        navigator.navigateToTrainingMaster(trainingRangeFrom.get(),
-                trainingRangeTo.get(),
-                kimariji.get(),
-                color.get(),
-                kamiNoKuStyle.get(),
-                shimoNoKuStyle.get());
+        onClickStartTrainingEvent.onNext(Unit.INSTANCE);
     }
 }

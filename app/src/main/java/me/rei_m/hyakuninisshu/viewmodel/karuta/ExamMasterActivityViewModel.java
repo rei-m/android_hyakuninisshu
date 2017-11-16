@@ -13,15 +13,33 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsActivityViewModel;
 
-public class ExamMasterActivityViewModel extends AbsActivityViewModel {
+public class ExamMasterActivityViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaExamModel karutaExamModel;
+
+        public Factory(@NonNull KarutaExamModel karutaExamModel) {
+            this.karutaExamModel = karutaExamModel;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public ExamMasterActivityViewModel create(@NonNull Class modelClass) {
+            return new ExamMasterActivityViewModel(karutaExamModel);
+        }
+    }
 
     public final EventObservable<Unit> startExamEvent = EventObservable.create();
 
@@ -29,47 +47,39 @@ public class ExamMasterActivityViewModel extends AbsActivityViewModel {
 
     public final EventObservable<Boolean> toggleAdEvent = EventObservable.create();
 
+    private boolean isVisibleAd = false;
+
     private final KarutaExamModel karutaExamModel;
 
-    private boolean isStartedExam = false;
-
-    private boolean isFinishedExam = false;
+    private CompositeDisposable disposable = null;
 
     public ExamMasterActivityViewModel(@NonNull KarutaExamModel karutaExamModel) {
         this.karutaExamModel = karutaExamModel;
-    }
 
-    public boolean isStartedExam() {
-        return isStartedExam;
-    }
-
-    public boolean isFinishedExam() {
-        return isFinishedExam;
-    }
-
-    public void onReCreate(boolean isStartedExam,
-                           boolean isFinishedExam) {
-        this.isStartedExam = isStartedExam;
-        this.isFinishedExam = isFinishedExam;
-        this.toggleAdEvent.onNext(isFinishedExam);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaExamModel.completeStartEvent.subscribe(v -> {
-            isStartedExam = true;
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaExamModel.completeStartEvent.subscribe(v -> {
+            isVisibleAd = false;
             toggleAdEvent.onNext(false);
             startExamEvent.onNext(Unit.INSTANCE);
         }), karutaExamModel.finishedExamId.subscribe(karutaExamIdentifier -> {
-            isFinishedExam = true;
+            isVisibleAd = true;
             toggleAdEvent.onNext(true);
             aggregateExamResultsEvent.onNext(karutaExamIdentifier);
         }));
+        karutaExamModel.start();
+    }
 
-        if (!isStartedExam) {
-            karutaExamModel.start();
+    public boolean isVisibleAd() {
+        return isVisibleAd;
+    }
+
+    @Override
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
         }
+        super.onCleared();
     }
 
     public void onClickGoToResult() {

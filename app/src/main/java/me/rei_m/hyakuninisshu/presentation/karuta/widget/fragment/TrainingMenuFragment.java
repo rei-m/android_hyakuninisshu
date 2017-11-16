@@ -13,6 +13,7 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,9 +28,11 @@ import javax.inject.Inject;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
@@ -51,7 +54,15 @@ public class TrainingMenuFragment extends DaggerFragment {
     Context context;
 
     @Inject
-    TrainingMenuFragmentViewModel viewModel;
+    AnalyticsManager analyticsManager;
+
+    @Inject
+    Navigator navigator;
+
+    @Inject
+    TrainingMenuFragmentViewModel.Factory viewModelFactory;
+
+    private TrainingMenuFragmentViewModel viewModel;
 
     private FragmentTrainingMenuBinding binding;
 
@@ -59,6 +70,18 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     public TrainingMenuFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingMenuFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -96,10 +119,17 @@ public class TrainingMenuFragment extends DaggerFragment {
     public void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.invalidTrainingRangeEvent.subscribe(v ->
-                Snackbar.make(binding.getRoot(), R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show())
-        );
-        viewModel.onStart();
+        disposable.addAll(viewModel.onClickStartTrainingEvent.subscribe(v -> {
+            analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING);
+            navigator.navigateToTrainingMaster(viewModel.trainingRangeFrom.get(),
+                    viewModel.trainingRangeTo.get(),
+                    viewModel.kimariji.get(),
+                    viewModel.color.get(),
+                    viewModel.kamiNoKuStyle.get(),
+                    viewModel.shimoNoKuStyle.get());
+        }), viewModel.invalidTrainingRangeEvent.subscribe(v ->
+                Snackbar.make(binding.getRoot(), R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show()
+        ));
     }
 
     @Override
@@ -108,26 +138,21 @@ public class TrainingMenuFragment extends DaggerFragment {
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
     }
 
     @Override
     public void onResume() {
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.TRAINING_MENU);
         super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
     public void onDetach() {
         context = null;
-        viewModel = null;
+        analyticsManager = null;
+        navigator = null;
+        viewModelFactory = null;
         super.onDetach();
     }
 

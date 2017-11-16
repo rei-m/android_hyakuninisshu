@@ -82,7 +82,7 @@ public class QuizFragment extends DaggerFragment {
     @Inject
     QuizFragmentViewModel.Factory viewModelFactory;
 
-    QuizFragmentViewModel viewModel;
+    private QuizFragmentViewModel viewModel;
 
     private FragmentQuizBinding binding;
 
@@ -130,9 +130,7 @@ public class QuizFragment extends DaggerFragment {
     @Override
     public void onStart() {
         super.onStart();
-
         disposable = new CompositeDisposable();
-
         disposable.addAll(viewModel.startDisplayAnimationEvent.subscribe(v ->
                 startDisplayQuizAnimation(
                         viewModel.firstPhrase.get(),
