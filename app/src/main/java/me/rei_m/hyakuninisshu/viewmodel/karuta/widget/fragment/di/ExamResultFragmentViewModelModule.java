@@ -33,7 +33,7 @@ public class ExamResultFragmentViewModelModule {
 
     @Provides
     @ForFragment
-    ExamResultFragmentViewModel.Factory provideExamResultFragmentViewModelFactory(KarutaExamModel karutaExamModel) {
+    ExamResultFragmentViewModel.Factory provideFactory(KarutaExamModel karutaExamModel) {
         return new ExamResultFragmentViewModel.Factory(karutaExamModel, karutaExamId);
     }
 }

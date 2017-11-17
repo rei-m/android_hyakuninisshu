@@ -33,7 +33,7 @@ public class MaterialEditFragmentViewModelModule {
 
     @Provides
     @ForFragment
-    MaterialEditFragmentViewModel.Factory provideMaterialEditFragmentViewModelFactory(@NonNull KarutaModel karutaModel) {
+    MaterialEditFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
         return new MaterialEditFragmentViewModel.Factory(karutaModel, karutaId);
     }
 }

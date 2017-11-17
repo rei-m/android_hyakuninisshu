@@ -58,13 +58,13 @@ public class ExamMasterActivityViewModel extends ViewModel {
 
         disposable = new CompositeDisposable();
         disposable.addAll(karutaExamModel.completeStartEvent.subscribe(v -> {
-            isVisibleAd = false;
             toggleAdEvent.onNext(false);
             startExamEvent.onNext(Unit.INSTANCE);
         }), karutaExamModel.finishedExamId.subscribe(karutaExamIdentifier -> {
-            isVisibleAd = true;
             toggleAdEvent.onNext(true);
             aggregateExamResultsEvent.onNext(karutaExamIdentifier);
+        }), toggleAdEvent.subscribe(isVisible -> {
+            isVisibleAd = isVisible;
         }));
         karutaExamModel.start();
     }

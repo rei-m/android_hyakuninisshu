@@ -129,13 +129,13 @@ public class MaterialDetailFragment extends DaggerFragment {
         abstract class Builder extends AndroidInjector.Builder<MaterialDetailFragment> {
 
             @SuppressWarnings("UnusedReturnValue")
-            public abstract Subcomponent.Builder fragmentModule(MaterialDetailFragmentViewModelModule module);
+            public abstract Subcomponent.Builder viewModelModule(MaterialDetailFragmentViewModelModule module);
 
             @Override
             public void seedInstance(MaterialDetailFragment instance) {
                 Bundle args = instance.getArguments();
                 KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_NO);
-                fragmentModule(new MaterialDetailFragmentViewModelModule(karutaId));
+                viewModelModule(new MaterialDetailFragmentViewModelModule(karutaId));
             }
         }
     }

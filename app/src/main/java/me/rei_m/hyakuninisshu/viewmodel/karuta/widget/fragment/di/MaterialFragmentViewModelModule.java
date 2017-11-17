@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentV
 public class MaterialFragmentViewModelModule {
     @Provides
     @ForFragment
-    MaterialFragmentViewModel.Factory provideMaterialFragmentViewModelFactory(@NonNull KarutaModel karutaModel) {
+    MaterialFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
         return new MaterialFragmentViewModel.Factory(karutaModel);
     }
 }

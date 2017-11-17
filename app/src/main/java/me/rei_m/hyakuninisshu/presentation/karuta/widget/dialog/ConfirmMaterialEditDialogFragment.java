@@ -14,18 +14,22 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.dialog;
 
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 
 import javax.inject.Inject;
 
-import dagger.android.ContributesAndroidInjector;
+import dagger.Binds;
+import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.FragmentKey;
+import dagger.multibindings.IntoMap;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.DialogConfirmMaterialEditBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
@@ -76,7 +80,9 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
     }
 
     @Inject
-    ConfirmMaterialEditDialogFragmentViewModel viewModel;
+    ConfirmMaterialEditDialogFragmentViewModel.Factory viewModelFactory;
+
+    private ConfirmMaterialEditDialogFragmentViewModel viewModel;
 
     private OnDialogInteractionListener listener;
 
@@ -87,6 +93,8 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfirmMaterialEditDialogFragmentViewModel.class);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -109,44 +117,9 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-
-        viewModel.onCreate(args.getString(ARG_FIRST_KANJI, ""),
-                args.getString(ARG_FIRST_KANA, ""),
-                args.getString(ARG_SECOND_KANJI, ""),
-                args.getString(ARG_SECOND_KANA, ""),
-                args.getString(ARG_THIRD_KANJI, ""),
-                args.getString(ARG_THIRD_KANA, ""),
-                args.getString(ARG_FOURTH_KANJI, ""),
-                args.getString(ARG_FOURTH_KANA, ""),
-                args.getString(ARG_FIFTH_KANJI, ""),
-                args.getString(ARG_FIFTH_KANA, ""));
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        viewModel.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        viewModel.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -160,7 +133,7 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
 
     @Override
     public void onDetach() {
-        viewModel = null;
+        viewModelFactory = null;
         listener = null;
         super.onDetach();
     }
@@ -171,11 +144,39 @@ public class ConfirmMaterialEditDialogFragment extends DialogFragment {
         void onConfirmMaterialEditDialogNegativeClick();
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(modules = {ConfirmMaterialEditDialogFragmentViewModelModule.class})
+    public interface Subcomponent extends AndroidInjector<ConfirmMaterialEditDialogFragment> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<ConfirmMaterialEditDialogFragment> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Subcomponent.Builder viewModelModule(ConfirmMaterialEditDialogFragmentViewModelModule module);
+
+            @Override
+            public void seedInstance(ConfirmMaterialEditDialogFragment instance) {
+                Bundle args = instance.getArguments();
+                viewModelModule(new ConfirmMaterialEditDialogFragmentViewModelModule(args.getString(ARG_FIRST_KANJI, ""),
+                        args.getString(ARG_FIRST_KANA, ""),
+                        args.getString(ARG_SECOND_KANJI, ""),
+                        args.getString(ARG_SECOND_KANA, ""),
+                        args.getString(ARG_THIRD_KANJI, ""),
+                        args.getString(ARG_THIRD_KANA, ""),
+                        args.getString(ARG_FOURTH_KANJI, ""),
+                        args.getString(ARG_FOURTH_KANA, ""),
+                        args.getString(ARG_FIFTH_KANJI, ""),
+                        args.getString(ARG_FIFTH_KANA, "")));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
     public abstract class Module {
         @SuppressWarnings("unused")
-        @ForFragment
-        @ContributesAndroidInjector(modules = ConfirmMaterialEditDialogFragmentViewModelModule.class)
-        abstract ConfirmMaterialEditDialogFragment contributeInjector();
+        @Binds
+        @IntoMap
+        @FragmentKey(ConfirmMaterialEditDialogFragment.class)
+        abstract AndroidInjector.Factory<? extends Fragment> bind(Subcomponent.Builder builder);
     }
 }

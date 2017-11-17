@@ -37,7 +37,7 @@ public class QuizFragmentViewModelModule {
 
     @Provides
     @ForFragment
-    QuizFragmentViewModel.Factory provideQuizFragmentViewModelFactory(@NonNull KarutaQuizModel karutaQuizModel) {
+    QuizFragmentViewModel.Factory provideFactory(@NonNull KarutaQuizModel karutaQuizModel) {
         return new QuizFragmentViewModel.Factory(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
     }
 }

@@ -172,13 +172,13 @@ public class ExamResultFragment extends DaggerFragment {
         abstract class Builder extends AndroidInjector.Builder<ExamResultFragment> {
 
             @SuppressWarnings("UnusedReturnValue")
-            public abstract Subcomponent.Builder fragmentModule(ExamResultFragmentViewModelModule module);
+            public abstract Subcomponent.Builder viewModelModule(ExamResultFragmentViewModelModule module);
 
             @Override
             public void seedInstance(ExamResultFragment instance) {
                 Bundle args = instance.getArguments();
                 KarutaExamIdentifier karutaExamId = args.getParcelable(ARG_EXAM_ID);
-                fragmentModule(new ExamResultFragmentViewModelModule(karutaExamId));
+                viewModelModule(new ExamResultFragmentViewModelModule(karutaExamId));
             }
         }
     }

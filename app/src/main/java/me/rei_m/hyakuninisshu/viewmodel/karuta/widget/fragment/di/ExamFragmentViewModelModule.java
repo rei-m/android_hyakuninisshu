@@ -23,7 +23,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewM
 public class ExamFragmentViewModelModule {
     @Provides
     @ForFragment
-    ExamFragmentViewModel.Factory provideExamFragmentViewModelFactory(KarutaExamModel karutaExamModel) {
+    ExamFragmentViewModel.Factory provideFactory(KarutaExamModel karutaExamModel) {
         return new ExamFragmentViewModel.Factory(karutaExamModel);
     }
 }

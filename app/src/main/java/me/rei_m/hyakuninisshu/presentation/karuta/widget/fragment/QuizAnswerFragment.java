@@ -181,14 +181,14 @@ public class QuizAnswerFragment extends DaggerFragment {
         abstract class Builder extends AndroidInjector.Builder<QuizAnswerFragment> {
 
             @SuppressWarnings("UnusedReturnValue")
-            public abstract Subcomponent.Builder fragmentModule(QuizAnswerFragmentViewModelModule module);
+            public abstract Subcomponent.Builder viewModelModule(QuizAnswerFragmentViewModelModule module);
 
             @Override
             public void seedInstance(QuizAnswerFragment instance) {
                 Bundle args = instance.getArguments();
                 KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_ID);
                 boolean existNextQuiz = args.getBoolean(ARG_EXIST_NEXT_QUIZ);
-                fragmentModule(new QuizAnswerFragmentViewModelModule(karutaId, existNextQuiz));
+                viewModelModule(new QuizAnswerFragmentViewModelModule(karutaId, existNextQuiz));
             }
         }
     }

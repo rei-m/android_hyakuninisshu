@@ -106,6 +106,8 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         adView = null;
 
         adViewFactory = null;
+        viewModelFactory = null;
+
         viewModel = null;
         binding = null;
         super.onDestroy();

@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -71,8 +72,6 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
 
     private static final String ARG_SHIMO_NO_KU_STYLE = "shimoNoKuStyle";
 
-    private static final String KEY_IS_STARTED = "isStarted";
-
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull TrainingRangeFrom trainingRangeFrom,
                                       @NonNull TrainingRangeTo trainingRangeTo,
@@ -96,7 +95,9 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     AdViewFactory adViewFactory;
 
     @Inject
-    TrainingMasterActivityViewModel viewModel;
+    TrainingMasterActivityViewModel.Factory viewModelFactory;
+
+    private TrainingMasterActivityViewModel viewModel;
 
     private ActivityTrainingMasterBinding binding;
 
@@ -107,31 +108,12 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingMasterActivityViewModel.class);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_master);
-
-        setSupportActionBar(binding.toolbar);
-
-        TrainingRangeFrom trainingRangeFrom = TrainingRangeFrom.get(getIntent().getIntExtra(ARG_TRAINING_RANGE_FROM, 0));
-        TrainingRangeTo trainingRangeTo = TrainingRangeTo.get(getIntent().getIntExtra(ARG_TRAINING_RANGE_TO, 0));
-        KimarijiFilter kimarijiFilter = KimarijiFilter.get(getIntent().getIntExtra(ARG_KIMARIJI, 0));
-        ColorFilter colorFilter = ColorFilter.get(getIntent().getIntExtra(ARG_COLOR, 0));
-
         binding.setViewModel(viewModel);
 
-        if (savedInstanceState == null) {
-            viewModel.onCreate(trainingRangeFrom,
-                    trainingRangeTo,
-                    kimarijiFilter,
-                    colorFilter);
-        } else {
-            boolean isStarted = savedInstanceState.getBoolean(KEY_IS_STARTED, false);
-            viewModel.onReCreate(trainingRangeFrom,
-                    trainingRangeTo,
-                    kimarijiFilter,
-                    colorFilter,
-                    isStarted);
-        }
+        setSupportActionBar(binding.toolbar);
 
         adView = adViewFactory.create();
 
@@ -142,7 +124,7 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
         adView.setLayoutParams(params);
         binding.root.addView(adView);
-        adView.setVisibility(View.GONE);
+        adView.setVisibility(viewModel.isVisibleAd() ? View.VISIBLE : View.GONE);
 
         AdViewHelper.loadAd(adView);
     }
@@ -155,8 +137,11 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         adView = null;
 
         adViewFactory = null;
+        viewModelFactory = null;
+
         viewModel = null;
         binding = null;
+
         super.onDestroy();
     }
 
@@ -178,7 +163,6 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
                 adView.setVisibility(View.GONE);
             }
         }));
-        viewModel.onStart();
     }
 
     @Override
@@ -187,7 +171,6 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
     }
 
@@ -195,20 +178,12 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     protected void onResume() {
         super.onResume();
         adView.resume();
-        viewModel.onResume();
     }
 
     @Override
     protected void onPause() {
         adView.pause();
-        viewModel.onPause();
         super.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
     }
 
     @Override
@@ -308,9 +283,23 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
             @SuppressWarnings("UnusedReturnValue")
             public abstract Builder activityModule(ActivityModule module);
 
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder viewModelModule(TrainingMasterActivityViewModelModule module);
+
             @Override
             public void seedInstance(TrainingMasterActivity instance) {
                 activityModule(new ActivityModule(instance));
+
+                Intent intent = instance.getIntent();
+                TrainingRangeFrom trainingRangeFrom = TrainingRangeFrom.get(intent.getIntExtra(ARG_TRAINING_RANGE_FROM, 0));
+                TrainingRangeTo trainingRangeTo = TrainingRangeTo.get(intent.getIntExtra(ARG_TRAINING_RANGE_TO, 0));
+                KimarijiFilter kimarijiFilter = KimarijiFilter.get(intent.getIntExtra(ARG_KIMARIJI, 0));
+                ColorFilter colorFilter = ColorFilter.get(intent.getIntExtra(ARG_COLOR, 0));
+
+                viewModelModule(new TrainingMasterActivityViewModelModule(trainingRangeFrom,
+                        trainingRangeTo,
+                        kimarijiFilter,
+                        colorFilter));
             }
         }
     }

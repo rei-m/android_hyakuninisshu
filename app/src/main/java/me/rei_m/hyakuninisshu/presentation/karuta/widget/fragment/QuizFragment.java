@@ -282,14 +282,14 @@ public class QuizFragment extends DaggerFragment {
         abstract class Builder extends AndroidInjector.Builder<QuizFragment> {
 
             @SuppressWarnings("UnusedReturnValue")
-            public abstract Builder fragmentModule(QuizFragmentViewModelModule module);
+            public abstract Builder viewModelModule(QuizFragmentViewModelModule module);
 
             @Override
             public void seedInstance(QuizFragment instance) {
                 Bundle args = instance.getArguments();
                 KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_KAMI_NO_KU_STYLE));
                 KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_SHIMO_NO_KU_STYLE));
-                fragmentModule(new QuizFragmentViewModelModule(kamiNoKuStyle, shimoNoKuStyle));
+                viewModelModule(new QuizFragmentViewModelModule(kamiNoKuStyle, shimoNoKuStyle));
             }
         }
     }

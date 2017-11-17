@@ -33,7 +33,7 @@ public class MaterialDetailFragmentViewModelModule {
 
     @Provides
     @ForFragment
-    MaterialDetailFragmentViewModel.Factory provideMaterialDetailFragmentViewModelFactory(@NonNull KarutaModel karutaModel) {
+    MaterialDetailFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
         return new MaterialDetailFragmentViewModel.Factory(karutaModel, karutaId);
     }
 }

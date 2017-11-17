@@ -194,13 +194,13 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
         abstract class Builder extends AndroidInjector.Builder<MaterialEditFragment> {
 
             @SuppressWarnings("UnusedReturnValue")
-            public abstract Subcomponent.Builder fragmentModule(MaterialEditFragmentViewModelModule module);
+            public abstract Subcomponent.Builder viewModelModule(MaterialEditFragmentViewModelModule module);
 
             @Override
             public void seedInstance(MaterialEditFragment instance) {
                 Bundle args = instance.getArguments();
                 KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_ID);
-                fragmentModule(new MaterialEditFragmentViewModelModule(karutaId));
+                viewModelModule(new MaterialEditFragmentViewModelModule(karutaId));
             }
         }
     }

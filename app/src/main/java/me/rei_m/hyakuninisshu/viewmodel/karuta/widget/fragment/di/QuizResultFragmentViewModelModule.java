@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmen
 public class QuizResultFragmentViewModelModule {
     @Provides
     @ForFragment
-    QuizResultFragmentViewModel.Factory provideQuizResultFragmentViewModelFactory(@NonNull KarutaTrainingModel karutaTrainingModel) {
+    QuizResultFragmentViewModel.Factory provideFactory(@NonNull KarutaTrainingModel karutaTrainingModel) {
         return new QuizResultFragmentViewModel.Factory(karutaTrainingModel);
     }
 }

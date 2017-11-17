@@ -22,7 +22,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragm
 public class TrainingMenuFragmentViewModelModule {
     @Provides
     @ForFragment
-    TrainingMenuFragmentViewModel.Factory provideTrainingMenuFragmentViewModelFactory() {
+    TrainingMenuFragmentViewModel.Factory provideFactory() {
         return new TrainingMenuFragmentViewModel.Factory();
     }
 }
