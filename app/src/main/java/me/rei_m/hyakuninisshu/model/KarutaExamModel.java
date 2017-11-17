@@ -38,11 +38,11 @@ public class KarutaExamModel {
 
     public final EventObservable<Unit> completeStartEvent = EventObservable.create();
 
-    public final EventObservable<KarutaExamIdentifier> completeAggregateResultsEvent = EventObservable.create();
+    public final EventObservable<KarutaExam> karutaExam = EventObservable.create();
 
-    public final EventObservable<KarutaExamResult> completeFetchResultEvent = EventObservable.create();
+    public final EventObservable<KarutaExam> recentKarutaExam = EventObservable.create();
 
-    public final EventObservable<Unit> notFoundResultEvent = EventObservable.create();
+    public final EventObservable<KarutaExamIdentifier> finishedExamId = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -59,6 +59,25 @@ public class KarutaExamModel {
         this.karutaExamRepository = karutaExamRepository;
     }
 
+    public void getKarutaExam(@NonNull KarutaExamIdentifier karutaExamIdentifier) {
+        karutaExamRepository.findBy(karutaExamIdentifier)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this.karutaExam::onNext);
+    }
+
+    public void getRecentKarutaExam() {
+        karutaExamRepository.list()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(karutaExams -> {
+                    KarutaExam recent = karutaExams.recent();
+                    if (recent != null) {
+                        recentKarutaExam.onNext(recent);
+                    }
+                });
+    }
+
     public void start() {
         Single.zip(karutaRepository.list(), karutaRepository.findIds(), Karutas::createQuizSet)
                 .flatMapCompletable(karutaQuizRepository::initialize)
@@ -70,32 +89,16 @@ public class KarutaExamModel {
     public void aggregateResults() {
         karutaQuizRepository.list()
                 .map(karutaQuizzes -> new KarutaExamResult(karutaQuizzes.resultSummary(), karutaQuizzes.wrongKarutaIds()))
-                .flatMap(karutaExamResult -> karutaExamRepository.storeResult(karutaExamResult, new Date()))
-                .flatMap(karutaExamIdentifier -> karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(Single.just(karutaExamIdentifier)))
+                .flatMap(karutaExamResult -> karutaExamRepository
+                        .storeResult(karutaExamResult, new Date()))
+                .flatMap(karutaExamIdentifier -> karutaExamRepository
+                        .adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+                        .andThen(karutaExamRepository.findBy(karutaExamIdentifier)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeAggregateResultsEvent::onNext);
-    }
-
-    public void fetchResult(KarutaExamIdentifier karutaExamIdentifier) {
-        karutaExamRepository.findBy(karutaExamIdentifier)
-                .map(KarutaExam::result)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeFetchResultEvent::onNext);
-    }
-
-    public void fetchRecentResult() {
-        karutaExamRepository.list()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaExams -> {
-                    KarutaExam recentKarutaExam = karutaExams.recent();
-                    if (recentKarutaExam == null) {
-                        notFoundResultEvent.onNext(Unit.INSTANCE);
-                    } else {
-                        completeFetchResultEvent.onNext(recentKarutaExam.result());
-                    }
+                .subscribe(karutaExam -> {
+                    this.finishedExamId.onNext(karutaExam.identifier());
+                    this.recentKarutaExam.onNext(karutaExam);
                 });
     }
 }

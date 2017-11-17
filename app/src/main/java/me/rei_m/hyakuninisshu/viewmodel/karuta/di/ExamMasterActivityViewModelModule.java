@@ -23,7 +23,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel;
 public class ExamMasterActivityViewModelModule {
     @Provides
     @ForActivity
-    ExamMasterActivityViewModel provideExamMasterActivityViewModel(KarutaExamModel karutaExamModel) {
-        return new ExamMasterActivityViewModel(karutaExamModel);
+    ExamMasterActivityViewModel.Factory provideFactory(KarutaExamModel karutaExamModel) {
+        return new ExamMasterActivityViewModel.Factory(karutaExamModel);
     }
 }

@@ -13,6 +13,7 @@
 
 package me.rei_m.hyakuninisshu.presentation.support.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,8 +27,10 @@ import javax.inject.Inject;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.SupportFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.di.SupportFragmentViewModelModule;
 
@@ -40,7 +43,15 @@ public class SupportFragment extends DaggerFragment {
     }
 
     @Inject
-    SupportFragmentViewModel viewModel;
+    SupportFragmentViewModel.Factory viewModelFactory;
+
+    @Inject
+    Navigator navigator;
+
+    @Inject
+    AnalyticsManager analyticsManager;
+
+    private SupportFragmentViewModel viewModel;
 
     private FragmentSupportBinding binding;
 
@@ -50,6 +61,18 @@ public class SupportFragment extends DaggerFragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SupportFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
+    }
+    
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSupportBinding.inflate(inflater, container, false);
@@ -67,14 +90,15 @@ public class SupportFragment extends DaggerFragment {
     public void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.add(viewModel.onClickLicenseEvent.subscribe(v -> {
+        disposable.addAll(viewModel.onClickLicenseEvent.subscribe(v -> {
             FragmentManager manager = getFragmentManager();
             if (manager != null && manager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
                 LicenceDialogFragment dialog = LicenceDialogFragment.newInstance();
                 dialog.show(manager, LicenceDialogFragment.TAG);
             }
+        }), viewModel.onClickReviewEvent.subscribe(v -> {
+            navigator.navigateToAppStore();
         }));
-        viewModel.onStart();
     }
 
     @Override
@@ -83,25 +107,20 @@ public class SupportFragment extends DaggerFragment {
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
     }
 
     @Override
     public void onResume() {
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.SUPPORT);
         super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
     public void onDetach() {
-        viewModel = null;
+        viewModelFactory = null;
+        analyticsManager = null;
+        navigator = null;
         super.onDetach();
     }
 

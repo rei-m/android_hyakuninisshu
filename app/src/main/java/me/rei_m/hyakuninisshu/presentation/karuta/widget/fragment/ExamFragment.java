@@ -13,8 +13,10 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +25,11 @@ import javax.inject.Inject;
 
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
+import io.reactivex.disposables.CompositeDisposable;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.databinding.FragmentExamBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.ExamFragmentViewModelModule;
 
@@ -37,12 +42,34 @@ public class ExamFragment extends DaggerFragment {
     }
 
     @Inject
-    ExamFragmentViewModel viewModel;
+    AnalyticsManager analyticsManager;
+
+    @Inject
+    Navigator navigator;
+
+    @Inject
+    ExamFragmentViewModel.Factory viewModelFactory;
+
+    private ExamFragmentViewModel viewModel;
 
     private FragmentExamBinding binding;
 
+    private CompositeDisposable disposable;
+
     public ExamFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -61,30 +88,35 @@ public class ExamFragment extends DaggerFragment {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.onStart();
+        disposable = new CompositeDisposable();
+        disposable.addAll(viewModel.onClickStartExamEvent.subscribe(v -> {
+            analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_EXAM);
+            navigator.navigateToExamMaster();
+        }), viewModel.onClickStartTrainingEvent.subscribe(v -> {
+            analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING_FOR_EXAM);
+            navigator.navigateToExamTrainingMaster();
+        }));
     }
 
     @Override
     public void onStop() {
-        viewModel.onStop();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onStop();
     }
 
     @Override
     public void onResume() {
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM);
         super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
     public void onDetach() {
-        viewModel = null;
+        navigator = null;
+        analyticsManager = null;
+        viewModelFactory = null;
         super.onDetach();
     }
 

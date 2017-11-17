@@ -13,43 +13,46 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import me.rei_m.hyakuninisshu.AnalyticsManager;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class SupportFragmentViewModel extends AbsFragmentViewModel {
+public class SupportFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final String version;
+
+        public Factory(@NonNull String version) {
+            this.version = version;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public SupportFragmentViewModel create(@NonNull Class modelClass) {
+            return new SupportFragmentViewModel(version);
+        }
+    }
 
     public final ObservableField<String> version = new ObservableField<>();
 
+    public final EventObservable<Unit> onClickReviewEvent = EventObservable.create();
+
     public final EventObservable<Unit> onClickLicenseEvent = EventObservable.create();
 
-    private final Navigator navigator;
-
-    private final AnalyticsManager analyticsManager;
-
-    public SupportFragmentViewModel(@NonNull String version,
-                                    @NonNull Navigator navigator,
-                                    @NonNull AnalyticsManager analyticsManager) {
+    public SupportFragmentViewModel(@NonNull String version) {
         this.version.set(version);
-        this.navigator = navigator;
-        this.analyticsManager = analyticsManager;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.SUPPORT);
     }
 
     @SuppressWarnings("unused")
     public void onClickReview(View view) {
-        navigator.navigateToAppStore();
+        onClickReviewEvent.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")

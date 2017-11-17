@@ -34,8 +34,10 @@ public class SplashActivity extends DaggerAppCompatActivity {
 
     @Inject
     Navigator navigator;
+
     @Inject
     ApplicationModel applicationModel;
+
     private CompositeDisposable disposable;
 
     @Override

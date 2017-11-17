@@ -13,12 +13,64 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.dialog;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
+public class ConfirmMaterialEditDialogFragmentViewModel extends ViewModel {
 
-public class ConfirmMaterialEditDialogFragmentViewModel extends AbsFragmentViewModel {
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final String firstPhraseKanji;
+        private final String firstPhraseKana;
+        private final String secondPhraseKanji;
+        private final String secondPhraseKana;
+        private final String thirdPhraseKanji;
+        private final String thirdPhraseKana;
+        private final String fourthPhraseKanji;
+        private final String fourthPhraseKana;
+        private final String fifthPhraseKanji;
+        private final String fifthPhraseKana;
+
+        public Factory(@NonNull String firstPhraseKanji,
+                       @NonNull String firstPhraseKana,
+                       @NonNull String secondPhraseKanji,
+                       @NonNull String secondPhraseKana,
+                       @NonNull String thirdPhraseKanji,
+                       @NonNull String thirdPhraseKana,
+                       @NonNull String fourthPhraseKanji,
+                       @NonNull String fourthPhraseKana,
+                       @NonNull String fifthPhraseKanji,
+                       @NonNull String fifthPhraseKana) {
+            this.firstPhraseKanji = firstPhraseKanji;
+            this.firstPhraseKana = firstPhraseKana;
+            this.secondPhraseKanji = secondPhraseKanji;
+            this.secondPhraseKana = secondPhraseKana;
+            this.thirdPhraseKanji = thirdPhraseKanji;
+            this.thirdPhraseKana = thirdPhraseKana;
+            this.fourthPhraseKanji = fourthPhraseKanji;
+            this.fourthPhraseKana = fourthPhraseKana;
+            this.fifthPhraseKanji = fifthPhraseKanji;
+            this.fifthPhraseKana = fifthPhraseKana;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public ConfirmMaterialEditDialogFragmentViewModel create(@NonNull Class modelClass) {
+            return new ConfirmMaterialEditDialogFragmentViewModel(firstPhraseKanji,
+                    firstPhraseKana,
+                    secondPhraseKanji,
+                    secondPhraseKana,
+                    thirdPhraseKanji,
+                    thirdPhraseKana,
+                    fourthPhraseKanji,
+                    fourthPhraseKana,
+                    fifthPhraseKanji,
+                    fifthPhraseKana);
+        }
+    }
 
     public final ObservableField<String> firstPhraseKanji = new ObservableField<>();
 
@@ -40,16 +92,16 @@ public class ConfirmMaterialEditDialogFragmentViewModel extends AbsFragmentViewM
 
     public final ObservableField<String> fifthPhraseKana = new ObservableField<>();
 
-    public void onCreate(@NonNull String firstPhraseKanji,
-                         @NonNull String firstPhraseKana,
-                         @NonNull String secondPhraseKanji,
-                         @NonNull String secondPhraseKana,
-                         @NonNull String thirdPhraseKanji,
-                         @NonNull String thirdPhraseKana,
-                         @NonNull String fourthPhraseKanji,
-                         @NonNull String fourthPhraseKana,
-                         @NonNull String fifthPhraseKanji,
-                         @NonNull String fifthPhraseKana) {
+    public ConfirmMaterialEditDialogFragmentViewModel(@NonNull String firstPhraseKanji,
+                                                      @NonNull String firstPhraseKana,
+                                                      @NonNull String secondPhraseKanji,
+                                                      @NonNull String secondPhraseKana,
+                                                      @NonNull String thirdPhraseKanji,
+                                                      @NonNull String thirdPhraseKana,
+                                                      @NonNull String fourthPhraseKanji,
+                                                      @NonNull String fourthPhraseKana,
+                                                      @NonNull String fifthPhraseKanji,
+                                                      @NonNull String fifthPhraseKana) {
         this.firstPhraseKanji.set(firstPhraseKanji);
         this.firstPhraseKana.set(firstPhraseKana);
         this.secondPhraseKanji.set(secondPhraseKanji);

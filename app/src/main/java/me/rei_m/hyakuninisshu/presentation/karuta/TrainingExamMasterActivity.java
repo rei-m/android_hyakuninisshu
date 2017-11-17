@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -56,8 +57,6 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         QuizResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
-    private static final String KEY_IS_STARTED = "isStarted";
-
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, TrainingExamMasterActivity.class);
     }
@@ -66,7 +65,9 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     AdViewFactory adViewFactory;
 
     @Inject
-    TrainingExamMasterActivityViewModel viewModel;
+    TrainingExamMasterActivityViewModel.Factory viewModelFactory;
+
+    private TrainingExamMasterActivityViewModel viewModel;
 
     private ActivityTrainingExamMasterBinding binding;
 
@@ -77,16 +78,12 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingExamMasterActivityViewModel.class);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_exam_master);
         binding.setViewModel(viewModel);
 
         setSupportActionBar(binding.toolbar);
-
-        if (savedInstanceState != null) {
-            boolean isStarted = savedInstanceState.getBoolean(KEY_IS_STARTED, false);
-            viewModel.onReCreate(isStarted);
-        }
 
         adView = adViewFactory.create();
 
@@ -97,7 +94,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
         adView.setLayoutParams(params);
         binding.root.addView(adView);
-        adView.setVisibility(View.GONE);
+        adView.setVisibility(viewModel.isVisibleAd() ? View.VISIBLE : View.GONE);
 
         AdViewHelper.loadAd(adView);
     }
@@ -110,8 +107,11 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         adView = null;
 
         adViewFactory = null;
+        viewModelFactory = null;
+
         viewModel = null;
         binding = null;
+
         super.onDestroy();
     }
 
@@ -119,16 +119,15 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     protected void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.startTrainingEvent.subscribe(v -> {
-            startTraining();
-        }), viewModel.toggleAdEvent.subscribe(isVisible -> {
+        disposable.addAll(viewModel.startTrainingEvent.subscribe(v ->
+                startTraining()
+        ), viewModel.toggleAdEvent.subscribe(isVisible -> {
             if (isVisible) {
                 adView.setVisibility(View.VISIBLE);
             } else {
                 adView.setVisibility(View.GONE);
             }
         }));
-        viewModel.onStart();
     }
 
     @Override
@@ -137,7 +136,6 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
     }
 
@@ -145,20 +143,12 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     protected void onResume() {
         super.onResume();
         adView.resume();
-        viewModel.onResume();
     }
 
     @Override
     protected void onPause() {
         adView.pause();
-        viewModel.onPause();
         super.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedTraining());
     }
 
     @Override

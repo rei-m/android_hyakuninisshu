@@ -13,19 +13,36 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import me.rei_m.hyakuninisshu.AnalyticsManager;
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class QuizResultFragmentViewModel extends AbsFragmentViewModel {
+public class QuizResultFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaTrainingModel karutaTrainingModel;
+
+        public Factory(@NonNull KarutaTrainingModel karutaTrainingModel) {
+            this.karutaTrainingModel = karutaTrainingModel;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public QuizResultFragmentViewModel create(@NonNull Class modelClass) {
+            return new QuizResultFragmentViewModel(karutaTrainingModel);
+        }
+    }
 
     public final ObservableField<String> score = new ObservableField<>("");
 
@@ -41,40 +58,36 @@ public class QuizResultFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaTrainingModel karutaTrainingModel;
 
-    private final AnalyticsManager analyticsManager;
+    private CompositeDisposable disposable = null;
 
-    public QuizResultFragmentViewModel(@NonNull KarutaTrainingModel karutaTrainingModel,
-                                       @NonNull AnalyticsManager analyticsManager) {
+    public QuizResultFragmentViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
         this.karutaTrainingModel = karutaTrainingModel;
-        this.analyticsManager = analyticsManager;
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaTrainingModel.completeAggregateResultsEvent.subscribe(trainingResult -> {
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaTrainingModel.trainingResult.subscribe(trainingResult -> {
             score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
             averageAnswerTime.set(trainingResult.averageAnswerTime());
             canRestartTraining.set(trainingResult.canRestartTraining());
         }), karutaTrainingModel.completeRestartEvent.subscribe(v -> restartEvent.onNext(Unit.INSTANCE)));
+        this.karutaTrainingModel.aggregateResults();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.QUIZ_RESULT);
-        karutaTrainingModel.aggregateResults();
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        super.onCleared();
     }
 
     @SuppressWarnings("unused")
     public void onClickPracticeWrongKarutas(View view) {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.RESTART_TRAINING);
         karutaTrainingModel.restartForPractice();
     }
 
     @SuppressWarnings("unused")
     public void onClickBackMenu(View view) {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.FINISH_TRAINING);
         onClickBackMenuEvent.onNext(Unit.INSTANCE);
     }
 }

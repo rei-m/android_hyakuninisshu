@@ -13,18 +13,36 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import me.rei_m.hyakuninisshu.AnalyticsManager;
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
+import me.rei_m.hyakuninisshu.util.EventObservable;
+import me.rei_m.hyakuninisshu.util.Unit;
 
-public class ExamFragmentViewModel extends AbsFragmentViewModel {
+public class ExamFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaExamModel karutaExamModel;
+
+        public Factory(@NonNull KarutaExamModel karutaExamModel) {
+            this.karutaExamModel = karutaExamModel;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public ExamFragmentViewModel create(@NonNull Class modelClass) {
+            return new ExamFragmentViewModel(karutaExamModel);
+        }
+    }
 
     public final ObservableBoolean hasResult = new ObservableBoolean(false);
 
@@ -32,46 +50,39 @@ public class ExamFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableFloat averageAnswerTime = new ObservableFloat();
 
-    private final KarutaExamModel karutaExamModel;
+    public final EventObservable<Unit> onClickStartExamEvent = EventObservable.create();
 
-    private final Navigator navigator;
+    public final EventObservable<Unit> onClickStartTrainingEvent = EventObservable.create();
 
-    private final AnalyticsManager analyticsManager;
+    private CompositeDisposable disposable = null;
 
-    public ExamFragmentViewModel(@NonNull KarutaExamModel karutaExamModel,
-                                 @NonNull Navigator navigator,
-                                 @NonNull AnalyticsManager analyticsManager) {
-        this.karutaExamModel = karutaExamModel;
-        this.navigator = navigator;
-        this.analyticsManager = analyticsManager;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaExamModel.completeFetchResultEvent.subscribe(examResult -> {
+    public ExamFragmentViewModel(@NonNull KarutaExamModel karutaExamModel) {
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaExamModel.recentKarutaExam.subscribe(karutaExam -> {
             hasResult.set(true);
-            score.set(examResult.score());
-            averageAnswerTime.set(examResult.averageAnswerTime());
-        }), karutaExamModel.notFoundResultEvent.subscribe(v -> hasResult.set(false)));
+            score.set(karutaExam.result().score());
+            averageAnswerTime.set(karutaExam.result().averageAnswerTime());
+        }));
+
+        karutaExamModel.getRecentKarutaExam();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM);
-        karutaExamModel.fetchRecentResult();
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        super.onCleared();
     }
 
     @SuppressWarnings("unused")
     public void onClickStartExam(View view) {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_EXAM);
-        navigator.navigateToExamMaster();
+        onClickStartExamEvent.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")
     public void onClickStartTraining(View view) {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING_FOR_EXAM);
-        navigator.navigateToExamTrainingMaster();
+        onClickStartTrainingEvent.onNext(Unit.INSTANCE);
     }
 }

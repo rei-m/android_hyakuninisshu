@@ -48,15 +48,19 @@ import me.rei_m.hyakuninisshu.presentation.support.widget.fragment.SupportFragme
 public class EntranceActivity extends DaggerAppCompatActivity {
 
     private static final String KEY_PAGE_INDEX = "pageIndex";
-    @Inject
-    AdViewFactory adViewFactory;
-    private ActivityEntranceBinding binding;
-    private AdView adView;
-    private int currentPageIndex = 0;
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, EntranceActivity.class);
     }
+
+    @Inject
+    AdViewFactory adViewFactory;
+
+    private ActivityEntranceBinding binding;
+
+    private AdView adView;
+
+    private int currentPageIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

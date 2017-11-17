@@ -13,19 +13,30 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di;
 
+import android.support.annotation.NonNull;
+
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 
 @Module
 public class QuizAnswerFragmentViewModelModule {
+
+    private final KarutaIdentifier karutaId;
+
+    private final boolean existNextQuiz;
+
+    public QuizAnswerFragmentViewModelModule(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
+        this.karutaId = karutaId;
+        this.existNextQuiz = existNextQuiz;
+    }
+
     @Provides
     @ForFragment
-    QuizAnswerFragmentViewModel provideQuizAnswerFragmentViewModel(KarutaModel karutaModel,
-                                                                   Navigator navigator) {
-        return new QuizAnswerFragmentViewModel(karutaModel, navigator);
+    QuizAnswerFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
+        return new QuizAnswerFragmentViewModel.Factory(karutaModel, karutaId, existNextQuiz);
     }
 }

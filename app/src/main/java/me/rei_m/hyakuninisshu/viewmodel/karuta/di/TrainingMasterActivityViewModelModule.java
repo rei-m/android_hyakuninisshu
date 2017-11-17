@@ -19,13 +19,40 @@ import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
 
 @Module
 public class TrainingMasterActivityViewModelModule {
+
+    private final TrainingRangeFrom trainingRangeFrom;
+
+    private final TrainingRangeTo trainingRangeTo;
+
+    private final KimarijiFilter kimarijiFilter;
+
+    private final ColorFilter colorFilter;
+
+    public TrainingMasterActivityViewModelModule(@NonNull TrainingRangeFrom trainingRangeFrom,
+                                                 @NonNull TrainingRangeTo trainingRangeTo,
+                                                 @NonNull KimarijiFilter kimarijiFilter,
+                                                 @NonNull ColorFilter colorFilter) {
+        this.trainingRangeFrom = trainingRangeFrom;
+        this.trainingRangeTo = trainingRangeTo;
+        this.kimarijiFilter = kimarijiFilter;
+        this.colorFilter = colorFilter;
+    }
+
     @Provides
     @ForActivity
-    TrainingMasterActivityViewModel provideTrainingMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        return new TrainingMasterActivityViewModel(karutaTrainingModel);
+    TrainingMasterActivityViewModel.Factory provideFactory(@NonNull KarutaTrainingModel karutaTrainingModel) {
+        return new TrainingMasterActivityViewModel.Factory(karutaTrainingModel,
+                trainingRangeFrom,
+                trainingRangeTo,
+                kimarijiFilter,
+                colorFilter);
     }
 }

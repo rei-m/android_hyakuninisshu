@@ -13,22 +13,28 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import dagger.android.ContributesAndroidInjector;
+import dagger.Binds;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerFragment;
+import dagger.android.support.FragmentKey;
+import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizAnswerFragmentViewModelModule;
 
@@ -51,7 +57,12 @@ public class QuizAnswerFragment extends DaggerFragment {
     }
 
     @Inject
-    QuizAnswerFragmentViewModel viewModel;
+    Navigator navigator;
+
+    @Inject
+    QuizAnswerFragmentViewModel.Factory viewModelFactory;
+
+    private QuizAnswerFragmentViewModel viewModel;
 
     private FragmentQuizAnswerBinding binding;
 
@@ -81,21 +92,24 @@ public class QuizAnswerFragment extends DaggerFragment {
             return;
         }
 
-        viewModel.onCreate(karutaId, existNextQuiz);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizAnswerFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         binding = FragmentQuizAnswerBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
-
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        viewModel = null;
         binding = null;
         super.onDestroyView();
     }
@@ -104,7 +118,9 @@ public class QuizAnswerFragment extends DaggerFragment {
     public void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.onClickNextQuizEvent.subscribe(v -> {
+        disposable.addAll(viewModel.onClickAnswerEvent.subscribe(karutaIdentifier -> {
+            navigator.navigateToMaterialSingle(karutaIdentifier);
+        }), viewModel.onClickNextQuizEvent.subscribe(v -> {
             if (listener != null) {
                 listener.onClickGoToNext();
             }
@@ -117,7 +133,6 @@ public class QuizAnswerFragment extends DaggerFragment {
                 listener.onErrorQuiz();
             }
         }));
-        viewModel.onStart();
     }
 
     @Override
@@ -126,20 +141,7 @@ public class QuizAnswerFragment extends DaggerFragment {
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
@@ -155,7 +157,8 @@ public class QuizAnswerFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        viewModel = null;
+        navigator = null;
+        viewModelFactory = null;
         listener = null;
         super.onDetach();
     }
@@ -170,11 +173,32 @@ public class QuizAnswerFragment extends DaggerFragment {
         void onReceiveIllegalArguments();
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(modules = {QuizAnswerFragmentViewModelModule.class})
+    public interface Subcomponent extends AndroidInjector<QuizAnswerFragment> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<QuizAnswerFragment> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Subcomponent.Builder viewModelModule(QuizAnswerFragmentViewModelModule module);
+
+            @Override
+            public void seedInstance(QuizAnswerFragment instance) {
+                Bundle args = instance.getArguments();
+                KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_ID);
+                boolean existNextQuiz = args.getBoolean(ARG_EXIST_NEXT_QUIZ);
+                viewModelModule(new QuizAnswerFragmentViewModelModule(karutaId, existNextQuiz));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
     public abstract class Module {
         @SuppressWarnings("unused")
-        @ForFragment
-        @ContributesAndroidInjector(modules = QuizAnswerFragmentViewModelModule.class)
-        abstract QuizAnswerFragment contributeInjector();
+        @Binds
+        @IntoMap
+        @FragmentKey(QuizAnswerFragment.class)
+        abstract AndroidInjector.Factory<? extends Fragment> bind(Subcomponent.Builder builder);
     }
 }

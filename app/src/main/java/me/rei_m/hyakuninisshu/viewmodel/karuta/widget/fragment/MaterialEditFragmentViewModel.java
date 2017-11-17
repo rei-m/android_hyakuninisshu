@@ -13,18 +13,40 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
+public class MaterialEditFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaModel karutaModel;
+
+        private final KarutaIdentifier karutaId;
+
+        public Factory(@NonNull KarutaModel karutaModel,
+                       @NonNull KarutaIdentifier karutaId) {
+            this.karutaModel = karutaModel;
+            this.karutaId = karutaId;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public MaterialEditFragmentViewModel create(@NonNull Class modelClass) {
+            return new MaterialEditFragmentViewModel(karutaModel, karutaId);
+        }
+    }
 
     public final ObservableInt karutaNo = new ObservableInt();
 
@@ -60,25 +82,20 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaModel karutaModel;
 
-    private KarutaIdentifier karutaId;
+    private final KarutaIdentifier karutaId;
 
-    public MaterialEditFragmentViewModel(@NonNull KarutaModel karutaModel) {
+    private CompositeDisposable disposable = null;
+
+    public MaterialEditFragmentViewModel(@NonNull KarutaModel karutaModel,
+                                         @NonNull KarutaIdentifier karutaId) {
+
         this.karutaModel = karutaModel;
-    }
-
-    public void onCreate(@NonNull KarutaIdentifier karutaId) {
         this.karutaId = karutaId;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
-
-            if (!karutaId.equals(karuta.identifier())) {
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
+            if (!karuta.identifier().equals(karutaId)) {
                 return;
             }
-
             karutaNo.set(karuta.identifier().value());
             creator.set(karuta.creator());
             kimariji.set(karuta.kimariji().value());
@@ -93,12 +110,16 @@ public class MaterialEditFragmentViewModel extends AbsFragmentViewModel {
             fifthPhraseKanji.set(karuta.shimoNoKu().fifth().kanji());
             fifthPhraseKana.set(karuta.shimoNoKu().fifth().kana());
         }), karutaModel.completeEditKarutaEvent.subscribe(v -> onUpdateMaterialEvent.onNext(Unit.INSTANCE)));
+        karutaModel.getKaruta(karutaId);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        karutaModel.fetchKaruta(karutaId);
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        super.onCleared();
     }
 
     @SuppressWarnings("unused")

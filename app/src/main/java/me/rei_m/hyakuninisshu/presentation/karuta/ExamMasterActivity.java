@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -55,10 +56,6 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         ExamResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
-    private static final String KEY_IS_STARTED = "isStarted";
-
-    private static final String KEY_IS_FINISHED = "isFinished";
-
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
     }
@@ -67,7 +64,9 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     AdViewFactory adViewFactory;
 
     @Inject
-    ExamMasterActivityViewModel viewModel;
+    ExamMasterActivityViewModel.Factory viewModelFactory;
+
+    private ExamMasterActivityViewModel viewModel;
 
     private ActivityExamMasterBinding binding;
 
@@ -78,17 +77,12 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamMasterActivityViewModel.class);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exam_master);
         binding.setViewModel(viewModel);
 
         setSupportActionBar(binding.toolbar);
-
-        if (savedInstanceState != null) {
-            boolean isStarted = savedInstanceState.getBoolean(KEY_IS_STARTED, false);
-            boolean isFinished = savedInstanceState.getBoolean(KEY_IS_FINISHED, false);
-            viewModel.onReCreate(isStarted, isFinished);
-        }
 
         adView = adViewFactory.create();
 
@@ -99,7 +93,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
         adView.setLayoutParams(params);
         binding.root.addView(adView);
-        adView.setVisibility(View.GONE);
+        adView.setVisibility(viewModel.isVisibleAd() ? View.VISIBLE : View.GONE);
 
         AdViewHelper.loadAd(adView);
     }
@@ -112,6 +106,8 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         adView = null;
 
         adViewFactory = null;
+        viewModelFactory = null;
+
         viewModel = null;
         binding = null;
         super.onDestroy();
@@ -139,7 +135,6 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
                     }
                 })
         );
-        viewModel.onStart();
     }
 
     @Override
@@ -148,7 +143,6 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
     }
 
@@ -156,21 +150,12 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     protected void onResume() {
         super.onResume();
         adView.resume();
-        viewModel.onResume();
     }
 
     @Override
     protected void onPause() {
         adView.pause();
-        viewModel.onPause();
         super.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_IS_STARTED, viewModel.isStartedExam());
-        outState.putBoolean(KEY_IS_FINISHED, viewModel.isFinishedExam());
     }
 
     @Override

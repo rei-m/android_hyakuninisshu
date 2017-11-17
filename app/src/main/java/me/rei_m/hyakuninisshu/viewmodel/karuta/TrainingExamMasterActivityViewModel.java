@@ -13,14 +13,33 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableBoolean;
+import android.support.annotation.NonNull;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsActivityViewModel;
 
-public class TrainingExamMasterActivityViewModel extends AbsActivityViewModel {
+public class TrainingExamMasterActivityViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaTrainingModel karutaTrainingModel;
+
+        public Factory(@NonNull KarutaTrainingModel karutaTrainingModel) {
+            this.karutaTrainingModel = karutaTrainingModel;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public TrainingExamMasterActivityViewModel create(@NonNull Class modelClass) {
+            return new TrainingExamMasterActivityViewModel(karutaTrainingModel);
+        }
+    }
 
     public final ObservableBoolean isVisibleEmpty = new ObservableBoolean(false);
 
@@ -28,36 +47,34 @@ public class TrainingExamMasterActivityViewModel extends AbsActivityViewModel {
 
     public final EventObservable<Boolean> toggleAdEvent = EventObservable.create();
 
-    private final KarutaTrainingModel karutaTrainingModel;
+    private boolean isVisibleAd = false;
 
-    private boolean isStartedTraining = false;
+    private CompositeDisposable disposable = null;
 
-    public TrainingExamMasterActivityViewModel(KarutaTrainingModel karutaTrainingModel) {
-        this.karutaTrainingModel = karutaTrainingModel;
-    }
-
-    public boolean isStartedTraining() {
-        return isStartedTraining;
-    }
-
-    public void onReCreate(boolean isStartedTraining) {
-        this.isStartedTraining = isStartedTraining;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaTrainingModel.completeStartForExamEvent.subscribe(v -> {
-            isStartedTraining = true;
+    public TrainingExamMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaTrainingModel.completeStartForExamEvent.subscribe(v -> {
             startTrainingEvent.onNext(Unit.INSTANCE);
         }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
             toggleAdEvent.onNext(true);
+        }), toggleAdEvent.subscribe(isVisible -> {
+            isVisibleAd = isVisible;
         }));
+        karutaTrainingModel.startForExam();
+    }
 
-        if (!isStartedTraining) {
-            karutaTrainingModel.startForExam();
+    @Override
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
         }
+        super.onCleared();
+    }
+
+    public boolean isVisibleAd() {
+        return isVisibleAd;
     }
 
     public void onClickGoToResult() {

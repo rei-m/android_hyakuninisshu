@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableField;
 import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
@@ -20,17 +22,35 @@ import android.view.View;
 
 import java.util.List;
 
-import me.rei_m.hyakuninisshu.AnalyticsManager;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
+public class ExamResultFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaExamModel karutaExamModel;
+
+        private final KarutaExamIdentifier karutaExamId;
+
+        public Factory(@NonNull KarutaExamModel karutaExamModel,
+                       @NonNull KarutaExamIdentifier karutaExamId) {
+            this.karutaExamModel = karutaExamModel;
+            this.karutaExamId = karutaExamId;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public ExamResultFragmentViewModel create(@NonNull Class modelClass) {
+            return new ExamResultFragmentViewModel(karutaExamModel, karutaExamId);
+        }
+    }
 
     public final ObservableField<String> score = new ObservableField<>();
 
@@ -40,49 +60,32 @@ public class ExamResultFragmentViewModel extends AbsFragmentViewModel {
 
     public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
 
-    private final KarutaExamModel karutaExamModel;
-
-    private final Navigator navigator;
-
-    private final AnalyticsManager analyticsManager;
-
-    private KarutaExamIdentifier karutaExamId;
+    private CompositeDisposable disposable = null;
 
     public ExamResultFragmentViewModel(@NonNull KarutaExamModel karutaExamModel,
-                                       @NonNull Navigator navigator,
-                                       @NonNull AnalyticsManager analyticsManager) {
-        this.karutaExamModel = karutaExamModel;
-        this.navigator = navigator;
-        this.analyticsManager = analyticsManager;
-    }
-
-    public void onCreate(@NonNull KarutaExamIdentifier karutaExamId) {
-        this.karutaExamId = karutaExamId;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaExamModel.completeFetchResultEvent.subscribe(examResult -> {
-            score.set(examResult.score());
-            averageAnswerTime.set(examResult.averageAnswerTime());
-            karutaQuizJudgements.set(examResult.judgements());
+                                       @NonNull KarutaExamIdentifier karutaExamId) {
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaExamModel.karutaExam.subscribe(karutaExam -> {
+            KarutaExamResult result = karutaExam.result();
+            score.set(result.score());
+            averageAnswerTime.set(result.averageAnswerTime());
+            karutaQuizJudgements.set(result.judgements());
         }));
+
+        karutaExamModel.getKarutaExam(karutaExamId);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM_RESULT);
-        karutaExamModel.fetchResult(karutaExamId);
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        super.onCleared();
     }
 
     @SuppressWarnings("unused")
     public void onClickBackMenu(View view) {
         onClickBackMenuEvent.onNext(Unit.INSTANCE);
-    }
-
-    public void onClickResult(@NonNull KarutaIdentifier karutaId) {
-        navigator.navigateToMaterialSingle(karutaId);
     }
 }

@@ -45,7 +45,7 @@ public class KarutaTrainingModel {
 
     public final EventObservable<Unit> completeStartForExamEvent = EventObservable.create();
 
-    public final EventObservable<TrainingResult> completeAggregateResultsEvent = EventObservable.create();
+    public final EventObservable<TrainingResult> trainingResult = EventObservable.create();
 
     public final EventObservable<Unit> notFoundErrorEvent = EventObservable.create();
 
@@ -117,7 +117,7 @@ public class KarutaTrainingModel {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        completeAggregateResultsEvent::onNext,
+                        trainingResult::onNext,
                         throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE)
                 );
     }

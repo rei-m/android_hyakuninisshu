@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableBoolean;
@@ -22,15 +24,38 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
+public class QuizAnswerFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaModel karutaModel;
+
+        private final KarutaIdentifier karutaId;
+
+        private final boolean existNextQuiz;
+
+        public Factory(@NonNull KarutaModel karutaModel,
+                       @NonNull KarutaIdentifier karutaId,
+                       boolean existNextQuiz) {
+            this.karutaModel = karutaModel;
+            this.karutaId = karutaId;
+            this.existNextQuiz = existNextQuiz;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public QuizAnswerFragmentViewModel create(@NonNull Class modelClass) {
+            return new QuizAnswerFragmentViewModel(karutaModel, karutaId, existNextQuiz);
+        }
+    }
 
     public final ObservableInt karutaNo = new ObservableInt();
 
@@ -50,6 +75,8 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     public final ObservableBoolean existNextQuiz = new ObservableBoolean(false);
 
+    public final EventObservable<KarutaIdentifier> onClickAnswerEvent = EventObservable.create();
+
     public final EventObservable<Unit> onClickNextQuizEvent = EventObservable.create();
 
     public final EventObservable<Unit> onClickConfirmResultEvent = EventObservable.create();
@@ -58,37 +85,19 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
 
     private final KarutaModel karutaModel;
 
-    private final Navigator navigator;
+    private final KarutaIdentifier karutaId;
 
-    private KarutaIdentifier karutaId;
+    private CompositeDisposable disposable = null;
 
     public QuizAnswerFragmentViewModel(@NonNull KarutaModel karutaModel,
-                                       @NonNull Navigator navigator) {
+                                       @NonNull KarutaIdentifier karutaId,
+                                       boolean existNextQuiz) {
         this.karutaModel = karutaModel;
-        this.navigator = navigator;
-    }
-
-    private static String padSpace(String text, int count) {
-
-        int finallyCount = (count < text.length()) ? text.length() : count;
-
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < finallyCount; i++) {
-            builder.append("　");
-        }
-        return (text + builder.toString()).substring(0, finallyCount);
-    }
-
-    public void onCreate(@NonNull KarutaIdentifier karutaId,
-                         boolean existNextQuiz) {
         this.karutaId = karutaId;
         this.existNextQuiz.set(existNextQuiz);
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaModel.completeFetchKarutaEvent.subscribe(karuta -> {
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
             karutaNo.set(karuta.identifier().value());
             kimariji.set(karuta.kimariji().value());
             creator.set(karuta.creator());
@@ -97,18 +106,22 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
             thirdPhrase.set(karuta.kamiNoKu().third().kanji());
             fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
             fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
-        }), karutaModel.errorEvent.subscribe(v -> errorEvent.onNext(Unit.INSTANCE)));
+        }));
+        this.karutaModel.getKaruta(karutaId);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        karutaModel.fetchKaruta(karutaId);
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        super.onCleared();
     }
 
     @SuppressWarnings("unused")
     public void onClickAnswer(View view) {
-        navigator.navigateToMaterialSingle(karutaId);
+        onClickAnswerEvent.onNext(karutaId);
     }
 
     @SuppressWarnings("unused")
@@ -133,5 +146,16 @@ public class QuizAnswerFragmentViewModel extends AbsFragmentViewModel {
         String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo) + " / " +
                 KarutaDisplayHelper.convertKimarijiToString(context, kimariji);
         view.setText(text);
+    }
+
+    private static String padSpace(String text, int count) {
+
+        int finallyCount = (count < text.length()) ? text.length() : count;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < finallyCount; i++) {
+            builder.append("　");
+        }
+        return (text + builder.toString()).substring(0, finallyCount);
     }
 }

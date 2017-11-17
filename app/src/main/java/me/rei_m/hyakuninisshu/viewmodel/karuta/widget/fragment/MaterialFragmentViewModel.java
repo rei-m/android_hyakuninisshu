@@ -13,49 +13,67 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableArrayList;
 import android.support.annotation.NonNull;
 
-import me.rei_m.hyakuninisshu.AnalyticsManager;
+import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
-import me.rei_m.hyakuninisshu.viewmodel.AbsFragmentViewModel;
 
-public class MaterialFragmentViewModel extends AbsFragmentViewModel {
+public class MaterialFragmentViewModel extends ViewModel {
+
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final KarutaModel karutaModel;
+
+        public Factory(@NonNull KarutaModel karutaModel) {
+            this.karutaModel = karutaModel;
+        }
+
+        @SuppressWarnings("unchecked")
+        @NonNull
+        @Override
+        public MaterialFragmentViewModel create(@NonNull Class modelClass) {
+            return new MaterialFragmentViewModel(karutaModel);
+        }
+    }
 
     public final ObservableArrayList<Karuta> karutaList = new ObservableArrayList<>();
 
     private final KarutaModel karutaModel;
 
-    private final AnalyticsManager analyticsManager;
-
     private ColorFilter colorFilter = ColorFilter.ALL;
 
-    public MaterialFragmentViewModel(@NonNull KarutaModel karutaModel,
-                                     @NonNull AnalyticsManager analyticsManager) {
+    private CompositeDisposable disposable = null;
+
+    public MaterialFragmentViewModel(@NonNull KarutaModel karutaModel) {
         this.karutaModel = karutaModel;
-        this.analyticsManager = analyticsManager;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        registerDisposable(karutaModel.completeFetchKarutasEvent.subscribe(karutaList -> {
-            this.karutaList.clear();
-            this.karutaList.addAll(karutaList);
+        disposable = new CompositeDisposable();
+        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
+            if (karutaList.contains(karuta)) {
+                karutaList.set(karuta.identifier().position(), karuta);
+            } else {
+                karutaList.add(karuta.identifier().position(), karuta);
+            }
         }));
+        this.karutaModel.getKarutas(colorFilter.value());
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL);
-        karutaModel.fetchKarutas(colorFilter.value());
+    protected void onCleared() {
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+        super.onCleared();
     }
 
     public void onOptionItemSelected(@NonNull ColorFilter colorFilter) {
-        karutaModel.fetchKarutas(colorFilter.value());
+        karutaList.clear();
+        karutaModel.getKarutas(colorFilter.value());
         this.colorFilter = colorFilter;
     }
 }

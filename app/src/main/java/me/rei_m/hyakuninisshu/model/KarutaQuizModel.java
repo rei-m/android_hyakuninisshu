@@ -39,9 +39,7 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaQuizModel {
 
-    public final EventObservable<KarutaQuizContent> completeStartEvent = EventObservable.create();
-
-    public final EventObservable<KarutaQuizContent> completeAnswerEvent = EventObservable.create();
+    public final EventObservable<KarutaQuizContent> karutaQuizContent = EventObservable.create();
 
     public final EventObservable<Unit> errorEvent = EventObservable.create();
 
@@ -62,7 +60,7 @@ public class KarutaQuizModel {
                 .flatMap(this::createContent)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeStartEvent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(karutaQuizContent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
     public void answer(@NonNull KarutaQuizIdentifier quizId, @NonNull ChoiceNo choiceNo) {
@@ -71,20 +69,7 @@ public class KarutaQuizModel {
                 .flatMap(this::createContent)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(completeAnswerEvent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
-    }
-
-    public void restart(@NonNull KarutaQuizIdentifier quizId) {
-        karutaQuizRepository.findBy(quizId)
-                .flatMap(this::createContent)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaQuizContent -> {
-                    completeStartEvent.onNext(karutaQuizContent);
-                    if (karutaQuizContent.quiz().result() != null) {
-                        completeAnswerEvent.onNext(karutaQuizContent);
-                    }
-                }, e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(karutaQuizContent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
     private Single<KarutaQuizContent> createContent(@NonNull KarutaQuiz karutaQuiz) {

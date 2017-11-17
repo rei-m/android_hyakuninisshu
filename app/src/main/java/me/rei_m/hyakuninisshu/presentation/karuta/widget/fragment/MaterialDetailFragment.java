@@ -13,18 +13,23 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
-import dagger.android.ContributesAndroidInjector;
+import dagger.Binds;
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerFragment;
+import dagger.android.support.FragmentKey;
+import dagger.multibindings.IntoMap;
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
@@ -46,7 +51,9 @@ public class MaterialDetailFragment extends DaggerFragment {
     }
 
     @Inject
-    MaterialDetailFragmentViewModel viewModel;
+    MaterialDetailFragmentViewModel.Factory viewModelFactory;
+
+    private MaterialDetailFragmentViewModel viewModel;
 
     private FragmentMaterialDetailBinding binding;
 
@@ -71,7 +78,13 @@ public class MaterialDetailFragment extends DaggerFragment {
             }
             return;
         }
-        viewModel.onCreate(karutaId);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialDetailFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -88,30 +101,6 @@ public class MaterialDetailFragment extends DaggerFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        viewModel.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        viewModel.onStop();
-        super.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -124,7 +113,6 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        viewModel = null;
         listener = null;
         super.onDetach();
     }
@@ -133,11 +121,31 @@ public class MaterialDetailFragment extends DaggerFragment {
         void onReceiveIllegalArguments();
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(modules = {MaterialDetailFragmentViewModelModule.class})
+    public interface Subcomponent extends AndroidInjector<MaterialDetailFragment> {
+
+        @dagger.Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<MaterialDetailFragment> {
+
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Subcomponent.Builder viewModelModule(MaterialDetailFragmentViewModelModule module);
+
+            @Override
+            public void seedInstance(MaterialDetailFragment instance) {
+                Bundle args = instance.getArguments();
+                KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_NO);
+                viewModelModule(new MaterialDetailFragmentViewModelModule(karutaId));
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = Subcomponent.class)
     public abstract class Module {
         @SuppressWarnings("unused")
-        @ForFragment
-        @ContributesAndroidInjector(modules = MaterialDetailFragmentViewModelModule.class)
-        abstract MaterialDetailFragment contributeInjector();
+        @Binds
+        @IntoMap
+        @FragmentKey(MaterialDetailFragment.class)
+        abstract AndroidInjector.Factory<? extends Fragment> bind(Subcomponent.Builder builder);
     }
 }

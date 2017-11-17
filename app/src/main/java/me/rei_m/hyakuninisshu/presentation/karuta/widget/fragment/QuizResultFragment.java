@@ -13,6 +13,7 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +27,7 @@ import javax.inject.Inject;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
+import me.rei_m.hyakuninisshu.AnalyticsManager;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizResultBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel;
@@ -40,7 +42,12 @@ public class QuizResultFragment extends DaggerFragment {
     }
 
     @Inject
-    QuizResultFragmentViewModel viewModel;
+    AnalyticsManager analyticsManager;
+
+    @Inject
+    QuizResultFragmentViewModel.Factory viewModelFactory;
+
+    private QuizResultFragmentViewModel viewModel;
 
     private FragmentQuizResultBinding binding;
 
@@ -50,6 +57,18 @@ public class QuizResultFragment extends DaggerFragment {
 
     public QuizResultFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizResultFragmentViewModel.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewModel = null;
+        super.onDestroy();
     }
 
     @Override
@@ -71,10 +90,12 @@ public class QuizResultFragment extends DaggerFragment {
         disposable = new CompositeDisposable();
         disposable.addAll(viewModel.restartEvent.subscribe(v -> {
             if (listener != null) {
+                analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.RESTART_TRAINING);
                 listener.onRestartTraining();
             }
         }), viewModel.onClickBackMenuEvent.subscribe(v -> {
             if (listener != null) {
+                analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.FINISH_TRAINING);
                 listener.onFinishTraining();
             }
         }), viewModel.errorEvent.subscribe(v -> {
@@ -82,7 +103,6 @@ public class QuizResultFragment extends DaggerFragment {
                 listener.onErrorQuiz();
             }
         }));
-        viewModel.onStart();
     }
 
     @Override
@@ -91,20 +111,13 @@ public class QuizResultFragment extends DaggerFragment {
             disposable.dispose();
             disposable = null;
         }
-        viewModel.onStop();
         super.onStop();
     }
 
     @Override
     public void onResume() {
+        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.QUIZ_RESULT);
         super.onResume();
-        viewModel.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        viewModel.onPause();
-        super.onPause();
     }
 
     @Override
@@ -120,7 +133,8 @@ public class QuizResultFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        viewModel = null;
+        analyticsManager = null;
+        viewModelFactory = null;
         listener = null;
         super.onDetach();
     }

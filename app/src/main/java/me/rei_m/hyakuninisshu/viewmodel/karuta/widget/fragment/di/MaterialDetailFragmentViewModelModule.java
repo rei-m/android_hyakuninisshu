@@ -13,17 +13,27 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di;
 
+import android.support.annotation.NonNull;
+
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
 
 @Module
 public class MaterialDetailFragmentViewModelModule {
+
+    private final KarutaIdentifier karutaId;
+
+    public MaterialDetailFragmentViewModelModule(@NonNull KarutaIdentifier karutaId) {
+        this.karutaId = karutaId;
+    }
+
     @Provides
     @ForFragment
-    MaterialDetailFragmentViewModel provideMaterialDetailFragmentViewModel(KarutaModel karutaModel) {
-        return new MaterialDetailFragmentViewModel(karutaModel);
+    MaterialDetailFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
+        return new MaterialDetailFragmentViewModel.Factory(karutaModel, karutaId);
     }
 }
