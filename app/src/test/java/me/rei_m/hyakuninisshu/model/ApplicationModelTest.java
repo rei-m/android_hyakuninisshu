@@ -13,19 +13,13 @@
 
 package me.rei_m.hyakuninisshu.model;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Completable;
-import io.reactivex.Scheduler;
-import io.reactivex.android.plugins.RxAndroidPlugins;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.plugins.RxJavaPlugins;
-import io.reactivex.schedulers.Schedulers;
+import me.rei_m.hyakuninisshu.rule.TestSchedulerRule;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.util.Unit;
 
@@ -34,22 +28,16 @@ import static org.mockito.Mockito.when;
 
 public class ApplicationModelTest {
 
+    @Rule
+    public TestSchedulerRule rule = new TestSchedulerRule();
+
     private ApplicationModel model;
 
     @Before
     public void setUp() throws Exception {
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(scheduler -> Schedulers.trampoline());
-        RxJavaPlugins.setNewThreadSchedulerHandler(schedulerCallable -> Schedulers.trampoline());
-
         KarutaRepository karutaRepository = mock(KarutaRepository.class);
         when(karutaRepository.initialize()).thenReturn(Completable.complete());
         model = new ApplicationModel(karutaRepository);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        RxJavaPlugins.reset();
-        RxAndroidPlugins.reset();
     }
 
     @Test
