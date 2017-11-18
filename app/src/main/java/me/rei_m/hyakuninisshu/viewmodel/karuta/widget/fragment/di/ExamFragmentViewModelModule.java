@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di;
 
+import android.support.annotation.NonNull;
+
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
@@ -23,7 +25,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamFragmentViewM
 public class ExamFragmentViewModelModule {
     @Provides
     @ForFragment
-    ExamFragmentViewModel.Factory provideFactory(KarutaExamModel karutaExamModel) {
+    ExamFragmentViewModel.Factory provideFactory(@NonNull KarutaExamModel karutaExamModel) {
         return new ExamFragmentViewModel.Factory(karutaExamModel);
     }
 }
