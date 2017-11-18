@@ -87,13 +87,10 @@ public class KarutaModel {
     }
 
     public void fetchKarutas(@Nullable Color color) {
-        karutaRepository.list()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutas -> {
-                    for (Karuta karuta : karutas.asList(color)) {
-                        this.karuta.onNext(karuta);
-                    }
-                }, e -> errorEvent.onNext(Unit.INSTANCE));
+        karutaRepository.list().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(karutas -> {
+            for (Karuta karuta : karutas.asList(color)) {
+                this.karuta.onNext(karuta);
+            }
+        }, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 }

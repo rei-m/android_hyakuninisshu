@@ -86,14 +86,11 @@ public class KarutaExamModel {
                 .subscribe(() -> startedEvent.onNext(Unit.INSTANCE));
     }
 
-    public void aggregateResults() {
+    public void finish() {
         karutaQuizRepository.list()
                 .map(karutaQuizzes -> new KarutaExamResult(karutaQuizzes.resultSummary(), karutaQuizzes.wrongKarutaIds()))
-                .flatMap(karutaExamResult -> karutaExamRepository
-                        .storeResult(karutaExamResult, new Date()))
-                .flatMap(karutaExamIdentifier -> karutaExamRepository
-                        .adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
-                        .andThen(karutaExamRepository.findBy(karutaExamIdentifier)))
+                .flatMap(karutaExamResult -> karutaExamRepository.storeResult(karutaExamResult, new Date()))
+                .flatMap(karutaExamIdentifier -> karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(karutaExamRepository.findBy(karutaExamIdentifier)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karutaExam -> {

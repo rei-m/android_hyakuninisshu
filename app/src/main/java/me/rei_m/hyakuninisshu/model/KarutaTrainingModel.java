@@ -39,9 +39,9 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaTrainingModel {
 
-    public final EventObservable<TrainingResult> trainingResult = EventObservable.create();
-
     public final EventObservable<Unit> startedEvent = EventObservable.create();
+
+    public final EventObservable<TrainingResult> result = EventObservable.create();
 
     public final EventObservable<Unit> notFoundErrorEvent = EventObservable.create();
 
@@ -64,10 +64,28 @@ public class KarutaTrainingModel {
                       @NonNull KarutaIdentifier toKarutaId,
                       @Nullable Kimariji kimariji,
                       @Nullable Color color) {
-        Single<Karutas> karutasSingle = karutaRepository.list();
-        Single<KarutaIds> trainingKarutaIdsSingle = karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji);
+        start(karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji));
+    }
 
-        Single.zip(karutasSingle, trainingKarutaIdsSingle, Karutas::createQuizSet)
+    public void startForExam() {
+        start(karutaExamRepository.list().map(KarutaExams::totalWrongKarutaIds));
+    }
+
+    public void restartForPractice() {
+        start(karutaQuizRepository.list().map(KarutaQuizzes::wrongKarutaIds));
+    }
+
+    public void aggregateResults() {
+        karutaQuizRepository.list()
+                .map(KarutaQuizzes::resultSummary)
+                .map(TrainingResult::new)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result::onNext, throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE));
+    }
+
+    private void start(Single<KarutaIds> karutaIdsSingle) {
+        Single.zip(karutaRepository.list(), karutaIdsSingle, Karutas::createQuizSet)
                 .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
@@ -78,43 +96,5 @@ public class KarutaTrainingModel {
                 },
                 throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE)
         );
-    }
-
-    public void restartForPractice() {
-        Single<Karutas> karutasSingle = karutaRepository.list();
-        Single<KarutaQuizzes> karutaQuizzesSingle = karutaQuizRepository.list();
-
-        Single.zip(karutasSingle, karutaQuizzesSingle, (karutas, karutaQuizzes) -> karutas.createQuizSet(karutaQuizzes.wrongKarutaIds()))
-                .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
-                .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
-                    if (hasQuiz) {
-                        startedEvent.onNext(Unit.INSTANCE);
-                    } else {
-                        notFoundErrorEvent.onNext(Unit.INSTANCE);
-                    }
-                },
-                throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE));
-    }
-
-    public void startForExam() {
-        Single<Karutas> karutasSingle = karutaRepository.list();
-        Single<KarutaExams> karutaExamsSingle = karutaExamRepository.list();
-
-        Single.zip(karutasSingle, karutaExamsSingle, (karutas, karutaExams) -> karutas.createQuizSet(karutaExams.totalWrongKarutaIds()))
-                .flatMapCompletable(karutaQuizRepository::initialize)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> startedEvent.onNext(Unit.INSTANCE));
-    }
-
-    public void aggregateResults() {
-        karutaQuizRepository.list().map(KarutaQuizzes::resultSummary)
-                .map(TrainingResult::new)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        trainingResult::onNext,
-                        throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE)
-                );
     }
 }

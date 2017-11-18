@@ -60,7 +60,7 @@ public class QuizResultFragmentViewModel extends ViewModel {
 
     public QuizResultFragmentViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaTrainingModel.trainingResult.subscribe(trainingResult -> {
+        disposable.addAll(karutaTrainingModel.result.subscribe(trainingResult -> {
             score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
             averageAnswerTime.set(trainingResult.averageAnswerTime());
             canRestartTraining.set(trainingResult.canRestartTraining());

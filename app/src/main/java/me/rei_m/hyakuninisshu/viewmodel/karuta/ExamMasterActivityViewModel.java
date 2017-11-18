@@ -87,6 +87,6 @@ public class ExamMasterActivityViewModel extends ViewModel {
     }
 
     public void onClickGoToResult() {
-        karutaExamModel.aggregateResults();
+        karutaExamModel.finish();
     }
 }

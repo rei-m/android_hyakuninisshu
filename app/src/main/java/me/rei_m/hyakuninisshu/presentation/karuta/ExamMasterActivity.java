@@ -126,13 +126,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .replace(R.id.content, ExamResultFragment.newInstance(karutaExamId), ExamResultFragment.TAG)
                         .commit()),
-                viewModel.toggledAdEvent.subscribe(isVisible -> {
-                    if (isVisible) {
-                        adView.setVisibility(View.VISIBLE);
-                    } else {
-                        adView.setVisibility(View.GONE);
-                    }
-                })
+                viewModel.toggledAdEvent.subscribe(isVisible -> adView.setVisibility((isVisible) ? View.VISIBLE : View.GONE))
         );
     }
 
