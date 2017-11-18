@@ -54,9 +54,10 @@ public class MaterialFragmentViewModel extends ViewModel {
         disposable = new CompositeDisposable();
         disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
             if (karutaList.contains(karuta)) {
-                karutaList.set(karuta.identifier().position(), karuta);
+                int index = karutaList.indexOf(karuta);
+                karutaList.set(index, karuta);
             } else {
-                karutaList.add(karuta.identifier().position(), karuta);
+                karutaList.add(karuta);
             }
         }));
         this.karutaModel.getKarutas(colorFilter.value());

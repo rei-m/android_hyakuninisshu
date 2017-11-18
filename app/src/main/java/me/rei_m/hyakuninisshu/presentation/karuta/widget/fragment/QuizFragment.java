@@ -251,6 +251,22 @@ public class QuizFragment extends DaggerFragment {
                 });
     }
 
+    private KarutaStyleFilter kamiNoKuStyle() throws IllegalArgumentException {
+        Bundle args = getArguments();
+        if (args != null) {
+            return KarutaStyleFilter.get(args.getInt(ARG_KAMI_NO_KU_STYLE, -1));
+        }
+        throw new IllegalArgumentException("argument is missing");
+    }
+
+    private KarutaStyleFilter shimoNoKuStyle() throws IllegalArgumentException {
+        Bundle args = getArguments();
+        if (args != null) {
+            return KarutaStyleFilter.get(args.getInt(ARG_SHIMO_NO_KU_STYLE));
+        }
+        throw new IllegalArgumentException("argument is missing");
+    }
+
     public interface OnFragmentInteractionListener {
         void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz);
 
@@ -286,10 +302,7 @@ public class QuizFragment extends DaggerFragment {
 
             @Override
             public void seedInstance(QuizFragment instance) {
-                Bundle args = instance.getArguments();
-                KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_KAMI_NO_KU_STYLE));
-                KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(args.getInt(ARG_SHIMO_NO_KU_STYLE));
-                viewModelModule(new QuizFragmentViewModelModule(kamiNoKuStyle, shimoNoKuStyle));
+                viewModelModule(new QuizFragmentViewModelModule(instance.kamiNoKuStyle(), instance.shimoNoKuStyle()));
             }
         }
     }

@@ -54,8 +54,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.di.TrainingExamMasterActivityView
 
 public class TrainingExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        QuizResultFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnDialogInteractionListener {
+        QuizResultFragment.OnFragmentInteractionListener {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, TrainingExamMasterActivity.class);
@@ -190,16 +189,6 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     }
 
     @Override
-    public void onReceiveIllegalArguments() {
-        DialogFragment newFragment = AlertDialogFragment.newInstance(
-                R.string.text_title_error,
-                R.string.text_message_illegal_arguments,
-                true,
-                false);
-        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
-    }
-
-    @Override
     public void onRestartTraining() {
         viewModel.onRestartTraining();
         startTraining();
@@ -208,16 +197,6 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     @Override
     public void onFinishTraining() {
         finish();
-    }
-
-    @Override
-    public void onDialogPositiveClick() {
-        finish();
-    }
-
-    @Override
-    public void onDialogNegativeClick() {
-
     }
 
     private void startTraining() {

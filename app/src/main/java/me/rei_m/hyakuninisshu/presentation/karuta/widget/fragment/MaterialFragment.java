@@ -57,7 +57,7 @@ public class MaterialFragment extends DaggerFragment {
     MaterialFragmentViewModel.Factory viewModelFactory;
 
     @Inject
-    MaterialKarutaListAdapter.Injector injector;
+    MaterialKarutaListAdapter.Injector adapterInjector;
 
     private MaterialFragmentViewModel viewModel;
 
@@ -84,7 +84,7 @@ public class MaterialFragment extends DaggerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
-        MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter(viewModel.karutaList, injector);
+        MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter(viewModel.karutaList, adapterInjector);
         binding.recyclerKarutaList.setAdapter(adapter);
         binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(inflater.getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
@@ -107,7 +107,7 @@ public class MaterialFragment extends DaggerFragment {
         analyticsManager = null;
         navigator = null;
         viewModelFactory = null;
-        injector = null;
+        adapterInjector = null;
         super.onDetach();
     }
 

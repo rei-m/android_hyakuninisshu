@@ -70,8 +70,6 @@ public class ExamResultFragment extends DaggerFragment {
 
     private OnFragmentInteractionListener listener;
 
-    private KarutaExamIdentifier karutaExamId;
-
     public ExamResultFragment() {
         // Required empty public constructor
     }
@@ -79,18 +77,6 @@ public class ExamResultFragment extends DaggerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            karutaExamId = getArguments().getParcelable(ARG_EXAM_ID);
-        }
-
-        if (karutaExamId == null) {
-            if (listener != null) {
-                listener.onReceiveIllegalArguments();
-            }
-            return;
-        }
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamResultFragmentViewModel.class);
     }
 
@@ -151,17 +137,23 @@ public class ExamResultFragment extends DaggerFragment {
 
     @Override
     public void onDetach() {
-        navigator = null;
         analyticsManager = null;
+        navigator = null;
         viewModelFactory = null;
         listener = null;
         super.onDetach();
     }
 
+    private KarutaExamIdentifier karutaExamIdentifier() throws IllegalArgumentException {
+        Bundle args = getArguments();
+        if (args != null) {
+            return args.getParcelable(ARG_EXAM_ID);
+        }
+        throw new IllegalArgumentException("argument is missing");
+    }
+
     public interface OnFragmentInteractionListener {
         void onFinishExam();
-
-        void onReceiveIllegalArguments();
     }
 
     @ForFragment
@@ -176,9 +168,7 @@ public class ExamResultFragment extends DaggerFragment {
 
             @Override
             public void seedInstance(ExamResultFragment instance) {
-                Bundle args = instance.getArguments();
-                KarutaExamIdentifier karutaExamId = args.getParcelable(ARG_EXAM_ID);
-                viewModelModule(new ExamResultFragmentViewModelModule(karutaExamId));
+                viewModelModule(new ExamResultFragmentViewModelModule(instance.karutaExamIdentifier()));
             }
         }
     }
