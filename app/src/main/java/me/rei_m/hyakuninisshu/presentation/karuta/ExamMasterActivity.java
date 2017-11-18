@@ -92,7 +92,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
         adView.setLayoutParams(params);
         binding.root.addView(adView);
-        adView.setVisibility(viewModel.isVisibleAd() ? View.VISIBLE : View.GONE);
+        adView.setVisibility(viewModel.isVisibleAd.get() ? View.VISIBLE : View.GONE);
 
         AdViewHelper.loadAd(adView);
     }
@@ -117,16 +117,16 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         super.onStart();
         disposable = new CompositeDisposable();
         disposable.addAll(
-                viewModel.startExamEvent.subscribe(v -> getSupportFragmentManager()
+                viewModel.startedExamEvent.subscribe(v -> getSupportFragmentManager()
                         .beginTransaction()
                         .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
                         .commit()),
-                viewModel.aggregateExamResultsEvent.subscribe(karutaExamId -> getSupportFragmentManager()
+                viewModel.finishedExamEvent.subscribe(karutaExamId -> getSupportFragmentManager()
                         .beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .replace(R.id.content, ExamResultFragment.newInstance(karutaExamId), ExamResultFragment.TAG)
                         .commit()),
-                viewModel.toggleAdEvent.subscribe(isVisible -> {
+                viewModel.toggledAdEvent.subscribe(isVisible -> {
                     if (isVisible) {
                         adView.setVisibility(View.VISIBLE);
                     } else {
@@ -194,7 +194,7 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     public void onFinishExam() {
         finish();
     }
-    
+
     @ForActivity
     @dagger.Subcomponent(modules = {
             ActivityModule.class,

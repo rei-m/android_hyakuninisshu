@@ -50,26 +50,22 @@ public class QuizResultFragmentViewModel extends ViewModel {
 
     public final ObservableBoolean canRestartTraining = new ObservableBoolean();
 
-    public final EventObservable<Unit> restartEvent = EventObservable.create();
+    public final EventObservable<Unit> onClickRestartEvent = EventObservable.create();
 
     public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
 
     public final EventObservable<Unit> errorEvent = EventObservable.create();
 
-    private final KarutaTrainingModel karutaTrainingModel;
-
     private CompositeDisposable disposable = null;
 
     public QuizResultFragmentViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        this.karutaTrainingModel = karutaTrainingModel;
-
         disposable = new CompositeDisposable();
         disposable.addAll(karutaTrainingModel.trainingResult.subscribe(trainingResult -> {
             score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
             averageAnswerTime.set(trainingResult.averageAnswerTime());
             canRestartTraining.set(trainingResult.canRestartTraining());
-        }), karutaTrainingModel.completeRestartEvent.subscribe(v -> restartEvent.onNext(Unit.INSTANCE)));
-        this.karutaTrainingModel.aggregateResults();
+        }));
+        karutaTrainingModel.aggregateResults();
     }
 
     @Override
@@ -83,7 +79,7 @@ public class QuizResultFragmentViewModel extends ViewModel {
 
     @SuppressWarnings("unused")
     public void onClickPracticeWrongKarutas(View view) {
-        karutaTrainingModel.restartForPractice();
+        onClickRestartEvent.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")

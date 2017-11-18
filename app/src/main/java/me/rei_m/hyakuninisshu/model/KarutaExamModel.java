@@ -36,13 +36,13 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaExamModel {
 
-    public final EventObservable<Unit> completeStartEvent = EventObservable.create();
-
     public final EventObservable<KarutaExam> karutaExam = EventObservable.create();
 
     public final EventObservable<KarutaExam> recentKarutaExam = EventObservable.create();
 
-    public final EventObservable<KarutaExamIdentifier> finishedExamId = EventObservable.create();
+    public final EventObservable<Unit> startedEvent = EventObservable.create();
+
+    public final EventObservable<KarutaExamIdentifier> finishedEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -59,14 +59,14 @@ public class KarutaExamModel {
         this.karutaExamRepository = karutaExamRepository;
     }
 
-    public void getKarutaExam(@NonNull KarutaExamIdentifier karutaExamIdentifier) {
+    public void fetchKarutaExam(@NonNull KarutaExamIdentifier karutaExamIdentifier) {
         karutaExamRepository.findBy(karutaExamIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this.karutaExam::onNext);
     }
 
-    public void getRecentKarutaExam() {
+    public void fetchRecentKarutaExam() {
         karutaExamRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -83,7 +83,7 @@ public class KarutaExamModel {
                 .flatMapCompletable(karutaQuizRepository::initialize)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> completeStartEvent.onNext(Unit.INSTANCE));
+                .subscribe(() -> startedEvent.onNext(Unit.INSTANCE));
     }
 
     public void aggregateResults() {
@@ -97,7 +97,7 @@ public class KarutaExamModel {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karutaExam -> {
-                    this.finishedExamId.onNext(karutaExam.identifier());
+                    this.finishedEvent.onNext(karutaExam.identifier());
                     this.recentKarutaExam.onNext(karutaExam);
                 });
     }

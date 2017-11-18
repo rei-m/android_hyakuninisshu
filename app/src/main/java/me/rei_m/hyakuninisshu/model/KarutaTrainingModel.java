@@ -39,13 +39,9 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaTrainingModel {
 
-    public final EventObservable<Unit> completeStartEvent = EventObservable.create();
-
-    public final EventObservable<Unit> completeRestartEvent = EventObservable.create();
-
-    public final EventObservable<Unit> completeStartForExamEvent = EventObservable.create();
-
     public final EventObservable<TrainingResult> trainingResult = EventObservable.create();
+
+    public final EventObservable<Unit> startedEvent = EventObservable.create();
 
     public final EventObservable<Unit> notFoundErrorEvent = EventObservable.create();
 
@@ -75,7 +71,7 @@ public class KarutaTrainingModel {
                 .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
-                        completeStartEvent.onNext(Unit.INSTANCE);
+                        startedEvent.onNext(Unit.INSTANCE);
                     } else {
                         notFoundErrorEvent.onNext(Unit.INSTANCE);
                     }
@@ -92,7 +88,7 @@ public class KarutaTrainingModel {
                 .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
-                        completeRestartEvent.onNext(Unit.INSTANCE);
+                        startedEvent.onNext(Unit.INSTANCE);
                     } else {
                         notFoundErrorEvent.onNext(Unit.INSTANCE);
                     }
@@ -108,7 +104,7 @@ public class KarutaTrainingModel {
                 .flatMapCompletable(karutaQuizRepository::initialize)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> completeStartForExamEvent.onNext(Unit.INSTANCE));
+                .subscribe(() -> startedEvent.onNext(Unit.INSTANCE));
     }
 
     public void aggregateResults() {

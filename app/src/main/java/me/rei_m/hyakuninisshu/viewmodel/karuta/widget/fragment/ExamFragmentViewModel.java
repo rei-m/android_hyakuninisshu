@@ -64,7 +64,7 @@ public class ExamFragmentViewModel extends ViewModel {
             averageAnswerTime.set(karutaExam.result().averageAnswerTime());
         }));
 
-        karutaExamModel.getRecentKarutaExam();
+        karutaExamModel.fetchRecentKarutaExam();
     }
 
     @Override

@@ -109,8 +109,8 @@ public class MaterialEditFragmentViewModel extends ViewModel {
             fourthPhraseKana.set(karuta.shimoNoKu().fourth().kana());
             fifthPhraseKanji.set(karuta.shimoNoKu().fifth().kanji());
             fifthPhraseKana.set(karuta.shimoNoKu().fifth().kana());
-        }), karutaModel.completeEditKarutaEvent.subscribe(v -> onUpdateMaterialEvent.onNext(Unit.INSTANCE)));
-        karutaModel.getKaruta(karutaId);
+        }), karutaModel.editedEvent.subscribe(v -> onUpdateMaterialEvent.onNext(Unit.INSTANCE)));
+        karutaModel.fetchKaruta(karutaId);
     }
 
     @Override

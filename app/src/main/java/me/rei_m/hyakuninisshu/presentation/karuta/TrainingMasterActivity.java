@@ -123,7 +123,7 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
         adView.setLayoutParams(params);
         binding.root.addView(adView);
-        adView.setVisibility(viewModel.isVisibleAd() ? View.VISIBLE : View.GONE);
+        adView.setVisibility(viewModel.isVisibleAd.get() ? View.VISIBLE : View.GONE);
 
         AdViewHelper.loadAd(adView);
     }
@@ -148,20 +148,14 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     protected void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.startTrainingEvent.subscribe(unit -> {
+        disposable.addAll(viewModel.startedTrainingEvent.subscribe(unit -> {
             KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(getIntent().getIntExtra(ARG_KAMI_NO_KU_STYLE, 0));
             KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(getIntent().getIntExtra(ARG_SHIMO_NO_KU_STYLE, 0));
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.content, QuizFragment.newInstance(kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
                     .commit();
-        }), viewModel.toggleAdEvent.subscribe(isVisible -> {
-            if (isVisible) {
-                adView.setVisibility(View.VISIBLE);
-            } else {
-                adView.setVisibility(View.GONE);
-            }
-        }));
+        }), viewModel.toggledAdEvent.subscribe(isVisible -> adView.setVisibility((isVisible) ? View.VISIBLE : View.GONE)));
     }
 
     @Override
@@ -219,8 +213,7 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
 
     @Override
     public void onClickGoToResult() {
-        viewModel.onClickGoToResult();
-
+        viewModel.isVisibleAd.set(true);
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -231,14 +224,6 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     @Override
     public void onRestartTraining() {
         viewModel.onRestartTraining();
-
-        KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.get(getIntent().getIntExtra(ARG_KAMI_NO_KU_STYLE, 0));
-        KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.get(getIntent().getIntExtra(ARG_SHIMO_NO_KU_STYLE, 0));
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.content, QuizFragment.newInstance(kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                .commit();
     }
 
     @Override

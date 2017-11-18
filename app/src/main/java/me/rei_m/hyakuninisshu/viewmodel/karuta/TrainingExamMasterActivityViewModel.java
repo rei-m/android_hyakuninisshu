@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
@@ -43,24 +44,35 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
 
     public final ObservableBoolean isVisibleEmpty = new ObservableBoolean(false);
 
-    public final EventObservable<Unit> startTrainingEvent = EventObservable.create();
+    public final ObservableBoolean isVisibleAd = new ObservableBoolean(true);
 
-    public final EventObservable<Boolean> toggleAdEvent = EventObservable.create();
+    public final EventObservable<Unit> startedTrainingEvent = EventObservable.create();
 
-    private boolean isVisibleAd = false;
+    public final EventObservable<Boolean> toggledAdEvent = EventObservable.create();
+
+    private final KarutaTrainingModel karutaTrainingModel;
 
     private CompositeDisposable disposable = null;
 
     public TrainingExamMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
+        this.karutaTrainingModel = karutaTrainingModel;
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaTrainingModel.completeStartForExamEvent.subscribe(v -> {
-            startTrainingEvent.onNext(Unit.INSTANCE);
+        disposable.addAll(karutaTrainingModel.startedEvent.subscribe(v -> {
+            isVisibleEmpty.set(false);
+            isVisibleAd.set(false);
+            startedTrainingEvent.onNext(Unit.INSTANCE);
         }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
-            toggleAdEvent.onNext(true);
-        }), toggleAdEvent.subscribe(isVisible -> {
-            isVisibleAd = isVisible;
+            isVisibleAd.set(true);
         }));
+
+        isVisibleAd.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                toggledAdEvent.onNext(isVisibleAd.get());
+            }
+        });
+
         karutaTrainingModel.startForExam();
     }
 
@@ -73,15 +85,7 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
         super.onCleared();
     }
 
-    public boolean isVisibleAd() {
-        return isVisibleAd;
-    }
-
-    public void onClickGoToResult() {
-        toggleAdEvent.onNext(true);
-    }
-
     public void onRestartTraining() {
-        toggleAdEvent.onNext(false);
+        karutaTrainingModel.restartForPractice();
     }
 }

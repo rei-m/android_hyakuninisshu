@@ -93,7 +93,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.getId());
         adView.setLayoutParams(params);
         binding.root.addView(adView);
-        adView.setVisibility(viewModel.isVisibleAd() ? View.VISIBLE : View.GONE);
+        adView.setVisibility(viewModel.isVisibleAd.get() ? View.VISIBLE : View.GONE);
 
         AdViewHelper.loadAd(adView);
     }
@@ -118,15 +118,10 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     protected void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.startTrainingEvent.subscribe(v ->
-                startTraining()
-        ), viewModel.toggleAdEvent.subscribe(isVisible -> {
-            if (isVisible) {
-                adView.setVisibility(View.VISIBLE);
-            } else {
-                adView.setVisibility(View.GONE);
-            }
-        }));
+        disposable.addAll(
+                viewModel.startedTrainingEvent.subscribe(v -> startTraining()),
+                viewModel.toggledAdEvent.subscribe(isVisible -> adView.setVisibility((isVisible) ? View.VISIBLE : View.GONE))
+        );
     }
 
     @Override
@@ -180,7 +175,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
 
     @Override
     public void onClickGoToResult() {
-        viewModel.onClickGoToResult();
+        viewModel.isVisibleAd.set(true);
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -191,7 +186,6 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     @Override
     public void onRestartTraining() {
         viewModel.onRestartTraining();
-        startTraining();
     }
 
     @Override
