@@ -20,7 +20,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +39,6 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
@@ -48,8 +46,7 @@ import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
 
-public class MaterialDetailActivity extends DaggerAppCompatActivity implements MaterialDetailFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnDialogInteractionListener {
+public class MaterialDetailActivity extends DaggerAppCompatActivity {
 
     private static final String ARG_KARUTA_ID = "karutaId";
 
@@ -142,26 +139,6 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity implements M
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onReceiveIllegalArguments() {
-        DialogFragment newFragment = AlertDialogFragment.newInstance(
-                R.string.text_title_error,
-                R.string.text_message_illegal_arguments,
-                true,
-                false);
-        newFragment.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
-    }
-
-    @Override
-    public void onDialogPositiveClick() {
-        finish();
-    }
-
-    @Override
-    public void onDialogNegativeClick() {
-
     }
 
     @ForActivity

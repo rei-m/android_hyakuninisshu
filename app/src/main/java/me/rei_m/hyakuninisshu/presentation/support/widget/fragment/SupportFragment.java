@@ -46,10 +46,10 @@ public class SupportFragment extends DaggerFragment {
     SupportFragmentViewModel.Factory viewModelFactory;
 
     @Inject
-    Navigator navigator;
+    AnalyticsManager analyticsManager;
 
     @Inject
-    AnalyticsManager analyticsManager;
+    Navigator navigator;
 
     private SupportFragmentViewModel viewModel;
 

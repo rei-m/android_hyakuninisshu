@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,12 +39,12 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     public static final String TAG = MaterialDetailFragment.class.getSimpleName();
 
-    private static final String ARG_KARUTA_NO = "karutaNo";
+    private static final String ARG_KARUTA_ID = "karutaId";
 
     public static MaterialDetailFragment newInstance(@NonNull KarutaIdentifier karutaId) {
         MaterialDetailFragment fragment = new MaterialDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_KARUTA_NO, karutaId);
+        args.putParcelable(ARG_KARUTA_ID, karutaId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,10 +56,6 @@ public class MaterialDetailFragment extends DaggerFragment {
 
     private FragmentMaterialDetailBinding binding;
 
-    private OnFragmentInteractionListener listener;
-
-    private KarutaIdentifier karutaId;
-
     public MaterialDetailFragment() {
         // Required empty public constructor
     }
@@ -68,16 +63,6 @@ public class MaterialDetailFragment extends DaggerFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            karutaId = getArguments().getParcelable(ARG_KARUTA_NO);
-        }
-
-        if (karutaId == null) {
-            if (listener != null) {
-                listener.onReceiveIllegalArguments();
-            }
-            return;
-        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialDetailFragmentViewModel.class);
     }
 
@@ -101,24 +86,17 @@ public class MaterialDetailFragment extends DaggerFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
-        listener = null;
+        viewModelFactory = null;
         super.onDetach();
     }
 
-    public interface OnFragmentInteractionListener {
-        void onReceiveIllegalArguments();
+    private KarutaIdentifier karutaIdentifier() throws IllegalArgumentException {
+        Bundle args = getArguments();
+        if (args != null) {
+            return args.getParcelable(ARG_KARUTA_ID);
+        }
+        throw new IllegalArgumentException("argument is missing");
     }
 
     @ForFragment
@@ -133,9 +111,7 @@ public class MaterialDetailFragment extends DaggerFragment {
 
             @Override
             public void seedInstance(MaterialDetailFragment instance) {
-                Bundle args = instance.getArguments();
-                KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_NO);
-                viewModelModule(new MaterialDetailFragmentViewModelModule(karutaId));
+                viewModelModule(new MaterialDetailFragmentViewModelModule(instance.karutaIdentifier()));
             }
         }
     }

@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -62,8 +61,6 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
     private FragmentMaterialEditBinding binding;
 
-    private OnFragmentInteractionListener listener;
-
     private CompositeDisposable disposable;
 
     public MaterialEditFragment() {
@@ -73,20 +70,6 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        KarutaIdentifier karutaId = null;
-
-        if (getArguments() != null) {
-            karutaId = getArguments().getParcelable(ARG_KARUTA_ID);
-        }
-
-        if (karutaId == null) {
-            if (listener != null) {
-                listener.onReceiveIllegalArguments();
-            }
-            return;
-        }
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialEditFragmentViewModel.class);
     }
 
@@ -114,8 +97,8 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
         super.onStart();
         disposable = new CompositeDisposable();
         disposable.addAll(viewModel.onClickEditEvent.subscribe(v -> {
-                    FragmentManager manger = getFragmentManager();
-                    if (manger == null) {
+                    FragmentManager manager = getFragmentManager();
+                    if (manager == null) {
                         return;
                     }
                     ConfirmMaterialEditDialogFragment fragment = ConfirmMaterialEditDialogFragment.newInstance(
@@ -131,7 +114,7 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
                             viewModel.fifthPhraseKana.get()
                     );
                     fragment.setTargetFragment(this, 0);
-                    fragment.show(manger, ConfirmMaterialEditDialogFragment.TAG);
+                    fragment.show(manager, ConfirmMaterialEditDialogFragment.TAG);
                 }), viewModel.onErrorEditEvent.subscribe(v -> {
                     if (getView() != null) {
                         Snackbar.make(getView(), getString(R.string.text_message_edit_error), Snackbar.LENGTH_SHORT)
@@ -156,19 +139,8 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
-        listener = null;
+        viewModelFactory = null;
         super.onDetach();
     }
 
@@ -182,8 +154,12 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
     }
 
-    public interface OnFragmentInteractionListener {
-        void onReceiveIllegalArguments();
+    private KarutaIdentifier karutaIdentifier() throws IllegalArgumentException {
+        Bundle args = getArguments();
+        if (args != null) {
+            return args.getParcelable(ARG_KARUTA_ID);
+        }
+        throw new IllegalArgumentException("argument is missing");
     }
 
     @ForFragment
@@ -198,9 +174,7 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
             @Override
             public void seedInstance(MaterialEditFragment instance) {
-                Bundle args = instance.getArguments();
-                KarutaIdentifier karutaId = args.getParcelable(ARG_KARUTA_ID);
-                viewModelModule(new MaterialEditFragmentViewModelModule(karutaId));
+                viewModelModule(new MaterialEditFragmentViewModelModule(instance.karutaIdentifier()));
             }
         }
     }
