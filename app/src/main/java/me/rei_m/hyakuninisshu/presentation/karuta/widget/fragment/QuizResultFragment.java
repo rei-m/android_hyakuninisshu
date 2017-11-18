@@ -88,7 +88,7 @@ public class QuizResultFragment extends DaggerFragment {
     public void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.addAll(viewModel.restartEvent.subscribe(v -> {
+        disposable.addAll(viewModel.onClickRestartEvent.subscribe(v -> {
             if (listener != null) {
                 analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.RESTART_TRAINING);
                 listener.onRestartTraining();

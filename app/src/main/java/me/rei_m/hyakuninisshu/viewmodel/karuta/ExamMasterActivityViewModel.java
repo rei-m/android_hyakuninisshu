@@ -15,6 +15,8 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.databinding.Observable;
+import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -41,13 +43,13 @@ public class ExamMasterActivityViewModel extends ViewModel {
         }
     }
 
-    public final EventObservable<Unit> startExamEvent = EventObservable.create();
+    public final ObservableBoolean isVisibleAd = new ObservableBoolean(true);
 
-    public final EventObservable<KarutaExamIdentifier> aggregateExamResultsEvent = EventObservable.create();
+    public final EventObservable<Unit> startedExamEvent = EventObservable.create();
 
-    public final EventObservable<Boolean> toggleAdEvent = EventObservable.create();
+    public final EventObservable<KarutaExamIdentifier> finishedExamEvent = EventObservable.create();
 
-    private boolean isVisibleAd = false;
+    public final EventObservable<Boolean> toggledAdEvent = EventObservable.create();
 
     private final KarutaExamModel karutaExamModel;
 
@@ -57,20 +59,22 @@ public class ExamMasterActivityViewModel extends ViewModel {
         this.karutaExamModel = karutaExamModel;
 
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaExamModel.completeStartEvent.subscribe(v -> {
-            toggleAdEvent.onNext(false);
-            startExamEvent.onNext(Unit.INSTANCE);
-        }), karutaExamModel.finishedExamId.subscribe(karutaExamIdentifier -> {
-            toggleAdEvent.onNext(true);
-            aggregateExamResultsEvent.onNext(karutaExamIdentifier);
-        }), toggleAdEvent.subscribe(isVisible -> {
-            isVisibleAd = isVisible;
+        disposable.addAll(karutaExamModel.startedEvent.subscribe(v -> {
+            isVisibleAd.set(false);
+            startedExamEvent.onNext(Unit.INSTANCE);
+        }), karutaExamModel.finishedEvent.subscribe(karutaExamIdentifier -> {
+            isVisibleAd.set(true);
+            finishedExamEvent.onNext(karutaExamIdentifier);
         }));
-        karutaExamModel.start();
-    }
 
-    public boolean isVisibleAd() {
-        return isVisibleAd;
+        isVisibleAd.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                toggledAdEvent.onNext(isVisibleAd.get());
+            }
+        });
+
+        karutaExamModel.start();
     }
 
     @Override
@@ -83,6 +87,6 @@ public class ExamMasterActivityViewModel extends ViewModel {
     }
 
     public void onClickGoToResult() {
-        karutaExamModel.aggregateResults();
+        karutaExamModel.finish();
     }
 }

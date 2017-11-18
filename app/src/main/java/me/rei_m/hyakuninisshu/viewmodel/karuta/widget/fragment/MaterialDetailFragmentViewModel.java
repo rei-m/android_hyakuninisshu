@@ -86,7 +86,7 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
             shimoNoKuKana.set(karuta.shimoNoKu().kana());
             translation.set(karuta.translation());
         }));
-        karutaModel.getKaruta(karutaId);
+        karutaModel.fetchKaruta(karutaId);
     }
 
     @Override

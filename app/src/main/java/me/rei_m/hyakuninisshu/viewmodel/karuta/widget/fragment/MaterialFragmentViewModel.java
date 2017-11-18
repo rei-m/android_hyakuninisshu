@@ -60,7 +60,7 @@ public class MaterialFragmentViewModel extends ViewModel {
                 karutaList.add(karuta);
             }
         }));
-        this.karutaModel.getKarutas(colorFilter.value());
+        this.karutaModel.fetchKarutas(colorFilter.value());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MaterialFragmentViewModel extends ViewModel {
 
     public void onOptionItemSelected(@NonNull ColorFilter colorFilter) {
         karutaList.clear();
-        karutaModel.getKarutas(colorFilter.value());
+        karutaModel.fetchKarutas(colorFilter.value());
         this.colorFilter = colorFilter;
     }
 }

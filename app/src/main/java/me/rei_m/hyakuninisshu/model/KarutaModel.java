@@ -34,8 +34,8 @@ public class KarutaModel {
 
     public final EventObservable<Karuta> karuta = EventObservable.create();
 
-    public final EventObservable<Unit> completeEditKarutaEvent = EventObservable.create();
-    
+    public final EventObservable<Unit> editedEvent = EventObservable.create();
+
     public final EventObservable<Unit> errorEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
@@ -45,7 +45,7 @@ public class KarutaModel {
         this.karutaRepository = karutaRepository;
     }
 
-    public void getKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
+    public void fetchKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
         karutaRepository.findBy(karutaIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,18 +82,15 @@ public class KarutaModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karuta -> {
                     this.karuta.onNext(karuta);
-                    this.completeEditKarutaEvent.onNext(Unit.INSTANCE);
+                    this.editedEvent.onNext(Unit.INSTANCE);
                 }, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 
-    public void getKarutas(@Nullable Color color) {
-        karutaRepository.list()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutas -> {
-                    for (Karuta karuta : karutas.asList(color)) {
-                        this.karuta.onNext(karuta);
-                    }
-                }, e -> errorEvent.onNext(Unit.INSTANCE));
+    public void fetchKarutas(@Nullable Color color) {
+        karutaRepository.list().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(karutas -> {
+            for (Karuta karuta : karutas.asList(color)) {
+                this.karuta.onNext(karuta);
+            }
+        }, e -> errorEvent.onNext(Unit.INSTANCE));
     }
 }

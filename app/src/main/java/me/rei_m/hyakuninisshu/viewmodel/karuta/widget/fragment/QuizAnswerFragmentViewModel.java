@@ -107,7 +107,7 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
             fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
             fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
         }));
-        this.karutaModel.getKaruta(karutaId);
+        this.karutaModel.fetchKaruta(karutaId);
     }
 
     @Override

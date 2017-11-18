@@ -77,13 +77,13 @@ public class KarutaQuizModel {
                 .flatMapSingle(karutaRepository::findBy)
                 .toList();
 
-        Single<Karuta> collectSingle = karutaRepository.findBy(karutaQuiz.correctId());
+        Single<Karuta> correctSingle = karutaRepository.findBy(karutaQuiz.correctId());
 
         Single<KarutaQuizCounter> countSingle = karutaQuizRepository.countQuizByAnswered();
 
         Single<Boolean> existNextQuizSingle = karutaQuizRepository.existNextQuiz();
 
-        return Single.zip(choiceSingle, collectSingle, countSingle, existNextQuizSingle, (karutaList, karuta, count, existNextQuiz) ->
+        return Single.zip(choiceSingle, correctSingle, countSingle, existNextQuizSingle, (karutaList, karuta, count, existNextQuiz) ->
                 new KarutaQuizContent(karutaQuiz, karuta, karutaList, count, existNextQuiz));
     }
 }

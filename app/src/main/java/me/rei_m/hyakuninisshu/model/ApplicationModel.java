@@ -27,7 +27,7 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class ApplicationModel {
 
-    public final EventObservable<Unit> completeStartEvent = EventObservable.create();
+    public final EventObservable<Unit> readyEvent = EventObservable.create();
 
     private final KarutaRepository karutaRepository;
 
@@ -40,6 +40,6 @@ public class ApplicationModel {
         karutaRepository.initialize()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> completeStartEvent.onNext(Unit.INSTANCE));
+                .subscribe(() -> readyEvent.onNext(Unit.INSTANCE));
     }
 }

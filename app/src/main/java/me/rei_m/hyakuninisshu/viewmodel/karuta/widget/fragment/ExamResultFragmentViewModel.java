@@ -72,7 +72,7 @@ public class ExamResultFragmentViewModel extends ViewModel {
             karutaQuizJudgements.set(result.judgements());
         }));
 
-        karutaExamModel.getKarutaExam(karutaExamId);
+        karutaExamModel.fetchKarutaExam(karutaExamId);
     }
 
     @Override

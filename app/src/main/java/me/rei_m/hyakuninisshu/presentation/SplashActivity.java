@@ -57,7 +57,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
     protected void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.add(applicationModel.completeStartEvent.subscribe(v -> {
+        disposable.add(applicationModel.readyEvent.subscribe(v -> {
             navigator.navigateToEntrance();
             finish();
         }));
