@@ -98,10 +98,6 @@ public class QuizResultFragment extends DaggerFragment {
                 analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.FINISH_TRAINING);
                 listener.onFinishTraining();
             }
-        }), viewModel.errorEvent.subscribe(v -> {
-            if (listener != null) {
-                listener.onErrorQuiz();
-            }
         }));
     }
 

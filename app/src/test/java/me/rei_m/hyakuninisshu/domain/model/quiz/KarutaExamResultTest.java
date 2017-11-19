@@ -64,8 +64,8 @@ public class KarutaExamResultTest {
 
     @Test
     public void averageAnswerTime() throws Exception {
-        when(resultSummary.averageAnswerTime()).thenReturn(5.0f);
-        assertThat(karutaExamResult.averageAnswerTime(), is(5.0f));
+        when(resultSummary.averageAnswerSec()).thenReturn(5.0f);
+        assertThat(karutaExamResult.averageAnswerSec(), is(5.0f));
     }
 
     @Test

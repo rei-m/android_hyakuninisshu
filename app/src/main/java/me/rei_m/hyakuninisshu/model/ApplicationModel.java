@@ -18,16 +18,21 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
+/**
+ * アプリケーションモデル.
+ */
 @Singleton
 public class ApplicationModel {
 
-    public final EventObservable<Unit> readyEvent = EventObservable.create();
+    private final PublishSubject<Unit> readyEventSubject = PublishSubject.create();
+    public final Observable<Unit> readyEvent = readyEventSubject;
 
     private final KarutaRepository karutaRepository;
 
@@ -36,10 +41,13 @@ public class ApplicationModel {
         this.karutaRepository = karutaRepository;
     }
 
+    /**
+     * 百人一首の情報を準備してアプリの利用を開始する.
+     */
     public void start() {
         karutaRepository.initialize()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> readyEvent.onNext(Unit.INSTANCE));
+                .subscribe(() -> readyEventSubject.onNext(Unit.INSTANCE));
     }
 }

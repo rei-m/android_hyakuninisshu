@@ -11,21 +11,21 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.viewmodel.karuta.di;
+package me.rei_m.hyakuninisshu.domain.util;
 
-import android.support.annotation.NonNull;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
-import dagger.Module;
-import dagger.Provides;
-import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
-@Module
-public class ExamMasterActivityViewModelModule {
-    @Provides
-    @ForActivity
-    ExamMasterActivityViewModel.Factory provideFactory(@NonNull KarutaExamModel karutaExamModel) {
-        return new ExamMasterActivityViewModel.Factory(karutaExamModel);
+// 内部的にSparseIntArrayを使っているためRobolectricを使う.
+@RunWith(RobolectricTestRunner.class)
+public class ArrayUtilTest {
+    @Test
+    public void generateRandomIndexArray() throws Exception {
+        int[] actual = ArrayUtil.generateRandomIndexArray(10, 4);
+        assertThat(actual.length, is(4));
     }
 }

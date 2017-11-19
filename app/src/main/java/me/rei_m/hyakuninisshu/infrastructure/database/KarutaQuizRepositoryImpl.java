@@ -143,7 +143,7 @@ public class KarutaQuizRepositoryImpl implements KarutaQuizRepository {
             if (result != null) {
                 updater.isCollect(result.judgement().isCorrect())
                         .choiceNo(result.choiceNo().value())
-                        .answerTime(result.answerTime());
+                        .answerTime(result.answerMillSec());
             }
             updater.execute();
         });

@@ -74,7 +74,7 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
      * @param choiceList    選択肢
      * @param correctId     正解の歌ID
      * @param startDate     解答開始時間
-     * @param answerTime    解答時間
+     * @param answerMillSec    解答時間
      * @param choiceNo      選択した選択肢
      * @param isCorrect     正誤
      */
@@ -82,14 +82,14 @@ public class KarutaQuiz extends AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>
                       @NonNull List<KarutaIdentifier> choiceList,
                       @NonNull KarutaIdentifier correctId,
                       @NonNull Date startDate,
-                      long answerTime,
+                      long answerMillSec,
                       @NonNull ChoiceNo choiceNo,
                       boolean isCorrect) {
         this(identifier, choiceList, correctId, startDate);
         this.result = new KarutaQuizResult(correctId,
                 choiceNo,
                 isCorrect,
-                answerTime);
+                answerMillSec);
     }
 
     /**

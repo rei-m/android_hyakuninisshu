@@ -65,8 +65,8 @@ public class KarutaExamResult implements ValueObject {
     /**
      * @return 平均解答時間
      */
-    public float averageAnswerTime() {
-        return resultSummary.averageAnswerTime();
+    public float averageAnswerSec() {
+        return resultSummary.averageAnswerSec();
     }
 
     /**

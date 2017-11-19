@@ -33,10 +33,10 @@ import java.util.Locale;
 
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
+import me.rei_m.hyakuninisshu.presentation.helper.GlideApp;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
-import me.rei_m.hyakuninisshu.util.GlideApp;
 
 import static me.rei_m.hyakuninisshu.util.Constants.SPACE;
 
@@ -119,11 +119,11 @@ public class DataBindingAttributeBinder {
         view.setText(ssb);
     }
 
-    @BindingAdapter({"averageAnswerTime"})
+    @BindingAdapter({"averageAnswerSec"})
     public static void setAverageAnswerTime(@NonNull TextView view,
-                                            float averageAnswerTime) {
+                                            float averageAnswerSec) {
         Context context = view.getContext().getApplicationContext();
-        final String averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerTime);
+        final String averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerSec);
         view.setText(context.getString(R.string.seconds, averageAnswerTimeString));
     }
 

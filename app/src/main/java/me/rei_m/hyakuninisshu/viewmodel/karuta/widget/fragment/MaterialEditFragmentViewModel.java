@@ -20,10 +20,11 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class MaterialEditFragmentViewModel extends ViewModel {
@@ -74,11 +75,14 @@ public class MaterialEditFragmentViewModel extends ViewModel {
 
     public final ObservableField<String> fifthPhraseKana = new ObservableField<>();
 
-    public final EventObservable<Unit> onClickEditEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickEditEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickEditEvent = onClickEditEventSubject;
 
-    public final EventObservable<Unit> onErrorEditEvent = EventObservable.create();
+    private final PublishSubject<Unit> onErrorEditEventSubject = PublishSubject.create();
+    public final Observable<Unit> onErrorEditEvent = onErrorEditEventSubject;
 
-    public final EventObservable<Unit> onUpdateMaterialEvent = EventObservable.create();
+    private final PublishSubject<Unit> onUpdateMaterialEventSubject = PublishSubject.create();
+    public final Observable<Unit> onUpdateMaterialEvent = onUpdateMaterialEventSubject;
 
     private final KarutaModel karutaModel;
 
@@ -109,7 +113,7 @@ public class MaterialEditFragmentViewModel extends ViewModel {
             fourthPhraseKana.set(karuta.shimoNoKu().fourth().kana());
             fifthPhraseKanji.set(karuta.shimoNoKu().fifth().kanji());
             fifthPhraseKana.set(karuta.shimoNoKu().fifth().kana());
-        }), karutaModel.editedEvent.subscribe(v -> onUpdateMaterialEvent.onNext(Unit.INSTANCE)));
+        }), karutaModel.editedEvent.subscribe(v -> onUpdateMaterialEventSubject.onNext(Unit.INSTANCE)));
         karutaModel.fetchKaruta(karutaId);
     }
 
@@ -134,10 +138,10 @@ public class MaterialEditFragmentViewModel extends ViewModel {
                 fourthPhraseKana.get().isEmpty() ||
                 fifthPhraseKanji.get().isEmpty() ||
                 firstPhraseKana.get().isEmpty()) {
-            onErrorEditEvent.onNext(Unit.INSTANCE);
+            onErrorEditEventSubject.onNext(Unit.INSTANCE);
             return;
         }
-        onClickEditEvent.onNext(Unit.INSTANCE);
+        onClickEditEventSubject.onNext(Unit.INSTANCE);
     }
 
     public void onClickDialogPositive() {

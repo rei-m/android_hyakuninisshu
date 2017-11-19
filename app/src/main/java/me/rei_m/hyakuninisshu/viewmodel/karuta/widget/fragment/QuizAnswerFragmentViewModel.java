@@ -24,11 +24,12 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class QuizAnswerFragmentViewModel extends ViewModel {
@@ -75,15 +76,17 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
 
     public final ObservableBoolean existNextQuiz = new ObservableBoolean(false);
 
-    public final EventObservable<KarutaIdentifier> onClickAnswerEvent = EventObservable.create();
+    private final PublishSubject<KarutaIdentifier> onClickAnswerEventSubject = PublishSubject.create();
+    public final Observable<KarutaIdentifier> onClickAnswerEvent = onClickAnswerEventSubject;
 
-    public final EventObservable<Unit> onClickNextQuizEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickNextQuizEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickNextQuizEvent = onClickNextQuizEventSubject;
 
-    public final EventObservable<Unit> onClickConfirmResultEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickConfirmResultEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickConfirmResultEvent = onClickConfirmResultEventSubject;
 
-    public final EventObservable<Unit> errorEvent = EventObservable.create();
-
-    private final KarutaModel karutaModel;
+    private final PublishSubject<Unit> errorEventSubject = PublishSubject.create();
+    public final Observable<Unit> errorEvent = errorEventSubject;
 
     private final KarutaIdentifier karutaId;
 
@@ -92,7 +95,6 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
     public QuizAnswerFragmentViewModel(@NonNull KarutaModel karutaModel,
                                        @NonNull KarutaIdentifier karutaId,
                                        boolean existNextQuiz) {
-        this.karutaModel = karutaModel;
         this.karutaId = karutaId;
         this.existNextQuiz.set(existNextQuiz);
 
@@ -107,7 +109,7 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
             fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
             fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
         }));
-        this.karutaModel.fetchKaruta(karutaId);
+        karutaModel.fetchKaruta(karutaId);
     }
 
     @Override
@@ -121,17 +123,17 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
 
     @SuppressWarnings("unused")
     public void onClickAnswer(View view) {
-        onClickAnswerEvent.onNext(karutaId);
+        onClickAnswerEventSubject.onNext(karutaId);
     }
 
     @SuppressWarnings("unused")
     public void onClickNextQuiz(View view) {
-        onClickNextQuizEvent.onNext(Unit.INSTANCE);
+        onClickNextQuizEventSubject.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")
     public void onClickConfirmResult(View view) {
-        onClickConfirmResultEvent.onNext(Unit.INSTANCE);
+        onClickConfirmResultEventSubject.onNext(Unit.INSTANCE);
     }
 
     @BindingAdapter({"karutaNo", "kimariji"})

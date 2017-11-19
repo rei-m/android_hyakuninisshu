@@ -27,15 +27,15 @@ public class KarutaQuizResult implements ValueObject {
 
     private final ChoiceNo choiceNo;
 
-    private final long answerTime;
+    private final long answerMillSec;
 
     KarutaQuizResult(@NonNull KarutaIdentifier correctKarutaId,
                      @NonNull ChoiceNo choiceNo,
                      boolean isCorrect,
-                     long answerTime) {
+                     long answerMillSec) {
         this.judgement = new KarutaQuizJudgement(correctKarutaId, isCorrect);
         this.choiceNo = choiceNo;
-        this.answerTime = answerTime;
+        this.answerMillSec = answerMillSec;
     }
 
     public KarutaQuizJudgement judgement() {
@@ -46,8 +46,8 @@ public class KarutaQuizResult implements ValueObject {
         return choiceNo;
     }
 
-    public long answerTime() {
-        return answerTime;
+    public long answerMillSec() {
+        return answerMillSec;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class KarutaQuizResult implements ValueObject {
 
         KarutaQuizResult result = (KarutaQuizResult) o;
 
-        return answerTime == result.answerTime &&
+        return answerMillSec == result.answerMillSec &&
                 judgement.equals(result.judgement) &&
                 choiceNo == result.choiceNo;
     }
@@ -66,7 +66,7 @@ public class KarutaQuizResult implements ValueObject {
     public int hashCode() {
         int result = judgement.hashCode();
         result = 31 * result + choiceNo.hashCode();
-        result = 31 * result + (int) (answerTime ^ (answerTime >>> 32));
+        result = 31 * result + (int) (answerMillSec ^ (answerMillSec >>> 32));
         return result;
     }
 
@@ -75,7 +75,7 @@ public class KarutaQuizResult implements ValueObject {
         return "KarutaQuizResult{" +
                 "judgement=" + judgement +
                 ", choiceNo=" + choiceNo +
-                ", answerTime=" + answerTime +
+                ", answerMillSec=" + answerMillSec +
                 '}';
     }
 }

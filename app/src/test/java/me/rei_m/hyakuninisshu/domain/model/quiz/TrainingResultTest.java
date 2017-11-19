@@ -42,7 +42,7 @@ public class TrainingResultTest {
 
         @Test
         public void averageAnswerTime() throws Exception {
-            assertThat(trainingResult.averageAnswerTime(), is(5f));
+            assertThat(trainingResult.averageAnswerSec(), is(5f));
         }
     }
 

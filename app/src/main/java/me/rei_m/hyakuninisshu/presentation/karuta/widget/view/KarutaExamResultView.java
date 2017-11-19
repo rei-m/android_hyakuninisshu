@@ -24,11 +24,12 @@ import android.widget.LinearLayout;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.presentation.util.ViewUtil;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 
 public class KarutaExamResultView extends LinearLayout {
 
@@ -50,7 +51,8 @@ public class KarutaExamResultView extends LinearLayout {
         }
     }
 
-    public final EventObservable<KarutaIdentifier> onClickKarutaEvent = EventObservable.create();
+    private final PublishSubject<KarutaIdentifier> onClickKarutaEventSubject = PublishSubject.create();
+    public final Observable<KarutaIdentifier> onClickKarutaEvent = onClickKarutaEventSubject;
 
     public KarutaExamResultView(@NonNull Context context) {
         super(context);
@@ -101,7 +103,7 @@ public class KarutaExamResultView extends LinearLayout {
             KarutaExamResultCellView cellView = findViewById(cellViewIdList[i]);
             KarutaQuizJudgement judgement = judgements.get(i);
             cellView.setResult(judgement.karutaId().value(), judgement.isCorrect());
-            cellView.setOnClickListener(view -> onClickKarutaEvent.onNext(judgement.karutaId()));
+            cellView.setOnClickListener(view -> onClickKarutaEventSubject.onNext(judgement.karutaId()));
         }
     }
 }

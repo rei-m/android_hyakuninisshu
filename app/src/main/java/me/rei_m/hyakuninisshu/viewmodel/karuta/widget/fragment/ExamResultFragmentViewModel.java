@@ -22,12 +22,13 @@ import android.view.View;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class ExamResultFragmentViewModel extends ViewModel {
@@ -54,11 +55,12 @@ public class ExamResultFragmentViewModel extends ViewModel {
 
     public final ObservableField<String> score = new ObservableField<>();
 
-    public final ObservableFloat averageAnswerTime = new ObservableFloat();
+    public final ObservableFloat averageAnswerSec = new ObservableFloat();
 
     public final ObservableField<List<KarutaQuizJudgement>> karutaQuizJudgements = new ObservableField<>();
 
-    public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickBackMenuEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickBackMenuEvent = onClickBackMenuEventSubject;
 
     private CompositeDisposable disposable = null;
 
@@ -68,7 +70,7 @@ public class ExamResultFragmentViewModel extends ViewModel {
         disposable.addAll(karutaExamModel.karutaExam.subscribe(karutaExam -> {
             KarutaExamResult result = karutaExam.result();
             score.set(result.score());
-            averageAnswerTime.set(result.averageAnswerTime());
+            averageAnswerSec.set(result.averageAnswerSec());
             karutaQuizJudgements.set(result.judgements());
         }));
 
@@ -86,6 +88,6 @@ public class ExamResultFragmentViewModel extends ViewModel {
 
     @SuppressWarnings("unused")
     public void onClickBackMenu(View view) {
-        onClickBackMenuEvent.onNext(Unit.INSTANCE);
+        onClickBackMenuEventSubject.onNext(Unit.INSTANCE);
     }
 }

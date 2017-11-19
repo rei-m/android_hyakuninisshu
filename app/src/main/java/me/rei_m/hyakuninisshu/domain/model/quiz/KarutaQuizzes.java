@@ -77,7 +77,7 @@ public class KarutaQuizzes {
                 throw new IllegalStateException("Training is not finished.");
             }
 
-            totalAnswerTimeMillSec += result.answerTime();
+            totalAnswerTimeMillSec += result.answerMillSec();
             if (result.judgement().isCorrect()) {
                 collectCount++;
             }

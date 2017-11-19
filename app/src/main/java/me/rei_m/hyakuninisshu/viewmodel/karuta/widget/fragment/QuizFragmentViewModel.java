@@ -28,7 +28,9 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent;
@@ -36,9 +38,8 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
 import me.rei_m.hyakuninisshu.domain.model.quiz.YomiFuda;
 import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
+import me.rei_m.hyakuninisshu.presentation.helper.GlideApp;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
-import me.rei_m.hyakuninisshu.util.EventObservable;
-import me.rei_m.hyakuninisshu.util.GlideApp;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class QuizFragmentViewModel extends ViewModel {
@@ -91,13 +92,17 @@ public class QuizFragmentViewModel extends ViewModel {
 
     public final ObservableBoolean isCorrect = new ObservableBoolean(false);
 
-    public final EventObservable<Unit> startDisplayAnimationEvent = EventObservable.create();
+    private final PublishSubject<Unit> startDisplayAnimationEventSubject = PublishSubject.create();
+    public final Observable<Unit> startDisplayAnimationEvent = startDisplayAnimationEventSubject;
 
-    public final EventObservable<Unit> stopDisplayAnimationEvent = EventObservable.create();
+    private final PublishSubject<Unit> stopDisplayAnimationEventSubject = PublishSubject.create();
+    public final Observable<Unit> stopDisplayAnimationEvent = stopDisplayAnimationEventSubject;
 
-    public final EventObservable<Unit> onClickResultEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickResultEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickResultEvent = onClickResultEventSubject;
 
-    public final EventObservable<Unit> errorEvent = EventObservable.create();
+    private final PublishSubject<Unit> errorEventSubject = PublishSubject.create();
+    public final Observable<Unit> errorEvent = errorEventSubject;
 
     private final KarutaQuizModel karutaQuizModel;
 
@@ -134,9 +139,9 @@ public class QuizFragmentViewModel extends ViewModel {
                     choiceFifthPhraseList.set(i, toriFuda.fifthPhrase());
                 }
 
-                startDisplayAnimationEvent.onNext(Unit.INSTANCE);
+                startDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
             } else {
-                stopDisplayAnimationEvent.onNext(Unit.INSTANCE);
+                stopDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
 
                 List<Boolean> isVisibleChoiceList = Arrays.asList(false, false, false, false);
                 isVisibleChoiceList.set(result.choiceNo().asIndex(), true);
@@ -146,7 +151,7 @@ public class QuizFragmentViewModel extends ViewModel {
                 this.isCorrect.set(result.judgement().isCorrect());
                 this.isVisibleResult.set(true);
             }
-        }), karutaQuizModel.errorEvent.subscribe(v -> errorEvent.onNext(Unit.INSTANCE)));
+        }), karutaQuizModel.errorEvent.subscribe(v -> errorEventSubject.onNext(Unit.INSTANCE)));
     }
 
     @Override
@@ -175,7 +180,7 @@ public class QuizFragmentViewModel extends ViewModel {
 
     public void onPause() {
         if (karutaQuizContent != null && karutaQuizContent.quiz().result() == null) {
-            stopDisplayAnimationEvent.onNext(Unit.INSTANCE);
+            stopDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
         }
     }
 
@@ -187,7 +192,7 @@ public class QuizFragmentViewModel extends ViewModel {
     }
 
     public void onClickResult() {
-        onClickResultEvent.onNext(Unit.INSTANCE);
+        onClickResultEventSubject.onNext(Unit.INSTANCE);
     }
 
     @BindingAdapter({"textForQuiz", "textPosition"})

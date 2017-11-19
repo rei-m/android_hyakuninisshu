@@ -25,6 +25,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo;
@@ -33,15 +34,19 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizCounter;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
+/**
+ * 問題モデル.
+ */
 @Singleton
 public class KarutaQuizModel {
 
-    public final EventObservable<KarutaQuizContent> karutaQuizContent = EventObservable.create();
+    private final PublishSubject<KarutaQuizContent> karutaQuizContentSubject = PublishSubject.create();
+    public final Observable<KarutaQuizContent> karutaQuizContent = karutaQuizContentSubject;
 
-    public final EventObservable<Unit> errorEvent = EventObservable.create();
+    private final PublishSubject<Unit> errorEventSubject = PublishSubject.create();
+    public final Observable<Unit> errorEvent = errorEventSubject;
 
     private final KarutaRepository karutaRepository;
 
@@ -54,22 +59,31 @@ public class KarutaQuizModel {
         this.karutaQuizRepository = karutaQuizRepository;
     }
 
+    /**
+     * 問題を開始する.
+     */
     public void start() {
         karutaQuizRepository.first()
                 .flatMap(karutaQuiz -> karutaQuizRepository.store(karutaQuiz.start(new Date())).toSingleDefault(karutaQuiz))
                 .flatMap(this::createContent)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaQuizContent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(karutaQuizContentSubject::onNext, e -> errorEventSubject.onNext(Unit.INSTANCE));
     }
 
+    /**
+     * 問題に解答する.
+     *
+     * @param quizId   問題ID
+     * @param choiceNo 解答した選択肢
+     */
     public void answer(@NonNull KarutaQuizIdentifier quizId, @NonNull ChoiceNo choiceNo) {
         karutaQuizRepository.findBy(quizId)
                 .flatMap(karutaQuiz -> karutaQuizRepository.store(karutaQuiz.verify(choiceNo, new Date())).toSingleDefault(karutaQuiz))
                 .flatMap(this::createContent)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaQuizContent::onNext, e -> errorEvent.onNext(Unit.INSTANCE));
+                .subscribe(karutaQuizContentSubject::onNext, e -> errorEventSubject.onNext(Unit.INSTANCE));
     }
 
     private Single<KarutaQuizContent> createContent(@NonNull KarutaQuiz karutaQuiz) {
@@ -77,13 +91,13 @@ public class KarutaQuizModel {
                 .flatMapSingle(karutaRepository::findBy)
                 .toList();
 
-        Single<Karuta> correctSingle = karutaRepository.findBy(karutaQuiz.correctId());
-
         Single<KarutaQuizCounter> countSingle = karutaQuizRepository.countQuizByAnswered();
 
         Single<Boolean> existNextQuizSingle = karutaQuizRepository.existNextQuiz();
 
-        return Single.zip(choiceSingle, correctSingle, countSingle, existNextQuizSingle, (karutaList, karuta, count, existNextQuiz) ->
-                new KarutaQuizContent(karutaQuiz, karuta, karutaList, count, existNextQuiz));
+        return Single.zip(choiceSingle, countSingle, existNextQuizSingle, (karutaList, count, existNextQuiz) -> {
+            Karuta correct = karutaList.get(karutaQuiz.choiceList().indexOf(karutaQuiz.correctId()));
+            return new KarutaQuizContent(karutaQuiz, correct, karutaList, count, existNextQuiz);
+        });
     }
 }

@@ -15,13 +15,13 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
-import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class TrainingExamMasterActivityViewModel extends ViewModel {
@@ -46,9 +46,11 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
 
     public final ObservableBoolean isVisibleAd = new ObservableBoolean(true);
 
-    public final EventObservable<Unit> startedTrainingEvent = EventObservable.create();
+    private final PublishSubject<Unit> startedTrainingEventSubject = PublishSubject.create();
+    public final Observable<Unit> startedTrainingEvent = startedTrainingEventSubject;
 
-    public final EventObservable<Boolean> toggledAdEvent = EventObservable.create();
+    private final PublishSubject<Boolean> toggledAdEventSubject = PublishSubject.create();
+    public final Observable<Boolean> toggledAdEvent = toggledAdEventSubject;
 
     private final KarutaTrainingModel karutaTrainingModel;
 
@@ -60,16 +62,16 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
         disposable.addAll(karutaTrainingModel.startedEvent.subscribe(v -> {
             isVisibleEmpty.set(false);
             isVisibleAd.set(false);
-            startedTrainingEvent.onNext(Unit.INSTANCE);
+            startedTrainingEventSubject.onNext(Unit.INSTANCE);
         }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
             isVisibleAd.set(true);
         }));
 
-        isVisibleAd.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+        isVisibleAd.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
-            public void onPropertyChanged(Observable observable, int i) {
-                toggledAdEvent.onNext(isVisibleAd.get());
+            public void onPropertyChanged(android.databinding.Observable observable, int i) {
+                toggledAdEventSubject.onNext(isVisibleAd.get());
             }
         });
 
