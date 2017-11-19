@@ -40,7 +40,7 @@ public class KarutaQuizzesResultSummaryTest {
 
     @Test
     public void averageAnswerTime() throws Exception {
-        assertThat(karutaQuizzesResultSummary.averageAnswerTime(), is(3f));
+        assertThat(karutaQuizzesResultSummary.averageAnswerSec(), is(3f));
     }
 
     @Test

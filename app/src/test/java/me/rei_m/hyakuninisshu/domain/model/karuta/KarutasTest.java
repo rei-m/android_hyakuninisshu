@@ -67,7 +67,7 @@ public class KarutasTest {
         assertThat(karutas.createQuizSet(karutaIds).asList().size(), is(1));
     }
 
-    private Karuta createKaruta(int id, Color color) {
+    private static Karuta createKaruta(int id, Color color) {
         KarutaIdentifier identifier = new KarutaIdentifier(id);
         String creator = "creator";
         KamiNoKu kamiNoKu = new KamiNoKu(

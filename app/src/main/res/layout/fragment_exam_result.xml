@@ -62,7 +62,7 @@
                 android:background="@color/white99"
                 android:gravity="center"
                 android:textSize="@dimen/text_xl"
-                app:averageAnswerTime="@{viewModel.averageAnswerTime}" />
+                app:averageAnswerSec="@{viewModel.averageAnswerSec}" />
 
             <TextView
                 android:layout_width="match_parent"

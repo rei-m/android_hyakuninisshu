@@ -19,9 +19,11 @@ import android.support.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
@@ -33,17 +35,22 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
+/**
+ * 練習モデル.
+ */
 @Singleton
 public class KarutaTrainingModel {
 
-    public final EventObservable<Unit> startedEvent = EventObservable.create();
+    private final PublishSubject<Unit> startedEventSubject = PublishSubject.create();
+    public final Observable<Unit> startedEvent = startedEventSubject;
 
-    public final EventObservable<TrainingResult> result = EventObservable.create();
+    private final PublishSubject<TrainingResult> resultSubject = PublishSubject.create();
+    public final Observable<TrainingResult> result = resultSubject;
 
-    public final EventObservable<Unit> notFoundErrorEvent = EventObservable.create();
+    private final PublishSubject<Unit> notFoundErrorEventSubject = PublishSubject.create();
+    public final Observable<Unit> notFoundErrorEvent = notFoundErrorEventSubject;
 
     private final KarutaRepository karutaRepository;
 
@@ -60,6 +67,14 @@ public class KarutaTrainingModel {
         this.karutaExamRepository = karutaExamRepository;
     }
 
+    /**
+     * 練習を開始する.
+     *
+     * @param fromKarutaId 練習範囲の開始歌ID
+     * @param toKarutaId   練習範囲の終了歌ID
+     * @param kimariji     決まり字
+     * @param color        色
+     */
     public void start(@NonNull KarutaIdentifier fromKarutaId,
                       @NonNull KarutaIdentifier toKarutaId,
                       @Nullable Kimariji kimariji,
@@ -67,21 +82,30 @@ public class KarutaTrainingModel {
         start(karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji));
     }
 
+    /**
+     * 力試しで過去に間違えた歌を練習対象にして練習を開始する.
+     */
     public void startForExam() {
         start(karutaExamRepository.list().map(KarutaExams::totalWrongKarutaIds));
     }
 
+    /**
+     * 練習で間違えた歌を練習対象にして練習を再開する.
+     */
     public void restartForPractice() {
         start(karutaQuizRepository.list().map(KarutaQuizzes::wrongKarutaIds));
     }
 
+    /**
+     * 練習結果を集計する.
+     */
     public void aggregateResults() {
         karutaQuizRepository.list()
                 .map(KarutaQuizzes::resultSummary)
                 .map(TrainingResult::new)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result::onNext, throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE));
+                .subscribe(resultSubject::onNext, throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE));
     }
 
     private void start(Single<KarutaIds> karutaIdsSingle) {
@@ -89,12 +113,12 @@ public class KarutaTrainingModel {
                 .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
-                        startedEvent.onNext(Unit.INSTANCE);
+                        startedEventSubject.onNext(Unit.INSTANCE);
                     } else {
-                        notFoundErrorEvent.onNext(Unit.INSTANCE);
+                        notFoundErrorEventSubject.onNext(Unit.INSTANCE);
                     }
                 },
-                throwable -> notFoundErrorEvent.onNext(Unit.INSTANCE)
+                throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE)
         );
     }
 }

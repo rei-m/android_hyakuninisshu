@@ -15,14 +15,14 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
-import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class ExamMasterActivityViewModel extends ViewModel {
@@ -45,11 +45,14 @@ public class ExamMasterActivityViewModel extends ViewModel {
 
     public final ObservableBoolean isVisibleAd = new ObservableBoolean(true);
 
-    public final EventObservable<Unit> startedExamEvent = EventObservable.create();
+    private final PublishSubject<Unit> startedExamEventSubject = PublishSubject.create();
+    public final Observable<Unit> startedExamEvent = startedExamEventSubject;
 
-    public final EventObservable<KarutaExamIdentifier> finishedExamEvent = EventObservable.create();
+    private final PublishSubject<KarutaExamIdentifier> finishedExamEventSubject = PublishSubject.create();
+    public final Observable<KarutaExamIdentifier> finishedExamEvent = finishedExamEventSubject;
 
-    public final EventObservable<Boolean> toggledAdEvent = EventObservable.create();
+    private final PublishSubject<Boolean> toggledAdEventSubject = PublishSubject.create();
+    public final Observable<Boolean> toggledAdEvent = toggledAdEventSubject;
 
     private final KarutaExamModel karutaExamModel;
 
@@ -61,16 +64,16 @@ public class ExamMasterActivityViewModel extends ViewModel {
         disposable = new CompositeDisposable();
         disposable.addAll(karutaExamModel.startedEvent.subscribe(v -> {
             isVisibleAd.set(false);
-            startedExamEvent.onNext(Unit.INSTANCE);
+            startedExamEventSubject.onNext(Unit.INSTANCE);
         }), karutaExamModel.finishedEvent.subscribe(karutaExamIdentifier -> {
             isVisibleAd.set(true);
-            finishedExamEvent.onNext(karutaExamIdentifier);
+            finishedExamEventSubject.onNext(karutaExamIdentifier);
         }));
 
-        isVisibleAd.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+        isVisibleAd.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
-            public void onPropertyChanged(Observable observable, int i) {
-                toggledAdEvent.onNext(isVisibleAd.get());
+            public void onPropertyChanged(android.databinding.Observable observable, int i) {
+                toggledAdEventSubject.onNext(isVisibleAd.get());
             }
         });
 

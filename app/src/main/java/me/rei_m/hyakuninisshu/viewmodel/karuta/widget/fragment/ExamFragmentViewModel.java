@@ -21,9 +21,10 @@ import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.model.KarutaExamModel;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class ExamFragmentViewModel extends ViewModel {
@@ -48,11 +49,13 @@ public class ExamFragmentViewModel extends ViewModel {
 
     public final ObservableField<String> score = new ObservableField<>("");
 
-    public final ObservableFloat averageAnswerTime = new ObservableFloat();
+    public final ObservableFloat averageAnswerSec = new ObservableFloat();
 
-    public final EventObservable<Unit> onClickStartExamEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickStartExamEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickStartExamEvent = onClickStartExamEventSubject;
 
-    public final EventObservable<Unit> onClickStartTrainingEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickStartTrainingEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickStartTrainingEvent = onClickStartTrainingEventSubject;
 
     private CompositeDisposable disposable = null;
 
@@ -61,7 +64,7 @@ public class ExamFragmentViewModel extends ViewModel {
         disposable.addAll(karutaExamModel.recentKarutaExam.subscribe(karutaExam -> {
             hasResult.set(true);
             score.set(karutaExam.result().score());
-            averageAnswerTime.set(karutaExam.result().averageAnswerTime());
+            averageAnswerSec.set(karutaExam.result().averageAnswerSec());
         }));
 
         karutaExamModel.fetchRecentKarutaExam();
@@ -78,11 +81,11 @@ public class ExamFragmentViewModel extends ViewModel {
 
     @SuppressWarnings("unused")
     public void onClickStartExam(View view) {
-        onClickStartExamEvent.onNext(Unit.INSTANCE);
+        onClickStartExamEventSubject.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")
     public void onClickStartTraining(View view) {
-        onClickStartTrainingEvent.onNext(Unit.INSTANCE);
+        onClickStartTrainingEventSubject.onNext(Unit.INSTANCE);
     }
 }

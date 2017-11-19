@@ -45,6 +45,6 @@ public class KarutaQuizResultTest {
 
     @Test
     public void answerTime() throws Exception {
-        assertThat(karutaQuizResult.answerTime(), is(5000L));
+        assertThat(karutaQuizResult.answerMillSec(), is(5000L));
     }
 }

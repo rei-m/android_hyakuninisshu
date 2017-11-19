@@ -19,7 +19,8 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import me.rei_m.hyakuninisshu.util.EventObservable;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class SupportFragmentViewModel extends ViewModel {
@@ -42,9 +43,11 @@ public class SupportFragmentViewModel extends ViewModel {
 
     public final ObservableField<String> version = new ObservableField<>();
 
-    public final EventObservable<Unit> onClickReviewEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickReviewEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickReviewEvent = onClickReviewEventSubject;
 
-    public final EventObservable<Unit> onClickLicenseEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickLicenseEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickLicenseEvent = onClickLicenseEventSubject;
 
     public SupportFragmentViewModel(@NonNull String version) {
         this.version.set(version);
@@ -52,11 +55,11 @@ public class SupportFragmentViewModel extends ViewModel {
 
     @SuppressWarnings("unused")
     public void onClickReview(View view) {
-        onClickReviewEvent.onNext(Unit.INSTANCE);
+        onClickReviewEventSubject.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")
     public void onClickLicense(View view) {
-        onClickLicenseEvent.onNext(Unit.INSTANCE);
+        onClickLicenseEventSubject.onNext(Unit.INSTANCE);
     }
 }

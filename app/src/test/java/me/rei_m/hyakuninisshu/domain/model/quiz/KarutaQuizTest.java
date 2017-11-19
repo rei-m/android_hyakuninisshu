@@ -110,7 +110,7 @@ public class KarutaQuizTest {
             assertThat(actual, is(karutaQuiz));
             assertThat(actual.result().choiceNo(), is(ChoiceNo.FIRST));
             assertThat(actual.result().judgement(), is(new KarutaQuizJudgement(correctId, true)));
-            assertThat(actual.result().answerTime(), is(answerDate.getTime() - startDate.getTime()));
+            assertThat(actual.result().answerMillSec(), is(answerDate.getTime() - startDate.getTime()));
         }
 
         @SuppressWarnings("ConstantConditions")
@@ -121,7 +121,7 @@ public class KarutaQuizTest {
             assertThat(actual, is(karutaQuiz));
             assertThat(actual.result().choiceNo(), is(ChoiceNo.SECOND));
             assertThat(actual.result().judgement(), is(new KarutaQuizJudgement(correctId, false)));
-            assertThat(actual.result().answerTime(), is(answerDate.getTime() - startDate.getTime()));
+            assertThat(actual.result().answerMillSec(), is(answerDate.getTime() - startDate.getTime()));
         }
     }
 

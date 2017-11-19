@@ -19,12 +19,13 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class TrainingMenuFragmentViewModel extends ViewModel {
@@ -51,18 +52,20 @@ public class TrainingMenuFragmentViewModel extends ViewModel {
 
     public final ObservableField<ColorFilter> color = new ObservableField<>(ColorFilter.ALL);
 
-    public final EventObservable<Unit> onClickStartTrainingEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickStartTrainingEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickStartTrainingEvent = onClickStartTrainingEventSubject;
 
-    public final EventObservable<Unit> invalidTrainingRangeEvent = EventObservable.create();
+    private final PublishSubject<Unit> invalidTrainingRangeEventSubject = PublishSubject.create();
+    public final Observable<Unit> invalidTrainingRangeEvent = invalidTrainingRangeEventSubject;
 
     @SuppressWarnings("unused")
     public void onClickStartTraining(View view) {
 
         if (trainingRangeFrom.get().ordinal() > trainingRangeTo.get().ordinal()) {
-            invalidTrainingRangeEvent.onNext(Unit.INSTANCE);
+            invalidTrainingRangeEventSubject.onNext(Unit.INSTANCE);
             return;
         }
 
-        onClickStartTrainingEvent.onNext(Unit.INSTANCE);
+        onClickStartTrainingEventSubject.onNext(Unit.INSTANCE);
     }
 }

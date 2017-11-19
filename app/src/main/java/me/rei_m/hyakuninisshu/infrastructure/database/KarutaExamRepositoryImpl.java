@@ -48,7 +48,7 @@ public class KarutaExamRepositoryImpl implements KarutaExamRepository {
         orma.transactionSync(() -> {
             karutaExamSchema.tookExamDate = tookExamDate;
             karutaExamSchema.totalQuizCount = karutaExamResult.quizCount();
-            karutaExamSchema.averageAnswerTime = karutaExamResult.averageAnswerTime();
+            karutaExamSchema.averageAnswerTime = karutaExamResult.averageAnswerSec();
             karutaExamSchema.id = KarutaExamSchema.relation(orma).inserter().execute(karutaExamSchema);
 
             Inserter<ExamWrongKarutaSchema> examWrongKarutaSchemaInserter = ExamWrongKarutaSchema.relation(orma).inserter();

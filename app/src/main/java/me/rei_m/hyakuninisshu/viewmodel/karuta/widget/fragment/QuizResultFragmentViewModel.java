@@ -21,9 +21,10 @@ import android.databinding.ObservableFloat;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.util.EventObservable;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class QuizResultFragmentViewModel extends ViewModel {
@@ -46,15 +47,15 @@ public class QuizResultFragmentViewModel extends ViewModel {
 
     public final ObservableField<String> score = new ObservableField<>("");
 
-    public final ObservableFloat averageAnswerTime = new ObservableFloat();
+    public final ObservableFloat averageAnswerSec = new ObservableFloat();
 
     public final ObservableBoolean canRestartTraining = new ObservableBoolean();
 
-    public final EventObservable<Unit> onClickRestartEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickRestartEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickRestartEvent = onClickRestartEventSubject;
 
-    public final EventObservable<Unit> onClickBackMenuEvent = EventObservable.create();
-
-    public final EventObservable<Unit> errorEvent = EventObservable.create();
+    private final PublishSubject<Unit> onClickBackMenuEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickBackMenuEvent = onClickBackMenuEventSubject;
 
     private CompositeDisposable disposable = null;
 
@@ -62,7 +63,7 @@ public class QuizResultFragmentViewModel extends ViewModel {
         disposable = new CompositeDisposable();
         disposable.addAll(karutaTrainingModel.result.subscribe(trainingResult -> {
             score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
-            averageAnswerTime.set(trainingResult.averageAnswerTime());
+            averageAnswerSec.set(trainingResult.averageAnswerSec());
             canRestartTraining.set(trainingResult.canRestartTraining());
         }));
         karutaTrainingModel.aggregateResults();
@@ -79,11 +80,11 @@ public class QuizResultFragmentViewModel extends ViewModel {
 
     @SuppressWarnings("unused")
     public void onClickPracticeWrongKarutas(View view) {
-        onClickRestartEvent.onNext(Unit.INSTANCE);
+        onClickRestartEventSubject.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")
     public void onClickBackMenu(View view) {
-        onClickBackMenuEvent.onNext(Unit.INSTANCE);
+        onClickBackMenuEventSubject.onNext(Unit.INSTANCE);
     }
 }

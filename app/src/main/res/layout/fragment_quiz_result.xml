@@ -61,7 +61,7 @@
             android:background="@color/white99"
             android:gravity="center"
             android:textSize="@dimen/text_xl"
-            app:averageAnswerTime="@{viewModel.averageAnswerTime}" />
+            app:averageAnswerSec="@{viewModel.averageAnswerSec}" />
 
         <Button
             android:layout_width="wrap_content"

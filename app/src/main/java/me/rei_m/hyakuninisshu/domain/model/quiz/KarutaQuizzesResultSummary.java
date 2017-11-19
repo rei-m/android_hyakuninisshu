@@ -24,14 +24,14 @@ public class KarutaQuizzesResultSummary implements ValueObject {
 
     private final int correctCount;
 
-    private final float averageAnswerTime;
+    private final float averageAnswerSec;
 
     public KarutaQuizzesResultSummary(int quizCount,
                                       int correctCount,
-                                      float averageAnswerTime) {
+                                      float averageAnswerSec) {
         this.quizCount = quizCount;
         this.correctCount = correctCount;
-        this.averageAnswerTime = averageAnswerTime;
+        this.averageAnswerSec = averageAnswerSec;
     }
 
     /**
@@ -51,8 +51,8 @@ public class KarutaQuizzesResultSummary implements ValueObject {
     /**
      * @return 平均解答時間
      */
-    public float averageAnswerTime() {
-        return averageAnswerTime;
+    public float averageAnswerSec() {
+        return averageAnswerSec;
     }
 
     /**
@@ -71,14 +71,14 @@ public class KarutaQuizzesResultSummary implements ValueObject {
 
         return quizCount == that.quizCount &&
                 correctCount == that.correctCount &&
-                Float.compare(that.averageAnswerTime, averageAnswerTime) == 0;
+                Float.compare(that.averageAnswerSec, averageAnswerSec) == 0;
     }
 
     @Override
     public int hashCode() {
         int result = quizCount;
         result = 31 * result + correctCount;
-        result = 31 * result + (averageAnswerTime != +0.0f ? Float.floatToIntBits(averageAnswerTime) : 0);
+        result = 31 * result + (averageAnswerSec != +0.0f ? Float.floatToIntBits(averageAnswerSec) : 0);
         return result;
     }
 
@@ -87,7 +87,7 @@ public class KarutaQuizzesResultSummary implements ValueObject {
         return "KarutaQuizResultSummary{" +
                 "quizCount=" + quizCount +
                 ", correctCount=" + correctCount +
-                ", averageAnswerTime=" + averageAnswerTime +
+                ", averageAnswerSec=" + averageAnswerSec +
                 '}';
     }
 }
