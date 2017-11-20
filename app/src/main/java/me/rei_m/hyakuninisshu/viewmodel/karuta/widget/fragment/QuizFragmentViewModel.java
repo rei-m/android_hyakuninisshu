@@ -117,8 +117,8 @@ public class QuizFragmentViewModel extends ViewModel {
 
         disposable = new CompositeDisposable();
         disposable.addAll(
-                karutaQuizModel.karutaQuizContent.subscribe(this.karutaQuizContent::set),
-                karutaQuizModel.errorEvent.subscribe(v -> errorEventSubject.onNext(Unit.INSTANCE))
+                karutaQuizModel.karutaQuizContent.subscribe(karutaQuizContent::set),
+                karutaQuizModel.errorEvent.subscribe(errorEventSubject::onNext)
         );
         karutaQuizContent.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override

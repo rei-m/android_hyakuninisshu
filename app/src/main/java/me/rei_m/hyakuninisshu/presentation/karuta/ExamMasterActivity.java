@@ -53,7 +53,8 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.di.ExamMasterActivityViewModelMod
 
 public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        ExamResultFragment.OnFragmentInteractionListener {
+        ExamResultFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnDialogInteractionListener {
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
@@ -187,6 +188,16 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     @Override
     public void onFinishExam() {
         finish();
+    }
+
+    @Override
+    public void onDialogPositiveClick() {
+        finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+
     }
 
     @ForActivity
