@@ -21,7 +21,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -68,6 +67,8 @@ public class QuizFragmentViewModel extends ViewModel {
         }
     }
 
+    public final ObservableField<KarutaQuizContent> karutaQuizContent = new ObservableField<>();
+
     public final ObservableField<String> quizCount = new ObservableField<>("");
 
     public final ObservableField<String> firstPhrase = new ObservableField<>("");
@@ -108,7 +109,6 @@ public class QuizFragmentViewModel extends ViewModel {
 
     private CompositeDisposable disposable = null;
 
-    private KarutaQuizContent karutaQuizContent = null;
 
     public QuizFragmentViewModel(@NonNull KarutaQuizModel karutaQuizModel,
                                  @NonNull KarutaStyleFilter kamiNoKuStyle,
@@ -116,42 +116,43 @@ public class QuizFragmentViewModel extends ViewModel {
         this.karutaQuizModel = karutaQuizModel;
 
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaQuizModel.karutaQuizContent.subscribe(karutaQuizContent -> {
+        disposable.addAll(
+                karutaQuizModel.karutaQuizContent.subscribe(karutaQuizContent::set),
+                karutaQuizModel.errorEvent.subscribe(errorEventSubject::onNext)
+        );
+        karutaQuizContent.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(android.databinding.Observable observable, int i) {
+                KarutaQuizResult result = karutaQuizContent.get().quiz().result();
 
-            this.karutaQuizContent = karutaQuizContent;
+                if (result == null) {
+                    quizCount.set(karutaQuizContent.get().currentPosition());
 
-            KarutaQuizResult result = karutaQuizContent.quiz().result();
+                    YomiFuda yomiFuda = karutaQuizContent.get().yomiFuda(kamiNoKuStyle.value());
+                    firstPhrase.set(yomiFuda.firstPhrase());
+                    secondPhrase.set(yomiFuda.secondPhrase());
+                    thirdPhrase.set(yomiFuda.thirdPhrase());
 
-            if (result == null) {
-                quizCount.set(karutaQuizContent.currentPosition());
+                    List<ToriFuda> toriFudas = karutaQuizContent.get().toriFudas(shimoNoKuStyle.value());
+                    for (int choiceIndex = 0; choiceIndex < toriFudas.size(); choiceIndex++) {
+                        ToriFuda toriFuda = toriFudas.get(choiceIndex);
+                        choiceFourthPhraseList.set(choiceIndex, toriFuda.fourthPhrase());
+                        choiceFifthPhraseList.set(choiceIndex, toriFuda.fifthPhrase());
+                    }
 
-                YomiFuda yomiFuda = karutaQuizContent.yomiFuda(kamiNoKuStyle.value());
+                    startDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
+                } else {
+                    stopDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
 
-                firstPhrase.set(yomiFuda.firstPhrase());
-                secondPhrase.set(yomiFuda.secondPhrase());
-                thirdPhrase.set(yomiFuda.thirdPhrase());
-
-                List<ToriFuda> toriFudas = karutaQuizContent.toriFudas(shimoNoKuStyle.value());
-
-                for (int i = 0; i < toriFudas.size(); i++) {
-                    ToriFuda toriFuda = toriFudas.get(i);
-                    choiceFourthPhraseList.set(i, toriFuda.fourthPhrase());
-                    choiceFifthPhraseList.set(i, toriFuda.fifthPhrase());
+                    for (int choiceIndex = 0; choiceIndex < isVisibleChoiceList.size(); choiceIndex++) {
+                        isVisibleChoiceList.set(choiceIndex, false);
+                    }
+                    isVisibleChoiceList.set(result.choiceNo().asIndex(), true);
+                    isCorrect.set(result.judgement().isCorrect());
+                    isVisibleResult.set(true);
                 }
-
-                startDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
-            } else {
-                stopDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
-
-                List<Boolean> isVisibleChoiceList = Arrays.asList(false, false, false, false);
-                isVisibleChoiceList.set(result.choiceNo().asIndex(), true);
-                for (int i = 0; i < isVisibleChoiceList.size(); i++) {
-                    this.isVisibleChoiceList.set(i, isVisibleChoiceList.get(i));
-                }
-                this.isCorrect.set(result.judgement().isCorrect());
-                this.isVisibleResult.set(true);
             }
-        }), karutaQuizModel.errorEvent.subscribe(v -> errorEventSubject.onNext(Unit.INSTANCE)));
+        });
     }
 
     @Override
@@ -163,32 +164,23 @@ public class QuizFragmentViewModel extends ViewModel {
         super.onCleared();
     }
 
-    @Nullable
-    public KarutaQuizContent karutaQuizContent() {
-        return karutaQuizContent;
-    }
-
     public void onResume() {
-        if (karutaQuizContent == null) {
+        if (karutaQuizContent.get() == null || karutaQuizContent.get().quiz().result() == null) {
             karutaQuizModel.start();
-        } else {
-            if (karutaQuizContent.quiz().result() == null) {
-                karutaQuizModel.start();
-            }
         }
     }
 
     public void onPause() {
-        if (karutaQuizContent != null && karutaQuizContent.quiz().result() == null) {
+        if (karutaQuizContent.get() != null && karutaQuizContent.get().quiz().result() == null) {
             stopDisplayAnimationEventSubject.onNext(Unit.INSTANCE);
         }
     }
 
     public void onClickChoice(int choiceNoValue) {
-        if (karutaQuizContent == null) {
+        if (karutaQuizContent.get() == null) {
             return;
         }
-        karutaQuizModel.answer(karutaQuizContent.quiz().identifier(), ChoiceNo.forValue(choiceNoValue));
+        karutaQuizModel.answer(karutaQuizContent.get().quiz().identifier(), ChoiceNo.forValue(choiceNoValue));
     }
 
     public void onClickResult() {

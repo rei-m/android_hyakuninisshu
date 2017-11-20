@@ -57,7 +57,8 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.di.TrainingMasterActivityViewMode
 
 public class TrainingMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        QuizResultFragment.OnFragmentInteractionListener {
+        QuizResultFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnDialogInteractionListener {
 
     private static final String ARG_TRAINING_RANGE_FROM = "trainingRangeFrom";
 
@@ -231,6 +232,16 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         finish();
     }
 
+    @Override
+    public void onDialogPositiveClick() {
+        finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+
+    }
+    
     @ForActivity
     @dagger.Subcomponent(modules = {
             ActivityModule.class,
