@@ -143,8 +143,8 @@ public class QuizFragment extends DaggerFragment {
                 animationDisposable = null;
             }
         }), viewModel.onClickResultEvent.subscribe(v -> {
-            KarutaQuizContent karutaQuizContent = viewModel.karutaQuizContent();
-            if (listener != null && karutaQuizContent != null) {
+            KarutaQuizContent karutaQuizContent = viewModel.karutaQuizContent.get();
+            if (listener != null && karutaQuizContent != null && karutaQuizContent.quiz().result() != null) {
                 listener.onAnswered(karutaQuizContent.quiz().correctId(), karutaQuizContent.existNext());
             }
         }), viewModel.errorEvent.subscribe(v -> {
