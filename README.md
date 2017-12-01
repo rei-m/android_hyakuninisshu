@@ -15,7 +15,7 @@
 
 ## Licence
 
-[MIT](LICENCE.txt)
+[Apache License 2.0](LICENCE.txt)
 
 ## Author
 
