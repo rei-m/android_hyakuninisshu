@@ -18,23 +18,14 @@ import android.support.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
+import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizMaterialFragmentViewModel;
 
 @Module
-public class MaterialDetailFragmentViewModelModule {
-
-    private final KarutaIdentifier karutaId;
-
-    public MaterialDetailFragmentViewModelModule(@NonNull KarutaIdentifier karutaId) {
-        this.karutaId = karutaId;
-    }
-
+public class QuizMaterialFragmentViewModelModule {
     @Provides
     @ForFragment
-    MaterialDetailFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
-        return new MaterialDetailFragmentViewModel.Factory(karutaModel, karutaId);
+    QuizMaterialFragmentViewModel.Factory provideFactory(@NonNull KarutaQuizModel karutaQuizModel) {
+        return new QuizMaterialFragmentViewModel.Factory(karutaQuizModel);
     }
 }

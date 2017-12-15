@@ -34,29 +34,23 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
 import dagger.multibindings.IntoMap;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.databinding.ActivityMaterialSingleBinding;
+import me.rei_m.hyakuninisshu.databinding.ActivityQuizMaterialBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizMaterialFragment;
 
-public class MaterialSingleActivity extends DaggerAppCompatActivity {
+public class QuizMaterialActivity extends DaggerAppCompatActivity {
 
-    private static final String ARG_KARUTA_ID = "karutaId";
-
-    public static Intent createIntent(@NonNull Context context,
-                                      @NonNull KarutaIdentifier karutaId) {
-        Intent intent = new Intent(context, MaterialSingleActivity.class);
-        intent.putExtra(ARG_KARUTA_ID, karutaId);
-        return intent;
+    public static Intent createIntent(@NonNull Context context) {
+        return new Intent(context, QuizMaterialActivity.class);
     }
 
     @Inject
     AdViewFactory adViewFactory;
 
-    private ActivityMaterialSingleBinding binding;
+    private ActivityQuizMaterialBinding binding;
 
     private AdView adView;
 
@@ -64,7 +58,7 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_material_single);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_quiz_material);
 
         setSupportActionBar(binding.toolbar);
 
@@ -73,12 +67,10 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        KarutaIdentifier karutaId = getIntent().getParcelableExtra(ARG_KARUTA_ID);
-
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.content, MaterialDetailFragment.newInstance(karutaId), MaterialDetailFragment.TAG)
+                    .add(R.id.content, QuizMaterialFragment.newInstance(), QuizMaterialFragment.TAG)
                     .commit();
         }
 
@@ -132,18 +124,18 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
     @ForActivity
     @dagger.Subcomponent(modules = {
             ActivityModule.class,
-            MaterialDetailFragment.Module.class
+            QuizMaterialFragment.Module.class
     })
-    public interface Subcomponent extends AndroidInjector<MaterialSingleActivity> {
+    public interface Subcomponent extends AndroidInjector<QuizMaterialActivity> {
 
         @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<MaterialSingleActivity> {
+        abstract class Builder extends AndroidInjector.Builder<QuizMaterialActivity> {
 
             @SuppressWarnings("UnusedReturnValue")
             public abstract Builder activityModule(ActivityModule module);
 
             @Override
-            public void seedInstance(MaterialSingleActivity instance) {
+            public void seedInstance(QuizMaterialActivity instance) {
                 activityModule(new ActivityModule(instance));
             }
         }
@@ -154,7 +146,7 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
         @SuppressWarnings("unused")
         @Binds
         @IntoMap
-        @ActivityKey(MaterialSingleActivity.class)
+        @ActivityKey(QuizMaterialActivity.class)
         abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

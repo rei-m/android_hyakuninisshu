@@ -32,31 +32,85 @@ public class TrainingMenuFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
+        private TrainingRangeFrom trainingRangeFrom = TrainingRangeFrom.ONE;
+        private TrainingRangeTo trainingRangeTo = TrainingRangeTo.ONE_HUNDRED;
+        private KimarijiFilter kimariji = KimarijiFilter.ALL;
+        private KarutaStyleFilter kamiNoKuStyle = KarutaStyleFilter.KANJI;
+        private KarutaStyleFilter shimoNoKuStyle = KarutaStyleFilter.KANA;
+        private ColorFilter color = ColorFilter.ALL;
+
+        public void setTrainingRangeFrom(@NonNull TrainingRangeFrom trainingRangeFrom) {
+            this.trainingRangeFrom = trainingRangeFrom;
+        }
+
+        public void setTrainingRangeTo(@NonNull TrainingRangeTo trainingRangeTo) {
+            this.trainingRangeTo = trainingRangeTo;
+        }
+
+        public void setKimariji(@NonNull KimarijiFilter kimariji) {
+            this.kimariji = kimariji;
+        }
+
+        public void setKamiNoKuStyle(@NonNull KarutaStyleFilter kamiNoKuStyle) {
+            this.kamiNoKuStyle = kamiNoKuStyle;
+        }
+
+        public void setShimoNoKuStyle(@NonNull KarutaStyleFilter shimoNoKuStyle) {
+            this.shimoNoKuStyle = shimoNoKuStyle;
+        }
+
+        public void setColor(@NonNull ColorFilter color) {
+            this.color = color;
+        }
+
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public TrainingMenuFragmentViewModel create(@NonNull Class modelClass) {
-            return new TrainingMenuFragmentViewModel();
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(TrainingMenuFragmentViewModel.class)) {
+                return (T) new TrainingMenuFragmentViewModel(
+                        trainingRangeFrom,
+                        trainingRangeTo,
+                        kimariji,
+                        kamiNoKuStyle,
+                        shimoNoKuStyle,
+                        color);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
-    public final ObservableField<TrainingRangeFrom> trainingRangeFrom = new ObservableField<>(TrainingRangeFrom.ONE);
+    public final ObservableField<TrainingRangeFrom> trainingRangeFrom;
 
-    public final ObservableField<TrainingRangeTo> trainingRangeTo = new ObservableField<>(TrainingRangeTo.ONE_HUNDRED);
+    public final ObservableField<TrainingRangeTo> trainingRangeTo;
 
-    public final ObservableField<KimarijiFilter> kimariji = new ObservableField<>(KimarijiFilter.ALL);
+    public final ObservableField<KimarijiFilter> kimariji;
 
-    public final ObservableField<KarutaStyleFilter> kamiNoKuStyle = new ObservableField<>(KarutaStyleFilter.KANJI);
+    public final ObservableField<KarutaStyleFilter> kamiNoKuStyle;
 
-    public final ObservableField<KarutaStyleFilter> shimoNoKuStyle = new ObservableField<>(KarutaStyleFilter.KANA);
+    public final ObservableField<KarutaStyleFilter> shimoNoKuStyle;
 
-    public final ObservableField<ColorFilter> color = new ObservableField<>(ColorFilter.ALL);
+    public final ObservableField<ColorFilter> color;
 
     private final PublishSubject<Unit> onClickStartTrainingEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickStartTrainingEvent = onClickStartTrainingEventSubject;
 
     private final PublishSubject<Unit> invalidTrainingRangeEventSubject = PublishSubject.create();
     public final Observable<Unit> invalidTrainingRangeEvent = invalidTrainingRangeEventSubject;
+
+    public TrainingMenuFragmentViewModel(@NonNull TrainingRangeFrom trainingRangeFrom,
+                                         @NonNull TrainingRangeTo trainingRangeTo,
+                                         @NonNull KimarijiFilter kimariji,
+                                         @NonNull KarutaStyleFilter kamiNoKuStyle,
+                                         @NonNull KarutaStyleFilter shimoNoKuStyle,
+                                         @NonNull ColorFilter color) {
+        this.trainingRangeFrom = new ObservableField<>(trainingRangeFrom);
+        this.trainingRangeTo = new ObservableField<>(trainingRangeTo);
+        this.kimariji = new ObservableField<>(kimariji);
+        this.kamiNoKuStyle = new ObservableField<>(kamiNoKuStyle);
+        this.shimoNoKuStyle = new ObservableField<>(shimoNoKuStyle);
+        this.color = new ObservableField<>(color);
+    }
 
     @SuppressWarnings("unused")
     public void onClickStartTraining(View view) {

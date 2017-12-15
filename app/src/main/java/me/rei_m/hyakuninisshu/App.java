@@ -33,7 +33,7 @@ import me.rei_m.hyakuninisshu.presentation.SplashActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialEditActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.MaterialSingleActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.QuizMaterialActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
 
@@ -80,7 +80,7 @@ public class App extends DaggerApplication {
             ExamMasterActivity.Module.class,
             MaterialDetailActivity.Module.class,
             MaterialEditActivity.Module.class,
-            MaterialSingleActivity.Module.class,
+            QuizMaterialActivity.Module.class,
             TrainingExamMasterActivity.Module.class,
             TrainingMasterActivity.Module.class
     })

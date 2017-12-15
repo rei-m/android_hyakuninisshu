@@ -43,6 +43,8 @@ public class MaterialFragment extends DaggerFragment {
 
     public static final String TAG = MaterialFragment.class.getSimpleName();
 
+    private static final String KEY_COLOR = "color";
+
     public static MaterialFragment newInstance() {
         return new MaterialFragment();
     }
@@ -57,11 +59,13 @@ public class MaterialFragment extends DaggerFragment {
     MaterialFragmentViewModel.Factory viewModelFactory;
 
     @Inject
-    MaterialKarutaListAdapter.Injector adapterInjector;
+    MaterialKarutaListAdapter.Injector adapterItemInjector;
 
     private MaterialFragmentViewModel viewModel;
 
     private FragmentMaterialBinding binding;
+
+    private MaterialKarutaListAdapter adapter;
 
     public MaterialFragment() {
         // Required empty public constructor
@@ -70,8 +74,11 @@ public class MaterialFragment extends DaggerFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        if (savedInstanceState != null) {
+            viewModelFactory.setColorFilter(ColorFilter.get(savedInstanceState.getInt(KEY_COLOR)));
+        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialFragmentViewModel.class);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -84,7 +91,7 @@ public class MaterialFragment extends DaggerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
-        MaterialKarutaListAdapter adapter = new MaterialKarutaListAdapter(viewModel.karutaList, adapterInjector);
+        adapter = new MaterialKarutaListAdapter(viewModel.karutaList, viewModel.colorFilter, adapterItemInjector);
         binding.recyclerKarutaList.setAdapter(adapter);
         binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(inflater.getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
@@ -92,6 +99,7 @@ public class MaterialFragment extends DaggerFragment {
 
     @Override
     public void onDestroyView() {
+        adapter.releaseCallback();
         binding = null;
         super.onDestroyView();
     }
@@ -107,8 +115,14 @@ public class MaterialFragment extends DaggerFragment {
         analyticsManager = null;
         navigator = null;
         viewModelFactory = null;
-        adapterInjector = null;
+        adapterItemInjector = null;
         super.onDetach();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_COLOR, viewModel.colorFilter.get().ordinal());
     }
 
     @Override
@@ -118,7 +132,7 @@ public class MaterialFragment extends DaggerFragment {
             MenuItem menuItem = menu.add(Menu.NONE, colorFilter.ordinal(), Menu.NONE, colorFilter.label(getResources()));
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             menuItem.setOnMenuItemClickListener(menuColor -> {
-                viewModel.onOptionItemSelected(colorFilter);
+                viewModel.colorFilter.set(colorFilter);
                 return false;
             });
         }

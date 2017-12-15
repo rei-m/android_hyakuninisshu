@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
@@ -22,7 +24,7 @@ import static me.rei_m.hyakuninisshu.util.Constants.SPACE;
 /**
  * 下の句.
  */
-public class ShimoNoKu extends AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier> {
+public class ShimoNoKu extends AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier> implements Parcelable {
 
     private final Phrase fourth;
 
@@ -59,4 +61,35 @@ public class ShimoNoKu extends AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier> {
                 ", fifth=" + fifth +
                 "} " + super.toString();
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.identifier(), flags);
+        dest.writeParcelable(this.fourth, flags);
+        dest.writeParcelable(this.fifth, flags);
+    }
+
+    protected ShimoNoKu(Parcel in) {
+        super(in.readParcelable(ShimoNoKuIdentifier.class.getClassLoader()));
+        this.fourth = in.readParcelable(Phrase.class.getClassLoader());
+        this.fifth = in.readParcelable(Phrase.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<ShimoNoKu> CREATOR = new Parcelable.Creator<ShimoNoKu>() {
+        @Override
+        public ShimoNoKu createFromParcel(Parcel source) {
+            return new ShimoNoKu(source);
+        }
+
+        @Override
+        public ShimoNoKu[] newArray(int size) {
+            return new ShimoNoKu[size];
+        }
+    };
 }

@@ -91,7 +91,7 @@ public class MaterialDetailFragment extends DaggerFragment {
         super.onDetach();
     }
 
-    private KarutaIdentifier karutaIdentifier() throws IllegalArgumentException {
+    private KarutaIdentifier karutaId() throws IllegalArgumentException {
         Bundle args = getArguments();
         if (args != null) {
             return args.getParcelable(ARG_KARUTA_ID);
@@ -111,7 +111,7 @@ public class MaterialDetailFragment extends DaggerFragment {
 
             @Override
             public void seedInstance(MaterialDetailFragment instance) {
-                viewModelModule(new MaterialDetailFragmentViewModelModule(instance.karutaIdentifier()));
+                viewModelModule(new MaterialDetailFragmentViewModelModule(instance.karutaId()));
             }
         }
     }

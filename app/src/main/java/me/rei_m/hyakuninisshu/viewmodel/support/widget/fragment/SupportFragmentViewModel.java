@@ -36,8 +36,11 @@ public class SupportFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public SupportFragmentViewModel create(@NonNull Class modelClass) {
-            return new SupportFragmentViewModel(version);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(SupportFragmentViewModel.class)) {
+                return (T) new SupportFragmentViewModel(version);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 

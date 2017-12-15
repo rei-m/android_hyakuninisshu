@@ -37,7 +37,7 @@ import dagger.multibindings.IntoMap;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
@@ -46,12 +46,12 @@ import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialEditFr
 
 public class MaterialEditActivity extends DaggerAppCompatActivity {
 
-    private static final String ARG_KARUTA_ID = "karutaId";
+    private static final String ARG_KARUTA = "karuta";
 
     public static Intent createIntent(@NonNull Context context,
-                                      @NonNull KarutaIdentifier karutaId) {
+                                      @NonNull Karuta karuta) {
         Intent intent = new Intent(context, MaterialEditActivity.class);
-        intent.putExtra(ARG_KARUTA_ID, karutaId);
+        intent.putExtra(ARG_KARUTA, karuta);
         return intent;
     }
 
@@ -75,12 +75,12 @@ public class MaterialEditActivity extends DaggerAppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        KarutaIdentifier karutaId = getIntent().getParcelableExtra(ARG_KARUTA_ID);
+        Karuta karuta = getIntent().getParcelableExtra(ARG_KARUTA);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
+                    .add(R.id.content, MaterialEditFragment.newInstance(karuta), MaterialEditFragment.TAG)
                     .commit();
         }
 

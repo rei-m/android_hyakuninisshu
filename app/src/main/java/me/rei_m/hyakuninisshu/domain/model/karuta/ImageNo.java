@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import java.util.regex.Pattern;
@@ -22,7 +24,7 @@ import me.rei_m.hyakuninisshu.domain.ValueObject;
 /**
  * 歌の画像番号.
  */
-public class ImageNo implements ValueObject {
+public class ImageNo implements ValueObject, Parcelable {
 
     private static final Pattern pattern = Pattern.compile("^(?!000)(0\\d\\d|001|100)$");
 
@@ -61,4 +63,30 @@ public class ImageNo implements ValueObject {
                 "value='" + value + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.value);
+    }
+
+    protected ImageNo(Parcel in) {
+        this.value = in.readString();
+    }
+
+    public static final Creator<ImageNo> CREATOR = new Creator<ImageNo>() {
+        @Override
+        public ImageNo createFromParcel(Parcel source) {
+            return new ImageNo(source);
+        }
+
+        @Override
+        public ImageNo[] newArray(int size) {
+            return new ImageNo[size];
+        }
+    };
 }

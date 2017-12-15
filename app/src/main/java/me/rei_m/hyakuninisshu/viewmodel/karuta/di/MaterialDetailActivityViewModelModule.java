@@ -11,30 +11,30 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di;
+package me.rei_m.hyakuninisshu.viewmodel.karuta.di;
 
 import android.support.annotation.NonNull;
 
 import dagger.Module;
 import dagger.Provides;
-import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.MaterialDetailActivityViewModel;
 
 @Module
-public class MaterialDetailFragmentViewModelModule {
+public class MaterialDetailActivityViewModelModule {
 
-    private final KarutaIdentifier karutaId;
+    private final ColorFilter colorFilter;
 
-    public MaterialDetailFragmentViewModelModule(@NonNull KarutaIdentifier karutaId) {
-        this.karutaId = karutaId;
+    public MaterialDetailActivityViewModelModule(@NonNull ColorFilter colorFilter) {
+        this.colorFilter = colorFilter;
     }
 
     @Provides
-    @ForFragment
-    MaterialDetailFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
-        return new MaterialDetailFragmentViewModel.Factory(karutaModel, karutaId);
+    @ForActivity
+    MaterialDetailActivityViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
+        return new MaterialDetailActivityViewModel.Factory(karutaModel, colorFilter);
     }
 }

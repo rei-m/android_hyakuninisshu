@@ -13,9 +13,12 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier;
 
-public class KamiNoKuIdentifier implements EntityIdentifier {
+public class KamiNoKuIdentifier implements EntityIdentifier, Parcelable {
 
     private final int value;
 
@@ -44,4 +47,31 @@ public class KamiNoKuIdentifier implements EntityIdentifier {
                 "value=" + value +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.value);
+    }
+
+    protected KamiNoKuIdentifier(Parcel in) {
+        this.value = in.readInt();
+    }
+
+    public static final Creator<KamiNoKuIdentifier> CREATOR = new Creator<KamiNoKuIdentifier>() {
+        @Override
+        public KamiNoKuIdentifier createFromParcel(Parcel source) {
+            return new KamiNoKuIdentifier(source);
+        }
+
+        @Override
+        public KamiNoKuIdentifier[] newArray(int size) {
+            return new KamiNoKuIdentifier[size];
+        }
+    };
 }

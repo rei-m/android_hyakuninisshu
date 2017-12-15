@@ -20,29 +20,24 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 
-public class MaterialDetailFragmentViewModel extends ViewModel {
+public class QuizMaterialFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaModel karutaModel;
+        private final KarutaQuizModel karutaQuizModel;
 
-        private final KarutaIdentifier karutaId;
-
-        public Factory(@NonNull KarutaModel karutaModel,
-                       @NonNull KarutaIdentifier karutaId) {
-            this.karutaModel = karutaModel;
-            this.karutaId = karutaId;
+        public Factory(KarutaQuizModel karutaQuizModel) {
+            this.karutaQuizModel = karutaQuizModel;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if (modelClass.isAssignableFrom(MaterialDetailFragmentViewModel.class)) {
-                return (T) new MaterialDetailFragmentViewModel(karutaModel, karutaId);
+            if (modelClass.isAssignableFrom(QuizMaterialFragmentViewModel.class)) {
+                return (T) new QuizMaterialFragmentViewModel(karutaQuizModel);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -52,16 +47,10 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
 
     private CompositeDisposable disposable;
 
-    public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel,
-                                           @NonNull KarutaIdentifier karutaId) {
+    public QuizMaterialFragmentViewModel(@NonNull KarutaQuizModel karutaQuizModel) {
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karutaList.subscribe(karutaList -> {
-            for (Karuta karuta : karutaList) {
-                if (karuta.identifier().equals(karutaId)) {
-                    this.karuta.set(karuta);
-                    break;
-                }
-            }
+        disposable.addAll(karutaQuizModel.karutaQuizContent.subscribe(karutaQuizContent -> {
+            karuta.set(karutaQuizContent.correct());
         }));
     }
 

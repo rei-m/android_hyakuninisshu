@@ -25,10 +25,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.util.Unit;
 
@@ -36,25 +34,24 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaModel karutaModel;
-
-        private final KarutaIdentifier karutaId;
+        private final Karuta karuta;
 
         private final boolean existNextQuiz;
 
-        public Factory(@NonNull KarutaModel karutaModel,
-                       @NonNull KarutaIdentifier karutaId,
+        public Factory(@NonNull Karuta karuta,
                        boolean existNextQuiz) {
-            this.karutaModel = karutaModel;
-            this.karutaId = karutaId;
+            this.karuta = karuta;
             this.existNextQuiz = existNextQuiz;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public QuizAnswerFragmentViewModel create(@NonNull Class modelClass) {
-            return new QuizAnswerFragmentViewModel(karutaModel, karutaId, existNextQuiz);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(QuizAnswerFragmentViewModel.class)) {
+                return (T) new QuizAnswerFragmentViewModel(karuta, existNextQuiz);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -76,8 +73,8 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
 
     public final ObservableBoolean existNextQuiz = new ObservableBoolean(false);
 
-    private final PublishSubject<KarutaIdentifier> onClickAnswerEventSubject = PublishSubject.create();
-    public final Observable<KarutaIdentifier> onClickAnswerEvent = onClickAnswerEventSubject;
+    private final PublishSubject<Unit> onClickAnswerEventSubject = PublishSubject.create();
+    public final Observable<Unit> onClickAnswerEvent = onClickAnswerEventSubject;
 
     private final PublishSubject<Unit> onClickNextQuizEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickNextQuizEvent = onClickNextQuizEventSubject;
@@ -88,42 +85,22 @@ public class QuizAnswerFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> errorEventSubject = PublishSubject.create();
     public final Observable<Unit> errorEvent = errorEventSubject;
 
-    private final KarutaIdentifier karutaId;
-
-    private CompositeDisposable disposable = null;
-
-    public QuizAnswerFragmentViewModel(@NonNull KarutaModel karutaModel,
-                                       @NonNull KarutaIdentifier karutaId,
+    public QuizAnswerFragmentViewModel(@NonNull Karuta karuta,
                                        boolean existNextQuiz) {
-        this.karutaId = karutaId;
+        karutaNo.set(karuta.identifier().value());
+        kimariji.set(karuta.kimariji().value());
+        creator.set(karuta.creator());
+        firstPhrase.set(padSpace(karuta.kamiNoKu().first().kanji(), 5));
+        secondPhrase.set(karuta.kamiNoKu().second().kanji());
+        thirdPhrase.set(karuta.kamiNoKu().third().kanji());
+        fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
+        fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
         this.existNextQuiz.set(existNextQuiz);
-
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
-            karutaNo.set(karuta.identifier().value());
-            kimariji.set(karuta.kimariji().value());
-            creator.set(karuta.creator());
-            firstPhrase.set(padSpace(karuta.kamiNoKu().first().kanji(), 5));
-            secondPhrase.set(karuta.kamiNoKu().second().kanji());
-            thirdPhrase.set(karuta.kamiNoKu().third().kanji());
-            fourthPhrase.set(padSpace(karuta.shimoNoKu().fourth().kanji(), 7));
-            fifthPhrase.set(karuta.shimoNoKu().fifth().kanji());
-        }));
-        karutaModel.fetchKaruta(karutaId);
-    }
-
-    @Override
-    protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
-        super.onCleared();
     }
 
     @SuppressWarnings("unused")
     public void onClickAnswer(View view) {
-        onClickAnswerEventSubject.onNext(karutaId);
+        onClickAnswerEventSubject.onNext(Unit.INSTANCE);
     }
 
     @SuppressWarnings("unused")

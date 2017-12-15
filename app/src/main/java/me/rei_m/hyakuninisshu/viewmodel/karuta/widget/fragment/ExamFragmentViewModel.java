@@ -40,8 +40,11 @@ public class ExamFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public ExamFragmentViewModel create(@NonNull Class modelClass) {
-            return new ExamFragmentViewModel(karutaExamModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(ExamFragmentViewModel.class)) {
+                return (T) new ExamFragmentViewModel(karutaExamModel);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 

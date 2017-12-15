@@ -18,22 +18,22 @@ import android.support.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialEditFragmentViewModel;
 
 @Module
 public class MaterialEditFragmentViewModelModule {
 
-    private final KarutaIdentifier karutaId;
+    private final Karuta karuta;
 
-    public MaterialEditFragmentViewModelModule(@NonNull KarutaIdentifier karutaId) {
-        this.karutaId = karutaId;
+    public MaterialEditFragmentViewModelModule(@NonNull Karuta karuta) {
+        this.karuta = karuta;
     }
 
     @Provides
     @ForFragment
     MaterialEditFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
-        return new MaterialEditFragmentViewModel.Factory(karutaModel, karutaId);
+        return new MaterialEditFragmentViewModel.Factory(karutaModel, karuta);
     }
 }

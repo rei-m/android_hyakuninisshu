@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
@@ -20,7 +22,7 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity;
 /**
  * 百人一首の歌.
  */
-public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
+public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> implements Parcelable {
 
     public static final int NUMBER_OF_KARUTA = 100;
 
@@ -126,4 +128,47 @@ public class Karuta extends AbstractEntity<Karuta, KarutaIdentifier> {
                 ", color=" + color +
                 "} " + super.toString();
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.identifier(), flags);
+        dest.writeString(this.creator);
+        dest.writeInt(this.kimariji == null ? -1 : this.kimariji.ordinal());
+        dest.writeParcelable(this.imageNo, flags);
+        dest.writeString(this.translation);
+        dest.writeInt(this.color == null ? -1 : this.color.ordinal());
+        dest.writeParcelable(this.kamiNoKu, flags);
+        dest.writeParcelable(this.shimoNoKu, flags);
+    }
+
+    protected Karuta(Parcel in) {
+        super(in.readParcelable(KarutaIdentifier.class.getClassLoader()));
+        this.creator = in.readString();
+        int tmpKimariji = in.readInt();
+        this.kimariji = tmpKimariji == -1 ? null : Kimariji.values()[tmpKimariji];
+        this.imageNo = in.readParcelable(ImageNo.class.getClassLoader());
+        this.translation = in.readString();
+        int tmpColor = in.readInt();
+        this.color = tmpColor == -1 ? null : Color.values()[tmpColor];
+        this.kamiNoKu = in.readParcelable(KamiNoKu.class.getClassLoader());
+        this.shimoNoKu = in.readParcelable(ShimoNoKu.class.getClassLoader());
+    }
+
+    public static final Creator<Karuta> CREATOR = new Creator<Karuta>() {
+        @Override
+        public Karuta createFromParcel(Parcel source) {
+            return new Karuta(source);
+        }
+
+        @Override
+        public Karuta[] newArray(int size) {
+            return new Karuta[size];
+        }
+    };
 }

@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter;
 
 import android.content.Context;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ import android.view.ViewGroup;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemViewModel;
 
 public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -33,39 +35,44 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
 
     private final ObservableArrayList<Karuta> karutaList;
 
+    private final ObservableField<ColorFilter> colorFilter;
+
     private final Injector injector;
 
+    private final ObservableList.OnListChangedCallback<ObservableList<Karuta>> listChangedCallback = new ObservableList.OnListChangedCallback<ObservableList<Karuta>>() {
+        @Override
+        public void onChanged(ObservableList<Karuta> karutas) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList<Karuta> karutas, int i, int i1, int i2) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+    };
+
     public MaterialKarutaListAdapter(@NonNull ObservableArrayList<Karuta> karutaList,
+                                     @NonNull ObservableField<ColorFilter> colorFilter,
                                      @NonNull Injector injector) {
         this.karutaList = karutaList;
+        this.colorFilter = colorFilter;
         this.injector = injector;
-
-        this.karutaList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Karuta>>() {
-            @Override
-            public void onChanged(ObservableList<Karuta> karutas) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeChanged(ObservableList<Karuta> karutas, int i, int i1) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeInserted(ObservableList<Karuta> karutas, int i, int i1) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeMoved(ObservableList<Karuta> karutas, int i, int i1, int i2) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeRemoved(ObservableList<Karuta> karutas, int i, int i1) {
-                notifyDataSetChanged();
-            }
-        });
+        this.karutaList.addOnListChangedCallback(listChangedCallback);
     }
 
     @Override
@@ -99,6 +106,8 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             itemViewHolder.binding.getViewModel().setKaruta(karutaList.get(position));
+            itemViewHolder.binding.getViewModel().setPosition(position);
+            itemViewHolder.binding.getViewModel().setColorFilter(colorFilter.get());
             itemViewHolder.binding.executePendingBindings();
         }
     }
@@ -106,6 +115,10 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public int getItemCount() {
         return karutaList.size() + FOOTER_COUNT;
+    }
+
+    public void releaseCallback() {
+        this.karutaList.removeOnListChangedCallback(listChangedCallback);
     }
 
     private enum ItemViewType {

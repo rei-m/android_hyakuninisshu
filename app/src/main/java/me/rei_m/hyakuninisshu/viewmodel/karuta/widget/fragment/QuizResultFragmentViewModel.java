@@ -40,8 +40,11 @@ public class QuizResultFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public QuizResultFragmentViewModel create(@NonNull Class modelClass) {
-            return new QuizResultFragmentViewModel(karutaTrainingModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(QuizResultFragmentViewModel.class)) {
+                return (T) new QuizResultFragmentViewModel(karutaTrainingModel);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 

@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity;
@@ -22,7 +24,7 @@ import static me.rei_m.hyakuninisshu.util.Constants.SPACE;
 /**
  * 上の句.
  */
-public class KamiNoKu extends AbstractEntity<KamiNoKu, KamiNoKuIdentifier> {
+public class KamiNoKu extends AbstractEntity<KamiNoKu, KamiNoKuIdentifier> implements Parcelable {
 
     private final Phrase first;
 
@@ -68,4 +70,37 @@ public class KamiNoKu extends AbstractEntity<KamiNoKu, KamiNoKuIdentifier> {
                 ", third=" + third +
                 "} " + super.toString();
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.identifier(), flags);
+        dest.writeParcelable(this.first, flags);
+        dest.writeParcelable(this.second, flags);
+        dest.writeParcelable(this.third, flags);
+    }
+
+    protected KamiNoKu(Parcel in) {
+        super(in.readParcelable(KamiNoKuIdentifier.class.getClassLoader()));
+        this.first = in.readParcelable(Phrase.class.getClassLoader());
+        this.second = in.readParcelable(Phrase.class.getClassLoader());
+        this.third = in.readParcelable(Phrase.class.getClassLoader());
+    }
+
+    public static final Creator<KamiNoKu> CREATOR = new Creator<KamiNoKu>() {
+        @Override
+        public KamiNoKu createFromParcel(Parcel source) {
+            return new KamiNoKu(source);
+        }
+
+        @Override
+        public KamiNoKu[] newArray(int size) {
+            return new KamiNoKu[size];
+        }
+    };
 }
