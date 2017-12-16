@@ -70,14 +70,14 @@ public class ExamResultFragmentViewModel extends ViewModel {
     public ExamResultFragmentViewModel(@NonNull KarutaExamModel karutaExamModel,
                                        @NonNull KarutaExamIdentifier karutaExamId) {
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaExamModel.karutaExam.subscribe(karutaExam -> {
+        disposable.addAll(karutaExamModel.recentKarutaExam.subscribe(karutaExam -> {
             KarutaExamResult result = karutaExam.result();
             score.set(result.score());
             averageAnswerSec.set(result.averageAnswerSec());
             karutaQuizJudgements.set(result.judgements());
         }));
 
-        karutaExamModel.fetchKarutaExam(karutaExamId);
+        karutaExamModel.fetchRecentKarutaExam();
     }
 
     @Override

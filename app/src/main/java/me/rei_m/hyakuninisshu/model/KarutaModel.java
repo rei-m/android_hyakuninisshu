@@ -14,9 +14,6 @@
 package me.rei_m.hyakuninisshu.model;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,10 +24,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 /**
@@ -39,8 +36,8 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaModel {
 
-    private final BehaviorSubject<List<Karuta>> karutaListSubject = BehaviorSubject.create();
-    public final Observable<List<Karuta>> karutaList = karutaListSubject;
+    private final BehaviorSubject<Karutas> karutasSubject = BehaviorSubject.create();
+    public final Observable<Karutas> karutas = karutasSubject;
 
     private final PublishSubject<Unit> editedEventSubject = PublishSubject.create();
     public final Observable<Unit> editedEvent = editedEventSubject;
@@ -50,8 +47,6 @@ public class KarutaModel {
 
     private final KarutaRepository karutaRepository;
 
-    private Color color;
-
     @Inject
     public KarutaModel(@NonNull KarutaRepository karutaRepository) {
         this.karutaRepository = karutaRepository;
@@ -59,14 +54,12 @@ public class KarutaModel {
 
     /**
      * 歌コレクションを取得する.
-     *
-     * @param color 歌の色。指定された場合は色でしぼりこんだ歌を取得する
      */
-    public void fetchKarutas(@Nullable Color color) {
-        karutaRepository.list().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(karutas -> {
-            karutaListSubject.onNext(karutas.asList(color));
-            this.color = color;
-        });
+    public void fetchKarutas() {
+        if (karutasSubject.hasValue()) {
+            return;
+        }
+        karutaRepository.list().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(karutasSubject::onNext);
     }
 
     /**
@@ -113,7 +106,7 @@ public class KarutaModel {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karutas -> {
-                    karutaListSubject.onNext(karutas.asList(color));
+                    karutasSubject.onNext(karutas);
                     editedEventSubject.onNext(Unit.INSTANCE);
                 }, e -> errorEventSubject.onNext(Unit.INSTANCE));
     }

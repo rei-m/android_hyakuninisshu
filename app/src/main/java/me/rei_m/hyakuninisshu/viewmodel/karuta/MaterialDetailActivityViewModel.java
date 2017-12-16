@@ -50,23 +50,20 @@ public class MaterialDetailActivityViewModel extends ViewModel {
 
     public final ObservableArrayList<Karuta> karutaList = new ObservableArrayList<>();
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public MaterialDetailActivityViewModel(@NonNull KarutaModel karutaModel,
                                            @NonNull ColorFilter colorFilter) {
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karutaList.subscribe(karutaList -> {
+        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
             this.karutaList.clear();
-            this.karutaList.addAll(karutaList);
+            this.karutaList.addAll(karutas.asList(colorFilter.value()));
         }));
+        karutaModel.fetchKarutas();
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 }

@@ -50,27 +50,19 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
 
     public final ObservableField<Karuta> karuta = new ObservableField<>();
 
-    private CompositeDisposable disposable;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel,
                                            @NonNull KarutaIdentifier karutaId) {
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karutaList.subscribe(karutaList -> {
-            for (Karuta karuta : karutaList) {
-                if (karuta.identifier().equals(karutaId)) {
-                    this.karuta.set(karuta);
-                    break;
-                }
-            }
+        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
+            this.karuta.set(karutas.get(karutaId));
         }));
+        karutaModel.fetchKarutas();
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 }

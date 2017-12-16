@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 
@@ -56,38 +57,41 @@ public class MaterialFragmentViewModel extends ViewModel {
 
     public final ObservableField<ColorFilter> colorFilter;
 
-    private CompositeDisposable disposable = null;
+    private final KarutaModel karutaModel;
 
-    private Observable.OnPropertyChangedCallback colorFilterChangedCallback;
+    private Karutas karutas;
+
+    private final CompositeDisposable disposable = new CompositeDisposable();
+
+    private final Observable.OnPropertyChangedCallback colorFilterChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            if (karutas == null) {
+                karutaModel.fetchKarutas();
+            } else {
+                karutaList.clear();
+                karutaList.addAll(karutas.asList(colorFilter.get().value()));
+            }
+        }
+    };
 
     public MaterialFragmentViewModel(@NonNull KarutaModel karutaModel,
                                      @NonNull ColorFilter colorFilter) {
-        colorFilterChangedCallback = new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable observable, int i) {
-                karutaModel.fetchKarutas(MaterialFragmentViewModel.this.colorFilter.get().value());
-            }
-        };
+        this.karutaModel = karutaModel;
         this.colorFilter = new ObservableField<>(colorFilter);
         this.colorFilter.addOnPropertyChangedCallback(colorFilterChangedCallback);
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karutaList.subscribe(karutaList -> {
+        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
+            this.karutas = karutas;
             this.karutaList.clear();
-            this.karutaList.addAll(karutaList);
+            this.karutaList.addAll(karutas.asList(MaterialFragmentViewModel.this.colorFilter.get().value()));
         }));
-        karutaModel.fetchKarutas(MaterialFragmentViewModel.this.colorFilter.get().value());
+        karutaModel.fetchKarutas();
     }
 
     @Override
     protected void onCleared() {
-        if (colorFilterChangedCallback != null) {
-            colorFilter.removeOnPropertyChangedCallback(colorFilterChangedCallback);
-            colorFilterChangedCallback = null;
-        }
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        colorFilter.removeOnPropertyChangedCallback(colorFilterChangedCallback);
+        disposable.dispose();
         super.onCleared();
     }
 }
