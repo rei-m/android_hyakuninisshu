@@ -62,8 +62,11 @@ public class QuizFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public QuizFragmentViewModel create(@NonNull Class modelClass) {
-            return new QuizFragmentViewModel(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(QuizFragmentViewModel.class)) {
+                return (T) new QuizFragmentViewModel(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -153,6 +156,7 @@ public class QuizFragmentViewModel extends ViewModel {
                 }
             }
         });
+        karutaQuizModel.start();
     }
 
     @Override

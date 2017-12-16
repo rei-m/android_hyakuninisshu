@@ -23,6 +23,7 @@ import android.view.View;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.util.Unit;
@@ -33,19 +34,95 @@ public class MaterialEditFragmentViewModel extends ViewModel {
 
         private final KarutaModel karutaModel;
 
-        private final KarutaIdentifier karutaId;
+        private final Karuta karuta;
+
+        private String firstPhraseKanji;
+        private String firstPhraseKana;
+        private String secondPhraseKanji;
+        private String secondPhraseKana;
+        private String thirdPhraseKanji;
+        private String thirdPhraseKana;
+        private String fourthPhraseKanji;
+        private String fourthPhraseKana;
+        private String fifthPhraseKanji;
+        private String fifthPhraseKana;
 
         public Factory(@NonNull KarutaModel karutaModel,
-                       @NonNull KarutaIdentifier karutaId) {
+                       @NonNull Karuta karuta) {
             this.karutaModel = karutaModel;
-            this.karutaId = karutaId;
+            this.karuta = karuta;
+            firstPhraseKanji = karuta.kamiNoKu().first().kanji();
+            firstPhraseKana = karuta.kamiNoKu().first().kana();
+            secondPhraseKanji = karuta.kamiNoKu().second().kanji();
+            secondPhraseKana = karuta.kamiNoKu().second().kana();
+            thirdPhraseKanji = karuta.kamiNoKu().third().kanji();
+            thirdPhraseKana = karuta.kamiNoKu().third().kana();
+            fourthPhraseKanji = karuta.shimoNoKu().fourth().kanji();
+            fourthPhraseKana = karuta.shimoNoKu().fourth().kana();
+            fifthPhraseKanji = karuta.shimoNoKu().fifth().kanji();
+            fifthPhraseKana = karuta.shimoNoKu().fifth().kana();
+        }
+
+        public void setFirstPhraseKanji(@NonNull String firstPhraseKanji) {
+            this.firstPhraseKanji = firstPhraseKanji;
+        }
+
+        public void setFirstPhraseKana(@NonNull String firstPhraseKana) {
+            this.firstPhraseKana = firstPhraseKana;
+        }
+
+        public void setSecondPhraseKanji(@NonNull String secondPhraseKanji) {
+            this.secondPhraseKanji = secondPhraseKanji;
+        }
+
+        public void setSecondPhraseKana(@NonNull String secondPhraseKana) {
+            this.secondPhraseKana = secondPhraseKana;
+        }
+
+        public void setThirdPhraseKanji(@NonNull String thirdPhraseKanji) {
+            this.thirdPhraseKanji = thirdPhraseKanji;
+        }
+
+        public void setThirdPhraseKana(@NonNull String thirdPhraseKana) {
+            this.thirdPhraseKana = thirdPhraseKana;
+        }
+
+        public void setFourthPhraseKanji(@NonNull String fourthPhraseKanji) {
+            this.fourthPhraseKanji = fourthPhraseKanji;
+        }
+
+        public void setFourthPhraseKana(@NonNull String fourthPhraseKana) {
+            this.fourthPhraseKana = fourthPhraseKana;
+        }
+
+        public void setFifthPhraseKanji(@NonNull String fifthPhraseKanji) {
+            this.fifthPhraseKanji = fifthPhraseKanji;
+        }
+
+        public void setFifthPhraseKana(@NonNull String fifthPhraseKana) {
+            this.fifthPhraseKana = fifthPhraseKana;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public MaterialEditFragmentViewModel create(@NonNull Class modelClass) {
-            return new MaterialEditFragmentViewModel(karutaModel, karutaId);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(MaterialEditFragmentViewModel.class)) {
+                return (T) new MaterialEditFragmentViewModel(
+                        karutaModel,
+                        karuta.identifier(),
+                        firstPhraseKanji,
+                        firstPhraseKana,
+                        secondPhraseKanji,
+                        secondPhraseKana,
+                        thirdPhraseKanji,
+                        thirdPhraseKana,
+                        fourthPhraseKanji,
+                        fourthPhraseKana,
+                        fifthPhraseKanji,
+                        fifthPhraseKana);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -55,25 +132,25 @@ public class MaterialEditFragmentViewModel extends ViewModel {
 
     public final ObservableInt kimariji = new ObservableInt();
 
-    public final ObservableField<String> firstPhraseKanji = new ObservableField<>();
+    public final ObservableField<String> firstPhraseKanji;
 
-    public final ObservableField<String> firstPhraseKana = new ObservableField<>();
+    public final ObservableField<String> firstPhraseKana;
 
-    public final ObservableField<String> secondPhraseKanji = new ObservableField<>();
+    public final ObservableField<String> secondPhraseKanji;
 
-    public final ObservableField<String> secondPhraseKana = new ObservableField<>();
+    public final ObservableField<String> secondPhraseKana;
 
-    public final ObservableField<String> thirdPhraseKanji = new ObservableField<>();
+    public final ObservableField<String> thirdPhraseKanji;
 
-    public final ObservableField<String> thirdPhraseKana = new ObservableField<>();
+    public final ObservableField<String> thirdPhraseKana;
 
-    public final ObservableField<String> fourthPhraseKanji = new ObservableField<>();
+    public final ObservableField<String> fourthPhraseKanji;
 
-    public final ObservableField<String> fourthPhraseKana = new ObservableField<>();
+    public final ObservableField<String> fourthPhraseKana;
 
-    public final ObservableField<String> fifthPhraseKanji = new ObservableField<>();
+    public final ObservableField<String> fifthPhraseKanji;
 
-    public final ObservableField<String> fifthPhraseKana = new ObservableField<>();
+    public final ObservableField<String> fifthPhraseKana;
 
     private final PublishSubject<Unit> onClickEditEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickEditEvent = onClickEditEventSubject;
@@ -91,30 +168,33 @@ public class MaterialEditFragmentViewModel extends ViewModel {
     private CompositeDisposable disposable = null;
 
     public MaterialEditFragmentViewModel(@NonNull KarutaModel karutaModel,
-                                         @NonNull KarutaIdentifier karutaId) {
+                                         @NonNull KarutaIdentifier karutaId,
+                                         @NonNull String firstPhraseKanji,
+                                         @NonNull String firstPhraseKana,
+                                         @NonNull String secondPhraseKanji,
+                                         @NonNull String secondPhraseKana,
+                                         @NonNull String thirdPhraseKanji,
+                                         @NonNull String thirdPhraseKana,
+                                         @NonNull String fourthPhraseKanji,
+                                         @NonNull String fourthPhraseKana,
+                                         @NonNull String fifthPhraseKanji,
+                                         @NonNull String fifthPhraseKana) {
 
         this.karutaModel = karutaModel;
         this.karutaId = karutaId;
+        this.firstPhraseKanji = new ObservableField<>(firstPhraseKanji);
+        this.firstPhraseKana = new ObservableField<>(firstPhraseKana);
+        this.secondPhraseKanji = new ObservableField<>(secondPhraseKanji);
+        this.secondPhraseKana = new ObservableField<>(secondPhraseKana);
+        this.thirdPhraseKanji = new ObservableField<>(thirdPhraseKanji);
+        this.thirdPhraseKana = new ObservableField<>(thirdPhraseKana);
+        this.fourthPhraseKanji = new ObservableField<>(fourthPhraseKanji);
+        this.fourthPhraseKana = new ObservableField<>(fourthPhraseKana);
+        this.fifthPhraseKanji = new ObservableField<>(fifthPhraseKanji);
+        this.fifthPhraseKana = new ObservableField<>(fifthPhraseKana);
+
         disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
-            if (!karuta.identifier().equals(karutaId)) {
-                return;
-            }
-            karutaNo.set(karuta.identifier().value());
-            creator.set(karuta.creator());
-            kimariji.set(karuta.kimariji().value());
-            firstPhraseKanji.set(karuta.kamiNoKu().first().kanji());
-            firstPhraseKana.set(karuta.kamiNoKu().first().kana());
-            secondPhraseKanji.set(karuta.kamiNoKu().second().kanji());
-            secondPhraseKana.set(karuta.kamiNoKu().second().kana());
-            thirdPhraseKanji.set(karuta.kamiNoKu().third().kanji());
-            thirdPhraseKana.set(karuta.kamiNoKu().third().kana());
-            fourthPhraseKanji.set(karuta.shimoNoKu().fourth().kanji());
-            fourthPhraseKana.set(karuta.shimoNoKu().fourth().kana());
-            fifthPhraseKanji.set(karuta.shimoNoKu().fifth().kanji());
-            fifthPhraseKana.set(karuta.shimoNoKu().fifth().kana());
-        }), karutaModel.editedEvent.subscribe(onUpdateMaterialEventSubject::onNext));
-        karutaModel.fetchKaruta(karutaId);
+        disposable.addAll(karutaModel.editedEvent.subscribe(onUpdateMaterialEventSubject::onNext));
     }
 
     @Override

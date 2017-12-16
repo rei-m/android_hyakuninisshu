@@ -100,6 +100,13 @@ public class KarutaQuizContent implements ValueObject {
     }
 
     /**
+     * @return 正解の歌
+     */
+    public Karuta correct() {
+        return correct;
+    }
+
+    /**
      * @return 現在が何問目か
      */
     public String currentPosition() {

@@ -46,7 +46,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent;
 import me.rei_m.hyakuninisshu.presentation.helper.Device;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
@@ -145,7 +145,7 @@ public class QuizFragment extends DaggerFragment {
         }), viewModel.onClickResultEvent.subscribe(v -> {
             KarutaQuizContent karutaQuizContent = viewModel.karutaQuizContent.get();
             if (listener != null && karutaQuizContent != null && karutaQuizContent.quiz().result() != null) {
-                listener.onAnswered(karutaQuizContent.quiz().correctId(), karutaQuizContent.existNext());
+                listener.onAnswered(karutaQuizContent.correct(), karutaQuizContent.existNext());
             }
         }), viewModel.errorEvent.subscribe(v -> {
             if (listener != null) {
@@ -268,7 +268,7 @@ public class QuizFragment extends DaggerFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz);
+        void onAnswered(@NonNull Karuta karuta, boolean existNextQuiz);
 
         void onErrorQuiz();
     }

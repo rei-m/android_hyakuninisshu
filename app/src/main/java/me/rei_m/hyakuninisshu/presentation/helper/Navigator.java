@@ -19,12 +19,12 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.presentation.EntranceActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialEditActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.MaterialSingleActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.QuizMaterialActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
@@ -73,18 +73,19 @@ public class Navigator {
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialDetail(@NonNull KarutaIdentifier karutaId) {
-        Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, karutaId);
+    public void navigateToMaterialDetail(int position,
+                                         @NonNull ColorFilter colorFilter) {
+        Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, position, colorFilter);
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialSingle(@NonNull KarutaIdentifier karutaId) {
-        Intent intentToLaunch = MaterialSingleActivity.createIntent(activity, karutaId);
+    public void navigateToQuizMaterial() {
+        Intent intentToLaunch = QuizMaterialActivity.createIntent(activity);
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialEdit(@NonNull KarutaIdentifier karutaId) {
-        Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karutaId);
+    public void navigateToMaterialEdit(@NonNull Karuta karuta) {
+        Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karuta);
         activity.startActivity(intentToLaunch);
     }
 

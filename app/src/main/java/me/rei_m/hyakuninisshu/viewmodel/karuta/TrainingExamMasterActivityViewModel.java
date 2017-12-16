@@ -37,8 +37,11 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public TrainingExamMasterActivityViewModel create(@NonNull Class modelClass) {
-            return new TrainingExamMasterActivityViewModel(karutaTrainingModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(TrainingExamMasterActivityViewModel.class)) {
+                return (T) new TrainingExamMasterActivityViewModel(karutaTrainingModel);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 

@@ -15,13 +15,9 @@ package me.rei_m.hyakuninisshu.presentation.util;
 
 import android.content.Context;
 import android.databinding.BindingAdapter;
-import android.graphics.Color;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,13 +28,13 @@ import java.util.List;
 import java.util.Locale;
 
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
 import me.rei_m.hyakuninisshu.presentation.helper.GlideApp;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaView;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.view.VerticalSingleLineTextView;
-
-import static me.rei_m.hyakuninisshu.util.Constants.SPACE;
 
 public class DataBindingAttributeBinder {
 
@@ -78,6 +74,16 @@ public class DataBindingAttributeBinder {
         view.setResult(judgements);
     }
 
+    @BindingAdapter({"karuta"})
+    public static void setKaruta(@NonNull KarutaView view,
+                                 @Nullable Karuta karuta) {
+
+        if (karuta == null) {
+            return;
+        }
+        view.setKaruta(karuta);
+    }
+
     @BindingAdapter({"karutaSrc"})
     public static void setKarutaSrc(@NonNull ImageView view,
                                     @Nullable String resIdString) {
@@ -93,30 +99,6 @@ public class DataBindingAttributeBinder {
                 .load(resId)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(view);
-    }
-
-    @BindingAdapter({"textKamiNoKuKana", "kimariji"})
-    public static void setTextKamiNoKuKana(@NonNull TextView view,
-                                           @Nullable String kamiNoKu,
-                                           int kimariji) {
-        if (kamiNoKu == null || kimariji < 1) {
-            return;
-        }
-
-        int finallyKimariji = 0;
-        for (int i = 0; i < kamiNoKu.length() - 1; i++) {
-            if (kamiNoKu.substring(i, i + 1).equals(SPACE)) {
-                finallyKimariji++;
-            } else {
-                if (kimariji < i) {
-                    break;
-                }
-            }
-            finallyKimariji++;
-        }
-        SpannableStringBuilder ssb = new SpannableStringBuilder().append(kamiNoKu);
-        ssb.setSpan(new ForegroundColorSpan(Color.RED), 0, finallyKimariji - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        view.setText(ssb);
     }
 
     @BindingAdapter({"averageAnswerSec"})
@@ -136,6 +118,17 @@ public class DataBindingAttributeBinder {
 
         Context context = view.getContext().getApplicationContext();
         String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo);
+        view.setText(text);
+    }
+
+    @BindingAdapter({"karutaNo", "creator"})
+    public static void setKarutaNoAndCreator(@NonNull TextView view,
+                                             int karutaNo,
+                                             @NonNull String creator) {
+
+        Context context = view.getContext().getApplicationContext();
+
+        String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo) + " / " + creator;
         view.setText(text);
     }
 }

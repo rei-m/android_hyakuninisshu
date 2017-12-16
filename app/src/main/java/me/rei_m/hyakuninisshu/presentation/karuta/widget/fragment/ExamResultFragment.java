@@ -107,7 +107,9 @@ public class ExamResultFragment extends DaggerFragment {
             if (listener != null) {
                 listener.onFinishExam();
             }
-        }), binding.viewResult.onClickKarutaEvent.subscribe(navigator::navigateToMaterialSingle));
+        }), binding.viewResult.onClickKarutaEvent.subscribe(v -> {
+//            navigator.navigateToQuizMaterial()
+        }));
     }
 
     @Override

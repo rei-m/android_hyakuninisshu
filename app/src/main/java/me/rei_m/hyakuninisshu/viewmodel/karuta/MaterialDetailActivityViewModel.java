@@ -11,51 +11,52 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
+package me.rei_m.hyakuninisshu.viewmodel.karuta;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
-import android.databinding.ObservableField;
+import android.databinding.ObservableArrayList;
 import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 
-public class MaterialDetailFragmentViewModel extends ViewModel {
+public class MaterialDetailActivityViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
         private final KarutaModel karutaModel;
 
-        private final KarutaIdentifier karutaId;
+        private final ColorFilter colorFilter;
 
         public Factory(@NonNull KarutaModel karutaModel,
-                       @NonNull KarutaIdentifier karutaId) {
+                       @NonNull ColorFilter colorFilter) {
             this.karutaModel = karutaModel;
-            this.karutaId = karutaId;
+            this.colorFilter = colorFilter;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if (modelClass.isAssignableFrom(MaterialDetailFragmentViewModel.class)) {
-                return (T) new MaterialDetailFragmentViewModel(karutaModel, karutaId);
+            if (modelClass.isAssignableFrom(MaterialDetailActivityViewModel.class)) {
+                return (T) new MaterialDetailActivityViewModel(karutaModel, colorFilter);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
     }
 
-    public final ObservableField<Karuta> karuta = new ObservableField<>();
+    public final ObservableArrayList<Karuta> karutaList = new ObservableArrayList<>();
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel,
-                                           @NonNull KarutaIdentifier karutaId) {
+    public MaterialDetailActivityViewModel(@NonNull KarutaModel karutaModel,
+                                           @NonNull ColorFilter colorFilter) {
         disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
-            this.karuta.set(karutas.get(karutaId));
+            this.karutaList.clear();
+            this.karutaList.addAll(karutas.asList(colorFilter.value()));
         }));
         karutaModel.fetchKarutas();
     }

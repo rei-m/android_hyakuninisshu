@@ -58,17 +58,20 @@ public class ConfirmMaterialEditDialogFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public ConfirmMaterialEditDialogFragmentViewModel create(@NonNull Class modelClass) {
-            return new ConfirmMaterialEditDialogFragmentViewModel(firstPhraseKanji,
-                    firstPhraseKana,
-                    secondPhraseKanji,
-                    secondPhraseKana,
-                    thirdPhraseKanji,
-                    thirdPhraseKana,
-                    fourthPhraseKanji,
-                    fourthPhraseKana,
-                    fifthPhraseKanji,
-                    fifthPhraseKana);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(ConfirmMaterialEditDialogFragmentViewModel.class)) {
+                return (T) new ConfirmMaterialEditDialogFragmentViewModel(firstPhraseKanji,
+                        firstPhraseKana,
+                        secondPhraseKanji,
+                        secondPhraseKana,
+                        thirdPhraseKanji,
+                        thirdPhraseKana,
+                        fourthPhraseKanji,
+                        fourthPhraseKana,
+                        fifthPhraseKanji,
+                        fifthPhraseKana);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 

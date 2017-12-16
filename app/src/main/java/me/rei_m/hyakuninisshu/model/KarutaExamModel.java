@@ -24,6 +24,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
@@ -40,10 +41,7 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaExamModel {
 
-    private final PublishSubject<KarutaExam> karutaExamSubject = PublishSubject.create();
-    public final Observable<KarutaExam> karutaExam = karutaExamSubject;
-
-    private final PublishSubject<KarutaExam> recentKarutaExamSubject = PublishSubject.create();
+    private final BehaviorSubject<KarutaExam> recentKarutaExamSubject = BehaviorSubject.create();
     public final Observable<KarutaExam> recentKarutaExam = recentKarutaExamSubject;
 
     private final PublishSubject<Unit> startedEventSubject = PublishSubject.create();
@@ -65,18 +63,6 @@ public class KarutaExamModel {
         this.karutaRepository = karutaRepository;
         this.karutaQuizRepository = karutaQuizRepository;
         this.karutaExamRepository = karutaExamRepository;
-    }
-
-    /**
-     * 力試しを取得する.
-     *
-     * @param karutaExamIdentifier 力試しID
-     */
-    public void fetchKarutaExam(@NonNull KarutaExamIdentifier karutaExamIdentifier) {
-        karutaExamRepository.findBy(karutaExamIdentifier)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this.karutaExamSubject::onNext);
     }
 
     /**

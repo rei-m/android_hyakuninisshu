@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import me.rei_m.hyakuninisshu.domain.ValueObject;
@@ -20,7 +22,7 @@ import me.rei_m.hyakuninisshu.domain.ValueObject;
 /**
  * 歌の句.
  */
-public class Phrase implements ValueObject {
+public class Phrase implements ValueObject, Parcelable {
 
     private final String kana;
 
@@ -64,4 +66,33 @@ public class Phrase implements ValueObject {
                 ", kanji='" + kanji + '\'' +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.kana);
+        dest.writeString(this.kanji);
+    }
+
+    protected Phrase(Parcel in) {
+        this.kana = in.readString();
+        this.kanji = in.readString();
+    }
+
+    public static final Creator<Phrase> CREATOR = new Creator<Phrase>() {
+        @Override
+        public Phrase createFromParcel(Parcel source) {
+            return new Phrase(source);
+        }
+
+        @Override
+        public Phrase[] newArray(int size) {
+            return new Phrase[size];
+        }
+    };
 }

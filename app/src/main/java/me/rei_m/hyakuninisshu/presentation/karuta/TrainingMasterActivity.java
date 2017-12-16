@@ -39,7 +39,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
@@ -109,7 +109,6 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingMasterActivityViewModel.class);
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_master);
         binding.setViewModel(viewModel);
 
@@ -181,11 +180,17 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     }
 
     @Override
-    public void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    public void onAnswered(@NonNull Karuta karuta, boolean existNextQuiz) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(karutaId, existNextQuiz), QuizAnswerFragment.TAG)
+                .replace(R.id.content, QuizAnswerFragment.newInstance(karuta, existNextQuiz), QuizAnswerFragment.TAG)
                 .commit();
     }
 
@@ -241,7 +246,7 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     public void onDialogNegativeClick() {
 
     }
-    
+
     @ForActivity
     @dagger.Subcomponent(modules = {
             ActivityModule.class,

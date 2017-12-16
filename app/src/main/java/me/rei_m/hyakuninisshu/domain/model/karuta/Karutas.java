@@ -63,6 +63,10 @@ public class Karutas {
         }
     }
 
+    public Karuta get(@NonNull KarutaIdentifier karutaId) {
+        return this.values.get(ids.indexOf(karutaId));
+    }
+
     /**
      * 指定された歌のIDを元に問題を作成する.
      *

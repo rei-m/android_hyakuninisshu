@@ -57,12 +57,15 @@ public class TrainingMasterActivityViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public TrainingMasterActivityViewModel create(@NonNull Class modelClass) {
-            return new TrainingMasterActivityViewModel(karutaTrainingModel,
-                    trainingRangeFrom,
-                    trainingRangeTo,
-                    kimarijiFilter,
-                    colorFilter);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(TrainingMasterActivityViewModel.class)) {
+                return (T) new TrainingMasterActivityViewModel(karutaTrainingModel,
+                        trainingRangeFrom,
+                        trainingRangeTo,
+                        kimarijiFilter,
+                        colorFilter);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
