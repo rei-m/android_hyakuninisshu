@@ -57,12 +57,15 @@ public class TrainingMasterActivityViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public TrainingMasterActivityViewModel create(@NonNull Class modelClass) {
-            return new TrainingMasterActivityViewModel(karutaTrainingModel,
-                    trainingRangeFrom,
-                    trainingRangeTo,
-                    kimarijiFilter,
-                    colorFilter);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(TrainingMasterActivityViewModel.class)) {
+                return (T) new TrainingMasterActivityViewModel(karutaTrainingModel,
+                        trainingRangeFrom,
+                        trainingRangeTo,
+                        kimarijiFilter,
+                        colorFilter);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -78,7 +81,7 @@ public class TrainingMasterActivityViewModel extends ViewModel {
 
     private final KarutaTrainingModel karutaTrainingModel;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public TrainingMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel,
                                            @NonNull TrainingRangeFrom trainingRangeFrom,
@@ -86,7 +89,6 @@ public class TrainingMasterActivityViewModel extends ViewModel {
                                            @NonNull KimarijiFilter kimarijiFilter,
                                            @NonNull ColorFilter colorFilter) {
         this.karutaTrainingModel = karutaTrainingModel;
-        disposable = new CompositeDisposable();
         disposable.addAll(karutaTrainingModel.startedEvent.subscribe(v -> {
             isVisibleEmpty.set(false);
             isVisibleAd.set(false);
@@ -111,10 +113,7 @@ public class TrainingMasterActivityViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

@@ -13,28 +13,65 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter;
 
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
 
 public class MaterialDetailPagerAdapter extends FragmentStatePagerAdapter {
 
-    public MaterialDetailPagerAdapter(@NonNull FragmentManager fm) {
+    private final ObservableArrayList<Karuta> karutaList;
+
+    private final ObservableList.OnListChangedCallback<ObservableList<Karuta>> listChangedCallback = new ObservableList.OnListChangedCallback<ObservableList<Karuta>>() {
+        @Override
+        public void onChanged(ObservableList<Karuta> karutas) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList<Karuta> karutas, int i, int i1, int i2) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+    };
+
+    public MaterialDetailPagerAdapter(@NonNull FragmentManager fm,
+                                      @NonNull ObservableArrayList<Karuta> karutaList) {
         super(fm);
+        this.karutaList = karutaList;
+        this.karutaList.addOnListChangedCallback(listChangedCallback);
     }
 
     @Override
     public Fragment getItem(int position) {
-        return MaterialDetailFragment.newInstance(new KarutaIdentifier(position + 1));
+        return MaterialDetailFragment.newInstance(karutaList.get(position).identifier());
     }
 
     @Override
     public int getCount() {
-        return Karuta.NUMBER_OF_KARUTA;
+        return karutaList.size();
+    }
+
+    public void releaseCallback() {
+        karutaList.removeOnListChangedCallback(listChangedCallback);
     }
 }

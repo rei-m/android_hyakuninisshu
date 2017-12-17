@@ -40,8 +40,11 @@ public class ExamFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public ExamFragmentViewModel create(@NonNull Class modelClass) {
-            return new ExamFragmentViewModel(karutaExamModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(ExamFragmentViewModel.class)) {
+                return (T) new ExamFragmentViewModel(karutaExamModel);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -57,10 +60,9 @@ public class ExamFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> onClickStartTrainingEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickStartTrainingEvent = onClickStartTrainingEventSubject;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public ExamFragmentViewModel(@NonNull KarutaExamModel karutaExamModel) {
-        disposable = new CompositeDisposable();
         disposable.addAll(karutaExamModel.recentKarutaExam.subscribe(karutaExam -> {
             hasResult.set(true);
             score.set(karutaExam.result().score());
@@ -72,10 +74,7 @@ public class ExamFragmentViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

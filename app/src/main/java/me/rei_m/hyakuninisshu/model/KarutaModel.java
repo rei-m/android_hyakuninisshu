@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.model;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,11 +22,12 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 /**
@@ -36,8 +36,8 @@ import me.rei_m.hyakuninisshu.util.Unit;
 @Singleton
 public class KarutaModel {
 
-    private final PublishSubject<Karuta> karutaSubject = PublishSubject.create();
-    public final Observable<Karuta> karuta = karutaSubject;
+    private final BehaviorSubject<Karutas> karutasSubject = BehaviorSubject.create();
+    public final Observable<Karutas> karutas = karutasSubject;
 
     private final PublishSubject<Unit> editedEventSubject = PublishSubject.create();
     public final Observable<Unit> editedEvent = editedEventSubject;
@@ -53,15 +53,16 @@ public class KarutaModel {
     }
 
     /**
-     * 歌を取得する.
-     *
-     * @param karutaIdentifier 歌ID
+     * 歌コレクションを取得する.
      */
-    public void fetchKaruta(@NonNull KarutaIdentifier karutaIdentifier) {
-        karutaRepository.findBy(karutaIdentifier)
+    public void fetchKarutas() {
+        if (karutasSubject.hasValue()) {
+            return;
+        }
+        karutaRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaSubject::onNext, e -> errorEventSubject.onNext(Unit.INSTANCE));
+                .subscribe(karutasSubject::onNext);
     }
 
     /**
@@ -104,25 +105,12 @@ public class KarutaModel {
                         fifthPhraseKana
                 )
         );
-        karutaSingle.flatMap(karuta -> karutaRepository.store(karuta).andThen(Single.just(karuta)))
+        karutaSingle.flatMap(karuta -> karutaRepository.store(karuta).andThen(karutaRepository.list()))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karuta -> {
-                    this.karutaSubject.onNext(karuta);
+                .subscribe(karutas -> {
+                    this.karutasSubject.onNext(karutas);
                     this.editedEventSubject.onNext(Unit.INSTANCE);
                 }, e -> errorEventSubject.onNext(Unit.INSTANCE));
-    }
-
-    /**
-     * 歌コレクションを取得する.
-     *
-     * @param color 歌の色。指定された場合は色でしぼりこんだ歌を取得する
-     */
-    public void fetchKarutas(@Nullable Color color) {
-        karutaRepository.list().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(karutas -> {
-            for (Karuta karuta : karutas.asList(color)) {
-                this.karutaSubject.onNext(karuta);
-            }
-        }, e -> errorEventSubject.onNext(Unit.INSTANCE));
     }
 }

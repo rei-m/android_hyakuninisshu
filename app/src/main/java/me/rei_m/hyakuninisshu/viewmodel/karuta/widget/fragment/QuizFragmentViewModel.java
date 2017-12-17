@@ -62,8 +62,11 @@ public class QuizFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public QuizFragmentViewModel create(@NonNull Class modelClass) {
-            return new QuizFragmentViewModel(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(QuizFragmentViewModel.class)) {
+                return (T) new QuizFragmentViewModel(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -107,19 +110,12 @@ public class QuizFragmentViewModel extends ViewModel {
 
     private final KarutaQuizModel karutaQuizModel;
 
-    private CompositeDisposable disposable = null;
-
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public QuizFragmentViewModel(@NonNull KarutaQuizModel karutaQuizModel,
                                  @NonNull KarutaStyleFilter kamiNoKuStyle,
                                  @NonNull KarutaStyleFilter shimoNoKuStyle) {
         this.karutaQuizModel = karutaQuizModel;
-
-        disposable = new CompositeDisposable();
-        disposable.addAll(
-                karutaQuizModel.karutaQuizContent.subscribe(karutaQuizContent::set),
-                karutaQuizModel.errorEvent.subscribe(errorEventSubject::onNext)
-        );
         karutaQuizContent.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(android.databinding.Observable observable, int i) {
@@ -153,14 +149,15 @@ public class QuizFragmentViewModel extends ViewModel {
                 }
             }
         });
+        disposable.addAll(
+                karutaQuizModel.karutaQuizContent.subscribe(karutaQuizContent::set),
+                karutaQuizModel.errorEvent.subscribe(errorEventSubject::onNext)
+        );
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

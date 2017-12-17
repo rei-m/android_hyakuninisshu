@@ -27,7 +27,7 @@ import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.util.Unit;
 
-public class QuizResultFragmentViewModel extends ViewModel {
+public class TrainingResultFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
@@ -40,8 +40,11 @@ public class QuizResultFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public QuizResultFragmentViewModel create(@NonNull Class modelClass) {
-            return new QuizResultFragmentViewModel(karutaTrainingModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(TrainingResultFragmentViewModel.class)) {
+                return (T) new TrainingResultFragmentViewModel(karutaTrainingModel);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -57,10 +60,9 @@ public class QuizResultFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> onClickBackMenuEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickBackMenuEvent = onClickBackMenuEventSubject;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public QuizResultFragmentViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        disposable = new CompositeDisposable();
+    public TrainingResultFragmentViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
         disposable.addAll(karutaTrainingModel.result.subscribe(trainingResult -> {
             score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
             averageAnswerSec.set(trainingResult.averageAnswerSec());
@@ -71,10 +73,7 @@ public class QuizResultFragmentViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

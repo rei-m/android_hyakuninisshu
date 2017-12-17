@@ -24,7 +24,7 @@ android {
     }
 
     compileSdkVersion 27
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 16
@@ -76,9 +76,9 @@ dependencies {
     ext.retrofit_version = '2.1.0'
     ext.streamsupport_version = '1.5.2'
     ext.rxjava_version = '2.1.4'
-    ext.dagger_version = '2.11'
+    ext.dagger_version = '2.13'
     ext.leakcanary_version = '1.5.4'
-    ext.play_services_version = '11.6.0'
+    ext.play_services_version = '11.6.2'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:support-annotations:$android_support_lib_version"
@@ -117,7 +117,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.5.1'
     testImplementation 'org.robolectric:shadows-multidex:3.5.1'
-    testImplementation 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'org.mockito:mockito-core:2.12.0'
     testImplementation('com.android.support.test:runner:1.0.1') {
         exclude module: 'support-annotations'
     }
@@ -139,7 +139,7 @@ dependencies {
     androidTestImplementation('com.android.support.test:rules:1.0.1') {
         exclude module: 'support-annotations'
     }
-    androidTestImplementation 'org.mockito:mockito-core:2.10.0'
+    androidTestImplementation 'org.mockito:mockito-core:2.12.0'
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 

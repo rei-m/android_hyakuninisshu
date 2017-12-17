@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.widget.TextView;
 
 import io.reactivex.disposables.CompositeDisposable;
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.model.KarutaModel;
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
@@ -44,8 +45,11 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public MaterialDetailFragmentViewModel create(@NonNull Class modelClass) {
-            return new MaterialDetailFragmentViewModel(karutaModel, karutaId);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(MaterialDetailFragmentViewModel.class)) {
+                return (T) new MaterialDetailFragmentViewModel(karutaModel, karutaId);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -67,15 +71,12 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
 
     public final ObservableField<String> translation = new ObservableField<>();
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel,
                                            @NonNull KarutaIdentifier karutaId) {
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
-            if (!karuta.identifier().equals(karutaId)) {
-                return;
-            }
+        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
+            Karuta karuta = karutas.get(karutaId);
             karutaNo.set(karutaId.value());
             karutaImageNo.set(karuta.imageNo().value());
             creator.set(karuta.creator());
@@ -86,15 +87,12 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
             shimoNoKuKana.set(karuta.shimoNoKu().kana());
             translation.set(karuta.translation());
         }));
-        karutaModel.fetchKaruta(karutaId);
+        karutaModel.fetchKarutas();
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

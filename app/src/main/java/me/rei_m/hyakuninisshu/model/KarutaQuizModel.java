@@ -45,6 +45,9 @@ public class KarutaQuizModel {
     private final PublishSubject<KarutaQuizContent> karutaQuizContentSubject = PublishSubject.create();
     public final Observable<KarutaQuizContent> karutaQuizContent = karutaQuizContentSubject;
 
+    private final PublishSubject<Karuta> correctKarutaSubject = PublishSubject.create();
+    public final Observable<Karuta> correctKaruta = correctKarutaSubject;
+
     private final PublishSubject<Unit> errorEventSubject = PublishSubject.create();
     public final Observable<Unit> errorEvent = errorEventSubject;
 
@@ -84,6 +87,19 @@ public class KarutaQuizModel {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karutaQuizContentSubject::onNext, e -> errorEventSubject.onNext(Unit.INSTANCE));
+    }
+
+    /**
+     * 正解の歌を取得する.
+     *
+     * @param quizId 問題ID
+     */
+    public void fetchCorrect(@NonNull KarutaQuizIdentifier quizId) {
+        karutaQuizRepository.findBy(quizId)
+                .flatMap(karutaQuiz -> karutaRepository.findBy(karutaQuiz.correctId()))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(correctKarutaSubject::onNext);
     }
 
     private Single<KarutaQuizContent> createContent(@NonNull KarutaQuiz karutaQuiz) {
