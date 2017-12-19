@@ -28,41 +28,41 @@ import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.AnalyticsManager;
-import me.rei_m.hyakuninisshu.databinding.FragmentQuizResultBinding;
+import me.rei_m.hyakuninisshu.databinding.FragmentTrainingResultBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizResultFragmentViewModelModule;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingResultFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.TrainingResultFragmentViewModelModule;
 
-public class QuizResultFragment extends DaggerFragment {
+public class TrainingResultFragment extends DaggerFragment {
 
-    public static final String TAG = QuizResultFragment.class.getSimpleName();
+    public static final String TAG = TrainingResultFragment.class.getSimpleName();
 
-    public static QuizResultFragment newInstance() {
-        return new QuizResultFragment();
+    public static TrainingResultFragment newInstance() {
+        return new TrainingResultFragment();
     }
 
     @Inject
     AnalyticsManager analyticsManager;
 
     @Inject
-    QuizResultFragmentViewModel.Factory viewModelFactory;
+    TrainingResultFragmentViewModel.Factory viewModelFactory;
 
-    private QuizResultFragmentViewModel viewModel;
+    private TrainingResultFragmentViewModel viewModel;
 
-    private FragmentQuizResultBinding binding;
+    private FragmentTrainingResultBinding binding;
 
     private OnFragmentInteractionListener listener;
 
     private CompositeDisposable disposable;
 
-    public QuizResultFragment() {
+    public TrainingResultFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizResultFragmentViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingResultFragmentViewModel.class);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class QuizResultFragment extends DaggerFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentQuizResultBinding.inflate(inflater, container, false);
+        binding = FragmentTrainingResultBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }
@@ -148,7 +148,7 @@ public class QuizResultFragment extends DaggerFragment {
     public abstract class Module {
         @SuppressWarnings("unused")
         @ForFragment
-        @ContributesAndroidInjector(modules = QuizResultFragmentViewModelModule.class)
-        abstract QuizResultFragment contributeInjector();
+        @ContributesAndroidInjector(modules = TrainingResultFragmentViewModelModule.class)
+        abstract TrainingResultFragment contributeInjector();
     }
 }

@@ -73,8 +73,9 @@ public class Navigator {
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialDetail(@NonNull KarutaIdentifier karutaId) {
-        Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, karutaId);
+    public void navigateToMaterialDetail(int position,
+                                         @NonNull ColorFilter colorFilter) {
+        Intent intentToLaunch = MaterialDetailActivity.createIntent(activity, position, colorFilter);
         activity.startActivity(intentToLaunch);
     }
 

@@ -19,13 +19,13 @@ import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
 import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingResultFragmentViewModel;
 
 @Module
-public class QuizResultFragmentViewModelModule {
+public class TrainingResultFragmentViewModelModule {
     @Provides
     @ForFragment
-    QuizResultFragmentViewModel.Factory provideFactory(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        return new QuizResultFragmentViewModel.Factory(karutaTrainingModel);
+    TrainingResultFragmentViewModel.Factory provideFactory(@NonNull KarutaTrainingModel karutaTrainingModel) {
+        return new TrainingResultFragmentViewModel.Factory(karutaTrainingModel);
     }
 }

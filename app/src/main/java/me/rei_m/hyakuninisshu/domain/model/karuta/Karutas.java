@@ -64,6 +64,16 @@ public class Karutas {
     }
 
     /**
+     * 指定の歌を取得する.
+     *
+     * @param karutaId 歌ID
+     * @return 歌
+     */
+    public Karuta get(@NonNull KarutaIdentifier karutaId) {
+        return values.get(ids.indexOf(karutaId));
+    }
+
+    /**
      * 指定された歌のIDを元に問題を作成する.
      *
      * @param karutaIds 歌IDコレクション。渡されたIDが正解となる問題を作成する。

@@ -21,8 +21,8 @@ import android.view.View;
 import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 
 public class KarutaListItemViewModel {
 
@@ -38,7 +38,9 @@ public class KarutaListItemViewModel {
 
     private final Navigator navigator;
 
-    private KarutaIdentifier karutaIdentifier;
+    private int position = 0;
+
+    private ColorFilter colorFilter = ColorFilter.ALL;
 
     @Inject
     public KarutaListItemViewModel(@NonNull Navigator navigator) {
@@ -51,14 +53,18 @@ public class KarutaListItemViewModel {
         this.creator.set(karuta.creator());
         this.kamiNoKu.set(karuta.kamiNoKu().kanji());
         this.shimoNoKu.set(karuta.shimoNoKu().kanji());
+    }
 
-        this.karutaIdentifier = karuta.identifier();
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public void setColorFilter(@NonNull ColorFilter colorFilter) {
+        this.colorFilter = colorFilter;
     }
 
     @SuppressWarnings("unused")
     public void onItemClicked(View view) {
-        if (karutaIdentifier != null) {
-            navigator.navigateToMaterialDetail(karutaIdentifier);
-        }
+        navigator.navigateToMaterialDetail(position, colorFilter);
     }
 }

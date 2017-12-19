@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.karuta;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -43,17 +44,23 @@ import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialDetailPagerAdapter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.MaterialDetailActivityViewModel;
+import me.rei_m.hyakuninisshu.viewmodel.karuta.di.MaterialDetailActivityViewModelModule;
 
 public class MaterialDetailActivity extends DaggerAppCompatActivity {
 
-    private static final String ARG_KARUTA_ID = "karutaId";
+    private static final String ARG_LIST_POSITION = "listPosition";
+    private static final String ARG_COLOR_FILTER = "colorFilter";
 
     public static Intent createIntent(@NonNull Context context,
-                                      @NonNull KarutaIdentifier karutaId) {
+                                      int position,
+                                      @NonNull ColorFilter colorFilter) {
         Intent intent = new Intent(context, MaterialDetailActivity.class);
-        intent.putExtra(ARG_KARUTA_ID, karutaId);
+        intent.putExtra(ARG_LIST_POSITION, position);
+        intent.putExtra(ARG_COLOR_FILTER, colorFilter.ordinal());
         return intent;
     }
 
@@ -63,14 +70,21 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity {
     @Inject
     Navigator navigator;
 
+    @Inject
+    MaterialDetailActivityViewModel.Factory viewModelFactory;
+
     private ActivityMaterialDetailBinding binding;
+
+    private MaterialDetailActivityViewModel viewModel;
+
+    private MaterialDetailPagerAdapter adapter;
 
     private AdView adView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialDetailActivityViewModel.class);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail);
 
         setSupportActionBar(binding.toolbar);
@@ -80,10 +94,9 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        KarutaIdentifier initialDisplayKarutaId = getIntent().getParcelableExtra(ARG_KARUTA_ID);
-
-        binding.pager.setAdapter(new MaterialDetailPagerAdapter(getSupportFragmentManager()));
-        binding.pager.setCurrentItem(initialDisplayKarutaId.position());
+        adapter = new MaterialDetailPagerAdapter(getSupportFragmentManager(), viewModel.karutaList);
+        binding.pager.setAdapter(adapter);
+        binding.pager.setCurrentItem(getIntent().getIntExtra(ARG_LIST_POSITION, 0));
 
         adView = adViewFactory.create();
 
@@ -105,7 +118,11 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity {
         adView.destroy();
         adView = null;
 
+        adapter.releaseCallback();
+        adapter = null;
+
         adViewFactory = null;
+        viewModel = null;
         binding = null;
         super.onDestroy();
     }
@@ -135,7 +152,8 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity {
                 finish();
                 return true;
             case R.id.activity_material_detail_edit:
-                navigator.navigateToMaterialEdit(new KarutaIdentifier(binding.pager.getCurrentItem() + 1));
+                KarutaIdentifier karutaId = viewModel.karutaList.get(binding.pager.getCurrentItem()).identifier();
+                navigator.navigateToMaterialEdit(karutaId);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -144,6 +162,7 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity {
     @ForActivity
     @dagger.Subcomponent(modules = {
             ActivityModule.class,
+            MaterialDetailActivityViewModelModule.class,
             MaterialDetailFragment.Module.class
     })
     public interface Subcomponent extends AndroidInjector<MaterialDetailActivity> {
@@ -154,9 +173,15 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity {
             @SuppressWarnings("UnusedReturnValue")
             public abstract Builder activityModule(ActivityModule module);
 
+            @SuppressWarnings("UnusedReturnValue")
+            public abstract Builder viewModelModule(MaterialDetailActivityViewModelModule module);
+
             @Override
             public void seedInstance(MaterialDetailActivity instance) {
                 activityModule(new ActivityModule(instance));
+
+                ColorFilter colorFilter = ColorFilter.get(instance.getIntent().getIntExtra(ARG_COLOR_FILTER, ColorFilter.ALL.ordinal()));
+                viewModelModule(new MaterialDetailActivityViewModelModule(colorFilter));
             }
         }
     }

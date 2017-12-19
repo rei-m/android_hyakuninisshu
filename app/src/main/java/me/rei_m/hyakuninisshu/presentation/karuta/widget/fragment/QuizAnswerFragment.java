@@ -33,7 +33,7 @@ import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.QuizAnswerFragmentViewModelModule;
@@ -42,15 +42,15 @@ public class QuizAnswerFragment extends DaggerFragment {
 
     public static final String TAG = QuizAnswerFragment.class.getSimpleName();
 
-    private static final String ARG_KARUTA_ID = "karutaId";
+    private static final String ARG_QUIZ_ID = "quizId";
 
     private static final String ARG_EXIST_NEXT_QUIZ = "existNextQuiz";
 
-    public static QuizAnswerFragment newInstance(@NonNull KarutaIdentifier karutaId,
+    public static QuizAnswerFragment newInstance(@NonNull KarutaQuizIdentifier quizId,
                                                  boolean existNextQuiz) {
         QuizAnswerFragment fragment = new QuizAnswerFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_KARUTA_ID, karutaId);
+        args.putParcelable(ARG_QUIZ_ID, quizId);
         args.putBoolean(ARG_EXIST_NEXT_QUIZ, existNextQuiz);
         fragment.setArguments(args);
         return fragment;
@@ -148,10 +148,10 @@ public class QuizAnswerFragment extends DaggerFragment {
         super.onDetach();
     }
 
-    private KarutaIdentifier karutaIdentifier() throws IllegalArgumentException {
+    private KarutaQuizIdentifier karutaQuizId() throws IllegalArgumentException {
         Bundle args = getArguments();
         if (args != null) {
-            return args.getParcelable(ARG_KARUTA_ID);
+            return args.getParcelable(ARG_QUIZ_ID);
         }
         throw new IllegalArgumentException("argument is missing");
     }
@@ -184,7 +184,7 @@ public class QuizAnswerFragment extends DaggerFragment {
 
             @Override
             public void seedInstance(QuizAnswerFragment instance) {
-                viewModelModule(new QuizAnswerFragmentViewModelModule(instance.karutaIdentifier(), instance.existNextQuiz()));
+                viewModelModule(new QuizAnswerFragmentViewModelModule(instance.karutaQuizId(), instance.existNextQuiz()));
             }
         }
     }

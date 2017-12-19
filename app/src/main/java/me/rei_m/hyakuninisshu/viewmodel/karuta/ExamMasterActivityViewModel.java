@@ -38,8 +38,11 @@ public class ExamMasterActivityViewModel extends ViewModel {
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public ExamMasterActivityViewModel create(@NonNull Class modelClass) {
-            return new ExamMasterActivityViewModel(karutaExamModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(ExamMasterActivityViewModel.class)) {
+                return (T) new ExamMasterActivityViewModel(karutaExamModel);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -56,12 +59,11 @@ public class ExamMasterActivityViewModel extends ViewModel {
 
     private final KarutaExamModel karutaExamModel;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public ExamMasterActivityViewModel(@NonNull KarutaExamModel karutaExamModel) {
         this.karutaExamModel = karutaExamModel;
 
-        disposable = new CompositeDisposable();
         disposable.addAll(karutaExamModel.startedEvent.subscribe(v -> {
             isVisibleAd.set(false);
             startedExamEventSubject.onNext(Unit.INSTANCE);
@@ -82,10 +84,7 @@ public class ExamMasterActivityViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

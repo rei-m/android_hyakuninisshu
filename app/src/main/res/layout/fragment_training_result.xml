@@ -1,7 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.widget.fragment.QuizResultFragment">
+    tools:context=".presentation.karuta.widget.fragment.TrainingResultFragment">
 
     <data>
 
@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel" />
+            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingResultFragmentViewModel" />
     </data>
 
     <LinearLayout

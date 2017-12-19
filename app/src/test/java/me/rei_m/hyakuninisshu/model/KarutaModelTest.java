@@ -58,40 +58,23 @@ public class KarutaModelTest {
     }
 
     @Test
-    public void fetchKaruta() throws Exception {
-        KarutaIdentifier identifier = new KarutaIdentifier(1);
-        Karuta karuta = createKaruta(identifier);
-        when(karutaRepository.findBy(identifier)).thenReturn(Single.just(karuta));
-        TestObserver<Karuta> observer = TestObserver.create();
-
-        model.karuta.subscribe(observer);
-        model.fetchKaruta(identifier);
-        observer.assertValueCount(1);
-        observer.assertValue(karuta);
-    }
-
-    @Test
-    public void fetchKarutaWhenReceiveException() throws Exception {
-        KarutaIdentifier identifier = new KarutaIdentifier(1);
-        when(karutaRepository.findBy(identifier)).thenReturn(Single.error(new Exception()));
-        TestObserver<Unit> observer = TestObserver.create();
-
-        model.errorEvent.subscribe(observer);
-        model.fetchKaruta(identifier);
-        observer.assertValueCount(1);
-        observer.assertValue(Unit.INSTANCE);
-    }
-
-    @Test
     public void editKaruta() throws Exception {
         KarutaIdentifier identifier = new KarutaIdentifier(1);
         Karuta karuta = createKaruta(identifier);
         when(karutaRepository.findBy(identifier)).thenReturn(Single.just(karuta));
         when(karutaRepository.store(karuta)).thenReturn(Completable.complete());
-        TestObserver<Karuta> karutaObserver = TestObserver.create();
+        List<Karuta> karutaList = new ArrayList<>(Arrays.asList(
+                createKaruta(new KarutaIdentifier(1)),
+                createKaruta(new KarutaIdentifier(2)),
+                createKaruta(new KarutaIdentifier(3))
+        ));
+        Karutas karutas = new Karutas(karutaList);
+        when(karutaRepository.list()).thenReturn(Single.just(karutas));
+
+        TestObserver<Karutas> karutaObserver = TestObserver.create();
         TestObserver<Unit> editedEventObserver = TestObserver.create();
 
-        model.karuta.subscribe(karutaObserver);
+        model.karutas.subscribe(karutaObserver);
         model.editedEvent.subscribe(editedEventObserver);
 
         model.editKaruta(identifier,
@@ -107,7 +90,7 @@ public class KarutaModelTest {
                 "ご"
         );
         karutaObserver.assertValueCount(1);
-        karutaObserver.assertValue(karuta);
+        karutaObserver.assertValue(karutas);
         editedEventObserver.assertValueCount(1);
         editedEventObserver.assertValue(Unit.INSTANCE);
     }
@@ -142,27 +125,15 @@ public class KarutaModelTest {
                 createKaruta(new KarutaIdentifier(2)),
                 createKaruta(new KarutaIdentifier(3))
         ));
-        when(karutaRepository.list()).thenReturn(Single.just(new Karutas(karutaList)));
+        Karutas karutas = new Karutas(karutaList);
+        when(karutaRepository.list()).thenReturn(Single.just(karutas));
 
-        TestObserver<Karuta> observer = TestObserver.create();
+        TestObserver<Karutas> observer = TestObserver.create();
 
-        model.karuta.subscribe(observer);
-        model.fetchKarutas(Color.BLUE);
-        observer.assertValueAt(0, karutaList.get(0));
-        observer.assertValueAt(1, karutaList.get(1));
-        observer.assertValueAt(2, karutaList.get(2));
-    }
-
-    @Test
-    public void fetchKarutasWhenReceiveException() throws Exception {
-        when(karutaRepository.list()).thenReturn(Single.error(new Exception()));
-
-        TestObserver<Unit> observer = TestObserver.create();
-
-        model.errorEvent.subscribe(observer);
-        model.fetchKarutas(Color.BLUE);
+        model.karutas.subscribe(observer);
+        model.fetchKarutas();
         observer.assertValueCount(1);
-        observer.assertValue(Unit.INSTANCE);
+        observer.assertValue(karutas);
     }
 
     private static Karuta createKaruta(KarutaIdentifier identifier) {

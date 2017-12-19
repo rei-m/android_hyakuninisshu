@@ -39,7 +39,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
@@ -51,13 +51,13 @@ import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingResultFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.di.TrainingMasterActivityViewModelModule;
 
 public class TrainingMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        QuizResultFragment.OnFragmentInteractionListener,
+        TrainingResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
     private static final String ARG_TRAINING_RANGE_FROM = "trainingRangeFrom";
@@ -181,11 +181,11 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     }
 
     @Override
-    public void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
+    public void onAnswered(@NonNull KarutaQuizIdentifier quizId, boolean existNext) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(karutaId, existNextQuiz), QuizAnswerFragment.TAG)
+                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId, existNext), QuizAnswerFragment.TAG)
                 .commit();
     }
 
@@ -218,7 +218,7 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
+                .replace(R.id.content, TrainingResultFragment.newInstance(), TrainingResultFragment.TAG)
                 .commit();
     }
 
@@ -241,14 +241,14 @@ public class TrainingMasterActivity extends DaggerAppCompatActivity implements Q
     public void onDialogNegativeClick() {
 
     }
-    
+
     @ForActivity
     @dagger.Subcomponent(modules = {
             ActivityModule.class,
             TrainingMasterActivityViewModelModule.class,
             QuizFragment.Module.class,
             QuizAnswerFragment.Module.class,
-            QuizResultFragment.Module.class
+            TrainingResultFragment.Module.class
     })
     public interface Subcomponent extends AndroidInjector<TrainingMasterActivity> {
 

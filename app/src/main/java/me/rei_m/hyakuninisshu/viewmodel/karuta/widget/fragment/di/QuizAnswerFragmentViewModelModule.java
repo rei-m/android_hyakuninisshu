@@ -18,25 +18,26 @@ import android.support.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
+import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizAnswerFragmentViewModel;
 
 @Module
 public class QuizAnswerFragmentViewModelModule {
 
-    private final KarutaIdentifier karutaId;
+    private final KarutaQuizIdentifier quizId;
 
     private final boolean existNextQuiz;
 
-    public QuizAnswerFragmentViewModelModule(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
-        this.karutaId = karutaId;
+    public QuizAnswerFragmentViewModelModule(@NonNull KarutaQuizIdentifier quizId,
+                                             boolean existNextQuiz) {
+        this.quizId = quizId;
         this.existNextQuiz = existNextQuiz;
     }
 
     @Provides
     @ForFragment
-    QuizAnswerFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
-        return new QuizAnswerFragmentViewModel.Factory(karutaModel, karutaId, existNextQuiz);
+    QuizAnswerFragmentViewModel.Factory provideFactory(@NonNull KarutaQuizModel karutaQuizModel) {
+        return new QuizAnswerFragmentViewModel.Factory(karutaQuizModel, quizId, existNextQuiz);
     }
 }
