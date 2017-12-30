@@ -18,16 +18,13 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
-import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
 import me.rei_m.hyakuninisshu.store.TrainingStore;
-import me.rei_m.hyakuninisshu.util.Unit;
 
 public class TrainingMasterActivityViewModel extends ViewModel {
 
@@ -39,6 +36,7 @@ public class TrainingMasterActivityViewModel extends ViewModel {
         private final TrainingRangeTo trainingRangeTo;
         private final KimarijiFilter kimarijiFilter;
         private final ColorFilter colorFilter;
+        private boolean isStarted = false;
 
         public Factory(@NonNull TrainingStore trainingStore,
                        @NonNull TrainingActionDispatcher actionDispatcher,
@@ -54,6 +52,10 @@ public class TrainingMasterActivityViewModel extends ViewModel {
             this.colorFilter = colorFilter;
         }
 
+        public void setStarted(boolean started) {
+            isStarted = started;
+        }
+
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
@@ -64,7 +66,8 @@ public class TrainingMasterActivityViewModel extends ViewModel {
                         trainingRangeFrom,
                         trainingRangeTo,
                         kimarijiFilter,
-                        colorFilter);
+                        colorFilter,
+                        isStarted);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -74,11 +77,7 @@ public class TrainingMasterActivityViewModel extends ViewModel {
 
     public final ObservableBoolean isVisibleAd = new ObservableBoolean(true);
 
-    private final PublishSubject<Unit> startedTrainingEventSubject = PublishSubject.create();
-    public final Observable<Unit> startedTrainingEvent = startedTrainingEventSubject;
-
-    private final PublishSubject<Boolean> toggledAdEventSubject = PublishSubject.create();
-    public final Observable<Boolean> toggledAdEvent = toggledAdEventSubject;
+    public final ObservableBoolean isStarted = new ObservableBoolean(false);
 
     private final TrainingActionDispatcher actionDispatcher;
 
@@ -89,28 +88,28 @@ public class TrainingMasterActivityViewModel extends ViewModel {
                                            @NonNull TrainingRangeFrom trainingRangeFrom,
                                            @NonNull TrainingRangeTo trainingRangeTo,
                                            @NonNull KimarijiFilter kimarijiFilter,
-                                           @NonNull ColorFilter colorFilter) {
+                                           @NonNull ColorFilter colorFilter,
+                                           boolean isStarted) {
         this.actionDispatcher = actionDispatcher;
         disposable.addAll(trainingStore.startedEvent.subscribe(v -> {
             isVisibleEmpty.set(false);
             isVisibleAd.set(false);
-            startedTrainingEventSubject.onNext(Unit.INSTANCE);
+            this.isStarted.set(true);
         }), trainingStore.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
             isVisibleAd.set(true);
+            this.isStarted.set(false);
         }));
 
-        isVisibleAd.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(android.databinding.Observable observable, int i) {
-                toggledAdEventSubject.onNext(isVisibleAd.get());
-            }
-        });
-
-        actionDispatcher.start(trainingRangeFrom.identifier(),
-                trainingRangeTo.identifier(),
-                kimarijiFilter.value(),
-                colorFilter.value());
+        if (isStarted) {
+            isVisibleAd.set(false);
+            this.isStarted.set(true);
+        } else {
+            actionDispatcher.start(trainingRangeFrom.identifier(),
+                    trainingRangeTo.identifier(),
+                    kimarijiFilter.value(),
+                    colorFilter.value());
+        }
     }
 
     @Override

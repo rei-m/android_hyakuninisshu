@@ -18,6 +18,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -35,7 +36,6 @@ import dagger.android.ActivityKey;
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
 import dagger.multibindings.IntoMap;
-import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
@@ -57,6 +57,8 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         TrainingResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
 
+    private static final String KEY_IS_STARTED = "isStarted";
+
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, TrainingExamMasterActivity.class);
     }
@@ -73,11 +75,29 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
 
     private AdView adView;
 
-    private CompositeDisposable disposable;
+    private Observable.OnPropertyChangedCallback isStartedChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            if (viewModel.isStarted.get()) {
+                startTraining();
+            }
+        }
+    };
+
+    private Observable.OnPropertyChangedCallback isVisibleAdChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            adView.setVisibility((viewModel.isVisibleAd.get()) ? View.VISIBLE : View.GONE);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            viewModelFactory.setStarted(savedInstanceState.getBoolean(KEY_IS_STARTED, false));
+        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingExamMasterActivityViewModel.class);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_exam_master);
@@ -118,19 +138,14 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     @Override
     protected void onStart() {
         super.onStart();
-        disposable = new CompositeDisposable();
-        disposable.addAll(
-                viewModel.startedTrainingEvent.subscribe(v -> startTraining()),
-                viewModel.toggledAdEvent.subscribe(isVisible -> adView.setVisibility((isVisible) ? View.VISIBLE : View.GONE))
-        );
+        viewModel.isStarted.addOnPropertyChangedCallback(isStartedChangedCallback);
+        viewModel.isVisibleAd.addOnPropertyChangedCallback(isVisibleAdChangedCallback);
     }
 
     @Override
     protected void onStop() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        viewModel.isStarted.removeOnPropertyChangedCallback(isStartedChangedCallback);
+        viewModel.isVisibleAd.removeOnPropertyChangedCallback(isVisibleAdChangedCallback);
         super.onStop();
     }
 
@@ -144,6 +159,12 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     protected void onPause() {
         adView.pause();
         super.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_IS_STARTED, viewModel.isStarted.get());
     }
 
     @Override
