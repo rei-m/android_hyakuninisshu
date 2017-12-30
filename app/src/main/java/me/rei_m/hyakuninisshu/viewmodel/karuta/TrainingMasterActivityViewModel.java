@@ -119,6 +119,7 @@ public class TrainingMasterActivityViewModel extends ViewModel {
     }
 
     public void onRestartTraining() {
+        isStarted.set(false);
         actionDispatcher.restartForPractice();
     }
 }
