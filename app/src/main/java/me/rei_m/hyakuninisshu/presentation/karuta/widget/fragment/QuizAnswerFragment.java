@@ -44,14 +44,10 @@ public class QuizAnswerFragment extends DaggerFragment {
 
     private static final String ARG_QUIZ_ID = "quizId";
 
-    private static final String ARG_EXIST_NEXT_QUIZ = "existNextQuiz";
-
-    public static QuizAnswerFragment newInstance(@NonNull KarutaQuizIdentifier quizId,
-                                                 boolean existNextQuiz) {
+    public static QuizAnswerFragment newInstance(@NonNull KarutaQuizIdentifier quizId) {
         QuizAnswerFragment fragment = new QuizAnswerFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_QUIZ_ID, quizId);
-        args.putBoolean(ARG_EXIST_NEXT_QUIZ, existNextQuiz);
         fragment.setArguments(args);
         return fragment;
     }
@@ -104,7 +100,7 @@ public class QuizAnswerFragment extends DaggerFragment {
         super.onStart();
         disposable = new CompositeDisposable();
         disposable.addAll(viewModel.onClickAnswerEvent.subscribe(karutaIdentifier -> {
-            navigator.navigateToMaterialSingle(karutaIdentifier);
+            navigator.navigateToKaruta(karutaIdentifier);
         }), viewModel.onClickNextQuizEvent.subscribe(v -> {
             if (listener != null) {
                 listener.onClickGoToNext();
@@ -156,14 +152,6 @@ public class QuizAnswerFragment extends DaggerFragment {
         throw new IllegalArgumentException("argument is missing");
     }
 
-    private boolean existNextQuiz() throws IllegalArgumentException {
-        Bundle args = getArguments();
-        if (args != null) {
-            return args.getBoolean(ARG_EXIST_NEXT_QUIZ);
-        }
-        throw new IllegalArgumentException("argument is missing");
-    }
-
     public interface OnFragmentInteractionListener {
         void onClickGoToNext();
 
@@ -184,7 +172,7 @@ public class QuizAnswerFragment extends DaggerFragment {
 
             @Override
             public void seedInstance(QuizAnswerFragment instance) {
-                viewModelModule(new QuizAnswerFragmentViewModelModule(instance.karutaQuizId(), instance.existNextQuiz()));
+                viewModelModule(new QuizAnswerFragmentViewModelModule(instance.karutaQuizId()));
             }
         }
     }

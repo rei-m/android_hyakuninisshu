@@ -15,30 +15,25 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
-import android.content.Context;
-import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
-import android.widget.TextView;
 
 import io.reactivex.disposables.CompositeDisposable;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
-import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper;
+import me.rei_m.hyakuninisshu.store.MaterialStore;
 
 public class MaterialDetailFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaModel karutaModel;
+        private final MaterialStore materialStore;
 
         private final KarutaIdentifier karutaId;
 
-        public Factory(@NonNull KarutaModel karutaModel,
+        public Factory(@NonNull MaterialStore materialStore,
                        @NonNull KarutaIdentifier karutaId) {
-            this.karutaModel = karutaModel;
+            this.materialStore = materialStore;
             this.karutaId = karutaId;
         }
 
@@ -47,7 +42,7 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(MaterialDetailFragmentViewModel.class)) {
-                return (T) new MaterialDetailFragmentViewModel(karutaModel, karutaId);
+                return (T) new MaterialDetailFragmentViewModel(materialStore, karutaId);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -73,10 +68,9 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public MaterialDetailFragmentViewModel(@NonNull KarutaModel karutaModel,
+    public MaterialDetailFragmentViewModel(@NonNull MaterialStore materialStore,
                                            @NonNull KarutaIdentifier karutaId) {
-        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
-            Karuta karuta = karutas.get(karutaId);
+        disposable.addAll(materialStore.karuta(karutaId).subscribe(karuta -> {
             karutaNo.set(karutaId.value());
             karutaImageNo.set(karuta.imageNo().value());
             creator.set(karuta.creator());
@@ -87,23 +81,11 @@ public class MaterialDetailFragmentViewModel extends ViewModel {
             shimoNoKuKana.set(karuta.shimoNoKu().kana());
             translation.set(karuta.translation());
         }));
-        karutaModel.fetchKarutas();
     }
 
     @Override
     protected void onCleared() {
         disposable.dispose();
         super.onCleared();
-    }
-
-    @BindingAdapter({"karutaNo", "creator"})
-    public static void setKarutaNoAndCreator(@NonNull TextView view,
-                                             int karutaNo,
-                                             @NonNull String creator) {
-
-        Context context = view.getContext().getApplicationContext();
-
-        String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo) + " / " + creator;
-        view.setText(text);
     }
 }

@@ -18,7 +18,8 @@ import android.support.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher;
+import me.rei_m.hyakuninisshu.store.MaterialStore;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.MaterialDetailActivityViewModel;
 
@@ -33,7 +34,8 @@ public class MaterialDetailActivityViewModelModule {
 
     @Provides
     @ForActivity
-    MaterialDetailActivityViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
-        return new MaterialDetailActivityViewModel.Factory(karutaModel, colorFilter);
+    MaterialDetailActivityViewModel.Factory provideFactory(@NonNull MaterialStore materialStore,
+                                                           @NonNull MaterialActionDispatcher actionDispatcher) {
+        return new MaterialDetailActivityViewModel.Factory(materialStore, actionDispatcher, colorFilter);
     }
 }

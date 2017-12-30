@@ -25,36 +25,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda;
 import me.rei_m.hyakuninisshu.domain.model.quiz.YomiFuda;
-import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.presentation.helper.GlideApp;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.store.QuizStore;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class QuizFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaQuizModel karutaQuizModel;
-
+        private final QuizStore quizStore;
+        private final QuizActionDispatcher actionDispatcher;
         private final KarutaStyleFilter kamiNoKuStyle;
-
         private final KarutaStyleFilter shimoNoKuStyle;
 
-        public Factory(@NonNull KarutaQuizModel karutaQuizModel,
+        public Factory(@NonNull QuizStore quizStore,
+                       @NonNull QuizActionDispatcher actionDispatcher,
                        @NonNull KarutaStyleFilter kamiNoKuStyle,
                        @NonNull KarutaStyleFilter shimoNoKuStyle) {
-            this.karutaQuizModel = karutaQuizModel;
+            this.quizStore = quizStore;
+            this.actionDispatcher = actionDispatcher;
             this.kamiNoKuStyle = kamiNoKuStyle;
             this.shimoNoKuStyle = shimoNoKuStyle;
         }
@@ -64,7 +67,7 @@ public class QuizFragmentViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(QuizFragmentViewModel.class)) {
-                return (T) new QuizFragmentViewModel(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
+                return (T) new QuizFragmentViewModel(quizStore, actionDispatcher, kamiNoKuStyle, shimoNoKuStyle);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -108,14 +111,15 @@ public class QuizFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> errorEventSubject = PublishSubject.create();
     public final Observable<Unit> errorEvent = errorEventSubject;
 
-    private final KarutaQuizModel karutaQuizModel;
+    private final QuizActionDispatcher actionDispatcher;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public QuizFragmentViewModel(@NonNull KarutaQuizModel karutaQuizModel,
+    public QuizFragmentViewModel(@NonNull QuizStore quizStore,
+                                 @NonNull QuizActionDispatcher actionDispatcher,
                                  @NonNull KarutaStyleFilter kamiNoKuStyle,
                                  @NonNull KarutaStyleFilter shimoNoKuStyle) {
-        this.karutaQuizModel = karutaQuizModel;
+        this.actionDispatcher = actionDispatcher;
         karutaQuizContent.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(android.databinding.Observable observable, int i) {
@@ -150,8 +154,8 @@ public class QuizFragmentViewModel extends ViewModel {
             }
         });
         disposable.addAll(
-                karutaQuizModel.karutaQuizContent.subscribe(karutaQuizContent::set),
-                karutaQuizModel.errorEvent.subscribe(errorEventSubject::onNext)
+                quizStore.karutaQuizContent.subscribe(karutaQuizContent::set),
+                quizStore.error.subscribe(errorEventSubject::onNext)
         );
     }
 
@@ -163,7 +167,7 @@ public class QuizFragmentViewModel extends ViewModel {
 
     public void onResume() {
         if (karutaQuizContent.get() == null || karutaQuizContent.get().quiz().result() == null) {
-            karutaQuizModel.start();
+            actionDispatcher.start(new Date());
         }
     }
 
@@ -177,7 +181,7 @@ public class QuizFragmentViewModel extends ViewModel {
         if (karutaQuizContent.get() == null) {
             return;
         }
-        karutaQuizModel.answer(karutaQuizContent.get().quiz().identifier(), ChoiceNo.forValue(choiceNoValue));
+        actionDispatcher.answer(karutaQuizContent.get().quiz().identifier(), ChoiceNo.forValue(choiceNoValue), new Date());
     }
 
     public void onClickResult() {

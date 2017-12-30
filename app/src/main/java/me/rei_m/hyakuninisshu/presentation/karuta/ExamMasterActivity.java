@@ -153,11 +153,11 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     }
 
     @Override
-    public void onAnswered(@NonNull KarutaQuizIdentifier quizId, boolean existNext) {
+    public void onAnswered(@NonNull KarutaQuizIdentifier quizId) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId, existNext), QuizAnswerFragment.TAG)
+                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
                 .commit();
     }
 

@@ -21,8 +21,7 @@ import android.view.View;
 import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
-import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
 
 public class KarutaListItemViewModel {
 
@@ -36,15 +35,12 @@ public class KarutaListItemViewModel {
 
     public final ObservableField<String> shimoNoKu = new ObservableField<>("");
 
-    private final Navigator navigator;
-
     private int position = 0;
 
-    private ColorFilter colorFilter = ColorFilter.ALL;
+    private MaterialKarutaListAdapter.OnItemInteractionListener listener;
 
     @Inject
-    public KarutaListItemViewModel(@NonNull Navigator navigator) {
-        this.navigator = navigator;
+    public KarutaListItemViewModel() {
     }
 
     public void setKaruta(@NonNull Karuta karuta) {
@@ -59,12 +55,12 @@ public class KarutaListItemViewModel {
         this.position = position;
     }
 
-    public void setColorFilter(@NonNull ColorFilter colorFilter) {
-        this.colorFilter = colorFilter;
+    public void setListener(MaterialKarutaListAdapter.OnItemInteractionListener listener) {
+        this.listener = listener;
     }
 
     @SuppressWarnings("unused")
     public void onItemClicked(View view) {
-        navigator.navigateToMaterialDetail(position, colorFilter);
+        listener.onItemClicked(position);
     }
 }

@@ -21,17 +21,21 @@ import android.support.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
+import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher;
+import me.rei_m.hyakuninisshu.store.TrainingStore;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class TrainingExamMasterActivityViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaTrainingModel karutaTrainingModel;
+        private final TrainingStore trainingStore;
+        private final TrainingActionDispatcher actionDispatcher;
 
-        public Factory(@NonNull KarutaTrainingModel karutaTrainingModel) {
-            this.karutaTrainingModel = karutaTrainingModel;
+        public Factory(@NonNull TrainingStore trainingStore,
+                       @NonNull TrainingActionDispatcher actionDispatcher) {
+            this.trainingStore = trainingStore;
+            this.actionDispatcher = actionDispatcher;
         }
 
         @SuppressWarnings("unchecked")
@@ -39,7 +43,7 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(TrainingExamMasterActivityViewModel.class)) {
-                return (T) new TrainingExamMasterActivityViewModel(karutaTrainingModel);
+                return (T) new TrainingExamMasterActivityViewModel(trainingStore, actionDispatcher);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -55,17 +59,17 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
     private final PublishSubject<Boolean> toggledAdEventSubject = PublishSubject.create();
     public final Observable<Boolean> toggledAdEvent = toggledAdEventSubject;
 
-    private final KarutaTrainingModel karutaTrainingModel;
-
+    private final TrainingActionDispatcher actionDispatcher;
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public TrainingExamMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        this.karutaTrainingModel = karutaTrainingModel;
-        disposable.addAll(karutaTrainingModel.startedEvent.subscribe(v -> {
+    public TrainingExamMasterActivityViewModel(@NonNull TrainingStore trainingStore,
+                                               @NonNull TrainingActionDispatcher actionDispatcher) {
+        this.actionDispatcher = actionDispatcher;
+        disposable.addAll(trainingStore.startedEvent.subscribe(v -> {
             isVisibleEmpty.set(false);
             isVisibleAd.set(false);
             startedTrainingEventSubject.onNext(Unit.INSTANCE);
-        }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
+        }), trainingStore.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
             isVisibleAd.set(true);
         }));
@@ -77,7 +81,7 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
             }
         });
 
-        karutaTrainingModel.startForExam();
+        actionDispatcher.startForExam();
     }
 
     @Override
@@ -87,6 +91,6 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
     }
 
     public void onRestartTraining() {
-        karutaTrainingModel.restartForPractice();
+        actionDispatcher.restartForPractice();
     }
 }

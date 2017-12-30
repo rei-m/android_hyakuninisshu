@@ -15,7 +15,6 @@ package me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter;
 
 import android.content.Context;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,6 @@ import android.view.ViewGroup;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemViewModel;
 
 public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -35,7 +33,7 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
 
     private final ObservableArrayList<Karuta> karutaList;
 
-    private final ObservableField<ColorFilter> colorFilter;
+    private OnItemInteractionListener listener;
 
     private final Injector injector;
 
@@ -67,10 +65,10 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
     };
 
     public MaterialKarutaListAdapter(@NonNull ObservableArrayList<Karuta> karutaList,
-                                     @NonNull ObservableField<ColorFilter> colorFilter,
+                                     @NonNull OnItemInteractionListener listener,
                                      @NonNull Injector injector) {
         this.karutaList = karutaList;
-        this.colorFilter = colorFilter;
+        this.listener = listener;
         this.injector = injector;
 
         this.karutaList.addOnListChangedCallback(listChangedCallback);
@@ -108,7 +106,7 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             itemViewHolder.binding.getViewModel().setKaruta(karutaList.get(position));
             itemViewHolder.binding.getViewModel().setPosition(position);
-            itemViewHolder.binding.getViewModel().setColorFilter(colorFilter.get());
+            itemViewHolder.binding.getViewModel().setListener(listener);
             itemViewHolder.binding.executePendingBindings();
         }
     }
@@ -119,6 +117,7 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public void releaseCallback() {
+        listener = null;
         karutaList.removeOnListChangedCallback(listChangedCallback);
     }
 
@@ -133,6 +132,10 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
 
     public interface Injector {
         KarutaListItemViewModel karutaListItemViewModel();
+    }
+
+    public interface OnItemInteractionListener {
+        void onItemClicked(int position);
     }
 
     private static class ItemViewHolder extends RecyclerView.ViewHolder {

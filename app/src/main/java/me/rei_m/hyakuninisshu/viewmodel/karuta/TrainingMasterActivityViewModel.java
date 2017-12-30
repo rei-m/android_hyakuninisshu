@@ -21,33 +21,33 @@ import android.support.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
+import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
+import me.rei_m.hyakuninisshu.store.TrainingStore;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class TrainingMasterActivityViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaTrainingModel karutaTrainingModel;
-
+        private final TrainingStore trainingStore;
+        private final TrainingActionDispatcher actionDispatcher;
         private final TrainingRangeFrom trainingRangeFrom;
-
         private final TrainingRangeTo trainingRangeTo;
-
         private final KimarijiFilter kimarijiFilter;
-
         private final ColorFilter colorFilter;
 
-        public Factory(@NonNull KarutaTrainingModel karutaTrainingModel,
+        public Factory(@NonNull TrainingStore trainingStore,
+                       @NonNull TrainingActionDispatcher actionDispatcher,
                        @NonNull TrainingRangeFrom trainingRangeFrom,
                        @NonNull TrainingRangeTo trainingRangeTo,
                        @NonNull KimarijiFilter kimarijiFilter,
                        @NonNull ColorFilter colorFilter) {
-            this.karutaTrainingModel = karutaTrainingModel;
+            this.trainingStore = trainingStore;
+            this.actionDispatcher = actionDispatcher;
             this.trainingRangeFrom = trainingRangeFrom;
             this.trainingRangeTo = trainingRangeTo;
             this.kimarijiFilter = kimarijiFilter;
@@ -59,7 +59,8 @@ public class TrainingMasterActivityViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(TrainingMasterActivityViewModel.class)) {
-                return (T) new TrainingMasterActivityViewModel(karutaTrainingModel,
+                return (T) new TrainingMasterActivityViewModel(trainingStore,
+                        actionDispatcher,
                         trainingRangeFrom,
                         trainingRangeTo,
                         kimarijiFilter,
@@ -79,21 +80,22 @@ public class TrainingMasterActivityViewModel extends ViewModel {
     private final PublishSubject<Boolean> toggledAdEventSubject = PublishSubject.create();
     public final Observable<Boolean> toggledAdEvent = toggledAdEventSubject;
 
-    private final KarutaTrainingModel karutaTrainingModel;
+    private final TrainingActionDispatcher actionDispatcher;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public TrainingMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel,
+    public TrainingMasterActivityViewModel(@NonNull TrainingStore trainingStore,
+                                           @NonNull TrainingActionDispatcher actionDispatcher,
                                            @NonNull TrainingRangeFrom trainingRangeFrom,
                                            @NonNull TrainingRangeTo trainingRangeTo,
                                            @NonNull KimarijiFilter kimarijiFilter,
                                            @NonNull ColorFilter colorFilter) {
-        this.karutaTrainingModel = karutaTrainingModel;
-        disposable.addAll(karutaTrainingModel.startedEvent.subscribe(v -> {
+        this.actionDispatcher = actionDispatcher;
+        disposable.addAll(trainingStore.startedEvent.subscribe(v -> {
             isVisibleEmpty.set(false);
             isVisibleAd.set(false);
             startedTrainingEventSubject.onNext(Unit.INSTANCE);
-        }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
+        }), trainingStore.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
             isVisibleAd.set(true);
         }));
@@ -105,7 +107,7 @@ public class TrainingMasterActivityViewModel extends ViewModel {
             }
         });
 
-        karutaTrainingModel.start(trainingRangeFrom.identifier(),
+        actionDispatcher.start(trainingRangeFrom.identifier(),
                 trainingRangeTo.identifier(),
                 kimarijiFilter.value(),
                 colorFilter.value());
@@ -118,6 +120,6 @@ public class TrainingMasterActivityViewModel extends ViewModel {
     }
 
     public void onRestartTraining() {
-        karutaTrainingModel.restartForPractice();
+        actionDispatcher.restartForPractice();
     }
 }

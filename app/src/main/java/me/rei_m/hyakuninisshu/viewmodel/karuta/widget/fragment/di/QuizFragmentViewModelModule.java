@@ -17,9 +17,10 @@ import android.support.annotation.NonNull;
 
 import dagger.Module;
 import dagger.Provides;
+import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.model.KarutaQuizModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.store.QuizStore;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizFragmentViewModel;
 
 @Module
@@ -37,7 +38,8 @@ public class QuizFragmentViewModelModule {
 
     @Provides
     @ForFragment
-    QuizFragmentViewModel.Factory provideFactory(@NonNull KarutaQuizModel karutaQuizModel) {
-        return new QuizFragmentViewModel.Factory(karutaQuizModel, kamiNoKuStyle, shimoNoKuStyle);
+    QuizFragmentViewModel.Factory provideFactory(@NonNull QuizStore quizStore,
+                                                 @NonNull QuizActionDispatcher actionDispatcher) {
+        return new QuizFragmentViewModel.Factory(quizStore, actionDispatcher, kamiNoKuStyle, shimoNoKuStyle);
     }
 }

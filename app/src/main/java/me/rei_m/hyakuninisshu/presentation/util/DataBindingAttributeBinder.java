@@ -138,4 +138,15 @@ public class DataBindingAttributeBinder {
         String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo);
         view.setText(text);
     }
+
+    @BindingAdapter({"karutaNo", "creator"})
+    public static void setKarutaNoAndCreator(@NonNull TextView view,
+                                             int karutaNo,
+                                             @NonNull String creator) {
+
+        Context context = view.getContext().getApplicationContext();
+
+        String text = KarutaDisplayHelper.convertNumberToString(context, karutaNo) + " / " + creator;
+        view.setText(text);
+    }
 }
