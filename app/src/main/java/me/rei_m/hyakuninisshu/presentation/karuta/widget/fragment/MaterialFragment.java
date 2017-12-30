@@ -39,7 +39,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.di.KarutaListItemV
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di.MaterialFragmentViewModelModule;
 
-public class MaterialFragment extends DaggerFragment {
+public class MaterialFragment extends DaggerFragment implements MaterialKarutaListAdapter.OnItemInteractionListener {
 
     public static final String TAG = MaterialFragment.class.getSimpleName();
 
@@ -91,7 +91,7 @@ public class MaterialFragment extends DaggerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMaterialBinding.inflate(inflater, container, false);
         binding.setViewModel(viewModel);
-        adapter = new MaterialKarutaListAdapter(viewModel.karutaList, viewModel.colorFilter, adapterItemInjector);
+        adapter = new MaterialKarutaListAdapter(viewModel.karutaList, this, adapterItemInjector);
         binding.recyclerKarutaList.setAdapter(adapter);
         binding.recyclerKarutaList.addItemDecoration(new DividerItemDecoration(inflater.getContext(), DividerItemDecoration.VERTICAL));
         return binding.getRoot();
@@ -136,6 +136,11 @@ public class MaterialFragment extends DaggerFragment {
                 return false;
             });
         }
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        navigator.navigateToMaterialDetail(position, viewModel.colorFilter.get());
     }
 
     @dagger.Module

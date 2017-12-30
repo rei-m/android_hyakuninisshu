@@ -13,6 +13,9 @@
 - 開発言語 : Java
 - min sdk : 18
 
+## Structure
+- MVVM + Fluxな構成になっています。が、仕様に対して過剰な設計です。個人の設計の遊び場としても作っているのであまり参考にはしない方がいいと思います。
+
 ## Licence
 
 [Apache License 2.0](LICENCE.txt)

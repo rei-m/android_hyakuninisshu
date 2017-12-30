@@ -25,10 +25,11 @@ import dagger.android.support.DaggerAppCompatActivity;
 import dagger.multibindings.IntoMap;
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
+import me.rei_m.hyakuninisshu.action.application.ApplicationActionDispatcher;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.model.ApplicationModel;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.store.ApplicationStore;
 
 public class SplashActivity extends DaggerAppCompatActivity {
 
@@ -36,7 +37,10 @@ public class SplashActivity extends DaggerAppCompatActivity {
     Navigator navigator;
 
     @Inject
-    ApplicationModel applicationModel;
+    ApplicationStore applicationStore;
+
+    @Inject
+    ApplicationActionDispatcher actionDispatcher;
 
     private CompositeDisposable disposable;
 
@@ -49,7 +53,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
     @Override
     protected void onDestroy() {
         navigator = null;
-        applicationModel = null;
+        applicationStore = null;
         super.onDestroy();
     }
 
@@ -57,7 +61,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
     protected void onStart() {
         super.onStart();
         disposable = new CompositeDisposable();
-        disposable.add(applicationModel.readyEvent.subscribe(v -> {
+        disposable.add(applicationStore.readyEvent.subscribe(v -> {
             navigator.navigateToEntrance();
             finish();
         }));
@@ -75,7 +79,7 @@ public class SplashActivity extends DaggerAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        applicationModel.start();
+        actionDispatcher.start();
     }
 
     @ForActivity

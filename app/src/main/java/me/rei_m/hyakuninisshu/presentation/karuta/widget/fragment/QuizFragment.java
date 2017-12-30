@@ -145,7 +145,7 @@ public class QuizFragment extends DaggerFragment {
         }), viewModel.onClickResultEvent.subscribe(v -> {
             KarutaQuizContent karutaQuizContent = viewModel.karutaQuizContent.get();
             if (listener != null && karutaQuizContent != null && karutaQuizContent.quiz().result() != null) {
-                listener.onAnswered(karutaQuizContent.quiz().identifier(), karutaQuizContent.existNext());
+                listener.onAnswered(karutaQuizContent.quiz().identifier());
             }
         }), viewModel.errorEvent.subscribe(v -> {
             if (listener != null) {
@@ -268,7 +268,7 @@ public class QuizFragment extends DaggerFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onAnswered(@NonNull KarutaQuizIdentifier quizId, boolean existNext);
+        void onAnswered(@NonNull KarutaQuizIdentifier quizId);
 
         void onErrorQuiz();
     }

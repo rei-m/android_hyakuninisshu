@@ -23,6 +23,6 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemView
 public class KarutaListItemViewModelModule {
     @Provides
     MaterialKarutaListAdapter.Injector provideMaterialKarutaListAdapterInjector(Navigator navigator) {
-        return () -> new KarutaListItemViewModel(navigator);
+        return KarutaListItemViewModel::new;
     }
 }

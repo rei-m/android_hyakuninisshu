@@ -53,6 +53,7 @@ import me.rei_m.hyakuninisshu.viewmodel.karuta.di.MaterialDetailActivityViewMode
 public class MaterialDetailActivity extends DaggerAppCompatActivity {
 
     private static final String ARG_LIST_POSITION = "listPosition";
+
     private static final String ARG_COLOR_FILTER = "colorFilter";
 
     public static Intent createIntent(@NonNull Context context,
@@ -179,8 +180,7 @@ public class MaterialDetailActivity extends DaggerAppCompatActivity {
             @Override
             public void seedInstance(MaterialDetailActivity instance) {
                 activityModule(new ActivityModule(instance));
-
-                ColorFilter colorFilter = ColorFilter.get(instance.getIntent().getIntExtra(ARG_COLOR_FILTER, ColorFilter.ALL.ordinal()));
+                ColorFilter colorFilter = ColorFilter.get(instance.getIntent().getIntExtra(ARG_COLOR_FILTER, 0));
                 viewModelModule(new MaterialDetailActivityViewModelModule(colorFilter));
             }
         }

@@ -20,20 +20,23 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher;
+import me.rei_m.hyakuninisshu.store.MaterialStore;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 
 public class MaterialDetailActivityViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaModel karutaModel;
-
+        private final MaterialStore materialStore;
+        private final MaterialActionDispatcher actionDispatcher;
         private final ColorFilter colorFilter;
 
-        public Factory(@NonNull KarutaModel karutaModel,
+        public Factory(@NonNull MaterialStore materialStore,
+                       @NonNull MaterialActionDispatcher actionDispatcher,
                        @NonNull ColorFilter colorFilter) {
-            this.karutaModel = karutaModel;
+            this.materialStore = materialStore;
+            this.actionDispatcher = actionDispatcher;
             this.colorFilter = colorFilter;
         }
 
@@ -42,7 +45,7 @@ public class MaterialDetailActivityViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(MaterialDetailActivityViewModel.class)) {
-                return (T) new MaterialDetailActivityViewModel(karutaModel, colorFilter);
+                return (T) new MaterialDetailActivityViewModel(materialStore, actionDispatcher, colorFilter);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -52,13 +55,15 @@ public class MaterialDetailActivityViewModel extends ViewModel {
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public MaterialDetailActivityViewModel(@NonNull KarutaModel karutaModel,
+    public MaterialDetailActivityViewModel(@NonNull MaterialStore materialStore,
+                                           @NonNull MaterialActionDispatcher actionDispatcher,
                                            @NonNull ColorFilter colorFilter) {
-        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
+        disposable.addAll(materialStore.karutaList.subscribe(karutaList -> {
             this.karutaList.clear();
-            this.karutaList.addAll(karutas.asList(colorFilter.value()));
+            this.karutaList.addAll(karutaList);
         }));
-        karutaModel.fetchKarutas();
+
+        actionDispatcher.fetch(colorFilter);
     }
 
     @Override

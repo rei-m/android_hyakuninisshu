@@ -24,17 +24,17 @@ import android.view.View;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
+import me.rei_m.hyakuninisshu.action.karuta.KarutaActionDispatcher;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.store.KarutaStore;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class MaterialEditFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaModel karutaModel;
-
+        private final KarutaStore karutaStore;
+        private final KarutaActionDispatcher actionDispatcher;
         private final KarutaIdentifier karutaId;
 
         private String firstPhraseKanji;
@@ -48,9 +48,11 @@ public class MaterialEditFragmentViewModel extends ViewModel {
         private String fifthPhraseKanji;
         private String fifthPhraseKana;
 
-        public Factory(@NonNull KarutaModel karutaModel,
+        public Factory(@NonNull KarutaStore karutaStore,
+                       @NonNull KarutaActionDispatcher actionDispatcher,
                        @NonNull KarutaIdentifier karutaId) {
-            this.karutaModel = karutaModel;
+            this.karutaStore = karutaStore;
+            this.actionDispatcher = actionDispatcher;
             this.karutaId = karutaId;
         }
 
@@ -100,7 +102,8 @@ public class MaterialEditFragmentViewModel extends ViewModel {
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(MaterialEditFragmentViewModel.class)) {
                 return (T) new MaterialEditFragmentViewModel(
-                        karutaModel,
+                        karutaStore,
+                        actionDispatcher,
                         karutaId,
                         firstPhraseKanji,
                         firstPhraseKana,
@@ -153,13 +156,14 @@ public class MaterialEditFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> onUpdateMaterialEventSubject = PublishSubject.create();
     public final Observable<Unit> onUpdateMaterialEvent = onUpdateMaterialEventSubject;
 
-    private final KarutaModel karutaModel;
+    private final KarutaActionDispatcher actionDispatcher;
 
     private final KarutaIdentifier karutaId;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public MaterialEditFragmentViewModel(@NonNull KarutaModel karutaModel,
+    public MaterialEditFragmentViewModel(@NonNull KarutaStore karutaStore,
+                                         @NonNull KarutaActionDispatcher actionDispatcher,
                                          @NonNull KarutaIdentifier karutaId,
                                          @Nullable String firstPhraseKanji,
                                          @Nullable String firstPhraseKana,
@@ -172,10 +176,9 @@ public class MaterialEditFragmentViewModel extends ViewModel {
                                          @Nullable String fifthPhraseKanji,
                                          @Nullable String fifthPhraseKana) {
 
-        this.karutaModel = karutaModel;
+        this.actionDispatcher = actionDispatcher;
         this.karutaId = karutaId;
-        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
-            Karuta karuta = karutas.get(karutaId);
+        disposable.addAll(karutaStore.karuta.subscribe(karuta -> {
             this.karutaNo.set(karuta.identifier().value());
             this.creator.set(karuta.creator());
             this.kimariji.set(karuta.kimariji().value());
@@ -229,8 +232,9 @@ public class MaterialEditFragmentViewModel extends ViewModel {
             } else {
                 this.fifthPhraseKana.set(fifthPhraseKana);
             }
-        }), karutaModel.editedEvent.subscribe(onUpdateMaterialEventSubject::onNext));
-        karutaModel.fetchKarutas();
+        }), karutaStore.editedEvent.subscribe(onUpdateMaterialEventSubject::onNext));
+
+        actionDispatcher.fetch(karutaId);
     }
 
     @Override
@@ -258,7 +262,7 @@ public class MaterialEditFragmentViewModel extends ViewModel {
     }
 
     public void onClickDialogPositive() {
-        karutaModel.editKaruta(karutaId,
+        actionDispatcher.edit(karutaId,
                 firstPhraseKanji.get(),
                 firstPhraseKana.get(),
                 secondPhraseKanji.get(),

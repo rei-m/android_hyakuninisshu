@@ -55,7 +55,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.karuta.MaterialSingleActivity"
+            android:name=".presentation.karuta.KarutaActivity"
             android:label="@string/function_material"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

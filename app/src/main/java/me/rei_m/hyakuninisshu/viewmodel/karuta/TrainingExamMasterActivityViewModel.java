@@ -18,20 +18,26 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
-import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.util.Unit;
+import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher;
+import me.rei_m.hyakuninisshu.store.TrainingStore;
 
 public class TrainingExamMasterActivityViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaTrainingModel karutaTrainingModel;
+        private final TrainingStore trainingStore;
+        private final TrainingActionDispatcher actionDispatcher;
+        private boolean isStarted = false;
 
-        public Factory(@NonNull KarutaTrainingModel karutaTrainingModel) {
-            this.karutaTrainingModel = karutaTrainingModel;
+        public Factory(@NonNull TrainingStore trainingStore,
+                       @NonNull TrainingActionDispatcher actionDispatcher) {
+            this.trainingStore = trainingStore;
+            this.actionDispatcher = actionDispatcher;
+        }
+
+        public void setStarted(boolean started) {
+            isStarted = started;
         }
 
         @SuppressWarnings("unchecked")
@@ -39,7 +45,7 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(TrainingExamMasterActivityViewModel.class)) {
-                return (T) new TrainingExamMasterActivityViewModel(karutaTrainingModel);
+                return (T) new TrainingExamMasterActivityViewModel(trainingStore, actionDispatcher, isStarted);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -49,35 +55,31 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
 
     public final ObservableBoolean isVisibleAd = new ObservableBoolean(true);
 
-    private final PublishSubject<Unit> startedTrainingEventSubject = PublishSubject.create();
-    public final Observable<Unit> startedTrainingEvent = startedTrainingEventSubject;
+    public final ObservableBoolean isStarted = new ObservableBoolean(false);
 
-    private final PublishSubject<Boolean> toggledAdEventSubject = PublishSubject.create();
-    public final Observable<Boolean> toggledAdEvent = toggledAdEventSubject;
-
-    private final KarutaTrainingModel karutaTrainingModel;
-
+    private final TrainingActionDispatcher actionDispatcher;
     private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public TrainingExamMasterActivityViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        this.karutaTrainingModel = karutaTrainingModel;
-        disposable.addAll(karutaTrainingModel.startedEvent.subscribe(v -> {
+    public TrainingExamMasterActivityViewModel(@NonNull TrainingStore trainingStore,
+                                               @NonNull TrainingActionDispatcher actionDispatcher,
+                                               boolean isStarted) {
+        this.actionDispatcher = actionDispatcher;
+        disposable.addAll(trainingStore.startedEvent.subscribe(v -> {
             isVisibleEmpty.set(false);
             isVisibleAd.set(false);
-            startedTrainingEventSubject.onNext(Unit.INSTANCE);
-        }), karutaTrainingModel.notFoundErrorEvent.subscribe(v -> {
+            this.isStarted.set(true);
+        }), trainingStore.notFoundErrorEvent.subscribe(v -> {
             isVisibleEmpty.set(true);
             isVisibleAd.set(true);
+            this.isStarted.set(false);
         }));
 
-        isVisibleAd.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(android.databinding.Observable observable, int i) {
-                toggledAdEventSubject.onNext(isVisibleAd.get());
-            }
-        });
-
-        karutaTrainingModel.startForExam();
+        if (isStarted) {
+            isVisibleAd.set(false);
+            this.isStarted.set(true);
+        } else {
+            actionDispatcher.startForExam();
+        }
     }
 
     @Override
@@ -87,6 +89,6 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
     }
 
     public void onRestartTraining() {
-        karutaTrainingModel.restartForPractice();
+        actionDispatcher.restartForPractice();
     }
 }

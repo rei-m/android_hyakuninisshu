@@ -22,20 +22,23 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher;
+import me.rei_m.hyakuninisshu.store.MaterialStore;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 
 public class MaterialFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaModel karutaModel;
+        private final MaterialStore materialStore;
+        private final MaterialActionDispatcher actionDispatcher;
 
         private ColorFilter colorFilter = ColorFilter.ALL;
 
-        public Factory(@NonNull KarutaModel karutaModel) {
-            this.karutaModel = karutaModel;
+        public Factory(@NonNull MaterialStore materialStore,
+                       @NonNull MaterialActionDispatcher actionDispatcher) {
+            this.materialStore = materialStore;
+            this.actionDispatcher = actionDispatcher;
         }
 
         public void setColorFilter(@NonNull ColorFilter colorFilter) {
@@ -47,7 +50,7 @@ public class MaterialFragmentViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(MaterialFragmentViewModel.class)) {
-                return (T) new MaterialFragmentViewModel(karutaModel, colorFilter);
+                return (T) new MaterialFragmentViewModel(materialStore, actionDispatcher, colorFilter);
             }
             throw new IllegalArgumentException("Unknown class name");
         }
@@ -57,35 +60,29 @@ public class MaterialFragmentViewModel extends ViewModel {
 
     public final ObservableField<ColorFilter> colorFilter;
 
-    private final KarutaModel karutaModel;
-
-    private Karutas karutas;
+    private final MaterialActionDispatcher actionDispatcher;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
 
     private final Observable.OnPropertyChangedCallback colorFilterChangedCallback = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable observable, int i) {
-            if (karutas == null) {
-                karutaModel.fetchKarutas();
-            } else {
-                karutaList.clear();
-                karutaList.addAll(karutas.asList(colorFilter.get().value()));
-            }
+            actionDispatcher.fetch(colorFilter.get());
         }
     };
 
-    public MaterialFragmentViewModel(@NonNull KarutaModel karutaModel,
+    public MaterialFragmentViewModel(@NonNull MaterialStore materialStore,
+                                     @NonNull MaterialActionDispatcher actionDispatcher,
                                      @NonNull ColorFilter colorFilter) {
-        this.karutaModel = karutaModel;
+        this.actionDispatcher = actionDispatcher;
         this.colorFilter = new ObservableField<>(colorFilter);
         this.colorFilter.addOnPropertyChangedCallback(colorFilterChangedCallback);
-        disposable.addAll(karutaModel.karutas.subscribe(karutas -> {
-            this.karutas = karutas;
+        disposable.addAll(materialStore.karutaList.subscribe(karutaList -> {
             this.karutaList.clear();
-            this.karutaList.addAll(karutas.asList(MaterialFragmentViewModel.this.colorFilter.get().value()));
+            this.karutaList.addAll(karutaList);
         }));
-        karutaModel.fetchKarutas();
+
+        actionDispatcher.fetch(colorFilter);
     }
 
     @Override

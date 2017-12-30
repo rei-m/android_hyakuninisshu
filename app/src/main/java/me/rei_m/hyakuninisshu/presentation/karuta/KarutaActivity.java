@@ -34,21 +34,21 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
 import dagger.multibindings.IntoMap;
 import me.rei_m.hyakuninisshu.R;
-import me.rei_m.hyakuninisshu.databinding.ActivityMaterialSingleBinding;
+import me.rei_m.hyakuninisshu.databinding.ActivityKarutaBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.MaterialDetailFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.KarutaFragment;
 
-public class MaterialSingleActivity extends DaggerAppCompatActivity {
+public class KarutaActivity extends DaggerAppCompatActivity {
 
     private static final String ARG_KARUTA_ID = "karutaId";
 
     public static Intent createIntent(@NonNull Context context,
                                       @NonNull KarutaIdentifier karutaId) {
-        Intent intent = new Intent(context, MaterialSingleActivity.class);
+        Intent intent = new Intent(context, KarutaActivity.class);
         intent.putExtra(ARG_KARUTA_ID, karutaId);
         return intent;
     }
@@ -56,7 +56,7 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
     @Inject
     AdViewFactory adViewFactory;
 
-    private ActivityMaterialSingleBinding binding;
+    private ActivityKarutaBinding binding;
 
     private AdView adView;
 
@@ -64,7 +64,7 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_material_single);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_karuta);
 
         setSupportActionBar(binding.toolbar);
 
@@ -78,7 +78,7 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.content, MaterialDetailFragment.newInstance(karutaId), MaterialDetailFragment.TAG)
+                    .add(R.id.content, KarutaFragment.newInstance(karutaId), KarutaFragment.TAG)
                     .commit();
         }
 
@@ -132,18 +132,18 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
     @ForActivity
     @dagger.Subcomponent(modules = {
             ActivityModule.class,
-            MaterialDetailFragment.Module.class
+            KarutaFragment.Module.class
     })
-    public interface Subcomponent extends AndroidInjector<MaterialSingleActivity> {
+    public interface Subcomponent extends AndroidInjector<KarutaActivity> {
 
         @dagger.Subcomponent.Builder
-        abstract class Builder extends AndroidInjector.Builder<MaterialSingleActivity> {
+        abstract class Builder extends AndroidInjector.Builder<KarutaActivity> {
 
             @SuppressWarnings("UnusedReturnValue")
             public abstract Builder activityModule(ActivityModule module);
 
             @Override
-            public void seedInstance(MaterialSingleActivity instance) {
+            public void seedInstance(KarutaActivity instance) {
                 activityModule(new ActivityModule(instance));
             }
         }
@@ -154,7 +154,7 @@ public class MaterialSingleActivity extends DaggerAppCompatActivity {
         @SuppressWarnings("unused")
         @Binds
         @IntoMap
-        @ActivityKey(MaterialSingleActivity.class)
+        @ActivityKey(KarutaActivity.class)
         abstract AndroidInjector.Factory<? extends Activity> bind(Subcomponent.Builder builder);
     }
 }

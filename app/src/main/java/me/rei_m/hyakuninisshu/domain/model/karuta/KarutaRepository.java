@@ -47,6 +47,14 @@ public interface KarutaRepository {
     Single<Karutas> list();
 
     /**
+     * 歌コレクションを取得する.
+     *
+     * @param color 色
+     * @return 歌コレクション
+     */
+    Single<Karutas> list(@Nullable Color color);
+
+    /**
      * 歌IDコレクションを取得する.
      *
      * @return 歌IDコレクション

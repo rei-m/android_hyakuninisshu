@@ -22,9 +22,9 @@ import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.presentation.EntranceActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.ExamMasterActivity;
+import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialDetailActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.MaterialEditActivity;
-import me.rei_m.hyakuninisshu.presentation.karuta.MaterialSingleActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingExamMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.TrainingMasterActivity;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
@@ -79,13 +79,13 @@ public class Navigator {
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialSingle(@NonNull KarutaIdentifier karutaId) {
-        Intent intentToLaunch = MaterialSingleActivity.createIntent(activity, karutaId);
+    public void navigateToMaterialEdit(@NonNull KarutaIdentifier karutaId) {
+        Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karutaId);
         activity.startActivity(intentToLaunch);
     }
 
-    public void navigateToMaterialEdit(@NonNull KarutaIdentifier karutaId) {
-        Intent intentToLaunch = MaterialEditActivity.createIntent(activity, karutaId);
+    public void navigateToKaruta(@NonNull KarutaIdentifier karutaId) {
+        Intent intentToLaunch = KarutaActivity.createIntent(activity, karutaId);
         activity.startActivity(intentToLaunch);
     }
 
