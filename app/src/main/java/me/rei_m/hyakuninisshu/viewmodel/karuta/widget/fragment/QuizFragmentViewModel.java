@@ -161,7 +161,9 @@ public class QuizFragmentViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        disposable.dispose();
+        if (!disposable.isDisposed()) {
+            disposable.dispose();
+        }
         super.onCleared();
     }
 
@@ -185,6 +187,7 @@ public class QuizFragmentViewModel extends ViewModel {
     }
 
     public void onClickResult() {
+        disposable.dispose();
         onClickResultEventSubject.onNext(Unit.INSTANCE);
     }
 

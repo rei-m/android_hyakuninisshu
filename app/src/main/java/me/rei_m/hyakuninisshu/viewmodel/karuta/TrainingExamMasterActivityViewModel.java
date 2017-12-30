@@ -58,6 +58,7 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
     public final ObservableBoolean isStarted = new ObservableBoolean(false);
 
     private final TrainingActionDispatcher actionDispatcher;
+
     private final CompositeDisposable disposable = new CompositeDisposable();
 
     public TrainingExamMasterActivityViewModel(@NonNull TrainingStore trainingStore,
@@ -89,6 +90,7 @@ public class TrainingExamMasterActivityViewModel extends ViewModel {
     }
 
     public void onRestartTraining() {
+        isStarted.set(false);
         actionDispatcher.restartForPractice();
     }
 }
