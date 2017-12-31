@@ -24,24 +24,31 @@ import android.view.View;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.model.KarutaExamModel;
+import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher;
+import me.rei_m.hyakuninisshu.store.ExamStore;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class ExamFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaExamModel karutaExamModel;
+        private final ExamStore examStore;
+        private final ExamActionDispatcher actionDispatcher;
 
-        public Factory(@NonNull KarutaExamModel karutaExamModel) {
-            this.karutaExamModel = karutaExamModel;
+        public Factory(@NonNull ExamStore examStore,
+                       @NonNull ExamActionDispatcher actionDispatcher) {
+            this.examStore = examStore;
+            this.actionDispatcher = actionDispatcher;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public ExamFragmentViewModel create(@NonNull Class modelClass) {
-            return new ExamFragmentViewModel(karutaExamModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(ExamFragmentViewModel.class)) {
+                return (T) new ExamFragmentViewModel(examStore, actionDispatcher);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -57,25 +64,22 @@ public class ExamFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> onClickStartTrainingEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickStartTrainingEvent = onClickStartTrainingEventSubject;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public ExamFragmentViewModel(@NonNull KarutaExamModel karutaExamModel) {
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaExamModel.recentKarutaExam.subscribe(karutaExam -> {
+    public ExamFragmentViewModel(@NonNull ExamStore examStore,
+                                 @NonNull ExamActionDispatcher actionDispatcher) {
+        disposable.addAll(examStore.recentKarutaExam.subscribe(karutaExam -> {
             hasResult.set(true);
             score.set(karutaExam.result().score());
             averageAnswerSec.set(karutaExam.result().averageAnswerSec());
         }));
 
-        karutaExamModel.fetchRecentKarutaExam();
+        actionDispatcher.fetchRecent();
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

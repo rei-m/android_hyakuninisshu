@@ -18,6 +18,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -35,11 +36,10 @@ import dagger.android.ActivityKey;
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
 import dagger.multibindings.IntoMap;
-import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
@@ -48,14 +48,16 @@ import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
-import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizResultFragment;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.TrainingResultFragment;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingExamMasterActivityViewModel;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.di.TrainingExamMasterActivityViewModelModule;
 
 public class TrainingExamMasterActivity extends DaggerAppCompatActivity implements QuizFragment.OnFragmentInteractionListener,
         QuizAnswerFragment.OnFragmentInteractionListener,
-        QuizResultFragment.OnFragmentInteractionListener,
+        TrainingResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
+
+    private static final String KEY_IS_STARTED = "isStarted";
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, TrainingExamMasterActivity.class);
@@ -73,11 +75,29 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
 
     private AdView adView;
 
-    private CompositeDisposable disposable;
+    private Observable.OnPropertyChangedCallback isStartedChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            if (viewModel.isStarted.get()) {
+                startTraining();
+            }
+        }
+    };
+
+    private Observable.OnPropertyChangedCallback isVisibleAdChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            adView.setVisibility((viewModel.isVisibleAd.get()) ? View.VISIBLE : View.GONE);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            viewModelFactory.setStarted(savedInstanceState.getBoolean(KEY_IS_STARTED, false));
+        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingExamMasterActivityViewModel.class);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training_exam_master);
@@ -118,19 +138,14 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     @Override
     protected void onStart() {
         super.onStart();
-        disposable = new CompositeDisposable();
-        disposable.addAll(
-                viewModel.startedTrainingEvent.subscribe(v -> startTraining()),
-                viewModel.toggledAdEvent.subscribe(isVisible -> adView.setVisibility((isVisible) ? View.VISIBLE : View.GONE))
-        );
+        viewModel.isStarted.addOnPropertyChangedCallback(isStartedChangedCallback);
+        viewModel.isVisibleAd.addOnPropertyChangedCallback(isVisibleAdChangedCallback);
     }
 
     @Override
     protected void onStop() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        viewModel.isStarted.removeOnPropertyChangedCallback(isStartedChangedCallback);
+        viewModel.isVisibleAd.removeOnPropertyChangedCallback(isVisibleAdChangedCallback);
         super.onStop();
     }
 
@@ -147,11 +162,17 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     }
 
     @Override
-    public void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_IS_STARTED, viewModel.isStarted.get());
+    }
+
+    @Override
+    public void onAnswered(@NonNull KarutaQuizIdentifier quizId) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(karutaId, existNextQuiz), QuizAnswerFragment.TAG)
+                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
                 .commit();
     }
 
@@ -180,7 +201,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizResultFragment.newInstance(), QuizResultFragment.TAG)
+                .replace(R.id.content, TrainingResultFragment.newInstance(), TrainingResultFragment.TAG)
                 .commit();
     }
 
@@ -203,7 +224,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
     public void onDialogNegativeClick() {
 
     }
-    
+
     private void startTraining() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -218,7 +239,7 @@ public class TrainingExamMasterActivity extends DaggerAppCompatActivity implemen
             ExamFragment.Module.class,
             QuizAnswerFragment.Module.class,
             QuizFragment.Module.class,
-            QuizResultFragment.Module.class
+            TrainingResultFragment.Module.class
     })
     public interface Subcomponent extends AndroidInjector<TrainingExamMasterActivity> {
 

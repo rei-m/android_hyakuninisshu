@@ -24,24 +24,31 @@ import android.view.View;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
+import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher;
+import me.rei_m.hyakuninisshu.store.TrainingStore;
 import me.rei_m.hyakuninisshu.util.Unit;
 
-public class QuizResultFragmentViewModel extends ViewModel {
+public class TrainingResultFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaTrainingModel karutaTrainingModel;
+        private final TrainingStore trainingStore;
+        private final TrainingActionDispatcher actionDispatcher;
 
-        public Factory(@NonNull KarutaTrainingModel karutaTrainingModel) {
-            this.karutaTrainingModel = karutaTrainingModel;
+        public Factory(@NonNull TrainingStore trainingStore,
+                       @NonNull TrainingActionDispatcher actionDispatcher) {
+            this.trainingStore = trainingStore;
+            this.actionDispatcher = actionDispatcher;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public QuizResultFragmentViewModel create(@NonNull Class modelClass) {
-            return new QuizResultFragmentViewModel(karutaTrainingModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(TrainingResultFragmentViewModel.class)) {
+                return (T) new TrainingResultFragmentViewModel(trainingStore, actionDispatcher);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -57,24 +64,21 @@ public class QuizResultFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> onClickBackMenuEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickBackMenuEvent = onClickBackMenuEventSubject;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public QuizResultFragmentViewModel(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaTrainingModel.result.subscribe(trainingResult -> {
+    public TrainingResultFragmentViewModel(@NonNull TrainingStore trainingStore,
+                                           @NonNull TrainingActionDispatcher actionDispatcher) {
+        disposable.addAll(trainingStore.result.subscribe(trainingResult -> {
             score.set(trainingResult.correctCount() + "/" + trainingResult.quizCount());
             averageAnswerSec.set(trainingResult.averageAnswerSec());
             canRestartTraining.set(trainingResult.canRestartTraining());
         }));
-        karutaTrainingModel.aggregateResults();
+        actionDispatcher.aggregateResults();
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 

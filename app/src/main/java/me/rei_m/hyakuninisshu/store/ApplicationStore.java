@@ -11,7 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.model;
+package me.rei_m.hyakuninisshu.store;
 
 import android.support.annotation.NonNull;
 
@@ -19,35 +19,21 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
+import me.rei_m.hyakuninisshu.action.Dispatcher;
+import me.rei_m.hyakuninisshu.action.application.StartApplicationAction;
 import me.rei_m.hyakuninisshu.util.Unit;
 
-/**
- * アプリケーションモデル.
- */
 @Singleton
-public class ApplicationModel {
+public class ApplicationStore {
 
     private final PublishSubject<Unit> readyEventSubject = PublishSubject.create();
     public final Observable<Unit> readyEvent = readyEventSubject;
 
-    private final KarutaRepository karutaRepository;
-
     @Inject
-    public ApplicationModel(@NonNull KarutaRepository karutaRepository) {
-        this.karutaRepository = karutaRepository;
-    }
-
-    /**
-     * 百人一首の情報を準備してアプリの利用を開始する.
-     */
-    public void start() {
-        karutaRepository.initialize()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> readyEventSubject.onNext(Unit.INSTANCE));
+    public ApplicationStore(@NonNull Dispatcher dispatcher) {
+        dispatcher.on(StartApplicationAction.class).subscribe(action -> {
+            readyEventSubject.onNext(Unit.INSTANCE);
+        });
     }
 }

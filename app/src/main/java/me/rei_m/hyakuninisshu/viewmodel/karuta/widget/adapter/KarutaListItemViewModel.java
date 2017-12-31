@@ -21,8 +21,7 @@ import android.view.View;
 import javax.inject.Inject;
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator;
+import me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.MaterialKarutaListAdapter;
 
 public class KarutaListItemViewModel {
 
@@ -36,13 +35,12 @@ public class KarutaListItemViewModel {
 
     public final ObservableField<String> shimoNoKu = new ObservableField<>("");
 
-    private final Navigator navigator;
+    private int position = 0;
 
-    private KarutaIdentifier karutaIdentifier;
+    private MaterialKarutaListAdapter.OnItemInteractionListener listener;
 
     @Inject
-    public KarutaListItemViewModel(@NonNull Navigator navigator) {
-        this.navigator = navigator;
+    public KarutaListItemViewModel() {
     }
 
     public void setKaruta(@NonNull Karuta karuta) {
@@ -51,14 +49,18 @@ public class KarutaListItemViewModel {
         this.creator.set(karuta.creator());
         this.kamiNoKu.set(karuta.kamiNoKu().kanji());
         this.shimoNoKu.set(karuta.shimoNoKu().kanji());
+    }
 
-        this.karutaIdentifier = karuta.identifier();
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public void setListener(MaterialKarutaListAdapter.OnItemInteractionListener listener) {
+        this.listener = listener;
     }
 
     @SuppressWarnings("unused")
     public void onItemClicked(View view) {
-        if (karutaIdentifier != null) {
-            navigator.navigateToMaterialDetail(karutaIdentifier);
-        }
+        listener.onItemClicked(position);
     }
 }

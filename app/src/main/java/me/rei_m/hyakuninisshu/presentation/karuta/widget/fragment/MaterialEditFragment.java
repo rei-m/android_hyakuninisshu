@@ -46,6 +46,17 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
 
     private static final String ARG_KARUTA_ID = "karutaId";
 
+    private static final String KEY_FIRST_KANJI = "firstKanji";
+    private static final String KEY_FIRST_KANA = "firstKana";
+    private static final String KEY_SECOND_KANJI = "secondKanji";
+    private static final String KEY_SECOND_KANA = "secondKana";
+    private static final String KEY_THIRD_KANJI = "thirdKanji";
+    private static final String KEY_THIRD_KANA = "thirdKana";
+    private static final String KEY_FOURTH_KANJI = "fourthKanji";
+    private static final String KEY_FOURTH_KANA = "fourthKana";
+    private static final String KEY_FIFTH_KANJI = "fifthKanji";
+    private static final String KEY_FIFTH_KANA = "fifthKana";
+
     public static MaterialEditFragment newInstance(@NonNull KarutaIdentifier karutaId) {
         MaterialEditFragment fragment = new MaterialEditFragment();
         Bundle args = new Bundle();
@@ -64,12 +75,24 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     private CompositeDisposable disposable;
 
     public MaterialEditFragment() {
-        // Required empty public constructor
+        // Required empty public constructor1
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            viewModelFactory.setFirstPhraseKanji(savedInstanceState.getString(KEY_FIRST_KANJI, ""));
+            viewModelFactory.setFirstPhraseKana(savedInstanceState.getString(KEY_FIRST_KANA, ""));
+            viewModelFactory.setSecondPhraseKanji(savedInstanceState.getString(KEY_SECOND_KANJI, ""));
+            viewModelFactory.setSecondPhraseKana(savedInstanceState.getString(KEY_SECOND_KANA, ""));
+            viewModelFactory.setThirdPhraseKanji(savedInstanceState.getString(KEY_THIRD_KANJI, ""));
+            viewModelFactory.setThirdPhraseKana(savedInstanceState.getString(KEY_THIRD_KANA, ""));
+            viewModelFactory.setFourthPhraseKanji(savedInstanceState.getString(KEY_FOURTH_KANJI, ""));
+            viewModelFactory.setFourthPhraseKana(savedInstanceState.getString(KEY_FOURTH_KANA, ""));
+            viewModelFactory.setFifthPhraseKanji(savedInstanceState.getString(KEY_FIFTH_KANJI, ""));
+            viewModelFactory.setFifthPhraseKana(savedInstanceState.getString(KEY_FIFTH_KANA, ""));
+        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaterialEditFragmentViewModel.class);
     }
 
@@ -142,6 +165,21 @@ public class MaterialEditFragment extends DaggerFragment implements ConfirmMater
     public void onDetach() {
         viewModelFactory = null;
         super.onDetach();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_FIRST_KANJI, viewModel.firstPhraseKanji.get());
+        outState.putString(KEY_FIRST_KANA, viewModel.firstPhraseKana.get());
+        outState.putString(KEY_SECOND_KANJI, viewModel.secondPhraseKanji.get());
+        outState.putString(KEY_SECOND_KANA, viewModel.secondPhraseKana.get());
+        outState.putString(KEY_THIRD_KANJI, viewModel.thirdPhraseKanji.get());
+        outState.putString(KEY_THIRD_KANA, viewModel.thirdPhraseKana.get());
+        outState.putString(KEY_FOURTH_KANJI, viewModel.fourthPhraseKanji.get());
+        outState.putString(KEY_FOURTH_KANA, viewModel.fourthPhraseKana.get());
+        outState.putString(KEY_FIFTH_KANJI, viewModel.fifthPhraseKanji.get());
+        outState.putString(KEY_FIFTH_KANA, viewModel.fifthPhraseKana.get());
     }
 
     @Override

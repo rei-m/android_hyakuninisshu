@@ -11,19 +11,17 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.model;
+package me.rei_m.hyakuninisshu.action.training;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
+import me.rei_m.hyakuninisshu.action.Dispatcher;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds;
@@ -35,33 +33,20 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes;
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult;
-import me.rei_m.hyakuninisshu.util.Unit;
 
-/**
- * 練習モデル.
- */
-@Singleton
-public class KarutaTrainingModel {
+public class TrainingActionDispatcher {
 
-    private final PublishSubject<Unit> startedEventSubject = PublishSubject.create();
-    public final Observable<Unit> startedEvent = startedEventSubject;
-
-    private final PublishSubject<TrainingResult> resultSubject = PublishSubject.create();
-    public final Observable<TrainingResult> result = resultSubject;
-
-    private final PublishSubject<Unit> notFoundErrorEventSubject = PublishSubject.create();
-    public final Observable<Unit> notFoundErrorEvent = notFoundErrorEventSubject;
-
+    private final Dispatcher dispatcher;
     private final KarutaRepository karutaRepository;
-
     private final KarutaQuizRepository karutaQuizRepository;
-
     private final KarutaExamRepository karutaExamRepository;
 
     @Inject
-    public KarutaTrainingModel(@NonNull KarutaRepository karutaRepository,
-                               @NonNull KarutaQuizRepository karutaQuizRepository,
-                               @NonNull KarutaExamRepository karutaExamRepository) {
+    public TrainingActionDispatcher(@NonNull Dispatcher dispatcher,
+                                    @NonNull KarutaRepository karutaRepository,
+                                    @NonNull KarutaQuizRepository karutaQuizRepository,
+                                    @NonNull KarutaExamRepository karutaExamRepository) {
+        this.dispatcher = dispatcher;
         this.karutaRepository = karutaRepository;
         this.karutaQuizRepository = karutaQuizRepository;
         this.karutaExamRepository = karutaExamRepository;
@@ -105,7 +90,11 @@ public class KarutaTrainingModel {
                 .map(TrainingResult::new)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultSubject::onNext, throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE));
+                .subscribe(trainingResult -> {
+                    dispatcher.dispatch(new AggregateResultsAction(trainingResult));
+                }, throwable -> {
+                    dispatcher.dispatch(new AggregateResultsAction());
+                });
     }
 
     private void start(Single<KarutaIds> karutaIdsSingle) {
@@ -113,12 +102,12 @@ public class KarutaTrainingModel {
                 .flatMap(karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(!karutaQuizzes.isEmpty())))
                 .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasQuiz -> {
                     if (hasQuiz) {
-                        startedEventSubject.onNext(Unit.INSTANCE);
+                        dispatcher.dispatch(new StartTrainingAction(false));
                     } else {
-                        notFoundErrorEventSubject.onNext(Unit.INSTANCE);
+                        dispatcher.dispatch(new StartTrainingAction(true));
                     }
                 },
-                throwable -> notFoundErrorEventSubject.onNext(Unit.INSTANCE)
+                throwable -> dispatcher.dispatch(new StartTrainingAction(true))
         );
     }
 }

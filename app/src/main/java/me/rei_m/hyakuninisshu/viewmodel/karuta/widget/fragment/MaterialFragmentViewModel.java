@@ -15,66 +15,80 @@ package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher;
+import me.rei_m.hyakuninisshu.store.MaterialStore;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 
 public class MaterialFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaModel karutaModel;
+        private final MaterialStore materialStore;
+        private final MaterialActionDispatcher actionDispatcher;
 
-        public Factory(@NonNull KarutaModel karutaModel) {
-            this.karutaModel = karutaModel;
+        private ColorFilter colorFilter = ColorFilter.ALL;
+
+        public Factory(@NonNull MaterialStore materialStore,
+                       @NonNull MaterialActionDispatcher actionDispatcher) {
+            this.materialStore = materialStore;
+            this.actionDispatcher = actionDispatcher;
+        }
+
+        public void setColorFilter(@NonNull ColorFilter colorFilter) {
+            this.colorFilter = colorFilter;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public MaterialFragmentViewModel create(@NonNull Class modelClass) {
-            return new MaterialFragmentViewModel(karutaModel);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(MaterialFragmentViewModel.class)) {
+                return (T) new MaterialFragmentViewModel(materialStore, actionDispatcher, colorFilter);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
     public final ObservableArrayList<Karuta> karutaList = new ObservableArrayList<>();
 
-    private final KarutaModel karutaModel;
+    public final ObservableField<ColorFilter> colorFilter;
 
-    private ColorFilter colorFilter = ColorFilter.ALL;
+    private final MaterialActionDispatcher actionDispatcher;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public MaterialFragmentViewModel(@NonNull KarutaModel karutaModel) {
-        this.karutaModel = karutaModel;
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaModel.karuta.subscribe(karuta -> {
-            if (karutaList.contains(karuta)) {
-                int index = karutaList.indexOf(karuta);
-                karutaList.set(index, karuta);
-            } else {
-                karutaList.add(karuta);
-            }
+    private final Observable.OnPropertyChangedCallback colorFilterChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            actionDispatcher.fetch(colorFilter.get());
+        }
+    };
+
+    public MaterialFragmentViewModel(@NonNull MaterialStore materialStore,
+                                     @NonNull MaterialActionDispatcher actionDispatcher,
+                                     @NonNull ColorFilter colorFilter) {
+        this.actionDispatcher = actionDispatcher;
+        this.colorFilter = new ObservableField<>(colorFilter);
+        this.colorFilter.addOnPropertyChangedCallback(colorFilterChangedCallback);
+        disposable.addAll(materialStore.karutaList.subscribe(karutaList -> {
+            this.karutaList.clear();
+            this.karutaList.addAll(karutaList);
         }));
-        this.karutaModel.fetchKarutas(colorFilter.value());
+
+        actionDispatcher.fetch(colorFilter);
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        colorFilter.removeOnPropertyChangedCallback(colorFilterChangedCallback);
+        disposable.dispose();
         super.onCleared();
-    }
-
-    public void onOptionItemSelected(@NonNull ColorFilter colorFilter) {
-        karutaList.clear();
-        karutaModel.fetchKarutas(colorFilter.value());
-        this.colorFilter = colorFilter;
     }
 }

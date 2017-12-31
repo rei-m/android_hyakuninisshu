@@ -17,12 +17,13 @@ import android.support.annotation.NonNull;
 
 import dagger.Module;
 import dagger.Provides;
+import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.ColorFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KimarijiFilter;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeFrom;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.TrainingRangeTo;
+import me.rei_m.hyakuninisshu.store.TrainingStore;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.TrainingMasterActivityViewModel;
 
 @Module
@@ -48,8 +49,10 @@ public class TrainingMasterActivityViewModelModule {
 
     @Provides
     @ForActivity
-    TrainingMasterActivityViewModel.Factory provideFactory(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        return new TrainingMasterActivityViewModel.Factory(karutaTrainingModel,
+    TrainingMasterActivityViewModel.Factory provideFactory(@NonNull TrainingStore trainingStore,
+                                                           @NonNull TrainingActionDispatcher actionDispatcher) {
+        return new TrainingMasterActivityViewModel.Factory(trainingStore,
+                actionDispatcher,
                 trainingRangeFrom,
                 trainingRangeTo,
                 kimarijiFilter,

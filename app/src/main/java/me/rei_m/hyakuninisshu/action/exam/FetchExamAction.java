@@ -11,21 +11,18 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.di;
+package me.rei_m.hyakuninisshu.action.exam;
 
 import android.support.annotation.NonNull;
 
-import dagger.Module;
-import dagger.Provides;
-import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.model.KarutaTrainingModel;
-import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.QuizResultFragmentViewModel;
+import me.rei_m.hyakuninisshu.action.Action;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
 
-@Module
-public class QuizResultFragmentViewModelModule {
-    @Provides
-    @ForFragment
-    QuizResultFragmentViewModel.Factory provideFactory(@NonNull KarutaTrainingModel karutaTrainingModel) {
-        return new QuizResultFragmentViewModel.Factory(karutaTrainingModel);
+public class FetchExamAction implements Action {
+
+    public final KarutaExam karutaExam;
+
+    public FetchExamAction(@NonNull KarutaExam karutaExam) {
+        this.karutaExam = karutaExam;
     }
 }

@@ -33,39 +33,45 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
 
     private final ObservableArrayList<Karuta> karutaList;
 
+    private OnItemInteractionListener listener;
+
     private final Injector injector;
 
+    private final ObservableList.OnListChangedCallback<ObservableList<Karuta>> listChangedCallback = new ObservableList.OnListChangedCallback<ObservableList<Karuta>>() {
+        @Override
+        public void onChanged(ObservableList<Karuta> karutas) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList<Karuta> karutas, int i, int i1, int i2) {
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList<Karuta> karutas, int i, int i1) {
+            notifyDataSetChanged();
+        }
+    };
+
     public MaterialKarutaListAdapter(@NonNull ObservableArrayList<Karuta> karutaList,
+                                     @NonNull OnItemInteractionListener listener,
                                      @NonNull Injector injector) {
         this.karutaList = karutaList;
+        this.listener = listener;
         this.injector = injector;
 
-        this.karutaList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Karuta>>() {
-            @Override
-            public void onChanged(ObservableList<Karuta> karutas) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeChanged(ObservableList<Karuta> karutas, int i, int i1) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeInserted(ObservableList<Karuta> karutas, int i, int i1) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeMoved(ObservableList<Karuta> karutas, int i, int i1, int i2) {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeRemoved(ObservableList<Karuta> karutas, int i, int i1) {
-                notifyDataSetChanged();
-            }
-        });
+        this.karutaList.addOnListChangedCallback(listChangedCallback);
     }
 
     @Override
@@ -99,6 +105,8 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             itemViewHolder.binding.getViewModel().setKaruta(karutaList.get(position));
+            itemViewHolder.binding.getViewModel().setPosition(position);
+            itemViewHolder.binding.getViewModel().setListener(listener);
             itemViewHolder.binding.executePendingBindings();
         }
     }
@@ -106,6 +114,11 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public int getItemCount() {
         return karutaList.size() + FOOTER_COUNT;
+    }
+
+    public void releaseCallback() {
+        listener = null;
+        karutaList.removeOnListChangedCallback(listChangedCallback);
     }
 
     private enum ItemViewType {
@@ -119,6 +132,10 @@ public class MaterialKarutaListAdapter extends RecyclerView.Adapter<RecyclerView
 
     public interface Injector {
         KarutaListItemViewModel karutaListItemViewModel();
+    }
+
+    public interface OnItemInteractionListener {
+        void onItemClicked(int position);
     }
 
     private static class ItemViewHolder extends RecyclerView.ViewHolder {

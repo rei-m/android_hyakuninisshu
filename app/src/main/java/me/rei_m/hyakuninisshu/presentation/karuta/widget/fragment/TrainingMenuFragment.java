@@ -46,6 +46,19 @@ public class TrainingMenuFragment extends DaggerFragment {
 
     public static final String TAG = TrainingMenuFragment.class.getSimpleName();
 
+    private static final String KEY_TRAINING_RANGE_FROM = "trainingRangeFrom";
+
+    private static final String KEY_TRAINING_RANGE_TO = "trainingRangeTo";
+
+    private static final String KEY_KIMARIJI = "kimarij";
+
+    private static final String KEY_COLOR = "color";
+
+    private static final String KEY_KAMI_NO_KU_STYLE = "kamiNoKuStyle";
+
+    private static final String KEY_SHIMO_NO_KU_STYLE = "shimoNoKuStyle";
+
+
     public static TrainingMenuFragment newInstance() {
         return new TrainingMenuFragment();
     }
@@ -75,6 +88,14 @@ public class TrainingMenuFragment extends DaggerFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            viewModelFactory.setTrainingRangeFrom(TrainingRangeFrom.get(savedInstanceState.getInt(KEY_TRAINING_RANGE_FROM)));
+            viewModelFactory.setTrainingRangeTo(TrainingRangeTo.get(savedInstanceState.getInt(KEY_TRAINING_RANGE_TO)));
+            viewModelFactory.setKimariji(KimarijiFilter.get(savedInstanceState.getInt(KEY_KIMARIJI)));
+            viewModelFactory.setKamiNoKuStyle(KarutaStyleFilter.get(savedInstanceState.getInt(KEY_KAMI_NO_KU_STYLE)));
+            viewModelFactory.setShimoNoKuStyle(KarutaStyleFilter.get(savedInstanceState.getInt(KEY_SHIMO_NO_KU_STYLE)));
+            viewModelFactory.setColor(ColorFilter.get(savedInstanceState.getInt(KEY_COLOR)));
+        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingMenuFragmentViewModel.class);
     }
 
@@ -154,6 +175,18 @@ public class TrainingMenuFragment extends DaggerFragment {
         navigator = null;
         viewModelFactory = null;
         super.onDetach();
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_TRAINING_RANGE_FROM, viewModel.trainingRangeFrom.get().ordinal());
+        outState.putInt(KEY_TRAINING_RANGE_TO, viewModel.trainingRangeTo.get().ordinal());
+        outState.putInt(KEY_KIMARIJI, viewModel.kimariji.get().ordinal());
+        outState.putInt(KEY_KAMI_NO_KU_STYLE, viewModel.kamiNoKuStyle.get().ordinal());
+        outState.putInt(KEY_SHIMO_NO_KU_STYLE, viewModel.shimoNoKuStyle.get().ordinal());
+        outState.putInt(KEY_COLOR, viewModel.color.get().ordinal());
     }
 
     @dagger.Module

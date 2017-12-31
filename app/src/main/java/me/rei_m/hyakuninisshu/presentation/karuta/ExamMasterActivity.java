@@ -18,6 +18,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -35,16 +36,17 @@ import dagger.android.ActivityKey;
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
 import dagger.multibindings.IntoMap;
-import io.reactivex.disposables.CompositeDisposable;
 import me.rei_m.hyakuninisshu.R;
 import me.rei_m.hyakuninisshu.databinding.ActivityExamMasterBinding;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier;
 import me.rei_m.hyakuninisshu.presentation.AlertDialogFragment;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewFactory;
 import me.rei_m.hyakuninisshu.presentation.ad.AdViewHelper;
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule;
 import me.rei_m.hyakuninisshu.presentation.karuta.enums.KarutaStyleFilter;
+import me.rei_m.hyakuninisshu.presentation.karuta.enums.QuizState;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.ExamResultFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizAnswerFragment;
 import me.rei_m.hyakuninisshu.presentation.karuta.widget.fragment.QuizFragment;
@@ -55,6 +57,9 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
         QuizAnswerFragment.OnFragmentInteractionListener,
         ExamResultFragment.OnFragmentInteractionListener,
         AlertDialogFragment.OnDialogInteractionListener {
+
+    private static final String KEY_QUIZ_STATE = "quizState";
+    private static final String KEY_KARUTA_EXAM_ID = "karutaExamId";
 
     public static Intent createIntent(@NonNull Context context) {
         return new Intent(context, ExamMasterActivity.class);
@@ -72,11 +77,49 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
 
     private AdView adView;
 
-    private CompositeDisposable disposable;
+    private Observable.OnPropertyChangedCallback quizStateChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            if (viewModel.quizState.get() == QuizState.STARTED) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
+                        .commit();
+            }
+        }
+    };
+
+    private Observable.OnPropertyChangedCallback karutaExamIdentifierChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            if (viewModel.karutaExamIdentifier.get() != null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.content, ExamResultFragment.newInstance(viewModel.karutaExamIdentifier.get()), ExamResultFragment.TAG)
+                        .commit();
+            }
+        }
+    };
+
+    private Observable.OnPropertyChangedCallback isVisibleAdChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+            adView.setVisibility((viewModel.isVisibleAd.get()) ? View.VISIBLE : View.GONE);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            // ここちょっと手抜き
+            viewModelFactory.setQuizState(QuizState.get(savedInstanceState.getInt(KEY_QUIZ_STATE)));
+            KarutaExamIdentifier karutaExamIdentifier = savedInstanceState.getParcelable(KEY_KARUTA_EXAM_ID);
+            if (karutaExamIdentifier != null) {
+                viewModelFactory.setFinishedKarutaExamIdentifier(karutaExamIdentifier);
+            }
+        }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamMasterActivityViewModel.class);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exam_master);
@@ -116,27 +159,16 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     @Override
     protected void onStart() {
         super.onStart();
-        disposable = new CompositeDisposable();
-        disposable.addAll(
-                viewModel.startedExamEvent.subscribe(v -> getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.content, QuizFragment.newInstance(KarutaStyleFilter.KANJI, KarutaStyleFilter.KANA), QuizFragment.TAG)
-                        .commit()),
-                viewModel.finishedExamEvent.subscribe(karutaExamId -> getSupportFragmentManager()
-                        .beginTransaction()
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .replace(R.id.content, ExamResultFragment.newInstance(karutaExamId), ExamResultFragment.TAG)
-                        .commit()),
-                viewModel.toggledAdEvent.subscribe(isVisible -> adView.setVisibility((isVisible) ? View.VISIBLE : View.GONE))
-        );
+        viewModel.quizState.addOnPropertyChangedCallback(quizStateChangedCallback);
+        viewModel.karutaExamIdentifier.addOnPropertyChangedCallback(karutaExamIdentifierChangedCallback);
+        viewModel.isVisibleAd.addOnPropertyChangedCallback(isVisibleAdChangedCallback);
     }
 
     @Override
     protected void onStop() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        viewModel.quizState.removeOnPropertyChangedCallback(quizStateChangedCallback);
+        viewModel.karutaExamIdentifier.removeOnPropertyChangedCallback(karutaExamIdentifierChangedCallback);
+        viewModel.isVisibleAd.removeOnPropertyChangedCallback(isVisibleAdChangedCallback);
         super.onStop();
     }
 
@@ -153,11 +185,18 @@ public class ExamMasterActivity extends DaggerAppCompatActivity implements QuizF
     }
 
     @Override
-    public void onAnswered(@NonNull KarutaIdentifier karutaId, boolean existNextQuiz) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_QUIZ_STATE, viewModel.quizState.get().ordinal());
+        outState.putParcelable(KEY_KARUTA_EXAM_ID, viewModel.karutaExamIdentifier.get());
+    }
+
+    @Override
+    public void onAnswered(@NonNull KarutaQuizIdentifier quizId) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content, QuizAnswerFragment.newInstance(karutaId, existNextQuiz), QuizAnswerFragment.TAG)
+                .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
                 .commit();
     }
 

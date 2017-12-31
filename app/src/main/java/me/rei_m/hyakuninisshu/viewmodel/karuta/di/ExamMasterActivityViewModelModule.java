@@ -17,15 +17,17 @@ import android.support.annotation.NonNull;
 
 import dagger.Module;
 import dagger.Provides;
+import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher;
 import me.rei_m.hyakuninisshu.di.ForActivity;
-import me.rei_m.hyakuninisshu.model.KarutaExamModel;
+import me.rei_m.hyakuninisshu.store.ExamStore;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.ExamMasterActivityViewModel;
 
 @Module
 public class ExamMasterActivityViewModelModule {
     @Provides
     @ForActivity
-    ExamMasterActivityViewModel.Factory provideFactory(@NonNull KarutaExamModel karutaExamModel) {
-        return new ExamMasterActivityViewModel.Factory(karutaExamModel);
+    ExamMasterActivityViewModel.Factory provideFactory(@NonNull ExamStore examStore,
+                                                       @NonNull ExamActionDispatcher actionDispatcher) {
+        return new ExamMasterActivityViewModel.Factory(examStore, actionDispatcher);
     }
 }

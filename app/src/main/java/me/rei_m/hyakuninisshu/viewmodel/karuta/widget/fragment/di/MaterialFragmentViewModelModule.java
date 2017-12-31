@@ -18,14 +18,16 @@ import android.support.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
 import me.rei_m.hyakuninisshu.di.ForFragment;
-import me.rei_m.hyakuninisshu.model.KarutaModel;
+import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher;
+import me.rei_m.hyakuninisshu.store.MaterialStore;
 import me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialFragmentViewModel;
 
 @Module
 public class MaterialFragmentViewModelModule {
     @Provides
     @ForFragment
-    MaterialFragmentViewModel.Factory provideFactory(@NonNull KarutaModel karutaModel) {
-        return new MaterialFragmentViewModel.Factory(karutaModel);
+    MaterialFragmentViewModel.Factory provideFactory(@NonNull MaterialStore materialStore,
+                                                     @NonNull MaterialActionDispatcher materialActionDispatcher) {
+        return new MaterialFragmentViewModel.Factory(materialStore, materialActionDispatcher);
     }
 }

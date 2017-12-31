@@ -11,20 +11,18 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.model;
+package me.rei_m.hyakuninisshu.action.exam;
 
 import android.support.annotation.NonNull;
 
 import java.util.Date;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
+import me.rei_m.hyakuninisshu.action.Dispatcher;
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository;
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam;
@@ -32,36 +30,20 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository;
-import me.rei_m.hyakuninisshu.util.Unit;
 
-/**
- * 力試しモデル.
- */
-@Singleton
-public class KarutaExamModel {
+public class ExamActionDispatcher {
 
-    private final PublishSubject<KarutaExam> karutaExamSubject = PublishSubject.create();
-    public final Observable<KarutaExam> karutaExam = karutaExamSubject;
-
-    private final PublishSubject<KarutaExam> recentKarutaExamSubject = PublishSubject.create();
-    public final Observable<KarutaExam> recentKarutaExam = recentKarutaExamSubject;
-
-    private final PublishSubject<Unit> startedEventSubject = PublishSubject.create();
-    public final Observable<Unit> startedEvent = startedEventSubject;
-
-    private final PublishSubject<KarutaExamIdentifier> finishedEventSubject = PublishSubject.create();
-    public final Observable<KarutaExamIdentifier> finishedEvent = finishedEventSubject;
-
+    private final Dispatcher dispatcher;
     private final KarutaRepository karutaRepository;
-
     private final KarutaQuizRepository karutaQuizRepository;
-
     private final KarutaExamRepository karutaExamRepository;
 
     @Inject
-    public KarutaExamModel(@NonNull KarutaRepository karutaRepository,
-                           @NonNull KarutaQuizRepository karutaQuizRepository,
-                           @NonNull KarutaExamRepository karutaExamRepository) {
+    public ExamActionDispatcher(@NonNull Dispatcher dispatcher,
+                                @NonNull KarutaRepository karutaRepository,
+                                @NonNull KarutaQuizRepository karutaQuizRepository,
+                                @NonNull KarutaExamRepository karutaExamRepository) {
+        this.dispatcher = dispatcher;
         this.karutaRepository = karutaRepository;
         this.karutaQuizRepository = karutaQuizRepository;
         this.karutaExamRepository = karutaExamRepository;
@@ -72,24 +54,24 @@ public class KarutaExamModel {
      *
      * @param karutaExamIdentifier 力試しID
      */
-    public void fetchKarutaExam(@NonNull KarutaExamIdentifier karutaExamIdentifier) {
+    public void fetch(@NonNull KarutaExamIdentifier karutaExamIdentifier) {
         karutaExamRepository.findBy(karutaExamIdentifier)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this.karutaExamSubject::onNext);
+                .subscribe(karutaExam -> dispatcher.dispatch(new FetchExamAction(karutaExam)));
     }
 
     /**
      * 最新の力試しを取得する.
      */
-    public void fetchRecentKarutaExam() {
+    public void fetchRecent() {
         karutaExamRepository.list()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(karutaExams -> {
                     KarutaExam recent = karutaExams.recent();
                     if (recent != null) {
-                        recentKarutaExamSubject.onNext(recent);
+                        dispatcher.dispatch(new FetchRecentExamAction(recent));
                     }
                 });
     }
@@ -102,7 +84,7 @@ public class KarutaExamModel {
                 .flatMapCompletable(karutaQuizRepository::initialize)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> startedEventSubject.onNext(Unit.INSTANCE));
+                .subscribe(() -> dispatcher.dispatch(new StartExamAction()));
     }
 
     /**
@@ -116,9 +98,6 @@ public class KarutaExamModel {
                 .flatMap(karutaExamIdentifier -> karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(karutaExamRepository.findBy(karutaExamIdentifier)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(karutaExam -> {
-                    this.finishedEventSubject.onNext(karutaExam.identifier());
-                    this.recentKarutaExamSubject.onNext(karutaExam);
-                });
+                .subscribe(karutaExam -> dispatcher.dispatch(new FinishExamAction(karutaExam)));
     }
 }

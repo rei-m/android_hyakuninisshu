@@ -25,31 +25,37 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.PublishSubject;
+import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult;
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement;
-import me.rei_m.hyakuninisshu.model.KarutaExamModel;
+import me.rei_m.hyakuninisshu.store.ExamStore;
 import me.rei_m.hyakuninisshu.util.Unit;
 
 public class ExamResultFragmentViewModel extends ViewModel {
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final KarutaExamModel karutaExamModel;
-
+        private final ExamStore examStore;
+        private final ExamActionDispatcher actionDispatcher;
         private final KarutaExamIdentifier karutaExamId;
 
-        public Factory(@NonNull KarutaExamModel karutaExamModel,
+        public Factory(@NonNull ExamStore examStore,
+                       @NonNull ExamActionDispatcher actionDispatcher,
                        @NonNull KarutaExamIdentifier karutaExamId) {
-            this.karutaExamModel = karutaExamModel;
+            this.examStore = examStore;
+            this.actionDispatcher = actionDispatcher;
             this.karutaExamId = karutaExamId;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
-        public ExamResultFragmentViewModel create(@NonNull Class modelClass) {
-            return new ExamResultFragmentViewModel(karutaExamModel, karutaExamId);
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            if (modelClass.isAssignableFrom(ExamResultFragmentViewModel.class)) {
+                return (T) new ExamResultFragmentViewModel(examStore, actionDispatcher, karutaExamId);
+            }
+            throw new IllegalArgumentException("Unknown class name");
         }
     }
 
@@ -62,27 +68,24 @@ public class ExamResultFragmentViewModel extends ViewModel {
     private final PublishSubject<Unit> onClickBackMenuEventSubject = PublishSubject.create();
     public final Observable<Unit> onClickBackMenuEvent = onClickBackMenuEventSubject;
 
-    private CompositeDisposable disposable = null;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public ExamResultFragmentViewModel(@NonNull KarutaExamModel karutaExamModel,
+    public ExamResultFragmentViewModel(@NonNull ExamStore examStore,
+                                       @NonNull ExamActionDispatcher actionDispatcher,
                                        @NonNull KarutaExamIdentifier karutaExamId) {
-        disposable = new CompositeDisposable();
-        disposable.addAll(karutaExamModel.karutaExam.subscribe(karutaExam -> {
+        disposable.addAll(examStore.karutaExam.subscribe(karutaExam -> {
             KarutaExamResult result = karutaExam.result();
             score.set(result.score());
             averageAnswerSec.set(result.averageAnswerSec());
             karutaQuizJudgements.set(result.judgements());
         }));
 
-        karutaExamModel.fetchKarutaExam(karutaExamId);
+        actionDispatcher.fetch(karutaExamId);
     }
 
     @Override
     protected void onCleared() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
-        }
+        disposable.dispose();
         super.onCleared();
     }
 
