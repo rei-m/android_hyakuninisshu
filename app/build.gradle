@@ -71,14 +71,14 @@ android {
 }
 
 dependencies {
-    ext.android_support_lib_version = '27.0.0'
+    ext.android_support_lib_version = '27.0.2'
     ext.okhttp_version = '3.4.1'
     ext.retrofit_version = '2.1.0'
     ext.streamsupport_version = '1.5.2'
     ext.rxjava_version = '2.1.4'
     ext.dagger_version = '2.13'
     ext.leakcanary_version = '1.5.4'
-    ext.play_services_version = '11.6.2'
+    ext.play_services_version = '11.8.0'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:support-annotations:$android_support_lib_version"
