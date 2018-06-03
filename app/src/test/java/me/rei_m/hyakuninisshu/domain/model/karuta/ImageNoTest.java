@@ -22,19 +22,19 @@ public class ImageNoTest {
     @Test
     public void createWith001() throws Exception {
         ImageNo imageNo = new ImageNo("001");
-        assertThat(imageNo.value(), is("001"));
+        assertThat(imageNo.getValue(), is("001"));
     }
 
     @Test
     public void createWith050() throws Exception {
         ImageNo imageNo = new ImageNo("050");
-        assertThat(imageNo.value(), is("050"));
+        assertThat(imageNo.getValue(), is("050"));
     }
 
     @Test
     public void createWith100() throws Exception {
         ImageNo imageNo = new ImageNo("100");
-        assertThat(imageNo.value(), is("100"));
+        assertThat(imageNo.getValue(), is("100"));
     }
 
     @Test(expected = IllegalArgumentException.class)

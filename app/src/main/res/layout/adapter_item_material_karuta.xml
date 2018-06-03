@@ -2,17 +2,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View.OnClickListener" />
 
         <variable
-            name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemViewModel" />
+            name="karuta"
+            type="me.rei_m.hyakuninisshu.domain.model.karuta.Karuta" />
+
+        <variable
+            name="position"
+            type="int" />
+
+        <variable
+            name="listener"
+            type="me.rei_m.hyakuninisshu.presentation.entrance.MaterialListAdapter.OnItemInteractionListener" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_ripple"
-        android:onClick="@{viewModel::onItemClicked}"
+        android:onClick="@{() -> listener.onItemClicked(position)}"
         android:orientation="vertical"
         android:paddingBottom="@dimen/padding_xs"
         android:paddingLeft="@dimen/padding_m"
@@ -25,7 +34,7 @@
             android:layout_marginBottom="@dimen/margin_xxs"
             android:gravity="center_horizontal"
             android:textSize="@dimen/text_xxs"
-            app:karutaNo="@{viewModel.karutaNo}" />
+            app:karutaNo="@{karuta.identifier().value}" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +49,7 @@
                 android:layout_marginRight="@dimen/margin_m"
                 android:layout_marginStart="0dp"
                 android:contentDescription="@string/karuta"
-                app:karutaSrc="@{viewModel.karutaImageNo}" />
+                app:karutaSrc="@{karuta.imageNo.value}" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -52,18 +61,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.kamiNoKu}" />
+                    android:text="@{karuta.kamiNoKu.kanji}" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.shimoNoKu}" />
+                    android:text="@{karuta.shimoNoKu.kanji}" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:text="@{viewModel.creator}" />
+                    android:text="@{karuta.creator}" />
             </LinearLayout>
 
         </LinearLayout>

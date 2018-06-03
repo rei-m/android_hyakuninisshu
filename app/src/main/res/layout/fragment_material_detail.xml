@@ -1,13 +1,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.widget.fragment.MaterialDetailFragment">
+    tools:context=".presentation.materialdetail.MaterialDetailFragment">
 
     <data>
 
         <variable
-            name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.MaterialDetailFragmentViewModel" />
+            name="karuta"
+            type="me.rei_m.hyakuninisshu.domain.model.karuta.Karuta" />
     </data>
 
     <ScrollView
@@ -25,7 +25,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_m"
                 android:contentDescription="@string/karuta"
-                app:karutaSrc="@{viewModel.karutaImageNo}" />
+                app:karutaSrc="@{karuta.imageNo.value}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,8 +46,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    app:creator="@{viewModel.creator}"
-                    app:karutaNo="@{viewModel.karutaNo}" />
+                    app:creator="@{karuta.creator}"
+                    app:karutaNo="@{karuta.identifier().value}" />
 
             </LinearLayout>
 
@@ -70,29 +70,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.kamiNoKuKanji}" />
+                    android:text="@{karuta.kamiNoKu.kanji}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.shimoNoKuKanji}" />
+                    android:text="@{karuta.shimoNoKu.kanji}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    app:kimariji="@{viewModel.kimariji}"
-                    app:textKamiNoKuKana="@{viewModel.kamiNoKuKana}" />
+                    app:kimariji="@{karuta.kimariji.value}"
+                    app:textKamiNoKuKana="@{karuta.kamiNoKu.kana}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.shimoNoKuKana}" />
+                    android:text="@{karuta.shimoNoKu.kana}" />
 
             </LinearLayout>
 
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_m"
                     android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.translation}" />
+                    android:text="@{karuta.translation}" />
             </LinearLayout>
 
             <View

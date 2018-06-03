@@ -21,11 +21,11 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 // 内部的にSparseIntArrayを使っているためRobolectricを使う.
-@RunWith(RobolectricTestRunner.class)
-public class ArrayUtilTest {
-    @Test
-    public void generateRandomIndexArray() throws Exception {
-        int[] actual = ArrayUtil.generateRandomIndexArray(10, 4);
-        assertThat(actual.length, is(4));
-    }
-}
+//@RunWith(RobolectricTestRunner.class)
+//public class ArrayUtilTest {
+//    @Test
+//    public void generateRandomIndexArray() throws Exception {
+//        int[] actual = ArrayUtil.generateRandomIndexArray(10, 4);
+//        assertThat(actual.length, is(4));
+//    }
+//}
