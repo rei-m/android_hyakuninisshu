@@ -51,7 +51,7 @@ class TrainingStore(dispatcher: Dispatcher) : ViewModel() {
             currentKarutaQuizIdLiveData.value = it.karutaQuizId
         }, dispatcher.on(AggregateResultsAction::class.java).subscribe {
             currentKarutaQuizIdLiveData.value = null
-            if (it.error) {
+            if (it.trainingResult == null) {
                 notFoundErrorEventLiveData.value = true
             } else {
                 resultLiveData.value = it.trainingResult

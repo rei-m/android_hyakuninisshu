@@ -24,15 +24,15 @@ import javax.inject.Inject
 
 class ApplicationStore @Inject constructor(dispatcher: Dispatcher) : ViewModel() {
 
-    private val isRedayLiveData = MutableLiveData<Boolean>()
-    val isReady: LiveData<Boolean> = isRedayLiveData
+    private val isReadyLiveData = MutableLiveData<Boolean>()
+    val isReady: LiveData<Boolean> = isReadyLiveData
 
     private val disposable = CompositeDisposable()
 
     init {
-        isRedayLiveData.value = false
+        isReadyLiveData.value = false
         disposable.add(dispatcher.on(StartApplicationAction::class.java).subscribe {
-            isRedayLiveData.value = true
+            isReadyLiveData.value = true
         })
     }
 

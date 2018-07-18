@@ -32,7 +32,11 @@ class KarutaStore(dispatcher: Dispatcher): ViewModel() {
 
     init {
         disposable.add(dispatcher.on(FetchKarutaAction::class.java).subscribe {
-            karutaLiveData.value = it.karuta
+            if (it.karuta != null) {
+                karutaLiveData.value = it.karuta
+            } else {
+                // TODO: 見つからなかった場合
+            }
         })
     }
 

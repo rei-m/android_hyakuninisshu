@@ -11,27 +11,23 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.action
+package me.rei_m.hyakuninisshu.ext
 
-import io.reactivex.Observable
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.processors.PublishProcessor
-import me.rei_m.hyakuninisshu.util.Logger
-import javax.inject.Inject
-import javax.inject.Singleton
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Action
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 
-@Singleton
-class Dispatcher @Inject constructor() {
-
-    private val processor = PublishProcessor.create<Action>()
-
-    fun dispatch(action: Action) {
-        Logger.action(action)
-        processor.onNext(action)
-    }
-
-    fun <T : Action> on(clazz: Class<T>): Observable<T> = processor.onBackpressureBuffer()
-            .ofType(clazz)
+interface CompletableExt {
+    fun Completable.subscribeNew(onSuccess: () -> Unit): Disposable = this
+            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .toObservable()
+            .subscribe(Action(onSuccess))
+
+    fun Completable.subscribeNew(onSuccess: () -> Unit, onError: ((Throwable) -> Unit)): Disposable = this
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(Action(onSuccess), Consumer(onError))
 }

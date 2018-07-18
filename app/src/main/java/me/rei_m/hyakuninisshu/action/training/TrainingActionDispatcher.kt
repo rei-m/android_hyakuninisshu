@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -13,36 +13,22 @@
 
 package me.rei_m.hyakuninisshu.action.training
 
-import javax.inject.Inject
-
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.functions.Function
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.Color
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
+import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
+import me.rei_m.hyakuninisshu.ext.SingleExt
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class TrainingActionDispatcher @Inject constructor(
         private val dispatcher: Dispatcher,
         private val karutaRepository: KarutaRepository,
         private val karutaQuizRepository: KarutaQuizRepository,
         private val karutaExamRepository: KarutaExamRepository
-) {
-
-    /**
-     * 練習を初期化する.
-     */
-    fun initialize() {
-        dispatcher.dispatch(InitializeTrainingAction())
-    }
-
+) : SingleExt {
     /**
      * 練習を開始する.
      *
@@ -69,22 +55,11 @@ class TrainingActionDispatcher @Inject constructor(
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        karutaQuizRepository.first()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
-                }, {
-                    // TODO: チェック処理
-                    println(it)
-                })
-    }
-
-    /**
-     * 練習を終了する.
-     */
-    fun finish() {
-        dispatcher.dispatch(FinishTrainingAction())
+        karutaQuizRepository.first().subscribeNew({
+            dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
+        }, {
+            dispatcher.dispatch(OpenNextQuizAction(null))
+        })
     }
 
     /**
@@ -98,27 +73,26 @@ class TrainingActionDispatcher @Inject constructor(
      * 練習結果を集計する.
      */
     fun aggregateResults() {
-        karutaQuizRepository.list()
-                .map<KarutaQuizzesResultSummary> { it.resultSummary() }
-                .map<TrainingResult> { TrainingResult(it) }
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ trainingResult -> dispatcher.dispatch(AggregateResultsAction(trainingResult)) }) { throwable -> dispatcher.dispatch(AggregateResultsAction()) }
+        karutaQuizRepository.list().subscribeNew({
+            dispatcher.dispatch(AggregateResultsAction(TrainingResult(it.resultSummary())))
+        }, {
+            dispatcher.dispatch(AggregateResultsAction(null))
+        })
     }
 
     private fun start(karutaIdsSingle: Single<KarutaIds>) {
-        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaIdsSingle, BiFunction<Karutas, KarutaIds, KarutaQuizzes> { obj, karutaIds -> obj.createQuizSet(karutaIds) })
-                .flatMap { karutaQuizzes -> karutaQuizRepository.initialize(karutaQuizzes).andThen(Single.just(karutaQuizzes)) }
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ karutaQuizzes ->
-                    if (karutaQuizzes.isEmpty) {
-                        dispatcher.dispatch(StartTrainingAction(null))
-                    } else {
-                        // TODO: リファクタ
-                        dispatcher.dispatch(StartTrainingAction(karutaQuizzes.values.first().identifier()))
-                    }
-                }
-                ) { _ -> dispatcher.dispatch(StartTrainingAction()) }
+        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaIdsSingle, BiFunction { karutas, karutaIds ->
+            karutas.createQuizSet(karutaIds)
+        }).flatMap {
+            karutaQuizRepository.initialize(it).andThen(Single.just(it))
+        }.subscribeNew({
+            if (it.isEmpty) {
+                dispatcher.dispatch(StartTrainingAction(null))
+            } else {
+                dispatcher.dispatch(StartTrainingAction(it.values.first().identifier()))
+            }
+        }, {
+            dispatcher.dispatch(StartTrainingAction(null))
+        })
     }
 }

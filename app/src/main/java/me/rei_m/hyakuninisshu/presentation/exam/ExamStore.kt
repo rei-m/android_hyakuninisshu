@@ -42,10 +42,20 @@ class ExamStore(dispatcher: Dispatcher) : ViewModel() {
         disposable.addAll(dispatcher.on(StartExamAction::class.java).subscribe {
             currentKarutaQuizIdLiveData.value = it.karutaQuizId
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
-            currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            if (it.karutaQuizId != null) {
+                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            } else {
+                // TODO: 見つからなかったらエラー
+            }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             currentKarutaQuizIdLiveData.value = null
             resultLiveData.value = it.karutaExam
+        }, dispatcher.on(FetchExamAction::class.java).subscribe {
+            if (it.karutaExam !== null) {
+                resultLiveData.value = it.karutaExam
+            } else {
+                // TODO: 見つからなかったらエラー
+            }
         })
     }
 

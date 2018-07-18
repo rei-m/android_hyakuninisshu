@@ -16,6 +16,6 @@ package me.rei_m.hyakuninisshu.action.exam
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 
-class OpenNextQuizAction(val karutaQuizId: KarutaQuizIdentifier? = null) : Action {
+class OpenNextQuizAction(val karutaQuizId: KarutaQuizIdentifier?) : Action {
     override fun toString() = "OpenNextQuizAction(karutaQuizId=$karutaQuizId)"
 }

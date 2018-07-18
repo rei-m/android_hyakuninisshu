@@ -21,7 +21,6 @@ import io.reactivex.disposables.CompositeDisposable
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.AnswerQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.FetchQuizAction
-import me.rei_m.hyakuninisshu.action.quiz.FinishQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.StartQuizAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import javax.inject.Inject
@@ -40,8 +39,6 @@ class QuizStore(dispatcher: Dispatcher) : ViewModel() {
             karutaQuizContentLiveData.value = it.karutaQuizContent
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
             karutaQuizContentLiveData.value = it.karutaQuizContent
-        }, dispatcher.on(FinishQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = null
         })
     }
 

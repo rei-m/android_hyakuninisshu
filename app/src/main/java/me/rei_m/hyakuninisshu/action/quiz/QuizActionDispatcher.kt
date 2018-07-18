@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -24,20 +24,34 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.*
 import me.rei_m.hyakuninisshu.ext.SingleExt
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
+@Singleton
 class QuizActionDispatcher @Inject constructor(
         private val dispatcher: Dispatcher,
         private val karutaRepository: KarutaRepository,
         private val karutaQuizRepository: KarutaQuizRepository
 ) : SingleExt {
 
-    fun fetch(quizId: KarutaQuizIdentifier) {
-        karutaQuizRepository.findBy(quizId)
-                .flatMap { this.createContent(it) }
-                .subscribeNew { dispatcher.dispatch(FetchQuizAction(it)) }
+    /**
+     * 指定の問題を取り出す.
+     *
+     * @param karutaQuizId 問題ID.
+     */
+    fun fetch(karutaQuizId: KarutaQuizIdentifier) {
+        karutaQuizRepository.findBy(karutaQuizId).flatMap { it.content() }.subscribeNew({
+            dispatcher.dispatch(FetchQuizAction(it))
+        }, {
+            dispatcher.dispatch(FetchQuizAction(null))
+        })
     }
 
+    /**
+     * 指定の問題の回答を開始する.
+     *
+     * @param karutaQuizId 問題ID.
+     * @param startTime 開始時間.
+     */
     fun start(karutaQuizId: KarutaQuizIdentifier, startTime: Date) {
         karutaQuizRepository.findBy(karutaQuizId).flatMap {
             if (it.result == null) {
@@ -45,29 +59,35 @@ class QuizActionDispatcher @Inject constructor(
             }
             return@flatMap Single.just(it)
         }.flatMap {
-            this.createContent(it)
+            it.content()
         }.subscribeNew({
             dispatcher.dispatch(StartQuizAction(it))
-        }, { println(it) })
+        }, {
+            dispatcher.dispatch(StartQuizAction(null))
+        })
     }
 
-    fun answer(quizId: KarutaQuizIdentifier, choiceNo: ChoiceNo, answerTime: Date) {
-        karutaQuizRepository.findBy(quizId)
-                .flatMap { karutaQuizRepository.store(it.verify(choiceNo, answerTime)).toSingleDefault(it) }
-                .flatMap { this.createContent(it) }
-                .subscribeNew({
-                    dispatcher.dispatch(AnswerQuizAction(it))
-                }, { throwable ->
-                    dispatcher.dispatch(AnswerQuizAction())
-                })
+    /**
+     * 指定の問題の回答をする.
+     *
+     * @param karutaQuizId 問題ID.
+     * @param choiceNo 選択した回答の番号.
+     * @param answerTime 回答時間.
+     */
+    fun answer(karutaQuizId: KarutaQuizIdentifier, choiceNo: ChoiceNo, answerTime: Date) {
+        karutaQuizRepository.findBy(karutaQuizId).flatMap {
+            karutaQuizRepository.store(it.verify(choiceNo, answerTime)).toSingleDefault(it)
+        }.flatMap {
+            it.content()
+        }.subscribeNew({
+            dispatcher.dispatch(AnswerQuizAction(it))
+        }, { throwable ->
+            dispatcher.dispatch(AnswerQuizAction(null))
+        })
     }
 
-    fun finish() {
-        dispatcher.dispatch(FinishQuizAction())
-    }
-
-    private fun createContent(karutaQuiz: KarutaQuiz): Single<KarutaQuizContent> {
-        val choiceSingle: Single<List<Karuta>> = Observable.fromIterable<KarutaIdentifier>(karutaQuiz.choiceList)
+    private fun KarutaQuiz.content(): Single<KarutaQuizContent> {
+        val choiceSingle: Single<List<Karuta>> = Observable.fromIterable<KarutaIdentifier>(choiceList)
                 .flatMapSingle<Karuta> { karutaRepository.findBy(it) }
                 .toList()
 
@@ -75,9 +95,9 @@ class QuizActionDispatcher @Inject constructor(
 
         val existNextQuizSingle: Single<Boolean> = karutaQuizRepository.existNextQuiz()
 
-        return Single.zip(choiceSingle, countSingle, existNextQuizSingle, Function3<List<Karuta>, KarutaQuizCounter, Boolean, KarutaQuizContent> { t1, t2, t3 ->
-            val correct = t1[karutaQuiz.choiceList.indexOf(karutaQuiz.correctId)]
-            KarutaQuizContent(karutaQuiz, correct, t1, t2, t3)
+        return Single.zip(choiceSingle, countSingle, existNextQuizSingle, Function3 { choice, count, existNext ->
+            val correct = choice[choiceList.indexOf(correctId)]
+            KarutaQuizContent(this, correct, choice, count, existNext)
         })
     }
 }
