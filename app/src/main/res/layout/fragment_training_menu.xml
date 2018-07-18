@@ -2,33 +2,33 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.widget.fragment.TrainingMenuFragment">
+    tools:context=".presentation.entrance.TrainingMenuFragment">
 
     <data>
 
         <variable
             name="trainingRangeFromAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="trainingRangeToAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="colorAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="kimarijiAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="karutaStyleAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingMenuFragmentViewModel" />
+            type="me.rei_m.hyakuninisshu.presentation.entrance.TrainingMenuViewModel" />
     </data>
 
     <ScrollView

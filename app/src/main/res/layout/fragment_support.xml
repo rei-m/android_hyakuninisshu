@@ -1,12 +1,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.support.widget.fragment.SupportFragment">
+    tools:context=".presentation.entrance.SupportFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.support.widget.fragment.SupportFragmentViewModel" />
+            type="me.rei_m.hyakuninisshu.presentation.entrance.SupportViewModel" />
     </data>
 
     <ScrollView

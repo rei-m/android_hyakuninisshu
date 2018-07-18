@@ -1,13 +1,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.widget.fragment.ExamResultFragment">
+    tools:context=".presentation.exam.ExamResultFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.ExamResultFragmentViewModel" />
+            type="me.rei_m.hyakuninisshu.presentation.exam.ExamResultViewModel" />
     </data>
 
     <ScrollView
@@ -87,7 +87,7 @@
                 android:text="@string/explain_result"
                 android:textSize="@dimen/text_xs" />
 
-            <me.rei_m.hyakuninisshu.presentation.karuta.widget.view.KarutaExamResultView
+            <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaExamResultView
                 android:id="@+id/view_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/margin_l"
-                android:onClick="@{viewModel::onClickBackMenu}"
+                android:onClick="@{() -> viewModel.finish()}"
                 android:text="@string/back_menu" />
 
             <View

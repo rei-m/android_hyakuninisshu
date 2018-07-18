@@ -1,0 +1,26 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.entrance.MaterialListFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.presentation.entrance.MaterialListViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_karuta_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:materials="@{viewModel.karutaList}"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+    </RelativeLayout>
+
+</layout>

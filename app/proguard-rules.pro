@@ -42,8 +42,7 @@
 -dontwarn org.antlr.**
 -dontwarn okio.**
 -dontwarn java.lang.invoke.**
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn javax.annotation.**
 
 -dontnote android.**
 -dontnote com.google.**
@@ -54,4 +53,8 @@
 
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
+}
+-keep @com.squareup.moshi.JsonQualifier interface *
+-keepclassmembers class kotlin.Metadata {
+    public <methods>;
 }

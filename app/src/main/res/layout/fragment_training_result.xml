@@ -1,7 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.widget.fragment.TrainingResultFragment">
+    tools:context=".presentation.training.TrainingResultFragment">
 
     <data>
 
@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.TrainingResultFragmentViewModel" />
+            type="me.rei_m.hyakuninisshu.presentation.training.TrainingResultViewModel" />
     </data>
 
     <LinearLayout
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/margin_s"
-            android:onClick="@{viewModel::onClickPracticeWrongKarutas}"
+            android:onClick="@{() -> viewModel.onClickPracticeWrongKarutas()}"
             android:text="@string/practice_wrong_karutas"
             android:visibility="@{viewModel.canRestartTraining ? View.VISIBLE : View.GONE}" />
 
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:onClick="@{viewModel::onClickBackMenu}"
+            android:onClick="@{() -> viewModel.onClickBackMenu()}"
             android:text="@string/back_menu" />
 
     </LinearLayout>
