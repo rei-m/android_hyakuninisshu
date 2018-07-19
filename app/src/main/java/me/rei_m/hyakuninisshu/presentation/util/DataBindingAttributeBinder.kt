@@ -42,27 +42,6 @@ object DataBindingAttributeBinder {
     }
 
     @JvmStatic
-    @BindingAdapter("verticalText")
-    fun setVerticalText(view: VerticalSingleLineTextView,
-                        text: String?) {
-        view.drawText(text)
-    }
-
-    @JvmStatic
-    @BindingAdapter("verticalTextSize")
-    fun setVerticalTextSize(view: VerticalSingleLineTextView,
-                            @DimenRes dimenId: Int) {
-        view.setTextSize(dimenId)
-    }
-
-    @JvmStatic
-    @BindingAdapter("verticalTextSizeByPx")
-    fun setVerticalTextSizeByPx(view: VerticalSingleLineTextView,
-                                textSize: Int) {
-        view.setTextSizeByPx(textSize)
-    }
-
-    @JvmStatic
     @BindingAdapter("examJudgements")
     fun setKarutaExamResult(view: KarutaExamResultView,
                             judgements: List<KarutaQuizJudgement>?) {

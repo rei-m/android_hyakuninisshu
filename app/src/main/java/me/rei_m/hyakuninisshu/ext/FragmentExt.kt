@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 
 interface FragmentExt {
-    fun Fragment.withArgs(block: Bundle.() -> Unit): Fragment {
+    fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit): T {
         arguments = Bundle().apply(block)
         return this
     }

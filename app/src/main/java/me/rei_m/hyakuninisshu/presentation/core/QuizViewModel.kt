@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -69,10 +69,10 @@ class QuizViewModel(
     init {
         quizCount = content.map { it.currentPosition }
 
-        val yomiFuda = content.map { it.yomiFuda(kamiNoKuStyle.value) }
-        firstPhrase = yomiFuda.map { it.firstPhrase }
-        secondPhrase = yomiFuda.map { it.secondPhrase }
-        thirdPhrase = yomiFuda.map { it.thirdPhrase }
+        val yomifuda = content.map { it.yomiFuda(kamiNoKuStyle.value) }
+        firstPhrase = yomifuda.map { it.firstPhrase }
+        secondPhrase = yomifuda.map { it.secondPhrase }
+        thirdPhrase = yomifuda.map { it.thirdPhrase }
 
         val torifudas = content.map { it.toriFudas(shimoNoKuStyle.value) }
         choiceFourthPhraseList = torifudas.map { it.map { it.fourthPhrase } }
