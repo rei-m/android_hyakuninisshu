@@ -19,7 +19,7 @@ import android.support.v7.widget.RecyclerView
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
 object EntranceBindings {
-    @BindingAdapter("app:materials")
+    @BindingAdapter("materials")
     @JvmStatic fun setMaterial(view: RecyclerView, karutaList: List<Karuta>?) {
         karutaList ?: return
         with(view.adapter as MaterialListAdapter) {

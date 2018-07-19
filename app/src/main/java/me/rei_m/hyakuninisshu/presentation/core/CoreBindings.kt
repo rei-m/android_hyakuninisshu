@@ -25,21 +25,21 @@ import me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextVie
 object CoreBindings : IntExt {
 
     @JvmStatic
-    @BindingAdapter("app:verticalText")
+    @BindingAdapter("verticalText")
     fun setVerticalText(view: VerticalSingleLineTextView,
                         text: String?) {
         view.drawText(text)
     }
 
     @JvmStatic
-    @BindingAdapter("app:verticalTextSize")
+    @BindingAdapter("verticalTextSize")
     fun setVerticalTextSize(view: VerticalSingleLineTextView,
                             @DimenRes dimenId: Int) {
         view.setTextSize(dimenId)
     }
 
     @JvmStatic
-    @BindingAdapter("app:verticalTextSizeByPx")
+    @BindingAdapter("verticalTextSizeByPx")
     fun setVerticalTextSizeByPx(view: VerticalSingleLineTextView,
                                 textSize: Int?) {
         textSize ?: let { return }
@@ -47,7 +47,7 @@ object CoreBindings : IntExt {
     }
 
     @JvmStatic
-    @BindingAdapter("app:textForQuiz", "app:textPosition")
+    @BindingAdapter("textForQuiz", "textPosition")
     fun setTextForQuiz(view: TextView,
                        text: String?,
                        textPosition: Int?) {
@@ -60,7 +60,7 @@ object CoreBindings : IntExt {
     }
 
     @JvmStatic
-    @BindingAdapter("app:karutaNo", "app:kimariji")
+    @BindingAdapter("karutaNo", "kimariji")
     fun setKarutaNoAndKimariji(view: TextView,
                                karutaNo: Int?,
                                kimariji: Int?) {
@@ -77,7 +77,7 @@ object CoreBindings : IntExt {
     }
 
     @JvmStatic
-    @BindingAdapter("app:isCorrect")
+    @BindingAdapter("isCorrect")
     fun setIsCorrect(imageView: ImageView,
                      isCorrect: Boolean?) {
         isCorrect ?: let { return }
