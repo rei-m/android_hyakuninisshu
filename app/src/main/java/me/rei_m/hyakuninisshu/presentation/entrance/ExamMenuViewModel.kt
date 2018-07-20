@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
-import android.view.View
 import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
@@ -23,7 +22,7 @@ import javax.inject.Inject
 
 class ExamMenuViewModel(
         store: EntranceStore,
-        private val actionDispatcher: ExamActionDispatcher,
+        actionDispatcher: ExamActionDispatcher,
         private val navigator: Navigator,
         private val analyticsManager: AnalyticsManager
 ) : LiveDataExt {
@@ -33,20 +32,16 @@ class ExamMenuViewModel(
 
     val averageAnswerSec: LiveData<Float?> = store.recentExam.map { it?.result?.averageAnswerSec }
 
-    fun start() {
-        if (hasResult.value != true) {
-            actionDispatcher.fetchRecent()
-        }
+    init {
+        actionDispatcher.fetchRecent()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun onClickStartExam(view: View) {
+    fun onClickStartExam() {
         analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_EXAM)
         navigator.navigateToExamMaster()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun onClickStartTraining(view: View) {
+    fun onClickStartTraining() {
         analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING_FOR_EXAM)
         navigator.navigateToExamTrainingMaster()
     }

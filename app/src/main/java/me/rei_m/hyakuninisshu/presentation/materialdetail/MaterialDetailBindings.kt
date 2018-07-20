@@ -18,7 +18,7 @@ import android.support.v4.view.ViewPager
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
 object MaterialDetailBindings {
-    @BindingAdapter("app:materials", "app:initialPosition")
+    @BindingAdapter("materials", "initialPosition")
     @JvmStatic fun setMaterial(pager: ViewPager, karutaList: List<Karuta>?, initialPosition: Int?) {
         karutaList ?: return
         initialPosition ?: return

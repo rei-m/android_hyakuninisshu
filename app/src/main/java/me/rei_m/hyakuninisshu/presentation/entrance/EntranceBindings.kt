@@ -14,16 +14,116 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.databinding.BindingAdapter
-import android.support.v4.view.ViewPager
+import android.databinding.InverseBindingAdapter
+import android.databinding.InverseBindingListener
 import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Spinner
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.presentation.enums.*
+import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
 
 object EntranceBindings {
+    @JvmStatic
     @BindingAdapter("materials")
-    @JvmStatic fun setMaterial(view: RecyclerView, karutaList: List<Karuta>?) {
+    fun setMaterial(view: RecyclerView, karutaList: List<Karuta>?) {
         karutaList ?: return
         with(view.adapter as MaterialListAdapter) {
             replaceData(karutaList)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("spinnerAdapter")
+    fun setSpinnerAdapter(spinner: Spinner, spinnerAdapter: SpinnerAdapter) {
+        spinner.adapter = spinnerAdapter
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
+    fun bindTrainingRangeData(spinner: Spinner,
+                              newSelectedValue: TrainingRangeFrom,
+                              newTextAttrChanged: InverseBindingListener) {
+        bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    fun captureSelectedTrainingRangeFrom(spinner: Spinner): TrainingRangeFrom {
+        return spinner.selectedItem as TrainingRangeFrom
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
+    fun bindTrainingRangeData(spinner: Spinner,
+                              newSelectedValue: TrainingRangeTo,
+                              newTextAttrChanged: InverseBindingListener) {
+        bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    fun captureSelectedTrainingRangeTo(spinner: Spinner): TrainingRangeTo {
+        return spinner.selectedItem as TrainingRangeTo
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
+    fun bindKimariji(spinner: Spinner,
+                     newSelectedValue: KimarijiFilter,
+                     newTextAttrChanged: InverseBindingListener) {
+        bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    fun captureSelectedKimariji(spinner: Spinner): KimarijiFilter {
+        return spinner.selectedItem as KimarijiFilter
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
+    fun bindKarutaStyle(spinner: Spinner,
+                        newSelectedValue: KarutaStyleFilter,
+                        newTextAttrChanged: InverseBindingListener) {
+        bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    fun captureSelectedKarutaStyle(spinner: Spinner): KarutaStyleFilter {
+        return spinner.selectedItem as KarutaStyleFilter
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
+    fun bindColor(spinner: Spinner,
+                  newSelectedValue: ColorFilter,
+                  newTextAttrChanged: InverseBindingListener) {
+        bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+    fun captureSelectedColor(spinner: Spinner): ColorFilter {
+        return spinner.selectedItem as ColorFilter
+    }
+
+    private fun bindSpinner(spinner: Spinner,
+                            newSelectedValue: SpinnerItem?,
+                            newTextAttrChanged: InverseBindingListener) {
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                newTextAttrChanged.onChange()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        if (newSelectedValue != null) {
+            val pos = (spinner.adapter as SpinnerAdapter).getPosition(newSelectedValue)
+            spinner.setSelection(pos, true)
         }
     }
 }

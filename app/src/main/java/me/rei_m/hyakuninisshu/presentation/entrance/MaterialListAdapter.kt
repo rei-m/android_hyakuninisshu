@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -90,7 +90,7 @@ class MaterialListAdapter(
         fun onItemClicked(position: Int)
     }
 
-    private class ItemViewHolder constructor(val binding: AdapterItemMaterialKarutaBinding) : RecyclerView.ViewHolder(binding.root)
+    private class ItemViewHolder(val binding: AdapterItemMaterialKarutaBinding) : RecyclerView.ViewHolder(binding.root)
 
     companion object {
         private const val FOOTER_COUNT = 1

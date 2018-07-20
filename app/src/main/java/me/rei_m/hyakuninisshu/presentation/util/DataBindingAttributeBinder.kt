@@ -15,31 +15,16 @@ package me.rei_m.hyakuninisshu.presentation.util
 
 import android.databinding.BindingAdapter
 import android.graphics.Color
-import android.support.annotation.DimenRes
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.util.TypedValue
-import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.presentation.helper.GlideApp
 import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper
 import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaExamResultView
-import me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
 import me.rei_m.hyakuninisshu.util.Constants
-import java.util.*
 
 object DataBindingAttributeBinder {
-
-    @JvmStatic
-    @BindingAdapter("textSizeByPx")
-    fun setTextSizeByPx(view: TextView,
-                        textSize: Int) {
-        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize.toFloat())
-    }
 
     @JvmStatic
     @BindingAdapter("examJudgements")
@@ -52,29 +37,11 @@ object DataBindingAttributeBinder {
     }
 
     @JvmStatic
-    @BindingAdapter("karutaSrc")
-    fun setKarutaSrc(view: ImageView,
-                     resIdString: String?) {
-        if (resIdString == null) {
-            return
-        }
-
-        val context = view.context.applicationContext
-
-        val resId = context.resources.getIdentifier("karuta_$resIdString", "drawable", context.packageName)
-
-        GlideApp.with(view.context)
-                .load(resId)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(view)
-    }
-
-    @JvmStatic
     @BindingAdapter("textKamiNoKuKana", "kimariji")
     fun setTextKamiNoKuKana(view: TextView,
                             kamiNoKu: String?,
-                            kimariji: Int) {
-        if (kamiNoKu == null || kimariji < 1) {
+                            kimariji: Int?) {
+        if (kamiNoKu == null || kimariji == null || kimariji < 1) {
             return
         }
 
@@ -92,28 +59,6 @@ object DataBindingAttributeBinder {
         val ssb = SpannableStringBuilder().append(kamiNoKu)
         ssb.setSpan(ForegroundColorSpan(Color.RED), 0, finallyKimariji - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         view.text = ssb
-    }
-
-    @JvmStatic
-    @BindingAdapter("averageAnswerSec")
-    fun setAverageAnswerTime(view: TextView,
-                             averageAnswerSec: Float) {
-        val context = view.context.applicationContext
-        val averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerSec)
-        view.text = context.getString(R.string.seconds, averageAnswerTimeString)
-    }
-
-    @JvmStatic
-    @BindingAdapter("karutaNo")
-    fun setKarutaNo(view: TextView,
-                    karutaNo: Int) {
-        if (karutaNo < 1) {
-            return
-        }
-
-        val context = view.context.applicationContext
-        val text = KarutaDisplayHelper.convertNumberToString(context, karutaNo)
-        view.text = text
     }
 
     @JvmStatic

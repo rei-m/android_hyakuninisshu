@@ -54,7 +54,7 @@
                 android:padding="@dimen/padding_xs"
                 android:text="@string/text_empty_training"
                 android:textSize="@dimen/text_m"
-                android:visibility="@{viewModel.isVisibleEmpty ? View.VISIBLE : View.GONE}" />
+                app:visibleOrGone="@{viewModel.isVisibleEmpty}" />
 
         </RelativeLayout>
 

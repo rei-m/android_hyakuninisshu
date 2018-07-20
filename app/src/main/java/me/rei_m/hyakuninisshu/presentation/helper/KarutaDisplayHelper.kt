@@ -47,10 +47,4 @@ object KarutaDisplayHelper {
 
         return context.getString(R.string.karuta_number, sb.toString())
     }
-
-    fun convertKimarijiToString(context: Context, kimariji: Int): String {
-        val resources = context.resources
-        val kimarijiArray = resources.getStringArray(R.array.kimariji)
-        return kimarijiArray[kimariji - 1]
-    }
 }

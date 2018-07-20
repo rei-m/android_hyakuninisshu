@@ -35,10 +35,8 @@ class MaterialListViewModel(
             field = value
         }
 
-    fun start() {
-        if (karutaList.value == null) {
-            actionDispatcher.fetch(colorFilter)
-        }
+    init {
+        actionDispatcher.fetch(colorFilter)
     }
 
     fun onClickItem(position: Int) {

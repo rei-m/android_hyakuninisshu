@@ -11,28 +11,19 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.di
+package me.rei_m.hyakuninisshu.presentation.widget.view
 
-import android.content.Context
-import android.support.v7.app.AppCompatActivity
-import dagger.Module
-import dagger.Provides
-import me.rei_m.hyakuninisshu.di.ForActivity
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import javax.inject.Named
+import android.databinding.BindingAdapter
+import android.view.View
 
-@Module
-class ActivityModule(private val activity: AppCompatActivity) {
-
-    @Provides
-    @ForActivity
-    @Named("activityContext")
-    fun provideContext(): Context {
-        return activity
-    }
-
-    @Provides
-    fun provideNavigator(): Navigator {
-        return Navigator(activity)
+object ViewBindings {
+    @JvmStatic
+    @BindingAdapter("visibleOrGone")
+    fun setVisibleOrGone(view: View, visible: Boolean?) {
+        if (visible == true) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
     }
 }

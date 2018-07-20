@@ -15,12 +15,14 @@ package me.rei_m.hyakuninisshu.presentation.core
 
 import android.databinding.BindingAdapter
 import android.support.annotation.DimenRes
+import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.ext.IntExt
 import me.rei_m.hyakuninisshu.presentation.helper.GlideApp
 import me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+import java.util.*
 
 object CoreBindings : IntExt {
 
@@ -60,6 +62,14 @@ object CoreBindings : IntExt {
     }
 
     @JvmStatic
+    @BindingAdapter("textSizeByPx")
+    fun setTextSizeByPx(view: TextView,
+                        textSize: Int?) {
+        textSize ?: let { return }
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize.toFloat())
+    }
+
+    @JvmStatic
     @BindingAdapter("karutaNo", "kimariji")
     fun setKarutaNoAndKimariji(view: TextView,
                                karutaNo: Int?,
@@ -83,5 +93,15 @@ object CoreBindings : IntExt {
         isCorrect ?: let { return }
         val resId = if (isCorrect) R.drawable.check_correct else R.drawable.check_incorrect
         GlideApp.with(imageView.context).load(resId).dontAnimate().into(imageView)
+    }
+
+    @JvmStatic
+    @BindingAdapter("averageAnswerSec")
+    fun setAverageAnswerTime(view: TextView,
+                             averageAnswerSec: Float?) {
+        averageAnswerSec ?: return
+        val context = view.context.applicationContext
+        val averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerSec)
+        view.text = context.getString(R.string.seconds, averageAnswerTimeString)
     }
 }

@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="viewModel"
             type="me.rei_m.hyakuninisshu.presentation.training.TrainingResultViewModel" />
@@ -70,7 +68,7 @@
             android:layout_marginBottom="@dimen/margin_s"
             android:onClick="@{() -> viewModel.onClickPracticeWrongKarutas()}"
             android:text="@string/practice_wrong_karutas"
-            android:visibility="@{viewModel.canRestartTraining ? View.VISIBLE : View.GONE}" />
+            app:visibleOrGone="@{viewModel.canRestartTraining}" />
 
         <Button
             android:layout_width="wrap_content"

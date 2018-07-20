@@ -36,16 +36,10 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
     @Inject
     lateinit var analyticsManager: AnalyticsManager
 
-    lateinit var binding: FragmentExamMenuBinding
-
-    lateinit var viewModel: ExamMenuViewModel
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val store = obtainActivityStore(EntranceStore::class.java, storeFactory)
-        viewModel = viewModelFactory.create(store)
-        viewModel.start()
+        val viewModel = viewModelFactory.create(obtainActivityStore(EntranceStore::class.java, storeFactory))
 
-        binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
+        val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@ExamMenuFragment)
         }
 

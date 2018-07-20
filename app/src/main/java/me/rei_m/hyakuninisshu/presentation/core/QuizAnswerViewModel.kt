@@ -25,14 +25,16 @@ import javax.inject.Inject
 
 class QuizAnswerViewModel(
         store: QuizStore,
-        private val actionDispatcher: QuizActionDispatcher,
-        private val quizId: KarutaQuizIdentifier,
+        actionDispatcher: QuizActionDispatcher,
+        quizId: KarutaQuizIdentifier,
         private val navigator: Navigator
 ) : LiveDataExt {
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
     val existNextQuiz: LiveData<Boolean> = content.map { it.existNext }
+
+    val canGoToResult: LiveData<Boolean> = content.map { !it.existNext }
 
     val karuta: LiveData<Karuta> = content.map { it.correct }
 
@@ -56,7 +58,7 @@ class QuizAnswerViewModel(
 
     val openResultEvent: SingleLiveEvent<Void> = SingleLiveEvent()
 
-    fun start() {
+    init {
         actionDispatcher.fetch(quizId)
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.MutableLiveData
-import android.view.View
 import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
@@ -47,8 +46,7 @@ class TrainingMenuViewModel(
 
     val snackBarMessage: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    @Suppress("UNUSED_PARAMETER")
-    fun onClickStartTraining(view: View) {
+    fun onClickStartTraining() {
 
         if (trainingRangeFrom.value!!.ordinal > trainingRangeTo.value!!.ordinal) {
             snackBarMessage.value =  R.string.text_message_invalid_training_range

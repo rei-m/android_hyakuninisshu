@@ -13,10 +13,10 @@
     </data>
 
     <RelativeLayout
-        android:visibility="@{viewModel.isVisibleContent ? View.VISIBLE : View.GONE}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/tatami">
+        android:background="@drawable/tatami"
+        app:visibleOrGone="@{viewModel.isVisibleContent}">
 
         <TextView
             android:layout_width="wrap_content"
@@ -455,7 +455,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:onClick="@{() -> viewModel.onClickResult()}"
-            android:visibility="@{viewModel.isVisibleResult ? View.VISIBLE : View.GONE}"
+            app:visibleOrGone="@{viewModel.isVisibleResult}"
             app:elevation="@{@dimen/elevation_level_ms}">
 
             <ImageView
@@ -464,7 +464,7 @@
                 android:layout_height="@dimen/size_karuta_quiz_result_mark"
                 android:layout_gravity="center"
                 android:contentDescription="@string/score"
-                android:visibility="@{viewModel.isVisibleResult ? View.VISIBLE : View.GONE}"
+                app:visibleOrGone="@{viewModel.isVisibleResult}"
                 app:isCorrect="@{viewModel.isCorrect}" />
 
         </FrameLayout>

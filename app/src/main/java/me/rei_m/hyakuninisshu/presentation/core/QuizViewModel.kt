@@ -69,14 +69,14 @@ class QuizViewModel(
     init {
         quizCount = content.map { it.currentPosition }
 
-        val yomifuda = content.map { it.yomiFuda(kamiNoKuStyle.value) }
-        firstPhrase = yomifuda.map { it.firstPhrase }
-        secondPhrase = yomifuda.map { it.secondPhrase }
-        thirdPhrase = yomifuda.map { it.thirdPhrase }
+        val yomiFuda = content.map { it.yomiFuda(kamiNoKuStyle.value) }
+        firstPhrase = yomiFuda.map { it.firstPhrase }
+        secondPhrase = yomiFuda.map { it.secondPhrase }
+        thirdPhrase = yomiFuda.map { it.thirdPhrase }
 
-        val torifudas = content.map { it.toriFudas(shimoNoKuStyle.value) }
-        choiceFourthPhraseList = torifudas.map { it.map { it.fourthPhrase } }
-        choiceFifthPhraseList = torifudas.map { it.map { it.fifthPhrase } }
+        val toriFudas = content.map { it.toriFudas(shimoNoKuStyle.value) }
+        choiceFourthPhraseList = toriFudas.map { it.map { it.fourthPhrase } }
+        choiceFifthPhraseList = toriFudas.map { it.map { it.fifthPhrase } }
 
         val result = content.map { it.quiz.result }
         isVisibleChoiceList = result.map {

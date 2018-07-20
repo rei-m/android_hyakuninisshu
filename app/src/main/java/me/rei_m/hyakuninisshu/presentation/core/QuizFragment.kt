@@ -52,18 +52,18 @@ class QuizFragment : DaggerFragment(), FragmentExt {
     private var listener: CoreInteractionListener? = null
 
     private val karutaQuizId: KarutaQuizIdentifier
-        get() = arguments?.getParcelable(ARG_KARUTA_QUIZ_ID) ?: let {
-            throw IllegalArgumentException("$ARG_KARUTA_QUIZ_ID is missing")
+        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_QUIZ_ID)) {
+            "$ARG_KARUTA_QUIZ_ID is missing"
         }
 
     private val kamiNoKuStyle: KarutaStyleFilter
-        get() = arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] } ?: let {
-            throw IllegalArgumentException("$ARG_KAMI_NO_KU_STYLE is missing")
+        get() = requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }){
+            "$ARG_KAMI_NO_KU_STYLE is missing"
         }
 
     private val shimoNoKuStyle: KarutaStyleFilter
-        get() = arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] } ?: let {
-            throw IllegalArgumentException("$ARG_SHIMO_NO_KU_STYLE is missing")
+        get() = requireNotNull(arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
+            "$ARG_SHIMO_NO_KU_STYLE is missing"
         }
 
     private var animationDisposable: Disposable? = null
