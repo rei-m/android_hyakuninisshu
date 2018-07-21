@@ -14,22 +14,42 @@
 package me.rei_m.hyakuninisshu.presentation.karuta
 
 import android.databinding.BindingAdapter
+import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.rei_m.hyakuninisshu.ext.IntExt
 import me.rei_m.hyakuninisshu.presentation.helper.GlideApp
+import me.rei_m.hyakuninisshu.util.Constants
 
 object KarutaBindings : IntExt {
     @JvmStatic
     @BindingAdapter("karutaNo")
     fun setKarutaNo(view: TextView, karutaNo: Int?) {
-        if (karutaNo == null || karutaNo < 1) {
+        if (karutaNo == null) {
             return
         }
 
         val context = view.context.applicationContext
         view.text = karutaNo.toKarutaNoStr(context)
+    }
+
+    @JvmStatic
+    @BindingAdapter("karutaNo", "creator")
+    fun setKarutaNoAndCreator(view: TextView,
+                              karutaNo: Int?,
+                              creator: String?) {
+
+        if (karutaNo == null || creator == null) {
+            return
+        }
+
+        val context = view.context.applicationContext
+        val text = "${karutaNo.toKarutaNoStr(context)} / $creator"
+        view.text = text
     }
 
     @JvmStatic
@@ -44,5 +64,30 @@ object KarutaBindings : IntExt {
                 .load(resId)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(view)
+    }
+
+    @JvmStatic
+    @BindingAdapter("textKamiNoKuKana", "kimariji")
+    fun setTextKamiNoKuKana(view: TextView,
+                            kamiNoKu: String?,
+                            kimariji: Int?) {
+        if (kamiNoKu == null || kimariji == null) {
+            return
+        }
+
+        var finallyKimariji = 0
+        for (i in 0 until kamiNoKu.length - 1) {
+            if (kamiNoKu.substring(i, i + 1) == Constants.SPACE) {
+                finallyKimariji++
+            } else {
+                if (kimariji < i) {
+                    break
+                }
+            }
+            finallyKimariji++
+        }
+        val ssb = SpannableStringBuilder().append(kamiNoKu)
+        ssb.setSpan(ForegroundColorSpan(Color.RED), 0, finallyKimariji - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        view.text = ssb
     }
 }

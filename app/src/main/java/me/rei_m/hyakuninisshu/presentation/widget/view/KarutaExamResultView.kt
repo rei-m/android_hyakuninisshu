@@ -24,8 +24,7 @@ import android.widget.LinearLayout
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
-import me.rei_m.hyakuninisshu.presentation.util.ViewUtil
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 
 class KarutaExamResultView @JvmOverloads constructor(
         context: Context,
@@ -91,7 +90,7 @@ class KarutaExamResultView @JvmOverloads constructor(
                 val viewId: Int = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
                     View.generateViewId()
                 } else {
-                    ViewUtil.generateViewId()
+                    ViewIdHolder.generateViewId()
                 }
                 cellViewIdList[i] = viewId
             }

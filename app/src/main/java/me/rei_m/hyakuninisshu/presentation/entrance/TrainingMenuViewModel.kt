@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
 import me.rei_m.hyakuninisshu.presentation.enums.*
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class TrainingMenuViewModel(

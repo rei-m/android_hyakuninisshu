@@ -11,10 +11,20 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.enums
+package me.rei_m.hyakuninisshu.presentation.exam
 
-import android.content.res.Resources
+import android.databinding.BindingAdapter
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
+import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaExamResultView
 
-interface SpinnerItem {
-    fun label(res: Resources): String
+object ExamBindings {
+    @JvmStatic
+    @BindingAdapter("examJudgements")
+    fun setKarutaExamResult(view: KarutaExamResultView,
+                            judgements: List<KarutaQuizJudgement>?) {
+        if (judgements == null) {
+            return
+        }
+        view.setResult(judgements)
+    }
 }

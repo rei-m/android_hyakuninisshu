@@ -77,6 +77,10 @@ class MaterialListAdapter(
         notifyDataSetChanged()
     }
 
+    interface OnItemInteractionListener {
+        fun onItemClicked(position: Int)
+    }
+
     private enum class ItemViewType {
         ITEM,
         FOOTER;
@@ -84,10 +88,6 @@ class MaterialListAdapter(
         companion object {
             fun forId(id: Int): ItemViewType = values()[id]
         }
-    }
-
-    interface OnItemInteractionListener {
-        fun onItemClicked(position: Int)
     }
 
     private class ItemViewHolder(val binding: AdapterItemMaterialKarutaBinding) : RecyclerView.ViewHolder(binding.root)

@@ -11,10 +11,21 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.enums
+package me.rei_m.hyakuninisshu.presentation
 
-import android.content.res.Resources
+import android.arch.lifecycle.ViewModel
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
-interface SpinnerItem {
-    fun label(res: Resources): String
+abstract class Store : ViewModel() {
+    private val disposable = CompositeDisposable()
+
+    protected fun register(vararg ds: Disposable) {
+        disposable.addAll(*ds)
+    }
+
+    override fun onCleared() {
+        disposable.dispose()
+        super.onCleared()
+    }
 }

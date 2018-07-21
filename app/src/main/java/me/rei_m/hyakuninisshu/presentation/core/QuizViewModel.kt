@@ -23,7 +23,7 @@ import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Device
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import java.util.*
 import javax.inject.Inject
 

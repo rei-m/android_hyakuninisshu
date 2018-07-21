@@ -20,7 +20,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class QuizAnswerViewModel(

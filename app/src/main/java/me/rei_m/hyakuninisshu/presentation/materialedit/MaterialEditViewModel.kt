@@ -23,7 +23,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 import me.rei_m.hyakuninisshu.R as Res
 

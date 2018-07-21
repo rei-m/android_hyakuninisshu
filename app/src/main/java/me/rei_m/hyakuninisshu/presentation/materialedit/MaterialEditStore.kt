@@ -22,7 +22,7 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.StartEditMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class MaterialEditStore(dispatcher: Dispatcher) : ViewModel() {

@@ -17,28 +17,20 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.StartApplicationAction
 import javax.inject.Inject
 
-class ApplicationStore @Inject constructor(dispatcher: Dispatcher) : ViewModel() {
+class ApplicationStore(dispatcher: Dispatcher) : Store() {
 
     private val isReadyLiveData = MutableLiveData<Boolean>()
     val isReady: LiveData<Boolean> = isReadyLiveData
 
-    private val disposable = CompositeDisposable()
-
     init {
         isReadyLiveData.value = false
-        disposable.add(dispatcher.on(StartApplicationAction::class.java).subscribe {
+        register(dispatcher.on(StartApplicationAction::class.java).subscribe {
             isReadyLiveData.value = true
         })
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
-        super.onCleared()
     }
 
     class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {

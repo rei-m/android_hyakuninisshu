@@ -38,8 +38,8 @@ class TrainingViewModel(
                       trainingRangeTo: TrainingRangeTo,
                       kimarijiFilter: KimarijiFilter,
                       colorFilter: ColorFilter) {
-        trainingActionDispatcher.start(trainingRangeFrom.identifier,
-                trainingRangeTo.identifier,
+        trainingActionDispatcher.start(trainingRangeFrom.value,
+                trainingRangeTo.value,
                 kimarijiFilter.value,
                 colorFilter.value)
     }

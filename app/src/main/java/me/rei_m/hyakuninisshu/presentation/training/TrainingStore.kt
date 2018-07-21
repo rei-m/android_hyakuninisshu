@@ -24,7 +24,7 @@ import me.rei_m.hyakuninisshu.action.training.OpenNextQuizAction
 import me.rei_m.hyakuninisshu.action.training.StartTrainingAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class TrainingStore(dispatcher: Dispatcher) : ViewModel() {
