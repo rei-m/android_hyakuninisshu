@@ -13,6 +13,8 @@
 
 package me.rei_m.hyakuninisshu.presentation.karuta
 
+import android.arch.lifecycle.Observer
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +35,8 @@ class KarutaFragment : DaggerFragment(), FragmentExt {
     @Inject
     lateinit var viewModelFactory: KarutaViewModel.Factory
 
+    private var listener: OnFragmentInteractionListener? = null
+
     private val karutaId: KarutaIdentifier
         get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
             "$ARG_KARUTA_ID is missing"
@@ -40,6 +44,9 @@ class KarutaFragment : DaggerFragment(), FragmentExt {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewModel = viewModelFactory.create(obtainActivityStore(KarutaStore::class.java, storeFactory), karutaId)
+        viewModel.notFoundKarutaEvent.observe(this, Observer {
+            listener?.onError()
+        })
 
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@KarutaFragment)
@@ -50,11 +57,30 @@ class KarutaFragment : DaggerFragment(), FragmentExt {
         return binding.root
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+
     @dagger.Module
     abstract class Module {
         @ForFragment
         @ContributesAndroidInjector
         abstract fun contributeInjector(): KarutaFragment
+    }
+
+    interface OnFragmentInteractionListener {
+        fun onError()
     }
 
     companion object : FragmentExt {

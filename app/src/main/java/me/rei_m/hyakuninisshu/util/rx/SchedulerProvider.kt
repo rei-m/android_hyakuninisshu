@@ -11,12 +11,16 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.action.exam
+package me.rei_m.hyakuninisshu.util.rx
 
-import me.rei_m.hyakuninisshu.action.Action
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import io.reactivex.Scheduler
 
-class FetchRecentExamAction(val karutaExam: KarutaExam?,
-                            val error: Boolean) : Action {
-    override fun toString(): String = "FetchRecentExamAction(karutaExam=$karutaExam, error=$error)"
+interface SchedulerProvider {
+    fun ui(): Scheduler
+
+    fun computation(): Scheduler
+
+    fun new(): Scheduler
+
+    fun io(): Scheduler
 }

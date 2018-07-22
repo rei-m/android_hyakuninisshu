@@ -14,20 +14,10 @@
 package me.rei_m.hyakuninisshu.ext
 
 import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 
 interface CompletableExt {
-    fun Completable.subscribeNew(onSuccess: () -> Unit): Disposable = this
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Action(onSuccess))
-
-    fun Completable.subscribeNew(onSuccess: () -> Unit, onError: ((Throwable) -> Unit)): Disposable = this
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Action(onSuccess), Consumer(onError))
+    fun Completable.scheduler(schedulerProvider: SchedulerProvider): Completable = this
+            .subscribeOn(schedulerProvider.new())
+            .observeOn(schedulerProvider.ui())
 }

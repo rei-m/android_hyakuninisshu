@@ -15,6 +15,6 @@ package me.rei_m.hyakuninisshu.action.application
 
 import me.rei_m.hyakuninisshu.action.Action
 
-class StartApplicationAction : Action {
-    override fun toString() = "StartApplicationAction()"
+class StartApplicationAction(val error: Boolean) : Action {
+    override fun toString() = "StartApplicationAction(error=$error)"
 }

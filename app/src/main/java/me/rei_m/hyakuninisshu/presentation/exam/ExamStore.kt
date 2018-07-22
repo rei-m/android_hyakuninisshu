@@ -25,6 +25,7 @@ import me.rei_m.hyakuninisshu.action.exam.StartExamAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.presentation.Store
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class ExamStore(dispatcher: Dispatcher) : Store() {
@@ -35,26 +36,40 @@ class ExamStore(dispatcher: Dispatcher) : Store() {
     private val resultLiveData = MutableLiveData<KarutaExam?>()
     val result: LiveData<KarutaExam?> = resultLiveData
 
+    private val notFoundQuizEventLiveData = SingleLiveEvent<Void>()
+    val notFoundQuizEvent = notFoundQuizEventLiveData
+
+    private val notFoundExamEventLiveData = SingleLiveEvent<Void>()
+    val notFoundExamEvent = notFoundExamEventLiveData
+
     init {
         currentKarutaQuizIdLiveData.value = null
         resultLiveData.value = null
 
         register(dispatcher.on(StartExamAction::class.java).subscribe {
-            currentKarutaQuizIdLiveData.value = it.karutaQuizId
-        }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
-            if (it.karutaQuizId != null) {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            if (it.error) {
+                notFoundQuizEventLiveData.call()
             } else {
-                // TODO: 見つからなかったらエラー
+                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            }
+        }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
+            if (it.error) {
+                notFoundQuizEventLiveData.call()
+            } else {
+                currentKarutaQuizIdLiveData.value = it.karutaQuizId
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             currentKarutaQuizIdLiveData.value = null
-            resultLiveData.value = it.karutaExam
-        }, dispatcher.on(FetchExamAction::class.java).subscribe {
-            if (it.karutaExam !== null) {
-                resultLiveData.value = it.karutaExam
+            if (it.error) {
+                notFoundExamEventLiveData.call()
             } else {
-                // TODO: 見つからなかったらエラー
+                resultLiveData.value = it.karutaExam
+            }
+        }, dispatcher.on(FetchExamAction::class.java).subscribe {
+            if (it.error) {
+                notFoundExamEventLiveData.call()
+            } else {
+                resultLiveData.value = it.karutaExam
             }
         })
     }

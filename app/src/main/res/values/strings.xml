@@ -125,7 +125,11 @@
 
     <string name="text_title_error">エラーの発生</string>
 
+    <string name="text_message_boot_error">アプリの起動に失敗しました。</string>
+
     <string name="text_message_quiz_error">回答の途中でエラーが発生しました。前の画面に戻ります。</string>
+
+    <string name="text_message_aggregate_error">回答結果の集計に失敗しました。前の画面に戻ります。</string>
 
     <string name="text_message_illegal_arguments">意図しない遷移をしました。前の画面に戻ります。</string>
 
@@ -141,9 +145,5 @@
     <string name="url_credit">file:///android_asset/licenses.html</string>
 
     <string name="app_font_file">Hannari.otf</string>
-    <string name="title_activity_material_single">MaterialSingleActivity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

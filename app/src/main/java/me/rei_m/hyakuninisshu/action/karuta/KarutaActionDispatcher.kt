@@ -17,14 +17,16 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class KarutaActionDispatcher @Inject constructor(
+        private val karutaRepository: KarutaRepository,
         private val dispatcher: Dispatcher,
-        private val karutaRepository: KarutaRepository
-): SingleExt {
+        private val schedulerProvider: SchedulerProvider
+) : SingleExt {
 
     /**
      * 指定の詩を取り出す.
@@ -32,7 +34,7 @@ class KarutaActionDispatcher @Inject constructor(
      * @param karutaId 歌ID.
      */
     fun fetch(karutaId: KarutaIdentifier) {
-        karutaRepository.findBy(karutaId).subscribeNew({
+        karutaRepository.findBy(karutaId).scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FetchKarutaAction(it))
         }, {
             dispatcher.dispatch(FetchKarutaAction(null))

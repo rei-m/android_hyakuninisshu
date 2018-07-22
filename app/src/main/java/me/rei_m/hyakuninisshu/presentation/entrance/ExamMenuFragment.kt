@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.databinding.FragmentExamMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.ext.FragmentExt
@@ -33,9 +32,6 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
     @Inject
     lateinit var viewModelFactory: ExamMenuViewModel.Factory
 
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewModel = viewModelFactory.create(obtainActivityStore(EntranceStore::class.java, storeFactory))
 
@@ -46,11 +42,6 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
         binding.viewModel = viewModel
 
         return binding.root
-    }
-
-    override fun onResume() {
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM)
-        super.onResume()
     }
 
     @dagger.Module

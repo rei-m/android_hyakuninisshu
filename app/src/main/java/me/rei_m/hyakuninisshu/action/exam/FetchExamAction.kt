@@ -18,4 +18,6 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
 class FetchExamAction(val karutaExam: KarutaExam?) : Action {
     override fun toString() = "FetchExamAction(karutaExam=$karutaExam)"
+
+    val error= karutaExam == null
 }

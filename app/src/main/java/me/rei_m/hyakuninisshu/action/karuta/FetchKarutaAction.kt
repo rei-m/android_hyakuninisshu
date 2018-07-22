@@ -18,4 +18,6 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
 class FetchKarutaAction(val karuta: Karuta?) : Action {
     override fun toString() = "FetchKarutaAction(karuta=$karuta)"
+
+    val error = karuta == null
 }

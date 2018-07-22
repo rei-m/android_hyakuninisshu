@@ -153,11 +153,11 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
         }
     }
 
-    override fun onDialogPositiveClick() {
+    override fun onAlertPositiveClick() {
         finish()
     }
 
-    override fun onDialogNegativeClick() {
+    override fun onAlertNegativeClick() {
 
     }
 

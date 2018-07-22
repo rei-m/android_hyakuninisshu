@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.ext
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -28,6 +29,12 @@ interface AppCompatActivityExt {
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             action()
+        }
+    }
+
+    fun AppCompatActivity.showDialogFragment(tag: String, dialog: () -> DialogFragment) {
+        if (supportFragmentManager.findFragmentByTag(tag) == null) {
+            dialog().show(supportFragmentManager, tag)
         }
     }
 }

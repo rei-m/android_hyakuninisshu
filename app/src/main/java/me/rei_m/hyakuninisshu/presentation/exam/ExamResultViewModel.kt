@@ -39,6 +39,8 @@ class ExamResultViewModel(
 
     val karutaQuizJudgements: LiveData<List<KarutaQuizJudgement>?> = store.result.map { it?.result?.judgements }
 
+    val notFoundExamError: LiveData<Boolean> = store.notFoundExamEvent.map { true }
+
     init {
         if (initialKarutaExamId == null) {
             actionDispatcher.finish()

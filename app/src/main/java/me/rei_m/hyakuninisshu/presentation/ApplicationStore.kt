@@ -19,6 +19,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.StartApplicationAction
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class ApplicationStore(dispatcher: Dispatcher) : Store() {
@@ -26,10 +27,17 @@ class ApplicationStore(dispatcher: Dispatcher) : Store() {
     private val isReadyLiveData = MutableLiveData<Boolean>()
     val isReady: LiveData<Boolean> = isReadyLiveData
 
+    private val errorEventLiveData = SingleLiveEvent<Void>()
+    val errorEvent = errorEventLiveData
+
     init {
         isReadyLiveData.value = false
         register(dispatcher.on(StartApplicationAction::class.java).subscribe {
-            isReadyLiveData.value = true
+            if (it.error) {
+                errorEventLiveData.call()
+            } else {
+                isReadyLiveData.value = true
+            }
         })
     }
 

@@ -21,16 +21,18 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
 import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ExamActionDispatcher @Inject constructor(
-        private val dispatcher: Dispatcher,
         private val karutaRepository: KarutaRepository,
         private val karutaQuizRepository: KarutaQuizRepository,
-        private val karutaExamRepository: KarutaExamRepository
+        private val karutaExamRepository: KarutaExamRepository,
+        private val dispatcher: Dispatcher,
+        private val schedulerProvider: SchedulerProvider
 ) : SingleExt {
 
     /**
@@ -39,7 +41,7 @@ class ExamActionDispatcher @Inject constructor(
      * @param karutaExamId 力試しID
      */
     fun fetch(karutaExamId: KarutaExamIdentifier) {
-        karutaExamRepository.findBy(karutaExamId).subscribeNew({
+        karutaExamRepository.findBy(karutaExamId).scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FetchExamAction(it))
         }, {
             dispatcher.dispatch(FetchExamAction(null))
@@ -50,9 +52,11 @@ class ExamActionDispatcher @Inject constructor(
      * 最新の力試しを取得する.
      */
     fun fetchRecent() {
-        karutaExamRepository.list().subscribeNew { karutaExams ->
-            karutaExams.recent?.let { dispatcher.dispatch(FetchRecentExamAction(it)) }
-        }
+        karutaExamRepository.list().scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(FetchRecentExamAction(it.recent, false))
+        }, {
+            dispatcher.dispatch(FetchRecentExamAction(null, true))
+        })
     }
 
     /**
@@ -63,16 +67,18 @@ class ExamActionDispatcher @Inject constructor(
             karutas.createQuizSet(karutaIds)
         }).flatMap {
             karutaQuizRepository.initialize(it).andThen(Single.just(it))
-        }.subscribeNew {
+        }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(StartExamAction(it.values.first().identifier()))
-        }
+        }, {
+            dispatcher.dispatch(StartExamAction(null))
+        })
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        karutaQuizRepository.first().subscribeNew({
+        karutaQuizRepository.first().scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
         }, {
             dispatcher.dispatch(OpenNextQuizAction(null))
@@ -83,14 +89,15 @@ class ExamActionDispatcher @Inject constructor(
      * 力試しを終了して結果を登録する.
      */
     fun finish() {
-        // TODO: 未解答の問題があった場合エラー
         karutaQuizRepository.list().flatMap {
             val result = KarutaExamResult(it.resultSummary(), it.wrongKarutaIds)
             karutaExamRepository.storeResult(result, Date())
         }.flatMap {
             karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(karutaExamRepository.findBy(it))
-        }.subscribeNew {
+        }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FinishExamAction(it))
-        }
+        }, {
+            dispatcher.dispatch(FinishExamAction(null))
+        })
     }
 }

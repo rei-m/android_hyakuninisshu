@@ -18,7 +18,6 @@ import android.support.v7.widget.DividerItemDecoration
 import android.view.*
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialListBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.ext.FragmentExt
@@ -32,9 +31,6 @@ class MaterialListFragment : DaggerFragment(), FragmentExt {
 
     @Inject
     lateinit var viewModelFactory: MaterialListViewModel.Factory
-
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
 
     private lateinit var viewModel: MaterialListViewModel
 
@@ -61,11 +57,6 @@ class MaterialListFragment : DaggerFragment(), FragmentExt {
         binding.viewModel = viewModel
 
         return binding.root
-    }
-
-    override fun onResume() {
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.MATERIAL)
-        super.onResume()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

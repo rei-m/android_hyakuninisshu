@@ -27,9 +27,12 @@ import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
-class SplashActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
+class SplashActivity : DaggerAppCompatActivity(),
+        AlertDialogFragment.OnDialogInteractionListener,
+        AppCompatActivityExt {
 
     @Inject
     lateinit var storeFactory: ApplicationStore.Factory
@@ -51,11 +54,29 @@ class SplashActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
                 finish()
             }
         })
+        store.errorEvent.observe(this, Observer {
+            showDialogFragment(AlertDialogFragment.TAG) {
+                AlertDialogFragment.newInstance(
+                        R.string.text_title_error,
+                        R.string.text_message_boot_error,
+                        true,
+                        false
+                )
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
         actionDispatcher.start()
+    }
+
+    override fun onAlertPositiveClick() {
+        finish()
+    }
+
+    override fun onAlertNegativeClick() {
+        // Negative Button is disable.
     }
 
     @ForActivity

@@ -43,6 +43,8 @@ class KarutaViewModel(
 
     val translation: LiveData<String> = store.karuta.map { it.translation }
 
+    val notFoundKarutaEvent = store.notFoundKarutaEvent
+
     init {
         actionDispatcher.fetch(karutaId)
     }

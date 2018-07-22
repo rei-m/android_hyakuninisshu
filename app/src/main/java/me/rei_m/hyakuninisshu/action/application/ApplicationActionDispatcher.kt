@@ -16,21 +16,25 @@ package me.rei_m.hyakuninisshu.action.application
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.ext.CompletableExt
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ApplicationActionDispatcher @Inject constructor(
+        private val karutaRepository: KarutaRepository,
         private val dispatcher: Dispatcher,
-        private val karutaRepository: KarutaRepository
-): CompletableExt {
+        private val schedulerProvider: SchedulerProvider
+) : CompletableExt {
 
     /**
      * 百人一首の情報を準備してアプリの利用を開始する.
      */
     fun start() {
-        karutaRepository.initialize().subscribeNew {
-            dispatcher.dispatch(StartApplicationAction())
-        }
+        karutaRepository.initialize().scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(StartApplicationAction(false))
+        }, {
+            dispatcher.dispatch(StartApplicationAction(true))
+        })
     }
 }

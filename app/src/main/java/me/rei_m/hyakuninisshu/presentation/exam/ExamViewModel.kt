@@ -28,6 +28,8 @@ class ExamViewModel(
 
     val isVisibleAd: LiveData<Boolean> = currentKarutaQuizId.map { it == null }
 
+    val notFoundQuizEvent: LiveData<Void> = store.notFoundQuizEvent
+
     fun startExam() {
         actionDispatcher.start()
     }

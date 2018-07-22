@@ -46,9 +46,17 @@ class EntranceStore(dispatcher: Dispatcher) : Store() {
                 karutaListLiveData.value = karutaList
             }
         }, dispatcher.on(FetchRecentExamAction::class.java).subscribe {
-            recentExamLiveData.value = it.karutaExam
+            if (!it.error) {
+                recentExamLiveData.value = it.karutaExam
+            } else {
+                // エラーが発生しても後続の処理には影響ないので継続する
+            }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
-            recentExamLiveData.value = it.karutaExam
+            if (!it.error) {
+                recentExamLiveData.value = it.karutaExam
+            } else {
+                // エラーが発生しても後続の処理には影響ないので継続する
+            }
         })
     }
 

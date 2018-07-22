@@ -54,13 +54,13 @@ class AlertDialogFragment : DialogFragment() {
 
         if (hasPositiveButton) {
             builder.setPositiveButton(android.R.string.ok) { _, _ ->
-                listener?.onDialogPositiveClick()
+                listener?.onAlertPositiveClick()
             }
         }
 
         if (hasNegativeButton) {
             builder.setPositiveButton(android.R.string.cancel) { _, _ ->
-                listener?.onDialogNegativeClick()
+                listener?.onAlertNegativeClick()
             }
         }
 
@@ -82,9 +82,9 @@ class AlertDialogFragment : DialogFragment() {
     }
 
     interface OnDialogInteractionListener {
-        fun onDialogPositiveClick()
+        fun onAlertPositiveClick()
 
-        fun onDialogNegativeClick()
+        fun onAlertNegativeClick()
     }
 
     companion object : FragmentExt {

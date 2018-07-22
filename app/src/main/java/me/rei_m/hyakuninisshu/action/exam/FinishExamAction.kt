@@ -16,6 +16,8 @@ package me.rei_m.hyakuninisshu.action.exam
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-class FinishExamAction(val karutaExam: KarutaExam) : Action {
+class FinishExamAction(val karutaExam: KarutaExam?) : Action {
     override fun toString() = "FinishExamAction(karutaExam=$karutaExam)"
+
+    val error = karutaExam == null
 }
