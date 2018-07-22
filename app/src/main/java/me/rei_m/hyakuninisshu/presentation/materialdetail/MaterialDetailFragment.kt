@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,8 +14,6 @@
 package me.rei_m.hyakuninisshu.presentation.materialdetail
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.Transformations
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,12 +24,17 @@ import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import javax.inject.Inject
 
-class MaterialDetailFragment : DaggerFragment() {
+class MaterialDetailFragment : DaggerFragment(), FragmentExt, LiveDataExt {
 
-    private val karutaIdentifier: KarutaIdentifier
-        get() = arguments?.getParcelable(ARG_KARUTA_ID) ?: let {
-            throw IllegalArgumentException("argument karuta id is missing")
+    @Inject
+    lateinit var storeFactory: MaterialDetailStore.Factory
+
+    private val karutaId: KarutaIdentifier
+        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+            "$ARG_KARUTA_ID is missing"
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,8 +42,8 @@ class MaterialDetailFragment : DaggerFragment() {
             setLifecycleOwner(this@MaterialDetailFragment)
         }
 
-        Transformations.map((activity as MaterialDetailActivity).viewModel.karutaList) {
-            it.find { it.identifier() == karutaIdentifier }
+        obtainActivityStore(MaterialDetailStore::class.java, storeFactory).karutaList.map {
+            it.find { it.identifier() == karutaId }
         }.observe(this, Observer { binding.karuta = it })
 
         return binding.root

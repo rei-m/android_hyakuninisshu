@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -42,7 +42,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
 
     private lateinit var binding: ActivityMaterialEditBinding
 
-    private val karutaIdentifier: KarutaIdentifier
+    private val karutaId: KarutaIdentifier
         get() = intent.getParcelableExtra(ARG_KARUTA_ID)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
         if (savedInstanceState == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.content, MaterialEditFragment.newInstance(karutaIdentifier), MaterialEditFragment.TAG)
+                    .add(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
                     .commit()
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -69,11 +69,12 @@ class KarutaExamResultView @JvmOverloads constructor(
     }
 
     fun setResult(judgements: List<KarutaQuizJudgement>) {
-        for (i in judgements.indices) {
-            val cellView = findViewById<KarutaExamResultCellView>(cellViewIdList[i])
-            val (karutaId, isCorrect) = judgements[i]
-            cellView.setResult(karutaId.value, isCorrect)
-            cellView.setOnClickListener { onClickKarutaEventData.value = karutaId }
+        judgements.forEachIndexed { index, karutaQuizJudgement ->
+            val (karutaId, isCorrect) = karutaQuizJudgement
+            with(findViewById<KarutaExamResultCellView>(cellViewIdList[index])) {
+                setResult(karutaId.value, isCorrect)
+                setOnClickListener { onClickKarutaEventData.value = karutaId }
+            }
         }
     }
 

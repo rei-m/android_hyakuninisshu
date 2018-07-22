@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -31,11 +31,6 @@ class MaterialEditFragment : DaggerFragment(),
         ConfirmMaterialEditDialogFragment.OnDialogInteractionListener,
         FragmentExt {
 
-    private val karutaId: KarutaIdentifier
-        get() = arguments?.getParcelable(ARG_KARUTA_ID) ?: let {
-            throw IllegalArgumentException("argument is missing")
-        }
-
     @Inject
     lateinit var storeFactory: MaterialEditStore.Factory
 
@@ -45,6 +40,11 @@ class MaterialEditFragment : DaggerFragment(),
     lateinit var binding: FragmentMaterialEditBinding
 
     lateinit var viewModel: MaterialEditViewModel
+
+    private val karutaId: KarutaIdentifier
+        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+            "$ARG_KARUTA_ID is missing"
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
@@ -62,7 +62,7 @@ class MaterialEditFragment : DaggerFragment(),
             }
         }
 
-        viewModel = viewModelFactory.create(obtainActivityStore(MaterialEditStore::class.java, storeFactory))
+        viewModel = viewModelFactory.create(obtainActivityStore(MaterialEditStore::class.java, storeFactory), karutaId)
         with(viewModel) {
             confirmEditEvent.observe(this@MaterialEditFragment, Observer { dialog ->
                 dialog ?: return@Observer
@@ -78,7 +78,6 @@ class MaterialEditFragment : DaggerFragment(),
                         .show()
             })
         }
-        viewModel.start(karutaId)
 
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@MaterialEditFragment)

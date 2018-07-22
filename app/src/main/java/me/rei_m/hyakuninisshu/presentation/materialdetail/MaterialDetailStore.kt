@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,23 +17,21 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.presentation.Store
 import java.util.*
 import javax.inject.Inject
 
-class MaterialDetailStore(dispatcher: Dispatcher) : ViewModel() {
+class MaterialDetailStore(dispatcher: Dispatcher) : Store() {
 
     private val karutaListLiveData = MutableLiveData<List<Karuta>>()
     val karutaList: LiveData<List<Karuta>> = karutaListLiveData
 
-    private val disposable = CompositeDisposable()
-
     init {
-        disposable.addAll(dispatcher.on(FetchMaterialAction::class.java).subscribe {
+        register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
             karutaListLiveData.value = it.karutas.asList()
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
             karutaListLiveData.value?.let {
@@ -42,11 +40,6 @@ class MaterialDetailStore(dispatcher: Dispatcher) : ViewModel() {
                 karutaListLiveData.value = karutaList
             }
         })
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
-        super.onCleared()
     }
 
     class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {

@@ -17,34 +17,27 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.AnswerQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.FetchQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.StartQuizAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
+import me.rei_m.hyakuninisshu.presentation.Store
 import javax.inject.Inject
 
-class QuizStore(dispatcher: Dispatcher) : ViewModel() {
+class QuizStore(dispatcher: Dispatcher) : Store() {
 
     private val karutaQuizContentLiveData = MutableLiveData<KarutaQuizContent>()
     val karutaQuizContent: LiveData<KarutaQuizContent> = karutaQuizContentLiveData
 
-    private val disposable = CompositeDisposable()
-
     init {
-        disposable.addAll(dispatcher.on(FetchQuizAction::class.java).subscribe {
+        register(dispatcher.on(FetchQuizAction::class.java).subscribe {
             karutaQuizContentLiveData.value = it.karutaQuizContent
         }, dispatcher.on(StartQuizAction::class.java).subscribe {
             karutaQuizContentLiveData.value = it.karutaQuizContent
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
             karutaQuizContentLiveData.value = it.karutaQuizContent
         })
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
-        super.onCleared()
     }
 
     class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {

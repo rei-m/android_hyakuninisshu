@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -44,7 +44,6 @@ class ExamResultFragment : DaggerFragment(), FragmentExt {
             viewModelFactory.initialKarutaExamId = savedInstanceState.getParcelable(KEY_EXAM_ID)
         }
         viewModel = viewModelFactory.create(obtainActivityStore(ExamStore::class.java, storeFactory))
-        viewModel.start()
 
         val binding = FragmentExamResultBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@ExamResultFragment)

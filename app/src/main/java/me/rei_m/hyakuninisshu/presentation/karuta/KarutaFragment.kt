@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -34,13 +34,14 @@ class KarutaFragment : DaggerFragment(), FragmentExt {
     lateinit var viewModelFactory: KarutaViewModel.Factory
 
     private val karutaId: KarutaIdentifier
-        get() = arguments?.getParcelable(ARG_KARUTA_ID) ?: let {
-            throw IllegalArgumentException("karutaId is missing")
+        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+            "$ARG_KARUTA_ID is missing"
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(obtainActivityStore(KarutaStore::class.java, storeFactory))
-        viewModel.start(karutaId)
+        val viewModel = viewModelFactory.create(obtainActivityStore(KarutaStore::class.java, storeFactory), karutaId)
+
+        println(storeFactory)
 
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@KarutaFragment)

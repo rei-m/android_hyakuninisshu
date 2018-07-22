@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -47,8 +47,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
     @Inject
     lateinit var adViewObserver: AdViewObserver
 
-    lateinit var viewModel: MaterialDetailViewModel
-        private set
+    private lateinit var viewModel: MaterialDetailViewModel
 
     private lateinit var binding: ActivityMaterialDetailBinding
 
@@ -60,8 +59,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = viewModelFactory.create(obtainStore(MaterialDetailStore::class.java, storeFactory), lastPosition)
-        viewModel.start(colorFilter)
+        viewModel = viewModelFactory.create(obtainStore(MaterialDetailStore::class.java, storeFactory), colorFilter, lastPosition)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail)
         binding.setLifecycleOwner(this)

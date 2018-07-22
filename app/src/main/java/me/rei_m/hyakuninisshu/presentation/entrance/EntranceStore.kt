@@ -17,7 +17,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.FetchRecentExamAction
 import me.rei_m.hyakuninisshu.action.exam.FinishExamAction
@@ -25,10 +24,11 @@ import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.presentation.Store
 import java.util.*
 import javax.inject.Inject
 
-class EntranceStore(dispatcher: Dispatcher) : ViewModel() {
+class EntranceStore(dispatcher: Dispatcher) : Store() {
 
     private val recentExamLiveData = MutableLiveData<KarutaExam?>()
     val recentExam: LiveData<KarutaExam?> = recentExamLiveData
@@ -36,10 +36,8 @@ class EntranceStore(dispatcher: Dispatcher) : ViewModel() {
     private val karutaListLiveData = MutableLiveData<List<Karuta>>()
     val karutaList: LiveData<List<Karuta>> = karutaListLiveData
 
-    private val disposable = CompositeDisposable()
-
     init {
-        disposable.addAll(dispatcher.on(FetchMaterialAction::class.java).subscribe {
+        register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
             karutaListLiveData.value = it.karutas.asList()
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
             karutaListLiveData.value?.let {
@@ -52,11 +50,6 @@ class EntranceStore(dispatcher: Dispatcher) : ViewModel() {
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             recentExamLiveData.value = it.karutaExam
         })
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
-        super.onCleared()
     }
 
     class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {
