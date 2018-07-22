@@ -33,10 +33,10 @@ class ApplicationStore(dispatcher: Dispatcher) : Store() {
     init {
         isReadyLiveData.value = false
         register(dispatcher.on(StartApplicationAction::class.java).subscribe {
-            if (it.error) {
-                errorEventLiveData.call()
-            } else {
+            if (it.error == null) {
                 isReadyLiveData.value = true
+            } else {
+                errorEventLiveData.call()
             }
         })
     }

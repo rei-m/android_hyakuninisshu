@@ -16,8 +16,7 @@ package me.rei_m.hyakuninisshu.action.karuta
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
-class FetchKarutaAction(val karuta: Karuta?) : Action {
-    override fun toString() = "FetchKarutaAction(karuta=$karuta)"
-
-    val error = karuta == null
+class FetchKarutaAction(val karuta: Karuta?,
+                        override val error: Throwable? = null) : Action {
+    override fun toString(): String = "FetchKarutaAction(karuta=$karuta, error=$error)"
 }

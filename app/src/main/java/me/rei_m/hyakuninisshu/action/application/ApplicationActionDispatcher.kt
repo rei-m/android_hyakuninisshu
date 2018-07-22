@@ -32,9 +32,9 @@ class ApplicationActionDispatcher @Inject constructor(
      */
     fun start() {
         karutaRepository.initialize().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(StartApplicationAction(false))
+            dispatcher.dispatch(StartApplicationAction())
         }, {
-            dispatcher.dispatch(StartApplicationAction(true))
+            dispatcher.dispatch(StartApplicationAction(it))
         })
     }
 }

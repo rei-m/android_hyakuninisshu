@@ -85,6 +85,9 @@ class QuizFragment : DaggerFragment(), FragmentExt {
                 it ?: let { return@Observer }
                 listener?.onAnswered(it)
             })
+            unhandledErrorEvent.observe(this@QuizFragment, Observer {
+                listener?.onErrorQuiz()
+            })
         }
 
         binding = FragmentQuizBinding.inflate(inflater, container, false).apply {

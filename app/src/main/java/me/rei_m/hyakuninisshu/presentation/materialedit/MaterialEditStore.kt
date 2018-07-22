@@ -33,12 +33,23 @@ class MaterialEditStore(dispatcher: Dispatcher) : Store() {
     private val completeEditEventLiveData = SingleLiveEvent<Void>()
     val completeEditEvent: LiveData<Void> = completeEditEventLiveData
 
+    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+
     init {
         register(dispatcher.on(StartEditMaterialAction::class.java).subscribe {
-            karutaLiveData.value = it.karuta
+            if (it.error == null) {
+                karutaLiveData.value = it.karuta
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe {
-            karutaLiveData.value = null
-            completeEditEventLiveData.call()
+            if (it.error == null) {
+                karutaLiveData.value = null
+                completeEditEventLiveData.call()
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         })
     }
 

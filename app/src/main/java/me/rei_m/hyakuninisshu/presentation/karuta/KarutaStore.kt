@@ -34,10 +34,10 @@ class KarutaStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchKarutaAction::class.java).subscribe {
-            if (it.error) {
-                notFoundKarutaEventLiveData.call()
-            } else {
+            if (it.error == null) {
                 karutaLiveData.value = it.karuta
+            } else {
+                notFoundKarutaEventLiveData.call()
             }
         })
     }

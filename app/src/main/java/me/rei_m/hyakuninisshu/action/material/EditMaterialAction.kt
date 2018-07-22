@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.action.material
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
-class EditMaterialAction(val karuta: Karuta) : Action {
-    override fun toString(): String = "EditMaterialAction(karuta=$karuta)"
+class EditMaterialAction(val karuta: Karuta?,
+                         override val error: Throwable? = null) : Action {
+    override fun toString(): String = "EditMaterialAction(karuta=$karuta, error=$error)"
 }

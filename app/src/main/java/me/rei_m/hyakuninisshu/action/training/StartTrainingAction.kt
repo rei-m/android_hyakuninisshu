@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.action.training
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 
-class StartTrainingAction(val karutaQuizId: KarutaQuizIdentifier? = null) : Action {
-    override fun toString() = "StartTrainingAction(error=$karutaQuizId)"
+class StartTrainingAction(val karutaQuizId: KarutaQuizIdentifier? = null,
+                          override val error: Throwable? = null) : Action {
+    override fun toString(): String = "StartTrainingAction(karutaQuizId=$karutaQuizId, error=$error)"
 }

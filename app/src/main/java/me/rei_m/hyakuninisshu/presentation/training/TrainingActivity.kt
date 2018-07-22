@@ -118,6 +118,9 @@ class TrainingActivity : DaggerAppCompatActivity(),
                     return@Observer
                 }
             })
+            unhandledErrorEvent.observe(this@TrainingActivity, Observer {
+                onErrorQuiz()
+            })
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training)
@@ -133,15 +136,6 @@ class TrainingActivity : DaggerAppCompatActivity(),
             viewModel.startTraining(trainingRangeFrom, trainingRangeTo, kimarijiFilter, colorFilter)
         }
     }
-
-//    override fun onErrorQuiz() {
-//        val newFragment = AlertDialogFragment.newInstance(
-//                R.string.text_title_error,
-//                R.string.text_message_quiz_error,
-//                true,
-//                false)
-//        newFragment.show(supportFragmentManager, AlertDialogFragment.TAG)
-//    }
 
     override fun onAnswered(quizId: KarutaQuizIdentifier) {
         if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
@@ -164,6 +158,16 @@ class TrainingActivity : DaggerAppCompatActivity(),
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .replace(R.id.content, TrainingResultFragment.newInstance(), TrainingResultFragment.TAG)
                     .commit()
+        }
+    }
+
+    override fun onErrorQuiz() {
+        showDialogFragment(AlertDialogFragment.TAG) {
+            AlertDialogFragment.newInstance(
+                    R.string.text_title_error,
+                    R.string.text_message_unhandled_error,
+                    true,
+                    false)
         }
     }
 

@@ -19,15 +19,17 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
 import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TrainingActionDispatcher @Inject constructor(
-        private val dispatcher: Dispatcher,
         private val karutaRepository: KarutaRepository,
         private val karutaQuizRepository: KarutaQuizRepository,
-        private val karutaExamRepository: KarutaExamRepository
+        private val karutaExamRepository: KarutaExamRepository,
+        private val dispatcher: Dispatcher,
+        private val schedulerProvider: SchedulerProvider
 ) : SingleExt {
     /**
      * 練習を開始する.
@@ -55,10 +57,10 @@ class TrainingActionDispatcher @Inject constructor(
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        karutaQuizRepository.first().subscribeNew({
+        karutaQuizRepository.first().scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
         }, {
-            dispatcher.dispatch(OpenNextQuizAction(null))
+            dispatcher.dispatch(OpenNextQuizAction(null, it))
         })
     }
 
@@ -73,10 +75,10 @@ class TrainingActionDispatcher @Inject constructor(
      * 練習結果を集計する.
      */
     fun aggregateResults() {
-        karutaQuizRepository.list().subscribeNew({
+        karutaQuizRepository.list().scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(AggregateResultsAction(TrainingResult(it.resultSummary())))
         }, {
-            dispatcher.dispatch(AggregateResultsAction(null))
+            dispatcher.dispatch(AggregateResultsAction(null, it))
         })
     }
 
@@ -85,14 +87,14 @@ class TrainingActionDispatcher @Inject constructor(
             karutas.createQuizSet(karutaIds)
         }).flatMap {
             karutaQuizRepository.initialize(it).andThen(Single.just(it))
-        }.subscribeNew({
+        }.scheduler(schedulerProvider).subscribe({
             if (it.isEmpty) {
                 dispatcher.dispatch(StartTrainingAction(null))
             } else {
                 dispatcher.dispatch(StartTrainingAction(it.values.first().identifier()))
             }
         }, {
-            dispatcher.dispatch(StartTrainingAction(null))
+            dispatcher.dispatch(StartTrainingAction(null, it))
         })
     }
 }

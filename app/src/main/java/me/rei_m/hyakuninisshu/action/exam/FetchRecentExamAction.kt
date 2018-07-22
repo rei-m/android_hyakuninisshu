@@ -17,6 +17,6 @@ import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
 class FetchRecentExamAction(val karutaExam: KarutaExam?,
-                            val error: Boolean) : Action {
+                            override val error: Throwable? = null) : Action {
     override fun toString(): String = "FetchRecentExamAction(karutaExam=$karutaExam, error=$error)"
 }

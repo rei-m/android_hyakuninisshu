@@ -50,6 +50,9 @@ class QuizAnswerFragment : DaggerFragment(), FragmentExt {
             openResultEvent.observe(this@QuizAnswerFragment, Observer {
                 listener?.onGoToResult()
             })
+            unhandledErrorEvent.observe(this@QuizAnswerFragment, Observer {
+                listener?.onErrorQuiz()
+            })
         }
 
         val binding = FragmentQuizAnswerBinding.inflate(inflater, container, false).apply {

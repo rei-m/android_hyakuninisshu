@@ -16,8 +16,7 @@ package me.rei_m.hyakuninisshu.action.exam
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-class FetchExamAction(val karutaExam: KarutaExam?) : Action {
-    override fun toString() = "FetchExamAction(karutaExam=$karutaExam)"
-
-    val error= karutaExam == null
+class FetchExamAction(val karutaExam: KarutaExam?,
+                      override val error: Throwable? = null) : Action {
+    override fun toString(): String = "FetchExamAction(karutaExam=$karutaExam, error=$error)"
 }

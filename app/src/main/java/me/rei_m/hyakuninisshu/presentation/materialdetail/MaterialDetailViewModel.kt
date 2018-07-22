@@ -34,6 +34,8 @@ class MaterialDetailViewModel(
 
     val initialPosition: LiveData<Int> = MutableLiveData<Int>().withValue(initialPosition)
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     init {
         actionDispatcher.fetch(colorFilter)
     }

@@ -18,6 +18,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 
-class StartEditMaterialAction(val karuta: Karuta) : Action {
-    override fun toString(): String = "StartEditMaterialAction(karuta=$karuta)"
+class StartEditMaterialAction(val karuta: Karuta?,
+                              override val error: Throwable? = null) : Action {
+    override fun toString(): String = "StartEditMaterialAction(karuta=$karuta, error=$error)"
 }

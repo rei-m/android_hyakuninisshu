@@ -139,7 +139,7 @@ class ExamActivity : DaggerAppCompatActivity(),
         }
     }
 
-    fun onErrorQuiz() {
+    override fun onErrorQuiz() {
         showDialogFragment(AlertDialogFragment.TAG) {
             AlertDialogFragment.newInstance(
                     R.string.text_title_error,

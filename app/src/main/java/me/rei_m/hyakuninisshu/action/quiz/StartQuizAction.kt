@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.action.quiz
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 
-class StartQuizAction(val karutaQuizContent: KarutaQuizContent?) : Action {
-    override fun toString() = "StartQuizAction(karutaQuizContent=$karutaQuizContent)"
+class StartQuizAction(val karutaQuizContent: KarutaQuizContent?,
+                      override val error: Throwable? = null) : Action {
+    override fun toString(): String = "StartQuizAction(karutaQuizContent=$karutaQuizContent, error=$error)"
 }

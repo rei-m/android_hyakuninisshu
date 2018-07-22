@@ -22,6 +22,7 @@ import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import java.util.*
 import javax.inject.Inject
 
@@ -30,10 +31,21 @@ class MaterialDetailStore(dispatcher: Dispatcher) : Store() {
     private val karutaListLiveData = MutableLiveData<List<Karuta>>()
     val karutaList: LiveData<List<Karuta>> = karutaListLiveData
 
+    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+
     init {
         register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
-            karutaListLiveData.value = it.karutas.asList()
+            if (it.error == null) {
+                karutaListLiveData.value = it.karutas?.asList()
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
+            if (action.error != null) {
+                unhandledErrorEventLiveData.call()
+                return@subscribe
+            }
             karutaListLiveData.value?.let {
                 val karutaList = ArrayList(it)
                 karutaList[karutaList.indexOf(action.karuta)] = action.karuta

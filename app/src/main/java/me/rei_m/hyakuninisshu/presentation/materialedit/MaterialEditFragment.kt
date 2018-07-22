@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
@@ -40,6 +41,8 @@ class MaterialEditFragment : DaggerFragment(),
     lateinit var binding: FragmentMaterialEditBinding
 
     lateinit var viewModel: MaterialEditViewModel
+
+    private var listener: OnFragmentInteractionListener? = null
 
     private val karutaId: KarutaIdentifier
         get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
@@ -77,6 +80,9 @@ class MaterialEditFragment : DaggerFragment(),
                         .setAction("Action", null)
                         .show()
             })
+            unhandledErrorEvent.observe(this@MaterialEditFragment, Observer {
+                listener?.onError()
+            })
         }
 
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false).apply {
@@ -91,6 +97,20 @@ class MaterialEditFragment : DaggerFragment(),
     override fun onDestroyView() {
         viewModel.onDestroyView()
         super.onDestroyView()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -115,6 +135,10 @@ class MaterialEditFragment : DaggerFragment(),
 
     override fun onClickBack() {
 
+    }
+
+    interface OnFragmentInteractionListener {
+        fun onError()
     }
 
     @dagger.Module

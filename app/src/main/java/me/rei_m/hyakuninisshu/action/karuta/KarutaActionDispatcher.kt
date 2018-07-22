@@ -37,7 +37,7 @@ class KarutaActionDispatcher @Inject constructor(
         karutaRepository.findBy(karutaId).scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FetchKarutaAction(it))
         }, {
-            dispatcher.dispatch(FetchKarutaAction(null))
+            dispatcher.dispatch(FetchKarutaAction(null, it))
         })
     }
 }

@@ -47,29 +47,29 @@ class ExamStore(dispatcher: Dispatcher) : Store() {
         resultLiveData.value = null
 
         register(dispatcher.on(StartExamAction::class.java).subscribe {
-            if (it.error) {
-                notFoundQuizEventLiveData.call()
-            } else {
+            if (it.error == null) {
                 currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            } else {
+                notFoundQuizEventLiveData.call()
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
-            if (it.error) {
-                notFoundQuizEventLiveData.call()
-            } else {
+            if (it.error == null) {
                 currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            } else {
+                notFoundQuizEventLiveData.call()
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             currentKarutaQuizIdLiveData.value = null
-            if (it.error) {
-                notFoundExamEventLiveData.call()
-            } else {
+            if (it.error == null) {
                 resultLiveData.value = it.karutaExam
+            } else {
+                notFoundExamEventLiveData.call()
             }
         }, dispatcher.on(FetchExamAction::class.java).subscribe {
-            if (it.error) {
-                notFoundExamEventLiveData.call()
-            } else {
+            if (it.error == null) {
                 resultLiveData.value = it.karutaExam
+            } else {
+                notFoundExamEventLiveData.call()
             }
         })
     }

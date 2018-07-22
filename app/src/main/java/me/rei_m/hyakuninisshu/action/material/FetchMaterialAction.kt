@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.action.material
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 
-class FetchMaterialAction(val karutas: Karutas) : Action {
-    override fun toString() = "FetchMaterialAction(karutas=$karutas)"
+class FetchMaterialAction(val karutas: Karutas?,
+                          override val error: Throwable? = null) : Action {
+    override fun toString(): String = "FetchMaterialAction(karutas=$karutas, error=$error)"
 }

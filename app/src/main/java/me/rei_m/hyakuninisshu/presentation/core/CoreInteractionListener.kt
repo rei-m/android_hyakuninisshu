@@ -21,4 +21,6 @@ interface CoreInteractionListener {
     fun onGoToNext()
 
     fun onGoToResult()
+
+    fun onErrorQuiz()
 }

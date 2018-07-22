@@ -34,6 +34,8 @@ class TrainingViewModel(
 
     val isVisibleEmpty: LiveData<Boolean> = store.notFoundErrorEvent
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     fun startTraining(trainingRangeFrom: TrainingRangeFrom,
                       trainingRangeTo: TrainingRangeTo,
                       kimarijiFilter: KimarijiFilter,

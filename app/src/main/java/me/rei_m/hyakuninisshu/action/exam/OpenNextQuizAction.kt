@@ -16,8 +16,7 @@ package me.rei_m.hyakuninisshu.action.exam
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 
-class OpenNextQuizAction(val karutaQuizId: KarutaQuizIdentifier?) : Action {
-    override fun toString() = "OpenNextQuizAction(karutaQuizId=$karutaQuizId)"
-
-    val error = karutaQuizId == null
+class OpenNextQuizAction(val karutaQuizId: KarutaQuizIdentifier?,
+                         override val error: Throwable? = null) : Action {
+    override fun toString(): String = "OpenNextQuizAction(karutaQuizId=$karutaQuizId, error=$error)"
 }

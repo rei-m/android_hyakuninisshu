@@ -38,7 +38,9 @@ class EntranceStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
-            karutaListLiveData.value = it.karutas.asList()
+            if (it.error == null) {
+                karutaListLiveData.value = it.karutas?.asList()
+            }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
             karutaListLiveData.value?.let {
                 val karutaList = ArrayList(it)
@@ -46,16 +48,12 @@ class EntranceStore(dispatcher: Dispatcher) : Store() {
                 karutaListLiveData.value = karutaList
             }
         }, dispatcher.on(FetchRecentExamAction::class.java).subscribe {
-            if (!it.error) {
+            if (it.error == null) {
                 recentExamLiveData.value = it.karutaExam
-            } else {
-                // エラーが発生しても後続の処理には影響ないので継続する
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
-            if (!it.error) {
+            if (it.error == null) {
                 recentExamLiveData.value = it.karutaExam
-            } else {
-                // エラーが発生しても後続の処理には影響ないので継続する
             }
         })
     }

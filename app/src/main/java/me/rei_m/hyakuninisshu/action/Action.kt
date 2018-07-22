@@ -14,5 +14,7 @@
 package me.rei_m.hyakuninisshu.action
 
 interface Action {
+    val error: Throwable?
+
     override fun toString(): String
 }

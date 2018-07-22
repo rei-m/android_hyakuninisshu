@@ -33,9 +33,13 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
-class MaterialEditActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
+class MaterialEditActivity : DaggerAppCompatActivity(),
+        MaterialEditFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnDialogInteractionListener,
+        AppCompatActivityExt {
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
@@ -71,6 +75,24 @@ class MaterialEditActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onError() {
+        showDialogFragment(AlertDialogFragment.TAG) {
+            AlertDialogFragment.newInstance(
+                    R.string.text_title_error,
+                    R.string.text_message_unhandled_error,
+                    true,
+                    false)
+        }
+    }
+
+    override fun onAlertPositiveClick() {
+        finish()
+    }
+
+    override fun onAlertNegativeClick() {
+        // Negative Button is disable.
     }
 
     private fun setupAd() {

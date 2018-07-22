@@ -20,13 +20,15 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.ext.SingleExt
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MaterialActionDispatcher @Inject constructor(
+        private val karutaRepository: KarutaRepository,
         private val dispatcher: Dispatcher,
-        private val karutaRepository: KarutaRepository
+        private val schedulerProvider: SchedulerProvider
 ) : SingleExt {
 
     /**
@@ -35,9 +37,11 @@ class MaterialActionDispatcher @Inject constructor(
      *  @param colorFilter 五色絞り込み条件
      */
     fun fetch(colorFilter: ColorFilter) {
-        karutaRepository.list(colorFilter.value).subscribeNew {
+        karutaRepository.list(colorFilter.value).scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FetchMaterialAction(it))
-        }
+        }, {
+            dispatcher.dispatch(FetchMaterialAction(null, it))
+        })
     }
 
     /**
@@ -46,9 +50,11 @@ class MaterialActionDispatcher @Inject constructor(
      * @param karutaId 歌ID.
      */
     fun startEdit(karutaId: KarutaIdentifier) {
-        karutaRepository.findBy(karutaId).subscribeNew {
+        karutaRepository.findBy(karutaId).scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(StartEditMaterialAction(it))
-        }
+        }, {
+            dispatcher.dispatch(StartEditMaterialAction(null, it))
+        })
     }
 
     /**
@@ -93,8 +99,10 @@ class MaterialActionDispatcher @Inject constructor(
             ).let {
                 return@flatMap karutaRepository.store(it).andThen(Single.just(karuta))
             }
-        }.subscribeNew {
+        }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(EditMaterialAction(it))
-        }
+        }, {
+            dispatcher.dispatch(EditMaterialAction(null, it))
+        })
     }
 }

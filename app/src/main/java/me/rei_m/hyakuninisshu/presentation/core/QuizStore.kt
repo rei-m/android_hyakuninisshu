@@ -23,6 +23,7 @@ import me.rei_m.hyakuninisshu.action.quiz.FetchQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.StartQuizAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.presentation.Store
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class QuizStore(dispatcher: Dispatcher) : Store() {
@@ -30,13 +31,28 @@ class QuizStore(dispatcher: Dispatcher) : Store() {
     private val karutaQuizContentLiveData = MutableLiveData<KarutaQuizContent>()
     val karutaQuizContent: LiveData<KarutaQuizContent> = karutaQuizContentLiveData
 
+    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+
     init {
         register(dispatcher.on(FetchQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = it.karutaQuizContent
+            if (it.error == null) {
+                karutaQuizContentLiveData.value = it.karutaQuizContent
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         }, dispatcher.on(StartQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = it.karutaQuizContent
+            if (it.error == null) {
+                karutaQuizContentLiveData.value = it.karutaQuizContent
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = it.karutaQuizContent
+            if (it.error == null) {
+                karutaQuizContentLiveData.value = it.karutaQuizContent
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         })
     }
 

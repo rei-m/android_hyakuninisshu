@@ -16,7 +16,6 @@ package me.rei_m.hyakuninisshu.presentation.materialedit
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.view.View
 import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -28,7 +27,7 @@ import javax.inject.Inject
 import me.rei_m.hyakuninisshu.R as Res
 
 class MaterialEditViewModel(
-        private val karutaStore: MaterialEditStore,
+        private val store: MaterialEditStore,
         private val actionDispatcher: MaterialActionDispatcher,
         private val karutaId: KarutaIdentifier,
         firstPhraseKanji: String?,
@@ -44,7 +43,7 @@ class MaterialEditViewModel(
         private val navigator: Navigator
 ) : LiveDataExt, MutableLiveDataExt {
 
-    private val karuta: LiveData<Karuta?> = karutaStore.karuta
+    private val karuta: LiveData<Karuta?> = store.karuta
 
     val karutaNo: LiveData<Int?> = karuta.map { it?.identifier()?.value }
 
@@ -76,6 +75,8 @@ class MaterialEditViewModel(
 
     val snackBarMessage: SingleLiveEvent<Int> = SingleLiveEvent()
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     private val karutaObserver: Observer<Karuta?> = Observer {
         it ?: return@Observer
         this.firstPhraseKanji.setIfNull(it.kamiNoKu.first.kanji)
@@ -106,14 +107,14 @@ class MaterialEditViewModel(
         this.fifthPhraseKanji.value = fifthPhraseKanji
         this.fifthPhraseKana.value = fifthPhraseKana
         karuta.observeForever(karutaObserver)
-        karutaStore.completeEditEvent.observeForever(completeEditEventObserver)
+        store.completeEditEvent.observeForever(completeEditEventObserver)
 
         actionDispatcher.startEdit(karutaId)
     }
 
     fun onDestroyView() {
         karuta.removeObserver(karutaObserver)
-        karutaStore.completeEditEvent.removeObserver(completeEditEventObserver)
+        store.completeEditEvent.removeObserver(completeEditEventObserver)
     }
 
     fun updateMaterial() {
@@ -154,8 +155,7 @@ class MaterialEditViewModel(
         )
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun onClickEdit(view: View) {
+    fun onClickEdit() {
         val firstPhraseKanji = this.firstPhraseKanji.value ?: ""
         val firstPhraseKana = this.firstPhraseKana.value ?: ""
         val secondPhraseKanji = this.secondPhraseKanji.value ?: ""

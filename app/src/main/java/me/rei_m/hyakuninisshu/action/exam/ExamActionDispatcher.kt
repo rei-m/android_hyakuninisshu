@@ -44,7 +44,7 @@ class ExamActionDispatcher @Inject constructor(
         karutaExamRepository.findBy(karutaExamId).scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FetchExamAction(it))
         }, {
-            dispatcher.dispatch(FetchExamAction(null))
+            dispatcher.dispatch(FetchExamAction(null, it))
         })
     }
 
@@ -53,9 +53,9 @@ class ExamActionDispatcher @Inject constructor(
      */
     fun fetchRecent() {
         karutaExamRepository.list().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchRecentExamAction(it.recent, false))
+            dispatcher.dispatch(FetchRecentExamAction(it.recent))
         }, {
-            dispatcher.dispatch(FetchRecentExamAction(null, true))
+            dispatcher.dispatch(FetchRecentExamAction(null, it))
         })
     }
 
@@ -70,7 +70,7 @@ class ExamActionDispatcher @Inject constructor(
         }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(StartExamAction(it.values.first().identifier()))
         }, {
-            dispatcher.dispatch(StartExamAction(null))
+            dispatcher.dispatch(StartExamAction(null, it))
         })
     }
 
@@ -81,7 +81,7 @@ class ExamActionDispatcher @Inject constructor(
         karutaQuizRepository.first().scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
         }, {
-            dispatcher.dispatch(OpenNextQuizAction(null))
+            dispatcher.dispatch(OpenNextQuizAction(null, it))
         })
     }
 
@@ -97,7 +97,7 @@ class ExamActionDispatcher @Inject constructor(
         }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FinishExamAction(it))
         }, {
-            dispatcher.dispatch(FinishExamAction(null))
+            dispatcher.dispatch(FinishExamAction(null, it))
         })
     }
 }

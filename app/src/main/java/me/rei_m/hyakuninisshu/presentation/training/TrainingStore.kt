@@ -38,16 +38,31 @@ class TrainingStore(dispatcher: Dispatcher) : Store() {
     private val notFoundErrorEventLiveData = SingleLiveEvent<Boolean>()
     val notFoundErrorEvent: LiveData<Boolean> = notFoundErrorEventLiveData
 
+    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+
     init {
         register(dispatcher.on(StartTrainingAction::class.java).subscribe {
+            if (it.error != null) {
+                unhandledErrorEventLiveData.call()
+                return@subscribe
+            }
             if (it.karutaQuizId == null) {
                 notFoundErrorEventLiveData.value = true
             } else {
                 currentKarutaQuizIdLiveData.value = it.karutaQuizId
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
-            currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            if (it.error == null) {
+                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         }, dispatcher.on(AggregateResultsAction::class.java).subscribe {
+            if (it.error != null) {
+                unhandledErrorEventLiveData.call()
+                return@subscribe
+            }
             currentKarutaQuizIdLiveData.value = null
             if (it.trainingResult == null) {
                 notFoundErrorEventLiveData.value = true

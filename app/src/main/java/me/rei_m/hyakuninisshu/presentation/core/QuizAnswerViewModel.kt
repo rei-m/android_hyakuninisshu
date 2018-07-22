@@ -58,6 +58,8 @@ class QuizAnswerViewModel(
 
     val openResultEvent: SingleLiveEvent<Void> = SingleLiveEvent()
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     init {
         actionDispatcher.fetch(quizId)
     }

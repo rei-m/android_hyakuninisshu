@@ -66,6 +66,8 @@ class QuizViewModel(
 
     val choiceTextSize: LiveData<Int>
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     init {
         quizCount = content.map { it.currentPosition }
 

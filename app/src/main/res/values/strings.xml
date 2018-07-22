@@ -133,6 +133,8 @@
 
     <string name="text_message_illegal_arguments">意図しない遷移をしました。前の画面に戻ります。</string>
 
+    <string name="text_message_unhandled_error">エラーが発生しました。前の画面に戻ります。</string>
+
     <string name="text_message_invalid_training_range">出題範囲の開始と終了の組み合わせが正しくありません。</string>
 
     <string name="text_message_edit_error">未入力の句があります。</string>

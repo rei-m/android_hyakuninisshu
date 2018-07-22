@@ -22,15 +22,17 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
 import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class QuizActionDispatcher @Inject constructor(
-        private val dispatcher: Dispatcher,
         private val karutaRepository: KarutaRepository,
-        private val karutaQuizRepository: KarutaQuizRepository
+        private val karutaQuizRepository: KarutaQuizRepository,
+        private val dispatcher: Dispatcher,
+        private val schedulerProvider: SchedulerProvider
 ) : SingleExt {
 
     /**
@@ -39,10 +41,12 @@ class QuizActionDispatcher @Inject constructor(
      * @param karutaQuizId 問題ID.
      */
     fun fetch(karutaQuizId: KarutaQuizIdentifier) {
-        karutaQuizRepository.findBy(karutaQuizId).flatMap { it.content() }.subscribeNew({
+        karutaQuizRepository.findBy(karutaQuizId).flatMap {
+            it.content()
+        }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(FetchQuizAction(it))
         }, {
-            dispatcher.dispatch(FetchQuizAction(null))
+            dispatcher.dispatch(FetchQuizAction(null, it))
         })
     }
 
@@ -60,10 +64,10 @@ class QuizActionDispatcher @Inject constructor(
             return@flatMap Single.just(it)
         }.flatMap {
             it.content()
-        }.subscribeNew({
+        }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(StartQuizAction(it))
         }, {
-            dispatcher.dispatch(StartQuizAction(null))
+            dispatcher.dispatch(StartQuizAction(null, it))
         })
     }
 
@@ -79,10 +83,10 @@ class QuizActionDispatcher @Inject constructor(
             karutaQuizRepository.store(it.verify(choiceNo, answerTime)).toSingleDefault(it)
         }.flatMap {
             it.content()
-        }.subscribeNew({
+        }.scheduler(schedulerProvider).subscribe({
             dispatcher.dispatch(AnswerQuizAction(it))
-        }, { throwable ->
-            dispatcher.dispatch(AnswerQuizAction(null))
+        }, {
+            dispatcher.dispatch(AnswerQuizAction(null, it))
         })
     }
 
