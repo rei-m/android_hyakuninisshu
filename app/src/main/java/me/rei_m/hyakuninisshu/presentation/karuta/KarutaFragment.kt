@@ -41,8 +41,6 @@ class KarutaFragment : DaggerFragment(), FragmentExt {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewModel = viewModelFactory.create(obtainActivityStore(KarutaStore::class.java, storeFactory), karutaId)
 
-        println(storeFactory)
-
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@KarutaFragment)
         }
