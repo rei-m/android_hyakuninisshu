@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,15 +14,16 @@
 package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
 import javax.inject.Inject
 
@@ -34,17 +35,21 @@ class ExamResultFragment : DaggerFragment(), FragmentExt {
     @Inject
     lateinit var viewModelFactory: ExamResultViewModel.Factory
 
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
+    private var listener: OnFragmentInteractionListener? = null
 
-    private lateinit var viewModel: ExamResultViewModel
+    private var karutaExamId: KarutaExamIdentifier? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
             viewModelFactory.initialKarutaExamId = savedInstanceState.getParcelable(KEY_EXAM_ID)
         }
-        viewModel = viewModelFactory.create(obtainActivityStore(ExamStore::class.java, storeFactory))
-        viewModel.start()
+        val viewModel = viewModelFactory.create(obtainActivityStore(ExamStore::class.java, storeFactory))
+        viewModel.karutaExamId.observe(this, Observer {
+            karutaExamId = it
+        })
+        viewModel.notFoundExamError.observe(this, Observer {
+            listener?.onErrorFinish()
+        })
 
         val binding = FragmentExamResultBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@ExamResultFragment)
@@ -60,13 +65,22 @@ class ExamResultFragment : DaggerFragment(), FragmentExt {
         return binding.root
     }
 
-    override fun onResume() {
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM_RESULT)
-        super.onResume()
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        viewModel.karutaExamId.value?.let { outState.putParcelable(KEY_EXAM_ID, it) }
+        karutaExamId?.let { outState.putParcelable(KEY_EXAM_ID, it) }
         super.onSaveInstanceState(outState)
     }
 
@@ -75,6 +89,10 @@ class ExamResultFragment : DaggerFragment(), FragmentExt {
         @ForFragment
         @ContributesAndroidInjector
         abstract fun contributeInjector(): ExamResultFragment
+    }
+
+    interface OnFragmentInteractionListener {
+        fun onErrorFinish()
     }
 
     companion object {

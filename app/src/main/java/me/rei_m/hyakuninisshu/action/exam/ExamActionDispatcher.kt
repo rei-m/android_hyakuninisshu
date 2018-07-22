@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,85 +14,90 @@
 package me.rei_m.hyakuninisshu.action.exam
 
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
+import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ExamActionDispatcher @Inject constructor(
-        private val dispatcher: Dispatcher,
         private val karutaRepository: KarutaRepository,
         private val karutaQuizRepository: KarutaQuizRepository,
-        private val karutaExamRepository: KarutaExamRepository
-) {
+        private val karutaExamRepository: KarutaExamRepository,
+        private val dispatcher: Dispatcher,
+        private val schedulerProvider: SchedulerProvider
+) : SingleExt {
 
     /**
      * 力試しを取得する.
      *
-     * @param karutaExamIdentifier 力試しID
+     * @param karutaExamId 力試しID
      */
-    fun fetch(karutaExamIdentifier: KarutaExamIdentifier) {
-        karutaExamRepository.findBy(karutaExamIdentifier)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { karutaExam -> dispatcher.dispatch(FetchExamAction(karutaExam)) }
+    fun fetch(karutaExamId: KarutaExamIdentifier) {
+        karutaExamRepository.findBy(karutaExamId).scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(FetchExamAction(it))
+        }, {
+            dispatcher.dispatch(FetchExamAction(null, it))
+        })
     }
 
     /**
      * 最新の力試しを取得する.
      */
     fun fetchRecent() {
-        karutaExamRepository.list()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { karutaExams ->
-                    karutaExams.recent?.let { dispatcher.dispatch(FetchRecentExamAction(it)) }
-                }
+        karutaExamRepository.list().scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(FetchRecentExamAction(it.recent))
+        }, {
+            dispatcher.dispatch(FetchRecentExamAction(null, it))
+        })
     }
 
     /**
      * 力試しを開始する.
      */
     fun start() {
-        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaRepository.findIds(), BiFunction<Karutas, KarutaIds, KarutaQuizzes> { obj, karutaIds -> obj.createQuizSet(karutaIds) })
-                .flatMap { karutaQuizRepository.initialize(it).andThen(Single.just(it)) }
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { karutaQuizzes -> dispatcher.dispatch(StartExamAction(karutaQuizzes.values.first().identifier())) }
+        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaRepository.findIds(), BiFunction { karutas, karutaIds ->
+            karutas.createQuizSet(karutaIds)
+        }).flatMap {
+            karutaQuizRepository.initialize(it).andThen(Single.just(it))
+        }.scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(StartExamAction(it.values.first().identifier()))
+        }, {
+            dispatcher.dispatch(StartExamAction(null, it))
+        })
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        karutaQuizRepository.first()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
-                }, {
-                    // TODO: チェック処理
-                    println(it)
-                })
+        karutaQuizRepository.first().scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
+        }, {
+            dispatcher.dispatch(OpenNextQuizAction(null, it))
+        })
     }
 
     /**
      * 力試しを終了して結果を登録する.
      */
     fun finish() {
-        // TODO: 未解答の問題があった場合エラー
-        karutaQuizRepository.list()
-                .map { karutaQuizzes -> KarutaExamResult(karutaQuizzes.resultSummary(), karutaQuizzes.wrongKarutaIds) }
-                .flatMap { karutaExamResult -> karutaExamRepository.storeResult(karutaExamResult, Date()) }
-                .flatMap { karutaExamIdentifier -> karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(karutaExamRepository.findBy(karutaExamIdentifier)) }
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { karutaExam -> dispatcher.dispatch(FinishExamAction(karutaExam)) }
+        karutaQuizRepository.list().flatMap {
+            val result = KarutaExamResult(it.resultSummary(), it.wrongKarutaIds)
+            karutaExamRepository.storeResult(result, Date())
+        }.flatMap {
+            karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(karutaExamRepository.findBy(it))
+        }.scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(FinishExamAction(it))
+        }, {
+            dispatcher.dispatch(FinishExamAction(null, it))
+        })
     }
 }

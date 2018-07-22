@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018 Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -26,37 +26,13 @@ class AnalyticsManager @Inject constructor(context: Context) {
 
     private val analytics = FirebaseAnalytics.getInstance(context)
 
-    fun logScreenEvent(event: ScreenEvent) {
-        if (analytics == null) {
-            return
-        }
-        val bundle = Bundle().apply {
-            putString(FirebaseAnalytics.Param.ITEM_CATEGORY, ITEM_CATEGORY_SCREEN)
-            putString(FirebaseAnalytics.Param.ITEM_ID, event.eventName)
-            putString(FirebaseAnalytics.Param.ITEM_NAME, event.eventName)
-        }
-        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-    }
-
     fun logActionEvent(event: ActionEvent) {
-        if (analytics == null) {
-            return
-        }
         val bundle = Bundle().apply {
             putString(FirebaseAnalytics.Param.ITEM_ID, event.id)
             putString(FirebaseAnalytics.Param.ITEM_NAME, event.eventName)
             putString(FirebaseAnalytics.Param.CONTENT_TYPE, event.contentType)
         }
         analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-    }
-
-    enum class ScreenEvent(val eventName: String) {
-        TRAINING_MENU("training_menu"),
-        QUIZ_RESULT("quiz_result"),
-        EXAM("exam"),
-        EXAM_RESULT("exam_result"),
-        MATERIAL("material"),
-        SUPPORT("support")
     }
 
     enum class ActionEvent(val id: String,
@@ -72,7 +48,5 @@ class AnalyticsManager @Inject constructor(context: Context) {
 
     companion object {
         private const val CONTENT_TYPE_BUTTON = "button"
-
-        private const val ITEM_CATEGORY_SCREEN = "screen"
     }
 }

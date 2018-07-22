@@ -11,14 +11,19 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.action.material
+package me.rei_m.hyakuninisshu.presentation.widget.view
 
-import me.rei_m.hyakuninisshu.action.Action
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import android.databinding.BindingAdapter
+import android.view.View
 
-class StartEditMaterialAction(val karuta: Karuta?,
-                              override val error: Throwable? = null) : Action {
-    override fun toString(): String = "StartEditMaterialAction(karuta=$karuta, error=$error)"
+object ViewBindings {
+    @JvmStatic
+    @BindingAdapter("visibleOrGone")
+    fun setVisibleOrGone(view: View, visible: Boolean?) {
+        if (visible == true) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }
 }

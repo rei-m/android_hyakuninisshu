@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -15,13 +15,11 @@ package me.rei_m.hyakuninisshu.presentation.di
 
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
-
-import javax.inject.Named
-
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import javax.inject.Named
 
 @Module
 class ActivityModule(private val activity: AppCompatActivity) {

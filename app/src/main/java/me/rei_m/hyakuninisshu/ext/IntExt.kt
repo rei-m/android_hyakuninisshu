@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,27 +11,23 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.helper
+package me.rei_m.hyakuninisshu.ext
 
 import android.content.Context
-import android.content.res.Resources
-
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
-object KarutaDisplayHelper {
-
-    fun convertNumberToString(context: Context, number: Int): String {
-
-        if (number == Karuta.NUMBER_OF_KARUTA) {
+interface IntExt {
+    fun Int.toKarutaNoStr(context: Context): String {
+        if (this == Karuta.NUMBER_OF_KARUTA) {
             return context.getString(R.string.karuta_number, context.getString(R.string.hundred))
         }
 
         val resources = context.resources
         val numArray = resources.getStringArray(R.array.number)
 
-        val doubleDigits = number / 10
-        val singleDigits = number % 10
+        val doubleDigits = this / 10
+        val singleDigits = this % 10
 
         val sb = StringBuilder()
         if (0 < doubleDigits) {
@@ -48,9 +44,9 @@ object KarutaDisplayHelper {
         return context.getString(R.string.karuta_number, sb.toString())
     }
 
-    fun convertKimarijiToString(context: Context, kimariji: Int): String {
+    fun Int.toKimarijiStr(context: Context): String {
         val resources = context.resources
         val kimarijiArray = resources.getStringArray(R.array.kimariji)
-        return kimarijiArray[kimariji - 1]
+        return kimarijiArray[this - 1]
     }
 }

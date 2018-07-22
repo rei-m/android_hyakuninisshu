@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.action.exam
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-class FetchRecentExamAction(val karutaExam: KarutaExam) : Action {
-    override fun toString() = "FetchRecentExamAction(karutaExam=$karutaExam)"
+class FetchRecentExamAction(val karutaExam: KarutaExam?,
+                            override val error: Throwable? = null) : Action {
+    override fun toString(): String = "FetchRecentExamAction(karutaExam=$karutaExam, error=$error)"
 }

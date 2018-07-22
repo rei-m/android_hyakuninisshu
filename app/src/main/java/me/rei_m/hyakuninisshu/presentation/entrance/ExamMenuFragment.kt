@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.databinding.FragmentExamMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.ext.FragmentExt
@@ -33,30 +32,16 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
     @Inject
     lateinit var viewModelFactory: ExamMenuViewModel.Factory
 
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
-
-    lateinit var binding: FragmentExamMenuBinding
-
-    lateinit var viewModel: ExamMenuViewModel
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val store = obtainActivityStore(EntranceStore::class.java, storeFactory)
-        viewModel = viewModelFactory.create(store)
-        viewModel.start()
+        val viewModel = viewModelFactory.create(obtainActivityStore(EntranceStore::class.java, storeFactory))
 
-        binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
+        val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@ExamMenuFragment)
         }
 
         binding.viewModel = viewModel
 
         return binding.root
-    }
-
-    override fun onResume() {
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.EXAM)
-        super.onResume()
     }
 
     @dagger.Module

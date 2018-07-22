@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -21,7 +21,6 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.presentation.enums.*
@@ -33,12 +32,9 @@ class TrainingMenuFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: TrainingMenuViewModel.Factory
 
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
+    private lateinit var binding: FragmentTrainingMenuBinding
 
-    lateinit var binding: FragmentTrainingMenuBinding
-
-    lateinit var viewModel: TrainingMenuViewModel
+    private lateinit var viewModel: TrainingMenuViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
@@ -70,11 +66,6 @@ class TrainingMenuFragment : DaggerFragment() {
         binding.viewModel = viewModel
 
         return binding.root
-    }
-
-    override fun onResume() {
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.TRAINING_MENU)
-        super.onResume()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

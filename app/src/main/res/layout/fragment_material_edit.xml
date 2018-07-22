@@ -186,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_l"
-                android:onClick="@{viewModel::onClickEdit}"
+                android:onClick="@{() -> viewModel.onClickEdit()}"
                 android:paddingBottom="@dimen/padding_m"
                 android:paddingEnd="@dimen/padding_m"
                 android:paddingStart="@dimen/padding_m"

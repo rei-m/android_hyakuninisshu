@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class TrainingViewModel(
         store: TrainingStore,
-        private val trainingActionDispatcher: TrainingActionDispatcher
+        private val actionDispatcher: TrainingActionDispatcher
 ) : LiveDataExt {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
@@ -34,22 +34,24 @@ class TrainingViewModel(
 
     val isVisibleEmpty: LiveData<Boolean> = store.notFoundErrorEvent
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     fun startTraining(trainingRangeFrom: TrainingRangeFrom,
                       trainingRangeTo: TrainingRangeTo,
                       kimarijiFilter: KimarijiFilter,
                       colorFilter: ColorFilter) {
-        trainingActionDispatcher.start(trainingRangeFrom.identifier,
-                trainingRangeTo.identifier,
+        actionDispatcher.start(trainingRangeFrom.value,
+                trainingRangeTo.value,
                 kimarijiFilter.value,
                 colorFilter.value)
     }
 
     fun startTraining() {
-        trainingActionDispatcher.startForExam()
+        actionDispatcher.startForExam()
     }
 
     fun fetchNext() {
-        trainingActionDispatcher.fetchNext()
+        actionDispatcher.fetchNext()
     }
 
     class Factory @Inject constructor(private val actionDispatcher: TrainingActionDispatcher) {

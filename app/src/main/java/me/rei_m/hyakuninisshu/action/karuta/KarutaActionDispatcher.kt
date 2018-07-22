@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -13,23 +13,31 @@
 
 package me.rei_m.hyakuninisshu.action.karuta
 
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
+import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class KarutaActionDispatcher @Inject constructor(
+        private val karutaRepository: KarutaRepository,
         private val dispatcher: Dispatcher,
-        private val karutaRepository: KarutaRepository
-) {
+        private val schedulerProvider: SchedulerProvider
+) : SingleExt {
 
-    fun fetch(karutaIdentifier: KarutaIdentifier) {
-        karutaRepository
-                .findBy(karutaIdentifier)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { karuta -> dispatcher.dispatch(FetchKarutaAction(karuta)) }
+    /**
+     * 指定の詩を取り出す.
+     *
+     * @param karutaId 歌ID.
+     */
+    fun fetch(karutaId: KarutaIdentifier) {
+        karutaRepository.findBy(karutaId).scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(FetchKarutaAction(it))
+        }, {
+            dispatcher.dispatch(FetchKarutaAction(null, it))
+        })
     }
 }

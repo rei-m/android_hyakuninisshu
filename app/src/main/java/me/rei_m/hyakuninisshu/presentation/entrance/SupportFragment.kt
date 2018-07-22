@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import javax.inject.Inject
@@ -28,9 +27,6 @@ class SupportFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: SupportViewModel.Factory
-
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewModel = viewModelFactory.create()
@@ -42,11 +38,6 @@ class SupportFragment : DaggerFragment() {
         binding.viewModel = viewModel
 
         return binding.root
-    }
-
-    override fun onResume() {
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.SUPPORT)
-        super.onResume()
     }
 
     @dagger.Module

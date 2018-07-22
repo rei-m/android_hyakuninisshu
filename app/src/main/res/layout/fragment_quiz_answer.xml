@@ -4,9 +4,7 @@
     tools:context=".presentation.core.QuizAnswerFragment">
 
     <data>
-
-        <import type="android.view.View" />
-
+        
         <import type="me.rei_m.hyakuninisshu.R" />
 
         <variable
@@ -147,7 +145,7 @@
             android:paddingTop="@dimen/padding_m"
             android:text="@string/go_to_next"
             android:textSize="@dimen/text_m"
-            android:visibility="@{viewModel.existNextQuiz ? View.VISIBLE : View.GONE}" />
+            app:visibleOrGone="@{viewModel.existNextQuiz}" />
 
         <Button
             android:layout_width="wrap_content"
@@ -160,7 +158,7 @@
             android:paddingTop="@dimen/padding_m"
             android:text="@string/confirm_result"
             android:textSize="@dimen/text_m"
-            android:visibility="@{viewModel.existNextQuiz ? View.GONE : View.VISIBLE}" />
+            app:visibleOrGone="@{viewModel.canGoToResult}" />
 
     </RelativeLayout>
 

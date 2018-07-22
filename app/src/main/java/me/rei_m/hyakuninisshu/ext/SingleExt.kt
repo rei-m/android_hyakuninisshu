@@ -14,19 +14,10 @@
 package me.rei_m.hyakuninisshu.ext
 
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 
 interface SingleExt {
-    fun <T> Single<T>.subscribeNew(onSuccess: (T) -> Unit): Disposable = this
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Consumer(onSuccess))
-
-    fun <T> Single<T>.subscribeNew(onSuccess: (T) -> Unit, onError: ((Throwable) -> Unit)): Disposable = this
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Consumer(onSuccess), Consumer(onError))
+    fun <T> Single<T>.scheduler(schedulerProvider: SchedulerProvider): Single<T> = this
+            .subscribeOn(schedulerProvider.new())
+            .observeOn(schedulerProvider.ui())
 }

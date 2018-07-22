@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -20,19 +20,21 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
 class QuizAnswerViewModel(
         store: QuizStore,
-        private val actionDispatcher: QuizActionDispatcher,
-        private val quizId: KarutaQuizIdentifier,
+        actionDispatcher: QuizActionDispatcher,
+        quizId: KarutaQuizIdentifier,
         private val navigator: Navigator
 ) : LiveDataExt {
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
     val existNextQuiz: LiveData<Boolean> = content.map { it.existNext }
+
+    val canGoToResult: LiveData<Boolean> = content.map { !it.existNext }
 
     val karuta: LiveData<Karuta> = content.map { it.correct }
 
@@ -56,7 +58,9 @@ class QuizAnswerViewModel(
 
     val openResultEvent: SingleLiveEvent<Void> = SingleLiveEvent()
 
-    fun start() {
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
+    init {
         actionDispatcher.fetch(quizId)
     }
 

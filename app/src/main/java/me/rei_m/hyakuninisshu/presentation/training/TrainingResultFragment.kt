@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingResultBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.ext.FragmentExt
@@ -33,12 +32,8 @@ class TrainingResultFragment : DaggerFragment(), FragmentExt {
     @Inject
     lateinit var viewModelFactory: TrainingResultViewModel.Factory
 
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewModel = viewModelFactory.create(obtainActivityStore(TrainingStore::class.java, storeFactory))
-        viewModel.start()
 
         val binding = FragmentTrainingResultBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@TrainingResultFragment)
@@ -46,11 +41,6 @@ class TrainingResultFragment : DaggerFragment(), FragmentExt {
         binding.viewModel = viewModel
 
         return binding.root
-    }
-
-    override fun onResume() {
-        analyticsManager.logScreenEvent(AnalyticsManager.ScreenEvent.QUIZ_RESULT)
-        super.onResume()
     }
 
     @dagger.Module

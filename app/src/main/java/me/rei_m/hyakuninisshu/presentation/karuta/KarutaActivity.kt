@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -33,9 +33,13 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
-class KarutaActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
+class KarutaActivity : DaggerAppCompatActivity(),
+        KarutaFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnDialogInteractionListener,
+        AppCompatActivityExt {
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
@@ -71,6 +75,24 @@ class KarutaActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onAlertPositiveClick() {
+        finish()
+    }
+
+    override fun onAlertNegativeClick() {
+        // Negative Button is disable.
+    }
+
+    override fun onError() {
+        showDialogFragment(AlertDialogFragment.TAG) {
+            AlertDialogFragment.newInstance(
+                    R.string.text_title_error,
+                    R.string.text_message_illegal_arguments,
+                    true,
+                    false)
+        }
     }
 
     private fun setupAd() {

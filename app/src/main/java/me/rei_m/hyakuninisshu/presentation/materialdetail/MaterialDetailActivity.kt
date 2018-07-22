@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.materialdetail
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -34,9 +35,12 @@ import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
-class MaterialDetailActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
+class MaterialDetailActivity : DaggerAppCompatActivity(),
+        AlertDialogFragment.OnDialogInteractionListener,
+        AppCompatActivityExt {
 
     @Inject
     lateinit var storeFactory: MaterialDetailStore.Factory
@@ -47,8 +51,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
     @Inject
     lateinit var adViewObserver: AdViewObserver
 
-    lateinit var viewModel: MaterialDetailViewModel
-        private set
+    private lateinit var viewModel: MaterialDetailViewModel
 
     private lateinit var binding: ActivityMaterialDetailBinding
 
@@ -60,8 +63,16 @@ class MaterialDetailActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = viewModelFactory.create(obtainStore(MaterialDetailStore::class.java, storeFactory), lastPosition)
-        viewModel.start(colorFilter)
+        viewModel = viewModelFactory.create(obtainStore(MaterialDetailStore::class.java, storeFactory), colorFilter, lastPosition)
+        viewModel.unhandledErrorEvent.observe(this, Observer {
+            showDialogFragment(AlertDialogFragment.TAG) {
+                AlertDialogFragment.newInstance(
+                        R.string.text_title_error,
+                        R.string.text_message_unhandled_error,
+                        true,
+                        false)
+            }
+        })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail)
         binding.setLifecycleOwner(this)
@@ -94,6 +105,14 @@ class MaterialDetailActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onAlertPositiveClick() {
+        finish()
+    }
+
+    override fun onAlertNegativeClick() {
+        // Negative Button is disable.
     }
 
     private fun setupAd() {

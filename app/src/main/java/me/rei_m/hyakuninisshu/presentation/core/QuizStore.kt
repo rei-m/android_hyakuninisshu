@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,37 +17,43 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.AnswerQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.FetchQuizAction
-import me.rei_m.hyakuninisshu.action.quiz.FinishQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.StartQuizAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
+import me.rei_m.hyakuninisshu.presentation.Store
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 
-class QuizStore(dispatcher: Dispatcher) : ViewModel() {
+class QuizStore(dispatcher: Dispatcher) : Store() {
 
     private val karutaQuizContentLiveData = MutableLiveData<KarutaQuizContent>()
     val karutaQuizContent: LiveData<KarutaQuizContent> = karutaQuizContentLiveData
 
-    private val disposable = CompositeDisposable()
+    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
 
     init {
-        disposable.addAll(dispatcher.on(FetchQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = it.karutaQuizContent
+        register(dispatcher.on(FetchQuizAction::class.java).subscribe {
+            if (it.error == null) {
+                karutaQuizContentLiveData.value = it.karutaQuizContent
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         }, dispatcher.on(StartQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = it.karutaQuizContent
+            if (it.error == null) {
+                karutaQuizContentLiveData.value = it.karutaQuizContent
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = it.karutaQuizContent
-        }, dispatcher.on(FinishQuizAction::class.java).subscribe {
-            karutaQuizContentLiveData.value = null
+            if (it.error == null) {
+                karutaQuizContentLiveData.value = it.karutaQuizContent
+            } else {
+                unhandledErrorEventLiveData.call()
+            }
         })
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
-        super.onCleared()
     }
 
     class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {

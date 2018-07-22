@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -32,18 +32,19 @@ import me.rei_m.hyakuninisshu.databinding.ActivityExamBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class ExamActivity : DaggerAppCompatActivity(),
-        AlertDialogFragment.OnDialogInteractionListener,
         CoreInteractionListener,
+        ExamResultFragment.OnFragmentInteractionListener,
+        AlertDialogFragment.OnDialogInteractionListener,
         AppCompatActivityExt {
 
     @Inject
@@ -95,6 +96,9 @@ class ExamActivity : DaggerAppCompatActivity(),
                     }
                 }
             })
+            notFoundQuizEvent.observe(this@ExamActivity, Observer {
+                onErrorQuiz()
+            })
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exam)
@@ -110,15 +114,6 @@ class ExamActivity : DaggerAppCompatActivity(),
             viewModel.startExam()
         }
     }
-
-//    override fun onErrorQuiz() {
-//        val newFragment = AlertDialogFragment.newInstance(
-//                R.string.text_title_error,
-//                R.string.text_message_quiz_error,
-//                true,
-//                false)
-//        newFragment.show(supportFragmentManager, "dialog")
-//    }
 
     override fun onAnswered(quizId: KarutaQuizIdentifier) {
         if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
@@ -144,12 +139,32 @@ class ExamActivity : DaggerAppCompatActivity(),
         }
     }
 
-    override fun onDialogPositiveClick() {
+    override fun onErrorQuiz() {
+        showDialogFragment(AlertDialogFragment.TAG) {
+            AlertDialogFragment.newInstance(
+                    R.string.text_title_error,
+                    R.string.text_message_quiz_error,
+                    true,
+                    false)
+        }
+    }
+
+    override fun onErrorFinish() {
+        showDialogFragment(AlertDialogFragment.TAG) {
+            AlertDialogFragment.newInstance(
+                    R.string.text_title_error,
+                    R.string.text_message_aggregate_error,
+                    true,
+                    false)
+        }
+    }
+
+    override fun onAlertPositiveClick() {
         finish()
     }
 
-    override fun onDialogNegativeClick() {
-
+    override fun onAlertNegativeClick() {
+        // Negative Button is disable.
     }
 
     private fun setupAd() {

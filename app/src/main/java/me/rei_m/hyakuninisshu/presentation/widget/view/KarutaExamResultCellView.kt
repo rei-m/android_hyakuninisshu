@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -21,13 +21,13 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 
 import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.presentation.helper.KarutaDisplayHelper
+import me.rei_m.hyakuninisshu.ext.IntExt
 
 class KarutaExamResultCellView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+) : RelativeLayout(context, attrs, defStyleAttr), IntExt {
 
     init {
         initialize(context)
@@ -47,7 +47,7 @@ class KarutaExamResultCellView @JvmOverloads constructor(
     }
 
     fun setResult(karutaNo: Int, isCorrect: Boolean) {
-        textKarutaNo.text = KarutaDisplayHelper.convertNumberToString(context, karutaNo)
+        textKarutaNo.text = karutaNo.toKarutaNoStr(context)
         if (isCorrect) {
             imageCorrect.visibility = View.VISIBLE
         } else {

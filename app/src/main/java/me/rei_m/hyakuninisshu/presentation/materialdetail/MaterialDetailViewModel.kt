@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -24,7 +24,8 @@ import javax.inject.Inject
 
 class MaterialDetailViewModel(
         store: MaterialDetailStore,
-        private val actionDispatcher: MaterialActionDispatcher,
+        actionDispatcher: MaterialActionDispatcher,
+        colorFilter: ColorFilter,
         initialPosition: Int,
         private val navigator: Navigator
 ) : MutableLiveDataExt {
@@ -33,7 +34,9 @@ class MaterialDetailViewModel(
 
     val initialPosition: LiveData<Int> = MutableLiveData<Int>().withValue(initialPosition)
 
-    fun start(colorFilter: ColorFilter) {
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
+    init {
         actionDispatcher.fetch(colorFilter)
     }
 
@@ -45,9 +48,10 @@ class MaterialDetailViewModel(
 
     class Factory @Inject constructor(private val actionDispatcher: MaterialActionDispatcher,
                                       private val navigator: Navigator) {
-        fun create(store: MaterialDetailStore, initialPosition: Int): MaterialDetailViewModel = MaterialDetailViewModel(
+        fun create(store: MaterialDetailStore, colorFilter: ColorFilter, initialPosition: Int): MaterialDetailViewModel = MaterialDetailViewModel(
                 store,
                 actionDispatcher,
+                colorFilter,
                 initialPosition,
                 navigator
         )

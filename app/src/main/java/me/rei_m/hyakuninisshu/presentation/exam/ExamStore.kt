@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,15 +17,18 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import javax.inject.Inject
-
-import io.reactivex.disposables.CompositeDisposable
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.action.exam.*
+import me.rei_m.hyakuninisshu.action.exam.FetchExamAction
+import me.rei_m.hyakuninisshu.action.exam.FinishExamAction
+import me.rei_m.hyakuninisshu.action.exam.OpenNextQuizAction
+import me.rei_m.hyakuninisshu.action.exam.StartExamAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
+import me.rei_m.hyakuninisshu.presentation.Store
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import javax.inject.Inject
 
-class ExamStore(dispatcher: Dispatcher) : ViewModel() {
+class ExamStore(dispatcher: Dispatcher) : Store() {
 
     private val currentKarutaQuizIdLiveData = MutableLiveData<KarutaQuizIdentifier?>()
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = currentKarutaQuizIdLiveData
@@ -33,25 +36,42 @@ class ExamStore(dispatcher: Dispatcher) : ViewModel() {
     private val resultLiveData = MutableLiveData<KarutaExam?>()
     val result: LiveData<KarutaExam?> = resultLiveData
 
-    private val disposable = CompositeDisposable()
+    private val notFoundQuizEventLiveData = SingleLiveEvent<Void>()
+    val notFoundQuizEvent = notFoundQuizEventLiveData
+
+    private val notFoundExamEventLiveData = SingleLiveEvent<Void>()
+    val notFoundExamEvent = notFoundExamEventLiveData
 
     init {
         currentKarutaQuizIdLiveData.value = null
         resultLiveData.value = null
 
-        disposable.addAll(dispatcher.on(StartExamAction::class.java).subscribe {
-            currentKarutaQuizIdLiveData.value = it.karutaQuizId
+        register(dispatcher.on(StartExamAction::class.java).subscribe {
+            if (it.error == null) {
+                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            } else {
+                notFoundQuizEventLiveData.call()
+            }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
-            currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            if (it.error == null) {
+                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+            } else {
+                notFoundQuizEventLiveData.call()
+            }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             currentKarutaQuizIdLiveData.value = null
-            resultLiveData.value = it.karutaExam
+            if (it.error == null) {
+                resultLiveData.value = it.karutaExam
+            } else {
+                notFoundExamEventLiveData.call()
+            }
+        }, dispatcher.on(FetchExamAction::class.java).subscribe {
+            if (it.error == null) {
+                resultLiveData.value = it.karutaExam
+            } else {
+                notFoundExamEventLiveData.call()
+            }
         })
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
-        super.onCleared()
     }
 
     class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -16,21 +16,20 @@ package me.rei_m.hyakuninisshu.presentation.materialedit
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.view.View
 import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
 import me.rei_m.hyakuninisshu.R as Res
 
 class MaterialEditViewModel(
-        private val karutaStore: MaterialEditStore,
+        private val store: MaterialEditStore,
         private val actionDispatcher: MaterialActionDispatcher,
-        private val navigator: Navigator,
+        private val karutaId: KarutaIdentifier,
         firstPhraseKanji: String?,
         firstPhraseKana: String?,
         secondPhraseKanji: String?,
@@ -40,10 +39,11 @@ class MaterialEditViewModel(
         fourthPhraseKanji: String?,
         fourthPhraseKana: String?,
         fifthPhraseKanji: String?,
-        fifthPhraseKana: String?
+        fifthPhraseKana: String?,
+        private val navigator: Navigator
 ) : LiveDataExt, MutableLiveDataExt {
 
-    private val karuta: LiveData<Karuta?> = karutaStore.karuta
+    private val karuta: LiveData<Karuta?> = store.karuta
 
     val karutaNo: LiveData<Int?> = karuta.map { it?.identifier()?.value }
 
@@ -75,6 +75,8 @@ class MaterialEditViewModel(
 
     val snackBarMessage: SingleLiveEvent<Int> = SingleLiveEvent()
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     private val karutaObserver: Observer<Karuta?> = Observer {
         it ?: return@Observer
         this.firstPhraseKanji.setIfNull(it.kamiNoKu.first.kanji)
@@ -105,38 +107,17 @@ class MaterialEditViewModel(
         this.fifthPhraseKanji.value = fifthPhraseKanji
         this.fifthPhraseKana.value = fifthPhraseKana
         karuta.observeForever(karutaObserver)
-        karutaStore.completeEditEvent.observeForever(completeEditEventObserver)
+        store.completeEditEvent.observeForever(completeEditEventObserver)
+
+        actionDispatcher.startEdit(karutaId)
     }
 
     fun onDestroyView() {
         karuta.removeObserver(karutaObserver)
-        karutaStore.completeEditEvent.removeObserver(completeEditEventObserver)
-    }
-
-    fun start(karutaId: KarutaIdentifier) {
-        if (karuta.value == null) {
-            actionDispatcher.startEdit(karutaId)
-        }
+        store.completeEditEvent.removeObserver(completeEditEventObserver)
     }
 
     fun updateMaterial() {
-        actionDispatcher.edit(
-                requireNotNull(karuta.value).identifier(),
-                requireNotNull(firstPhraseKanji.value),
-                requireNotNull(firstPhraseKana.value),
-                requireNotNull(secondPhraseKanji.value),
-                requireNotNull(secondPhraseKana.value),
-                requireNotNull(thirdPhraseKanji.value),
-                requireNotNull(thirdPhraseKana.value),
-                requireNotNull(fourthPhraseKanji.value),
-                requireNotNull(fourthPhraseKana.value),
-                requireNotNull(fifthPhraseKanji.value),
-                requireNotNull(fifthPhraseKana.value)
-        )
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun onClickEdit(view: View) {
         val firstPhraseKanji = this.firstPhraseKanji.value ?: ""
         val firstPhraseKana = this.firstPhraseKana.value ?: ""
         val secondPhraseKanji = this.secondPhraseKanji.value ?: ""
@@ -147,6 +128,7 @@ class MaterialEditViewModel(
         val fourthPhraseKana = this.fourthPhraseKana.value ?: ""
         val fifthPhraseKanji = this.fifthPhraseKanji.value ?: ""
         val fifthPhraseKana = this.fifthPhraseKana.value ?: ""
+
         if (
                 firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
                 secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
@@ -157,6 +139,45 @@ class MaterialEditViewModel(
             snackBarMessage.value = Res.string.text_message_edit_error
             return
         }
+
+        actionDispatcher.edit(
+                karutaId,
+                firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana
+        )
+    }
+
+    fun onClickEdit() {
+        val firstPhraseKanji = this.firstPhraseKanji.value ?: ""
+        val firstPhraseKana = this.firstPhraseKana.value ?: ""
+        val secondPhraseKanji = this.secondPhraseKanji.value ?: ""
+        val secondPhraseKana = this.secondPhraseKana.value ?: ""
+        val thirdPhraseKanji = this.thirdPhraseKanji.value ?: ""
+        val thirdPhraseKana = this.thirdPhraseKana.value ?: ""
+        val fourthPhraseKanji = this.fourthPhraseKanji.value ?: ""
+        val fourthPhraseKana = this.fourthPhraseKana.value ?: ""
+        val fifthPhraseKanji = this.fifthPhraseKanji.value ?: ""
+        val fifthPhraseKana = this.fifthPhraseKana.value ?: ""
+
+        if (
+                firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
+                secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
+                thirdPhraseKanji.isBlank() || thirdPhraseKana.isBlank() ||
+                fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
+                fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
+        ) {
+            snackBarMessage.value = Res.string.text_message_edit_error
+            return
+        }
+
         confirmEditEvent.value = ConfirmMaterialEditDialogFragment.newInstance(
                 firstPhraseKanji,
                 firstPhraseKana,
@@ -185,10 +206,10 @@ class MaterialEditViewModel(
         var fifthPhraseKanji: String? = null
         var fifthPhraseKana: String? = null
 
-        fun create(store: MaterialEditStore): MaterialEditViewModel = MaterialEditViewModel(
+        fun create(store: MaterialEditStore, karutaId: KarutaIdentifier): MaterialEditViewModel = MaterialEditViewModel(
                 store,
                 actionDispatcher,
-                navigator,
+                karutaId,
                 firstPhraseKanji,
                 firstPhraseKana,
                 secondPhraseKanji,
@@ -198,7 +219,8 @@ class MaterialEditViewModel(
                 fourthPhraseKanji,
                 fourthPhraseKana,
                 fifthPhraseKanji,
-                fifthPhraseKana
+                fifthPhraseKana,
+                navigator
         )
     }
 }

@@ -11,14 +11,13 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.action.material
+package me.rei_m.hyakuninisshu.ext
 
-import me.rei_m.hyakuninisshu.action.Action
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import io.reactivex.Completable
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 
-class StartEditMaterialAction(val karuta: Karuta?,
-                              override val error: Throwable? = null) : Action {
-    override fun toString(): String = "StartEditMaterialAction(karuta=$karuta, error=$error)"
+interface CompletableExt {
+    fun Completable.scheduler(schedulerProvider: SchedulerProvider): Completable = this
+            .subscribeOn(schedulerProvider.new())
+            .observeOn(schedulerProvider.ui())
 }

@@ -5,6 +5,10 @@ import timber.log.Timber
 
 object Logger {
     fun action(a: Action) {
-        Timber.tag("Action").d("$a")
+        if (a.error == null) {
+            Timber.tag("Action").d("$a")
+        } else {
+            Timber.tag("Action").e("$a")
+        }
     }
 }

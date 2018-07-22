@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -55,11 +55,11 @@ class EntranceActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
         setupActionBar(binding.toolbar) {
         }
 
+        subscribeUi()
+
         setupAd()
 
         setupAppRate()
-
-        subscribeUi()
 
         if (savedInstanceState == null) {
             supportFragmentManager

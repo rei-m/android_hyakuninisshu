@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -118,6 +118,9 @@ class TrainingActivity : DaggerAppCompatActivity(),
                     return@Observer
                 }
             })
+            unhandledErrorEvent.observe(this@TrainingActivity, Observer {
+                onErrorQuiz()
+            })
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training)
@@ -133,15 +136,6 @@ class TrainingActivity : DaggerAppCompatActivity(),
             viewModel.startTraining(trainingRangeFrom, trainingRangeTo, kimarijiFilter, colorFilter)
         }
     }
-
-//    override fun onErrorQuiz() {
-//        val newFragment = AlertDialogFragment.newInstance(
-//                R.string.text_title_error,
-//                R.string.text_message_quiz_error,
-//                true,
-//                false)
-//        newFragment.show(supportFragmentManager, AlertDialogFragment.TAG)
-//    }
 
     override fun onAnswered(quizId: KarutaQuizIdentifier) {
         if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
@@ -167,11 +161,21 @@ class TrainingActivity : DaggerAppCompatActivity(),
         }
     }
 
-    override fun onDialogPositiveClick() {
+    override fun onErrorQuiz() {
+        showDialogFragment(AlertDialogFragment.TAG) {
+            AlertDialogFragment.newInstance(
+                    R.string.text_title_error,
+                    R.string.text_message_unhandled_error,
+                    true,
+                    false)
+        }
+    }
+
+    override fun onAlertPositiveClick() {
         finish()
     }
 
-    override fun onDialogNegativeClick() {
+    override fun onAlertNegativeClick() {
 
     }
 

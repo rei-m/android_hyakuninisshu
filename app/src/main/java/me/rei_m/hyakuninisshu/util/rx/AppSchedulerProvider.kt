@@ -11,14 +11,18 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.action.material
+package me.rei_m.hyakuninisshu.util.rx
 
-import me.rei_m.hyakuninisshu.action.Action
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class StartEditMaterialAction(val karuta: Karuta?,
-                              override val error: Throwable? = null) : Action {
-    override fun toString(): String = "StartEditMaterialAction(karuta=$karuta, error=$error)"
+class AppSchedulerProvider : SchedulerProvider {
+    override fun ui(): Scheduler = AndroidSchedulers.mainThread()
+
+    override fun computation(): Scheduler = Schedulers.computation()
+
+    override fun new(): Scheduler = Schedulers.newThread()
+
+    override fun io(): Scheduler = Schedulers.io()
 }

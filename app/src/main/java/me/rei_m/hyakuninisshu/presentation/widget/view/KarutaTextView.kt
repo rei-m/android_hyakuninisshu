@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -24,10 +24,6 @@ class KarutaTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     init {
-        initialize(context)
-    }
-
-    private fun initialize(context: Context) {
         typeface = KarutaFontHolder.INSTANCE.getTypeFace(context)
     }
 }

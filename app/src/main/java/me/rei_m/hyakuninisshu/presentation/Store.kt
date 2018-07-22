@@ -11,14 +11,21 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.action.material
+package me.rei_m.hyakuninisshu.presentation
 
-import me.rei_m.hyakuninisshu.action.Action
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import android.arch.lifecycle.ViewModel
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
-class StartEditMaterialAction(val karuta: Karuta?,
-                              override val error: Throwable? = null) : Action {
-    override fun toString(): String = "StartEditMaterialAction(karuta=$karuta, error=$error)"
+abstract class Store : ViewModel() {
+    private val disposable = CompositeDisposable()
+
+    protected fun register(vararg ds: Disposable) {
+        disposable.addAll(*ds)
+    }
+
+    override fun onCleared() {
+        disposable.dispose()
+        super.onCleared()
+    }
 }

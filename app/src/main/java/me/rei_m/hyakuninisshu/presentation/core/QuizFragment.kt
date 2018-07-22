@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -52,18 +52,18 @@ class QuizFragment : DaggerFragment(), FragmentExt {
     private var listener: CoreInteractionListener? = null
 
     private val karutaQuizId: KarutaQuizIdentifier
-        get() = arguments?.getParcelable(ARG_KARUTA_QUIZ_ID) ?: let {
-            throw IllegalArgumentException("$ARG_KARUTA_QUIZ_ID is missing")
+        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_QUIZ_ID)) {
+            "$ARG_KARUTA_QUIZ_ID is missing"
         }
 
     private val kamiNoKuStyle: KarutaStyleFilter
-        get() = arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] } ?: let {
-            throw IllegalArgumentException("$ARG_KAMI_NO_KU_STYLE is missing")
+        get() = requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }){
+            "$ARG_KAMI_NO_KU_STYLE is missing"
         }
 
     private val shimoNoKuStyle: KarutaStyleFilter
-        get() = arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] } ?: let {
-            throw IllegalArgumentException("$ARG_SHIMO_NO_KU_STYLE is missing")
+        get() = requireNotNull(arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
+            "$ARG_SHIMO_NO_KU_STYLE is missing"
         }
 
     private var animationDisposable: Disposable? = null
@@ -84,6 +84,9 @@ class QuizFragment : DaggerFragment(), FragmentExt {
             openAnswerEvent.observe(this@QuizFragment, Observer {
                 it ?: let { return@Observer }
                 listener?.onAnswered(it)
+            })
+            unhandledErrorEvent.observe(this@QuizFragment, Observer {
+                listener?.onErrorQuiz()
             })
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -23,7 +23,7 @@ import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Device
-import me.rei_m.hyakuninisshu.presentation.util.SingleLiveEvent
+import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import java.util.*
 import javax.inject.Inject
 
@@ -66,6 +66,8 @@ class QuizViewModel(
 
     val choiceTextSize: LiveData<Int>
 
+    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+
     init {
         quizCount = content.map { it.currentPosition }
 
@@ -74,9 +76,9 @@ class QuizViewModel(
         secondPhrase = yomiFuda.map { it.secondPhrase }
         thirdPhrase = yomiFuda.map { it.thirdPhrase }
 
-        val torifudas = content.map { it.toriFudas(shimoNoKuStyle.value) }
-        choiceFourthPhraseList = torifudas.map { it.map { it.fourthPhrase } }
-        choiceFifthPhraseList = torifudas.map { it.map { it.fifthPhrase } }
+        val toriFudas = content.map { it.toriFudas(shimoNoKuStyle.value) }
+        choiceFourthPhraseList = toriFudas.map { it.map { it.fourthPhrase } }
+        choiceFifthPhraseList = toriFudas.map { it.map { it.fifthPhrase } }
 
         val result = content.map { it.quiz.result }
         isVisibleChoiceList = result.map {
