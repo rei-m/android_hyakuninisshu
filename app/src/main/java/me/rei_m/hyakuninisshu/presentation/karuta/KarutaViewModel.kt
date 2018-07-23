@@ -25,28 +25,32 @@ class KarutaViewModel(
         karutaId: KarutaIdentifier
 ) : LiveDataExt {
 
-    val karutaNo: LiveData<Int> = store.karuta.map { it.identifier().value }
+    val isLoading: LiveData<Boolean> = store.karuta.map { it == null }
 
-    val karutaImageNo: LiveData<String> = store.karuta.map { it.imageNo.value }
+    val karutaNo: LiveData<Int?> = store.karuta.map { it?.identifier()?.value }
 
-    val creator: LiveData<String> = store.karuta.map { it.creator }
+    val karutaImageNo: LiveData<String?> = store.karuta.map { it?.imageNo?.value }
 
-    val kimariji: LiveData<Int> = store.karuta.map { it.kimariji.value }
+    val creator: LiveData<String?> = store.karuta.map { it?.creator }
 
-    val kamiNoKuKanji: LiveData<String> = store.karuta.map { it.kamiNoKu.kanji }
+    val kimariji: LiveData<Int?> = store.karuta.map { it?.kimariji?.value }
 
-    val shimoNoKuKanji: LiveData<String> = store.karuta.map { it.shimoNoKu.kanji }
+    val kamiNoKuKanji: LiveData<String?> = store.karuta.map { it?.kamiNoKu?.kanji }
 
-    val kamiNoKuKana: LiveData<String> = store.karuta.map { it.kamiNoKu.kana }
+    val shimoNoKuKanji: LiveData<String?> = store.karuta.map { it?.shimoNoKu?.kanji }
 
-    val shimoNoKuKana: LiveData<String> = store.karuta.map { it.shimoNoKu.kana }
+    val kamiNoKuKana: LiveData<String?> = store.karuta.map { it?.kamiNoKu?.kana }
 
-    val translation: LiveData<String> = store.karuta.map { it.translation }
+    val shimoNoKuKana: LiveData<String?> = store.karuta.map { it?.shimoNoKu?.kana }
+
+    val translation: LiveData<String?> = store.karuta.map { it?.translation }
 
     val notFoundKarutaEvent = store.notFoundKarutaEvent
 
     init {
-        actionDispatcher.fetch(karutaId)
+        if (store.karuta.value == null) {
+            actionDispatcher.fetch(karutaId)
+        }
     }
 
     class Factory @Inject constructor(private val actionDispatcher: KarutaActionDispatcher) {

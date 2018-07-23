@@ -40,7 +40,8 @@
                 android:background="@color/white99"
                 android:gravity="center"
                 android:text="@{viewModel.score}"
-                android:textSize="@dimen/text_xl" />
+                android:textSize="@dimen/text_xl"
+                tools:text="28/100" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -62,7 +63,8 @@
                 android:background="@color/white99"
                 android:gravity="center"
                 android:textSize="@dimen/text_xl"
-                app:averageAnswerSec="@{viewModel.averageAnswerSec}" />
+                app:averageAnswerSec="@{viewModel.averageAnswerSec}"
+                tools:text="2.40秒" />
 
             <TextView
                 android:layout_width="match_parent"

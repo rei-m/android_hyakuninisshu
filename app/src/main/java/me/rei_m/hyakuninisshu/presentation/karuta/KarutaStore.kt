@@ -26,8 +26,8 @@ import javax.inject.Inject
 
 class KarutaStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaLiveData = MutableLiveData<Karuta>()
-    val karuta: LiveData<Karuta> = karutaLiveData
+    private val karutaLiveData = MutableLiveData<Karuta?>()
+    val karuta: LiveData<Karuta?> = karutaLiveData
 
     private val notFoundKarutaEventLiveData = SingleLiveEvent<Void>()
     val notFoundKarutaEvent = notFoundKarutaEventLiveData
