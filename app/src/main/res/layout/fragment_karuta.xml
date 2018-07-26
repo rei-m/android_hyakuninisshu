@@ -31,7 +31,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:src="@drawable/karuta_001" />
 
             <TextView
                 android:id="@+id/text_creator_title"

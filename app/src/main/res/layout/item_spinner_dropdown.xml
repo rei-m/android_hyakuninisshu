@@ -4,7 +4,6 @@
     style="?android:attr/spinnerDropDownItemStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:ellipsize="marquee"
-    android:maxLines="1"
     android:padding="@dimen/padding_s"
+    android:singleLine="true"
     android:textColor="@color/black8a" />

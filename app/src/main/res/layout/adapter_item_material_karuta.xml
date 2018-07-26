@@ -57,7 +57,8 @@
             app:layout_constraintEnd_toStartOf="@id/karuta_kami_no_ku"
             app:layout_constraintRight_toLeftOf="@id/karuta_kami_no_ku"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/karuta_no" />
+            app:layout_constraintTop_toBottomOf="@id/karuta_no"
+            tools:src="@drawable/karuta_001" />
 
         <TextView
             android:id="@+id/karuta_kami_no_ku"
