@@ -144,6 +144,17 @@
     <string name="text_confirm_edit">以下の内容で変更します。よろしいですか？</string>
     <string name="text_caution_edit">※この変更は取り消せません。取り消す場合は再度同じ内容で変更してください。</string>
 
+    <string name="text_hint_input_first_kanji">初句の漢字を入力してください</string>
+    <string name="text_hint_input_first_kana">初句のかなを入力してください</string>
+    <string name="text_hint_input_second_kanji">二句の漢字を入力してください</string>
+    <string name="text_hint_input_second_kana">二句のかなを入力してください</string>
+    <string name="text_hint_input_third_kanji">三句の漢字を入力してください</string>
+    <string name="text_hint_input_third_kana">三句のかなを入力してください</string>
+    <string name="text_hint_input_fourth_kanji">四句の漢字を入力してください</string>
+    <string name="text_hint_input_fourth_kana">四句のかなを入力してください</string>
+    <string name="text_hint_input_fifth_kanji">五句の漢字を入力してください</string>
+    <string name="text_hint_input_fifth_kana">五句のかなを入力してください</string>
+
     <string name="url_credit">file:///android_asset/licenses.html</string>
 
     <string name="app_font_file">Hannari.otf</string>
