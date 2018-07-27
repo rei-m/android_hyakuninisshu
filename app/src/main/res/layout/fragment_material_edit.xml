@@ -18,173 +18,277 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:padding="@dimen/padding_m">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
+                android:id="@+id/text_edit_explain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="@string/text_explain_edit"
-                android:textSize="@dimen/text_xs" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_m"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@string/creator"
-                    android:textSize="@dimen/text_xs" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    app:creator="@{viewModel.creator}"
-                    app:karutaNo="@{viewModel.karutaNo}" />
-
-            </LinearLayout>
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/text_creator_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_creator_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:text="@string/creator"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/text_creator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_edit_explain" />
+
+            <TextView
+                android:id="@+id/text_creator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:creator="@{viewModel.creator}"
+                app:karutaNo="@{viewModel.karutaNo}"
+                app:layout_constraintBottom_toTopOf="@id/text_first_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator_title"
+                tools:text="一番 / 天智天皇" />
+
+            <TextView
+                android:id="@+id/text_first_phrase_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_l"
                 android:text="@string/first_phrase"
-                android:textSize="@dimen/text_xs" />
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_first_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_first_phrase_kanji"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_first_kanji"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.firstPhraseKanji}" />
+                android:text="@={viewModel.firstPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_first_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_first_phrase_title"
+                tools:text="秋の田の" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_first_phrase_kana"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_first_kana"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.firstPhraseKana}" />
+                android:text="@={viewModel.firstPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_second_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_first_phrase_kanji"
+                tools:text="あきのたの" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_second_phrase_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/second_phrase"
-                android:textSize="@dimen/text_xs" />
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_second_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_first_phrase_kana" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_second_phrase_kanji"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_second_kanji"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.secondPhraseKanji}" />
+                android:text="@={viewModel.secondPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_second_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_second_phrase_title"
+                tools:text="かりほの庵の" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_second_phrase_kana"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_second_kana"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.secondPhraseKana}" />
+                android:text="@={viewModel.secondPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_third_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_second_phrase_kanji"
+                tools:text="かりほのいほの" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_third_phrase_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/third_phrase"
-                android:textSize="@dimen/text_xs" />
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_third_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_second_phrase_kana" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_third_phrase_kanji"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_third_kanji"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.thirdPhraseKanji}" />
+                android:text="@={viewModel.thirdPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_third_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_third_phrase_title"
+                tools:text="苫をあらみ" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_third_phrase_kana"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_third_kana"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.thirdPhraseKana}" />
+                android:text="@={viewModel.thirdPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_fourth_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_third_phrase_kanji"
+                tools:text="とまをあらみ" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_fourth_phrase_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/fourth_phrase"
-                android:textSize="@dimen/text_xs" />
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_fourth_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_third_phrase_kana" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_fourth_phrase_kanji"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_fourth_kanji"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.fourthPhraseKanji}" />
+                android:text="@={viewModel.fourthPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_fourth_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_fourth_phrase_title"
+                tools:text="わが衣手は" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_fourth_phrase_kana"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_fourth_kana"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.fourthPhraseKana}" />
+                android:text="@={viewModel.fourthPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_fifth_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fourth_phrase_kanji"
+                tools:text="わがころもでは" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_fifth_phrase_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/fifth_phrase"
-                android:textSize="@dimen/text_xs" />
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_fifth_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fourth_phrase_kana" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_fifth_phrase_kanji"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_fifth_kanji"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.fifthPhraseKanji}" />
+                android:text="@={viewModel.fifthPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_fifth_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_fifth_phrase_title"
+                tools:text="露にぬれつつ" />
 
             <EditText
-                android:layout_width="match_parent"
+                android:id="@+id/edit_fifth_phrase_kana"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginStart="@dimen/margin_m"
+                android:hint="@string/text_hint_input_fifth_kana"
                 android:inputType="textNoSuggestions"
-                android:text="@={viewModel.fifthPhraseKana}" />
+                android:text="@={viewModel.fifthPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/button_edit_material"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fifth_phrase_kanji"
+                tools:text="つゆにぬれつつ" />
 
             <Button
+                android:id="@+id/button_edit_material"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/height_ad_banner"
                 android:layout_marginTop="@dimen/margin_l"
                 android:onClick="@{() -> viewModel.onClickEdit()}"
                 android:paddingBottom="@dimen/padding_m"
@@ -192,14 +296,16 @@
                 android:paddingStart="@dimen/padding_m"
                 android:paddingTop="@dimen/padding_m"
                 android:text="@string/update"
-                android:textSize="@dimen/text_m" />
+                android:textSize="@dimen/text_m"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fifth_phrase_kana" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_ad_banner" />
 
-        </LinearLayout>
-
+        </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
 </layout>

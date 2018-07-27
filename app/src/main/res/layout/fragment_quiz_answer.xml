@@ -4,7 +4,7 @@
     tools:context=".presentation.core.QuizAnswerFragment">
 
     <data>
-        
+
         <import type="me.rei_m.hyakuninisshu.R" />
 
         <variable
@@ -12,7 +12,7 @@
             type="me.rei_m.hyakuninisshu.presentation.core.QuizAnswerViewModel" />
     </data>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/tatami">
@@ -21,8 +21,6 @@
             android:id="@+id/karuta_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/layout_karuta"
-            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/margin_m"
             android:background="@android:color/white"
             android:paddingBottom="@dimen/padding_s"
@@ -33,7 +31,12 @@
             android:paddingTop="@dimen/padding_s"
             android:textSize="@dimen/text_s"
             app:karutaNo="@{viewModel.karutaNo}"
-            app:kimariji="@{viewModel.kimariji}" />
+            app:kimariji="@{viewModel.kimariji}"
+            app:layout_constraintBottom_toTopOf="@id/layout_karuta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,8 +45,6 @@
             android:layout_marginBottom="@dimen/margin_m"
             android:layout_marginLeft="@dimen/margin_s"
             android:layout_marginStart="@dimen/margin_s"
-            android:layout_toEndOf="@id/karuta_no"
-            android:layout_toRightOf="@id/karuta_no"
             android:background="@android:color/white"
             android:onClick="@{() -> viewModel.onClickAnswer()}"
             android:paddingBottom="@dimen/padding_s"
@@ -53,18 +54,24 @@
             android:paddingStart="@dimen/padding_s"
             android:paddingTop="@dimen/padding_s"
             android:text="@string/char_material"
-            android:textSize="@dimen/text_s" />
+            android:textSize="@dimen/text_s"
+            app:layout_constraintBottom_toTopOf="@id/layout_karuta"
+            app:layout_constraintLeft_toRightOf="@id/karuta_no"
+            app:layout_constraintStart_toEndOf="@id/karuta_no" />
 
         <FrameLayout
             android:id="@+id/layout_karuta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_karuta"
-            android:gravity="center_horizontal"
             android:padding="@dimen/padding_s"
-            app:elevation="@{@dimen/elevation_level_ms}">
+            app:elevation="@{@dimen/elevation_level_ms}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -135,8 +142,6 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/layout_karuta"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
             android:onClick="@{() -> viewModel.onClickNextQuiz()}"
             android:paddingBottom="@dimen/padding_m"
@@ -145,21 +150,28 @@
             android:paddingTop="@dimen/padding_m"
             android:text="@string/go_to_next"
             android:textSize="@dimen/text_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_karuta"
             app:visibleOrGone="@{viewModel.existNextQuiz}" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/layout_karuta"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_l"
             android:onClick="@{() -> viewModel.onClickConfirmResult()}"
             android:paddingBottom="@dimen/padding_m"
             android:paddingTop="@dimen/padding_m"
             android:text="@string/confirm_result"
             android:textSize="@dimen/text_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_karuta"
             app:visibleOrGone="@{viewModel.canGoToResult}" />
 
-    </RelativeLayout>
-
+    </android.support.constraint.ConstraintLayout>
 </layout>

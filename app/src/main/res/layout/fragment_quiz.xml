@@ -12,7 +12,7 @@
             type="me.rei_m.hyakuninisshu.presentation.core.QuizViewModel" />
     </data>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/tatami"
@@ -21,21 +21,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:background="@color/white66"
             android:padding="@dimen/padding_m"
-            android:text="@{viewModel.quizCount}" />
+            android:text="@{viewModel.quizCount}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1 / 100" />
 
         <RelativeLayout
             android:id="@+id/layout_quiz_phrase"
-            android:layout_width="@dimen/width_karuta_quiz_phrase"
+            android:layout_width="176dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_m"
             android:background="@drawable/bg_karuta"
             android:padding="@dimen/padding_s"
-            app:elevation="@{@dimen/elevation_level_xs}">
+            app:elevation="@{@dimen/elevation_level_xs}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -59,7 +65,8 @@
                         android:layout_marginTop="@dimen/margin_s"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{1}"
-                        app:textSizeByPx="@{viewModel.quizTextSize}" />
+                        app:textSizeByPx="@{viewModel.quizTextSize}"
+                        tools:text="秋" />
 
                     <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_2"
@@ -70,7 +77,8 @@
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{2}"
-                        app:textSizeByPx="@{viewModel.quizTextSize}" />
+                        app:textSizeByPx="@{viewModel.quizTextSize}"
+                        tools:text="の" />
 
                     <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_3"
@@ -81,7 +89,8 @@
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{3}"
-                        app:textSizeByPx="@{viewModel.quizTextSize}" />
+                        app:textSizeByPx="@{viewModel.quizTextSize}"
+                        tools:text="田" />
 
                     <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_4"
@@ -92,7 +101,8 @@
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{4}"
-                        app:textSizeByPx="@{viewModel.quizTextSize}" />
+                        app:textSizeByPx="@{viewModel.quizTextSize}"
+                        tools:text="の" />
 
                     <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_5"
@@ -295,168 +305,190 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/layout_choice_1"
+            style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/layout_quiz_phrase"
-            android:layout_centerHorizontal="true"
-            android:baselineAligned="false"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_m"
+            android:layout_marginStart="@dimen/margin_m"
+            android:onClick="@{() -> viewModel.onClickChoice(1)}"
+            android:padding="@dimen/padding_xs"
+            android:visibility="@{viewModel.isVisibleChoiceList.get(0).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
+            app:elevation="@{@dimen/elevation_level_xs}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/layout_choice_2"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/layout_choice_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
-            <FrameLayout
-                android:id="@+id/layout_choice_1"
-                style="@style/KarutaChoicePhrase"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginRight="@dimen/margin_m"
-                android:onClick="@{() -> viewModel.onClickChoice(1)}"
-                android:padding="@dimen/padding_xs"
-                android:visibility="@{viewModel.isVisibleChoiceList.get(0).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-                app:elevation="@{@dimen/elevation_level_xs}">
+                android:background="@drawable/bg_karuta_inner"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_s">
 
-                <LinearLayout
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_karuta_inner"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/padding_s">
+                    android:layout_marginTop="@dimen/margin_l"
+                    app:verticalText="@{viewModel.choiceFifthPhraseList.get(0)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(0)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:layout_marginStart="@dimen/margin_xs"
+                    app:verticalText="@{viewModel.choiceFourthPhraseList.get(0)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_xs"
-                        android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(0)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
+            </LinearLayout>
 
-                </LinearLayout>
+        </FrameLayout>
 
-            </FrameLayout>
+        <FrameLayout
+            android:id="@+id/layout_choice_2"
+            style="@style/KarutaChoicePhrase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.onClickChoice(2)}"
+            android:padding="@dimen/padding_xs"
+            android:visibility="@{viewModel.isVisibleChoiceList.get(1).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
+            app:elevation="@{@dimen/elevation_level_xs}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/layout_choice_3"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/layout_choice_1"
+            app:layout_constraintRight_toLeftOf="@id/layout_choice_3"
+            app:layout_constraintStart_toEndOf="@id/layout_choice_1"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
-            <FrameLayout
-                android:id="@+id/layout_choice_2"
-                style="@style/KarutaChoicePhrase"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginRight="@dimen/margin_m"
-                android:onClick="@{() -> viewModel.onClickChoice(2)}"
-                android:padding="@dimen/padding_xs"
-                android:visibility="@{viewModel.isVisibleChoiceList.get(1).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-                app:elevation="@{@dimen/elevation_level_xs}">
+                android:background="@drawable/bg_karuta_inner"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_s">
 
-                <LinearLayout
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_karuta_inner"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/padding_s">
+                    android:layout_marginTop="@dimen/margin_l"
+                    app:verticalText="@{viewModel.choiceFifthPhraseList.get(1)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(1)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:layout_marginStart="@dimen/margin_xs"
+                    app:verticalText="@{viewModel.choiceFourthPhraseList.get(1)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
+            </LinearLayout>
+        </FrameLayout>
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_xs"
-                        android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(1)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
-                </LinearLayout>
-            </FrameLayout>
+        <FrameLayout
+            android:id="@+id/layout_choice_3"
+            style="@style/KarutaChoicePhrase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.onClickChoice(3)}"
+            android:padding="@dimen/padding_xs"
+            android:visibility="@{viewModel.isVisibleChoiceList.get(2).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
+            app:elevation="@{@dimen/elevation_level_xs}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/layout_choice_4"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/layout_choice_2"
+            app:layout_constraintRight_toLeftOf="@id/layout_choice_4"
+            app:layout_constraintStart_toEndOf="@id/layout_choice_2"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
-            <FrameLayout
-                android:id="@+id/layout_choice_3"
-                style="@style/KarutaChoicePhrase"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginRight="@dimen/margin_m"
-                android:onClick="@{() -> viewModel.onClickChoice(3)}"
-                android:padding="@dimen/padding_xs"
-                android:visibility="@{viewModel.isVisibleChoiceList.get(2).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-                app:elevation="@{@dimen/elevation_level_xs}">
+                android:background="@drawable/bg_karuta_inner"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_s">
 
-                <LinearLayout
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_karuta_inner"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/padding_s">
+                    android:layout_marginTop="@dimen/margin_l"
+                    app:verticalText="@{viewModel.choiceFifthPhraseList.get(2)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(2)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:layout_marginStart="@dimen/margin_xs"
+                    app:verticalText="@{viewModel.choiceFourthPhraseList.get(2)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
+            </LinearLayout>
+        </FrameLayout>
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_xs"
-                        android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(2)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
-                </LinearLayout>
-            </FrameLayout>
+        <FrameLayout
+            android:id="@+id/layout_choice_4"
+            style="@style/KarutaChoicePhrase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_m"
+            android:layout_marginRight="@dimen/margin_m"
+            android:onClick="@{() -> viewModel.onClickChoice(4)}"
+            android:padding="@dimen/padding_xs"
+            android:visibility="@{viewModel.isVisibleChoiceList.get(3).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
+            app:elevation="@{@dimen/elevation_level_xs}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/layout_choice_3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/layout_choice_3"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
-            <FrameLayout
-                android:id="@+id/layout_choice_4"
-                style="@style/KarutaChoicePhrase"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.onClickChoice(4)}"
-                android:padding="@dimen/padding_xs"
-                android:visibility="@{viewModel.isVisibleChoiceList.get(3).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-                app:elevation="@{@dimen/elevation_level_xs}">
+                android:background="@drawable/bg_karuta_inner"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_s">
 
-                <LinearLayout
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_karuta_inner"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/padding_s">
+                    android:layout_marginTop="@dimen/margin_l"
+                    app:verticalText="@{viewModel.choiceFifthPhraseList.get(3)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_l"
-                        app:verticalText="@{viewModel.choiceFifthPhraseList.get(3)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
-
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_xs"
-                        android:layout_marginStart="@dimen/margin_xs"
-                        app:verticalText="@{viewModel.choiceFourthPhraseList.get(3)}"
-                        app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
-                </LinearLayout>
-            </FrameLayout>
-
-        </LinearLayout>
+                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:layout_marginStart="@dimen/margin_xs"
+                    app:verticalText="@{viewModel.choiceFourthPhraseList.get(3)}"
+                    app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
+            </LinearLayout>
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/layout_quiz_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:onClick="@{() -> viewModel.onClickResult()}"
+            app:elevation="@{@dimen/elevation_level_ms}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:visibleOrGone="@{viewModel.isVisibleResult}"
-            app:elevation="@{@dimen/elevation_level_ms}">
+            tools:visibility="gone">
 
             <ImageView
                 android:id="@+id/image_quiz_result"
@@ -464,11 +496,11 @@
                 android:layout_height="@dimen/size_karuta_quiz_result_mark"
                 android:layout_gravity="center"
                 android:contentDescription="@string/score"
-                app:visibleOrGone="@{viewModel.isVisibleResult}"
-                app:isCorrect="@{viewModel.isCorrect}" />
+                app:isCorrect="@{viewModel.isCorrect}"
+                app:visibleOrGone="@{viewModel.isVisibleResult}" />
 
         </FrameLayout>
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </layout>
