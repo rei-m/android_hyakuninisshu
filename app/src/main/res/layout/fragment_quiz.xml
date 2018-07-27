@@ -23,11 +23,11 @@
             android:layout_height="wrap_content"
             android:background="@color/white66"
             android:padding="@dimen/padding_m"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:text="@{viewModel.quizCount}"
-            tools:text="1 / 100"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1 / 100" />
 
         <RelativeLayout
             android:id="@+id/layout_quiz_phrase"
@@ -310,20 +310,19 @@
             style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_m"
             android:layout_marginLeft="@dimen/margin_m"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:layout_marginRight="@dimen/margin_m"
+            android:layout_marginStart="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickChoice(1)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(0).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase"
-            app:layout_constraintRight_toLeftOf="@id/layout_choice_2"
-            app:layout_constraintEnd_toStartOf="@id/layout_choice_2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:elevation="@{@dimen/elevation_level_xs}">
+            app:layout_constraintEnd_toStartOf="@id/layout_choice_2"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/layout_choice_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -356,18 +355,17 @@
             style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:layout_marginRight="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickChoice(2)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(1).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase"
-            app:layout_constraintRight_toLeftOf="@id/layout_choice_3"
-            app:layout_constraintEnd_toStartOf="@id/layout_choice_3"
-            app:layout_constraintStart_toEndOf="@id/layout_choice_1"
-            app:layout_constraintLeft_toRightOf="@id/layout_choice_1"
+            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:elevation="@{@dimen/elevation_level_xs}">
+            app:layout_constraintEnd_toStartOf="@id/layout_choice_3"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/layout_choice_1"
+            app:layout_constraintRight_toLeftOf="@id/layout_choice_3"
+            app:layout_constraintStart_toEndOf="@id/layout_choice_1"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -398,18 +396,17 @@
             style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:layout_marginRight="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickChoice(3)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(2).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase"
-            app:layout_constraintRight_toLeftOf="@id/layout_choice_4"
-            app:layout_constraintEnd_toStartOf="@id/layout_choice_4"
-            app:layout_constraintStart_toEndOf="@id/layout_choice_2"
-            app:layout_constraintLeft_toRightOf="@id/layout_choice_2"
+            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:elevation="@{@dimen/elevation_level_xs}">
+            app:layout_constraintEnd_toStartOf="@id/layout_choice_4"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/layout_choice_2"
+            app:layout_constraintRight_toLeftOf="@id/layout_choice_4"
+            app:layout_constraintStart_toEndOf="@id/layout_choice_2"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -440,18 +437,19 @@
             style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_m"
+            android:layout_marginRight="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickChoice(4)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(3).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/layout_choice_3"
-            app:layout_constraintLeft_toRightOf="@id/layout_choice_3"
+            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:layout_marginRight="@dimen/margin_m"
-            app:elevation="@{@dimen/elevation_level_xs}">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/layout_choice_3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/layout_choice_3"
+            app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -483,13 +481,13 @@
             android:layout_height="0dp"
             android:onClick="@{() -> viewModel.onClickResult()}"
             app:elevation="@{@dimen/elevation_level_ms}"
-            app:visibleOrGone="@{viewModel.isVisibleResult}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleOrGone="@{viewModel.isVisibleResult}"
             tools:visibility="gone">
 
             <ImageView
@@ -504,455 +502,5 @@
         </FrameLayout>
 
     </android.support.constraint.ConstraintLayout>
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/tatami"-->
-        <!--app:visibleOrGone="@{viewModel.isVisibleContent}">-->
-
-        <!--<RelativeLayout-->
-            <!--android:id="@+id/layout_quiz_phrase"-->
-            <!--android:layout_width="@dimen/width_karuta_quiz_phrase"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginTop="@dimen/margin_m"-->
-            <!--android:background="@drawable/bg_karuta"-->
-            <!--android:padding="@dimen/padding_s"-->
-            <!--app:elevation="@{@dimen/elevation_level_xs}">-->
-
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@drawable/bg_karuta_inner">-->
-
-                <!--<RelativeLayout-->
-                    <!--android:id="@+id/phrase_1"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_toEndOf="@+id/phrase_2"-->
-                    <!--android:layout_toRightOf="@+id/phrase_2"-->
-                    <!--android:paddingBottom="@dimen/padding_m"-->
-                    <!--android:paddingTop="@dimen/padding_m">-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_1_1"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_s"-->
-                        <!--app:textForQuiz="@{viewModel.firstPhrase}"-->
-                        <!--app:textPosition="@{1}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_1_2"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_1_1"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.firstPhrase}"-->
-                        <!--app:textPosition="@{2}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_1_3"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_1_2"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.firstPhrase}"-->
-                        <!--app:textPosition="@{3}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_1_4"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_1_3"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.firstPhrase}"-->
-                        <!--app:textPosition="@{4}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_1_5"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_1_4"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.firstPhrase}"-->
-                        <!--app:textPosition="@{5}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_1_6"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_1_5"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.firstPhrase}"-->
-                        <!--app:textPosition="@{6}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                <!--</RelativeLayout>-->
-
-                <!--<RelativeLayout-->
-                    <!--android:id="@+id/phrase_2"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_centerHorizontal="true"-->
-                    <!--android:layout_marginLeft="@dimen/margin_s"-->
-                    <!--android:layout_marginRight="@dimen/margin_s"-->
-                    <!--android:layout_marginTop="@dimen/margin_ll"-->
-                    <!--android:paddingBottom="@dimen/padding_m"-->
-                    <!--android:paddingTop="@dimen/padding_m">-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_1"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{1}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_2"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_2_1"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{2}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_3"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_2_2"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{3}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_4"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_2_3"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{4}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_5"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_2_4"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{5}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_6"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_2_5"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{6}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_7"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_2_6"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{7}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_2_8"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_2_7"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.secondPhrase}"-->
-                        <!--app:textPosition="@{8}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                <!--</RelativeLayout>-->
-
-                <!--<RelativeLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="@dimen/margin_xxl"-->
-                    <!--android:layout_toLeftOf="@+id/phrase_2"-->
-                    <!--android:layout_toStartOf="@+id/phrase_2"-->
-                    <!--android:paddingBottom="@dimen/padding_m"-->
-                    <!--android:paddingTop="@dimen/padding_m">-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_3_1"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--app:textForQuiz="@{viewModel.thirdPhrase}"-->
-                        <!--app:textPosition="@{1}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_3_2"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_3_1"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.thirdPhrase}"-->
-                        <!--app:textPosition="@{2}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_3_3"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_3_2"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.thirdPhrase}"-->
-                        <!--app:textPosition="@{3}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_3_4"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_3_3"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.thirdPhrase}"-->
-                        <!--app:textPosition="@{4}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_3_5"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_3_4"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--app:textForQuiz="@{viewModel.thirdPhrase}"-->
-                        <!--app:textPosition="@{5}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView-->
-                        <!--android:id="@+id/phrase_3_6"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@id/phrase_3_5"-->
-                        <!--android:layout_marginBottom="@dimen/margin_karuta_text_bottom"-->
-                        <!--android:layout_marginTop="@dimen/margin_karuta_word_adjust"-->
-                        <!--android:visibility="invisible"-->
-                        <!--app:textForQuiz="@{viewModel.thirdPhrase}"-->
-                        <!--app:textPosition="@{6}"-->
-                        <!--app:textSizeByPx="@{viewModel.quizTextSize}" />-->
-
-                <!--</RelativeLayout>-->
-            <!--</RelativeLayout>-->
-        <!--</RelativeLayout>-->
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_below="@+id/layout_quiz_phrase"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:baselineAligned="false"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<FrameLayout-->
-                <!--android:id="@+id/layout_choice_1"-->
-                <!--style="@style/KarutaChoicePhrase"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginEnd="@dimen/margin_m"-->
-                <!--android:layout_marginRight="@dimen/margin_m"-->
-                <!--android:onClick="@{() -> viewModel.onClickChoice(1)}"-->
-                <!--android:padding="@dimen/padding_xs"-->
-                <!--android:visibility="@{viewModel.isVisibleChoiceList.get(0).booleanValue() ? View.VISIBLE : View.INVISIBLE}"-->
-                <!--app:elevation="@{@dimen/elevation_level_xs}">-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/bg_karuta_inner"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:padding="@dimen/padding_s">-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginTop="@dimen/margin_l"-->
-                        <!--app:verticalText="@{viewModel.choiceFifthPhraseList.get(0)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="@dimen/margin_xs"-->
-                        <!--android:layout_marginStart="@dimen/margin_xs"-->
-                        <!--app:verticalText="@{viewModel.choiceFourthPhraseList.get(0)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-
-                <!--</LinearLayout>-->
-
-            <!--</FrameLayout>-->
-
-            <!--<FrameLayout-->
-                <!--android:id="@+id/layout_choice_2"-->
-                <!--style="@style/KarutaChoicePhrase"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginEnd="@dimen/margin_m"-->
-                <!--android:layout_marginRight="@dimen/margin_m"-->
-                <!--android:onClick="@{() -> viewModel.onClickChoice(2)}"-->
-                <!--android:padding="@dimen/padding_xs"-->
-                <!--android:visibility="@{viewModel.isVisibleChoiceList.get(1).booleanValue() ? View.VISIBLE : View.INVISIBLE}"-->
-                <!--app:elevation="@{@dimen/elevation_level_xs}">-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/bg_karuta_inner"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:padding="@dimen/padding_s">-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginTop="@dimen/margin_l"-->
-                        <!--app:verticalText="@{viewModel.choiceFifthPhraseList.get(1)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="@dimen/margin_xs"-->
-                        <!--android:layout_marginStart="@dimen/margin_xs"-->
-                        <!--app:verticalText="@{viewModel.choiceFourthPhraseList.get(1)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-                <!--</LinearLayout>-->
-            <!--</FrameLayout>-->
-
-            <!--<FrameLayout-->
-                <!--android:id="@+id/layout_choice_3"-->
-                <!--style="@style/KarutaChoicePhrase"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginEnd="@dimen/margin_m"-->
-                <!--android:layout_marginRight="@dimen/margin_m"-->
-                <!--android:onClick="@{() -> viewModel.onClickChoice(3)}"-->
-                <!--android:padding="@dimen/padding_xs"-->
-                <!--android:visibility="@{viewModel.isVisibleChoiceList.get(2).booleanValue() ? View.VISIBLE : View.INVISIBLE}"-->
-                <!--app:elevation="@{@dimen/elevation_level_xs}">-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/bg_karuta_inner"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:padding="@dimen/padding_s">-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginTop="@dimen/margin_l"-->
-                        <!--app:verticalText="@{viewModel.choiceFifthPhraseList.get(2)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="@dimen/margin_xs"-->
-                        <!--android:layout_marginStart="@dimen/margin_xs"-->
-                        <!--app:verticalText="@{viewModel.choiceFourthPhraseList.get(2)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-                <!--</LinearLayout>-->
-            <!--</FrameLayout>-->
-
-            <!--<FrameLayout-->
-                <!--android:id="@+id/layout_choice_4"-->
-                <!--style="@style/KarutaChoicePhrase"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="@{() -> viewModel.onClickChoice(4)}"-->
-                <!--android:padding="@dimen/padding_xs"-->
-                <!--android:visibility="@{viewModel.isVisibleChoiceList.get(3).booleanValue() ? View.VISIBLE : View.INVISIBLE}"-->
-                <!--app:elevation="@{@dimen/elevation_level_xs}">-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/bg_karuta_inner"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:padding="@dimen/padding_s">-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginTop="@dimen/margin_l"-->
-                        <!--app:verticalText="@{viewModel.choiceFifthPhraseList.get(3)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-
-                    <!--<me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="@dimen/margin_xs"-->
-                        <!--android:layout_marginStart="@dimen/margin_xs"-->
-                        <!--app:verticalText="@{viewModel.choiceFourthPhraseList.get(3)}"-->
-                        <!--app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />-->
-                <!--</LinearLayout>-->
-            <!--</FrameLayout>-->
-
-        <!--</LinearLayout>-->
-
-        <!--<FrameLayout-->
-            <!--android:id="@+id/layout_quiz_result"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:onClick="@{() -> viewModel.onClickResult()}"-->
-            <!--app:visibleOrGone="@{viewModel.isVisibleResult}"-->
-            <!--app:elevation="@{@dimen/elevation_level_ms}">-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/image_quiz_result"-->
-                <!--android:layout_width="@dimen/size_karuta_quiz_result_mark"-->
-                <!--android:layout_height="@dimen/size_karuta_quiz_result_mark"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:contentDescription="@string/score"-->
-                <!--app:visibleOrGone="@{viewModel.isVisibleResult}"-->
-                <!--app:isCorrect="@{viewModel.isCorrect}" />-->
-
-        <!--</FrameLayout>-->
-
-    <!--</RelativeLayout>-->
 
 </layout>

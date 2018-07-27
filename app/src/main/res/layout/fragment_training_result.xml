@@ -10,14 +10,14 @@
             type="me.rei_m.hyakuninisshu.presentation.training.TrainingResultViewModel" />
     </data>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/tatami"
-        android:orientation="vertical">
+        android:background="@drawable/tatami">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/text_training_score_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_m"
             android:layout_marginStart="@dimen/margin_m"
@@ -25,21 +25,35 @@
             android:background="@color/white99"
             android:gravity="start"
             android:padding="@dimen/padding_xs"
-            android:text="@string/number_of_correct_answers" />
+            android:text="@string/number_of_correct_answers"
+            app:layout_constraintBottom_toTopOf="@id/text_training_score"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/text_training_score"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginEnd="@dimen/margin_m"
             android:layout_marginStart="@dimen/margin_m"
             android:background="@color/white99"
             android:gravity="center"
             android:text="@{viewModel.score}"
-            android:textSize="@dimen/text_xl" />
+            android:textSize="@dimen/text_xl"
+            app:layout_constraintBottom_toTopOf="@id/text_training_average_time_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_training_score_title"
+            tools:text="10 / 100" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/text_training_average_time_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_m"
             android:layout_marginStart="@dimen/margin_m"
@@ -47,36 +61,59 @@
             android:background="@color/white99"
             android:gravity="start"
             android:padding="@dimen/padding_xs"
-            android:text="@string/average_response_time" />
+            android:text="@string/average_response_time"
+            app:layout_constraintBottom_toTopOf="@id/text_training_average_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_training_score" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/text_training_average_time"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/margin_l"
             android:layout_marginEnd="@dimen/margin_m"
             android:layout_marginStart="@dimen/margin_m"
             android:background="@color/white99"
             android:gravity="center"
             android:textSize="@dimen/text_xl"
-            app:averageAnswerSec="@{viewModel.averageAnswerSec}" />
+            app:averageAnswerSec="@{viewModel.averageAnswerSec}"
+            app:layout_constraintBottom_toTopOf="@id/button_restart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_training_average_time_title"
+            tools:text="1.24秒" />
 
         <Button
+            android:id="@+id/button_restart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/margin_s"
+            android:layout_marginBottom="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickPracticeWrongKarutas()}"
             android:text="@string/practice_wrong_karutas"
+            app:layout_constraintBottom_toTopOf="@id/button_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_training_average_time"
             app:visibleOrGone="@{viewModel.canRestartTraining}" />
 
         <Button
+            android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:onClick="@{() -> viewModel.onClickBackMenu()}"
-            android:text="@string/back_menu" />
+            android:text="@string/back_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_restart" />
 
-    </LinearLayout>
-
+    </android.support.constraint.ConstraintLayout>
 </layout>
