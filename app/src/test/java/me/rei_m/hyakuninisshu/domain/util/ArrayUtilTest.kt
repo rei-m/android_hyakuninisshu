@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,21 +11,21 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.domain.util;
+package me.rei_m.hyakuninisshu.domain.util
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 // 内部的にSparseIntArrayを使っているためRobolectricを使う.
-//@RunWith(RobolectricTestRunner.class)
-//public class ArrayUtilTest {
-//    @Test
-//    public void generateRandomIndexArray() throws Exception {
-//        int[] actual = ArrayUtil.generateRandomIndexArray(10, 4);
-//        assertThat(actual.length, is(4));
-//    }
-//}
+@RunWith(RobolectricTestRunner::class)
+class ArrayUtilTest {
+    @Test
+    fun generateRandomIndexArray() {
+        val actual = ArrayUtil.generateRandomIndexArray(10, 4)
+        val firstValue = actual.first()
+        assertThat(actual.size).isEqualTo(4)
+        assertThat(actual.slice(1..actual.lastIndex).contains(firstValue)).isFalse()
+    }
+}
