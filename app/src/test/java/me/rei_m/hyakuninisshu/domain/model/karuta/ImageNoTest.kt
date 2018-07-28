@@ -16,7 +16,6 @@ package me.rei_m.hyakuninisshu.domain.model.karuta
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-
 class ImageNoTest {
     @Test
     fun createWith001() {
@@ -44,19 +43,5 @@ class ImageNoTest {
     @Test(expected = IllegalArgumentException::class)
     fun createWith101() {
         ImageNo("101")
-    }
-
-    @Test
-    fun equals() {
-        val imageNo1 = ImageNo("100")
-        val imageNo2 = ImageNo("100")
-        assertThat(imageNo1 == imageNo2).isTrue()
-    }
-
-    @Test
-    fun notEquals() {
-        val imageNo1 = ImageNo("100")
-        val imageNo2 = ImageNo("001")
-        assertThat(imageNo1 == imageNo2).isFalse()
     }
 }

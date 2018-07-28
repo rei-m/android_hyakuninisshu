@@ -11,20 +11,34 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.domain.util
+package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ArrayUtilTest {
+class KarutaIdentifierTest {
+
+    private lateinit var karutaIdentifier: KarutaIdentifier
+
+    @Before
+    fun setUp() {
+        karutaIdentifier = KarutaIdentifier(1)
+    }
+
     @Test
-    fun generateRandomIndexArray() {
-        val actual = ArrayUtil.generateRandomIndexArray(10, 4)
-        val firstValue = actual.first()
-        assertThat(actual.size).isEqualTo(4)
-        assertThat(actual.slice(1..actual.lastIndex)).doesNotContain(firstValue)
+    fun createInstance() {
+        assertThat(karutaIdentifier.value).isEqualTo(1)
+        assertThat(karutaIdentifier.position).isEqualTo(0)
+    }
+
+    @Test
+    fun equals() {
+        assertThat(karutaIdentifier == KarutaIdentifier(1)).isTrue()
+    }
+
+    @Test
+    fun notEquals() {
+        assertThat(karutaIdentifier == KarutaIdentifier(2)).isFalse()
     }
 }

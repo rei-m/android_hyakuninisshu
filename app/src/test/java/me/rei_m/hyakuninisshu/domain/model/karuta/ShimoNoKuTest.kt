@@ -11,20 +11,29 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.domain.util
+package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ArrayUtilTest {
+class ShimoNoKuTest {
+
+    private lateinit var shimoNoKu: ShimoNoKu
+    private lateinit var fourth: Phrase
+    private lateinit var fifth: Phrase
+
+    @Before
+    fun setUp() {
+        val identifier = ShimoNoKuIdentifier(1)
+        fourth = Phrase("よんく", "四句")
+        fifth = Phrase("ごく", "五句")
+        shimoNoKu = ShimoNoKu(identifier, fourth, fifth)
+    }
+
     @Test
-    fun generateRandomIndexArray() {
-        val actual = ArrayUtil.generateRandomIndexArray(10, 4)
-        val firstValue = actual.first()
-        assertThat(actual.size).isEqualTo(4)
-        assertThat(actual.slice(1..actual.lastIndex)).doesNotContain(firstValue)
+    fun createInstance() {
+        assertThat(shimoNoKu.fourth).isEqualTo(fourth)
+        assertThat(shimoNoKu.fifth).isEqualTo(fifth)
     }
 }

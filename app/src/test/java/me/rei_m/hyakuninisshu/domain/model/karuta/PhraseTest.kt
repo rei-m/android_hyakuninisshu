@@ -11,20 +11,24 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.domain.util
+package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ArrayUtilTest {
+class PhraseTest {
+
+    private lateinit var phrase: Phrase
+
+    @Before
+    fun setUp() {
+        phrase = Phrase("かな", "漢字")
+    }
+
     @Test
-    fun generateRandomIndexArray() {
-        val actual = ArrayUtil.generateRandomIndexArray(10, 4)
-        val firstValue = actual.first()
-        assertThat(actual.size).isEqualTo(4)
-        assertThat(actual.slice(1..actual.lastIndex)).doesNotContain(firstValue)
+    fun createInstance() {
+        assertThat(phrase.kana).isEqualTo("かな")
+        assertThat(phrase.kanji).isEqualTo("漢字")
     }
 }
