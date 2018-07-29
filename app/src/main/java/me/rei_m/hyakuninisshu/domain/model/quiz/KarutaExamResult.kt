@@ -26,6 +26,12 @@ data class KarutaExamResult(private val resultSummary: KarutaQuizzesResultSummar
 
     val judgements: List<KarutaQuizJudgement>
 
+    val quizCount = resultSummary.quizCount
+
+    val score = resultSummary.score
+
+    val averageAnswerSec = resultSummary.averageAnswerSec
+
     init {
         this.judgements = (1..Karuta.NUMBER_OF_KARUTA).map {
             val karutaId = KarutaIdentifier(it)
@@ -33,20 +39,4 @@ data class KarutaExamResult(private val resultSummary: KarutaQuizzesResultSummar
             KarutaQuizJudgement(karutaId, isCorrect)
         }
     }
-
-    /**
-     * @return 問題の件数
-     */
-    val quizCount = resultSummary.quizCount
-
-    /**
-     * @return 力試しの結果
-     */
-    val score = resultSummary.score
-
-
-    /**
-     * @return 平均解答時間
-     */
-    val averageAnswerSec = resultSummary.averageAnswerSec
 }

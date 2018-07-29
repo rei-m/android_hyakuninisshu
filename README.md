@@ -10,7 +10,7 @@
 - 他、希望あればIssueに書いておくと対応するかもしれません
 
 ## Environment
-- 開発言語 : Java
+- 開発言語 : Java -> Kotlin
 - min sdk : 18
 
 ## Structure
