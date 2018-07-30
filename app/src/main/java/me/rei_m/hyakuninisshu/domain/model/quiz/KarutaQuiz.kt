@@ -30,6 +30,15 @@ class KarutaQuiz(
 
     var result: KarutaQuizResult? = null
 
+    val state: State
+        get() = if (startDate == null && result == null) {
+            State.READY
+        } else if (startDate != null && result == null) {
+            State.IN_ANSWER
+        } else {
+            State.ANSWERED
+        }
+
     constructor(identifier: KarutaQuizIdentifier,
                 choiceList: List<KarutaIdentifier>,
                 correctId: KarutaIdentifier,
@@ -82,4 +91,8 @@ class KarutaQuiz(
     }
 
     override fun toString() = "KarutaQuiz(choiceList=$choiceList, correctId=$correctId, startDate=$startDate, result=$result)"
+
+    enum class State {
+        READY, IN_ANSWER, ANSWERED,
+    }
 }

@@ -50,6 +50,11 @@ class KarutaQuizTest {
         fun verify() {
             karutaQuiz.verify(ChoiceNo.FIRST, Date())
         }
+
+        @Test
+        fun state() {
+            assertThat(karutaQuiz.state).isEqualTo(KarutaQuiz.State.READY)
+        }
     }
 
     class WhenStarted {
@@ -91,6 +96,11 @@ class KarutaQuizTest {
             assertThat(actual.result!!.judgement).isEqualTo(KarutaQuizJudgement(correctId, false))
             assertThat(actual.result!!.answerMillSec).isEqualTo(answerDate.time - startDate.time)
         }
+
+        @Test
+        fun state() {
+            assertThat(karutaQuiz.state).isEqualTo(KarutaQuiz.State.IN_ANSWER)
+        }
     }
 
     class WhenAnswered {
@@ -121,6 +131,11 @@ class KarutaQuizTest {
                     true,
                     5000
             ))
+        }
+
+        @Test
+        fun state() {
+            assertThat(karutaQuiz.state).isEqualTo(KarutaQuiz.State.ANSWERED)
         }
     }
 
