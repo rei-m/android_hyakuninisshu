@@ -19,7 +19,6 @@ import org.junit.Test
 class ShimoNoKuIdentifierTest {
 
     @Test
-    @Throws(Exception::class)
     fun equals() {
         val thisValue = ShimoNoKuIdentifier(1)
         val thatValue = ShimoNoKuIdentifier(1)
@@ -27,7 +26,6 @@ class ShimoNoKuIdentifierTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun notEquals() {
         val thisValue = ShimoNoKuIdentifier(1)
         val thatValue = ShimoNoKuIdentifier(2)

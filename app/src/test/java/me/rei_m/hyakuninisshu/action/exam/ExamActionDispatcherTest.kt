@@ -20,14 +20,16 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
 import me.rei_m.hyakuninisshu.domain.util.rx.TestSchedulerProvider
+import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
-class ExamActionDispatcherTest {
+class ExamActionDispatcherTest : TestHelper {
 
     private lateinit var actionDispatcher: ExamActionDispatcher
 
@@ -159,22 +161,77 @@ class ExamActionDispatcherTest {
         })
     }
 
-    private fun createKaruta(id: Int): Karuta {
-        val identifier = KarutaIdentifier(id)
-        val creator = "creator"
-        val kamiNoKu = KamiNoKu(
-                KamiNoKuIdentifier(identifier.value),
-                Phrase("しょく_$id", "初句_$id"),
-                Phrase("にく_$id", "二句_$id"),
-                Phrase("さんく_$id", "三句_$id")
+    @Test
+    fun fetchNext() {
+        val quiz = createQuiz(1)
+
+        whenever(karutaQuizRepository.first()).thenReturn(Single.just(quiz))
+
+        actionDispatcher.fetchNext()
+
+        verify(dispatcher).dispatch(check {
+            assertThat(it).isInstanceOf(OpenNextQuizAction::class.java)
+            if (it is OpenNextQuizAction) {
+                assertThat(it.karutaQuizId).isEqualTo(quiz.identifier())
+                assertThat(it.error).isNull()
+            }
+        })
+    }
+
+    @Test
+    fun fetchNextWithError() {
+        whenever(karutaQuizRepository.first()).thenReturn(Single.error(RuntimeException()))
+
+        actionDispatcher.fetchNext()
+
+        verify(dispatcher).dispatch(check {
+            assertThat(it).isInstanceOf(OpenNextQuizAction::class.java)
+            assertThat(it.error).isNotNull()
+        })
+    }
+
+    @Test
+    fun finish() {
+        val quiz = createQuiz(1, Date(), 500, ChoiceNo.FIRST, true)
+        val examId = KarutaExamIdentifier(1)
+        val exam = KarutaExam(
+                identifier = examId,
+                result = KarutaExamResult(
+                        resultSummary = KarutaQuizzesResultSummary(
+                                quizCount = 100,
+                                correctCount = 100,
+                                averageAnswerSec = 5f
+                        ),
+                        wrongKarutaIds = KarutaIds(listOf())
+                )
         )
-        val shimoNoKu = ShimoNoKu(
-                ShimoNoKuIdentifier(identifier.value),
-                Phrase("よんく_$id", "四句_$id"),
-                Phrase("ごく_$id", "五句_$id")
-        )
-        val imageNo = ImageNo("001")
-        val translation = "歌の訳"
-        return Karuta(identifier, creator, kamiNoKu, shimoNoKu, Kimariji.ONE, imageNo, translation, Color.BLUE)
+        whenever(karutaQuizRepository.list()).thenReturn(Single.just(KarutaQuizzes(listOf(quiz))))
+        whenever(karutaExamRepository.storeResult(any(), any())).thenReturn(Single.just(examId))
+        whenever(karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)).thenReturn(Completable.complete())
+        whenever(karutaExamRepository.findBy(examId)).thenReturn(Single.just(exam))
+
+        actionDispatcher.finish()
+
+        verify(dispatcher).dispatch(check {
+            assertThat(it).isInstanceOf(FinishExamAction::class.java)
+            if (it is FinishExamAction) {
+                assertThat(it.karutaExam).isEqualTo(exam)
+                assertThat(it.error).isNull()
+            }
+        })
+    }
+
+    @Test
+    fun finishWithError() {
+        val quiz = createQuiz(1)
+
+        whenever(karutaQuizRepository.list()).thenReturn(Single.just(KarutaQuizzes(listOf(quiz))))
+
+        actionDispatcher.finish()
+
+        verify(dispatcher).dispatch(check {
+            assertThat(it).isInstanceOf(FinishExamAction::class.java)
+            assertThat(it.error).isNotNull()
+        })
     }
 }

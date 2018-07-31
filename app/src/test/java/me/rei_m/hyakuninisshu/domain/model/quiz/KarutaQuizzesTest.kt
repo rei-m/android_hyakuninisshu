@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
+import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +23,7 @@ import java.util.*
 
 class KarutaQuizzesTest {
 
-    class WhenAllFinished {
+    class WhenAllFinished : TestHelper {
 
         private lateinit var karutaQuizzes: KarutaQuizzes
 
@@ -31,11 +32,11 @@ class KarutaQuizzesTest {
         @Before
         fun setUp() {
             value = listOf(
-                    createMockKarutaQuiz(1),
-                    createMockKarutaQuiz(2),
-                    createMockKarutaQuiz(3),
-                    createMockKarutaQuiz(4),
-                    createMockKarutaQuiz(5)
+                    createQuiz(1),
+                    createQuiz(2),
+                    createQuiz(3),
+                    createQuiz(4),
+                    createQuiz(5)
             )
             value.forEachIndexed { i, v ->
                 val startDate = Date()
@@ -110,7 +111,7 @@ class KarutaQuizzesTest {
         }
     }
 
-    class WhenNotFinished {
+    class WhenNotFinished: TestHelper {
         private lateinit var karutaQuizzes: KarutaQuizzes
 
         private lateinit var value: List<KarutaQuiz>
@@ -118,8 +119,8 @@ class KarutaQuizzesTest {
         @Before
         fun setUp() {
             value = listOf(
-                    createMockKarutaQuiz(1),
-                    createMockKarutaQuiz(2)
+                    createQuiz(1),
+                    createQuiz(2)
             )
             value.first().start(Date()).verify(ChoiceNo.FIRST, Date())
             karutaQuizzes = KarutaQuizzes(value)
@@ -128,20 +129,6 @@ class KarutaQuizzesTest {
         @Test(expected = IllegalStateException::class)
         fun resultSummary() {
             karutaQuizzes.resultSummary()
-        }
-    }
-
-    companion object {
-        private fun createMockKarutaQuiz(karutaId: Int): KarutaQuiz {
-            val karutaQuizId = KarutaQuizIdentifier()
-            val choiceList: List<KarutaIdentifier> = listOf(
-                    KarutaIdentifier(karutaId),
-                    KarutaIdentifier(karutaId + 1),
-                    KarutaIdentifier(karutaId + 2),
-                    KarutaIdentifier(karutaId + 3)
-            )
-            val correctId = choiceList.first()
-            return KarutaQuiz(karutaQuizId, choiceList, correctId)
         }
     }
 }
