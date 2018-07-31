@@ -14,9 +14,23 @@
 package me.rei_m.hyakuninisshu.action
 
 import io.reactivex.Observable
+import io.reactivex.processors.PublishProcessor
+import me.rei_m.hyakuninisshu.util.Logger
+import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
+import javax.inject.Singleton
 
-interface Dispatcher {
-    fun dispatch(action: Action)
+@Singleton
+class AppDispatcher(private val schedulerProvider: SchedulerProvider): Dispatcher {
 
-    fun <T : Action> on(clazz: Class<T>): Observable<T>
+    private val processor = PublishProcessor.create<Action>()
+
+    override fun dispatch(action: Action) {
+        Logger.action(action)
+        processor.onNext(action)
+    }
+
+    override fun <T : Action> on(clazz: Class<T>): Observable<T> = processor.onBackpressureBuffer()
+            .ofType(clazz)
+            .observeOn(schedulerProvider.ui())
+            .toObservable()
 }
