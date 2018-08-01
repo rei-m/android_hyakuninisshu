@@ -18,7 +18,7 @@ import me.rei_m.hyakuninisshu.domain.ValueObject
 /**
  * 歌の決まり字.
  */
-enum class Kimariji private constructor(val value: Int) : ValueObject {
+enum class Kimariji(val value: Int) : ValueObject {
     ONE(1),
     TWO(2),
     THREE(3),

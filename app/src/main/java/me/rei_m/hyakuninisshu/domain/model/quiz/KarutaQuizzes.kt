@@ -13,12 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import java.util.ArrayList
-import java.util.Collections
-import java.util.concurrent.TimeUnit
-
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
+import java.util.concurrent.TimeUnit
 
 /**
  * 問題のコレクション.

@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil
-import java.util.*
 
 /**
  * 歌IDのコレクション.

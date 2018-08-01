@@ -15,8 +15,6 @@ package me.rei_m.hyakuninisshu.action.material
 
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 
 class StartEditMaterialAction(val karuta: Karuta?,
                               override val error: Throwable? = null) : Action {

@@ -13,14 +13,9 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import java.util.ArrayList
-
 import me.rei_m.hyakuninisshu.domain.ValueObject
-import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle
-import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase
-import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu
 
 /**
  * 百人一首の問題内容.

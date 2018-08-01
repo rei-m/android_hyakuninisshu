@@ -13,16 +13,12 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
-import java.util.ArrayList
-import java.util.Collections
-
-import io.reactivex.Observable
-import me.rei_m.hyakuninisshu.domain.AbstractEntity
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
 import me.rei_m.hyakuninisshu.domain.util.ArrayUtil
+import java.util.*
 
 /**
  * 全ての歌のコレクション.
