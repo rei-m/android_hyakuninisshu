@@ -15,7 +15,7 @@ package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.squareup.moshi.Json
 
-class KarutaData {
+class KarutaList {
     @Json(name = "karuta_list")
     lateinit var karutaList: List<KarutaSchema>
 }

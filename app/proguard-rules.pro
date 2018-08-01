@@ -72,7 +72,8 @@
   <init>(...);
   <fields>;
 }
--keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaData {
+-keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaList {
+  <init>(...);
   <fields>;
 }
 -keepnames @com.squareup.moshi.JsonClass class *
