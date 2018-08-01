@@ -23,4 +23,6 @@ data class KarutaQuizCounter(
         private val startedCount: Int
 ) : ValueObject {
     val value = "$startedCount / $totalCount"
+
+    val existNext = startedCount < totalCount
 }

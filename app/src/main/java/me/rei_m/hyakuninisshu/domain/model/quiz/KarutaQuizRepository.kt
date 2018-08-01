@@ -53,13 +53,6 @@ interface KarutaQuizRepository {
     fun store(karutaQuiz: KarutaQuiz): Completable
 
     /**
-     * 次の問題が存在するか判定する.
-     *
-     * @return `true` 存在する場合, `false` 存在しない場合
-     */
-    fun existNextQuiz(): Single<Boolean>
-
-    /**
      * 問題のコレクションを取得する.
      *
      * @return 問題コレクション

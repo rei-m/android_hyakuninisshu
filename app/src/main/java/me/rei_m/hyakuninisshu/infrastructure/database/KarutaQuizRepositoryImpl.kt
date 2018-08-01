@@ -126,14 +126,6 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
         }
     }
 
-    override fun existNextQuiz(): Single<Boolean> {
-        return KarutaQuizSchema.relation(orma)
-                .where("answerTime = ?", 0)
-                .selector()
-                .executeAsObservable().count()
-                .map { count -> 0 < count }
-    }
-
     override fun list(): Single<KarutaQuizzes> {
         return KarutaQuizSchema.relation(orma)
                 .selector()

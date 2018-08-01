@@ -20,6 +20,8 @@ import javax.inject.Singleton
 
 import dagger.Module
 import dagger.Provides
+import me.rei_m.hyakuninisshu.action.AppDispatcher
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.util.rx.AppSchedulerProvider
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 
@@ -37,4 +39,10 @@ class ApplicationModule(application: Application) {
     @Provides
     @Singleton
     fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
+
+    @Provides
+    @Singleton
+    fun provideDispatcher(schedulerProvider: SchedulerProvider): Dispatcher {
+        return AppDispatcher(schedulerProvider)
+    }
 }

@@ -29,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
@@ -57,7 +58,7 @@ class QuizFragment : DaggerFragment(), FragmentExt {
         }
 
     private val kamiNoKuStyle: KarutaStyleFilter
-        get() = requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }){
+        get() = requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
             "$ARG_KAMI_NO_KU_STYLE is missing"
         }
 
@@ -73,12 +74,16 @@ class QuizFragment : DaggerFragment(), FragmentExt {
         viewModel = viewModelFactory.create(store, karutaQuizId, kamiNoKuStyle, shimoNoKuStyle).apply {
             content.observe(this@QuizFragment, Observer {
                 it ?: let { return@Observer }
-                // TODO: 状態の判定はモデル内部に実装する
-                if (it.quiz.startDate != null && it.quiz.result == null) {
-                    val (firstPhrase, secondPhrase, thirdPhrase) = it.yomiFuda(kamiNoKuStyle.value)
-                    startDisplayQuizAnimation(firstPhrase, secondPhrase, thirdPhrase)
-                } else if (it.quiz.startDate != null && it.quiz.result != null) {
-                    stopDisplayQuizAnimation()
+                when (it.quiz.state) {
+                    KarutaQuiz.State.IN_ANSWER -> {
+                        val (firstPhrase, secondPhrase, thirdPhrase) = it.yomiFuda(kamiNoKuStyle.value)
+                        startDisplayQuizAnimation(firstPhrase, secondPhrase, thirdPhrase)
+                    }
+                    KarutaQuiz.State.ANSWERED -> {
+                        stopDisplayQuizAnimation()
+                    }
+                    else -> {
+                    }
                 }
             })
             openAnswerEvent.observe(this@QuizFragment, Observer {

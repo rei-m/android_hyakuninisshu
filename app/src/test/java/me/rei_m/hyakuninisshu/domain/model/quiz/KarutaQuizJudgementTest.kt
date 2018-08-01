@@ -13,11 +13,10 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import org.junit.Before
-import org.junit.Test
-
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
+import org.junit.Test
 
 class KarutaQuizJudgementTest {
 

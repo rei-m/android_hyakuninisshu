@@ -13,12 +13,14 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import me.rei_m.hyakuninisshu.domain.model.karuta.*
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle
+import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class KarutaQuizContentTest {
+class KarutaQuizContentTest : TestHelper {
 
     private lateinit var karutaQuizContent: KarutaQuizContent
 
@@ -28,19 +30,9 @@ class KarutaQuizContentTest {
 
     @Before
     fun setUp() {
-        correct = createKaruta(1)
-
-        val choices = listOf(
-                createKaruta(1),
-                createKaruta(2),
-                createKaruta(3),
-                createKaruta(4)
-        )
-        karutaQuiz = KarutaQuiz(
-                KarutaQuizIdentifier(),
-                choices.map { it.identifier() },
-                correct.identifier()
-        )
+        correct = createKaruta(id = 1)
+        karutaQuiz = createQuiz(1)
+        val choices = karutaQuiz.choiceList.map { createKaruta(id = it.value) }
 
         val counter = KarutaQuizCounter(100, 10)
         karutaQuizContent = KarutaQuizContent(karutaQuiz, correct, choices, counter, true)
@@ -86,24 +78,5 @@ class KarutaQuizContentTest {
                 ToriFuda("四句_4", "五句_4")
         )
         assertThat(karutaQuizContent.toriFudas(KarutaStyle.KANJI)).isEqualTo(expected)
-    }
-
-    private fun createKaruta(id: Int): Karuta {
-        val identifier = KarutaIdentifier(id)
-        val creator = "creator"
-        val kamiNoKu = KamiNoKu(
-                KamiNoKuIdentifier(identifier.value),
-                Phrase("しょく_$id", "初句_$id"),
-                Phrase("にく_$id", "二句_$id"),
-                Phrase("さんく_$id", "三句_$id")
-        )
-        val shimoNoKu = ShimoNoKu(
-                ShimoNoKuIdentifier(identifier.value),
-                Phrase("よんく_$id", "四句_$id"),
-                Phrase("ごく_$id", "五句_$id")
-        )
-        val imageNo = ImageNo("001")
-        val translation = "歌の訳"
-        return Karuta(identifier, creator, kamiNoKu, shimoNoKu, Kimariji.ONE, imageNo, translation, Color.BLUE)
     }
 }

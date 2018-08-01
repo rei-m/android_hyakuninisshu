@@ -21,5 +21,13 @@ class KarutaQuizCounterTest {
     fun createInstance() {
         val counter = KarutaQuizCounter(100, 1)
         assertThat(counter.value).isEqualTo("1 / 100")
+        assertThat(counter.existNext).isTrue()
+    }
+
+    @Test
+    fun createAllStartedInstance() {
+        val counter = KarutaQuizCounter(100, 100)
+        assertThat(counter.value).isEqualTo("100 / 100")
+        assertThat(counter.existNext).isFalse()
     }
 }

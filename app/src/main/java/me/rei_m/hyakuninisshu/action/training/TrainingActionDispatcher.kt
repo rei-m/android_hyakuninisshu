@@ -54,6 +54,13 @@ class TrainingActionDispatcher @Inject constructor(
     }
 
     /**
+     * 練習で間違えた歌を練習対象にして練習を再開する.
+     */
+    fun restartForPractice() {
+        start(karutaQuizRepository.list().map { it.wrongKarutaIds })
+    }
+
+    /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
@@ -62,13 +69,6 @@ class TrainingActionDispatcher @Inject constructor(
         }, {
             dispatcher.dispatch(OpenNextQuizAction(null, it))
         })
-    }
-
-    /**
-     * 練習で間違えた歌を練習対象にして練習を再開する.
-     */
-    fun restartForPractice() {
-        start(karutaQuizRepository.list().map { it.wrongKarutaIds })
     }
 
     /**
