@@ -13,17 +13,9 @@
 
 package me.rei_m.hyakuninisshu.infrastructure.database
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import java.io.IOException
+import com.squareup.moshi.Json
 
-object KarutaJsonAdaptor {
-
-    @Throws(IOException::class)
-    fun convert(jsonString: String): List<KarutaSchema> {
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val jsonAdapter = moshi.adapter(KarutaData::class.java)
-        val karutaData = jsonAdapter.fromJson(jsonString)!!
-        return karutaData.karutaList
-    }
+class KarutaData {
+    @Json(name = "karuta_list")
+    lateinit var karutaList: List<KarutaSchema>
 }
