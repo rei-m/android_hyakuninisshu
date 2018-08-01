@@ -20,25 +20,38 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import java.util.*
 
 interface TestHelper {
-    fun createKaruta(id: Int): Karuta = createKaruta(id, Color.BLUE)
-
-    fun createKaruta(id: Int, color: Color): Karuta {
+    fun createKaruta(
+            id: Int,
+            firstKanji: String = "初句_$id",
+            firstKana: String = "しょく_$id",
+            secondKanji: String = "二句_$id",
+            secondKana: String = "にく_$id",
+            thirdKanji: String = "三句_$id",
+            thirdKana: String = "さんく_$id",
+            fourthKanji: String = "四句_$id",
+            fourthKana: String = "よんく_$id",
+            fifthKanji: String = "五句_$id",
+            fifthKana: String = "ごく_$id",
+            translation: String = "歌の訳",
+            creator: String = "creator",
+            kimariji: Kimariji = Kimariji.ONE,
+            color: Color = Color.BLUE
+    ): Karuta {
         val identifier = KarutaIdentifier(id)
-        val creator = "creator"
         val kamiNoKu = KamiNoKu(
                 KamiNoKuIdentifier(identifier.value),
-                Phrase("しょく_$id", "初句_$id"),
-                Phrase("にく_$id", "二句_$id"),
-                Phrase("さんく_$id", "三句_$id")
+                Phrase(firstKana, firstKanji),
+                Phrase(secondKana, secondKanji),
+                Phrase(thirdKana, thirdKanji)
         )
         val shimoNoKu = ShimoNoKu(
                 ShimoNoKuIdentifier(identifier.value),
-                Phrase("よんく_$id", "四句_$id"),
-                Phrase("ごく_$id", "五句_$id")
+                Phrase(fourthKana, fourthKanji),
+                Phrase(fifthKana, fifthKanji)
         )
         val imageNo = ImageNo("001")
-        val translation = "歌の訳"
-        return Karuta(identifier, creator, kamiNoKu, shimoNoKu, Kimariji.ONE, imageNo, translation, color)
+
+        return Karuta(identifier, creator, kamiNoKu, shimoNoKu, kimariji, imageNo, translation, color)
     }
 
     fun createQuiz(correctId: Int): KarutaQuiz {
@@ -54,7 +67,7 @@ interface TestHelper {
         )
     }
 
-    fun createQuiz(correctId: Int, startDate: Date): KarutaQuiz {
+    fun createStartedQuiz(correctId: Int, startDate: Date): KarutaQuiz {
         return KarutaQuiz(
                 identifier = KarutaQuizIdentifier(),
                 choiceList = listOf(
@@ -68,7 +81,7 @@ interface TestHelper {
         )
     }
 
-    fun createQuiz(correctId: Int, startDate: Date, answerMillSec: Long, choiceNo: ChoiceNo, isCorrect: Boolean): KarutaQuiz {
+    fun createAnsweredQuiz(correctId: Int, startDate: Date, answerMillSec: Long, choiceNo: ChoiceNo, isCorrect: Boolean): KarutaQuiz {
         return KarutaQuiz(
                 identifier = KarutaQuizIdentifier(),
                 choiceList = listOf(

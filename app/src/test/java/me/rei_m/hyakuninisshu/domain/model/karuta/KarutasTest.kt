@@ -30,10 +30,10 @@ class KarutasTest : TestHelper {
     @Before
     fun setUp() {
         karutasValue = arrayListOf(
-                createKaruta(1, Color.BLUE),
-                createKaruta(2, Color.BLUE),
-                createKaruta(3, Color.PINK),
-                createKaruta(4, Color.PINK)
+                createKaruta(id = 1, color = Color.BLUE),
+                createKaruta(id = 2, color = Color.BLUE),
+                createKaruta(id = 3, color = Color.PINK),
+                createKaruta(id = 4, color = Color.PINK)
         )
         karutas = Karutas(karutasValue)
     }

@@ -29,9 +29,9 @@ class KarutaQuizContentTest : TestHelper {
 
     @Before
     fun setUp() {
-        correct = createKaruta(1)
+        correct = createKaruta(id = 1)
         karutaQuiz = createQuiz(1)
-        val choices = karutaQuiz.choiceList.map { createKaruta(it.value) }
+        val choices = karutaQuiz.choiceList.map { createKaruta(id = it.value) }
 
         val counter = KarutaQuizCounter(100, 10)
         karutaQuizContent = KarutaQuizContent(karutaQuiz, correct, choices, counter, true)

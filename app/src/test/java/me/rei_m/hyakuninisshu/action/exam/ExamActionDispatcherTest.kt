@@ -125,11 +125,11 @@ class ExamActionDispatcherTest : TestHelper {
     @Test
     fun start() {
         val karutaList: List<Karuta> = listOf(
-                createKaruta(1),
-                createKaruta(2),
-                createKaruta(3),
-                createKaruta(4),
-                createKaruta(5)
+                createKaruta(id = 1),
+                createKaruta(id = 2),
+                createKaruta(id = 3),
+                createKaruta(id = 4),
+                createKaruta(id = 5)
         )
 
         whenever(karutaRepository.list()).thenReturn(Single.just(Karutas(karutaList)))
@@ -192,7 +192,7 @@ class ExamActionDispatcherTest : TestHelper {
 
     @Test
     fun finish() {
-        val quiz = createQuiz(1, Date(), 500, ChoiceNo.FIRST, true)
+        val quiz = createAnsweredQuiz(1, Date(), 500, ChoiceNo.FIRST, true)
         val examId = KarutaExamIdentifier(1)
         val exam = KarutaExam(
                 identifier = examId,

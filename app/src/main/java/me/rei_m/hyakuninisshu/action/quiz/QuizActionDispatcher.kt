@@ -15,7 +15,7 @@ package me.rei_m.hyakuninisshu.action.quiz
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.Function3
+import io.reactivex.functions.BiFunction
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -97,11 +97,9 @@ class QuizActionDispatcher @Inject constructor(
 
         val countSingle: Single<KarutaQuizCounter> = karutaQuizRepository.countQuizByAnswered()
 
-        val existNextQuizSingle: Single<Boolean> = karutaQuizRepository.existNextQuiz()
-
-        return Single.zip(choiceSingle, countSingle, existNextQuizSingle, Function3 { choice, count, existNext ->
+        return Single.zip(choiceSingle, countSingle, BiFunction { choice, counter ->
             val correct = choice[choiceList.indexOf(correctId)]
-            KarutaQuizContent(this, correct, choice, count, existNext)
+            KarutaQuizContent(this, correct, choice, counter, counter.existNext)
         })
     }
 }
