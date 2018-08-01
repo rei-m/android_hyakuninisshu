@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -54,8 +54,7 @@ class KarutaRepositoryImpl(private val context: Context,
                                 .and()
                                 .where("isEdited = ?", true).count()
                         if (count == 0) {
-                            KarutaSchema.relation(orma).deleter().idEq(it.id).execute()
-                            KarutaSchema.relation(orma).inserter().execute(it)
+                            KarutaSchema.relation(orma).upsert(it)
                         }
                     }
 
@@ -159,6 +158,6 @@ class KarutaRepositoryImpl(private val context: Context,
                 .fifthKanji(shimoNoKu.fifth.kanji)
                 .isEdited(true)
                 .executeAsSingle()
-                .toCompletable()
+                .ignoreElement()
     }
 }
