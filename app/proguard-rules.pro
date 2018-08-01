@@ -28,8 +28,13 @@
 # Android Support Library
 -dontwarn android.support.**
 -dontwarn android.databinding.**
+-dontwarn android.arch.**
 -keep class android.support.** { *; }
 -keep class android.databinding.** { *; }
+-keep class android.arch.** { *; }
+
+-keep class com.crashlytics.** { *; }
+-keep class com.google.firebase.*.* { *; }
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
@@ -58,3 +63,11 @@
 -keepclassmembers class kotlin.Metadata {
     public <methods>;
 }
+-dontwarn kotlin.reflect.jvm.internal.**
+-keep class kotlin.reflect.jvm.internal.** { *; }
+# Must keep all model fields and constructors
+-keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema {
+  <init>(...);
+  <fields>;
+}
+-keepnames @com.squareup.moshi.JsonClass class *
