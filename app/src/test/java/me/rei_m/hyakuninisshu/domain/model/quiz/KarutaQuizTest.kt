@@ -90,7 +90,7 @@ class KarutaQuizTest {
         @Test
         fun verifyWhenNotCorrect() {
             val answerDate = Date()
-            val actual = karutaQuiz!!.verify(ChoiceNo.SECOND, answerDate)
+            val actual = karutaQuiz.verify(ChoiceNo.SECOND, answerDate)
             assertThat(actual).isEqualTo(karutaQuiz)
             assertThat(actual.result!!.choiceNo).isEqualTo(ChoiceNo.SECOND)
             assertThat(actual.result!!.judgement).isEqualTo(KarutaQuizJudgement(correctId, false))

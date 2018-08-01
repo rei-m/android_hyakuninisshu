@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -13,12 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import java.util.ArrayList
-import java.util.Collections
-import java.util.concurrent.TimeUnit
-
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
+import java.util.concurrent.TimeUnit
 
 /**
  * 問題のコレクション.
