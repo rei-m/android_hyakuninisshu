@@ -13,7 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import me.rei_m.hyakuninisshu.domain.model.karuta.*
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before

@@ -13,14 +13,12 @@
 
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import org.junit.Before
-import org.junit.Test
-
-import java.util.ArrayList
-
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
+import org.junit.Test
+import java.util.*
 
 class KarutaExamsTest {
     class WhenNotEmpty {
