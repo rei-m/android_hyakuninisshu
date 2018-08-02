@@ -15,12 +15,14 @@ package me.rei_m.hyakuninisshu.presentation.core
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.support.v4.app.Fragment
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Device
 import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
@@ -117,12 +119,13 @@ class QuizViewModel(
     }
 
     class Factory @Inject constructor(private val actionDispatcher: QuizActionDispatcher,
-                                      private val device: Device) {
-        fun create(store: QuizStore,
+                                      private val storeFactory: QuizStore.Factory,
+                                      private val device: Device) : ViewModelFactory {
+        fun create(fragment: Fragment,
                    quizId: KarutaQuizIdentifier,
                    kamiNoKuStyle: KarutaStyleFilter,
                    shimoNoKuStyle: KarutaStyleFilter): QuizViewModel = QuizViewModel(
-                store,
+                obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
                 actionDispatcher,
                 device,
                 quizId,

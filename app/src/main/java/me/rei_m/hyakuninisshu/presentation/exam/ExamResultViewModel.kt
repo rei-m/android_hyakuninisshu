@@ -14,12 +14,14 @@
 package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.arch.lifecycle.LiveData
+import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
 
@@ -59,13 +61,14 @@ class ExamResultViewModel(
     }
 
     class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
+                                      private val storeFactory: ExamStore.Factory,
                                       private val navigator: Navigator,
-                                      private val analyticsManager: AnalyticsManager) {
+                                      private val analyticsManager: AnalyticsManager): ViewModelFactory {
 
         var initialKarutaExamId: KarutaExamIdentifier? = null
 
-        fun create(store: ExamStore): ExamResultViewModel = ExamResultViewModel(
-                store,
+        fun create(activity: FragmentActivity): ExamResultViewModel = ExamResultViewModel(
+                obtainActivityStore(activity, ExamStore::class.java, storeFactory),
                 actionDispatcher,
                 initialKarutaExamId,
                 navigator,

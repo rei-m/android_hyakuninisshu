@@ -27,13 +27,10 @@ import javax.inject.Inject
 class ExamMenuFragment : DaggerFragment(), FragmentExt {
 
     @Inject
-    lateinit var storeFactory: EntranceStore.Factory
-
-    @Inject
     lateinit var viewModelFactory: ExamMenuViewModel.Factory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(obtainActivityStore(EntranceStore::class.java, storeFactory))
+        val viewModel = viewModelFactory.create(requireActivity())
 
         val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@ExamMenuFragment)

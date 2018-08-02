@@ -47,9 +47,6 @@ class TrainingActivity : DaggerAppCompatActivity(),
         AppCompatActivityExt {
 
     @Inject
-    lateinit var storeFactory: TrainingStore.Factory
-
-    @Inject
     lateinit var viewModelFactory: TrainingViewModel.Factory
 
     @Inject
@@ -79,7 +76,7 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = viewModelFactory.create(obtainStore(TrainingStore::class.java, storeFactory))
+        viewModel = viewModelFactory.create(this)
         with(viewModel) {
             isVisibleAd.observe(this@TrainingActivity, Observer {
                 if (it == true) {

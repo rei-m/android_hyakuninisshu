@@ -24,13 +24,9 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
 import javax.inject.Inject
 
-class ExamResultFragment : DaggerFragment(), FragmentExt {
-
-    @Inject
-    lateinit var storeFactory: ExamStore.Factory
+class ExamResultFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ExamResultViewModel.Factory
@@ -43,7 +39,7 @@ class ExamResultFragment : DaggerFragment(), FragmentExt {
         if (savedInstanceState != null) {
             viewModelFactory.initialKarutaExamId = savedInstanceState.getParcelable(KEY_EXAM_ID)
         }
-        val viewModel = viewModelFactory.create(obtainActivityStore(ExamStore::class.java, storeFactory))
+        val viewModel = viewModelFactory.create(requireActivity())
         viewModel.karutaExamId.observe(this, Observer {
             karutaExamId = it
         })

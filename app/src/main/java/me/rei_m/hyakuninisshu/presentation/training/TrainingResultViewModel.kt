@@ -14,9 +14,11 @@
 package me.rei_m.hyakuninisshu.presentation.training
 
 import android.arch.lifecycle.LiveData
+import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
 
@@ -46,10 +48,11 @@ class TrainingResultViewModel(store: TrainingStore,
     }
 
     class Factory @Inject constructor(private val actionDispatcher: TrainingActionDispatcher,
+                                      private val storeFactory: TrainingStore.Factory,
                                       private val navigator: Navigator,
-                                      private val analyticsManager: AnalyticsManager) {
-        fun create(store: TrainingStore): TrainingResultViewModel = TrainingResultViewModel(
-                store,
+                                      private val analyticsManager: AnalyticsManager) : ViewModelFactory {
+        fun create(activity: FragmentActivity): TrainingResultViewModel = TrainingResultViewModel(
+                obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
                 actionDispatcher,
                 navigator,
                 analyticsManager

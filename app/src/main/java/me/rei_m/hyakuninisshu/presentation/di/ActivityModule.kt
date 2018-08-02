@@ -13,21 +13,18 @@
 
 package me.rei_m.hyakuninisshu.presentation.di
 
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import javax.inject.Named
 
 @Module
 class ActivityModule(private val activity: AppCompatActivity) {
 
     @Provides
     @ForActivity
-    @Named("activityContext")
-    fun provideContext(): Context {
+    fun provideActivity(): AppCompatActivity {
         return activity
     }
 

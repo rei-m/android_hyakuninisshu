@@ -25,9 +25,10 @@ import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import javax.inject.Inject
 
-class MaterialDetailFragment : DaggerFragment(), FragmentExt, LiveDataExt {
+class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
 
     @Inject
     lateinit var storeFactory: MaterialDetailStore.Factory
@@ -42,7 +43,7 @@ class MaterialDetailFragment : DaggerFragment(), FragmentExt, LiveDataExt {
             setLifecycleOwner(this@MaterialDetailFragment)
         }
 
-        obtainActivityStore(MaterialDetailStore::class.java, storeFactory).karutaList.map {
+        obtainActivityStore(requireActivity(), MaterialDetailStore::class.java, storeFactory).karutaList.map {
             it.find { it.identifier() == karutaId }
         }.observe(this, Observer { binding.karuta = it })
 

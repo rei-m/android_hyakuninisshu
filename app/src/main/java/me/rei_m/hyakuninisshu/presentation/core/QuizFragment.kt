@@ -38,11 +38,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class QuizFragment : DaggerFragment(), FragmentExt {
-
-    @Inject
-    lateinit var storeFactory: QuizStore.Factory
-
+class QuizFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: QuizViewModel.Factory
 
@@ -70,8 +66,7 @@ class QuizFragment : DaggerFragment(), FragmentExt {
     private var animationDisposable: Disposable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val store = obtainFragmentStore(QuizStore::class.java, storeFactory)
-        viewModel = viewModelFactory.create(store, karutaQuizId, kamiNoKuStyle, shimoNoKuStyle).apply {
+        viewModel = viewModelFactory.create(this, karutaQuizId, kamiNoKuStyle, shimoNoKuStyle).apply {
             content.observe(this@QuizFragment, Observer {
                 it ?: let { return@Observer }
                 when (it.quiz.state) {

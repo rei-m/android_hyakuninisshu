@@ -16,11 +16,13 @@ package me.rei_m.hyakuninisshu.presentation.materialedit
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
@@ -193,7 +195,8 @@ class MaterialEditViewModel(
     }
 
     class Factory @Inject constructor(private val actionDispatcher: MaterialActionDispatcher,
-                                      private val navigator: Navigator) {
+                                      private val storeFactory: MaterialEditStore.Factory,
+                                      private val navigator: Navigator): ViewModelFactory {
 
         var firstPhraseKanji: String? = null
         var firstPhraseKana: String? = null
@@ -206,8 +209,8 @@ class MaterialEditViewModel(
         var fifthPhraseKanji: String? = null
         var fifthPhraseKana: String? = null
 
-        fun create(store: MaterialEditStore, karutaId: KarutaIdentifier): MaterialEditViewModel = MaterialEditViewModel(
-                store,
+        fun create(activity: FragmentActivity, karutaId: KarutaIdentifier): MaterialEditViewModel = MaterialEditViewModel(
+                obtainActivityStore(activity, MaterialEditStore::class.java, storeFactory),
                 actionDispatcher,
                 karutaId,
                 firstPhraseKanji,
