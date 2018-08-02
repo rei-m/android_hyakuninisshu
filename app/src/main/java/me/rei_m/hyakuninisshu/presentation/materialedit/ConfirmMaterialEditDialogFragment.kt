@@ -78,7 +78,7 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
 
     companion object {
 
-        val TAG: String = ConfirmMaterialEditDialogFragment::class.java.simpleName
+        const val TAG: String = "ConfirmMaterialEditDialogFragment"
 
         private const val ARG_FIRST_KANJI = "firstKanji"
         private const val ARG_FIRST_KANA = "firstKana"
