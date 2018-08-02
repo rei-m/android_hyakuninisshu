@@ -96,7 +96,7 @@ class TrainingActivity : DaggerAppCompatActivity(),
                 }
 
                 supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG)?.let { fragment ->
-                    if ((fragment as QuizAnswerFragment).karutaQuizId != it) {
+                    if (fragment is QuizAnswerFragment && fragment.karutaQuizId != it) {
                         supportFragmentManager
                                 .beginTransaction()
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)

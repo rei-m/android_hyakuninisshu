@@ -40,7 +40,7 @@ class LicenceDialogFragment : DialogFragment() {
 
     companion object {
 
-        val TAG: String = LicenceDialogFragment::class.java.simpleName
+        const val TAG: String = "LicenceDialogFragment"
 
         fun newInstance(): LicenceDialogFragment = LicenceDialogFragment()
     }

@@ -89,7 +89,7 @@ class AlertDialogFragment : DialogFragment() {
 
     companion object : FragmentExt {
 
-        val TAG: String = AlertDialogFragment::class.java.simpleName
+        const val TAG: String = "AlertDialogFragment"
 
         private const val ARG_TITLE = "title"
 

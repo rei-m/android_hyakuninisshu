@@ -82,7 +82,7 @@ class KarutaFragment : DaggerFragment() {
 
     companion object : FragmentExt {
 
-        val TAG: String = KarutaFragment::class.java.simpleName
+        const val TAG: String = "KarutaFragment"
 
         private const val ARG_KARUTA_ID = "karutaId"
 

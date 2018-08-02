@@ -48,7 +48,7 @@ class SupportFragment : DaggerFragment() {
     }
 
     companion object {
-        val TAG: String = SupportFragment::class.java.simpleName
+        const val TAG: String = "SupportFragment"
 
         fun newInstance(): SupportFragment = SupportFragment()
     }

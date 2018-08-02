@@ -59,7 +59,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
 
     companion object : FragmentExt {
 
-        val TAG: String = MaterialDetailFragment::class.java.simpleName
+        const val TAG: String = "MaterialDetailFragment"
 
         private const val ARG_KARUTA_ID = "karutaId"
 

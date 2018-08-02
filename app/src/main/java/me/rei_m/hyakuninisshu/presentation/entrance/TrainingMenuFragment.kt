@@ -87,7 +87,7 @@ class TrainingMenuFragment : DaggerFragment() {
 
     companion object {
 
-        val TAG: String = TrainingMenuFragment::class.java.simpleName
+        const val TAG: String = "TrainingMenuFragment"
 
         private const val KEY_TRAINING_RANGE_FROM = "trainingRangeFrom"
 

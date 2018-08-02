@@ -80,7 +80,7 @@ class MaterialListFragment : DaggerFragment() {
 
     companion object {
 
-        val TAG: String = MaterialListFragment::class.java.simpleName
+        const val TAG: String = "MaterialListFragment"
 
         private const val KEY_MATERIAL_COLOR_FILTER = "materialColorFilter"
 

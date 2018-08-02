@@ -200,7 +200,7 @@ class QuizFragment : DaggerFragment() {
 
     companion object : FragmentExt {
 
-        val TAG: String = QuizFragment::class.java.simpleName
+        const val TAG: String = "QuizFragment"
 
         private const val ARG_KARUTA_QUIZ_ID = "karutaQuizId"
 
