@@ -50,7 +50,7 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
 
     companion object {
 
-        val TAG: String = ExamMenuFragment::class.java.simpleName
+        const val TAG: String = "ExamMenuFragment"
 
         fun newInstance(): ExamMenuFragment = ExamMenuFragment()
     }

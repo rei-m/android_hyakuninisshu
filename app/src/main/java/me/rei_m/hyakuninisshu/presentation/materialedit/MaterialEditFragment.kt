@@ -146,7 +146,7 @@ class MaterialEditFragment : DaggerFragment(),
 
     companion object : FragmentExt {
 
-        val TAG: String = MaterialEditFragment::class.java.simpleName
+        const val TAG: String = "MaterialEditFragment"
 
         private const val ARG_KARUTA_ID = "karutaId"
 

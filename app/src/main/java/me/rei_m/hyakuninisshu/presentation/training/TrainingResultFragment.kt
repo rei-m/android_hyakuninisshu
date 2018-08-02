@@ -49,7 +49,7 @@ class TrainingResultFragment : DaggerFragment() {
 
     companion object {
 
-        val TAG: String = TrainingResultFragment::class.java.simpleName
+        const val TAG: String = "TrainingResultFragment"
 
         fun newInstance(): TrainingResultFragment = TrainingResultFragment()
     }

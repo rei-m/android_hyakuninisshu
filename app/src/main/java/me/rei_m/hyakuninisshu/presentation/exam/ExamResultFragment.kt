@@ -93,7 +93,7 @@ class ExamResultFragment : DaggerFragment() {
 
     companion object {
 
-        val TAG: String = ExamResultFragment::class.java.simpleName
+        const val TAG: String = "ExamResultFragment"
 
         private const val KEY_EXAM_ID = "examId"
 
