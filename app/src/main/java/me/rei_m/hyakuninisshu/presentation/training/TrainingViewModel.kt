@@ -14,9 +14,11 @@
 package me.rei_m.hyakuninisshu.presentation.training
 
 import android.arch.lifecycle.LiveData
+import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
@@ -54,9 +56,10 @@ class TrainingViewModel(
         actionDispatcher.fetchNext()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: TrainingActionDispatcher) {
-        fun create(store: TrainingStore): TrainingViewModel = TrainingViewModel(
-                store,
+    class Factory @Inject constructor(private val actionDispatcher: TrainingActionDispatcher,
+                                      private val storeFactory: TrainingStore.Factory): ViewModelFactory {
+        fun create(activity: FragmentActivity): TrainingViewModel = TrainingViewModel(
+                obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
                 actionDispatcher
         )
     }

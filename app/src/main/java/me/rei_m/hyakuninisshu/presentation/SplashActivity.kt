@@ -15,6 +15,7 @@ package me.rei_m.hyakuninisshu.presentation
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import dagger.Binds
 import dagger.android.ActivityKey
@@ -47,7 +48,7 @@ class SplashActivity : DaggerAppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        val store = obtainStore(ApplicationStore::class.java, storeFactory)
+        val store = ViewModelProviders.of(this, storeFactory).get(ApplicationStore::class.java)
         store.isReady.observe(this, Observer {
             if (it == true) {
                 navigator.navigateToEntrance()

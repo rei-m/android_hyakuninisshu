@@ -13,18 +13,12 @@
 
 package me.rei_m.hyakuninisshu.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 
 interface AppCompatActivityExt {
-    fun <T : ViewModel> AppCompatActivity.obtainStore(viewModelClass: Class<T>, factory: ViewModelProvider.Factory) =
-            ViewModelProviders.of(this, factory).get(viewModelClass)
-
     fun AppCompatActivity.setupActionBar(toolbar: Toolbar, action: ActionBar.() -> Unit) {
         setSupportActionBar(toolbar)
         supportActionBar?.run {

@@ -27,10 +27,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
 import javax.inject.Inject
 
-class QuizAnswerFragment : DaggerFragment(), FragmentExt {
-
-    @Inject
-    lateinit var storeFactory: QuizStore.Factory
+class QuizAnswerFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: QuizAnswerViewModel.Factory
@@ -43,7 +40,7 @@ class QuizAnswerFragment : DaggerFragment(), FragmentExt {
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(obtainFragmentStore(QuizStore::class.java, storeFactory), karutaQuizId).apply {
+        val viewModel = viewModelFactory.create(this, karutaQuizId).apply {
             openNextQuizEvent.observe(this@QuizAnswerFragment, Observer {
                 listener?.onGoToNext()
             })

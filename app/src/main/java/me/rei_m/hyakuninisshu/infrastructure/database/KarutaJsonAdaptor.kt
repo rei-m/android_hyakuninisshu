@@ -18,7 +18,6 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.io.IOException
 
 object KarutaJsonAdaptor {
-
     @Throws(IOException::class)
     fun convert(jsonString: String): List<KarutaSchema> {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()

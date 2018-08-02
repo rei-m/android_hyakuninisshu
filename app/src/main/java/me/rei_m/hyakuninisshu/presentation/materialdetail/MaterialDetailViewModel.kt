@@ -15,9 +15,11 @@ package me.rei_m.hyakuninisshu.presentation.materialdetail
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
@@ -47,9 +49,10 @@ class MaterialDetailViewModel(
     }
 
     class Factory @Inject constructor(private val actionDispatcher: MaterialActionDispatcher,
-                                      private val navigator: Navigator) {
-        fun create(store: MaterialDetailStore, colorFilter: ColorFilter, initialPosition: Int): MaterialDetailViewModel = MaterialDetailViewModel(
-                store,
+                                      private val storeFactory: MaterialDetailStore.Factory,
+                                      private val navigator: Navigator): ViewModelFactory {
+        fun create(activity: FragmentActivity, colorFilter: ColorFilter, initialPosition: Int): MaterialDetailViewModel = MaterialDetailViewModel(
+                obtainActivityStore(activity, MaterialDetailStore::class.java, storeFactory),
                 actionDispatcher,
                 colorFilter,
                 initialPosition,

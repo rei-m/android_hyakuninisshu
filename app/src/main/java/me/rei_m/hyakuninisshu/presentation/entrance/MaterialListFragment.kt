@@ -20,14 +20,10 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialListBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.ext.FragmentExt
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import javax.inject.Inject
 
-class MaterialListFragment : DaggerFragment(), FragmentExt {
-
-    @Inject
-    lateinit var storeFactory: EntranceStore.Factory
+class MaterialListFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: MaterialListViewModel.Factory
@@ -35,14 +31,13 @@ class MaterialListFragment : DaggerFragment(), FragmentExt {
     private lateinit var viewModel: MaterialListViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val store = obtainActivityStore(EntranceStore::class.java, storeFactory)
         val colorFilter = if (savedInstanceState == null) {
             ColorFilter.ALL
         } else {
             ColorFilter[savedInstanceState.getInt(KEY_MATERIAL_COLOR_FILTER)]
         }
 
-        viewModel = viewModelFactory.create(store, colorFilter)
+        viewModel = viewModelFactory.create(requireActivity(), colorFilter)
 
         val binding = FragmentMaterialListBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@MaterialListFragment)

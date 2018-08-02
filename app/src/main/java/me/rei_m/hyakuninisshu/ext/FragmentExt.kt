@@ -13,9 +13,6 @@
 
 package me.rei_m.hyakuninisshu.ext
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 
@@ -24,10 +21,4 @@ interface FragmentExt {
         arguments = Bundle().apply(block)
         return this
     }
-
-    fun <T : ViewModel> Fragment.obtainActivityStore(viewModelClass: Class<T>, factory: ViewModelProvider.Factory) =
-            ViewModelProviders.of(requireActivity(), factory).get(viewModelClass)
-
-    fun <T : ViewModel> Fragment.obtainFragmentStore(viewModelClass: Class<T>, factory: ViewModelProvider.Factory) =
-            ViewModelProviders.of(this, factory).get(viewModelClass)
 }

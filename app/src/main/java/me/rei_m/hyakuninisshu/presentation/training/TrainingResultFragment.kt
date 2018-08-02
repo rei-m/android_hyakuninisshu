@@ -24,16 +24,13 @@ import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.ext.FragmentExt
 import javax.inject.Inject
 
-class TrainingResultFragment : DaggerFragment(), FragmentExt {
-
-    @Inject
-    lateinit var storeFactory: TrainingStore.Factory
+class TrainingResultFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: TrainingResultViewModel.Factory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(obtainActivityStore(TrainingStore::class.java, storeFactory))
+        val viewModel = viewModelFactory.create(requireActivity())
 
         val binding = FragmentTrainingResultBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@TrainingResultFragment)

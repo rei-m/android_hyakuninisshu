@@ -14,9 +14,11 @@
 package me.rei_m.hyakuninisshu.presentation.karuta
 
 import android.arch.lifecycle.LiveData
+import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.karuta.KarutaActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import javax.inject.Inject
 
 class KarutaViewModel(
@@ -53,8 +55,11 @@ class KarutaViewModel(
         }
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: KarutaActionDispatcher) {
-        fun create(store: KarutaStore, karutaId: KarutaIdentifier): KarutaViewModel =
-                KarutaViewModel(store, actionDispatcher, karutaId)
+    class Factory @Inject constructor(private val actionDispatcher: KarutaActionDispatcher,
+                                      private val storeFactory: KarutaStore.Factory) : ViewModelFactory {
+        fun create(activity: FragmentActivity, karutaId: KarutaIdentifier): KarutaViewModel {
+            val store = obtainActivityStore(activity, KarutaStore::class.java, storeFactory)
+            return KarutaViewModel(store, actionDispatcher, karutaId)
+        }
     }
 }

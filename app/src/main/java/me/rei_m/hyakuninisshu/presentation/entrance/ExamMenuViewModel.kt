@@ -14,9 +14,12 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
+import android.support.v4.app.FragmentActivity
+import android.support.v7.app.AppCompatActivity
 import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
 
@@ -47,10 +50,11 @@ class ExamMenuViewModel(
     }
 
     class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
+                                      private val storeFactory: EntranceStore.Factory,
                                       private val navigator: Navigator,
-                                      private val analyticsManager: AnalyticsManager) {
-        fun create(store: EntranceStore): ExamMenuViewModel = ExamMenuViewModel(
-                store,
+                                      private val analyticsManager: AnalyticsManager) : ViewModelFactory {
+        fun create(activity: FragmentActivity): ExamMenuViewModel = ExamMenuViewModel(
+                obtainActivityStore(activity, EntranceStore::class.java, storeFactory),
                 actionDispatcher,
                 navigator,
                 analyticsManager

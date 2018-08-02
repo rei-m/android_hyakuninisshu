@@ -14,11 +14,13 @@
 package me.rei_m.hyakuninisshu.presentation.core
 
 import android.arch.lifecycle.LiveData
+import android.support.v4.app.Fragment
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import javax.inject.Inject
@@ -79,10 +81,11 @@ class QuizAnswerViewModel(
     }
 
     class Factory @Inject constructor(private val actionDispatcher: QuizActionDispatcher,
-                                      private val navigator: Navigator) {
-        fun create(store: QuizStore,
+                                      private val storeFactory: QuizStore.Factory,
+                                      private val navigator: Navigator) : ViewModelFactory {
+        fun create(fragment: Fragment,
                    quizId: KarutaQuizIdentifier): QuizAnswerViewModel = QuizAnswerViewModel(
-                store,
+                obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
                 actionDispatcher,
                 quizId,
                 navigator

@@ -27,10 +27,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
 import javax.inject.Inject
 
-class KarutaFragment : DaggerFragment(), FragmentExt {
-
-    @Inject
-    lateinit var storeFactory: KarutaStore.Factory
+class KarutaFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: KarutaViewModel.Factory
@@ -43,7 +40,7 @@ class KarutaFragment : DaggerFragment(), FragmentExt {
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(obtainActivityStore(KarutaStore::class.java, storeFactory), karutaId)
+        val viewModel = viewModelFactory.create(requireActivity(), karutaId)
         viewModel.notFoundKarutaEvent.observe(this, Observer {
             listener?.onError()
         })

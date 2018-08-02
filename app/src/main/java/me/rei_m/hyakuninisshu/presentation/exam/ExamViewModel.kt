@@ -14,9 +14,11 @@
 package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.arch.lifecycle.LiveData
+import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import javax.inject.Inject
 
 class ExamViewModel(
@@ -38,7 +40,11 @@ class ExamViewModel(
         actionDispatcher.fetchNext()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher) {
-        fun create(store: ExamStore): ExamViewModel = ExamViewModel(store, actionDispatcher)
+    class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
+                                      private val storeFactory: ExamStore.Factory): ViewModelFactory {
+        fun create(activity: FragmentActivity): ExamViewModel = ExamViewModel(
+                obtainActivityStore(activity, ExamStore::class.java, storeFactory),
+                actionDispatcher
+        )
     }
 }

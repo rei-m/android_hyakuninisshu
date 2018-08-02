@@ -29,11 +29,7 @@ import me.rei_m.hyakuninisshu.ext.FragmentExt
 import javax.inject.Inject
 
 class MaterialEditFragment : DaggerFragment(),
-        ConfirmMaterialEditDialogFragment.OnDialogInteractionListener,
-        FragmentExt {
-
-    @Inject
-    lateinit var storeFactory: MaterialEditStore.Factory
+        ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
 
     @Inject
     lateinit var viewModelFactory: MaterialEditViewModel.Factory
@@ -65,7 +61,7 @@ class MaterialEditFragment : DaggerFragment(),
             }
         }
 
-        viewModel = viewModelFactory.create(obtainActivityStore(MaterialEditStore::class.java, storeFactory), karutaId)
+        viewModel = viewModelFactory.create(requireActivity(), karutaId)
         with(viewModel) {
             confirmEditEvent.observe(this@MaterialEditFragment, Observer { dialog ->
                 dialog ?: return@Observer

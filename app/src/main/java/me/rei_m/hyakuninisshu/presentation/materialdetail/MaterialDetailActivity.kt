@@ -43,9 +43,6 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         AppCompatActivityExt {
 
     @Inject
-    lateinit var storeFactory: MaterialDetailStore.Factory
-
-    @Inject
     lateinit var viewModelFactory: MaterialDetailViewModel.Factory
 
     @Inject
@@ -63,7 +60,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = viewModelFactory.create(obtainStore(MaterialDetailStore::class.java, storeFactory), colorFilter, lastPosition)
+        viewModel = viewModelFactory.create(this, colorFilter, lastPosition)
         viewModel.unhandledErrorEvent.observe(this, Observer {
             showDialogFragment(AlertDialogFragment.TAG) {
                 AlertDialogFragment.newInstance(

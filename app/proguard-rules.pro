@@ -58,7 +58,6 @@
 
 -dontwarn kotlin.reflect.jvm.internal.**
 -keep class kotlin.reflect.jvm.internal.** { *; }
-
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
 }
@@ -66,13 +65,14 @@
 -keepclassmembers class kotlin.Metadata {
     public <methods>;
 }
-
-# Must keep all model fields and constructors
--keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema {
+-dontwarn org.jetbrains.annotations.**
+-keep class kotlin.Metadata { *; }
+-keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaData {
   <init>(...);
   <fields>;
 }
--keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaData {
+-keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema {
+  <init>(...);
   <fields>;
 }
 -keepnames @com.squareup.moshi.JsonClass class *
