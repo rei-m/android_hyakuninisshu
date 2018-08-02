@@ -1,73 +1,114 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View.OnClickListener" />
+
         <variable
-            name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.adapter.KarutaListItemViewModel" />
+            name="karuta"
+            type="me.rei_m.hyakuninisshu.domain.model.karuta.Karuta" />
+
+        <variable
+            name="position"
+            type="int" />
+
+        <variable
+            name="listener"
+            type="me.rei_m.hyakuninisshu.presentation.entrance.MaterialListAdapter.OnItemInteractionListener" />
     </data>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_ripple"
-        android:onClick="@{viewModel::onItemClicked}"
-        android:orientation="vertical"
+        android:onClick="@{() -> listener.onItemClicked(position)}"
         android:paddingBottom="@dimen/padding_xs"
         android:paddingLeft="@dimen/padding_m"
         android:paddingRight="@dimen/padding_m"
         android:paddingTop="@dimen/padding_xs">
 
         <TextView
+            android:id="@+id/karuta_no"
             android:layout_width="@dimen/width_karuta_thumbnail_small"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_xxs"
             android:gravity="center_horizontal"
             android:textSize="@dimen/text_xxs"
-            app:karutaNo="@{viewModel.karutaNo}" />
+            app:karutaNo="@{karuta.identifier().value}"
+            app:layout_constraintBottom_toTopOf="@id/karuta_image"
+            app:layout_constraintEnd_toStartOf="@id/karuta_kami_no_ku"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/karuta_kami_no_ku"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="一番" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/karuta_image"
+            android:layout_width="@dimen/width_karuta_thumbnail_small"
+            android:layout_height="@dimen/height_karuta_thumbnail_small"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="@dimen/margin_xxs"
+            android:contentDescription="@string/karuta"
+            app:karutaSrc="@{karuta.imageNo.value}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/karuta_kami_no_ku"
+            app:layout_constraintRight_toLeftOf="@id/karuta_kami_no_ku"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/karuta_no"
+            tools:src="@drawable/karuta_001" />
+
+        <TextView
+            android:id="@+id/karuta_kami_no_ku"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginLeft="@dimen/margin_m"
+            android:layout_marginStart="@dimen/margin_m"
+            android:text="@{karuta.kamiNoKu.kanji}"
+            app:layout_constraintBottom_toTopOf="@+id/karuta_shimo_no_ku"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/karuta_no"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/karuta_no"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="秋の田の　かりほの庵の　苫をあらみ" />
 
-            <ImageView
-                android:layout_width="@dimen/width_karuta_thumbnail_small"
-                android:layout_height="@dimen/height_karuta_thumbnail_small"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="@dimen/margin_m"
-                android:layout_marginStart="0dp"
-                android:contentDescription="@string/karuta"
-                app:karutaSrc="@{viewModel.karutaImageNo}" />
+        <TextView
+            android:id="@+id/karuta_shimo_no_ku"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_m"
+            android:layout_marginStart="@dimen/margin_m"
+            android:text="@{karuta.shimoNoKu.kanji}"
+            app:layout_constraintBottom_toTopOf="@id/karuta_creator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/karuta_no"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/karuta_no"
+            app:layout_constraintTop_toBottomOf="@id/karuta_kami_no_ku"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="わが衣手は　露にぬれつつ" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/karuta_creator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_m"
+            android:layout_marginStart="@dimen/margin_m"
+            android:gravity="end"
+            android:text="@{karuta.creator}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/karuta_no"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/karuta_no"
+            app:layout_constraintTop_toBottomOf="@id/karuta_shimo_no_ku"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="天智天皇" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewModel.kamiNoKu}" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewModel.shimoNoKu}" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="@{viewModel.creator}" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </layout>

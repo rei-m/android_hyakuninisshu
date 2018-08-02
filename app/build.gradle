@@ -1,8 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
 android {
@@ -24,14 +27,13 @@ android {
     }
 
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled true
-        versionCode 13
-        versionName "1.0.12"
+        versionCode 14
+        versionName "1.0.13"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -47,10 +49,6 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -68,78 +66,89 @@ android {
             includeAndroidResources = true
         }
     }
+    kotlin {
+        experimental {
+            coroutines 'enable'
+        }
+    }
 }
 
 dependencies {
-    ext.android_support_lib_version = '27.0.2'
-    ext.okhttp_version = '3.4.1'
-    ext.retrofit_version = '2.1.0'
-    ext.streamsupport_version = '1.5.2'
-    ext.rxjava_version = '2.1.4'
-    ext.dagger_version = '2.13'
-    ext.leakcanary_version = '1.5.4'
-    ext.play_services_version = '11.8.0'
+    def android_support_lib_version = '27.1.1'
+    def rxjava_version = '2.2.0'
+    def dagger_version = '2.16'
+    def leakcanary_version = '1.6.1'
+    def lifecycle_version = "1.1.1"
+    def coroutines_version = '0.24.0'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:support-annotations:$android_support_lib_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "com.android.support:appcompat-v7:$android_support_lib_version"
     implementation "com.android.support:support-v4:$android_support_lib_version"
     implementation "com.android.support:percent:$android_support_lib_version"
     implementation "com.android.support:design:$android_support_lib_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:multidex:1.0.2'
-    implementation "com.google.firebase:firebase-core:$play_services_version"
-    implementation "com.google.android.gms:play-services-ads:$play_services_version"
+    implementation "com.android.support:support-annotations:$android_support_lib_version"
+    implementation "com.android.support:customtabs:$android_support_lib_version"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation "com.google.firebase:firebase-core:16.0.1"
+    implementation "com.google.android.gms:play-services-ads:15.0.1"
 
-    implementation "android.arch.lifecycle:extensions:1.0.0"
-    testImplementation "android.arch.core:core-testing:1.0.0"
-    implementation "android.arch.lifecycle:reactivestreams:1.0.0"
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+    implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
+    testImplementation "android.arch.core:core-testing:$lifecycle_version"
 
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
-    implementation 'com.squareup.moshi:moshi:1.5.0'
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
+    implementation 'com.squareup.moshi:moshi:1.6.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.6.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.2.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
 
     implementation 'com.github.hotchemi:android-rate:1.0.1'
 
-    annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
+    kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:3.5.1'
-    testImplementation 'org.robolectric:shadows-multidex:3.5.1'
-    testImplementation 'org.mockito:mockito-core:2.12.0'
-    testImplementation('com.android.support.test:runner:1.0.1') {
+    testImplementation 'org.assertj:assertj-core:3.10.0'
+    testImplementation 'org.robolectric:robolectric:3.6.1'
+    testImplementation 'org.robolectric:shadows-multidex:3.6.1'
+    testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
+    testImplementation('com.android.support.test:runner:1.0.2') {
         exclude module: 'support-annotations'
     }
-    testImplementation('com.android.support.test:rules:1.0.1') {
+    testImplementation('com.android.support.test:rules:1.0.2') {
         exclude module: 'support-annotations'
     }
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2') {
         exclude module: 'support-annotations'
         exclude group: 'com.google.code.findbugs'
     }
-    androidTestImplementation('com.android.support.test.espresso:espresso-intents:3.0.1') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-intents:3.0.2') {
         exclude module: 'support-annotations'
         exclude group: 'com.google.code.findbugs'
     }
-    androidTestImplementation('com.android.support.test:runner:1.0.1') {
+    androidTestImplementation('com.android.support.test:runner:1.0.2') {
         exclude module: 'support-annotations'
     }
-    androidTestImplementation('com.android.support.test:rules:1.0.1') {
+    androidTestImplementation('com.android.support.test:rules:1.0.2') {
         exclude module: 'support-annotations'
     }
-    androidTestImplementation 'org.mockito:mockito-core:2.12.0'
+    androidTestImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 
@@ -148,7 +157,7 @@ dependencies {
     androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
 
-    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true
     }
 }

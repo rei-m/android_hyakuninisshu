@@ -28,8 +28,13 @@
 # Android Support Library
 -dontwarn android.support.**
 -dontwarn android.databinding.**
+-dontwarn android.arch.**
 -keep class android.support.** { *; }
 -keep class android.databinding.** { *; }
+-keep class android.arch.** { *; }
+
+-keep class com.crashlytics.** { *; }
+-keep class com.google.firebase.*.* { *; }
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
@@ -42,8 +47,7 @@
 -dontwarn org.antlr.**
 -dontwarn okio.**
 -dontwarn java.lang.invoke.**
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn javax.annotation.**
 
 -dontnote android.**
 -dontnote com.google.**
@@ -52,6 +56,23 @@
 
 -dontwarn com.google.errorprone.annotations.*
 
+-dontwarn kotlin.reflect.jvm.internal.**
+-keep class kotlin.reflect.jvm.internal.** { *; }
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
 }
+-keep @com.squareup.moshi.JsonQualifier interface *
+-keepclassmembers class kotlin.Metadata {
+    public <methods>;
+}
+-dontwarn org.jetbrains.annotations.**
+-keep class kotlin.Metadata { *; }
+-keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaData {
+  <init>(...);
+  <fields>;
+}
+-keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema {
+  <init>(...);
+  <fields>;
+}
+-keepnames @com.squareup.moshi.JsonClass class *

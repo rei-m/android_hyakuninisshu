@@ -1,15 +1,50 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.widget.dialog.ConfirmMaterialEditDialogFragment">
+    tools:context=".presentation.materialedit.ConfirmMaterialEditDialogFragment">
 
     <data>
 
         <import type="android.view.View" />
 
         <variable
-            name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.dialog.ConfirmMaterialEditDialogFragmentViewModel" />
+            name="firstPhraseKanji"
+            type="String" />
 
+        <variable
+            name="firstPhraseKana"
+            type="String" />
+
+        <variable
+            name="secondPhraseKanji"
+            type="String" />
+
+        <variable
+            name="secondPhraseKana"
+            type="String" />
+
+        <variable
+            name="thirdPhraseKanji"
+            type="String" />
+
+        <variable
+            name="thirdPhraseKana"
+            type="String" />
+
+        <variable
+            name="fourthPhraseKanji"
+            type="String" />
+
+        <variable
+            name="fourthPhraseKana"
+            type="String" />
+
+        <variable
+            name="fifthPhraseKanji"
+            type="String" />
+
+        <variable
+            name="fifthPhraseKana"
+            type="String" />
     </data>
 
     <ScrollView
@@ -53,14 +88,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.firstPhraseKanji}" />
+                android:text="@{firstPhraseKanji}"
+                tools:text="秋の田の" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.firstPhraseKana}" />
+                android:text="@{firstPhraseKana}"
+                tools:text="あきのたの" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,14 +113,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.secondPhraseKanji}" />
+                android:text="@{secondPhraseKanji}"
+                tools:text="かりほの庵の" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.secondPhraseKana}" />
+                android:text="@{secondPhraseKana}"
+                tools:text="かりほのいほの" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -99,14 +138,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.thirdPhraseKanji}" />
+                android:text="@{thirdPhraseKanji}"
+                tools:text="苫をあらみ" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.thirdPhraseKana}" />
+                android:text="@{thirdPhraseKana}"
+                tools:text="とまをあらみ" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,14 +163,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.fourthPhraseKanji}" />
+                android:text="@{fourthPhraseKanji}"
+                tools:text="わが衣手は" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.fourthPhraseKana}" />
+                android:text="@{fourthPhraseKana}"
+                tools:text="わがころもでは" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -145,7 +188,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.fifthPhraseKanji}" />
+                android:text="@{fifthPhraseKanji}"
+                tools:text="露にぬれつつ" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -153,7 +197,8 @@
                 android:layout_marginBottom="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@{viewModel.fifthPhraseKana}" />
+                android:text="@{fifthPhraseKana}"
+                tools:text="つゆにぬれつつ" />
 
         </LinearLayout>
 

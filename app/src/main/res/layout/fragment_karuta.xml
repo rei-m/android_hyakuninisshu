@@ -1,129 +1,182 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.widget.fragment.KarutaFragment">
+    tools:context=".presentation.karuta.KarutaFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.viewmodel.karuta.widget.fragment.KarutaFragmentViewModel" />
+            type="me.rei_m.hyakuninisshu.presentation.karuta.KarutaViewModel" />
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:padding="@dimen/padding_m">
 
             <ImageView
+                android:id="@+id/image_karuta"
                 android:layout_width="@dimen/width_karuta_thumbnail"
                 android:layout_height="@dimen/height_karuta_thumbnail"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_m"
                 android:contentDescription="@string/karuta"
-                app:karutaSrc="@{viewModel.karutaImageNo}" />
+                app:karutaSrc="@{viewModel.karutaImageNo}"
+                app:layout_constraintBottom_toTopOf="@id/text_creator_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:src="@drawable/karuta_001" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_creator_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
-                android:orientation="vertical">
+                android:text="@string/creator"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/text_creator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_karuta" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@string/creator"
-                    android:textSize="@dimen/text_xs" />
+            <TextView
+                android:id="@+id/text_creator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:creator="@{viewModel.creator}"
+                app:karutaNo="@{viewModel.karutaNo}"
+                app:layout_constraintBottom_toTopOf="@id/text_karuta_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator_title"
+                tools:text="一番 / 天智天皇" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    app:creator="@{viewModel.creator}"
-                    app:karutaNo="@{viewModel.karutaNo}" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_karuta_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
-                android:orientation="vertical">
+                android:text="@string/original_text"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/text_kami_no_ku_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@string/original_text"
-                    android:textSize="@dimen/text_xs" />
+            <TextView
+                android:id="@+id/text_kami_no_ku_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.kamiNoKuKanji}"
+                app:layout_constraintBottom_toTopOf="@id/text_shimo_no_ku_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_karuta_title"
+                tools:text="秋の田の　かりほの庵の　苫をあらみ" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.kamiNoKuKanji}" />
+            <TextView
+                android:id="@+id/text_shimo_no_ku_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.shimoNoKuKanji}"
+                app:layout_constraintBottom_toTopOf="@id/text_kami_no_ku_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_kami_no_ku_kanji"
+                tools:text="わが衣手は　露にぬれつつ" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.shimoNoKuKanji}" />
+            <TextView
+                android:id="@+id/text_kami_no_ku_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:kimariji="@{viewModel.kimariji}"
+                app:layout_constraintBottom_toTopOf="@id/text_shimo_no_ku_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_shimo_no_ku_kanji"
+                app:textKamiNoKuKana="@{viewModel.kamiNoKuKana}"
+                tools:text="あきのたの　かりほのいほの　とまをあらみ" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    app:kimariji="@{viewModel.kimariji}"
-                    app:textKamiNoKuKana="@{viewModel.kamiNoKuKana}" />
+            <TextView
+                android:id="@+id/text_shimo_no_ku_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.shimoNoKuKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_translation_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_kami_no_ku_kana"
+                tools:text="わがころもでは　つゆにねれつつ" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.shimoNoKuKana}" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_translation_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
-                android:orientation="vertical">
+                android:text="@string/translation"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/text_translation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_shimo_no_ku_kana" />
 
-                <TextView
+            <TextView
+                android:id="@+id/text_translation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/height_ad_banner"
+                android:text="@{viewModel.translation}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_translation_title"
+                tools:text="秋の田圃のほとりにある仮小屋の、屋根を葺いた苫の編み目が粗いので、私の衣の袖は露に濡れていくばかりだ。" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/whiteSmoke"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:visibleOrGone="@{viewModel.isLoading}"
+                tools:visibility="gone">
+
+                <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@string/translation"
-                    android:textSize="@dimen/text_xs" />
+                    android:layout_gravity="center" />
+            </FrameLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_m"
-                    android:layout_marginStart="@dimen/margin_m"
-                    android:text="@{viewModel.translation}" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_ad_banner" />
-
-        </LinearLayout>
-
+        </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
 </layout>
