@@ -1,10 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
 }
 
@@ -156,10 +154,6 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
-
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
-        transitive = true
-    }
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -16,8 +16,6 @@ package me.rei_m.hyakuninisshu
 import android.content.Context
 import android.support.multidex.MultiDex
 
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import com.squareup.leakcanary.LeakCanary
 
 import javax.inject.Singleton
@@ -25,7 +23,6 @@ import javax.inject.Singleton
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.DaggerApplication
-import io.fabric.sdk.android.Fabric
 import me.rei_m.hyakuninisshu.di.ApplicationModule
 import me.rei_m.hyakuninisshu.infrastructure.di.InfrastructureModule
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
@@ -44,7 +41,6 @@ open class App : DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
         initLeakCanary()
-        initFabric()
         initTimber()
     }
 
@@ -62,13 +58,6 @@ open class App : DaggerApplication() {
     protected open fun initLeakCanary() {
         if (BuildConfig.DEBUG) {
             LeakCanary.install(this)
-        }
-    }
-
-    protected open fun initFabric() {
-        if (!BuildConfig.DEBUG) {
-            val crashlyticsCore = CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()
-            Fabric.with(this, Crashlytics.Builder().core(crashlyticsCore).build())
         }
     }
 
