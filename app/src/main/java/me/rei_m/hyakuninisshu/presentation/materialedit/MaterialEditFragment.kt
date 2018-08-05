@@ -34,16 +34,17 @@ class MaterialEditFragment : DaggerFragment(),
     @Inject
     lateinit var viewModelFactory: MaterialEditViewModel.Factory
 
-    lateinit var binding: FragmentMaterialEditBinding
+    private lateinit var binding: FragmentMaterialEditBinding
 
-    lateinit var viewModel: MaterialEditViewModel
+    private lateinit var viewModel: MaterialEditViewModel
 
     private var listener: OnFragmentInteractionListener? = null
 
-    private val karutaId: KarutaIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+    private val karutaId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
             "$ARG_KARUTA_ID is missing"
         }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
@@ -71,7 +72,7 @@ class MaterialEditFragment : DaggerFragment(),
                 }
             })
             snackBarMessage.observe(this@MaterialEditFragment, Observer {
-                if (it == null) return@Observer
+                it ?: return@Observer
                 Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
                         .setAction("Action", null)
                         .show()

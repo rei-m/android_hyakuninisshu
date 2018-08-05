@@ -46,8 +46,9 @@ class KarutaActivity : DaggerAppCompatActivity(),
 
     private lateinit var binding: ActivityKarutaBinding
 
-    private val karutaId: KarutaIdentifier
-        get() = intent.getParcelableExtra(ARG_KARUTA_ID)
+    private val karutaId by lazy {
+        intent.getParcelableExtra<KarutaIdentifier>(ARG_KARUTA_ID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

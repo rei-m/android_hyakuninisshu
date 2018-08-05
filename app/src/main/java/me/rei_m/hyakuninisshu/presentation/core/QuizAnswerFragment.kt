@@ -34,10 +34,11 @@ class QuizAnswerFragment : DaggerFragment() {
 
     private var listener: CoreInteractionListener? = null
 
-    val karutaQuizId: KarutaQuizIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_QUIZ_ID)) {
+    val karutaQuizId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaQuizIdentifier>(ARG_KARUTA_QUIZ_ID)) {
             "$ARG_KARUTA_QUIZ_ID is missing"
         }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewModel = viewModelFactory.create(this, karutaQuizId).apply {

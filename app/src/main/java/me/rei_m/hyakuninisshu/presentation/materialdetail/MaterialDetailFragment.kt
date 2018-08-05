@@ -33,10 +33,11 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
     @Inject
     lateinit var storeFactory: MaterialDetailStore.Factory
 
-    private val karutaId: KarutaIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+    private val karutaId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
             "$ARG_KARUTA_ID is missing"
         }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentMaterialDetailBinding.inflate(inflater, container, false).apply {
@@ -44,7 +45,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
         }
 
         obtainActivityStore(requireActivity(), MaterialDetailStore::class.java, storeFactory).karutaList.map {
-            it.find { it.identifier() == karutaId }
+            it.find { karuta -> karuta.identifier() == karutaId }
         }.observe(this, Observer { binding.karuta = it })
 
         return binding.root

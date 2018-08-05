@@ -52,11 +52,13 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
     private lateinit var binding: ActivityMaterialDetailBinding
 
-    private val lastPosition: Int
-        get() = intent.getIntExtra(ARG_LIST_POSITION, 0)
+    private val lastPosition by lazy {
+        intent.getIntExtra(ARG_LIST_POSITION, 0)
+    }
 
-    private val colorFilter: ColorFilter
-        get() = ColorFilter[intent.getIntExtra(ARG_COLOR_FILTER, 0)]
+    private val colorFilter by lazy {
+        ColorFilter[intent.getIntExtra(ARG_COLOR_FILTER, 0)]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

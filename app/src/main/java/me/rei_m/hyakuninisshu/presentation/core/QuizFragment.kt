@@ -48,27 +48,30 @@ class QuizFragment : DaggerFragment() {
 
     private var listener: CoreInteractionListener? = null
 
-    private val karutaQuizId: KarutaQuizIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_QUIZ_ID)) {
+    private val karutaQuizId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaQuizIdentifier>(ARG_KARUTA_QUIZ_ID)) {
             "$ARG_KARUTA_QUIZ_ID is missing"
         }
+    }
 
-    private val kamiNoKuStyle: KarutaStyleFilter
-        get() = requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
+    private val kamiNoKuStyle by lazy {
+        requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
             "$ARG_KAMI_NO_KU_STYLE is missing"
         }
+    }
 
-    private val shimoNoKuStyle: KarutaStyleFilter
-        get() = requireNotNull(arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
+    private val shimoNoKuStyle by lazy {
+        requireNotNull(arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
             "$ARG_SHIMO_NO_KU_STYLE is missing"
         }
+    }
 
     private var animationDisposable: Disposable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = viewModelFactory.create(this, karutaQuizId, kamiNoKuStyle, shimoNoKuStyle).apply {
             content.observe(this@QuizFragment, Observer {
-                it ?: let { return@Observer }
+                it ?: return@Observer
                 when (it.quiz.state) {
                     KarutaQuiz.State.IN_ANSWER -> {
                         val (firstPhrase, secondPhrase, thirdPhrase) = it.yomiFuda(kamiNoKuStyle.value)
@@ -82,7 +85,7 @@ class QuizFragment : DaggerFragment() {
                 }
             })
             openAnswerEvent.observe(this@QuizFragment, Observer {
-                it ?: let { return@Observer }
+                it ?: return@Observer
                 listener?.onAnswered(it)
             })
             unhandledErrorEvent.observe(this@QuizFragment, Observer {

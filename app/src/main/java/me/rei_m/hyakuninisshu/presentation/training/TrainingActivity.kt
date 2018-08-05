@@ -56,23 +56,29 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     private lateinit var binding: ActivityTrainingBinding
 
-    private val kamiNoKuStyle: KarutaStyleFilter
-        get() = KarutaStyleFilter[intent.getIntExtra(ARG_KAMI_NO_KU_STYLE, 0)]
+    private val kamiNoKuStyle by lazy {
+        KarutaStyleFilter[intent.getIntExtra(ARG_KAMI_NO_KU_STYLE, 0)]
+    }
 
-    private val shimoNoKuStyle: KarutaStyleFilter
-        get() = KarutaStyleFilter[intent.getIntExtra(ARG_SHIMO_NO_KU_STYLE, 0)]
+    private val shimoNoKuStyle by lazy {
+        KarutaStyleFilter[intent.getIntExtra(ARG_SHIMO_NO_KU_STYLE, 0)]
+    }
 
-    private val trainingRangeFrom: TrainingRangeFrom
-        get() = TrainingRangeFrom[intent.getIntExtra(ARG_TRAINING_RANGE_FROM, 0)]
+    private val trainingRangeFrom by lazy {
+        TrainingRangeFrom[intent.getIntExtra(ARG_TRAINING_RANGE_FROM, 0)]
+    }
 
-    private val trainingRangeTo: TrainingRangeTo
-        get() = TrainingRangeTo[intent.getIntExtra(ARG_TRAINING_RANGE_TO, 0)]
+    private val trainingRangeTo by lazy {
+        TrainingRangeTo[intent.getIntExtra(ARG_TRAINING_RANGE_TO, 0)]
+    }
 
-    private val kimarijiFilter: KimarijiFilter
-        get() = KimarijiFilter[intent.getIntExtra(ARG_KIMARIJI, 0)]
+    private val kimarijiFilter by lazy {
+        KimarijiFilter[intent.getIntExtra(ARG_KIMARIJI, 0)]
+    }
 
-    private val colorFilter: ColorFilter
-        get() = ColorFilter[intent.getIntExtra(ARG_COLOR, 0)]
+    private val colorFilter by lazy {
+        ColorFilter[intent.getIntExtra(ARG_COLOR, 0)]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

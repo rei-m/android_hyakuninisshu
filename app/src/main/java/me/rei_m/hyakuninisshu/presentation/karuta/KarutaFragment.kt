@@ -34,10 +34,11 @@ class KarutaFragment : DaggerFragment() {
 
     private var listener: OnFragmentInteractionListener? = null
 
-    private val karutaId: KarutaIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+    private val karutaId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
             "$ARG_KARUTA_ID is missing"
         }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewModel = viewModelFactory.create(requireActivity(), karutaId)
