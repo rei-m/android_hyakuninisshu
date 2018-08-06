@@ -61,10 +61,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         setupAd()
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
-                    .commit()
+            addFragment(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
         }
     }
 

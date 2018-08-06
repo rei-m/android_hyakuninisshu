@@ -94,30 +94,29 @@ class TrainingActivity : DaggerAppCompatActivity(),
             currentKarutaQuizId.observe(this@TrainingActivity, Observer {
                 it ?: return@Observer
                 if (supportFragmentManager.fragments.isEmpty()) {
-                    supportFragmentManager
-                            .beginTransaction()
-                            .add(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                            .commit()
+                    addFragment(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
                     return@Observer
                 }
 
                 supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG)?.let { fragment ->
                     if (fragment is QuizAnswerFragment && fragment.karutaQuizId != it) {
-                        supportFragmentManager
-                                .beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                                .replace(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                                .commit()
+                        replaceFragment(
+                                R.id.content,
+                                QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle),
+                                QuizFragment.TAG,
+                                FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
+                        )
                         return@Observer
                     }
                 }
 
                 supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
-                    supportFragmentManager
-                            .beginTransaction()
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                            .replace(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                            .commit()
+                    replaceFragment(
+                            R.id.content,
+                            QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle),
+                            QuizFragment.TAG,
+                            FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
+                    )
                     return@Observer
                 }
             })
@@ -142,11 +141,12 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     override fun onAnswered(quizId: KarutaQuizIdentifier) {
         if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
-                    .commit()
+            replaceFragment(
+                    R.id.content,
+                    QuizAnswerFragment.newInstance(quizId),
+                    QuizAnswerFragment.TAG,
+                    FragmentTransaction.TRANSIT_FRAGMENT_FADE
+            )
         }
     }
 
@@ -156,11 +156,12 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     override fun onGoToResult() {
         if (supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, TrainingResultFragment.newInstance(), TrainingResultFragment.TAG)
-                    .commit()
+            replaceFragment(
+                    R.id.content,
+                    TrainingResultFragment.newInstance(),
+                    TrainingResultFragment.TAG,
+                    FragmentTransaction.TRANSIT_FRAGMENT_FADE
+            )
         }
     }
 

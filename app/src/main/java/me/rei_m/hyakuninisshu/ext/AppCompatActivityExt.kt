@@ -13,12 +13,34 @@
 
 package me.rei_m.hyakuninisshu.ext
 
+import android.support.annotation.IdRes
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 
 interface AppCompatActivityExt {
+    fun AppCompatActivity.addFragment(@IdRes containerViewId: Int,
+                                      fragment: Fragment,
+                                      tag: String) {
+        supportFragmentManager
+                .beginTransaction()
+                .add(containerViewId, fragment, tag)
+                .commit()
+    }
+
+    fun AppCompatActivity.replaceFragment(@IdRes containerViewId: Int,
+                                          fragment: Fragment,
+                                          tag: String,
+                                          transition: Int? = null) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transition?.let { transaction.setTransition(it) }
+        transaction
+                .replace(containerViewId, fragment, tag)
+                .commit()
+    }
+
     fun AppCompatActivity.setupActionBar(toolbar: Toolbar, action: ActionBar.() -> Unit) {
         setSupportActionBar(toolbar)
         supportActionBar?.run {

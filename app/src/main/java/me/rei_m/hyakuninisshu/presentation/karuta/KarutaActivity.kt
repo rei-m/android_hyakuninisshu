@@ -61,10 +61,7 @@ class KarutaActivity : DaggerAppCompatActivity(),
         setupAd()
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.content, KarutaFragment.newInstance(karutaId), KarutaFragment.TAG)
-                    .commit()
+            addFragment(R.id.content, KarutaFragment.newInstance(karutaId), KarutaFragment.TAG)
         }
     }
 
