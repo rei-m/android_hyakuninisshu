@@ -56,11 +56,11 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     private lateinit var binding: ActivityTrainingBinding
 
-    private val kamiNoKuStyle by lazy {
+    override val kamiNoKuStyle by lazy {
         KarutaStyleFilter[intent.getIntExtra(ARG_KAMI_NO_KU_STYLE, 0)]
     }
 
-    private val shimoNoKuStyle by lazy {
+    override val shimoNoKuStyle by lazy {
         KarutaStyleFilter[intent.getIntExtra(ARG_SHIMO_NO_KU_STYLE, 0)]
     }
 
@@ -93,32 +93,7 @@ class TrainingActivity : DaggerAppCompatActivity(),
             })
             currentKarutaQuizId.observe(this@TrainingActivity, Observer {
                 it ?: return@Observer
-                if (supportFragmentManager.fragments.isEmpty()) {
-                    addFragment(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                    return@Observer
-                }
-
-                supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG)?.let { fragment ->
-                    if (fragment is QuizAnswerFragment && fragment.karutaQuizId != it) {
-                        replaceFragment(
-                                R.id.content,
-                                QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle),
-                                QuizFragment.TAG,
-                                FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
-                        )
-                        return@Observer
-                    }
-                }
-
-                supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
-                    replaceFragment(
-                            R.id.content,
-                            QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle),
-                            QuizFragment.TAG,
-                            FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
-                    )
-                    return@Observer
-                }
+                onReceiveKarutaQuizId(it)
             })
             unhandledErrorEvent.observe(this@TrainingActivity, Observer {
                 onErrorQuiz()
@@ -140,14 +115,7 @@ class TrainingActivity : DaggerAppCompatActivity(),
     }
 
     override fun onAnswered(quizId: KarutaQuizIdentifier) {
-        if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
-            replaceFragment(
-                    R.id.content,
-                    QuizAnswerFragment.newInstance(quizId),
-                    QuizAnswerFragment.TAG,
-                    FragmentTransaction.TRANSIT_FRAGMENT_FADE
-            )
-        }
+        openAnswer(quizId)
     }
 
     override fun onGoToNext() {
@@ -166,13 +134,7 @@ class TrainingActivity : DaggerAppCompatActivity(),
     }
 
     override fun onErrorQuiz() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_unhandled_error,
-                    true,
-                    false)
-        }
+        showError()
     }
 
     override fun onAlertPositiveClick() {
