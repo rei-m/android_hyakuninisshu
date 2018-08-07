@@ -1,6 +1,5 @@
 /build
 keystore/
 src/release/
-src/debug/google-services.json
 app-release.apk
 release/
