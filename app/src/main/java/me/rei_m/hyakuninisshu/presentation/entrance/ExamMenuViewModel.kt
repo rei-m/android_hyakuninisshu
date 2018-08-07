@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.presentation.entrance
 import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import com.crashlytics.android.Crashlytics
 import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
@@ -37,6 +38,10 @@ class ExamMenuViewModel(
 
     init {
         actionDispatcher.fetchRecent()
+    }
+
+    fun onClickShowAllExamResults() {
+
     }
 
     fun onClickStartExam() {
