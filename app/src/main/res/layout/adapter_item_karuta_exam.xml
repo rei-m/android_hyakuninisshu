@@ -4,27 +4,16 @@
 
     <data>
 
-        <import type="android.view.View.OnClickListener" />
-
         <variable
             name="karuta"
             type="me.rei_m.hyakuninisshu.domain.model.karuta.Karuta" />
 
-        <variable
-            name="position"
-            type="int" />
-
-        <variable
-            name="listener"
-            type="me.rei_m.hyakuninisshu.presentation.entrance.MaterialListAdapter.OnItemInteractionListener" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ripple"
-        android:onClick="@{() -> listener.onItemClicked(position)}"
         android:paddingBottom="@dimen/padding_xs"
         android:paddingLeft="@dimen/padding_m"
         android:paddingRight="@dimen/padding_m"

@@ -11,21 +11,12 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.domain.model.quiz
+package me.rei_m.hyakuninisshu.action.exam
 
-import me.rei_m.hyakuninisshu.domain.AbstractEntity
-import java.util.*
+import me.rei_m.hyakuninisshu.action.Action
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-/**
- * 百人一首の力試し.
- */
-class KarutaExam(identifier: KarutaExamIdentifier,
-                 val tookDate: Date,
-                 val result: KarutaExamResult) : AbstractEntity<KarutaExam, KarutaExamIdentifier>(identifier) {
-
-    override fun toString() = "KarutaExam(result=$result)"
-
-    companion object {
-        const val MAX_HISTORY_COUNT = 10
-    }
+class FetchAllExamAction(val karutaExamList: List<KarutaExam>?,
+                         override val error: Throwable? = null) : Action {
+    override fun toString(): String = "FetchAllExamAction(karutaExamList=$karutaExamList, error=$error)"
 }

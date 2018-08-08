@@ -11,43 +11,43 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.karuta
+package me.rei_m.hyakuninisshu.presentation.examhistory
 
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentKarutaBinding
+import me.rei_m.hyakuninisshu.databinding.FragmentExamHistoryBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
 import javax.inject.Inject
 
-class KarutaFragment : DaggerFragment() {
+class ExamHistoryFragment : DaggerFragment() {
 
     @Inject
-    lateinit var viewModelFactory: KarutaViewModel.Factory
+    lateinit var viewModelFactory: ExamHistoryViewModel.Factory
 
     private var listener: OnFragmentInteractionListener? = null
 
-    private val karutaId by lazy {
-        requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
-            "$ARG_KARUTA_ID is missing"
-        }
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(requireActivity(), karutaId)
-        viewModel.notFoundKarutaEvent.observe(this, Observer {
+        val viewModel = viewModelFactory.create(requireActivity())
+        viewModel.unhandledErrorEvent.observe(this, Observer {
             listener?.onError()
         })
 
-        val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
-            setLifecycleOwner(this@KarutaFragment)
+        val binding = FragmentExamHistoryBinding.inflate(inflater, container, false).apply {
+            setLifecycleOwner(this@ExamHistoryFragment)
+        }
+
+        with(binding.recyclerKarutaExamList) {
+            adapter = KarutaExamListAdapter(listOf())
+            addItemDecoration(DividerItemDecoration(inflater.context, DividerItemDecoration.VERTICAL))
         }
 
         binding.viewModel = viewModel
@@ -73,21 +73,17 @@ class KarutaFragment : DaggerFragment() {
     abstract class Module {
         @ForFragment
         @ContributesAndroidInjector
-        abstract fun contributeInjector(): KarutaFragment
+        abstract fun contributeInjector(): ExamHistoryFragment
     }
 
     interface OnFragmentInteractionListener {
         fun onError()
     }
 
-    companion object : FragmentExt {
+    companion object {
 
-        const val TAG: String = "KarutaFragment"
+        const val TAG: String = "ExamHistoryFragment"
 
-        private const val ARG_KARUTA_ID = "karutaId"
-
-        fun newInstance(karutaId: KarutaIdentifier) = KarutaFragment().withArgs {
-            putParcelable(ARG_KARUTA_ID, karutaId)
-        }
+        fun newInstance() = ExamHistoryFragment()
     }
 }

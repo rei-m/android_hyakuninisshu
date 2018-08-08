@@ -54,7 +54,7 @@ class TrainingMenuViewModel(
         }
 
         analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING)
-        navigator.navigateToTrainingMaster(trainingRangeFrom.value!!,
+        navigator.navigateToTraining(trainingRangeFrom.value!!,
                 trainingRangeTo.value!!,
                 kimariji.value!!,
                 color.value!!,

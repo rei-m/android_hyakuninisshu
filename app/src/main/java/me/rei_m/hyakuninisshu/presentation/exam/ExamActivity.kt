@@ -88,8 +88,6 @@ class ExamActivity : DaggerAppCompatActivity(),
         }
         setupAd()
 
-        binding.viewModel = viewModel
-
         if (supportFragmentManager.fragments.isEmpty()) {
             viewModel.startExam()
         }

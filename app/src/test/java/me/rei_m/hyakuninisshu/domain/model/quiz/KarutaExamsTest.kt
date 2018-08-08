@@ -77,7 +77,7 @@ class KarutaExamsTest {
                     wrongKarutaIds
             )
 
-            return KarutaExam(KarutaExamIdentifier(1), karutaExamResult)
+            return KarutaExam(KarutaExamIdentifier(1), Date(), karutaExamResult)
         }
     }
 }

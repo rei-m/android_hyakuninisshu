@@ -60,6 +60,17 @@ class ExamActionDispatcher @Inject constructor(
     }
 
     /**
+     * 全ての力試しを取得する.
+     */
+    fun fetchAll() {
+        karutaExamRepository.list().scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(FetchAllExamAction(it.all))
+        }, {
+            dispatcher.dispatch(FetchAllExamAction(null, it))
+        })
+    }
+
+    /**
      * 力試しを開始する.
      */
     fun start() {

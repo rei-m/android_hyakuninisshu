@@ -45,7 +45,7 @@ class MaterialListFragment : DaggerFragment() {
         setHasOptionsMenu(true)
 
         with(binding.recyclerKarutaList) {
-            adapter = MaterialListAdapter(listOf(), viewModel)
+            adapter = MaterialListAdapter(requireContext(), listOf(), viewModel)
             addItemDecoration(DividerItemDecoration(inflater.context, DividerItemDecoration.VERTICAL))
         }
 

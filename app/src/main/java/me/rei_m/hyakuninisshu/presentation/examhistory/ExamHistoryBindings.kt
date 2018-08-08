@@ -11,21 +11,19 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.domain.model.quiz
+package me.rei_m.hyakuninisshu.presentation.examhistory
 
-import me.rei_m.hyakuninisshu.domain.AbstractEntity
-import java.util.*
+import android.databinding.BindingAdapter
+import android.support.v7.widget.RecyclerView
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-/**
- * 百人一首の力試し.
- */
-class KarutaExam(identifier: KarutaExamIdentifier,
-                 val tookDate: Date,
-                 val result: KarutaExamResult) : AbstractEntity<KarutaExam, KarutaExamIdentifier>(identifier) {
-
-    override fun toString() = "KarutaExam(result=$result)"
-
-    companion object {
-        const val MAX_HISTORY_COUNT = 10
+object ExamHistoryBindings {
+    @JvmStatic
+    @BindingAdapter("karutaExamList")
+    fun setMaterial(view: RecyclerView, karutaExamList: List<KarutaExam>?) {
+        karutaExamList ?: return
+        with(view.adapter as KarutaExamListAdapter) {
+            replaceData(karutaExamList)
+        }
     }
 }

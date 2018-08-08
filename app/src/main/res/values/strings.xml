@@ -159,5 +159,7 @@
     <string name="url_credit">file:///android_asset/licenses.html</string>
 
     <string name="app_font_file">Hannari.otf</string>
+    <string name="title_activity_exam_history">ExamHistoryActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

@@ -28,6 +28,7 @@ import me.rei_m.hyakuninisshu.infrastructure.di.InfrastructureModule
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
 import me.rei_m.hyakuninisshu.presentation.SplashActivity
 import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
+import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
 import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
 import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditActivity
@@ -75,6 +76,7 @@ open class App : DaggerApplication() {
         SplashActivity.Module::class,
         EntranceActivity.Module::class,
         ExamActivity.Module::class,
+        ExamHistoryActivity.Module::class,
         MaterialDetailActivity.Module::class,
         MaterialEditActivity.Module::class,
         KarutaActivity.Module::class,

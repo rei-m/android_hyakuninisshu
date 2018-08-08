@@ -22,6 +22,11 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 class KarutaExams(private val values: List<KarutaExam>) {
 
     /**
+     * すべての力試し.
+     */
+    val all: List<KarutaExam> = values
+
+    /**
      * 直近の力試し.
      */
     val recent: KarutaExam? = values.firstOrNull()
@@ -29,16 +34,14 @@ class KarutaExams(private val values: List<KarutaExam>) {
     /**
      * 過去の力試しの結果から間違えた問題の歌のIDの集合.
      */
-    val totalWrongKarutaIds: KarutaIds = values.fold(mutableListOf<KarutaIdentifier>()) { karutaIdList, karutaExam ->
+    val totalWrongKarutaIds: KarutaIds = KarutaIds(values.fold(mutableListOf()) { karutaIdList, karutaExam ->
         karutaExam.result.wrongKarutaIds.values.forEach { wrongKarutaId ->
             if (!karutaIdList.contains(wrongKarutaId)) {
                 karutaIdList.add(wrongKarutaId)
             }
         }
         karutaIdList
-    }.let {
-        KarutaIds(it)
-    }
+    })
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

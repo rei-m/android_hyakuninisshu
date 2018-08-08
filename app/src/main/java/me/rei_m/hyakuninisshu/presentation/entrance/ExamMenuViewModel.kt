@@ -15,8 +15,6 @@ package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
-import com.crashlytics.android.Crashlytics
 import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
@@ -41,17 +39,17 @@ class ExamMenuViewModel(
     }
 
     fun onClickShowAllExamResults() {
-
+        navigator.navigateToExamHistory()
     }
 
     fun onClickStartExam() {
         analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_EXAM)
-        navigator.navigateToExamMaster()
+        navigator.navigateToExam()
     }
 
     fun onClickStartTraining() {
         analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING_FOR_EXAM)
-        navigator.navigateToExamTrainingMaster()
+        navigator.navigateToTrainingExam()
     }
 
     class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,

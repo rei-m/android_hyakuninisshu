@@ -62,6 +62,7 @@ class ExamActionDispatcherTest : TestHelper {
         val examId = KarutaExamIdentifier(1)
         val exam = KarutaExam(
                 identifier = examId,
+                tookDate = Date(),
                 result = KarutaExamResult(
                         resultSummary = KarutaQuizzesResultSummary(
                                 quizCount = 100,
@@ -121,6 +122,33 @@ class ExamActionDispatcherTest : TestHelper {
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchRecentExamAction::class.java)
+            assertThat(it.error).isNotNull()
+        })
+    }
+
+    @Test
+    fun fetchAll() {
+        whenever(karutaExamRepository.list()).thenReturn(Single.just(KarutaExams(listOf())))
+
+        actionDispatcher.fetchAll()
+
+        verify(dispatcher).dispatch(check {
+            assertThat(it).isInstanceOf(FetchAllExamAction::class.java)
+            if (it is FetchAllExamAction) {
+                assertThat(it.karutaExamList).isNotNull
+                assertThat(it.error).isNull()
+            }
+        })
+    }
+
+    @Test
+    fun fetchAllWithError() {
+        whenever(karutaExamRepository.list()).thenReturn(Single.error(RuntimeException()))
+
+        actionDispatcher.fetchAll()
+
+        verify(dispatcher).dispatch(check {
+            assertThat(it).isInstanceOf(FetchAllExamAction::class.java)
             assertThat(it.error).isNotNull()
         })
     }
@@ -199,6 +227,7 @@ class ExamActionDispatcherTest : TestHelper {
         val examId = KarutaExamIdentifier(1)
         val exam = KarutaExam(
                 identifier = examId,
+                tookDate = Date(),
                 result = KarutaExamResult(
                         resultSummary = KarutaQuizzesResultSummary(
                                 quizCount = 100,
