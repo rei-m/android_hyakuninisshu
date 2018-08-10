@@ -17,39 +17,36 @@ import android.util.SparseIntArray
 
 import java.util.Random
 
-object ArrayUtil {
+/**
+ * ランダムなインデックスの配列を生成する.
+ *
+ * ex) generateRandomIndexArray(10, 4) では 0 ~ 9 の中からランダムに4個の要素を選んで配列にして返す.
+ *
+ * @param randomArraySize 生成する配列の要素数
+ * @param size            生成した配列から返却する数
+ * @return ランダム順にIndexを格納した配列
+ */
+fun generateRandomIndexArray(randomArraySize: Int, size: Int): IntArray {
 
-    /**
-     * ランダムなインデックスの配列を生成する.
-     *
-     * ex) generateRandomIndexArray(10, 4) では 0 ~ 9 の中からランダムに4個の要素を選んで配列にして返す.
-     *
-     * @param randomArraySize 生成する配列の要素数
-     * @param size            生成した配列から返却する数
-     * @return ランダム順にIndexを格納した配列
-     */
-    fun generateRandomIndexArray(randomArraySize: Int, size: Int): IntArray {
+    val randArray = IntArray(size)
+    val conversion = SparseIntArray()
 
-        val randArray = IntArray(size)
-        val conversion = SparseIntArray()
+    val rand = Random()
 
-        val rand = Random()
+    var i = 0
+    var upper = randomArraySize
+    while (i < size) {
+        val key = rand.nextInt(upper)
+        val value = conversion.get(key, key)
 
-        var i = 0
-        var upper = randomArraySize
-        while (i < size) {
-            val key = rand.nextInt(upper)
-            val value = conversion.get(key, key)
+        randArray[i] = value
 
-            randArray[i] = value
+        val nextLastIndex = upper - 1
 
-            val nextLastIndex = upper - 1
-
-            conversion.put(key, conversion.get(nextLastIndex, nextLastIndex))
-            i++
-            upper--
-        }
-
-        return randArray
+        conversion.put(key, conversion.get(nextLastIndex, nextLastIndex))
+        i++
+        upper--
     }
+
+    return randArray
 }
