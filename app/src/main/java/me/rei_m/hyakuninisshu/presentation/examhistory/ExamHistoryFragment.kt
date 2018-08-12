@@ -16,7 +16,6 @@ package me.rei_m.hyakuninisshu.presentation.examhistory
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,8 +45,7 @@ class ExamHistoryFragment : DaggerFragment() {
         }
 
         with(binding.recyclerKarutaExamList) {
-            adapter = KarutaExamListAdapter(listOf())
-            addItemDecoration(DividerItemDecoration(inflater.context, DividerItemDecoration.VERTICAL))
+            adapter = KarutaExamListAdapter(requireContext(), listOf())
         }
 
         binding.viewModel = viewModel

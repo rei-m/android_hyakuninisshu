@@ -64,16 +64,17 @@
             android:label="@string/editing_material"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.examhistory.ExamHistoryActivity"
+            android:label="@string/exam_history"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <!-- Include the AdActivity configChanges and theme. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
-        <activity
-            android:name=".presentation.examhistory.ExamHistoryActivity"
-            android:label="@string/title_activity_exam_history"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

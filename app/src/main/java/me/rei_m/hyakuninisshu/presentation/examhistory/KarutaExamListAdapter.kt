@@ -13,84 +13,57 @@
 
 package me.rei_m.hyakuninisshu.presentation.examhistory
 
-import android.support.constraint.ConstraintSet
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.AdapterItemKarutaExamBinding
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.ext.ContextExt
 
 class KarutaExamListAdapter(
+        context: Context,
         private var karutaExamList: List<KarutaExam>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<KarutaExamListAdapter.ItemViewHolder>(), ContextExt {
 
-    override fun getItemViewType(position: Int) = if (position < karutaExamList.size)
-        ItemViewType.ITEM.ordinal
-    else
-        ItemViewType.FOOTER.ordinal
+    private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.padding_xs)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (ItemViewType.forId(viewType)) {
-            ItemViewType.ITEM -> {
-                val binding = AdapterItemKarutaExamBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                )
-                return ItemViewHolder(binding)
+    private val lastItemPaddingBottom = context.adHeight + itemPaddingBottom
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        val binding = AdapterItemKarutaExamBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+        )
+        return ItemViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        with(holder.binding) {
+            val paddingBottom = if (position == karutaExamList.lastIndex) {
+                lastItemPaddingBottom
+            } else {
+                itemPaddingBottom
             }
-            else -> {
-                val context = parent.context
-                val view = View(context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            context.resources.getDimensionPixelOffset(R.dimen.height_ad_banner)
-                    )
-                }
-                return object : RecyclerView.ViewHolder(view) {
-                }
-            }
+            holder.binding.layoutRoot.setPadding(
+                    holder.binding.layoutRoot.paddingLeft,
+                    holder.binding.layoutRoot.paddingTop,
+                    holder.binding.layoutRoot.paddingRight,
+                    paddingBottom
+            )
+            exam = karutaExamList[position]
+            executePendingBindings()
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemViewHolder) {
-            val context = holder.binding.layoutRoot.context
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(holder.binding.layoutRoot)
-            constraintSet.setMargin(R.id.karuta_creator, ConstraintSet.BOTTOM, context.resources.getDimensionPixelOffset(R.dimen.height_ad_banner))
-            holder.binding.layoutRoot.setConstraintSet(constraintSet)
-            with(holder.binding) {
-
-//                marginBottom
-//                this.karuta = karutaList[position]
-//                this.position = position
-//                executePendingBindings()
-            }
-        }
-    }
-
-    override fun getItemCount() = karutaExamList.size + FOOTER_COUNT
+    override fun getItemCount() = karutaExamList.size
 
     fun replaceData(karutaExamList: List<KarutaExam>) {
         this.karutaExamList = karutaExamList
         notifyDataSetChanged()
     }
 
-    private enum class ItemViewType {
-        ITEM,
-        FOOTER;
-
-        companion object {
-            fun forId(id: Int): ItemViewType = values()[id]
-        }
-    }
-
-    private class ItemViewHolder(val binding: AdapterItemKarutaExamBinding) : RecyclerView.ViewHolder(binding.root)
-
-    companion object {
-        private const val FOOTER_COUNT = 1
-    }
+    class ItemViewHolder(val binding: AdapterItemKarutaExamBinding) : RecyclerView.ViewHolder(binding.root)
 }

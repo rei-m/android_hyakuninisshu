@@ -20,16 +20,17 @@ import android.view.ViewGroup
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.ext.ContextExt
 
 class MaterialListAdapter(
         context: Context,
         private var karutaList: List<Karuta>,
         private var viewModel: MaterialListViewModel
-) : RecyclerView.Adapter<MaterialListAdapter.ItemViewHolder>() {
+) : RecyclerView.Adapter<MaterialListAdapter.ItemViewHolder>(), ContextExt {
 
-    private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.padding_xs)
+    private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.padding_s)
 
-    private val lastItemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.height_ad_banner)
+    private val lastItemPaddingBottom = context.adHeight + itemPaddingBottom
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = AdapterItemMaterialKarutaBinding.inflate(

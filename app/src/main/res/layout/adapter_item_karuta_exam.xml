@@ -5,99 +5,56 @@
     <data>
 
         <variable
-            name="karuta"
-            type="me.rei_m.hyakuninisshu.domain.model.karuta.Karuta" />
+            name="exam"
+            type="me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam" />
 
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/padding_xs"
-        android:paddingLeft="@dimen/padding_m"
-        android:paddingRight="@dimen/padding_m"
-        android:paddingTop="@dimen/padding_xs">
+        android:layout_height="@dimen/height_line"
+        android:padding="@dimen/padding_m">
 
         <TextView
-            android:id="@+id/karuta_no"
-            android:layout_width="@dimen/width_karuta_thumbnail_small"
+            android:id="@+id/exam_date"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:text="@{exam.examDateTimeString}"
             android:textSize="@dimen/text_xxs"
-            app:karutaNo="@{karuta.identifier().value}"
-            app:layout_constraintBottom_toTopOf="@id/karuta_image"
-            app:layout_constraintEnd_toStartOf="@id/karuta_kami_no_ku"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/karuta_kami_no_ku"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="一番" />
+            tools:text="8月1日 19:12" />
 
-        <ImageView
-            android:id="@+id/karuta_image"
-            android:layout_width="@dimen/width_karuta_thumbnail_small"
-            android:layout_height="@dimen/height_karuta_thumbnail_small"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="@dimen/margin_xxs"
-            android:contentDescription="@string/karuta"
-            app:karutaSrc="@{karuta.imageNo.value}"
+        <TextView
+            android:id="@+id/text_number_of_correct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{exam.result.score}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/karuta_kami_no_ku"
-            app:layout_constraintRight_toLeftOf="@id/karuta_kami_no_ku"
+            app:layout_constraintEnd_toStartOf="@id/average_response_time"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/average_response_time"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/karuta_no"
-            tools:src="@drawable/karuta_001" />
-
-        <TextView
-            android:id="@+id/karuta_kami_no_ku"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_m"
-            android:layout_marginStart="@dimen/margin_m"
-            android:text="@{karuta.kamiNoKu.kanji}"
-            app:layout_constraintBottom_toTopOf="@+id/karuta_shimo_no_ku"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/karuta_no"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@id/karuta_no"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="秋の田の　かりほの庵の　苫をあらみ" />
+            tools:text="21/100" />
 
         <TextView
-            android:id="@+id/karuta_shimo_no_ku"
+            android:id="@+id/average_response_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_m"
-            android:layout_marginStart="@dimen/margin_m"
-            android:text="@{karuta.shimoNoKu.kanji}"
-            app:layout_constraintBottom_toTopOf="@id/karuta_creator"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/karuta_no"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@id/karuta_no"
-            app:layout_constraintTop_toBottomOf="@id/karuta_kami_no_ku"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="わが衣手は　露にぬれつつ" />
-
-        <TextView
-            android:id="@+id/karuta_creator"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_m"
-            android:layout_marginStart="@dimen/margin_m"
-            android:gravity="end"
-            android:text="@{karuta.creator}"
+            app:averageAnswerSec="@{exam.result.averageAnswerSec}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/karuta_no"
+            app:layout_constraintLeft_toRightOf="@id/text_number_of_correct"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@id/karuta_no"
-            app:layout_constraintTop_toBottomOf="@id/karuta_shimo_no_ku"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="天智天皇" />
+            app:layout_constraintStart_toEndOf="@id/text_number_of_correct"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2.40秒" />
 
     </android.support.constraint.ConstraintLayout>
 
