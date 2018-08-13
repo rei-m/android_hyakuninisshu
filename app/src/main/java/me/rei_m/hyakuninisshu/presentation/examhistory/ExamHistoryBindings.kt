@@ -15,15 +15,25 @@ package me.rei_m.hyakuninisshu.presentation.examhistory
 
 import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
+import android.widget.TextView
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.ext.DateExt
+import java.util.*
 
-object ExamHistoryBindings {
+object ExamHistoryBindings : DateExt {
     @JvmStatic
     @BindingAdapter("karutaExamList")
-    fun setMaterial(view: RecyclerView, karutaExamList: List<KarutaExam>?) {
+    fun setKarutaExamList(view: RecyclerView, karutaExamList: List<KarutaExam>?) {
         karutaExamList ?: return
         with(view.adapter as KarutaExamListAdapter) {
             replaceData(karutaExamList)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("examTime")
+    fun setExamTime(view: TextView, value: Date?) {
+        value ?: return
+        view.text = value.diffString(view.context.applicationContext, Date())
     }
 }

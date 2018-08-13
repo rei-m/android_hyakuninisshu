@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -24,13 +23,9 @@ class KarutaExam(identifier: KarutaExamIdentifier,
                  val tookDate: Date,
                  val result: KarutaExamResult) : AbstractEntity<KarutaExam, KarutaExamIdentifier>(identifier) {
 
-    val examDateTimeString: String = dateFormat.format(tookDate)
-
     override fun toString() = "KarutaExam(result=$result)"
 
     companion object {
         const val MAX_HISTORY_COUNT = 10
-
-        private val dateFormat = SimpleDateFormat("M月d日 HH:mm", Locale.JAPAN)
     }
 }

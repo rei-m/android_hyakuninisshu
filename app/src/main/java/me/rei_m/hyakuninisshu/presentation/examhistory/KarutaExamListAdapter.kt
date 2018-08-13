@@ -17,7 +17,6 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.AdapterItemKarutaExamBinding
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.ext.ContextExt
@@ -27,9 +26,9 @@ class KarutaExamListAdapter(
         private var karutaExamList: List<KarutaExam>
 ) : RecyclerView.Adapter<KarutaExamListAdapter.ItemViewHolder>(), ContextExt {
 
-    private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.padding_xs)
+    private val itemPaddingBottom = 0
 
-    private val lastItemPaddingBottom = context.adHeight + itemPaddingBottom
+    private val lastItemPaddingBottom = context.adHeight
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = AdapterItemKarutaExamBinding.inflate(

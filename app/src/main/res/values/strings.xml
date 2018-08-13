@@ -113,6 +113,18 @@
     <string name="color_green">緑色</string>
     <string name="color_orange">橙色</string>
 
+    <string name="past_second">%1$d秒前</string>
+    <string name="past_minute">%1$d分前</string>
+    <string name="past_hour">%1$d時間前</string>
+    <string name="yesterday">昨日</string>
+    <string name="past_day">%1$d日前</string>
+    <string name="last_week">先週</string>
+    <string name="past_week">%1$d週間前</string>
+    <string name="last_month">先月</string>
+    <string name="past_month">%1$dヶ月前</string>
+    <string name="last_year">昨年</string>
+    <string name="past_year">%1$d年前</string>
+
     <string name="text_exam_about">全百首から出題されます。出題順は毎回変わります。</string>
 
     <string name="text_explain_app">このアプリは百人一首を覚えるためのアプリです。簡単に繰り返し練習して使ってもらえることを目標に作成しました。</string>
