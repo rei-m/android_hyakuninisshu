@@ -11,7 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu
+package me.rei_m.hyakuninisshu.util
 
 import android.content.Context
 import android.os.Bundle
@@ -22,7 +22,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AnalyticsManager @Inject constructor(context: Context) {
+class AnalyticsHelper @Inject constructor(context: Context) {
 
     private val analytics = FirebaseAnalytics.getInstance(context)
 

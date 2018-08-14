@@ -14,7 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.MutableLiveData
-import me.rei_m.hyakuninisshu.AnalyticsManager
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
 import me.rei_m.hyakuninisshu.presentation.enums.*
@@ -30,7 +30,7 @@ class TrainingMenuViewModel(
         shimoNoKuStyle: KarutaStyleFilter,
         color: ColorFilter,
         private val navigator: Navigator,
-        private val analyticsManager: AnalyticsManager
+        private val analyticsHelper: AnalyticsHelper
 ): MutableLiveDataExt {
     val trainingRangeFrom = MutableLiveData<TrainingRangeFrom>().withValue(trainingRangeFrom)
 
@@ -53,7 +53,7 @@ class TrainingMenuViewModel(
             return
         }
 
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING)
+        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
         navigator.navigateToTraining(trainingRangeFrom.value!!,
                 trainingRangeTo.value!!,
                 kimariji.value!!,
@@ -63,7 +63,7 @@ class TrainingMenuViewModel(
     }
 
     class Factory @Inject constructor(private val navigator: Navigator,
-                                      private val analyticsManager: AnalyticsManager) {
+                                      private val analyticsHelper: AnalyticsHelper) {
 
         var trainingRangeFrom = TrainingRangeFrom.ONE
         var trainingRangeTo = TrainingRangeTo.ONE_HUNDRED
@@ -80,7 +80,7 @@ class TrainingMenuViewModel(
                 shimoNoKuStyle,
                 color,
                 navigator,
-                analyticsManager
+                analyticsHelper
         )
     }
 }

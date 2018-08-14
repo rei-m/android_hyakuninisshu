@@ -15,7 +15,7 @@ package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
-import me.rei_m.hyakuninisshu.AnalyticsManager
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
@@ -30,7 +30,7 @@ class ExamResultViewModel(
         actionDispatcher: ExamActionDispatcher,
         initialKarutaExamId: KarutaExamIdentifier?,
         private val navigator: Navigator,
-        private val analyticsManager: AnalyticsManager
+        private val analyticsHelper: AnalyticsHelper
 ) : LiveDataExt {
 
     val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier() }
@@ -56,14 +56,14 @@ class ExamResultViewModel(
     }
 
     fun finish() {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.FINISH_EXAM)
+        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.FINISH_EXAM)
         navigator.back()
     }
 
     class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
                                       private val storeFactory: ExamStore.Factory,
                                       private val navigator: Navigator,
-                                      private val analyticsManager: AnalyticsManager): ViewModelFactory {
+                                      private val analyticsHelper: AnalyticsHelper): ViewModelFactory {
 
         var initialKarutaExamId: KarutaExamIdentifier? = null
 
@@ -72,7 +72,7 @@ class ExamResultViewModel(
                 actionDispatcher,
                 initialKarutaExamId,
                 navigator,
-                analyticsManager
+                analyticsHelper
         )
     }
 }

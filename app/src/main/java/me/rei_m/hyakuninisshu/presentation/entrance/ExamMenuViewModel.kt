@@ -15,7 +15,7 @@ package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
-import me.rei_m.hyakuninisshu.AnalyticsManager
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
@@ -26,7 +26,7 @@ class ExamMenuViewModel(
         store: EntranceStore,
         actionDispatcher: ExamActionDispatcher,
         private val navigator: Navigator,
-        private val analyticsManager: AnalyticsManager
+        private val analyticsHelper: AnalyticsHelper
 ) : LiveDataExt {
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
 
@@ -43,24 +43,24 @@ class ExamMenuViewModel(
     }
 
     fun onClickStartExam() {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_EXAM)
+        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_EXAM)
         navigator.navigateToExam()
     }
 
     fun onClickStartTraining() {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.START_TRAINING_FOR_EXAM)
+        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING_FOR_EXAM)
         navigator.navigateToTrainingExam()
     }
 
     class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
                                       private val storeFactory: EntranceStore.Factory,
                                       private val navigator: Navigator,
-                                      private val analyticsManager: AnalyticsManager) : ViewModelFactory {
+                                      private val analyticsHelper: AnalyticsHelper) : ViewModelFactory {
         fun create(activity: FragmentActivity): ExamMenuViewModel = ExamMenuViewModel(
                 obtainActivityStore(activity, EntranceStore::class.java, storeFactory),
                 actionDispatcher,
                 navigator,
-                analyticsManager
+                analyticsHelper
         )
     }
 }
