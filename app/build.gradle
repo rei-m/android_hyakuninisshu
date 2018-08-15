@@ -25,11 +25,11 @@ android {
         android.signingConfigs.releaseConfig.keyPassword = keyPassword
     }
 
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         multiDexEnabled true
         versionCode 15
         versionName "1.0.14"
@@ -73,7 +73,7 @@ android {
 }
 
 dependencies {
-    def android_support_lib_version = '27.1.1'
+    def android_support_lib_version = '28.0.0-rc01'
     def rxjava_version = '2.2.0'
     def dagger_version = '2.16'
     def leakcanary_version = '1.6.1'

@@ -21,9 +21,13 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialListBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class MaterialListFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: MaterialListViewModel.Factory
@@ -52,6 +56,11 @@ class MaterialListFragment : DaggerFragment() {
         binding.viewModel = viewModel
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Entrance - MaterialList", requireActivity())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

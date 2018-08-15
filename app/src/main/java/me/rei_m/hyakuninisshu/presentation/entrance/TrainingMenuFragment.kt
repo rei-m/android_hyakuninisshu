@@ -25,9 +25,13 @@ import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.presentation.enums.*
 import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class TrainingMenuFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: TrainingMenuViewModel.Factory
@@ -66,6 +70,11 @@ class TrainingMenuFragment : DaggerFragment() {
         binding.viewModel = viewModel
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Entrance - TrainingMenu", requireActivity())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

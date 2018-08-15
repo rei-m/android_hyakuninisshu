@@ -22,9 +22,13 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class ExamMenuFragment : DaggerFragment(), FragmentExt {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: ExamMenuViewModel.Factory
@@ -39,6 +43,11 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
         binding.viewModel = viewModel
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Entrance - ExamMenu", requireActivity())
     }
 
     @dagger.Module
