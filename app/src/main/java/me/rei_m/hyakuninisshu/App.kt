@@ -34,6 +34,7 @@ import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
 import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingExamActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingActivity
+import me.rei_m.hyakuninisshu.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -65,6 +66,8 @@ open class App : DaggerApplication() {
     protected open fun initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
+        } else {
+            Timber.plant(CrashlyticsTree())
         }
     }
 
