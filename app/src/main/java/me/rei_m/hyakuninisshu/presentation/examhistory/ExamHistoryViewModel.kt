@@ -17,14 +17,11 @@ import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import javax.inject.Inject
 
-class ExamHistoryViewModel(
-        store: ExamHistoryStore,
-        actionDispatcher: ExamActionDispatcher
-) : LiveDataExt {
+class ExamHistoryViewModel(store: ExamHistoryStore, actionDispatcher: ExamActionDispatcher) {
 
     val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
 
@@ -36,11 +33,13 @@ class ExamHistoryViewModel(
         actionDispatcher.fetchAll()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
-                                      private val storeFactory: ExamHistoryStore.Factory) : ViewModelFactory {
-        fun create(activity: FragmentActivity): ExamHistoryViewModel {
-            val store = obtainActivityStore(activity, ExamHistoryStore::class.java, storeFactory)
-            return ExamHistoryViewModel(store, actionDispatcher)
-        }
+    class Factory @Inject constructor(
+        private val actionDispatcher: ExamActionDispatcher,
+        private val storeFactory: ExamHistoryStore.Factory
+    ) : ViewModelFactory {
+        fun create(activity: FragmentActivity) = ExamHistoryViewModel(
+            obtainActivityStore(activity, ExamHistoryStore::class.java, storeFactory),
+            actionDispatcher
+        )
     }
 }

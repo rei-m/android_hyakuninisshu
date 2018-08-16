@@ -32,17 +32,17 @@ import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.ext.setupActionBar
+import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class MaterialDetailActivity : DaggerAppCompatActivity(),
-    AlertDialogFragment.OnDialogInteractionListener,
-    AppCompatActivityExt {
+    AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -69,13 +69,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         super.onCreate(savedInstanceState)
         materialDetailViewModel = viewModelFactory.create(this, colorFilter, lastPosition)
         materialDetailViewModel.unhandledErrorEvent.observe(this, Observer {
-            showDialogFragment(AlertDialogFragment.TAG) {
-                AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_unhandled_error,
-                    true,
-                    false)
-            }
+            showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
         })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail)

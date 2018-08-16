@@ -25,7 +25,7 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
@@ -156,7 +156,7 @@ class MaterialEditFragment : DaggerFragment(),
         abstract fun contributeInjector(): MaterialEditFragment
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "MaterialEditFragment"
 

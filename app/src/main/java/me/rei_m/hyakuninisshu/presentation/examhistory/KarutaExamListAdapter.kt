@@ -19,12 +19,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import me.rei_m.hyakuninisshu.databinding.AdapterItemKarutaExamBinding
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
-import me.rei_m.hyakuninisshu.ext.ContextExt
+import me.rei_m.hyakuninisshu.ext.adHeight
 
 class KarutaExamListAdapter(
-        context: Context,
-        private var karutaExamList: List<KarutaExam>
-) : RecyclerView.Adapter<KarutaExamListAdapter.ItemViewHolder>(), ContextExt {
+    context: Context,
+    private var karutaExamList: List<KarutaExam>
+) : RecyclerView.Adapter<KarutaExamListAdapter.ItemViewHolder>() {
 
     private val itemPaddingBottom = 0
 
@@ -32,9 +32,9 @@ class KarutaExamListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = AdapterItemKarutaExamBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return ItemViewHolder(binding)
     }
@@ -47,10 +47,10 @@ class KarutaExamListAdapter(
                 itemPaddingBottom
             }
             holder.binding.layoutRoot.setPadding(
-                    holder.binding.layoutRoot.paddingLeft,
-                    holder.binding.layoutRoot.paddingTop,
-                    holder.binding.layoutRoot.paddingRight,
-                    paddingBottom
+                holder.binding.layoutRoot.paddingLeft,
+                holder.binding.layoutRoot.paddingTop,
+                holder.binding.layoutRoot.paddingRight,
+                paddingBottom
             )
             exam = karutaExamList[position]
             executePendingBindings()
@@ -64,5 +64,7 @@ class KarutaExamListAdapter(
         notifyDataSetChanged()
     }
 
-    class ItemViewHolder(val binding: AdapterItemKarutaExamBinding) : RecyclerView.ViewHolder(binding.root)
+    class ItemViewHolder(
+        val binding: AdapterItemKarutaExamBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 }

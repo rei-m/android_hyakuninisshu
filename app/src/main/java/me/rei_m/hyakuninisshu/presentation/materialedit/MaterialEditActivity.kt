@@ -30,16 +30,17 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.ext.addFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
+import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class MaterialEditActivity : DaggerAppCompatActivity(),
     MaterialEditFragment.OnFragmentInteractionListener,
-    AlertDialogFragment.OnDialogInteractionListener,
-    AppCompatActivityExt {
+    AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
@@ -76,13 +77,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
     }
 
     override fun onError() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                R.string.text_title_error,
-                R.string.text_message_unhandled_error,
-                true,
-                false)
-        }
+        showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
     }
 
     override fun onAlertPositiveClick() {

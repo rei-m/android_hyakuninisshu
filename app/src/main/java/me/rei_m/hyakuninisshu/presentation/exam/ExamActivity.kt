@@ -31,7 +31,9 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityExamBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
+import me.rei_m.hyakuninisshu.ext.replaceFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
+import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
@@ -42,10 +44,9 @@ import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class ExamActivity : DaggerAppCompatActivity(),
-        CoreInteractionListener,
-        ExamResultFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnDialogInteractionListener,
-        AppCompatActivityExt {
+    CoreInteractionListener,
+    ExamResultFragment.OnFragmentInteractionListener,
+    AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
     lateinit var viewModelFactory: ExamViewModel.Factory
@@ -104,10 +105,10 @@ class ExamActivity : DaggerAppCompatActivity(),
     override fun onGoToResult() {
         if (supportFragmentManager.findFragmentByTag(ExamResultFragment.TAG) == null) {
             replaceFragment(
-                    R.id.content,
-                    ExamResultFragment.newInstance(),
-                    ExamResultFragment.TAG,
-                    FragmentTransaction.TRANSIT_FRAGMENT_FADE
+                R.id.content,
+                ExamResultFragment.newInstance(),
+                ExamResultFragment.TAG,
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE
             )
         }
     }
@@ -117,13 +118,7 @@ class ExamActivity : DaggerAppCompatActivity(),
     }
 
     override fun onErrorFinish() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_aggregate_error,
-                    true,
-                    false)
-        }
+        showAlertDialog(R.string.text_title_error, R.string.text_message_aggregate_error)
     }
 
     override fun onAlertPositiveClick() {
@@ -139,8 +134,8 @@ class ExamActivity : DaggerAppCompatActivity(),
         val adView = adViewObserver.adView()
 
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

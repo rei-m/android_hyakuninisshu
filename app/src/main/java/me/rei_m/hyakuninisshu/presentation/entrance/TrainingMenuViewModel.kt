@@ -14,24 +14,24 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.MutableLiveData
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
+import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.enums.*
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class TrainingMenuViewModel(
-        trainingRangeFrom: TrainingRangeFrom,
-        trainingRangeTo: TrainingRangeTo,
-        kimariji: KimarijiFilter,
-        kamiNoKuStyle: KarutaStyleFilter,
-        shimoNoKuStyle: KarutaStyleFilter,
-        color: ColorFilter,
-        private val navigator: Navigator,
-        private val analyticsHelper: AnalyticsHelper
-): MutableLiveDataExt {
+    trainingRangeFrom: TrainingRangeFrom,
+    trainingRangeTo: TrainingRangeTo,
+    kimariji: KimarijiFilter,
+    kamiNoKuStyle: KarutaStyleFilter,
+    shimoNoKuStyle: KarutaStyleFilter,
+    color: ColorFilter,
+    private val navigator: Navigator,
+    private val analyticsHelper: AnalyticsHelper
+) {
     val trainingRangeFrom = MutableLiveData<TrainingRangeFrom>().withValue(trainingRangeFrom)
 
     val trainingRangeTo = MutableLiveData<TrainingRangeTo>().withValue(trainingRangeTo)
@@ -49,21 +49,23 @@ class TrainingMenuViewModel(
     fun onClickStartTraining() {
 
         if (trainingRangeFrom.value!!.ordinal > trainingRangeTo.value!!.ordinal) {
-            snackBarMessage.value =  R.string.text_message_invalid_training_range
+            snackBarMessage.value = R.string.text_message_invalid_training_range
             return
         }
 
         analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
         navigator.navigateToTraining(trainingRangeFrom.value!!,
-                trainingRangeTo.value!!,
-                kimariji.value!!,
-                color.value!!,
-                kamiNoKuStyle.value!!,
-                shimoNoKuStyle.value!!)
+            trainingRangeTo.value!!,
+            kimariji.value!!,
+            color.value!!,
+            kamiNoKuStyle.value!!,
+            shimoNoKuStyle.value!!)
     }
 
-    class Factory @Inject constructor(private val navigator: Navigator,
-                                      private val analyticsHelper: AnalyticsHelper) {
+    class Factory @Inject constructor(
+        private val navigator: Navigator,
+        private val analyticsHelper: AnalyticsHelper
+    ) {
 
         var trainingRangeFrom = TrainingRangeFrom.ONE
         var trainingRangeTo = TrainingRangeTo.ONE_HUNDRED
@@ -73,14 +75,14 @@ class TrainingMenuViewModel(
         var color = ColorFilter.ALL
 
         fun create(): TrainingMenuViewModel = TrainingMenuViewModel(
-                trainingRangeFrom,
-                trainingRangeTo,
-                kimariji,
-                kamiNoKuStyle,
-                shimoNoKuStyle,
-                color,
-                navigator,
-                analyticsHelper
+            trainingRangeFrom,
+            trainingRangeTo,
+            kimariji,
+            kamiNoKuStyle,
+            shimoNoKuStyle,
+            color,
+            navigator,
+            analyticsHelper
         )
     }
 }

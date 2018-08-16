@@ -16,17 +16,17 @@ package me.rei_m.hyakuninisshu.action.karuta
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class KarutaActionDispatcher @Inject constructor(
-        private val karutaRepository: KarutaRepository,
-        private val dispatcher: Dispatcher,
-        private val schedulerProvider: SchedulerProvider
-) : SingleExt {
+    private val karutaRepository: KarutaRepository,
+    private val dispatcher: Dispatcher,
+    private val schedulerProvider: SchedulerProvider
+) {
 
     /**
      * 指定の詩を取り出す.

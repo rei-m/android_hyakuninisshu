@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2018. Rei Matsushita
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+ * the License for the specific language governing permissions and limitations under the License.
+ */
+
 package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
 import android.databinding.BindingAdapter
@@ -13,7 +26,7 @@ import me.rei_m.hyakuninisshu.ext.diffString
 import me.rei_m.hyakuninisshu.ext.toKarutaNoStr
 import me.rei_m.hyakuninisshu.ext.toKimarijiStr
 import me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
-import me.rei_m.hyakuninisshu.util.Constants
+import me.rei_m.hyakuninisshu.util.SPACE
 import java.util.*
 
 @BindingAdapter("verticalText")
@@ -98,7 +111,7 @@ fun setTextKamiNoKuKana(view: TextView,
 
     var finallyKimariji = 0
     for (i in 0 until kamiNoKu.length - 1) {
-        if (kamiNoKu.substring(i, i + 1) == Constants.SPACE) {
+        if (kamiNoKu.substring(i, i + 1) == SPACE) {
             finallyKimariji++
         } else {
             if (kimariji < i) {

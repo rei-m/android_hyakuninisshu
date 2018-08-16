@@ -23,13 +23,12 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
+import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
-class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
+class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
 
     @Inject
     lateinit var storeFactory: MaterialDetailStore.Factory
@@ -72,7 +71,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
         abstract fun contributeInjector(): MaterialDetailFragment
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "MaterialDetailFragment"
 

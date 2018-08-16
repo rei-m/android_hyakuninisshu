@@ -17,15 +17,17 @@ import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
 
-class TrainingResultViewModel(store: TrainingStore,
-                              private val actionDispatcher: TrainingActionDispatcher,
-                              private val navigator: Navigator,
-                              private val analyticsHelper: AnalyticsHelper) : LiveDataExt {
+class TrainingResultViewModel(
+    store: TrainingStore,
+    private val actionDispatcher: TrainingActionDispatcher,
+    private val navigator: Navigator,
+    private val analyticsHelper: AnalyticsHelper
+) {
 
     val score: LiveData<String> = store.result.map { "${it.correctCount}/${it.quizCount}" }
 
@@ -47,15 +49,17 @@ class TrainingResultViewModel(store: TrainingStore,
         navigator.back()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: TrainingActionDispatcher,
-                                      private val storeFactory: TrainingStore.Factory,
-                                      private val navigator: Navigator,
-                                      private val analyticsHelper: AnalyticsHelper) : ViewModelFactory {
-        fun create(activity: FragmentActivity): TrainingResultViewModel = TrainingResultViewModel(
-                obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
-                actionDispatcher,
-                navigator,
-                analyticsHelper
+    class Factory @Inject constructor(
+        private val actionDispatcher: TrainingActionDispatcher,
+        private val storeFactory: TrainingStore.Factory,
+        private val navigator: Navigator,
+        private val analyticsHelper: AnalyticsHelper
+    ) : ViewModelFactory {
+        fun create(activity: FragmentActivity) = TrainingResultViewModel(
+            obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
+            actionDispatcher,
+            navigator,
+            analyticsHelper
         )
     }
 }

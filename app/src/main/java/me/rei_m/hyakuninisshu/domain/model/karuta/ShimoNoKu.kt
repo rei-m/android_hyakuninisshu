@@ -14,15 +14,16 @@
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
-
-import me.rei_m.hyakuninisshu.util.Constants.SPACE
+import me.rei_m.hyakuninisshu.util.SPACE
 
 /**
  * 下の句.
  */
-class ShimoNoKu(identifier: ShimoNoKuIdentifier,
-                val fourth: Phrase,
-                val fifth: Phrase) : AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier>(identifier) {
+class ShimoNoKu(
+    identifier: ShimoNoKuIdentifier,
+    val fourth: Phrase,
+    val fifth: Phrase
+) : AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier>(identifier) {
 
     val kanji = "${fourth.kanji}$SPACE${fifth.kanji}"
 

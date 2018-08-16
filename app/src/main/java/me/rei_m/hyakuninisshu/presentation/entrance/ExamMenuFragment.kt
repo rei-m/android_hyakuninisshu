@@ -21,11 +21,10 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.ext.FragmentExt
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
-class ExamMenuFragment : DaggerFragment(), FragmentExt {
+class ExamMenuFragment : DaggerFragment() {
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper

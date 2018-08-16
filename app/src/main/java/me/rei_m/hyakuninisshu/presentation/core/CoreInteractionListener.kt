@@ -17,12 +17,13 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
+import me.rei_m.hyakuninisshu.ext.addFragment
+import me.rei_m.hyakuninisshu.ext.replaceFragment
+import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.training.TrainingResultFragment
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 
-interface CoreInteractionListener: AppCompatActivityExt {
+interface CoreInteractionListener {
 
     val kamiNoKuStyle: KarutaStyleFilter
 
@@ -38,17 +39,21 @@ interface CoreInteractionListener: AppCompatActivityExt {
 
     fun AppCompatActivity.onReceiveKarutaQuizId(karutaQuizId: KarutaQuizIdentifier) {
         if (supportFragmentManager.fragments.isEmpty()) {
-            addFragment(R.id.content, QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
+            addFragment(
+                R.id.content,
+                QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
+                QuizFragment.TAG
+            )
             return
         }
 
         supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG)?.let { fragment ->
             if (fragment is QuizAnswerFragment && fragment.karutaQuizId != karutaQuizId) {
                 replaceFragment(
-                        R.id.content,
-                        QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
-                        QuizFragment.TAG,
-                        FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
+                    R.id.content,
+                    QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
+                    QuizFragment.TAG,
+                    FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
                 )
             }
             return
@@ -56,10 +61,10 @@ interface CoreInteractionListener: AppCompatActivityExt {
 
         supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
             replaceFragment(
-                    R.id.content,
-                    QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
-                    QuizFragment.TAG,
-                    FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
+                R.id.content,
+                QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
+                QuizFragment.TAG,
+                FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
             )
             return
         }
@@ -68,21 +73,15 @@ interface CoreInteractionListener: AppCompatActivityExt {
     fun AppCompatActivity.openAnswer(quizId: KarutaQuizIdentifier) {
         if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
             replaceFragment(
-                    R.id.content,
-                    QuizAnswerFragment.newInstance(quizId),
-                    QuizAnswerFragment.TAG,
-                    FragmentTransaction.TRANSIT_FRAGMENT_FADE
+                R.id.content,
+                QuizAnswerFragment.newInstance(quizId),
+                QuizAnswerFragment.TAG,
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE
             )
         }
     }
 
     fun AppCompatActivity.showError() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_quiz_error,
-                    true,
-                    false)
-        }
+        showAlertDialog(R.string.text_title_error, R.string.text_message_quiz_error)
     }
 }

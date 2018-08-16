@@ -24,7 +24,7 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentKarutaBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
@@ -93,7 +93,7 @@ class KarutaFragment : DaggerFragment() {
         fun onError()
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "KarutaFragment"
 

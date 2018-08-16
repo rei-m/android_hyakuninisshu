@@ -17,14 +17,11 @@ import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import javax.inject.Inject
 
-class ExamViewModel(
-        store: ExamStore,
-        private val actionDispatcher: ExamActionDispatcher
-) : LiveDataExt {
+class ExamViewModel(store: ExamStore, private val actionDispatcher: ExamActionDispatcher) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -40,11 +37,13 @@ class ExamViewModel(
         actionDispatcher.fetchNext()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
-                                      private val storeFactory: ExamStore.Factory): ViewModelFactory {
-        fun create(activity: FragmentActivity): ExamViewModel = ExamViewModel(
-                obtainActivityStore(activity, ExamStore::class.java, storeFactory),
-                actionDispatcher
+    class Factory @Inject constructor(
+        private val actionDispatcher: ExamActionDispatcher,
+        private val storeFactory: ExamStore.Factory
+    ) : ViewModelFactory {
+        fun create(activity: FragmentActivity) = ExamViewModel(
+            obtainActivityStore(activity, ExamStore::class.java, storeFactory),
+            actionDispatcher
         )
     }
 }

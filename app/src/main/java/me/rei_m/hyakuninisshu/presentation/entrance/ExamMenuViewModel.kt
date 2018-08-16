@@ -15,19 +15,19 @@ package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class ExamMenuViewModel(
-        store: EntranceStore,
-        actionDispatcher: ExamActionDispatcher,
-        private val navigator: Navigator,
-        private val analyticsHelper: AnalyticsHelper
-) : LiveDataExt {
+    store: EntranceStore,
+    actionDispatcher: ExamActionDispatcher,
+    private val navigator: Navigator,
+    private val analyticsHelper: AnalyticsHelper
+) {
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
 
     val score: LiveData<String?> = store.recentExam.map { it?.result?.score }
@@ -52,15 +52,17 @@ class ExamMenuViewModel(
         navigator.navigateToTrainingExam()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
-                                      private val storeFactory: EntranceStore.Factory,
-                                      private val navigator: Navigator,
-                                      private val analyticsHelper: AnalyticsHelper) : ViewModelFactory {
-        fun create(activity: FragmentActivity): ExamMenuViewModel = ExamMenuViewModel(
-                obtainActivityStore(activity, EntranceStore::class.java, storeFactory),
-                actionDispatcher,
-                navigator,
-                analyticsHelper
+    class Factory @Inject constructor(
+        private val actionDispatcher: ExamActionDispatcher,
+        private val storeFactory: EntranceStore.Factory,
+        private val navigator: Navigator,
+        private val analyticsHelper: AnalyticsHelper
+    ) : ViewModelFactory {
+        fun create(activity: FragmentActivity) = ExamMenuViewModel(
+            obtainActivityStore(activity, EntranceStore::class.java, storeFactory),
+            actionDispatcher,
+            navigator,
+            analyticsHelper
         )
     }
 }

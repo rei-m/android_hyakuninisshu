@@ -20,8 +20,8 @@ import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
-import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
+import me.rei_m.hyakuninisshu.ext.setIfNull
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
@@ -29,21 +29,21 @@ import javax.inject.Inject
 import me.rei_m.hyakuninisshu.R as Res
 
 class MaterialEditViewModel(
-        private val store: MaterialEditStore,
-        private val actionDispatcher: MaterialActionDispatcher,
-        private val karutaId: KarutaIdentifier,
-        firstPhraseKanji: String?,
-        firstPhraseKana: String?,
-        secondPhraseKanji: String?,
-        secondPhraseKana: String?,
-        thirdPhraseKanji: String?,
-        thirdPhraseKana: String?,
-        fourthPhraseKanji: String?,
-        fourthPhraseKana: String?,
-        fifthPhraseKanji: String?,
-        fifthPhraseKana: String?,
-        private val navigator: Navigator
-) : LiveDataExt, MutableLiveDataExt {
+    private val store: MaterialEditStore,
+    private val actionDispatcher: MaterialActionDispatcher,
+    private val karutaId: KarutaIdentifier,
+    firstPhraseKanji: String?,
+    firstPhraseKana: String?,
+    secondPhraseKanji: String?,
+    secondPhraseKana: String?,
+    thirdPhraseKanji: String?,
+    thirdPhraseKana: String?,
+    fourthPhraseKanji: String?,
+    fourthPhraseKana: String?,
+    fifthPhraseKanji: String?,
+    fifthPhraseKana: String?,
+    private val navigator: Navigator
+) {
 
     private val karuta: LiveData<Karuta?> = store.karuta
 
@@ -132,28 +132,28 @@ class MaterialEditViewModel(
         val fifthPhraseKana = this.fifthPhraseKana.value ?: ""
 
         if (
-                firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
-                secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
-                thirdPhraseKanji.isBlank() || thirdPhraseKana.isBlank() ||
-                fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
-                fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
+            firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
+            secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
+            thirdPhraseKanji.isBlank() || thirdPhraseKana.isBlank() ||
+            fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
+            fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
         ) {
             snackBarMessage.value = Res.string.text_message_edit_error
             return
         }
 
         actionDispatcher.edit(
-                karutaId,
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
+            karutaId,
+            firstPhraseKanji,
+            firstPhraseKana,
+            secondPhraseKanji,
+            secondPhraseKana,
+            thirdPhraseKanji,
+            thirdPhraseKana,
+            fourthPhraseKanji,
+            fourthPhraseKana,
+            fifthPhraseKanji,
+            fifthPhraseKana
         )
     }
 
@@ -170,33 +170,35 @@ class MaterialEditViewModel(
         val fifthPhraseKana = this.fifthPhraseKana.value ?: ""
 
         if (
-                firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
-                secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
-                thirdPhraseKanji.isBlank() || thirdPhraseKana.isBlank() ||
-                fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
-                fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
+            firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
+            secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
+            thirdPhraseKanji.isBlank() || thirdPhraseKana.isBlank() ||
+            fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
+            fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
         ) {
             snackBarMessage.value = Res.string.text_message_edit_error
             return
         }
 
         confirmEditEvent.value = ConfirmMaterialEditDialogFragment.newInstance(
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
+            firstPhraseKanji,
+            firstPhraseKana,
+            secondPhraseKanji,
+            secondPhraseKana,
+            thirdPhraseKanji,
+            thirdPhraseKana,
+            fourthPhraseKanji,
+            fourthPhraseKana,
+            fifthPhraseKanji,
+            fifthPhraseKana
         )
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: MaterialActionDispatcher,
-                                      private val storeFactory: MaterialEditStore.Factory,
-                                      private val navigator: Navigator): ViewModelFactory {
+    class Factory @Inject constructor(
+        private val actionDispatcher: MaterialActionDispatcher,
+        private val storeFactory: MaterialEditStore.Factory,
+        private val navigator: Navigator
+    ) : ViewModelFactory {
 
         var firstPhraseKanji: String? = null
         var firstPhraseKana: String? = null
@@ -209,21 +211,21 @@ class MaterialEditViewModel(
         var fifthPhraseKanji: String? = null
         var fifthPhraseKana: String? = null
 
-        fun create(activity: FragmentActivity, karutaId: KarutaIdentifier): MaterialEditViewModel = MaterialEditViewModel(
-                obtainActivityStore(activity, MaterialEditStore::class.java, storeFactory),
-                actionDispatcher,
-                karutaId,
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana,
-                navigator
+        fun create(activity: FragmentActivity, karutaId: KarutaIdentifier) = MaterialEditViewModel(
+            obtainActivityStore(activity, MaterialEditStore::class.java, storeFactory),
+            actionDispatcher,
+            karutaId,
+            firstPhraseKanji,
+            firstPhraseKana,
+            secondPhraseKanji,
+            secondPhraseKana,
+            thirdPhraseKanji,
+            thirdPhraseKana,
+            fourthPhraseKanji,
+            fourthPhraseKana,
+            fifthPhraseKanji,
+            fifthPhraseKana,
+            navigator
         )
     }
 }

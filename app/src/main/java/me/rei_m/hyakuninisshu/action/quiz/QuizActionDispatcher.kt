@@ -21,7 +21,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import java.util.*
 import javax.inject.Inject
@@ -29,11 +29,11 @@ import javax.inject.Singleton
 
 @Singleton
 class QuizActionDispatcher @Inject constructor(
-        private val karutaRepository: KarutaRepository,
-        private val karutaQuizRepository: KarutaQuizRepository,
-        private val dispatcher: Dispatcher,
-        private val schedulerProvider: SchedulerProvider
-) : SingleExt {
+    private val karutaRepository: KarutaRepository,
+    private val karutaQuizRepository: KarutaQuizRepository,
+    private val dispatcher: Dispatcher,
+    private val schedulerProvider: SchedulerProvider
+) {
 
     /**
      * 指定の問題を取り出す.
@@ -92,8 +92,8 @@ class QuizActionDispatcher @Inject constructor(
 
     private fun KarutaQuiz.content(): Single<KarutaQuizContent> {
         val choiceSingle: Single<List<Karuta>> = Observable.fromIterable<KarutaIdentifier>(choiceList)
-                .flatMapSingle<Karuta> { karutaRepository.findBy(it) }
-                .toList()
+            .flatMapSingle<Karuta> { karutaRepository.findBy(it) }
+            .toList()
 
         val countSingle: Single<KarutaQuizCounter> = karutaQuizRepository.countQuizByAnswered()
 

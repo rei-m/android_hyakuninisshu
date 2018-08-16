@@ -20,13 +20,13 @@ import android.view.ViewGroup
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.ext.ContextExt
+import me.rei_m.hyakuninisshu.ext.adHeight
 
 class MaterialListAdapter(
-        context: Context,
-        private var karutaList: List<Karuta>,
-        private var viewModel: MaterialListViewModel
-) : RecyclerView.Adapter<MaterialListAdapter.ItemViewHolder>(), ContextExt {
+    context: Context,
+    private var karutaList: List<Karuta>,
+    private var viewModel: MaterialListViewModel
+) : RecyclerView.Adapter<MaterialListAdapter.ItemViewHolder>() {
 
     private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.padding_s)
 
@@ -34,9 +34,9 @@ class MaterialListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = AdapterItemMaterialKarutaBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         binding.listener = object : OnItemInteractionListener {
             override fun onItemClicked(position: Int) {
@@ -54,10 +54,10 @@ class MaterialListAdapter(
                 itemPaddingBottom
             }
             holder.binding.layoutRoot.setPadding(
-                    holder.binding.layoutRoot.paddingLeft,
-                    holder.binding.layoutRoot.paddingTop,
-                    holder.binding.layoutRoot.paddingRight,
-                    paddingBottom
+                holder.binding.layoutRoot.paddingLeft,
+                holder.binding.layoutRoot.paddingTop,
+                holder.binding.layoutRoot.paddingRight,
+                paddingBottom
             )
             this.karuta = karutaList[position]
             this.position = position
@@ -76,5 +76,7 @@ class MaterialListAdapter(
         fun onItemClicked(position: Int)
     }
 
-    class ItemViewHolder(val binding: AdapterItemMaterialKarutaBinding) : RecyclerView.ViewHolder(binding.root)
+    class ItemViewHolder(
+        val binding: AdapterItemMaterialKarutaBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 }

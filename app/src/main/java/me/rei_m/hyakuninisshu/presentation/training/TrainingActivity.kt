@@ -31,20 +31,20 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.ext.replaceFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.*
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class TrainingActivity : DaggerAppCompatActivity(),
-        AlertDialogFragment.OnDialogInteractionListener,
-        CoreInteractionListener,
-        AppCompatActivityExt {
+    AlertDialogFragment.OnDialogInteractionListener,
+    CoreInteractionListener {
 
     @Inject
     lateinit var viewModelFactory: TrainingViewModel.Factory
@@ -125,10 +125,10 @@ class TrainingActivity : DaggerAppCompatActivity(),
     override fun onGoToResult() {
         if (supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG) == null) {
             replaceFragment(
-                    R.id.content,
-                    TrainingResultFragment.newInstance(),
-                    TrainingResultFragment.TAG,
-                    FragmentTransaction.TRANSIT_FRAGMENT_FADE
+                R.id.content,
+                TrainingResultFragment.newInstance(),
+                TrainingResultFragment.TAG,
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE
             )
         }
     }
@@ -150,8 +150,8 @@ class TrainingActivity : DaggerAppCompatActivity(),
         val adView = adViewObserver.adView()
 
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

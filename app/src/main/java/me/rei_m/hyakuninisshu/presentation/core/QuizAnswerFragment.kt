@@ -24,7 +24,7 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
@@ -96,7 +96,7 @@ class QuizAnswerFragment : DaggerFragment() {
         abstract fun contributeInjector(): QuizAnswerFragment
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "QuizAnswerFragment"
 

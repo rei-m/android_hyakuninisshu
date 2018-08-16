@@ -18,7 +18,7 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
@@ -26,10 +26,10 @@ import javax.inject.Singleton
 
 @Singleton
 class MaterialActionDispatcher @Inject constructor(
-        private val karutaRepository: KarutaRepository,
-        private val dispatcher: Dispatcher,
-        private val schedulerProvider: SchedulerProvider
-) : SingleExt {
+    private val karutaRepository: KarutaRepository,
+    private val dispatcher: Dispatcher,
+    private val schedulerProvider: SchedulerProvider
+) {
 
     /**
      * 指定した色の該当する歌をすべて取り出す.
@@ -86,16 +86,16 @@ class MaterialActionDispatcher @Inject constructor(
 
         karutaRepository.findBy(karutaId).flatMap<Karuta> { karuta ->
             karuta.updatePhrase(
-                    firstPhraseKanji,
-                    firstPhraseKana,
-                    secondPhraseKanji,
-                    secondPhraseKana,
-                    thirdPhraseKanji,
-                    thirdPhraseKana,
-                    fourthPhraseKanji,
-                    fourthPhraseKana,
-                    fifthPhraseKanji,
-                    fifthPhraseKana
+                firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana
             ).let {
                 return@flatMap karutaRepository.store(it).andThen(Single.just(karuta))
             }

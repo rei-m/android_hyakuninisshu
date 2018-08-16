@@ -31,7 +31,7 @@ import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
@@ -215,7 +215,7 @@ class QuizFragment : DaggerFragment() {
         abstract fun contributeInjector(): QuizFragment
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "QuizFragment"
 

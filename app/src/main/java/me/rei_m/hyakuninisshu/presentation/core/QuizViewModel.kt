@@ -20,8 +20,8 @@ import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
-import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
+import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Device
@@ -30,13 +30,13 @@ import java.util.*
 import javax.inject.Inject
 
 class QuizViewModel(
-        store: QuizStore,
-        private val actionDispatcher: QuizActionDispatcher,
-        device: Device,
-        private val quizId: KarutaQuizIdentifier,
-        kamiNoKuStyle: KarutaStyleFilter,
-        shimoNoKuStyle: KarutaStyleFilter
-) : LiveDataExt, MutableLiveDataExt {
+    store: QuizStore,
+    private val actionDispatcher: QuizActionDispatcher,
+    device: Device,
+    private val quizId: KarutaQuizIdentifier,
+    kamiNoKuStyle: KarutaStyleFilter,
+    shimoNoKuStyle: KarutaStyleFilter
+) {
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
@@ -118,19 +118,23 @@ class QuizViewModel(
         openAnswerEvent.value = quizId
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: QuizActionDispatcher,
-                                      private val storeFactory: QuizStore.Factory,
-                                      private val device: Device) : ViewModelFactory {
-        fun create(fragment: Fragment,
-                   quizId: KarutaQuizIdentifier,
-                   kamiNoKuStyle: KarutaStyleFilter,
-                   shimoNoKuStyle: KarutaStyleFilter): QuizViewModel = QuizViewModel(
-                obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
-                actionDispatcher,
-                device,
-                quizId,
-                kamiNoKuStyle,
-                shimoNoKuStyle
+    class Factory @Inject constructor(
+        private val actionDispatcher: QuizActionDispatcher,
+        private val storeFactory: QuizStore.Factory,
+        private val device: Device
+    ) : ViewModelFactory {
+        fun create(
+            fragment: Fragment,
+            quizId: KarutaQuizIdentifier,
+            kamiNoKuStyle: KarutaStyleFilter,
+            shimoNoKuStyle: KarutaStyleFilter
+        ) = QuizViewModel(
+            obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
+            actionDispatcher,
+            device,
+            quizId,
+            kamiNoKuStyle,
+            shimoNoKuStyle
         )
     }
 }

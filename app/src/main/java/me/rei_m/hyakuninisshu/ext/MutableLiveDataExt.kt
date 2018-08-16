@@ -15,15 +15,13 @@ package me.rei_m.hyakuninisshu.ext
 
 import android.arch.lifecycle.MutableLiveData
 
-interface MutableLiveDataExt {
-    fun <T> MutableLiveData<T>.withValue(value: T): MutableLiveData<T> {
-        this.value = value
-        return this
-    }
+fun <T> MutableLiveData<T>.withValue(value: T): MutableLiveData<T> {
+    this.value = value
+    return this
+}
 
-    fun <T> MutableLiveData<T>.setIfNull(value: T) {
-        if (this.value == null) {
-            this.value = value
-        }
+fun <T> MutableLiveData<T>.setIfNull(value: T) {
+    if (this.value == null) {
+        this.value = value
     }
 }

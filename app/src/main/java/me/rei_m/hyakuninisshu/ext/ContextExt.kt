@@ -16,7 +16,5 @@ package me.rei_m.hyakuninisshu.ext
 import android.content.Context
 import com.google.android.gms.ads.AdSize
 
-interface ContextExt {
-    val Context.adHeight
-        get() = AdSize.SMART_BANNER.getHeightInPixels(this)
-}
+val Context.adHeight
+    get() = AdSize.SMART_BANNER.getHeightInPixels(this)
