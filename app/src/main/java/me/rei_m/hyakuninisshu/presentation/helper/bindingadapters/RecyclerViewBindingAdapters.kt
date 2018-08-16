@@ -16,12 +16,22 @@ package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.presentation.entrance.MaterialListAdapter
+import me.rei_m.hyakuninisshu.presentation.examhistory.KarutaExamListAdapter
 
 @BindingAdapter("materials")
 fun setMaterial(view: RecyclerView, karutaList: List<Karuta>?) {
     karutaList ?: return
     with(view.adapter as MaterialListAdapter) {
         replaceData(karutaList)
+    }
+}
+
+@BindingAdapter("karutaExamList")
+fun setKarutaExamList(view: RecyclerView, karutaExamList: List<KarutaExam>?) {
+    karutaExamList ?: return
+    with(view.adapter as KarutaExamListAdapter) {
+        replaceData(karutaExamList)
     }
 }

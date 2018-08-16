@@ -26,17 +26,21 @@ import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class MaterialEditFragment : DaggerFragment(),
-        ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
+    ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: MaterialEditViewModel.Factory
 
     private lateinit var binding: FragmentMaterialEditBinding
 
-    private lateinit var viewModel: MaterialEditViewModel
+    private lateinit var materialEditViewModel: MaterialEditViewModel
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -46,7 +50,11 @@ class MaterialEditFragment : DaggerFragment(),
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         if (savedInstanceState != null) {
             with(viewModelFactory) {
                 firstPhraseKanji = savedInstanceState.getString(KEY_FIRST_KANJI, "")
@@ -62,37 +70,40 @@ class MaterialEditFragment : DaggerFragment(),
             }
         }
 
-        viewModel = viewModelFactory.create(requireActivity(), karutaId)
-        with(viewModel) {
-            confirmEditEvent.observe(this@MaterialEditFragment, Observer { dialog ->
-                dialog ?: return@Observer
-                fragmentManager?.let {
-                    dialog.setTargetFragment(this@MaterialEditFragment, 0)
-                    dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
-                }
-            })
-            snackBarMessage.observe(this@MaterialEditFragment, Observer {
-                it ?: return@Observer
-                Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null)
-                        .show()
-            })
-            unhandledErrorEvent.observe(this@MaterialEditFragment, Observer {
-                listener?.onError()
-            })
-        }
+        materialEditViewModel = viewModelFactory.create(requireActivity(), karutaId)
 
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false).apply {
+            viewModel = materialEditViewModel
             setLifecycleOwner(this@MaterialEditFragment)
         }
 
-        binding.viewModel = viewModel
+        materialEditViewModel.confirmEditEvent.observe(this, Observer { dialog ->
+            dialog ?: return@Observer
+            fragmentManager?.let {
+                dialog.setTargetFragment(this, 0)
+                dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
+            }
+        })
+        materialEditViewModel.snackBarMessage.observe(this, Observer {
+            it ?: return@Observer
+            Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
+                .setAction("Action", null)
+                .show()
+        })
+        materialEditViewModel.unhandledErrorEvent.observe(this, Observer {
+            listener?.onError()
+        })
 
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("MaterialEdit-${karutaId.value}", requireActivity())
+    }
+
     override fun onDestroyView() {
-        viewModel.onDestroyView()
+        materialEditViewModel.onDestroyView()
         super.onDestroyView()
     }
 
@@ -112,22 +123,22 @@ class MaterialEditFragment : DaggerFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         with(outState) {
-            putString(KEY_FIRST_KANJI, viewModel.firstPhraseKanji.value)
-            putString(KEY_FIRST_KANA, viewModel.firstPhraseKana.value)
-            putString(KEY_SECOND_KANJI, viewModel.secondPhraseKanji.value)
-            putString(KEY_SECOND_KANA, viewModel.secondPhraseKana.value)
-            putString(KEY_THIRD_KANJI, viewModel.thirdPhraseKanji.value)
-            putString(KEY_THIRD_KANA, viewModel.thirdPhraseKana.value)
-            putString(KEY_FOURTH_KANJI, viewModel.fourthPhraseKanji.value)
-            putString(KEY_FOURTH_KANA, viewModel.fourthPhraseKana.value)
-            putString(KEY_FIFTH_KANJI, viewModel.fifthPhraseKanji.value)
-            putString(KEY_FIFTH_KANA, viewModel.fifthPhraseKana.value)
+            putString(KEY_FIRST_KANJI, materialEditViewModel.firstPhraseKanji.value)
+            putString(KEY_FIRST_KANA, materialEditViewModel.firstPhraseKana.value)
+            putString(KEY_SECOND_KANJI, materialEditViewModel.secondPhraseKanji.value)
+            putString(KEY_SECOND_KANA, materialEditViewModel.secondPhraseKana.value)
+            putString(KEY_THIRD_KANJI, materialEditViewModel.thirdPhraseKanji.value)
+            putString(KEY_THIRD_KANA, materialEditViewModel.thirdPhraseKana.value)
+            putString(KEY_FOURTH_KANJI, materialEditViewModel.fourthPhraseKanji.value)
+            putString(KEY_FOURTH_KANA, materialEditViewModel.fourthPhraseKana.value)
+            putString(KEY_FIFTH_KANJI, materialEditViewModel.fifthPhraseKanji.value)
+            putString(KEY_FIFTH_KANA, materialEditViewModel.fifthPhraseKana.value)
         }
         super.onSaveInstanceState(outState)
     }
 
     override fun onClickUpdate() {
-        viewModel.updateMaterial()
+        materialEditViewModel.updateMaterial()
     }
 
     override fun onClickBack() {

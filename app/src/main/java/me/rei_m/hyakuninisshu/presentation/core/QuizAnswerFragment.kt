@@ -25,9 +25,13 @@ import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class QuizAnswerFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: QuizAnswerViewModel.Factory
@@ -40,26 +44,35 @@ class QuizAnswerFragment : DaggerFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(this, karutaQuizId).apply {
-            openNextQuizEvent.observe(this@QuizAnswerFragment, Observer {
-                listener?.onGoToNext()
-            })
-            openResultEvent.observe(this@QuizAnswerFragment, Observer {
-                listener?.onGoToResult()
-            })
-            unhandledErrorEvent.observe(this@QuizAnswerFragment, Observer {
-                listener?.onErrorQuiz()
-            })
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val quizAnswerViewModel = viewModelFactory.create(this, karutaQuizId)
 
         val binding = FragmentQuizAnswerBinding.inflate(inflater, container, false).apply {
+            viewModel = quizAnswerViewModel
             setLifecycleOwner(this@QuizAnswerFragment)
         }
 
-        binding.viewModel = viewModel
+        quizAnswerViewModel.openNextQuizEvent.observe(this, Observer {
+            listener?.onGoToNext()
+        })
+        quizAnswerViewModel.openResultEvent.observe(this, Observer {
+            listener?.onGoToResult()
+        })
+        quizAnswerViewModel.unhandledErrorEvent.observe(this, Observer {
+            listener?.onErrorQuiz()
+        })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("QuizAnswer", requireActivity())
     }
 
     override fun onAttach(context: Context) {

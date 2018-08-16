@@ -37,9 +37,9 @@ import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class MaterialEditActivity : DaggerAppCompatActivity(),
-        MaterialEditFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnDialogInteractionListener,
-        AppCompatActivityExt {
+    MaterialEditFragment.OnFragmentInteractionListener,
+    AlertDialogFragment.OnDialogInteractionListener,
+    AppCompatActivityExt {
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
@@ -78,10 +78,10 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
     override fun onError() {
         showDialogFragment(AlertDialogFragment.TAG) {
             AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_unhandled_error,
-                    true,
-                    false)
+                R.string.text_title_error,
+                R.string.text_message_unhandled_error,
+                true,
+                false)
         }
     }
 
@@ -97,8 +97,8 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         lifecycle.addObserver(adViewObserver)
         val adView = adViewObserver.adView()
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

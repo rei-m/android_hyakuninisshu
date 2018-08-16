@@ -32,14 +32,17 @@ class SupportFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: SupportViewModel.Factory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val supportViewModel = viewModelFactory.create()
 
         val binding = FragmentSupportBinding.inflate(inflater, container, false).apply {
+            viewModel = supportViewModel
             setLifecycleOwner(this@SupportFragment)
         }
-
-        binding.viewModel = viewModel
 
         return binding.root
     }
@@ -59,6 +62,6 @@ class SupportFragment : DaggerFragment() {
     companion object {
         const val TAG: String = "SupportFragment"
 
-        fun newInstance(): SupportFragment = SupportFragment()
+        fun newInstance() = SupportFragment()
     }
 }

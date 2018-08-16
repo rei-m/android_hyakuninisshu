@@ -26,6 +26,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
 import me.rei_m.hyakuninisshu.ext.LiveDataExt
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
@@ -39,14 +40,27 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = FragmentMaterialDetailBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@MaterialDetailFragment)
         }
 
-        obtainActivityStore(requireActivity(), MaterialDetailStore::class.java, storeFactory).karutaList.map {
+        val materialDetailStore = obtainActivityStore(
+            requireActivity(),
+            MaterialDetailStore::class.java,
+            storeFactory
+        )
+
+        materialDetailStore.karutaList.map {
             it.find { karuta -> karuta.identifier() == karutaId }
-        }.observe(this, Observer { binding.karuta = it })
+        }.observe(this, Observer {
+            it ?: return@Observer
+            binding.karuta = it
+        })
 
         return binding.root
     }

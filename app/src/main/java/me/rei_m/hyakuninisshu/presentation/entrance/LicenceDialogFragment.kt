@@ -42,6 +42,6 @@ class LicenceDialogFragment : DialogFragment() {
 
         const val TAG: String = "LicenceDialogFragment"
 
-        fun newInstance(): LicenceDialogFragment = LicenceDialogFragment()
+        fun newInstance() = LicenceDialogFragment()
     }
 }

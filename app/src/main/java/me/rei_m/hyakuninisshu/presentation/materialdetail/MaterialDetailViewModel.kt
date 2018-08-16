@@ -25,11 +25,11 @@ import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
 
 class MaterialDetailViewModel(
-        store: MaterialDetailStore,
-        actionDispatcher: MaterialActionDispatcher,
-        colorFilter: ColorFilter,
-        initialPosition: Int,
-        private val navigator: Navigator
+    store: MaterialDetailStore,
+    actionDispatcher: MaterialActionDispatcher,
+    colorFilter: ColorFilter,
+    initialPosition: Int,
+    private val navigator: Navigator
 ) : MutableLiveDataExt {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
@@ -50,13 +50,13 @@ class MaterialDetailViewModel(
 
     class Factory @Inject constructor(private val actionDispatcher: MaterialActionDispatcher,
                                       private val storeFactory: MaterialDetailStore.Factory,
-                                      private val navigator: Navigator): ViewModelFactory {
+                                      private val navigator: Navigator) : ViewModelFactory {
         fun create(activity: FragmentActivity, colorFilter: ColorFilter, initialPosition: Int): MaterialDetailViewModel = MaterialDetailViewModel(
-                obtainActivityStore(activity, MaterialDetailStore::class.java, storeFactory),
-                actionDispatcher,
-                colorFilter,
-                initialPosition,
-                navigator
+            obtainActivityStore(activity, MaterialDetailStore::class.java, storeFactory),
+            actionDispatcher,
+            colorFilter,
+            initialPosition,
+            navigator
         )
     }
 }

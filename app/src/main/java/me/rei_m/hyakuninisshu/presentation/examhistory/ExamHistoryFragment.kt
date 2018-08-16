@@ -23,24 +23,29 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamHistoryBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class ExamHistoryFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: ExamHistoryViewModel.Factory
 
     private var listener: OnFragmentInteractionListener? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        val viewModel = viewModelFactory.create(requireActivity())
-        viewModel.unhandledErrorEvent.observe(this, Observer {
-            listener?.onError()
-        })
+        val examHistoryViewModel = viewModelFactory.create(requireActivity())
 
         val binding = FragmentExamHistoryBinding.inflate(inflater, container, false).apply {
+            viewModel = examHistoryViewModel
             setLifecycleOwner(this@ExamHistoryFragment)
         }
 
@@ -48,9 +53,16 @@ class ExamHistoryFragment : DaggerFragment() {
             adapter = KarutaExamListAdapter(requireContext(), listOf())
         }
 
-        binding.viewModel = viewModel
+        examHistoryViewModel.unhandledErrorEvent.observe(this, Observer {
+            listener?.onError()
+        })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("ExamHistory", requireActivity())
     }
 
     override fun onAttach(context: Context?) {

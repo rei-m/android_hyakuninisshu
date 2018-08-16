@@ -25,9 +25,13 @@ import me.rei_m.hyakuninisshu.databinding.FragmentKarutaBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class KarutaFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: KarutaViewModel.Factory
@@ -40,19 +44,28 @@ class KarutaFragment : DaggerFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(requireActivity(), karutaId)
-        viewModel.notFoundKarutaEvent.observe(this, Observer {
-            listener?.onError()
-        })
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val karutaViewModel = viewModelFactory.create(requireActivity(), karutaId)
 
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
+            viewModel = karutaViewModel
             setLifecycleOwner(this@KarutaFragment)
         }
 
-        binding.viewModel = viewModel
+        karutaViewModel.notFoundKarutaEvent.observe(this, Observer {
+            listener?.onError()
+        })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Karuta-${karutaId.value}", requireActivity())
     }
 
     override fun onAttach(context: Context?) {

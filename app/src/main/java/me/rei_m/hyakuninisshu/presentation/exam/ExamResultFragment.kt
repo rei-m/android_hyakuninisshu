@@ -24,41 +24,58 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class ExamResultFragment : DaggerFragment() {
 
     @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
+    @Inject
     lateinit var viewModelFactory: ExamResultViewModel.Factory
+
+    private lateinit var examResultViewModel: ExamResultViewModel
+
+    private lateinit var binding: FragmentExamResultBinding
 
     private var listener: OnFragmentInteractionListener? = null
 
     private var karutaExamId: KarutaExamIdentifier? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         if (savedInstanceState != null) {
             viewModelFactory.initialKarutaExamId = savedInstanceState.getParcelable(KEY_EXAM_ID)
         }
-        val viewModel = viewModelFactory.create(requireActivity())
-        viewModel.karutaExamId.observe(this, Observer {
-            karutaExamId = it
-        })
-        viewModel.notFoundExamError.observe(this, Observer {
-            listener?.onErrorFinish()
-        })
+        examResultViewModel = viewModelFactory.create(requireActivity())
 
-        val binding = FragmentExamResultBinding.inflate(inflater, container, false).apply {
+        binding = FragmentExamResultBinding.inflate(inflater, container, false).apply {
+            viewModel = examResultViewModel
             setLifecycleOwner(this@ExamResultFragment)
         }
 
-        binding.viewResult.onClickKarutaEvent.observe(this, Observer {
-            it ?: return@Observer
-            viewModel.openKaruta(it)
+        examResultViewModel.karutaExamId.observe(this, Observer {
+            karutaExamId = it
+        })
+        examResultViewModel.notFoundExamError.observe(this, Observer {
+            listener?.onErrorFinish()
         })
 
-        binding.viewModel = viewModel
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("ExamResult", requireActivity())
+
+        binding.viewResult.onClickKarutaEvent.observe(this, Observer {
+            it ?: return@Observer
+            examResultViewModel.openKaruta(it)
+        })
     }
 
     override fun onAttach(context: Context?) {
@@ -97,6 +114,6 @@ class ExamResultFragment : DaggerFragment() {
 
         private const val KEY_EXAM_ID = "examId"
 
-        fun newInstance(): ExamResultFragment = ExamResultFragment()
+        fun newInstance() = ExamResultFragment()
     }
 }

@@ -17,36 +17,34 @@ import android.content.Context
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
-interface IntExt {
-    fun Int.toKarutaNoStr(context: Context): String {
-        if (this == Karuta.NUMBER_OF_KARUTA) {
-            return context.getString(R.string.karuta_number, context.getString(R.string.hundred))
-        }
-
-        val resources = context.resources
-        val numArray = resources.getStringArray(R.array.number)
-
-        val doubleDigits = this / 10
-        val singleDigits = this % 10
-
-        val sb = StringBuilder()
-        if (0 < doubleDigits) {
-            if (1 < doubleDigits) {
-                sb.append(numArray[doubleDigits - 1])
-            }
-            sb.append(resources.getString(R.string.ten))
-        }
-
-        if (0 < singleDigits) {
-            sb.append(numArray[singleDigits - 1])
-        }
-
-        return context.getString(R.string.karuta_number, sb.toString())
+fun Int.toKarutaNoStr(context: Context): String {
+    if (this == Karuta.NUMBER_OF_KARUTA) {
+        return context.getString(R.string.karuta_number, context.getString(R.string.hundred))
     }
 
-    fun Int.toKimarijiStr(context: Context): String {
-        val resources = context.resources
-        val kimarijiArray = resources.getStringArray(R.array.kimariji)
-        return kimarijiArray[this - 1]
+    val resources = context.resources
+    val numArray = resources.getStringArray(R.array.number)
+
+    val doubleDigits = this / 10
+    val singleDigits = this % 10
+
+    val sb = StringBuilder()
+    if (0 < doubleDigits) {
+        if (1 < doubleDigits) {
+            sb.append(numArray[doubleDigits - 1])
+        }
+        sb.append(resources.getString(R.string.ten))
     }
+
+    if (0 < singleDigits) {
+        sb.append(numArray[singleDigits - 1])
+    }
+
+    return context.getString(R.string.karuta_number, sb.toString())
+}
+
+fun Int.toKimarijiStr(context: Context): String {
+    val resources = context.resources
+    val kimarijiArray = resources.getStringArray(R.array.kimariji)
+    return kimarijiArray[this - 1]
 }

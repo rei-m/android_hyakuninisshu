@@ -18,71 +18,66 @@ import me.rei_m.hyakuninisshu.R
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-interface DateExt {
+private const val COUNT_MONTHS_AT_YEAR = 12
 
-    fun Date.diffString(context: Context, now: Date): String {
-        val diffMillSeconds = now.time - this.time
+private const val COUNT_DAYS_AT_MONTH = 30
 
-        val diffSeconds = TimeUnit.MILLISECONDS.toSeconds(diffMillSeconds)
-        if (diffSeconds < COUNT_SECONDS_AT_MINUTE) {
-            val displaySecond = if (diffSeconds < 0) {
-                1
-            } else {
-                diffSeconds
-            }
-            return context.getString(R.string.past_second, displaySecond)
-        }
+private const val COUNT_WEEKS_AT_MONTH = 5
 
-        val diffMinutes = TimeUnit.SECONDS.toMinutes(diffSeconds)
-        if (diffMinutes < COUNT_SECONDS_AT_MINUTE) {
-            return context.getString(R.string.past_minute, diffMinutes)
-        }
+private const val COUNT_DAYS_AT_WEEK = 7
 
-        val diffHours = TimeUnit.MINUTES.toHours(diffMinutes)
-        if (diffHours < COUNT_HOURS_AT_DAY) {
-            return context.getString(R.string.past_hour, diffHours)
-        }
+private const val COUNT_HOURS_AT_DAY = 24
 
-        val diffDays = TimeUnit.HOURS.toDays(diffHours)
-        if (diffDays == 1L) {
-            return context.getString(R.string.yesterday)
-        } else if (diffDays < COUNT_DAYS_AT_WEEK) {
-            return context.getString(R.string.past_day, diffDays)
-        }
+private const val COUNT_SECONDS_AT_MINUTE = 60
 
-        val diffWeeks = diffDays / COUNT_DAYS_AT_WEEK
-        if (diffWeeks == 1L) {
-            return context.getString(R.string.last_week)
-        } else if (diffWeeks < COUNT_WEEKS_AT_MONTH) {
-            return context.getString(R.string.past_week, diffWeeks)
-        }
+fun Date.diffString(context: Context, now: Date): String {
+    val diffMillSeconds = now.time - this.time
 
-        val diffMonths = diffDays / COUNT_DAYS_AT_MONTH
-        if (diffMonths == 1L) {
-            return context.getString(R.string.last_month)
-        } else if (diffMonths < COUNT_MONTHS_AT_YEAR) {
-            return context.getString(R.string.past_month, diffMonths)
-        }
-
-        val diffYears = diffMonths / COUNT_MONTHS_AT_YEAR
-        return if (diffYears == 1L) {
-            context.getString(R.string.last_year)
+    val diffSeconds = TimeUnit.MILLISECONDS.toSeconds(diffMillSeconds)
+    if (diffSeconds < COUNT_SECONDS_AT_MINUTE) {
+        val displaySecond = if (diffSeconds < 0) {
+            1
         } else {
-            context.getString(R.string.past_year, diffYears)
+            diffSeconds
         }
+        return context.getString(R.string.past_second, displaySecond)
     }
 
-    companion object {
-        private const val COUNT_MONTHS_AT_YEAR = 12
+    val diffMinutes = TimeUnit.SECONDS.toMinutes(diffSeconds)
+    if (diffMinutes < COUNT_SECONDS_AT_MINUTE) {
+        return context.getString(R.string.past_minute, diffMinutes)
+    }
 
-        private const val COUNT_DAYS_AT_MONTH = 30
+    val diffHours = TimeUnit.MINUTES.toHours(diffMinutes)
+    if (diffHours < COUNT_HOURS_AT_DAY) {
+        return context.getString(R.string.past_hour, diffHours)
+    }
 
-        private const val COUNT_WEEKS_AT_MONTH = 5
+    val diffDays = TimeUnit.HOURS.toDays(diffHours)
+    if (diffDays == 1L) {
+        return context.getString(R.string.yesterday)
+    } else if (diffDays < COUNT_DAYS_AT_WEEK) {
+        return context.getString(R.string.past_day, diffDays)
+    }
 
-        private const val COUNT_DAYS_AT_WEEK = 7
+    val diffWeeks = diffDays / COUNT_DAYS_AT_WEEK
+    if (diffWeeks == 1L) {
+        return context.getString(R.string.last_week)
+    } else if (diffWeeks < COUNT_WEEKS_AT_MONTH) {
+        return context.getString(R.string.past_week, diffWeeks)
+    }
 
-        private const val COUNT_HOURS_AT_DAY = 24
+    val diffMonths = diffDays / COUNT_DAYS_AT_MONTH
+    if (diffMonths == 1L) {
+        return context.getString(R.string.last_month)
+    } else if (diffMonths < COUNT_MONTHS_AT_YEAR) {
+        return context.getString(R.string.past_month, diffMonths)
+    }
 
-        private const val COUNT_SECONDS_AT_MINUTE = 60
+    val diffYears = diffMonths / COUNT_MONTHS_AT_YEAR
+    return if (diffYears == 1L) {
+        context.getString(R.string.last_year)
+    } else {
+        context.getString(R.string.past_year, diffYears)
     }
 }

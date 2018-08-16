@@ -19,6 +19,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -36,11 +37,15 @@ import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class MaterialDetailActivity : DaggerAppCompatActivity(),
-        AlertDialogFragment.OnDialogInteractionListener,
-        AppCompatActivityExt {
+    AlertDialogFragment.OnDialogInteractionListener,
+    AppCompatActivityExt {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: MaterialDetailViewModel.Factory
@@ -48,7 +53,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     @Inject
     lateinit var adViewObserver: AdViewObserver
 
-    private lateinit var viewModel: MaterialDetailViewModel
+    private lateinit var materialDetailViewModel: MaterialDetailViewModel
 
     private lateinit var binding: ActivityMaterialDetailBinding
 
@@ -62,18 +67,19 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = viewModelFactory.create(this, colorFilter, lastPosition)
-        viewModel.unhandledErrorEvent.observe(this, Observer {
+        materialDetailViewModel = viewModelFactory.create(this, colorFilter, lastPosition)
+        materialDetailViewModel.unhandledErrorEvent.observe(this, Observer {
             showDialogFragment(AlertDialogFragment.TAG) {
                 AlertDialogFragment.newInstance(
-                        R.string.text_title_error,
-                        R.string.text_message_unhandled_error,
-                        true,
-                        false)
+                    R.string.text_title_error,
+                    R.string.text_message_unhandled_error,
+                    true,
+                    false)
             }
         })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail)
+        binding.viewModel = materialDetailViewModel
         binding.setLifecycleOwner(this)
 
         setupActionBar(binding.toolbar) {
@@ -84,7 +90,15 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
         binding.pager.adapter = MaterialDetailPagerAdapter(supportFragmentManager)
 
-        binding.viewModel = viewModel
+        binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {}
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
+            override fun onPageSelected(p0: Int) {
+                trackInfoScreenView(p0)
+            }
+        })
+
+        trackInfoScreenView(lastPosition)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -99,7 +113,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
                 return true
             }
             R.id.activity_material_detail_edit -> {
-                viewModel.onClickEdit(binding.pager.currentItem)
+                materialDetailViewModel.onClickEdit(binding.pager.currentItem)
                 return true
             }
         }
@@ -114,12 +128,18 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         // Negative Button is disable.
     }
 
+    private fun trackInfoScreenView(position: Int) {
+        val karutaList = materialDetailViewModel.karutaList.value ?: return
+        val karutaId = karutaList[position].identifier().value
+        analyticsHelper.sendScreenView("MaterialDetail-$karutaId", this)
+    }
+
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
         val adView = adViewObserver.adView()
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

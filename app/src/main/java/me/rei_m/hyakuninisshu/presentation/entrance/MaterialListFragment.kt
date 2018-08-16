@@ -32,28 +32,32 @@ class MaterialListFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: MaterialListViewModel.Factory
 
-    private lateinit var viewModel: MaterialListViewModel
+    private lateinit var materialListViewModel: MaterialListViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val colorFilter = if (savedInstanceState == null) {
             ColorFilter.ALL
         } else {
             ColorFilter[savedInstanceState.getInt(KEY_MATERIAL_COLOR_FILTER)]
         }
 
-        viewModel = viewModelFactory.create(requireActivity(), colorFilter)
+        materialListViewModel = viewModelFactory.create(requireActivity(), colorFilter)
 
         val binding = FragmentMaterialListBinding.inflate(inflater, container, false).apply {
+            viewModel = materialListViewModel
             setLifecycleOwner(this@MaterialListFragment)
         }
-        setHasOptionsMenu(true)
 
         with(binding.recyclerKarutaList) {
-            adapter = MaterialListAdapter(requireContext(), listOf(), viewModel)
+            adapter = MaterialListAdapter(requireContext(), listOf(), materialListViewModel)
             addItemDecoration(DividerItemDecoration(inflater.context, DividerItemDecoration.VERTICAL))
         }
 
-        binding.viewModel = viewModel
+        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -64,7 +68,7 @@ class MaterialListFragment : DaggerFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(KEY_MATERIAL_COLOR_FILTER, viewModel.colorFilter.ordinal)
+        outState.putInt(KEY_MATERIAL_COLOR_FILTER, materialListViewModel.colorFilter.ordinal)
         super.onSaveInstanceState(outState)
     }
 
@@ -74,7 +78,7 @@ class MaterialListFragment : DaggerFragment() {
             val menuItem = menu!!.add(Menu.NONE, colorFilter.ordinal, Menu.NONE, colorFilter.label(resources))
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             menuItem.setOnMenuItemClickListener {
-                viewModel.colorFilter = colorFilter
+                materialListViewModel.colorFilter = colorFilter
                 false
             }
         }
@@ -93,6 +97,6 @@ class MaterialListFragment : DaggerFragment() {
 
         private const val KEY_MATERIAL_COLOR_FILTER = "materialColorFilter"
 
-        fun newInstance(): MaterialListFragment = MaterialListFragment()
+        fun newInstance() = MaterialListFragment()
     }
 }

@@ -33,14 +33,17 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
     @Inject
     lateinit var viewModelFactory: ExamMenuViewModel.Factory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(requireActivity())
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val examMenuViewModel = viewModelFactory.create(requireActivity())
 
         val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
+            viewModel = examMenuViewModel
             setLifecycleOwner(this@ExamMenuFragment)
         }
-
-        binding.viewModel = viewModel
 
         return binding.root
     }
@@ -61,6 +64,6 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
 
         const val TAG: String = "ExamMenuFragment"
 
-        fun newInstance(): ExamMenuFragment = ExamMenuFragment()
+        fun newInstance() = ExamMenuFragment()
     }
 }
