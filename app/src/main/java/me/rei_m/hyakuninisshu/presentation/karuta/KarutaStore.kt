@@ -21,7 +21,7 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.karuta.FetchKarutaAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class KarutaStore(dispatcher: Dispatcher) : Store() {
@@ -29,7 +29,7 @@ class KarutaStore(dispatcher: Dispatcher) : Store() {
     private val _karuta = MutableLiveData<Karuta?>()
     val karuta: LiveData<Karuta?> = _karuta
 
-    private val _notFoundKarutaEvent = SingleLiveEvent<Void>()
+    private val _notFoundKarutaEvent = MutableLiveData<Event<Unit>>()
     val notFoundKarutaEvent = _notFoundKarutaEvent
 
     init {
@@ -37,7 +37,7 @@ class KarutaStore(dispatcher: Dispatcher) : Store() {
             if (it.error == null) {
                 _karuta.value = it.karuta
             } else {
-                _notFoundKarutaEvent.call()
+                _notFoundKarutaEvent.value = Event(Unit)
             }
         })
     }

@@ -21,7 +21,7 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.FetchAllExamAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class ExamHistoryStore(dispatcher: Dispatcher) : Store() {
@@ -29,15 +29,15 @@ class ExamHistoryStore(dispatcher: Dispatcher) : Store() {
     private val _karutaExamList = MutableLiveData<List<KarutaExam>>()
     val karutaExamList: LiveData<List<KarutaExam>?> = _karutaExamList
 
-    private val _unhandledError: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = _unhandledError
+    private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(FetchAllExamAction::class.java).subscribe {
             if (it.error == null) {
                 _karutaExamList.value = it.karutaExamList
             } else {
-                _unhandledError.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         })
     }

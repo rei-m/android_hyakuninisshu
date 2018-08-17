@@ -29,6 +29,7 @@ import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class SplashActivity : DaggerAppCompatActivity(),
@@ -54,7 +55,7 @@ class SplashActivity : DaggerAppCompatActivity(),
                 finish()
             }
         })
-        store.errorEvent.observe(this, Observer {
+        store.unhandledErrorEvent.observe(this, EventObserver {
             showAlertDialog(R.string.text_title_error, R.string.text_message_boot_error)
         })
     }

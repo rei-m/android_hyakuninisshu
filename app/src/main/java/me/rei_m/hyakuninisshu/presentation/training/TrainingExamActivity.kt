@@ -40,6 +40,7 @@ import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class TrainingExamActivity : DaggerAppCompatActivity(),
@@ -75,7 +76,7 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
                 it ?: return@Observer
                 onReceiveKarutaQuizId(it)
             })
-            unhandledErrorEvent.observe(this@TrainingExamActivity, Observer {
+            unhandledErrorEvent.observe(this@TrainingExamActivity, EventObserver {
                 onErrorQuiz()
             })
         }

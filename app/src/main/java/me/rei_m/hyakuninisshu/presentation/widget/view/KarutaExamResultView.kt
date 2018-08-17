@@ -14,6 +14,7 @@
 package me.rei_m.hyakuninisshu.presentation.widget.view
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
@@ -24,20 +25,20 @@ import android.widget.LinearLayout
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 
 class KarutaExamResultView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     init {
         initialize(context)
     }
 
-    private val onClickKarutaEventData = SingleLiveEvent<KarutaIdentifier>()
-    val onClickKarutaEvent: LiveData<KarutaIdentifier> = onClickKarutaEventData
+    private val _onClickKarutaEvent = MutableLiveData<Event<KarutaIdentifier>>()
+    val onClickKarutaEvent: LiveData<Event<KarutaIdentifier>> = _onClickKarutaEvent
 
     private fun initialize(context: Context) {
         orientation = LinearLayout.VERTICAL
@@ -73,7 +74,7 @@ class KarutaExamResultView @JvmOverloads constructor(
             val (karutaId, isCorrect) = karutaQuizJudgement
             with(findViewById<KarutaExamResultCellView>(cellViewIdList[index])) {
                 setResult(karutaId.value, isCorrect)
-                setOnClickListener { onClickKarutaEventData.value = karutaId }
+                setOnClickListener { _onClickKarutaEvent.value = Event(karutaId) }
             }
         }
     }

@@ -22,6 +22,7 @@ import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class MaterialDetailViewModel(
@@ -36,7 +37,7 @@ class MaterialDetailViewModel(
 
     val initialPosition: LiveData<Int> = MutableLiveData<Int>().withValue(initialPosition)
 
-    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
         actionDispatcher.fetch(colorFilter)

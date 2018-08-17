@@ -19,6 +19,7 @@ import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class ExamViewModel(store: ExamStore, private val actionDispatcher: ExamActionDispatcher) {
@@ -27,7 +28,7 @@ class ExamViewModel(store: ExamStore, private val actionDispatcher: ExamActionDi
 
     val isVisibleAd: LiveData<Boolean> = currentKarutaQuizId.map { it == null }
 
-    val notFoundQuizEvent: LiveData<Void> = store.notFoundQuizEvent
+    val notFoundQuizEvent: LiveData<Event<Unit>> = store.notFoundQuizEvent
 
     fun startExam() {
         actionDispatcher.start()

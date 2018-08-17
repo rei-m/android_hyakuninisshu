@@ -24,6 +24,7 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamHistoryBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class ExamHistoryFragment : DaggerFragment() {
@@ -53,7 +54,7 @@ class ExamHistoryFragment : DaggerFragment() {
             adapter = KarutaExamListAdapter(requireContext(), listOf())
         }
 
-        examHistoryViewModel.unhandledErrorEvent.observe(this, Observer {
+        examHistoryViewModel.unhandledErrorEvent.observe(this, EventObserver {
             listener?.onError()
         })
 

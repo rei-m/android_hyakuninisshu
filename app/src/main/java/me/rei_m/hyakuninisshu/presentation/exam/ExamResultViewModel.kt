@@ -23,6 +23,7 @@ import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class ExamResultViewModel(
@@ -41,7 +42,7 @@ class ExamResultViewModel(
 
     val karutaQuizJudgements: LiveData<List<KarutaQuizJudgement>?> = store.result.map { it?.result?.judgements }
 
-    val notFoundExamError: LiveData<Boolean> = store.notFoundExamEvent.map { true }
+    val notFoundExamEvent: LiveData<Event<Unit>> = store.notFoundExamEvent
 
     init {
         if (initialKarutaExamId == null) {

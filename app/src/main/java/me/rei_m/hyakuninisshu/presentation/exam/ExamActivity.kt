@@ -41,6 +41,7 @@ import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class ExamActivity : DaggerAppCompatActivity(),
@@ -77,7 +78,7 @@ class ExamActivity : DaggerAppCompatActivity(),
                 it ?: return@Observer
                 onReceiveKarutaQuizId(it)
             })
-            notFoundQuizEvent.observe(this@ExamActivity, Observer {
+            notFoundQuizEvent.observe(this@ExamActivity, EventObserver {
                 onErrorQuiz()
             })
         }

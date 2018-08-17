@@ -90,9 +90,11 @@
 
         <Button
             android:id="@+id/button_restart"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_m"
+            android:layout_marginEnd="@dimen/margin_m"
+            android:layout_marginStart="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickPracticeWrongKarutas()}"
             android:text="@string/practice_wrong_karutas"
             app:layout_constraintBottom_toTopOf="@id/button_back"
@@ -105,8 +107,10 @@
 
         <Button
             android:id="@+id/button_back"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_m"
+            android:layout_marginStart="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickBackMenu()}"
             android:text="@string/back_menu"
             app:layout_constraintEnd_toEndOf="parent"

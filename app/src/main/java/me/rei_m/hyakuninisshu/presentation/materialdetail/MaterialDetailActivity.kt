@@ -39,6 +39,7 @@ import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class MaterialDetailActivity : DaggerAppCompatActivity(),
@@ -68,7 +69,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         materialDetailViewModel = viewModelFactory.create(this, colorFilter, lastPosition)
-        materialDetailViewModel.unhandledErrorEvent.observe(this, Observer {
+        materialDetailViewModel.unhandledErrorEvent.observe(this, EventObserver {
             showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
         })
 

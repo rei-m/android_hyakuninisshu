@@ -24,7 +24,7 @@ import me.rei_m.hyakuninisshu.action.training.StartTrainingAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class TrainingStore(dispatcher: Dispatcher) : Store() {
@@ -35,20 +35,21 @@ class TrainingStore(dispatcher: Dispatcher) : Store() {
     private val _result = MutableLiveData<TrainingResult>()
     val result: LiveData<TrainingResult> = _result
 
-    private val _notFoundErrorEvent = SingleLiveEvent<Boolean>()
-    val notFoundErrorEvent: LiveData<Boolean> = _notFoundErrorEvent
+    private val _empty = MutableLiveData<Boolean>()
+    val empty: LiveData<Boolean> = _empty
 
-    private val _unhandledErrorEvent: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = _unhandledErrorEvent
+    private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
+        _empty.value = false
         register(dispatcher.on(StartTrainingAction::class.java).subscribe {
             if (it.error != null) {
-                _unhandledErrorEvent.call()
+                _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }
             if (it.karutaQuizId == null) {
-                _notFoundErrorEvent.value = true
+                _empty.value = true
             } else {
                 _currentKarutaQuizId.value = it.karutaQuizId
             }
@@ -56,16 +57,16 @@ class TrainingStore(dispatcher: Dispatcher) : Store() {
             if (it.error == null) {
                 _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                _unhandledErrorEvent.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(AggregateResultsAction::class.java).subscribe {
             if (it.error != null) {
-                _unhandledErrorEvent.call()
+                _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }
             _currentKarutaQuizId.value = null
             if (it.trainingResult == null) {
-                _notFoundErrorEvent.value = true
+                _empty.value = true
             } else {
                 _result.value = it.trainingResult
             }

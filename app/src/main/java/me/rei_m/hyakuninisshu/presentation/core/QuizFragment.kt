@@ -35,6 +35,7 @@ import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -100,11 +101,10 @@ class QuizFragment : DaggerFragment() {
                 }
             }
         })
-        quizViewModel.openAnswerEvent.observe(this, Observer {
-            it ?: return@Observer
+        quizViewModel.openAnswerEvent.observe(this, EventObserver {
             listener?.onAnswered(it)
         })
-        quizViewModel.unhandledErrorEvent.observe(this, Observer {
+        quizViewModel.unhandledErrorEvent.observe(this, EventObserver {
             listener?.onErrorQuiz()
         })
 

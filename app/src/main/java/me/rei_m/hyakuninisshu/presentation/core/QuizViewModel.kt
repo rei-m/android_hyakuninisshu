@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Device
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import java.util.*
 import javax.inject.Inject
 
@@ -62,13 +62,14 @@ class QuizViewModel(
 
     val isCorrect: LiveData<Boolean?>
 
-    val openAnswerEvent: SingleLiveEvent<KarutaQuizIdentifier> = SingleLiveEvent()
+    private val _openAnswerEvent = MutableLiveData<Event<KarutaQuizIdentifier>>()
+    val openAnswerEvent: LiveData<Event<KarutaQuizIdentifier>> = _openAnswerEvent
 
     val quizTextSize: LiveData<Int>
 
     val choiceTextSize: LiveData<Int>
 
-    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
         quizCount = content.map { it.currentPosition }
@@ -115,7 +116,7 @@ class QuizViewModel(
     }
 
     fun onClickResult() {
-        openAnswerEvent.value = quizId
+        _openAnswerEvent.value = Event(quizId)
     }
 
     class Factory @Inject constructor(

@@ -26,6 +26,7 @@ import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class QuizAnswerFragment : DaggerFragment() {
@@ -57,13 +58,13 @@ class QuizAnswerFragment : DaggerFragment() {
             setLifecycleOwner(this@QuizAnswerFragment)
         }
 
-        quizAnswerViewModel.openNextQuizEvent.observe(this, Observer {
+        quizAnswerViewModel.openNextQuizEvent.observe(this, EventObserver {
             listener?.onGoToNext()
         })
-        quizAnswerViewModel.openResultEvent.observe(this, Observer {
+        quizAnswerViewModel.openResultEvent.observe(this, EventObserver {
             listener?.onGoToResult()
         })
-        quizAnswerViewModel.unhandledErrorEvent.observe(this, Observer {
+        quizAnswerViewModel.unhandledErrorEvent.observe(this, EventObserver {
             listener?.onErrorQuiz()
         })
 

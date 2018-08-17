@@ -13,7 +13,6 @@
 
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -27,6 +26,7 @@ import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class MaterialEditFragment : DaggerFragment(),
@@ -77,20 +77,18 @@ class MaterialEditFragment : DaggerFragment(),
             setLifecycleOwner(this@MaterialEditFragment)
         }
 
-        materialEditViewModel.confirmEditEvent.observe(this, Observer { dialog ->
-            dialog ?: return@Observer
+        materialEditViewModel.confirmEditEvent.observe(this, EventObserver { dialog ->
             fragmentManager?.let {
                 dialog.setTargetFragment(this, 0)
                 dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
             }
         })
-        materialEditViewModel.snackBarMessage.observe(this, Observer {
-            it ?: return@Observer
+        materialEditViewModel.snackBarMessage.observe(this, EventObserver {
             Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
                 .setAction("Action", null)
                 .show()
         })
-        materialEditViewModel.unhandledErrorEvent.observe(this, Observer {
+        materialEditViewModel.unhandledErrorEvent.observe(this, EventObserver {
             listener?.onError()
         })
 

@@ -25,6 +25,7 @@ import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class ExamResultFragment : DaggerFragment() {
@@ -61,7 +62,8 @@ class ExamResultFragment : DaggerFragment() {
         examResultViewModel.karutaExamId.observe(this, Observer {
             karutaExamId = it
         })
-        examResultViewModel.notFoundExamError.observe(this, Observer {
+
+        examResultViewModel.notFoundExamEvent.observe(this, EventObserver {
             listener?.onErrorFinish()
         })
 
@@ -72,8 +74,7 @@ class ExamResultFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("ExamResult", requireActivity())
 
-        binding.viewResult.onClickKarutaEvent.observe(this, Observer {
-            it ?: return@Observer
+        binding.viewResult.onClickKarutaEvent.observe(this, EventObserver {
             examResultViewModel.openKaruta(it)
         })
     }

@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.action.exam.StartExamAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class ExamStore(dispatcher: Dispatcher) : Store() {
@@ -36,10 +36,10 @@ class ExamStore(dispatcher: Dispatcher) : Store() {
     private val _result = MutableLiveData<KarutaExam?>()
     val result: LiveData<KarutaExam?> = _result
 
-    private val _notFoundQuizEvent = SingleLiveEvent<Void>()
+    private val _notFoundQuizEvent = MutableLiveData<Event<Unit>>()
     val notFoundQuizEvent = _notFoundQuizEvent
 
-    private val _notFoundExamEvent = SingleLiveEvent<Void>()
+    private val _notFoundExamEvent = MutableLiveData<Event<Unit>>()
     val notFoundExamEvent = _notFoundExamEvent
 
     init {
@@ -50,26 +50,26 @@ class ExamStore(dispatcher: Dispatcher) : Store() {
             if (it.error == null) {
                 _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                _notFoundQuizEvent.call()
+                _notFoundQuizEvent.value = Event(Unit)
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
             if (it.error == null) {
                 _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                _notFoundQuizEvent.call()
+                _notFoundQuizEvent.value = Event(Unit)
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             _currentKarutaQuizId.value = null
             if (it.error == null) {
                 _result.value = it.karutaExam
             } else {
-                _notFoundExamEvent.call()
+                _notFoundExamEvent.value = Event(Unit)
             }
         }, dispatcher.on(FetchExamAction::class.java).subscribe {
             if (it.error == null) {
                 _result.value = it.karutaExam
             } else {
-                _notFoundExamEvent.call()
+                _notFoundExamEvent.value = Event(Unit)
             }
         })
     }

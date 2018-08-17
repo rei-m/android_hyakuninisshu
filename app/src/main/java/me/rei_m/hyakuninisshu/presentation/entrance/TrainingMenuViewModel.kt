@@ -13,13 +13,14 @@
 
 package me.rei_m.hyakuninisshu.presentation.entrance
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.enums.*
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class TrainingMenuViewModel(
@@ -44,12 +45,13 @@ class TrainingMenuViewModel(
 
     val color = MutableLiveData<ColorFilter>().withValue(color)
 
-    val snackBarMessage: SingleLiveEvent<Int> = SingleLiveEvent()
+    private val _snackBarMessage = MutableLiveData<Event<Int>>()
+    val snackBarMessage: LiveData<Event<Int>> = _snackBarMessage
 
     fun onClickStartTraining() {
 
         if (trainingRangeFrom.value!!.ordinal > trainingRangeTo.value!!.ordinal) {
-            snackBarMessage.value = R.string.text_message_invalid_training_range
+            _snackBarMessage.value = Event(R.string.text_message_invalid_training_range)
             return
         }
 

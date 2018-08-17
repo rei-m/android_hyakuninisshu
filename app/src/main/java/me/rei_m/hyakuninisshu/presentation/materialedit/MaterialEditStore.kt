@@ -22,7 +22,7 @@ import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.StartEditMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class MaterialEditStore(dispatcher: Dispatcher) : Store() {
@@ -30,25 +30,25 @@ class MaterialEditStore(dispatcher: Dispatcher) : Store() {
     private val _karuta = MutableLiveData<Karuta?>()
     val karuta: LiveData<Karuta?> = _karuta
 
-    private val _completeEditEvent = SingleLiveEvent<Void>()
-    val completeEditEvent: LiveData<Void> = _completeEditEvent
+    private val _completeEditEvent = MutableLiveData<Event<Unit>>()
+    val completeEditEvent: LiveData<Event<Unit>> = _completeEditEvent
 
-    private val _unhandledErrorEvent: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = _unhandledErrorEvent
+    private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(StartEditMaterialAction::class.java).subscribe {
             if (it.error == null) {
                 _karuta.value = it.karuta
             } else {
-                _unhandledErrorEvent.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe {
             if (it.error == null) {
                 _karuta.value = null
-                _completeEditEvent.call()
+                _completeEditEvent.value = Event(Unit)
             } else {
-                _unhandledErrorEvent.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         })
     }

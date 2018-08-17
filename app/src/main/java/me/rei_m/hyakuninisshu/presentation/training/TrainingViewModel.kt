@@ -23,6 +23,7 @@ import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class TrainingViewModel(
@@ -34,9 +35,9 @@ class TrainingViewModel(
 
     val isVisibleAd: LiveData<Boolean> = currentKarutaQuizId.map { it == null }
 
-    val isVisibleEmpty: LiveData<Boolean> = store.notFoundErrorEvent
+    val isVisibleEmpty: LiveData<Boolean> = store.empty
 
-    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     fun startTraining(trainingRangeFrom: TrainingRangeFrom,
                       trainingRangeTo: TrainingRangeTo,

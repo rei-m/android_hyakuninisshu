@@ -24,9 +24,10 @@ import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.setIfNull
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
-import me.rei_m.hyakuninisshu.R as Res
+import me.rei_m.hyakuninisshu.R
 
 class MaterialEditViewModel(
     private val store: MaterialEditStore,
@@ -73,11 +74,13 @@ class MaterialEditViewModel(
 
     val fifthPhraseKana = MutableLiveData<String>()
 
-    val confirmEditEvent: SingleLiveEvent<ConfirmMaterialEditDialogFragment> = SingleLiveEvent()
+    private val _confirmEditEvent = MutableLiveData<Event<ConfirmMaterialEditDialogFragment>>()
+    val confirmEditEvent: LiveData<Event<ConfirmMaterialEditDialogFragment>> = _confirmEditEvent
 
-    val snackBarMessage: SingleLiveEvent<Int> = SingleLiveEvent()
+    private val _snackBarMessage = MutableLiveData<Event<Int>>()
+    val snackBarMessage: LiveData<Event<Int>> = _snackBarMessage
 
-    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     private val karutaObserver: Observer<Karuta?> = Observer {
         it ?: return@Observer
@@ -93,7 +96,7 @@ class MaterialEditViewModel(
         this.fifthPhraseKana.setIfNull(it.shimoNoKu.fifth.kana)
     }
 
-    private val completeEditEventObserver: Observer<Void> = Observer {
+    private val completeEditEventObserver = EventObserver<Unit> {
         navigator.back()
     }
 
@@ -138,7 +141,7 @@ class MaterialEditViewModel(
             fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
             fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
         ) {
-            snackBarMessage.value = Res.string.text_message_edit_error
+            _snackBarMessage.value = Event(R.string.text_message_edit_error)
             return
         }
 
@@ -176,11 +179,11 @@ class MaterialEditViewModel(
             fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
             fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
         ) {
-            snackBarMessage.value = Res.string.text_message_edit_error
+            _snackBarMessage.value = Event(R.string.text_message_edit_error)
             return
         }
 
-        confirmEditEvent.value = ConfirmMaterialEditDialogFragment.newInstance(
+        _confirmEditEvent.value = Event(ConfirmMaterialEditDialogFragment.newInstance(
             firstPhraseKanji,
             firstPhraseKana,
             secondPhraseKanji,
@@ -191,7 +194,7 @@ class MaterialEditViewModel(
             fourthPhraseKana,
             fifthPhraseKanji,
             fifthPhraseKana
-        )
+        ))
     }
 
     class Factory @Inject constructor(

@@ -26,6 +26,7 @@ import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.presentation.enums.*
 import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class TrainingMenuFragment : DaggerFragment() {
@@ -68,8 +69,7 @@ class TrainingMenuFragment : DaggerFragment() {
             colorAdapter = SpinnerAdapter.newInstance(root.context, ColorFilter.values().asList())
         }
 
-        trainingMenuViewModel.snackBarMessage.observe(this, Observer {
-            it ?: return@Observer
+        trainingMenuViewModel.snackBarMessage.observe(this, EventObserver {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
         })
 
