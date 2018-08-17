@@ -83,6 +83,7 @@ class TrainingActionDispatcherTest : TestHelper {
         val examId = KarutaExamIdentifier(1)
         val exam = KarutaExam(
                 identifier = examId,
+                tookDate = Date(),
                 result = KarutaExamResult(
                         resultSummary = KarutaQuizzesResultSummary(
                                 quizCount = 100,

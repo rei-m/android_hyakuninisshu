@@ -31,20 +31,21 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.ext.replaceFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.*
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class TrainingActivity : DaggerAppCompatActivity(),
-        AlertDialogFragment.OnDialogInteractionListener,
-        CoreInteractionListener,
-        AppCompatActivityExt {
+    AlertDialogFragment.OnDialogInteractionListener,
+    CoreInteractionListener {
 
     @Inject
     lateinit var viewModelFactory: TrainingViewModel.Factory
@@ -56,23 +57,29 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     private lateinit var binding: ActivityTrainingBinding
 
-    private val kamiNoKuStyle: KarutaStyleFilter
-        get() = KarutaStyleFilter[intent.getIntExtra(ARG_KAMI_NO_KU_STYLE, 0)]
+    override val kamiNoKuStyle by lazy {
+        KarutaStyleFilter[intent.getIntExtra(ARG_KAMI_NO_KU_STYLE, 0)]
+    }
 
-    private val shimoNoKuStyle: KarutaStyleFilter
-        get() = KarutaStyleFilter[intent.getIntExtra(ARG_SHIMO_NO_KU_STYLE, 0)]
+    override val shimoNoKuStyle by lazy {
+        KarutaStyleFilter[intent.getIntExtra(ARG_SHIMO_NO_KU_STYLE, 0)]
+    }
 
-    private val trainingRangeFrom: TrainingRangeFrom
-        get() = TrainingRangeFrom[intent.getIntExtra(ARG_TRAINING_RANGE_FROM, 0)]
+    private val trainingRangeFrom by lazy {
+        TrainingRangeFrom[intent.getIntExtra(ARG_TRAINING_RANGE_FROM, 0)]
+    }
 
-    private val trainingRangeTo: TrainingRangeTo
-        get() = TrainingRangeTo[intent.getIntExtra(ARG_TRAINING_RANGE_TO, 0)]
+    private val trainingRangeTo by lazy {
+        TrainingRangeTo[intent.getIntExtra(ARG_TRAINING_RANGE_TO, 0)]
+    }
 
-    private val kimarijiFilter: KimarijiFilter
-        get() = KimarijiFilter[intent.getIntExtra(ARG_KIMARIJI, 0)]
+    private val kimarijiFilter by lazy {
+        KimarijiFilter[intent.getIntExtra(ARG_KIMARIJI, 0)]
+    }
 
-    private val colorFilter: ColorFilter
-        get() = ColorFilter[intent.getIntExtra(ARG_COLOR, 0)]
+    private val colorFilter by lazy {
+        ColorFilter[intent.getIntExtra(ARG_COLOR, 0)]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,35 +94,9 @@ class TrainingActivity : DaggerAppCompatActivity(),
             })
             currentKarutaQuizId.observe(this@TrainingActivity, Observer {
                 it ?: return@Observer
-                if (supportFragmentManager.fragments.isEmpty()) {
-                    supportFragmentManager
-                            .beginTransaction()
-                            .add(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                            .commit()
-                    return@Observer
-                }
-
-                supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG)?.let { fragment ->
-                    if (fragment is QuizAnswerFragment && fragment.karutaQuizId != it) {
-                        supportFragmentManager
-                                .beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                                .replace(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                                .commit()
-                        return@Observer
-                    }
-                }
-
-                supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
-                    supportFragmentManager
-                            .beginTransaction()
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                            .replace(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                            .commit()
-                    return@Observer
-                }
+                onReceiveKarutaQuizId(it)
             })
-            unhandledErrorEvent.observe(this@TrainingActivity, Observer {
+            unhandledErrorEvent.observe(this@TrainingActivity, EventObserver {
                 onErrorQuiz()
             })
         }
@@ -135,13 +116,7 @@ class TrainingActivity : DaggerAppCompatActivity(),
     }
 
     override fun onAnswered(quizId: KarutaQuizIdentifier) {
-        if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
-                    .commit()
-        }
+        openAnswer(quizId)
     }
 
     override fun onGoToNext() {
@@ -150,22 +125,17 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     override fun onGoToResult() {
         if (supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, TrainingResultFragment.newInstance(), TrainingResultFragment.TAG)
-                    .commit()
+            replaceFragment(
+                R.id.content,
+                TrainingResultFragment.newInstance(),
+                TrainingResultFragment.TAG,
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE
+            )
         }
     }
 
     override fun onErrorQuiz() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_unhandled_error,
-                    true,
-                    false)
-        }
+        showError()
     }
 
     override fun onAlertPositiveClick() {
@@ -181,8 +151,8 @@ class TrainingActivity : DaggerAppCompatActivity(),
         val adView = adViewObserver.adView()
 
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

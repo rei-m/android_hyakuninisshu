@@ -30,24 +30,26 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.ext.addFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
+import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class MaterialEditActivity : DaggerAppCompatActivity(),
-        MaterialEditFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnDialogInteractionListener,
-        AppCompatActivityExt {
+    MaterialEditFragment.OnFragmentInteractionListener,
+    AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
 
     private lateinit var binding: ActivityMaterialEditBinding
 
-    private val karutaId: KarutaIdentifier
-        get() = intent.getParcelableExtra(ARG_KARUTA_ID)
+    private val karutaId by lazy {
+        intent.getParcelableExtra<KarutaIdentifier>(ARG_KARUTA_ID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +62,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         setupAd()
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
-                    .commit()
+            addFragment(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
         }
     }
 
@@ -78,13 +77,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
     }
 
     override fun onError() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_unhandled_error,
-                    true,
-                    false)
-        }
+        showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
     }
 
     override fun onAlertPositiveClick() {
@@ -99,8 +92,8 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         lifecycle.addObserver(adViewObserver)
         val adView = adViewObserver.adView()
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

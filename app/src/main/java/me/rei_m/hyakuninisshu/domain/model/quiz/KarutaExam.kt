@@ -14,11 +14,13 @@
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
+import java.util.*
 
 /**
  * 百人一首の力試し.
  */
 class KarutaExam(identifier: KarutaExamIdentifier,
+                 val tookDate: Date,
                  val result: KarutaExamResult) : AbstractEntity<KarutaExam, KarutaExamIdentifier>(identifier) {
 
     override fun toString() = "KarutaExam(result=$result)"

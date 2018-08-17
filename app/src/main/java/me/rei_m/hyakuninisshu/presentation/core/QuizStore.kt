@@ -23,35 +23,35 @@ import me.rei_m.hyakuninisshu.action.quiz.FetchQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.StartQuizAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class QuizStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaQuizContentLiveData = MutableLiveData<KarutaQuizContent>()
-    val karutaQuizContent: LiveData<KarutaQuizContent> = karutaQuizContentLiveData
+    private val _karutaQuizContent = MutableLiveData<KarutaQuizContent>()
+    val karutaQuizContent: LiveData<KarutaQuizContent> = _karutaQuizContent
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(FetchQuizAction::class.java).subscribe {
             if (it.error == null) {
-                karutaQuizContentLiveData.value = it.karutaQuizContent
+                _karutaQuizContent.value = it.karutaQuizContent
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(StartQuizAction::class.java).subscribe {
             if (it.error == null) {
-                karutaQuizContentLiveData.value = it.karutaQuizContent
+                _karutaQuizContent.value = it.karutaQuizContent
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
             if (it.error == null) {
-                karutaQuizContentLiveData.value = it.karutaQuizContent
+                _karutaQuizContent.value = it.karutaQuizContent
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         })
     }

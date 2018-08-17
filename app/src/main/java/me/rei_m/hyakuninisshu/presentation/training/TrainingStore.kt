@@ -24,50 +24,51 @@ import me.rei_m.hyakuninisshu.action.training.StartTrainingAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class TrainingStore(dispatcher: Dispatcher) : Store() {
 
-    private val currentKarutaQuizIdLiveData = MutableLiveData<KarutaQuizIdentifier?>()
-    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = currentKarutaQuizIdLiveData
+    private val _currentKarutaQuizId = MutableLiveData<KarutaQuizIdentifier?>()
+    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = _currentKarutaQuizId
 
-    private val resultLiveData = MutableLiveData<TrainingResult>()
-    val result: LiveData<TrainingResult> = resultLiveData
+    private val _result = MutableLiveData<TrainingResult>()
+    val result: LiveData<TrainingResult> = _result
 
-    private val notFoundErrorEventLiveData = SingleLiveEvent<Boolean>()
-    val notFoundErrorEvent: LiveData<Boolean> = notFoundErrorEventLiveData
+    private val _empty = MutableLiveData<Boolean>()
+    val empty: LiveData<Boolean> = _empty
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
+        _empty.value = false
         register(dispatcher.on(StartTrainingAction::class.java).subscribe {
             if (it.error != null) {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }
             if (it.karutaQuizId == null) {
-                notFoundErrorEventLiveData.value = true
+                _empty.value = true
             } else {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
             if (it.error == null) {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(AggregateResultsAction::class.java).subscribe {
             if (it.error != null) {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }
-            currentKarutaQuizIdLiveData.value = null
+            _currentKarutaQuizId.value = null
             if (it.trainingResult == null) {
-                notFoundErrorEventLiveData.value = true
+                _empty.value = true
             } else {
-                resultLiveData.value = it.trainingResult
+                _result.value = it.trainingResult
             }
         })
     }

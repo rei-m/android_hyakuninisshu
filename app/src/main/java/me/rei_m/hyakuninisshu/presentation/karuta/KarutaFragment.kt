@@ -24,34 +24,49 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentKarutaBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class KarutaFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: KarutaViewModel.Factory
 
     private var listener: OnFragmentInteractionListener? = null
 
-    private val karutaId: KarutaIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+    private val karutaId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
             "$ARG_KARUTA_ID is missing"
         }
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(requireActivity(), karutaId)
-        viewModel.notFoundKarutaEvent.observe(this, Observer {
-            listener?.onError()
-        })
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val karutaViewModel = viewModelFactory.create(requireActivity(), karutaId)
 
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
+            viewModel = karutaViewModel
             setLifecycleOwner(this@KarutaFragment)
         }
 
-        binding.viewModel = viewModel
+        karutaViewModel.notFoundKarutaEvent.observe(this, EventObserver {
+            listener?.onError()
+        })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Karuta-${karutaId.value}", requireActivity())
     }
 
     override fun onAttach(context: Context?) {
@@ -68,7 +83,6 @@ class KarutaFragment : DaggerFragment() {
         listener = null
     }
 
-
     @dagger.Module
     abstract class Module {
         @ForFragment
@@ -80,7 +94,7 @@ class KarutaFragment : DaggerFragment() {
         fun onError()
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "KarutaFragment"
 

@@ -21,24 +21,35 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
-class ExamMenuFragment : DaggerFragment(), FragmentExt {
+class ExamMenuFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: ExamMenuViewModel.Factory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(requireActivity())
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val examMenuViewModel = viewModelFactory.create(requireActivity())
 
         val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
+            viewModel = examMenuViewModel
             setLifecycleOwner(this@ExamMenuFragment)
         }
 
-        binding.viewModel = viewModel
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Entrance - ExamMenu", requireActivity())
     }
 
     @dagger.Module
@@ -52,6 +63,6 @@ class ExamMenuFragment : DaggerFragment(), FragmentExt {
 
         const val TAG: String = "ExamMenuFragment"
 
-        fun newInstance(): ExamMenuFragment = ExamMenuFragment()
+        fun newInstance() = ExamMenuFragment()
     }
 }

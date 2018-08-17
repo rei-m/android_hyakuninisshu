@@ -21,13 +21,13 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 
 import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.ext.IntExt
+import me.rei_m.hyakuninisshu.ext.toKarutaNoStr
 
 class KarutaExamResultCellView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr), IntExt {
+) : RelativeLayout(context, attrs, defStyleAttr) {
 
     init {
         initialize(context)

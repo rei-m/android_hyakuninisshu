@@ -16,8 +16,6 @@ package me.rei_m.hyakuninisshu.ext
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 
-interface LiveDataExt {
-    fun <X, Y> LiveData<X>.map(transform: (X) -> Y): LiveData<Y> {
-        return Transformations.map(this, transform)
-    }
+fun <X, Y> LiveData<X>.map(transform: (X) -> Y): LiveData<Y> {
+    return Transformations.map(this, transform)
 }

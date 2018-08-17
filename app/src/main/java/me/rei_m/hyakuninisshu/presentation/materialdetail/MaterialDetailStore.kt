@@ -22,34 +22,34 @@ import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import java.util.*
 import javax.inject.Inject
 
 class MaterialDetailStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaListLiveData = MutableLiveData<List<Karuta>>()
-    val karutaList: LiveData<List<Karuta>> = karutaListLiveData
+    private val _karutaList = MutableLiveData<List<Karuta>>()
+    val karutaList: LiveData<List<Karuta>> = _karutaList
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
             if (it.error == null) {
-                karutaListLiveData.value = it.karutas?.asList()
+                _karutaList.value = it.karutas?.asList()
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
             if (action.error != null) {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }
-            karutaListLiveData.value?.let {
+            _karutaList.value?.let {
                 val karutaList = ArrayList(it)
                 karutaList[karutaList.indexOf(action.karuta)] = action.karuta
-                karutaListLiveData.value = karutaList
+                _karutaList.value = karutaList
             }
         })
     }

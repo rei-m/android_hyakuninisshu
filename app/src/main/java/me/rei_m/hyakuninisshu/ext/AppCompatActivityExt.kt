@@ -13,22 +13,47 @@
 
 package me.rei_m.hyakuninisshu.ext
 
-import android.support.v4.app.DialogFragment
+import android.support.annotation.IdRes
+import android.support.annotation.StringRes
+import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 
-interface AppCompatActivityExt {
-    fun AppCompatActivity.setupActionBar(toolbar: Toolbar, action: ActionBar.() -> Unit) {
-        setSupportActionBar(toolbar)
-        supportActionBar?.run {
-            action()
-        }
+fun AppCompatActivity.addFragment(@IdRes containerViewId: Int,
+                                  fragment: Fragment,
+                                  tag: String) {
+    supportFragmentManager
+        .beginTransaction()
+        .add(containerViewId, fragment, tag)
+        .commit()
+}
+
+fun AppCompatActivity.replaceFragment(@IdRes containerViewId: Int,
+                                      fragment: Fragment,
+                                      tag: String,
+                                      transition: Int? = null) {
+    val transaction = supportFragmentManager.beginTransaction()
+    transition?.let { transaction.setTransition(it) }
+    transaction
+        .replace(containerViewId, fragment, tag)
+        .commit()
+}
+
+fun AppCompatActivity.setupActionBar(toolbar: Toolbar, action: ActionBar.() -> Unit) {
+    setSupportActionBar(toolbar)
+    supportActionBar?.run {
+        action()
     }
+}
 
-    fun AppCompatActivity.showDialogFragment(tag: String, dialog: () -> DialogFragment) {
-        if (supportFragmentManager.findFragmentByTag(tag) == null) {
-            dialog().show(supportFragmentManager, tag)
-        }
+fun AppCompatActivity.showAlertDialog(@StringRes titleId: Int, @StringRes messageId: Int) {
+    if (supportFragmentManager.findFragmentByTag(AlertDialogFragment.TAG) == null) {
+        AlertDialogFragment.newInstance(
+            titleId,
+            messageId,
+            true,
+            false).show(supportFragmentManager, AlertDialogFragment.TAG)
     }
 }

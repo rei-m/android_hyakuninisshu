@@ -13,7 +13,7 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
-import me.rei_m.hyakuninisshu.domain.util.ArrayUtil
+import me.rei_m.hyakuninisshu.domain.util.generateRandomIndexArray
 
 /**
  * 歌IDのコレクション.
@@ -29,7 +29,7 @@ class KarutaIds(val values: List<KarutaIdentifier>) {
      * @return ランダムにソートされた歌IDのリスト
      */
     val asRandomized: List<KarutaIdentifier>
-        get() = ArrayUtil.generateRandomIndexArray(values.size, values.size).map { values[it] }
+        get() = generateRandomIndexArray(values.size, values.size).map { values[it] }
 
     /**
      * 指定の歌IDを含んでいるか確認する.

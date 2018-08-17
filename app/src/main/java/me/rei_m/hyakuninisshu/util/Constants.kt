@@ -13,6 +13,4 @@
 
 package me.rei_m.hyakuninisshu.util
 
-object Constants {
-    const val SPACE = "　"
-}
+const val SPACE = "　"

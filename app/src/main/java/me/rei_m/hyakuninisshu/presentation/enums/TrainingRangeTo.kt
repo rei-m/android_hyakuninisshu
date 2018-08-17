@@ -19,7 +19,10 @@ import android.support.annotation.StringRes
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 
-enum class TrainingRangeTo(val value: KarutaIdentifier, @param:StringRes private val resId: Int) : SpinnerItem {
+enum class TrainingRangeTo(
+    val value: KarutaIdentifier,
+    @param:StringRes private val resId: Int
+) : SpinnerItem {
     TEN(KarutaIdentifier(10), R.string.training_range_10),
     TWENTY(KarutaIdentifier(20), R.string.training_range_20),
     THIRTY(KarutaIdentifier(30), R.string.training_range_30),

@@ -25,51 +25,51 @@ import me.rei_m.hyakuninisshu.action.exam.StartExamAction
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class ExamStore(dispatcher: Dispatcher) : Store() {
 
-    private val currentKarutaQuizIdLiveData = MutableLiveData<KarutaQuizIdentifier?>()
-    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = currentKarutaQuizIdLiveData
+    private val _currentKarutaQuizId = MutableLiveData<KarutaQuizIdentifier?>()
+    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = _currentKarutaQuizId
 
-    private val resultLiveData = MutableLiveData<KarutaExam?>()
-    val result: LiveData<KarutaExam?> = resultLiveData
+    private val _result = MutableLiveData<KarutaExam?>()
+    val result: LiveData<KarutaExam?> = _result
 
-    private val notFoundQuizEventLiveData = SingleLiveEvent<Void>()
-    val notFoundQuizEvent = notFoundQuizEventLiveData
+    private val _notFoundQuizEvent = MutableLiveData<Event<Unit>>()
+    val notFoundQuizEvent = _notFoundQuizEvent
 
-    private val notFoundExamEventLiveData = SingleLiveEvent<Void>()
-    val notFoundExamEvent = notFoundExamEventLiveData
+    private val _notFoundExamEvent = MutableLiveData<Event<Unit>>()
+    val notFoundExamEvent = _notFoundExamEvent
 
     init {
-        currentKarutaQuizIdLiveData.value = null
-        resultLiveData.value = null
+        _currentKarutaQuizId.value = null
+        _result.value = null
 
         register(dispatcher.on(StartExamAction::class.java).subscribe {
             if (it.error == null) {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                notFoundQuizEventLiveData.call()
+                _notFoundQuizEvent.value = Event(Unit)
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
             if (it.error == null) {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                notFoundQuizEventLiveData.call()
+                _notFoundQuizEvent.value = Event(Unit)
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
-            currentKarutaQuizIdLiveData.value = null
+            _currentKarutaQuizId.value = null
             if (it.error == null) {
-                resultLiveData.value = it.karutaExam
+                _result.value = it.karutaExam
             } else {
-                notFoundExamEventLiveData.call()
+                _notFoundExamEvent.value = Event(Unit)
             }
         }, dispatcher.on(FetchExamAction::class.java).subscribe {
             if (it.error == null) {
-                resultLiveData.value = it.karutaExam
+                _result.value = it.karutaExam
             } else {
-                notFoundExamEventLiveData.call()
+                _notFoundExamEvent.value = Event(Unit)
             }
         })
     }

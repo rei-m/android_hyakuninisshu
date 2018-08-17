@@ -11,29 +11,25 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.widget.view
+package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
 import android.databinding.BindingAdapter
 import android.view.View
 
-object ViewBindings {
-    @JvmStatic
-    @BindingAdapter("visibleOrGone")
-    fun setVisibleOrGone(view: View, visible: Boolean?) {
-        if (visible == true) {
-            view.visibility = View.VISIBLE
-        } else {
-            view.visibility = View.GONE
-        }
+@BindingAdapter("visibleOrGone")
+fun setVisibleOrGone(view: View, visible: Boolean?) {
+    if (visible == true) {
+        view.visibility = View.VISIBLE
+    } else {
+        view.visibility = View.GONE
     }
+}
 
-    @JvmStatic
-    @BindingAdapter("visibleOrInvisible")
-    fun setVisibleOrInvisible(view: View, visible: Boolean?) {
-        if (visible == true) {
-            view.visibility = View.VISIBLE
-        } else {
-            view.visibility = View.INVISIBLE
-        }
+@BindingAdapter("visibleOrInvisible")
+fun setVisibleOrInvisible(view: View, visible: Boolean?) {
+    if (visible == true) {
+        view.visibility = View.VISIBLE
+    } else {
+        view.visibility = View.INVISIBLE
     }
 }

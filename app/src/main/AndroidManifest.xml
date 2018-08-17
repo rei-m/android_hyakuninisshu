@@ -64,6 +64,11 @@
             android:label="@string/editing_material"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.examhistory.ExamHistoryActivity"
+            android:label="@string/exam_history"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <!-- Include the AdActivity configChanges and theme. -->
         <activity

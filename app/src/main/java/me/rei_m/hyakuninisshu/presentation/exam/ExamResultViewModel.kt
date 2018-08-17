@@ -15,23 +15,24 @@ package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
-import me.rei_m.hyakuninisshu.AnalyticsManager
 import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class ExamResultViewModel(
-        store: ExamStore,
-        actionDispatcher: ExamActionDispatcher,
-        initialKarutaExamId: KarutaExamIdentifier?,
-        private val navigator: Navigator,
-        private val analyticsManager: AnalyticsManager
-) : LiveDataExt {
+    store: ExamStore,
+    actionDispatcher: ExamActionDispatcher,
+    initialKarutaExamId: KarutaExamIdentifier?,
+    private val navigator: Navigator,
+    private val analyticsHelper: AnalyticsHelper
+) {
 
     val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier() }
 
@@ -41,7 +42,7 @@ class ExamResultViewModel(
 
     val karutaQuizJudgements: LiveData<List<KarutaQuizJudgement>?> = store.result.map { it?.result?.judgements }
 
-    val notFoundExamError: LiveData<Boolean> = store.notFoundExamEvent.map { true }
+    val notFoundExamEvent: LiveData<Event<Unit>> = store.notFoundExamEvent
 
     init {
         if (initialKarutaExamId == null) {
@@ -56,23 +57,25 @@ class ExamResultViewModel(
     }
 
     fun finish() {
-        analyticsManager.logActionEvent(AnalyticsManager.ActionEvent.FINISH_EXAM)
+        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.FINISH_EXAM)
         navigator.back()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: ExamActionDispatcher,
-                                      private val storeFactory: ExamStore.Factory,
-                                      private val navigator: Navigator,
-                                      private val analyticsManager: AnalyticsManager): ViewModelFactory {
+    class Factory @Inject constructor(
+        private val actionDispatcher: ExamActionDispatcher,
+        private val storeFactory: ExamStore.Factory,
+        private val navigator: Navigator,
+        private val analyticsHelper: AnalyticsHelper
+    ) : ViewModelFactory {
 
         var initialKarutaExamId: KarutaExamIdentifier? = null
 
-        fun create(activity: FragmentActivity): ExamResultViewModel = ExamResultViewModel(
-                obtainActivityStore(activity, ExamStore::class.java, storeFactory),
-                actionDispatcher,
-                initialKarutaExamId,
-                navigator,
-                analyticsManager
+        fun create(activity: FragmentActivity) = ExamResultViewModel(
+            obtainActivityStore(activity, ExamStore::class.java, storeFactory),
+            actionDispatcher,
+            initialKarutaExamId,
+            navigator,
+            analyticsHelper
         )
     }
 }

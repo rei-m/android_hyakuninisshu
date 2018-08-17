@@ -19,7 +19,10 @@ import android.support.annotation.StringRes
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
 
-enum class KimarijiFilter(val value: Kimariji?, @param:StringRes private val resId: Int) : SpinnerItem {
+enum class KimarijiFilter(
+    val value: Kimariji?,
+    @param:StringRes private val resId: Int
+) : SpinnerItem {
     ALL(null, R.string.kimariji_not_select),
     ONE(Kimariji.ONE, R.string.kimariji_1),
     TWO(Kimariji.TWO, R.string.kimariji_2),

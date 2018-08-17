@@ -14,23 +14,24 @@
 package me.rei_m.hyakuninisshu.presentation.core
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.support.v4.app.Fragment
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class QuizAnswerViewModel(
-        store: QuizStore,
-        actionDispatcher: QuizActionDispatcher,
-        quizId: KarutaQuizIdentifier,
-        private val navigator: Navigator
-) : LiveDataExt {
+    store: QuizStore,
+    actionDispatcher: QuizActionDispatcher,
+    quizId: KarutaQuizIdentifier,
+    private val navigator: Navigator
+) {
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
@@ -56,11 +57,13 @@ class QuizAnswerViewModel(
 
     val fifthPhrase: LiveData<String> = karuta.map { it.shimoNoKu.fifth.kanji }
 
-    val openNextQuizEvent: SingleLiveEvent<Void> = SingleLiveEvent()
+    private val _openNextQuizEvent = MutableLiveData<Event<Unit>>()
+    val openNextQuizEvent: LiveData<Event<Unit>> = _openNextQuizEvent
 
-    val openResultEvent: SingleLiveEvent<Void> = SingleLiveEvent()
+    private val _openResultEvent = MutableLiveData<Event<Unit>>()
+    val openResultEvent: LiveData<Event<Unit>> = _openResultEvent
 
-    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
         actionDispatcher.fetch(quizId)
@@ -73,22 +76,23 @@ class QuizAnswerViewModel(
     }
 
     fun onClickNextQuiz() {
-        openNextQuizEvent.call()
+        _openNextQuizEvent.value = Event(Unit)
     }
 
     fun onClickConfirmResult() {
-        openResultEvent.call()
+        _openResultEvent.value = Event(Unit)
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: QuizActionDispatcher,
-                                      private val storeFactory: QuizStore.Factory,
-                                      private val navigator: Navigator) : ViewModelFactory {
-        fun create(fragment: Fragment,
-                   quizId: KarutaQuizIdentifier): QuizAnswerViewModel = QuizAnswerViewModel(
-                obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
-                actionDispatcher,
-                quizId,
-                navigator
+    class Factory @Inject constructor(
+        private val actionDispatcher: QuizActionDispatcher,
+        private val storeFactory: QuizStore.Factory,
+        private val navigator: Navigator
+    ) : ViewModelFactory {
+        fun create(fragment: Fragment, quizId: KarutaQuizIdentifier) = QuizAnswerViewModel(
+            obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
+            actionDispatcher,
+            quizId,
+            navigator
         )
     }
 }

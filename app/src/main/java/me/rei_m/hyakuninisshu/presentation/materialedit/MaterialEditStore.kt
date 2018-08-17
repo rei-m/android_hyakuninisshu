@@ -22,33 +22,33 @@ import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.StartEditMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class MaterialEditStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaLiveData = MutableLiveData<Karuta?>()
-    val karuta: LiveData<Karuta?> = karutaLiveData
+    private val _karuta = MutableLiveData<Karuta?>()
+    val karuta: LiveData<Karuta?> = _karuta
 
-    private val completeEditEventLiveData = SingleLiveEvent<Void>()
-    val completeEditEvent: LiveData<Void> = completeEditEventLiveData
+    private val _completeEditEvent = MutableLiveData<Event<Unit>>()
+    val completeEditEvent: LiveData<Event<Unit>> = _completeEditEvent
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(StartEditMaterialAction::class.java).subscribe {
             if (it.error == null) {
-                karutaLiveData.value = it.karuta
+                _karuta.value = it.karuta
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe {
             if (it.error == null) {
-                karutaLiveData.value = null
-                completeEditEventLiveData.call()
+                _karuta.value = null
+                _completeEditEvent.value = Event(Unit)
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.value = Event(Unit)
             }
         })
     }

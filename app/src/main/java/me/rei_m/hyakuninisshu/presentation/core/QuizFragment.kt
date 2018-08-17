@@ -31,77 +31,94 @@ import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class QuizFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
     @Inject
     lateinit var viewModelFactory: QuizViewModel.Factory
 
-    private lateinit var viewModel: QuizViewModel
+    private lateinit var quizViewModel: QuizViewModel
 
     private lateinit var binding: FragmentQuizBinding
 
     private var listener: CoreInteractionListener? = null
 
-    private val karutaQuizId: KarutaQuizIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_QUIZ_ID)) {
+    private val karutaQuizId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaQuizIdentifier>(ARG_KARUTA_QUIZ_ID)) {
             "$ARG_KARUTA_QUIZ_ID is missing"
         }
+    }
 
-    private val kamiNoKuStyle: KarutaStyleFilter
-        get() = requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
+    private val kamiNoKuStyle by lazy {
+        requireNotNull(arguments?.getInt(ARG_KAMI_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
             "$ARG_KAMI_NO_KU_STYLE is missing"
         }
+    }
 
-    private val shimoNoKuStyle: KarutaStyleFilter
-        get() = requireNotNull(arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
+    private val shimoNoKuStyle by lazy {
+        requireNotNull(arguments?.getInt(ARG_SHIMO_NO_KU_STYLE)?.let { KarutaStyleFilter[it] }) {
             "$ARG_SHIMO_NO_KU_STYLE is missing"
         }
+    }
 
     private var animationDisposable: Disposable? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModel = viewModelFactory.create(this, karutaQuizId, kamiNoKuStyle, shimoNoKuStyle).apply {
-            content.observe(this@QuizFragment, Observer {
-                it ?: let { return@Observer }
-                when (it.quiz.state) {
-                    KarutaQuiz.State.IN_ANSWER -> {
-                        val (firstPhrase, secondPhrase, thirdPhrase) = it.yomiFuda(kamiNoKuStyle.value)
-                        startDisplayQuizAnimation(firstPhrase, secondPhrase, thirdPhrase)
-                    }
-                    KarutaQuiz.State.ANSWERED -> {
-                        stopDisplayQuizAnimation()
-                    }
-                    else -> {
-                    }
-                }
-            })
-            openAnswerEvent.observe(this@QuizFragment, Observer {
-                it ?: let { return@Observer }
-                listener?.onAnswered(it)
-            })
-            unhandledErrorEvent.observe(this@QuizFragment, Observer {
-                listener?.onErrorQuiz()
-            })
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        quizViewModel = viewModelFactory.create(this, karutaQuizId, kamiNoKuStyle, shimoNoKuStyle)
 
         binding = FragmentQuizBinding.inflate(inflater, container, false).apply {
+            viewModel = quizViewModel
             setLifecycleOwner(this@QuizFragment)
         }
 
-        binding.viewModel = viewModel
+
+        quizViewModel.content.observe(this, Observer {
+            it ?: return@Observer
+            when (it.quiz.state) {
+                KarutaQuiz.State.IN_ANSWER -> {
+                    val (firstPhrase, secondPhrase, thirdPhrase) = it.yomiFuda(kamiNoKuStyle.value)
+                    startDisplayQuizAnimation(firstPhrase, secondPhrase, thirdPhrase)
+                }
+                KarutaQuiz.State.ANSWERED -> {
+                    stopDisplayQuizAnimation()
+                }
+                else -> {
+                }
+            }
+        })
+        quizViewModel.openAnswerEvent.observe(this, EventObserver {
+            listener?.onAnswered(it)
+        })
+        quizViewModel.unhandledErrorEvent.observe(this, EventObserver {
+            listener?.onErrorQuiz()
+        })
 
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Quiz", requireActivity())
+    }
+
     override fun onResume() {
         super.onResume()
-        viewModel.start()
+        quizViewModel.start()
     }
 
     override fun onPause() {
@@ -132,34 +149,34 @@ class QuizFragment : DaggerFragment() {
         }
 
         val firstLine = Arrays.asList<KarutaTextView>(
-                binding.phrase11,
-                binding.phrase12,
-                binding.phrase13,
-                binding.phrase14,
-                binding.phrase15,
-                binding.phrase16
+            binding.phrase11,
+            binding.phrase12,
+            binding.phrase13,
+            binding.phrase14,
+            binding.phrase15,
+            binding.phrase16
         )
         firstLine.forEach { it.visibility = View.INVISIBLE }
 
         val secondLine = Arrays.asList<KarutaTextView>(
-                binding.phrase21,
-                binding.phrase22,
-                binding.phrase23,
-                binding.phrase24,
-                binding.phrase25,
-                binding.phrase26,
-                binding.phrase27,
-                binding.phrase28
+            binding.phrase21,
+            binding.phrase22,
+            binding.phrase23,
+            binding.phrase24,
+            binding.phrase25,
+            binding.phrase26,
+            binding.phrase27,
+            binding.phrase28
         )
         secondLine.forEach { it.visibility = View.INVISIBLE }
 
         val thirdLine = Arrays.asList<KarutaTextView>(
-                binding.phrase31,
-                binding.phrase32,
-                binding.phrase33,
-                binding.phrase34,
-                binding.phrase35,
-                binding.phrase36
+            binding.phrase31,
+            binding.phrase32,
+            binding.phrase33,
+            binding.phrase34,
+            binding.phrase35,
+            binding.phrase36
         )
 
         thirdLine.forEach { it.visibility = View.INVISIBLE }
@@ -171,19 +188,19 @@ class QuizFragment : DaggerFragment() {
         }
 
         animationDisposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS)
-                .zipWith(totalKarutaTextViewList) { _, textView -> textView }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnDispose {
-                    totalKarutaTextViewList.forEach { it.animation?.cancel() }
+            .zipWith(totalKarutaTextViewList) { _, textView -> textView }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnDispose {
+                totalKarutaTextViewList.forEach { it.animation?.cancel() }
+            }
+            .subscribe { textView ->
+                val fadeIn = AlphaAnimation(0f, 1f).apply {
+                    interpolator = DecelerateInterpolator()
+                    duration = SPEED_DISPLAY_ANIMATION_MILL_SEC
                 }
-                .subscribe { textView ->
-                    val fadeIn = AlphaAnimation(0f, 1f).apply {
-                        interpolator = DecelerateInterpolator()
-                        duration = SPEED_DISPLAY_ANIMATION_MILL_SEC
-                    }
-                    textView.visibility = View.VISIBLE
-                    textView.startAnimation(fadeIn)
-                }
+                textView.visibility = View.VISIBLE
+                textView.startAnimation(fadeIn)
+            }
     }
 
     private fun stopDisplayQuizAnimation() {
@@ -198,7 +215,7 @@ class QuizFragment : DaggerFragment() {
         abstract fun contributeInjector(): QuizFragment
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "QuizFragment"
 
