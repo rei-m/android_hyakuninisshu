@@ -18,6 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 abstract class Store : ViewModel() {
+
     private val disposable = CompositeDisposable()
 
     protected fun register(vararg ds: Disposable) {

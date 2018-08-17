@@ -24,41 +24,56 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class QuizAnswerFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var viewModelFactory: QuizAnswerViewModel.Factory
 
     private var listener: CoreInteractionListener? = null
 
-    val karutaQuizId: KarutaQuizIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_QUIZ_ID)) {
+    val karutaQuizId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaQuizIdentifier>(ARG_KARUTA_QUIZ_ID)) {
             "$ARG_KARUTA_QUIZ_ID is missing"
         }
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(this, karutaQuizId).apply {
-            openNextQuizEvent.observe(this@QuizAnswerFragment, Observer {
-                listener?.onGoToNext()
-            })
-            openResultEvent.observe(this@QuizAnswerFragment, Observer {
-                listener?.onGoToResult()
-            })
-            unhandledErrorEvent.observe(this@QuizAnswerFragment, Observer {
-                listener?.onErrorQuiz()
-            })
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val quizAnswerViewModel = viewModelFactory.create(this, karutaQuizId)
 
         val binding = FragmentQuizAnswerBinding.inflate(inflater, container, false).apply {
+            viewModel = quizAnswerViewModel
             setLifecycleOwner(this@QuizAnswerFragment)
         }
 
-        binding.viewModel = viewModel
+        quizAnswerViewModel.openNextQuizEvent.observe(this, EventObserver {
+            listener?.onGoToNext()
+        })
+        quizAnswerViewModel.openResultEvent.observe(this, EventObserver {
+            listener?.onGoToResult()
+        })
+        quizAnswerViewModel.unhandledErrorEvent.observe(this, EventObserver {
+            listener?.onErrorQuiz()
+        })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("QuizAnswer", requireActivity())
     }
 
     override fun onAttach(context: Context) {
@@ -82,7 +97,7 @@ class QuizAnswerFragment : DaggerFragment() {
         abstract fun contributeInjector(): QuizAnswerFragment
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "QuizAnswerFragment"
 

@@ -32,6 +32,7 @@ import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
 
 class Navigator(private val activity: AppCompatActivity) {
 
@@ -41,12 +42,12 @@ class Navigator(private val activity: AppCompatActivity) {
         activity.startActivity(intentToLaunch)
     }
 
-    fun navigateToTrainingMaster(trainingRangeFrom: TrainingRangeFrom,
-                                 trainingRangeTo: TrainingRangeTo,
-                                 kimarijiFilter: KimarijiFilter,
-                                 colorFilter: ColorFilter,
-                                 kamiNoKuStyle: KarutaStyleFilter,
-                                 shimoNoKuStyle: KarutaStyleFilter) {
+    fun navigateToTraining(trainingRangeFrom: TrainingRangeFrom,
+                           trainingRangeTo: TrainingRangeTo,
+                           kimarijiFilter: KimarijiFilter,
+                           colorFilter: ColorFilter,
+                           kamiNoKuStyle: KarutaStyleFilter,
+                           shimoNoKuStyle: KarutaStyleFilter) {
         val intentToLaunch = TrainingActivity.createIntent(activity,
                 trainingRangeFrom,
                 trainingRangeTo,
@@ -57,12 +58,17 @@ class Navigator(private val activity: AppCompatActivity) {
         activity.startActivity(intentToLaunch)
     }
 
-    fun navigateToExamMaster() {
+    fun navigateToExam() {
         val intentToLaunch = ExamActivity.createIntent(activity)
         activity.startActivity(intentToLaunch)
     }
 
-    fun navigateToExamTrainingMaster() {
+    fun navigateToExamHistory() {
+        val intentToLaunch = ExamHistoryActivity.createIntent(activity)
+        activity.startActivity(intentToLaunch)
+    }
+
+    fun navigateToTrainingExam() {
         val intentToLaunch = TrainingExamActivity.createIntent(activity)
         activity.startActivity(intentToLaunch)
     }

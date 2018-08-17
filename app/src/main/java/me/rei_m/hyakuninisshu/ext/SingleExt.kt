@@ -16,8 +16,6 @@ package me.rei_m.hyakuninisshu.ext
 import io.reactivex.Single
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 
-interface SingleExt {
-    fun <T> Single<T>.scheduler(schedulerProvider: SchedulerProvider): Single<T> = this
-            .subscribeOn(schedulerProvider.new())
-            .observeOn(schedulerProvider.ui())
-}
+fun <T> Single<T>.scheduler(schedulerProvider: SchedulerProvider): Single<T> = this
+    .subscribeOn(schedulerProvider.new())
+    .observeOn(schedulerProvider.ui())

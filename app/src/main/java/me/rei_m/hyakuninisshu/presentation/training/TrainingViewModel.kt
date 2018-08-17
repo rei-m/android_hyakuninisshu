@@ -17,35 +17,36 @@ import android.arch.lifecycle.LiveData
 import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class TrainingViewModel(
-        store: TrainingStore,
-        private val actionDispatcher: TrainingActionDispatcher
-) : LiveDataExt {
+    store: TrainingStore,
+    private val actionDispatcher: TrainingActionDispatcher
+) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
     val isVisibleAd: LiveData<Boolean> = currentKarutaQuizId.map { it == null }
 
-    val isVisibleEmpty: LiveData<Boolean> = store.notFoundErrorEvent
+    val isVisibleEmpty: LiveData<Boolean> = store.empty
 
-    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     fun startTraining(trainingRangeFrom: TrainingRangeFrom,
                       trainingRangeTo: TrainingRangeTo,
                       kimarijiFilter: KimarijiFilter,
                       colorFilter: ColorFilter) {
         actionDispatcher.start(trainingRangeFrom.value,
-                trainingRangeTo.value,
-                kimarijiFilter.value,
-                colorFilter.value)
+            trainingRangeTo.value,
+            kimarijiFilter.value,
+            colorFilter.value)
     }
 
     fun startTraining() {
@@ -56,11 +57,13 @@ class TrainingViewModel(
         actionDispatcher.fetchNext()
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: TrainingActionDispatcher,
-                                      private val storeFactory: TrainingStore.Factory): ViewModelFactory {
-        fun create(activity: FragmentActivity): TrainingViewModel = TrainingViewModel(
-                obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
-                actionDispatcher
+    class Factory @Inject constructor(
+        private val actionDispatcher: TrainingActionDispatcher,
+        private val storeFactory: TrainingStore.Factory
+    ) : ViewModelFactory {
+        fun create(activity: FragmentActivity) = TrainingViewModel(
+            obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
+            actionDispatcher
         )
     }
 }

@@ -31,12 +31,14 @@ import hotchemi.android.rate.AppRate
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.ext.addFragment
+import me.rei_m.hyakuninisshu.ext.replaceFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import javax.inject.Inject
 
-class EntranceActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
+class EntranceActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
@@ -62,10 +64,7 @@ class EntranceActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
         setupAppRate()
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.content, initialPage.newInstance(), initialPage.tag)
-                    .commit()
+            addFragment(R.id.content, initialPage.newInstance(), initialPage.tag)
         } else {
             currentPageIndex = savedInstanceState.getInt(KEY_PAGE_INDEX, 0)
             binding.bottomNavigation.menu.getItem(currentPageIndex).isChecked = true
@@ -84,11 +83,7 @@ class EntranceActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
                 return@setOnNavigationItemSelectedListener false
             }
             currentPageIndex = page.ordinal
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, page.newInstance(), page.tag)
-                    .commit()
+            replaceFragment(R.id.content, page.newInstance(), page.tag, FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             return@setOnNavigationItemSelectedListener true
         }
     }
@@ -97,8 +92,8 @@ class EntranceActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
         lifecycle.addObserver(adViewObserver)
         val adView = adViewObserver.adView()
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ABOVE, R.id.bottom_navigation)
         }
@@ -110,12 +105,12 @@ class EntranceActivity : DaggerAppCompatActivity(), AppCompatActivityExt {
 
     private fun setupAppRate() {
         AppRate.with(this)
-                .setInstallDays(1)
-                .setLaunchTimes(3)
-                .setRemindInterval(10)
-                .setShowLaterButton(true)
-                .setDebug(false)
-                .monitor()
+            .setInstallDays(1)
+            .setLaunchTimes(3)
+            .setRemindInterval(10)
+            .setShowLaterButton(true)
+            .setDebug(false)
+            .monitor()
 
         AppRate.showRateDialogIfMeetsConditions(this)
     }

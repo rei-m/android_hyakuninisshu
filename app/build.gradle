@@ -4,7 +4,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
 }
 
@@ -32,8 +31,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled true
-        versionCode 15
-        versionName "1.0.14"
+        versionCode 16
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -122,6 +121,8 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.assertj:assertj-core:3.10.0'
     testImplementation 'org.robolectric:robolectric:3.6.1'
@@ -156,10 +157,6 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
-
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
-        transitive = true
-    }
 }
 
 apply plugin: 'com.google.gms.google-services'

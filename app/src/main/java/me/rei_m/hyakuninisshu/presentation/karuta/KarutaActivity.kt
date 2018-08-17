@@ -30,24 +30,26 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityKarutaBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
+import me.rei_m.hyakuninisshu.ext.addFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
+import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class KarutaActivity : DaggerAppCompatActivity(),
-        KarutaFragment.OnFragmentInteractionListener,
-        AlertDialogFragment.OnDialogInteractionListener,
-        AppCompatActivityExt {
+    KarutaFragment.OnFragmentInteractionListener,
+    AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
 
     private lateinit var binding: ActivityKarutaBinding
 
-    private val karutaId: KarutaIdentifier
-        get() = intent.getParcelableExtra(ARG_KARUTA_ID)
+    private val karutaId by lazy {
+        intent.getParcelableExtra<KarutaIdentifier>(ARG_KARUTA_ID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +62,7 @@ class KarutaActivity : DaggerAppCompatActivity(),
         setupAd()
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.content, KarutaFragment.newInstance(karutaId), KarutaFragment.TAG)
-                    .commit()
+            addFragment(R.id.content, KarutaFragment.newInstance(karutaId), KarutaFragment.TAG)
         }
     }
 
@@ -86,21 +85,15 @@ class KarutaActivity : DaggerAppCompatActivity(),
     }
 
     override fun onError() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_illegal_arguments,
-                    true,
-                    false)
-        }
+        showAlertDialog(R.string.text_title_error, R.string.text_message_illegal_arguments)
     }
 
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
         val adView = adViewObserver.adView()
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

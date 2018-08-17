@@ -102,10 +102,12 @@
                 app:examJudgements="@{viewModel.karutaQuizJudgements}" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/margin_l"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_m"
                 android:onClick="@{() -> viewModel.finish()}"
                 android:text="@string/back_menu" />
 

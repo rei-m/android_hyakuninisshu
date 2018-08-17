@@ -19,9 +19,13 @@ import timber.log.Timber
 object Logger {
     fun action(a: Action) {
         if (a.error == null) {
-            Timber.tag("Action").d("$a")
+            Timber.tag("Action").d(a.toString())
         } else {
-            Timber.tag("Action").e("$a")
+            Timber.tag("Action").e(a.toString())
         }
+    }
+
+    fun analytics(message: String) {
+        Timber.tag("Analytics").d(message)
     }
 }

@@ -17,20 +17,23 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
-import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
+import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
+import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TrainingActionDispatcher @Inject constructor(
-        private val karutaRepository: KarutaRepository,
-        private val karutaQuizRepository: KarutaQuizRepository,
-        private val karutaExamRepository: KarutaExamRepository,
-        private val dispatcher: Dispatcher,
-        private val schedulerProvider: SchedulerProvider
-) : SingleExt {
+    private val karutaRepository: KarutaRepository,
+    private val karutaQuizRepository: KarutaQuizRepository,
+    private val karutaExamRepository: KarutaExamRepository,
+    private val dispatcher: Dispatcher,
+    private val schedulerProvider: SchedulerProvider
+) {
     /**
      * 練習を開始する.
      *

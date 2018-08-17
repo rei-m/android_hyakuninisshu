@@ -30,7 +30,7 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
         val parentActivity = requireActivity()
 
         val binding = DialogConfirmMaterialEditBinding
-                .inflate(parentActivity.layoutInflater, null, false)
+            .inflate(parentActivity.layoutInflater, null, false)
 
         with(binding) {
             firstPhraseKanji = arguments?.getString(ARG_FIRST_KANJI)
@@ -46,13 +46,13 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
         }
 
         val builder = AlertDialog.Builder(parentActivity)
-                .setView(binding.root)
-                .setPositiveButton(R.string.update) { _, _ ->
-                    listener?.onClickUpdate()
-                }
-                .setNegativeButton(R.string.back) { _, _ ->
-                    listener?.onClickBack()
-                }
+            .setView(binding.root)
+            .setPositiveButton(R.string.update) { _, _ ->
+                listener?.onClickUpdate()
+            }
+            .setNegativeButton(R.string.back) { _, _ ->
+                listener?.onClickBack()
+            }
 
         return builder.create()
     }
@@ -100,7 +100,7 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
                         fourthKanji: String,
                         fourthKana: String,
                         fifthKanji: String,
-                        fifthKana: String): ConfirmMaterialEditDialogFragment = ConfirmMaterialEditDialogFragment().apply {
+                        fifthKana: String) = ConfirmMaterialEditDialogFragment().apply {
             arguments = Bundle().apply {
                 putString(ARG_FIRST_KANJI, firstKanji)
                 putString(ARG_FIRST_KANA, firstKana)

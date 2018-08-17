@@ -20,14 +20,15 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_ripple"
         android:onClick="@{() -> listener.onItemClicked(position)}"
-        android:paddingBottom="@dimen/padding_xs"
+        android:paddingBottom="@dimen/padding_s"
         android:paddingLeft="@dimen/padding_m"
         android:paddingRight="@dimen/padding_m"
-        android:paddingTop="@dimen/padding_xs">
+        android:paddingTop="@dimen/padding_s">
 
         <TextView
             android:id="@+id/karuta_no"

@@ -20,7 +20,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.ext.SingleExt
+import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import java.util.*
 import javax.inject.Inject
@@ -28,12 +28,12 @@ import javax.inject.Singleton
 
 @Singleton
 class ExamActionDispatcher @Inject constructor(
-        private val karutaRepository: KarutaRepository,
-        private val karutaQuizRepository: KarutaQuizRepository,
-        private val karutaExamRepository: KarutaExamRepository,
-        private val dispatcher: Dispatcher,
-        private val schedulerProvider: SchedulerProvider
-) : SingleExt {
+    private val karutaRepository: KarutaRepository,
+    private val karutaQuizRepository: KarutaQuizRepository,
+    private val karutaExamRepository: KarutaExamRepository,
+    private val dispatcher: Dispatcher,
+    private val schedulerProvider: SchedulerProvider
+) {
 
     /**
      * 力試しを取得する.
@@ -56,6 +56,17 @@ class ExamActionDispatcher @Inject constructor(
             dispatcher.dispatch(FetchRecentExamAction(it.recent))
         }, {
             dispatcher.dispatch(FetchRecentExamAction(null, it))
+        })
+    }
+
+    /**
+     * 全ての力試しを取得する.
+     */
+    fun fetchAll() {
+        karutaExamRepository.list().scheduler(schedulerProvider).subscribe({
+            dispatcher.dispatch(FetchAllExamAction(it.all))
+        }, {
+            dispatcher.dispatch(FetchAllExamAction(null, it))
         })
     }
 

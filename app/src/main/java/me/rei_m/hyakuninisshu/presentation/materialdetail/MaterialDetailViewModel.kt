@@ -18,25 +18,26 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.v4.app.FragmentActivity
 import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.ext.MutableLiveDataExt
+import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class MaterialDetailViewModel(
-        store: MaterialDetailStore,
-        actionDispatcher: MaterialActionDispatcher,
-        colorFilter: ColorFilter,
-        initialPosition: Int,
-        private val navigator: Navigator
-) : MutableLiveDataExt {
+    store: MaterialDetailStore,
+    actionDispatcher: MaterialActionDispatcher,
+    colorFilter: ColorFilter,
+    initialPosition: Int,
+    private val navigator: Navigator
+) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
     val initialPosition: LiveData<Int> = MutableLiveData<Int>().withValue(initialPosition)
 
-    val unhandledErrorEvent: LiveData<Void> = store.unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
         actionDispatcher.fetch(colorFilter)
@@ -48,15 +49,21 @@ class MaterialDetailViewModel(
         }
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: MaterialActionDispatcher,
-                                      private val storeFactory: MaterialDetailStore.Factory,
-                                      private val navigator: Navigator): ViewModelFactory {
-        fun create(activity: FragmentActivity, colorFilter: ColorFilter, initialPosition: Int): MaterialDetailViewModel = MaterialDetailViewModel(
-                obtainActivityStore(activity, MaterialDetailStore::class.java, storeFactory),
-                actionDispatcher,
-                colorFilter,
-                initialPosition,
-                navigator
+    class Factory @Inject constructor(
+        private val actionDispatcher: MaterialActionDispatcher,
+        private val storeFactory: MaterialDetailStore.Factory,
+        private val navigator: Navigator
+    ) : ViewModelFactory {
+        fun create(
+            activity: FragmentActivity,
+            colorFilter: ColorFilter,
+            initialPosition: Int
+        ) = MaterialDetailViewModel(
+            obtainActivityStore(activity, MaterialDetailStore::class.java, storeFactory),
+            actionDispatcher,
+            colorFilter,
+            initialPosition,
+            navigator
         )
     }
 }

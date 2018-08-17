@@ -13,64 +13,59 @@
 
 package me.rei_m.hyakuninisshu.presentation.entrance
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.ext.adHeight
 
 class MaterialListAdapter(
-        private var karutaList: List<Karuta>,
-        private var viewModel: MaterialListViewModel
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    context: Context,
+    private var karutaList: List<Karuta>,
+    private var viewModel: MaterialListViewModel
+) : RecyclerView.Adapter<MaterialListAdapter.ItemViewHolder>() {
 
-    override fun getItemViewType(position: Int) = if (position < karutaList.size)
-        ItemViewType.ITEM.ordinal
-    else
-        ItemViewType.FOOTER.ordinal
+    private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.padding_s)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (ItemViewType.forId(viewType)) {
-            ItemViewType.ITEM -> {
-                val binding = AdapterItemMaterialKarutaBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                )
-                binding.listener = object : OnItemInteractionListener {
-                    override fun onItemClicked(position: Int) {
-                        viewModel.onClickItem(position)
-                    }
-                }
-                return ItemViewHolder(binding)
+    private val lastItemPaddingBottom = context.adHeight + itemPaddingBottom
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        val binding = AdapterItemMaterialKarutaBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        binding.listener = object : OnItemInteractionListener {
+            override fun onItemClicked(position: Int) {
+                viewModel.onClickItem(position)
             }
-            else -> {
-                val context = parent.context
-                val view = View(context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            context.resources.getDimensionPixelOffset(R.dimen.height_ad_banner)
-                    )
-                }
-                return object : RecyclerView.ViewHolder(view) {
-                }
+        }
+        return ItemViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        with(holder.binding) {
+            val paddingBottom = if (position == karutaList.lastIndex) {
+                lastItemPaddingBottom
+            } else {
+                itemPaddingBottom
             }
+            holder.binding.layoutRoot.setPadding(
+                holder.binding.layoutRoot.paddingLeft,
+                holder.binding.layoutRoot.paddingTop,
+                holder.binding.layoutRoot.paddingRight,
+                paddingBottom
+            )
+            this.karuta = karutaList[position]
+            this.position = position
+            executePendingBindings()
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemViewHolder) {
-            with(holder.binding) {
-                this.karuta = karutaList[position]
-                this.position = position
-                executePendingBindings()
-            }
-        }
-    }
-
-    override fun getItemCount() = karutaList.size + FOOTER_COUNT
+    override fun getItemCount() = karutaList.size
 
     fun replaceData(karutaList: List<Karuta>) {
         this.karutaList = karutaList
@@ -81,18 +76,7 @@ class MaterialListAdapter(
         fun onItemClicked(position: Int)
     }
 
-    private enum class ItemViewType {
-        ITEM,
-        FOOTER;
-
-        companion object {
-            fun forId(id: Int): ItemViewType = values()[id]
-        }
-    }
-
-    private class ItemViewHolder(val binding: AdapterItemMaterialKarutaBinding) : RecyclerView.ViewHolder(binding.root)
-
-    companion object {
-        private const val FOOTER_COUNT = 1
-    }
+    class ItemViewHolder(
+        val binding: AdapterItemMaterialKarutaBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 }

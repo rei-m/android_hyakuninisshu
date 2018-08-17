@@ -31,20 +31,21 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamBinding
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.ext.replaceFragment
+import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class TrainingExamActivity : DaggerAppCompatActivity(),
-        AlertDialogFragment.OnDialogInteractionListener,
-        CoreInteractionListener,
-        AppCompatActivityExt {
+    AlertDialogFragment.OnDialogInteractionListener,
+    CoreInteractionListener {
 
     @Inject
     lateinit var viewModelFactory: TrainingViewModel.Factory
@@ -56,9 +57,9 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
 
     private lateinit var binding: ActivityTrainingExamBinding
 
-    private val kamiNoKuStyle = KarutaStyleFilter.KANJI
+    override val kamiNoKuStyle = KarutaStyleFilter.KANJI
 
-    private val shimoNoKuStyle = KarutaStyleFilter.KANA
+    override val shimoNoKuStyle = KarutaStyleFilter.KANA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,35 +74,9 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
             })
             currentKarutaQuizId.observe(this@TrainingExamActivity, Observer {
                 it ?: return@Observer
-                if (supportFragmentManager.fragments.isEmpty()) {
-                    supportFragmentManager
-                            .beginTransaction()
-                            .add(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                            .commit()
-                    return@Observer
-                }
-
-                supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG)?.let { fragment ->
-                    if ((fragment as QuizAnswerFragment).karutaQuizId != it) {
-                        supportFragmentManager
-                                .beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                                .replace(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                                .commit()
-                        return@Observer
-                    }
-                }
-
-                supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
-                    supportFragmentManager
-                            .beginTransaction()
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                            .replace(R.id.content, QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle), QuizFragment.TAG)
-                            .commit()
-                    return@Observer
-                }
+                onReceiveKarutaQuizId(it)
             })
-            unhandledErrorEvent.observe(this@TrainingExamActivity, Observer {
+            unhandledErrorEvent.observe(this@TrainingExamActivity, EventObserver {
                 onErrorQuiz()
             })
         }
@@ -121,13 +96,7 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
     }
 
     override fun onAnswered(quizId: KarutaQuizIdentifier) {
-        if (supportFragmentManager.findFragmentByTag(QuizAnswerFragment.TAG) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, QuizAnswerFragment.newInstance(quizId), QuizAnswerFragment.TAG)
-                    .commit()
-        }
+        openAnswer(quizId)
     }
 
     override fun onGoToNext() {
@@ -136,22 +105,17 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
 
     override fun onGoToResult() {
         if (supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG) == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.content, TrainingResultFragment.newInstance(), TrainingResultFragment.TAG)
-                    .commit()
+            replaceFragment(
+                R.id.content,
+                TrainingResultFragment.newInstance(),
+                TrainingResultFragment.TAG,
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE
+            )
         }
     }
 
     override fun onErrorQuiz() {
-        showDialogFragment(AlertDialogFragment.TAG) {
-            AlertDialogFragment.newInstance(
-                    R.string.text_title_error,
-                    R.string.text_message_unhandled_error,
-                    true,
-                    false)
-        }
+        showError()
     }
 
     override fun onAlertPositiveClick() {
@@ -167,8 +131,8 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
         val adView = adViewObserver.adView()
 
         val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
             addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
         }

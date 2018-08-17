@@ -32,9 +32,7 @@ class ApplicationModule(application: Application) {
 
     @Provides
     @Singleton
-    fun provideContext(): Context {
-        return context
-    }
+    fun provideContext(): Context = context
 
     @Provides
     @Singleton
@@ -42,7 +40,5 @@ class ApplicationModule(application: Application) {
 
     @Provides
     @Singleton
-    fun provideDispatcher(schedulerProvider: SchedulerProvider): Dispatcher {
-        return AppDispatcher(schedulerProvider)
-    }
+    fun provideDispatcher(schedulerProvider: SchedulerProvider): Dispatcher = AppDispatcher(schedulerProvider)
 }

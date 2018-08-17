@@ -11,20 +11,12 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.presentation.exam
+package me.rei_m.hyakuninisshu.action.exam
 
-import android.databinding.BindingAdapter
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaExamResultView
+import me.rei_m.hyakuninisshu.action.Action
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-object ExamBindings {
-    @JvmStatic
-    @BindingAdapter("examJudgements")
-    fun setKarutaExamResult(view: KarutaExamResultView,
-                            judgements: List<KarutaQuizJudgement>?) {
-        if (judgements == null) {
-            return
-        }
-        view.setResult(judgements)
-    }
+class FetchAllExamAction(val karutaExamList: List<KarutaExam>?,
+                         override val error: Throwable? = null) : Action {
+    override fun toString(): String = "FetchAllExamAction(karutaExamList=$karutaExamList, error=$error)"
 }

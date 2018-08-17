@@ -22,7 +22,7 @@ import org.robolectric.RobolectricTestRunner
 class ArrayUtilTest {
     @Test
     fun generateRandomIndexArray() {
-        val actual = ArrayUtil.generateRandomIndexArray(10, 4)
+        val actual = generateRandomIndexArray(10, 4)
         val firstValue = actual.first()
         assertThat(actual.size).isEqualTo(4)
         assertThat(actual.slice(1..actual.lastIndex)).doesNotContain(firstValue)

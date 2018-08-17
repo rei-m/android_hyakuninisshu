@@ -19,38 +19,42 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.ext.withArgs
 
 class AlertDialogFragment : DialogFragment() {
 
     private var listener: OnDialogInteractionListener? = null
 
-    private val titleResId: Int
-        get() = requireNotNull(arguments?.getInt(ARG_TITLE)) {
+    private val titleResId by lazy {
+        requireNotNull(arguments?.getInt(ARG_TITLE)) {
             "$ARG_TITLE is missing"
         }
+    }
 
-    private val messageResId: Int
-        get() = requireNotNull(arguments?.getInt(ARG_MESSAGE)) {
+    private val messageResId by lazy {
+        requireNotNull(arguments?.getInt(ARG_MESSAGE)) {
             "$ARG_MESSAGE is missing"
         }
+    }
 
-    private val hasPositiveButton: Boolean
-        get() = requireNotNull(arguments?.getBoolean(ARG_HAS_POSITIVE_BUTTON)) {
+    private val hasPositiveButton by lazy {
+        requireNotNull(arguments?.getBoolean(ARG_HAS_POSITIVE_BUTTON)) {
             "$ARG_HAS_POSITIVE_BUTTON is missing"
         }
+    }
 
-    private val hasNegativeButton: Boolean
-        get() = requireNotNull(arguments?.getBoolean(ARG_HAS_NEGATIVE_BUTTON)) {
+    private val hasNegativeButton by lazy {
+        requireNotNull(arguments?.getBoolean(ARG_HAS_NEGATIVE_BUTTON)) {
             "$ARG_HAS_NEGATIVE_BUTTON is missing"
         }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val builder = AlertDialog.Builder(activity!!)
-                .setTitle(titleResId)
-                .setMessage(messageResId)
-                .setCancelable(false)
+        val builder = AlertDialog.Builder(requireActivity())
+            .setTitle(titleResId)
+            .setMessage(messageResId)
+            .setCancelable(false)
 
         if (hasPositiveButton) {
             builder.setPositiveButton(android.R.string.ok) { _, _ ->
@@ -87,7 +91,7 @@ class AlertDialogFragment : DialogFragment() {
         fun onAlertNegativeClick()
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "AlertDialogFragment"
 

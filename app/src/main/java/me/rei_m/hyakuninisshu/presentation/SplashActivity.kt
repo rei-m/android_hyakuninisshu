@@ -25,15 +25,15 @@ import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.action.application.ApplicationActionDispatcher
 import me.rei_m.hyakuninisshu.di.ForActivity
-import me.rei_m.hyakuninisshu.ext.AppCompatActivityExt
+import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
 
 class SplashActivity : DaggerAppCompatActivity(),
-        AlertDialogFragment.OnDialogInteractionListener,
-        AppCompatActivityExt {
+    AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
     lateinit var storeFactory: ApplicationStore.Factory
@@ -55,15 +55,8 @@ class SplashActivity : DaggerAppCompatActivity(),
                 finish()
             }
         })
-        store.errorEvent.observe(this, Observer {
-            showDialogFragment(AlertDialogFragment.TAG) {
-                AlertDialogFragment.newInstance(
-                        R.string.text_title_error,
-                        R.string.text_message_boot_error,
-                        true,
-                        false
-                )
-            }
+        store.unhandledErrorEvent.observe(this, EventObserver {
+            showAlertDialog(R.string.text_title_error, R.string.text_message_boot_error)
         })
     }
 

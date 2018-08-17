@@ -23,29 +23,43 @@ import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.FragmentExt
-import me.rei_m.hyakuninisshu.ext.LiveDataExt
+import me.rei_m.hyakuninisshu.ext.map
+import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import javax.inject.Inject
 
-class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
+class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
 
     @Inject
     lateinit var storeFactory: MaterialDetailStore.Factory
 
-    private val karutaId: KarutaIdentifier
-        get() = requireNotNull(arguments?.getParcelable(ARG_KARUTA_ID)) {
+    private val karutaId by lazy {
+        requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
             "$ARG_KARUTA_ID is missing"
         }
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = FragmentMaterialDetailBinding.inflate(inflater, container, false).apply {
             setLifecycleOwner(this@MaterialDetailFragment)
         }
 
-        obtainActivityStore(requireActivity(), MaterialDetailStore::class.java, storeFactory).karutaList.map {
-            it.find { it.identifier() == karutaId }
-        }.observe(this, Observer { binding.karuta = it })
+        val materialDetailStore = obtainActivityStore(
+            requireActivity(),
+            MaterialDetailStore::class.java,
+            storeFactory
+        )
+
+        materialDetailStore.karutaList.map {
+            it.find { karuta -> karuta.identifier() == karutaId }
+        }.observe(this, Observer {
+            it ?: return@Observer
+            binding.karuta = it
+        })
 
         return binding.root
     }
@@ -57,7 +71,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory, LiveDataExt {
         abstract fun contributeInjector(): MaterialDetailFragment
     }
 
-    companion object : FragmentExt {
+    companion object {
 
         const val TAG: String = "MaterialDetailFragment"
 

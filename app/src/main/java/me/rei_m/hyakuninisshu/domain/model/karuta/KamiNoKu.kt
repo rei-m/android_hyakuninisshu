@@ -14,16 +14,17 @@
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
-
-import me.rei_m.hyakuninisshu.util.Constants.SPACE
+import me.rei_m.hyakuninisshu.util.SPACE
 
 /**
  * 上の句.
  */
-class KamiNoKu(identifier: KamiNoKuIdentifier,
-               val first: Phrase,
-               val second: Phrase,
-               val third: Phrase) : AbstractEntity<KamiNoKu, KamiNoKuIdentifier>(identifier) {
+class KamiNoKu(
+    identifier: KamiNoKuIdentifier,
+    val first: Phrase,
+    val second: Phrase,
+    val third: Phrase
+) : AbstractEntity<KamiNoKu, KamiNoKuIdentifier>(identifier) {
 
     val kanji: String = "${first.kanji}$SPACE${second.kanji}$SPACE${third.kanji}"
 

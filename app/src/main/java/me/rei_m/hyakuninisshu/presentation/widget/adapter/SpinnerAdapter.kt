@@ -32,12 +32,22 @@ class SpinnerAdapter : ArrayAdapter<SpinnerItem> {
     @LayoutRes
     private val dropDownResource: Int
 
-    private constructor(context: Context, @LayoutRes resource: Int, @LayoutRes dropDownResource: Int, objects: Array<SpinnerItem>) : super(context, resource, objects) {
+    private constructor(
+        context: Context,
+        @LayoutRes resource: Int,
+        @LayoutRes dropDownResource: Int,
+        objects: Array<SpinnerItem>
+    ) : super(context, resource, objects) {
         this.resource = resource
         this.dropDownResource = dropDownResource
     }
 
-    private constructor(context: Context, @LayoutRes resource: Int, @LayoutRes dropDownResource: Int, objects: List<SpinnerItem>) : super(context, resource, objects) {
+    private constructor(
+        context: Context,
+        @LayoutRes resource: Int,
+        @LayoutRes dropDownResource: Int,
+        objects: List<SpinnerItem>
+    ) : super(context, resource, objects) {
         this.resource = resource
         this.dropDownResource = dropDownResource
     }
@@ -47,7 +57,7 @@ class SpinnerAdapter : ArrayAdapter<SpinnerItem> {
             LayoutInflater.from(context).inflate(resource, null)
         }
         return parentView.findViewById<TextView>(R.id.text_spinner_item).apply {
-            text = getItem(position)?.label(this@SpinnerAdapter.context.resources) ?: let { "" }
+            text = getItem(position)?.label(this@SpinnerAdapter.context.resources) ?: ""
         }
     }
 
@@ -56,17 +66,23 @@ class SpinnerAdapter : ArrayAdapter<SpinnerItem> {
             LayoutInflater.from(context).inflate(dropDownResource, null)
         }
         return parentView.findViewById<TextView>(R.id.text_spinner_item).apply {
-            text = getItem(position)?.label(this@SpinnerAdapter.context.resources) ?: let { "" }
+            text = getItem(position)?.label(this@SpinnerAdapter.context.resources) ?: ""
         }
     }
 
     companion object {
-        fun newInstance(context: Context, objects: Array<SpinnerItem>): SpinnerAdapter {
-            return SpinnerAdapter(context, R.layout.item_spinner, R.layout.item_spinner_dropdown, objects)
-        }
+        fun newInstance(context: Context, objects: Array<SpinnerItem>) = SpinnerAdapter(
+            context,
+            R.layout.item_spinner,
+            R.layout.item_spinner_dropdown,
+            objects
+        )
 
-        fun newInstance(context: Context, objects: List<SpinnerItem>): SpinnerAdapter {
-            return SpinnerAdapter(context, R.layout.item_spinner, R.layout.item_spinner_dropdown, objects)
-        }
+        fun newInstance(context: Context, objects: List<SpinnerItem>) = SpinnerAdapter(
+            context,
+            R.layout.item_spinner,
+            R.layout.item_spinner_dropdown,
+            objects
+        )
     }
 }

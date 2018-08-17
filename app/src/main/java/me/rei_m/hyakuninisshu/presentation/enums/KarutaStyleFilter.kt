@@ -19,7 +19,10 @@ import android.support.annotation.StringRes
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle
 
-enum class KarutaStyleFilter(val value: KarutaStyle, @param:StringRes private val resId: Int) : SpinnerItem {
+enum class KarutaStyleFilter(
+    val value: KarutaStyle,
+    @param:StringRes private val resId: Int
+) : SpinnerItem {
     KANA(KarutaStyle.KANA, R.string.display_style_kana),
     KANJI(KarutaStyle.KANJI, R.string.display_style_kanji);
 

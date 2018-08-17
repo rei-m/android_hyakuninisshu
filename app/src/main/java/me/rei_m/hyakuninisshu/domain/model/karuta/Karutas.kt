@@ -17,7 +17,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
-import me.rei_m.hyakuninisshu.domain.util.ArrayUtil
+import me.rei_m.hyakuninisshu.domain.util.generateRandomIndexArray
 import java.util.*
 
 /**
@@ -67,11 +67,11 @@ class Karutas(private val values: List<Karuta>) {
         val quizzes = karutaIds.asRandomized.map {
             val dupIds = ArrayList(this.ids).apply { remove(it) }
 
-            val choices = ArrayUtil.generateRandomIndexArray(dupIds.size, ChoiceNo.values().size - 1).map { choiceIndex ->
+            val choices = generateRandomIndexArray(dupIds.size, ChoiceNo.values().size - 1).map { choiceIndex ->
                 dupIds[choiceIndex]
             }.toMutableList()
 
-            val correctPosition = ArrayUtil.generateRandomIndexArray(ChoiceNo.values().size, 1)[0]
+            val correctPosition = generateRandomIndexArray(ChoiceNo.values().size, 1)[0]
             choices.add(correctPosition, it)
 
             KarutaQuiz(KarutaQuizIdentifier(), choices, it)

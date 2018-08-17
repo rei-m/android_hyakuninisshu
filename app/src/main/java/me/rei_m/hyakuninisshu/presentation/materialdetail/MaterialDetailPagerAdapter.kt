@@ -18,11 +18,13 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
 class MaterialDetailPagerAdapter(
-        fm: FragmentManager,
-        private var karutaList: List<Karuta> = listOf()
+    fm: FragmentManager,
+    private var karutaList: List<Karuta> = listOf()
 ) : FragmentStatePagerAdapter(fm) {
 
-    override fun getItem(position: Int) = MaterialDetailFragment.newInstance(karutaList[position].identifier())
+    override fun getItem(position: Int) = MaterialDetailFragment.newInstance(
+        karutaList[position].identifier()
+    )
 
     override fun getCount() = karutaList.size
 

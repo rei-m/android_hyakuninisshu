@@ -20,7 +20,7 @@ import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Singleton
 
 @Singleton
-class AppDispatcher(private val schedulerProvider: SchedulerProvider): Dispatcher {
+class AppDispatcher(private val schedulerProvider: SchedulerProvider) : Dispatcher {
 
     private val processor = PublishProcessor.create<Action>()
 
@@ -30,7 +30,7 @@ class AppDispatcher(private val schedulerProvider: SchedulerProvider): Dispatche
     }
 
     override fun <T : Action> on(clazz: Class<T>): Observable<T> = processor.onBackpressureBuffer()
-            .ofType(clazz)
-            .observeOn(schedulerProvider.ui())
-            .toObservable()
+        .ofType(clazz)
+        .observeOn(schedulerProvider.ui())
+        .toObservable()
 }

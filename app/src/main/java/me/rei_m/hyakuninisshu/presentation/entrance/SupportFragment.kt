@@ -21,23 +21,35 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class SupportFragment : DaggerFragment() {
 
     @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
+    @Inject
     lateinit var viewModelFactory: SupportViewModel.Factory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val supportViewModel = viewModelFactory.create()
 
         val binding = FragmentSupportBinding.inflate(inflater, container, false).apply {
+            viewModel = supportViewModel
             setLifecycleOwner(this@SupportFragment)
         }
 
-        binding.viewModel = viewModel
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Entrance - Support", requireActivity())
     }
 
     @dagger.Module
@@ -50,6 +62,6 @@ class SupportFragment : DaggerFragment() {
     companion object {
         const val TAG: String = "SupportFragment"
 
-        fun newInstance(): SupportFragment = SupportFragment()
+        fun newInstance() = SupportFragment()
     }
 }

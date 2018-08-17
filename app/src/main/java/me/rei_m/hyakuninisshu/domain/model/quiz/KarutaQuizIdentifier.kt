@@ -31,7 +31,7 @@ data class KarutaQuizIdentifier(val value: String = UUID.randomUUID().toString()
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<KarutaQuizIdentifier> = object : Parcelable.Creator<KarutaQuizIdentifier> {
-            override fun createFromParcel(source: Parcel): KarutaQuizIdentifier = KarutaQuizIdentifier(source.readString())
+            override fun createFromParcel(source: Parcel): KarutaQuizIdentifier = KarutaQuizIdentifier(source.readString()!!)
 
             override fun newArray(size: Int): Array<KarutaQuizIdentifier?> = arrayOfNulls(size)
         }

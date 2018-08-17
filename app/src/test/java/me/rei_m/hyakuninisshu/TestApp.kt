@@ -18,8 +18,4 @@ class TestApp : App() {
     override fun initLeakCanary() {
         // テスト時は設定しない.
     }
-
-    override fun initFabric() {
-        // テスト時は設定しない.
-    }
 }

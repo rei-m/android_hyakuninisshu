@@ -21,23 +21,35 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingResultBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.ext.FragmentExt
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
 
 class TrainingResultFragment : DaggerFragment() {
 
     @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
+    @Inject
     lateinit var viewModelFactory: TrainingResultViewModel.Factory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val viewModel = viewModelFactory.create(requireActivity())
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val trainingResultViewModel = viewModelFactory.create(requireActivity())
 
         val binding = FragmentTrainingResultBinding.inflate(inflater, container, false).apply {
+            viewModel = trainingResultViewModel
             setLifecycleOwner(this@TrainingResultFragment)
         }
-        binding.viewModel = viewModel
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("TrainingResult", requireActivity())
     }
 
     @dagger.Module
@@ -51,6 +63,6 @@ class TrainingResultFragment : DaggerFragment() {
 
         const val TAG: String = "TrainingResultFragment"
 
-        fun newInstance(): TrainingResultFragment = TrainingResultFragment()
+        fun newInstance() = TrainingResultFragment()
     }
 }

@@ -21,23 +21,23 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.karuta.FetchKarutaAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.presentation.helper.SingleLiveEvent
+import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
 class KarutaStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaLiveData = MutableLiveData<Karuta?>()
-    val karuta: LiveData<Karuta?> = karutaLiveData
+    private val _karuta = MutableLiveData<Karuta?>()
+    val karuta: LiveData<Karuta?> = _karuta
 
-    private val notFoundKarutaEventLiveData = SingleLiveEvent<Void>()
-    val notFoundKarutaEvent = notFoundKarutaEventLiveData
+    private val _notFoundKarutaEvent = MutableLiveData<Event<Unit>>()
+    val notFoundKarutaEvent = _notFoundKarutaEvent
 
     init {
         register(dispatcher.on(FetchKarutaAction::class.java).subscribe {
             if (it.error == null) {
-                karutaLiveData.value = it.karuta
+                _karuta.value = it.karuta
             } else {
-                notFoundKarutaEventLiveData.call()
+                _notFoundKarutaEvent.value = Event(Unit)
             }
         })
     }

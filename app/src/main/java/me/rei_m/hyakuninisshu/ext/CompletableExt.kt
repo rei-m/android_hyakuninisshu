@@ -16,8 +16,6 @@ package me.rei_m.hyakuninisshu.ext
 import io.reactivex.Completable
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 
-interface CompletableExt {
-    fun Completable.scheduler(schedulerProvider: SchedulerProvider): Completable = this
-            .subscribeOn(schedulerProvider.new())
-            .observeOn(schedulerProvider.ui())
-}
+fun Completable.scheduler(schedulerProvider: SchedulerProvider): Completable = this
+    .subscribeOn(schedulerProvider.new())
+    .observeOn(schedulerProvider.ui())

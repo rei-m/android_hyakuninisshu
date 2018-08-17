@@ -38,6 +38,6 @@ object KarutaExamFactory {
 
         val result = KarutaExamResult(resultSummary, wrongKarutaIds)
 
-        return KarutaExam(identifier, result)
+        return KarutaExam(identifier, schema.tookExamDate, result)
     }
 }
