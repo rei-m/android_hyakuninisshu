@@ -13,28 +13,13 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_line">
-
-        <TextView
-            android:id="@+id/exam_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/padding_m"
-            android:paddingLeft="@dimen/padding_m"
-            android:paddingRight="@dimen/padding_m"
-            android:paddingStart="@dimen/padding_m"
-            android:textSize="@dimen/text_xxs"
-            app:examTime="@{exam.tookDate}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="3日前" />
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/text_number_of_correct"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/height_line"
+            android:gravity="center_vertical"
             android:paddingEnd="@dimen/padding_m"
             android:paddingLeft="@dimen/padding_m"
             android:paddingRight="@dimen/padding_m"
@@ -51,7 +36,8 @@
         <TextView
             android:id="@+id/average_response_time"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/height_line"
+            android:gravity="center_vertical"
             app:averageAnswerSec="@{exam.result.averageAnswerSec}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +46,23 @@
             app:layout_constraintStart_toEndOf="@id/text_number_of_correct"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="2.40秒" />
+
+        <TextView
+            android:id="@+id/exam_date"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_line"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingLeft="@dimen/padding_m"
+            android:paddingRight="@dimen/padding_m"
+            android:paddingStart="@dimen/padding_m"
+            android:textSize="@dimen/text_xxs"
+            app:examTime="@{exam.tookDate}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3日前" />
 
         <View
             android:layout_width="0dp"
