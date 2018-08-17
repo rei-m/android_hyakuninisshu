@@ -28,30 +28,30 @@ import javax.inject.Inject
 
 class QuizStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaQuizContentLiveData = MutableLiveData<KarutaQuizContent>()
-    val karutaQuizContent: LiveData<KarutaQuizContent> = karutaQuizContentLiveData
+    private val _karutaQuizContent = MutableLiveData<KarutaQuizContent>()
+    val karutaQuizContent: LiveData<KarutaQuizContent> = _karutaQuizContent
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledErrorEvent: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(FetchQuizAction::class.java).subscribe {
             if (it.error == null) {
-                karutaQuizContentLiveData.value = it.karutaQuizContent
+                _karutaQuizContent.value = it.karutaQuizContent
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
             }
         }, dispatcher.on(StartQuizAction::class.java).subscribe {
             if (it.error == null) {
-                karutaQuizContentLiveData.value = it.karutaQuizContent
+                _karutaQuizContent.value = it.karutaQuizContent
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
             }
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
             if (it.error == null) {
-                karutaQuizContentLiveData.value = it.karutaQuizContent
+                _karutaQuizContent.value = it.karutaQuizContent
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
             }
         })
     }

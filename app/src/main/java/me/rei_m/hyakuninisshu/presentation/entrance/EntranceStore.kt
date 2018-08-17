@@ -30,30 +30,30 @@ import javax.inject.Inject
 
 class EntranceStore(dispatcher: Dispatcher) : Store() {
 
-    private val recentExamLiveData = MutableLiveData<KarutaExam?>()
-    val recentExam: LiveData<KarutaExam?> = recentExamLiveData
+    private val _recentExam = MutableLiveData<KarutaExam?>()
+    val recentExam: LiveData<KarutaExam?> = _recentExam
 
-    private val karutaListLiveData = MutableLiveData<List<Karuta>>()
-    val karutaList: LiveData<List<Karuta>> = karutaListLiveData
+    private val _karutaList = MutableLiveData<List<Karuta>>()
+    val karutaList: LiveData<List<Karuta>> = _karutaList
 
     init {
         register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
             if (it.error == null) {
-                karutaListLiveData.value = it.karutas?.asList()
+                _karutaList.value = it.karutas?.asList()
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
-            karutaListLiveData.value?.let {
+            _karutaList.value?.let {
                 val karutaList = ArrayList(it)
                 karutaList[karutaList.indexOf(action.karuta)] = action.karuta
-                karutaListLiveData.value = karutaList
+                _karutaList.value = karutaList
             }
         }, dispatcher.on(FetchRecentExamAction::class.java).subscribe {
             if (it.error == null) {
-                recentExamLiveData.value = it.karutaExam
+                _recentExam.value = it.karutaExam
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             if (it.error == null) {
-                recentExamLiveData.value = it.karutaExam
+                _recentExam.value = it.karutaExam
             }
         })
     }

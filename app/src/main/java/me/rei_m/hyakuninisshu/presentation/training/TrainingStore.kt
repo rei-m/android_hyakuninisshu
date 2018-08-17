@@ -29,45 +29,45 @@ import javax.inject.Inject
 
 class TrainingStore(dispatcher: Dispatcher) : Store() {
 
-    private val currentKarutaQuizIdLiveData = MutableLiveData<KarutaQuizIdentifier?>()
-    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = currentKarutaQuizIdLiveData
+    private val _currentKarutaQuizId = MutableLiveData<KarutaQuizIdentifier?>()
+    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = _currentKarutaQuizId
 
-    private val resultLiveData = MutableLiveData<TrainingResult>()
-    val result: LiveData<TrainingResult> = resultLiveData
+    private val _result = MutableLiveData<TrainingResult>()
+    val result: LiveData<TrainingResult> = _result
 
-    private val notFoundErrorEventLiveData = SingleLiveEvent<Boolean>()
-    val notFoundErrorEvent: LiveData<Boolean> = notFoundErrorEventLiveData
+    private val _notFoundErrorEvent = SingleLiveEvent<Boolean>()
+    val notFoundErrorEvent: LiveData<Boolean> = _notFoundErrorEvent
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledErrorEvent: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(StartTrainingAction::class.java).subscribe {
             if (it.error != null) {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
                 return@subscribe
             }
             if (it.karutaQuizId == null) {
-                notFoundErrorEventLiveData.value = true
+                _notFoundErrorEvent.value = true
             } else {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
             if (it.error == null) {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
             }
         }, dispatcher.on(AggregateResultsAction::class.java).subscribe {
             if (it.error != null) {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
                 return@subscribe
             }
-            currentKarutaQuizIdLiveData.value = null
+            _currentKarutaQuizId.value = null
             if (it.trainingResult == null) {
-                notFoundErrorEventLiveData.value = true
+                _notFoundErrorEvent.value = true
             } else {
-                resultLiveData.value = it.trainingResult
+                _result.value = it.trainingResult
             }
         })
     }

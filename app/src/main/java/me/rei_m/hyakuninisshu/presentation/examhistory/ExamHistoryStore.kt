@@ -26,18 +26,18 @@ import javax.inject.Inject
 
 class ExamHistoryStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaExamListLiveData = MutableLiveData<List<KarutaExam>>()
-    val karutaExamList: LiveData<List<KarutaExam>?> = karutaExamListLiveData
+    private val _karutaExamList = MutableLiveData<List<KarutaExam>>()
+    val karutaExamList: LiveData<List<KarutaExam>?> = _karutaExamList
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledError: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = _unhandledError
 
     init {
         register(dispatcher.on(FetchAllExamAction::class.java).subscribe {
             if (it.error == null) {
-                karutaExamListLiveData.value = it.karutaExamList
+                _karutaExamList.value = it.karutaExamList
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledError.call()
             }
         })
     }

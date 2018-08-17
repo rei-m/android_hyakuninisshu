@@ -27,28 +27,28 @@ import javax.inject.Inject
 
 class MaterialEditStore(dispatcher: Dispatcher) : Store() {
 
-    private val karutaLiveData = MutableLiveData<Karuta?>()
-    val karuta: LiveData<Karuta?> = karutaLiveData
+    private val _karuta = MutableLiveData<Karuta?>()
+    val karuta: LiveData<Karuta?> = _karuta
 
-    private val completeEditEventLiveData = SingleLiveEvent<Void>()
-    val completeEditEvent: LiveData<Void> = completeEditEventLiveData
+    private val _completeEditEvent = SingleLiveEvent<Void>()
+    val completeEditEvent: LiveData<Void> = _completeEditEvent
 
-    private val unhandledErrorEventLiveData: SingleLiveEvent<Void> = SingleLiveEvent()
-    val unhandledErrorEvent: LiveData<Void> = unhandledErrorEventLiveData
+    private val _unhandledErrorEvent: SingleLiveEvent<Void> = SingleLiveEvent()
+    val unhandledErrorEvent: LiveData<Void> = _unhandledErrorEvent
 
     init {
         register(dispatcher.on(StartEditMaterialAction::class.java).subscribe {
             if (it.error == null) {
-                karutaLiveData.value = it.karuta
+                _karuta.value = it.karuta
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe {
             if (it.error == null) {
-                karutaLiveData.value = null
-                completeEditEventLiveData.call()
+                _karuta.value = null
+                _completeEditEvent.call()
             } else {
-                unhandledErrorEventLiveData.call()
+                _unhandledErrorEvent.call()
             }
         })
     }

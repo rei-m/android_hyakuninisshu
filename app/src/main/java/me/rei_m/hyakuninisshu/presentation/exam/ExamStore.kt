@@ -30,46 +30,46 @@ import javax.inject.Inject
 
 class ExamStore(dispatcher: Dispatcher) : Store() {
 
-    private val currentKarutaQuizIdLiveData = MutableLiveData<KarutaQuizIdentifier?>()
-    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = currentKarutaQuizIdLiveData
+    private val _currentKarutaQuizId = MutableLiveData<KarutaQuizIdentifier?>()
+    val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = _currentKarutaQuizId
 
-    private val resultLiveData = MutableLiveData<KarutaExam?>()
-    val result: LiveData<KarutaExam?> = resultLiveData
+    private val _result = MutableLiveData<KarutaExam?>()
+    val result: LiveData<KarutaExam?> = _result
 
-    private val notFoundQuizEventLiveData = SingleLiveEvent<Void>()
-    val notFoundQuizEvent = notFoundQuizEventLiveData
+    private val _notFoundQuizEvent = SingleLiveEvent<Void>()
+    val notFoundQuizEvent = _notFoundQuizEvent
 
-    private val notFoundExamEventLiveData = SingleLiveEvent<Void>()
-    val notFoundExamEvent = notFoundExamEventLiveData
+    private val _notFoundExamEvent = SingleLiveEvent<Void>()
+    val notFoundExamEvent = _notFoundExamEvent
 
     init {
-        currentKarutaQuizIdLiveData.value = null
-        resultLiveData.value = null
+        _currentKarutaQuizId.value = null
+        _result.value = null
 
         register(dispatcher.on(StartExamAction::class.java).subscribe {
             if (it.error == null) {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                notFoundQuizEventLiveData.call()
+                _notFoundQuizEvent.call()
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
             if (it.error == null) {
-                currentKarutaQuizIdLiveData.value = it.karutaQuizId
+                _currentKarutaQuizId.value = it.karutaQuizId
             } else {
-                notFoundQuizEventLiveData.call()
+                _notFoundQuizEvent.call()
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
-            currentKarutaQuizIdLiveData.value = null
+            _currentKarutaQuizId.value = null
             if (it.error == null) {
-                resultLiveData.value = it.karutaExam
+                _result.value = it.karutaExam
             } else {
-                notFoundExamEventLiveData.call()
+                _notFoundExamEvent.call()
             }
         }, dispatcher.on(FetchExamAction::class.java).subscribe {
             if (it.error == null) {
-                resultLiveData.value = it.karutaExam
+                _result.value = it.karutaExam
             } else {
-                notFoundExamEventLiveData.call()
+                _notFoundExamEvent.call()
             }
         })
     }

@@ -20,9 +20,15 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 
 interface ViewModelFactory {
-    fun <T : ViewModel> obtainActivityStore(activity: FragmentActivity, viewModelClass: Class<T>, factory: ViewModelProvider.Factory) =
-            ViewModelProviders.of(activity, factory).get(viewModelClass)
+    fun <T : ViewModel> obtainActivityStore(
+        activity: FragmentActivity,
+        viewModelClass: Class<T>,
+        factory: ViewModelProvider.Factory
+    ) = ViewModelProviders.of(activity, factory).get(viewModelClass)
 
-    fun <T : ViewModel> obtainFragmentStore(fragment: Fragment, viewModelClass: Class<T>, factory: ViewModelProvider.Factory) =
-            ViewModelProviders.of(fragment, factory).get(viewModelClass)
+    fun <T : ViewModel> obtainFragmentStore(
+        fragment: Fragment,
+        viewModelClass: Class<T>,
+        factory: ViewModelProvider.Factory
+    ) = ViewModelProviders.of(fragment, factory).get(viewModelClass)
 }
