@@ -27,29 +27,29 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
     private val funcConvertEntity = Function<KarutaQuizSchema, KarutaQuiz> { karutaQuizSchema ->
         val karutaIdentifierList = ArrayList<KarutaIdentifier>()
         karutaQuizSchema.getChoices(orma)
-                .selector()
-                .executeAsObservable()
-                .map { karutaQuizChoiceSchema -> KarutaIdentifier(karutaQuizChoiceSchema.karutaId.toInt()) }
-                .subscribe { karutaIdentifierList.add(it) }
+            .selector()
+            .executeAsObservable()
+            .map { karutaQuizChoiceSchema -> KarutaIdentifier(karutaQuizChoiceSchema.karutaId.toInt()) }
+            .subscribe { karutaIdentifierList.add(it) }
 
         if (karutaQuizSchema.startDate == null) {
-            KarutaQuiz(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                    karutaIdentifierList,
-                    KarutaIdentifier(karutaQuizSchema.collectId.toInt()))
+            KarutaQuiz.createReady(KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                karutaIdentifierList,
+                KarutaIdentifier(karutaQuizSchema.collectId.toInt()))
         } else {
             if (karutaQuizSchema.answerTime!! > 0) {
-                KarutaQuiz(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                        karutaIdentifierList,
-                        KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
-                        karutaQuizSchema.startDate!!,
-                        karutaQuizSchema.answerTime!!,
-                        ChoiceNo.forValue(karutaQuizSchema.choiceNo!!),
-                        karutaQuizSchema.isCollect)
+                KarutaQuiz.createAnswered(KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                    karutaIdentifierList,
+                    KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
+                    karutaQuizSchema.startDate!!,
+                    karutaQuizSchema.answerTime!!,
+                    ChoiceNo.forValue(karutaQuizSchema.choiceNo!!),
+                    karutaQuizSchema.isCollect)
             } else {
-                KarutaQuiz(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                        karutaIdentifierList,
-                        KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
-                        karutaQuizSchema.startDate!!)
+                KarutaQuiz.createInAnswer(KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                    karutaIdentifierList,
+                    KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
+                    karutaQuizSchema.startDate!!)
             }
         }
     }
@@ -65,15 +65,15 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
 
             for (karutaQuiz in karutaQuizzes.values) {
                 val karutaQuizSchema = KarutaQuizSchema(
-                        quizId = karutaQuiz.identifier().value,
-                        collectId = karutaQuiz.correctId.value.toLong()
+                    quizId = karutaQuiz.identifier().value,
+                    collectId = karutaQuiz.correctId.value.toLong()
                 )
                 karutaQuizSchema.id = karutaQuizSchemaInserter.execute(karutaQuizSchema)
                 karutaQuiz.choiceList.forEachIndexed { index, karutaIdentifier ->
                     val karutaQuizChoiceSchema = KarutaQuizChoiceSchema(
-                            karutaQuizSchema = SingleAssociation.just(karutaQuizSchema),
-                            karutaId = karutaIdentifier.value.toLong(),
-                            orderNo = index.toLong()
+                        karutaQuizSchema = SingleAssociation.just(karutaQuizSchema),
+                        karutaId = karutaIdentifier.value.toLong(),
+                        orderNo = index.toLong()
                     )
                     karutaQuizChoiceSchemaInserter.execute(karutaQuizChoiceSchema)
                 }
@@ -83,44 +83,44 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
 
     override fun first(): Single<KarutaQuiz> {
         return KarutaQuizSchema.relation(orma)
-                .where("answerTime = ?", 0)
-                .selector()
-                .executeAsObservable()
-                .firstOrError()
-                .map { karutaQuizSchema ->
-                    val karutaIdentifierList = ArrayList<KarutaIdentifier>()
-                    karutaQuizSchema.getChoices(orma)
-                            .selector()
-                            .executeAsObservable()
-                            .map { karutaQuizChoiceSchema -> KarutaIdentifier(karutaQuizChoiceSchema.karutaId.toInt()) }
-                            .subscribe { karutaIdentifierList.add(it) }
-                    KarutaQuiz(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                            karutaIdentifierList,
-                            KarutaIdentifier(karutaQuizSchema.collectId.toInt()))
-                }
+            .where("answerTime = ?", 0)
+            .selector()
+            .executeAsObservable()
+            .firstOrError()
+            .map { karutaQuizSchema ->
+                val karutaIdentifierList = ArrayList<KarutaIdentifier>()
+                karutaQuizSchema.getChoices(orma)
+                    .selector()
+                    .executeAsObservable()
+                    .map { karutaQuizChoiceSchema -> KarutaIdentifier(karutaQuizChoiceSchema.karutaId.toInt()) }
+                    .subscribe { karutaIdentifierList.add(it) }
+                KarutaQuiz.createReady(KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                    karutaIdentifierList,
+                    KarutaIdentifier(karutaQuizSchema.collectId.toInt()))
+            }
     }
 
     override fun findBy(identifier: KarutaQuizIdentifier): Single<KarutaQuiz> {
         return KarutaQuizSchema.relation(orma)
-                .quizIdEq(identifier.value)
-                .selector()
-                .executeAsObservable()
-                .firstOrError()
-                .map(funcConvertEntity)
+            .quizIdEq(identifier.value)
+            .selector()
+            .executeAsObservable()
+            .firstOrError()
+            .map(funcConvertEntity)
     }
 
     override fun store(karutaQuiz: KarutaQuiz): Completable {
         return orma.transactionAsCompletable {
             val updater = KarutaQuizSchema.relation(orma)
-                    .quizIdEq(karutaQuiz.identifier().value)
-                    .updater()
+                .quizIdEq(karutaQuiz.identifier().value)
+                .updater()
 
             updater.startDate(karutaQuiz.startDate)
             val result = karutaQuiz.result
             if (result != null) {
                 updater.isCollect(result.judgement.isCorrect)
-                        .choiceNo(result.choiceNo.value)
-                        .answerTime(result.answerMillSec)
+                    .choiceNo(result.choiceNo.value)
+                    .answerTime(result.answerMillSec)
             }
             updater.execute()
         }
@@ -128,24 +128,24 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
 
     override fun list(): Single<KarutaQuizzes> {
         return KarutaQuizSchema.relation(orma)
-                .selector()
-                .executeAsObservable()
-                .map(funcConvertEntity)
-                .toList()
-                .map { KarutaQuizzes(it) }
+            .selector()
+            .executeAsObservable()
+            .map(funcConvertEntity)
+            .toList()
+            .map { KarutaQuizzes(it) }
     }
 
     override fun countQuizByAnswered(): Single<KarutaQuizCounter> {
         val totalCountSingle = KarutaQuizSchema.relation(orma)
-                .selector()
-                .executeAsObservable()
-                .count()
+            .selector()
+            .executeAsObservable()
+            .count()
 
         val answeredCountSingle = KarutaQuizSchema.relation(orma)
-                .where("startDate IS NOT NULL")
-                .selector()
-                .executeAsObservable()
-                .count()
+            .where("startDate IS NOT NULL")
+            .selector()
+            .executeAsObservable()
+            .count()
 
         return Single.zip(totalCountSingle, answeredCountSingle, BiFunction { totalCount, answeredCount ->
             KarutaQuizCounter(totalCount.toInt(), answeredCount.toInt())

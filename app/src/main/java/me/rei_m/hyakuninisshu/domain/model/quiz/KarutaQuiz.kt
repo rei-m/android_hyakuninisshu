@@ -20,15 +20,19 @@ import java.util.*
 /**
  * 百人一首の問題.
  */
-class KarutaQuiz(
-        identifier: KarutaQuizIdentifier,
-        val choiceList: List<KarutaIdentifier>,
-        val correctId: KarutaIdentifier
+class KarutaQuiz private constructor(
+    identifier: KarutaQuizIdentifier,
+    val choiceList: List<KarutaIdentifier>,
+    val correctId: KarutaIdentifier,
+    startDate: Date? = null,
+    result: KarutaQuizResult? = null
 ) : AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>(identifier) {
 
-    var startDate: Date? = null
+    var startDate: Date? = startDate
+        private set
 
-    var result: KarutaQuizResult? = null
+    var result: KarutaQuizResult? = result
+        private set
 
     val state: State
         get() = if (startDate == null && result == null) {
@@ -38,26 +42,6 @@ class KarutaQuiz(
         } else {
             State.ANSWERED
         }
-
-    constructor(identifier: KarutaQuizIdentifier,
-                choiceList: List<KarutaIdentifier>,
-                correctId: KarutaIdentifier,
-                startDate: Date) : this(identifier, choiceList, correctId) {
-        this.startDate = startDate
-    }
-
-    constructor(identifier: KarutaQuizIdentifier,
-                choiceList: List<KarutaIdentifier>,
-                correctId: KarutaIdentifier,
-                startDate: Date,
-                answerMillSec: Long,
-                choiceNo: ChoiceNo,
-                isCorrect: Boolean) : this(identifier, choiceList, correctId, startDate) {
-        this.result = KarutaQuizResult(correctId,
-                choiceNo,
-                isCorrect,
-                answerMillSec)
-    }
 
     /**
      * 解答を開始する.
@@ -94,5 +78,38 @@ class KarutaQuiz(
 
     enum class State {
         READY, IN_ANSWER, ANSWERED,
+    }
+
+    companion object {
+        fun createReady(
+            identifier: KarutaQuizIdentifier,
+            choiceList: List<KarutaIdentifier>,
+            correctId: KarutaIdentifier
+        ) = KarutaQuiz(identifier, choiceList, correctId)
+
+        fun createInAnswer(
+            identifier: KarutaQuizIdentifier,
+            choiceList: List<KarutaIdentifier>,
+            correctId: KarutaIdentifier,
+            startDate: Date
+        ) = KarutaQuiz(identifier, choiceList, correctId, startDate)
+
+        fun createAnswered(
+            identifier: KarutaQuizIdentifier,
+            choiceList: List<KarutaIdentifier>,
+            correctId: KarutaIdentifier,
+            startDate: Date,
+            answerMillSec: Long,
+            choiceNo: ChoiceNo,
+            isCorrect: Boolean
+        ): KarutaQuiz {
+
+            val result = KarutaQuizResult(correctId,
+                choiceNo,
+                isCorrect,
+                answerMillSec)
+
+            return KarutaQuiz(identifier, choiceList, correctId, startDate, result)
+        }
     }
 }
