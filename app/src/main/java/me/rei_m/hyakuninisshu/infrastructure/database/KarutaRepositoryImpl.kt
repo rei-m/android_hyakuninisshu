@@ -140,7 +140,6 @@ class KarutaRepositoryImpl(private val context: Context,
     }
 
     override fun findBy2(karutaId: KarutaIdentifier): Karuta? {
-        Thread.sleep(2000)
         return KarutaSchema.relation(orma).selector()
             .idEq(karutaId.value.toLong())
             .firstOrNull()?.let {

@@ -33,6 +33,7 @@ class KarutaStore(dispatcher: Dispatcher) : Store() {
     val notFoundKarutaEvent = _notFoundKarutaEvent
 
     init {
+        _karuta.value = null
         register(dispatcher.on(FetchKarutaAction::class.java).subscribe {
             if (it.error == null) {
                 _karuta.value = it.karuta
