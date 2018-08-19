@@ -20,10 +20,12 @@ import javax.inject.Singleton
 
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.experimental.CommonPool
 import me.rei_m.hyakuninisshu.action.AppDispatcher
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.util.rx.AppSchedulerProvider
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Module
 class ApplicationModule(application: Application) {
@@ -33,6 +35,10 @@ class ApplicationModule(application: Application) {
     @Provides
     @Singleton
     fun provideContext(): Context = context
+
+    @Provides
+    @Singleton
+    fun provideCoroutineContext(): CoroutineContext = CommonPool
 
     @Provides
     @Singleton

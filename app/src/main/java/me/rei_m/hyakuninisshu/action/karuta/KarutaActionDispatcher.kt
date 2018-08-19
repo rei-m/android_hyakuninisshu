@@ -13,19 +13,20 @@
 
 package me.rei_m.hyakuninisshu.action.karuta
 
+import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.ext.scheduler
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Singleton
 class KarutaActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider
+    private val coroutineContext: CoroutineContext
 ) {
 
     /**
@@ -34,10 +35,11 @@ class KarutaActionDispatcher @Inject constructor(
      * @param karutaId 歌ID.
      */
     fun fetch(karutaId: KarutaIdentifier) {
-        karutaRepository.findBy(karutaId).scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchKarutaAction(it))
-        }, {
-            dispatcher.dispatch(FetchKarutaAction(null, it))
-        })
+        launch(coroutineContext) {
+            val action = karutaRepository.findBy2(karutaId)?.let {
+                FetchKarutaAction.createSuccess(it)
+            } ?: FetchKarutaAction.createError(NoSuchElementException(karutaId.toString()))
+            dispatcher.dispatch(action)
+        }
     }
 }

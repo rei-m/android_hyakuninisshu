@@ -139,6 +139,15 @@ class KarutaRepositoryImpl(private val context: Context,
                 .singleOrError()
     }
 
+    override fun findBy2(karutaId: KarutaIdentifier): Karuta? {
+        Thread.sleep(2000)
+        return KarutaSchema.relation(orma).selector()
+            .idEq(karutaId.value.toLong())
+            .firstOrNull()?.let {
+                KarutaFactory.create(it)
+            }
+    }
+
     override fun store(karuta: Karuta): Completable {
 
         val kamiNoKu = karuta.kamiNoKu

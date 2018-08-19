@@ -37,6 +37,14 @@ interface KarutaRepository {
     fun findBy(identifier: KarutaIdentifier): Single<Karuta>
 
     /**
+     * 歌を取得する.
+     *
+     * @param karutaId 歌ID
+     * @return 歌
+     */
+    fun findBy2(karutaId: KarutaIdentifier): Karuta?
+
+    /**
      * 歌コレクションを取得する.
      *
      * @return 歌コレクション
