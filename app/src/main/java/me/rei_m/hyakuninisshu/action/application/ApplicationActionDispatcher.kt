@@ -13,28 +13,32 @@
 
 package me.rei_m.hyakuninisshu.action.application
 
+import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.ext.scheduler
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Singleton
 class ApplicationActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider
+    private val coroutineContext: CoroutineContext
 ) {
 
     /**
      * 百人一首の情報を準備してアプリの利用を開始する.
      */
     fun start() {
-        karutaRepository.initialize().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(StartApplicationAction())
-        }, {
-            dispatcher.dispatch(StartApplicationAction(it))
-        })
+        launch(coroutineContext) {
+            try {
+                karutaRepository.initialize()
+                dispatcher.dispatch(StartApplicationAction())
+            } catch (e: IOException) {
+                dispatcher.dispatch(StartApplicationAction(e))
+            }
+        }
     }
 }

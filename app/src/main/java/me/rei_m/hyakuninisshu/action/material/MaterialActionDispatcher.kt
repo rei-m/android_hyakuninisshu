@@ -13,22 +13,24 @@
 
 package me.rei_m.hyakuninisshu.action.material
 
-import io.reactivex.Single
+import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
+import java.util.NoSuchElementException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Singleton
 class MaterialActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider
+    private val schedulerProvider: SchedulerProvider,
+    private val coroutineContext: CoroutineContext
 ) {
 
     /**
@@ -50,11 +52,12 @@ class MaterialActionDispatcher @Inject constructor(
      * @param karutaId 歌ID.
      */
     fun startEdit(karutaId: KarutaIdentifier) {
-        karutaRepository.findBy(karutaId).scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(StartEditMaterialAction(it))
-        }, {
-            dispatcher.dispatch(StartEditMaterialAction(null, it))
-        })
+        launch(coroutineContext) {
+            val action = karutaRepository.findBy2(karutaId)?.let {
+                StartEditMaterialAction.createSuccess(it)
+            } ?: StartEditMaterialAction.createError(NoSuchElementException(karutaId.toString()))
+            dispatcher.dispatch(action)
+        }
     }
 
     /**
@@ -84,7 +87,12 @@ class MaterialActionDispatcher @Inject constructor(
              fifthPhraseKanji: String,
              fifthPhraseKana: String) {
 
-        karutaRepository.findBy(karutaId).flatMap<Karuta> { karuta ->
+        launch(coroutineContext) {
+            val karuta =  karutaRepository.findBy2(karutaId)
+            if (karuta == null) {
+                dispatcher.dispatch(EditMaterialAction(null, NoSuchElementException(karutaId.toString())))
+                return@launch
+            }
             karuta.updatePhrase(
                 firstPhraseKanji,
                 firstPhraseKana,
@@ -97,12 +105,9 @@ class MaterialActionDispatcher @Inject constructor(
                 fifthPhraseKanji,
                 fifthPhraseKana
             ).let {
-                return@flatMap karutaRepository.store(it).andThen(Single.just(karuta))
+                karutaRepository.store(it)
             }
-        }.scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(EditMaterialAction(it))
-        }, {
-            dispatcher.dispatch(EditMaterialAction(null, it))
-        })
+            dispatcher.dispatch(EditMaterialAction(karuta))
+        }
     }
 }

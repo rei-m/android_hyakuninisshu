@@ -13,8 +13,8 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
-import io.reactivex.Completable
 import io.reactivex.Single
+import java.io.IOException
 
 /**
  * 歌リポジトリ.
@@ -23,10 +23,9 @@ interface KarutaRepository {
 
     /**
      * 歌セットを初期化する.
-     *
-     * @return Completable
      */
-    fun initialize(): Completable
+    @Throws(IOException::class)
+    fun initialize()
 
     /**
      * 歌を取得する.
@@ -84,7 +83,6 @@ interface KarutaRepository {
      * 歌を永続化する,
      *
      * @param karuta 歌
-     * @return Completable
      */
-    fun store(karuta: Karuta): Completable
+    fun store(karuta: Karuta)
 }

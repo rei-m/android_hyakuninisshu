@@ -14,7 +14,6 @@
 package me.rei_m.hyakuninisshu.action.material
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Completable
 import io.reactivex.Single
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color
@@ -22,6 +21,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 import me.rei_m.hyakuninisshu.domain.util.rx.TestSchedulerProvider
+import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import org.assertj.core.api.Assertions.assertThat
@@ -41,9 +41,10 @@ class MaterialActionDispatcherTest : TestHelper {
         dispatcher = mock {}
         karutaRepository = mock {}
         actionDispatcher = MaterialActionDispatcher(
-                karutaRepository,
-                dispatcher,
-                TestSchedulerProvider()
+            karutaRepository,
+            dispatcher,
+            TestSchedulerProvider(),
+            DirectCoroutineContext
         )
     }
 
@@ -80,7 +81,7 @@ class MaterialActionDispatcherTest : TestHelper {
     fun startEdit() {
         val karuta = createKaruta(id = 1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(Single.just(karuta))
+        whenever(karutaRepository.findBy2(karuta.identifier())).thenReturn(karuta)
 
         actionDispatcher.startEdit(karuta.identifier())
 
@@ -95,7 +96,7 @@ class MaterialActionDispatcherTest : TestHelper {
 
     @Test
     fun startEditWithError() {
-        whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(Single.error(RuntimeException()))
+        whenever(karutaRepository.findBy2(KarutaIdentifier(1))).thenReturn(null)
 
         actionDispatcher.startEdit(KarutaIdentifier(1))
 
@@ -109,21 +110,21 @@ class MaterialActionDispatcherTest : TestHelper {
     fun edit() {
         val karuta = createKaruta(1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(Single.just(karuta))
-        whenever(karutaRepository.store(any())).thenReturn(Completable.complete())
+        whenever(karutaRepository.findBy2(karuta.identifier())).thenReturn(karuta)
+        whenever(karutaRepository.store(any())).thenAnswer {  }
 
         actionDispatcher.edit(
-                karuta.identifier(),
-                "初句改",
-                "しょくかい",
-                "二句改",
-                "にくかい",
-                "三句改",
-                "さんくかい",
-                "四句改",
-                "よんくかい",
-                "五句改",
-                "ごくかい"
+            karuta.identifier(),
+            "初句改",
+            "しょくかい",
+            "二句改",
+            "にくかい",
+            "三句改",
+            "さんくかい",
+            "四句改",
+            "よんくかい",
+            "五句改",
+            "ごくかい"
         )
 
         verify(dispatcher).dispatch(check {
@@ -149,21 +150,20 @@ class MaterialActionDispatcherTest : TestHelper {
     fun editWithError() {
         val karuta = createKaruta(1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(Single.just(karuta))
-        whenever(karutaRepository.store(any())).thenReturn(Completable.error(RuntimeException()))
+        whenever(karutaRepository.findBy2(karuta.identifier())).thenReturn(null)
 
         actionDispatcher.edit(
-                karuta.identifier(),
-                "初句改",
-                "しょくかい",
-                "二句改",
-                "にくかい",
-                "三句改",
-                "さんくかい",
-                "四句改",
-                "よんくかい",
-                "五句改",
-                "ごくかい"
+            karuta.identifier(),
+            "初句改",
+            "しょくかい",
+            "二句改",
+            "にくかい",
+            "三句改",
+            "さんくかい",
+            "四句改",
+            "よんくかい",
+            "五句改",
+            "ごくかい"
         )
 
         verify(dispatcher).dispatch(check {

@@ -22,63 +22,60 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-class KarutaRepositoryImpl(private val context: Context,
-                           private val preferences: SharedPreferences,
-                           private val orma: OrmaDatabase) : KarutaRepository {
+class KarutaRepositoryImpl(
+    private val context: Context,
+    private val preferences: SharedPreferences,
+    private val orma: OrmaDatabase
+) : KarutaRepository {
 
-    override fun initialize(): Completable {
+    override fun initialize() {
 
-        val karutaJsonVersion = preferences.getInt(KarutaJsonConstant.KEY_KARUTA_JSON_VERSION, 0)
+        val karutaJsonVersion = preferences.getInt(
+            KarutaJsonConstant.KEY_KARUTA_JSON_VERSION,
+            0
+        )
 
         if (karutaJsonVersion < KarutaJsonConstant.KARUTA_VERSION) {
-            try {
-                val inputStream = context.assets.open("karuta_list.json")
-                val reader = BufferedReader(InputStreamReader(inputStream))
-                val stringBuilder = StringBuilder()
-                var line: String?
-                while (true) {
-                    line = reader.readLine()
-                    if (line == null) {
-                        break
-                    }
-                    stringBuilder.append(line)
+            val inputStream = context.assets.open("karuta_list.json")
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            val stringBuilder = StringBuilder()
+            var line: String?
+            while (true) {
+                line = reader.readLine()
+                if (line == null) {
+                    break
                 }
-                reader.close()
-
-                val karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString())
-
-                return orma.transactionAsCompletable {
-
-                    karutaSchemaList.forEach {
-                        val count = KarutaSchema.relation(orma).selector().idEq(it.id)
-                                .and()
-                                .where("isEdited = ?", true).count()
-                        if (count == 0) {
-                            KarutaSchema.relation(orma).upsert(it)
-                        }
-                    }
-
-                    preferences.edit()
-                            .putInt(KarutaJsonConstant.KEY_KARUTA_JSON_VERSION, KarutaJsonConstant.KARUTA_VERSION)
-                            .apply()
-                }
-            } catch (e: IOException) {
-                return Completable.error(e)
+                stringBuilder.append(line)
             }
+            reader.close()
 
-        } else {
-            return Completable.complete()
+            val karutaSchemaList = KarutaJsonAdaptor.convert(stringBuilder.toString())
+
+            orma.transactionSync {
+                karutaSchemaList.forEach {
+                    val count = KarutaSchema.relation(orma).selector().idEq(it.id)
+                        .and()
+                        .where("isEdited = ?", true).count()
+                    if (count == 0) {
+                        KarutaSchema.relation(orma).upsert(it)
+                    }
+                }
+
+                preferences.edit()
+                    .putInt(KarutaJsonConstant.KEY_KARUTA_JSON_VERSION, KarutaJsonConstant.KARUTA_VERSION)
+                    .apply()
+            }
         }
     }
 
     override fun list(): Single<Karutas> {
         val relation = KarutaSchema.relation(orma)
         return relation.selector()
-                .orderBy(relation.schema.id.orderInAscending())
-                .executeAsObservable()
-                .map { KarutaFactory.create(it) }
-                .toList()
-                .map { Karutas(it) }
+            .orderBy(relation.schema.id.orderInAscending())
+            .executeAsObservable()
+            .map { KarutaFactory.create(it) }
+            .toList()
+            .map { Karutas(it) }
     }
 
     override fun list(color: Color?): Single<Karutas> {
@@ -88,11 +85,11 @@ class KarutaRepositoryImpl(private val context: Context,
             selector = selector.and().where("color = ?", color.value)
         }
         return selector
-                .orderBy(relation.schema.id.orderInAscending())
-                .executeAsObservable()
-                .map { KarutaFactory.create(it) }
-                .toList()
-                .map { Karutas(it) }
+            .orderBy(relation.schema.id.orderInAscending())
+            .executeAsObservable()
+            .map { KarutaFactory.create(it) }
+            .toList()
+            .map { Karutas(it) }
     }
 
     override fun findIds(fromIdentifier: KarutaIdentifier,
@@ -101,9 +98,9 @@ class KarutaRepositoryImpl(private val context: Context,
                          kimariji: Kimariji?): Single<KarutaIds> {
         val relation = KarutaSchema.relation(orma)
         var selector = relation.selector()
-                .idGe(fromIdentifier.value.toLong())
-                .and()
-                .idLe(toIdentifier.value.toLong())
+            .idGe(fromIdentifier.value.toLong())
+            .and()
+            .idLe(toIdentifier.value.toLong())
 
         if (color != null) {
             selector = selector.and().where("color = ?", color.value)
@@ -114,29 +111,29 @@ class KarutaRepositoryImpl(private val context: Context,
         }
 
         return selector
-                .orderBy(relation.schema.id.orderInAscending())
-                .executeAsObservable()
-                .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
-                .toList()
-                .map { KarutaIds(it) }
+            .orderBy(relation.schema.id.orderInAscending())
+            .executeAsObservable()
+            .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
+            .toList()
+            .map { KarutaIds(it) }
     }
 
     override fun findIds(): Single<KarutaIds> {
         val relation = KarutaSchema.relation(orma)
         return KarutaSchema.relation(orma).selector()
-                .orderBy(relation.schema.id.orderInAscending())
-                .executeAsObservable()
-                .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
-                .toList()
-                .map { KarutaIds(it) }
+            .orderBy(relation.schema.id.orderInAscending())
+            .executeAsObservable()
+            .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
+            .toList()
+            .map { KarutaIds(it) }
     }
 
     override fun findBy(identifier: KarutaIdentifier): Single<Karuta> {
         return KarutaSchema.relation(orma).selector()
-                .idEq(identifier.value.toLong())
-                .executeAsObservable()
-                .map { KarutaFactory.create(it) }
-                .singleOrError()
+            .idEq(identifier.value.toLong())
+            .executeAsObservable()
+            .map { KarutaFactory.create(it) }
+            .singleOrError()
     }
 
     override fun findBy2(karutaId: KarutaIdentifier): Karuta? {
@@ -147,25 +144,23 @@ class KarutaRepositoryImpl(private val context: Context,
             }
     }
 
-    override fun store(karuta: Karuta): Completable {
-
+    override fun store(karuta: Karuta) {
         val kamiNoKu = karuta.kamiNoKu
         val shimoNoKu = karuta.shimoNoKu
 
-        return KarutaSchema.relation(orma).updater()
-                .idEq(karuta.identifier().value.toLong())
-                .firstKana(kamiNoKu.first.kana)
-                .firstKanji(kamiNoKu.first.kanji)
-                .secondKana(kamiNoKu.second.kana)
-                .secondKanji(kamiNoKu.second.kanji)
-                .thirdKana(kamiNoKu.third.kana)
-                .thirdKanji(kamiNoKu.third.kanji)
-                .fourthKana(shimoNoKu.fourth.kana)
-                .fourthKanji(shimoNoKu.fourth.kanji)
-                .fifthKana(shimoNoKu.fifth.kana)
-                .fifthKanji(shimoNoKu.fifth.kanji)
-                .isEdited(true)
-                .executeAsSingle()
-                .ignoreElement()
+        KarutaSchema.relation(orma).updater()
+            .idEq(karuta.identifier().value.toLong())
+            .firstKana(kamiNoKu.first.kana)
+            .firstKanji(kamiNoKu.first.kanji)
+            .secondKana(kamiNoKu.second.kana)
+            .secondKanji(kamiNoKu.second.kanji)
+            .thirdKana(kamiNoKu.third.kana)
+            .thirdKanji(kamiNoKu.third.kanji)
+            .fourthKana(shimoNoKu.fourth.kana)
+            .fourthKanji(shimoNoKu.fourth.kanji)
+            .fifthKana(shimoNoKu.fifth.kana)
+            .fifthKanji(shimoNoKu.fifth.kanji)
+            .isEdited(true)
+            .execute()
     }
 }

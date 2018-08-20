@@ -16,7 +16,14 @@ package me.rei_m.hyakuninisshu.action.material
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
-class StartEditMaterialAction(val karuta: Karuta?,
-                              override val error: Throwable? = null) : Action {
+class StartEditMaterialAction private constructor(
+    val karuta: Karuta?,
+    override val error: Throwable? = null
+) : Action {
     override fun toString(): String = "StartEditMaterialAction(karuta=$karuta, error=$error)"
+
+    companion object {
+        fun createSuccess(karuta: Karuta) = StartEditMaterialAction(karuta)
+        fun createError(error: Throwable) = StartEditMaterialAction(null, error)
+    }
 }
