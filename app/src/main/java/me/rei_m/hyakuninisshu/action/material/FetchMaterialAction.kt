@@ -16,7 +16,12 @@ package me.rei_m.hyakuninisshu.action.material
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 
-class FetchMaterialAction(val karutas: Karutas?,
-                          override val error: Throwable? = null) : Action {
+class FetchMaterialAction private constructor(val karutas: Karutas?,
+                                              override val error: Throwable? = null) : Action {
     override fun toString(): String = "FetchMaterialAction(karutas=$karutas, error=$error)"
+
+    companion object {
+        fun createSuccess(karutas: Karutas?) = FetchMaterialAction(karutas)
+        fun createError(error: Throwable) = FetchMaterialAction(null, error)
+    }
 }

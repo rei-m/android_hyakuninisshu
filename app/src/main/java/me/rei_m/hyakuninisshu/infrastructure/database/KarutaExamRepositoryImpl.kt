@@ -14,23 +14,23 @@
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.SingleAssociation
-import io.reactivex.Completable
-import io.reactivex.Single
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
 import java.util.*
 
 class KarutaExamRepositoryImpl(private val orma: OrmaDatabase) : KarutaExamRepository {
 
-    override fun storeResult(karutaExamResult: KarutaExamResult,
-                             tookExamDate: Date): Single<KarutaExamIdentifier> {
+    override fun storeResult(
+        karutaExamResult: KarutaExamResult,
+        tookExamDate: Date
+    ): KarutaExamIdentifier {
 
         var karutaExamSchemaId: Long = 0
 
         orma.transactionSync {
             val karutaExamSchema = KarutaExamSchema(
-                    tookExamDate = tookExamDate,
-                    totalQuizCount = karutaExamResult.quizCount,
-                    averageAnswerTime = karutaExamResult.averageAnswerSec
+                tookExamDate = tookExamDate,
+                totalQuizCount = karutaExamResult.quizCount,
+                averageAnswerTime = karutaExamResult.averageAnswerSec
             )
             karutaExamSchemaId = KarutaExamSchema.relation(orma).inserter().execute(karutaExamSchema)
             karutaExamSchema.id = karutaExamSchemaId
@@ -42,58 +42,55 @@ class KarutaExamRepositoryImpl(private val orma: OrmaDatabase) : KarutaExamRepos
             }
         }
 
-        return Single.just(KarutaExamIdentifier(karutaExamSchemaId))
+        return KarutaExamIdentifier(karutaExamSchemaId)
     }
 
-    override fun adjustHistory(historySize: Int): Completable {
-        val karutaExamSchemaObservable = KarutaExamSchema.relation(orma)
-                .selector()
-                .orderByIdAsc()
-                .executeAsObservable()
+    override fun adjustHistory(historySize: Int) {
+        val karutaExamSchemaList = KarutaExamSchema.relation(orma)
+            .selector()
+            .orderByIdAsc()
+            .toList()
 
-        val examCount = karutaExamSchemaObservable.count().blockingGet()
+        val examCount = karutaExamSchemaList.size
 
-        return if (historySize < examCount) {
-            orma.transactionAsCompletable {
+        if (historySize < examCount) {
+            orma.transactionSync {
                 val deleter = KarutaExamSchema.relation(orma).deleter()
-                karutaExamSchemaObservable
-                        .take(examCount - historySize)
-                        .subscribe { karutaExamSchema -> deleter.idEq(karutaExamSchema.id).execute() }
+                karutaExamSchemaList.take(examCount - historySize).forEach {
+                    deleter.idEq(it.id).execute()
+                }
             }
-        } else {
-            Completable.complete()
         }
     }
 
-    override fun findBy(identifier: KarutaExamIdentifier): Single<KarutaExam> {
-        return KarutaExamSchema.relation(orma)
-                .idEq(identifier.value)
-                .selector()
-                .executeAsObservable()
-                .firstOrError()
-                .map { examSchema ->
-                    val examWrongKarutaSchemaList = ArrayList<ExamWrongKarutaSchema>()
-                    examSchema.getWrongKarutas(orma)
-                            .selector()
-                            .executeAsObservable()
-                            .subscribe { examWrongKarutaSchemaList.add(it) }
-                    KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList)
-                }
+    override fun findBy(karutaExamId: KarutaExamIdentifier): KarutaExam? {
+        val examSchema = KarutaExamSchema.relation(orma)
+            .idEq(karutaExamId.value)
+            .selector()
+            .firstOrNull() ?: return null
+
+        val examWrongKarutaSchemaList = examSchema
+            .getWrongKarutas(orma)
+            .selector()
+            .toList()
+
+        return KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList)
     }
 
-    override fun list(): Single<KarutaExams> {
-        return KarutaExamSchema.relation(orma)
+    override fun list(): KarutaExams {
+        val examSchemaList = KarutaExamSchema.relation(orma)
+            .selector()
+            .orderByIdDesc()
+            .toList()
+
+        val examList = examSchemaList.map { examSchema ->
+            val examWrongKarutaSchemaList = examSchema
+                .getWrongKarutas(orma)
                 .selector()
-                .orderByIdDesc()
-                .executeAsObservable()
-                .map { examSchema ->
-                    val examWrongKarutaSchemaList = ArrayList<ExamWrongKarutaSchema>()
-                    examSchema.getWrongKarutas(orma)
-                            .selector()
-                            .executeAsObservable()
-                            .subscribe { examWrongKarutaSchemaList.add(it) }
-                    KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList)
-                }.toList()
-                .map { KarutaExams(it) }
+                .toList()
+            return@map KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList)
+        }
+
+        return KarutaExams(examList)
     }
 }

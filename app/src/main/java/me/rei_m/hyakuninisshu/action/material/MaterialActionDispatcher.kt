@@ -17,10 +17,8 @@ import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
-import java.util.NoSuchElementException
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext
@@ -29,7 +27,6 @@ import kotlin.coroutines.experimental.CoroutineContext
 class MaterialActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider,
     private val coroutineContext: CoroutineContext
 ) {
 
@@ -39,11 +36,11 @@ class MaterialActionDispatcher @Inject constructor(
      *  @param colorFilter 五色絞り込み条件
      */
     fun fetch(colorFilter: ColorFilter) {
-        karutaRepository.list(colorFilter.value).scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchMaterialAction(it))
-        }, {
-            dispatcher.dispatch(FetchMaterialAction(null, it))
-        })
+        launch(coroutineContext) {
+            karutaRepository.list(colorFilter.value).let {
+                dispatcher.dispatch(FetchMaterialAction.createSuccess(it))
+            }
+        }
     }
 
     /**
@@ -88,7 +85,7 @@ class MaterialActionDispatcher @Inject constructor(
              fifthPhraseKana: String) {
 
         launch(coroutineContext) {
-            val karuta =  karutaRepository.findBy2(karutaId)
+            val karuta = karutaRepository.findBy2(karutaId)
             if (karuta == null) {
                 dispatcher.dispatch(EditMaterialAction(null, NoSuchElementException(karutaId.toString())))
                 return@launch

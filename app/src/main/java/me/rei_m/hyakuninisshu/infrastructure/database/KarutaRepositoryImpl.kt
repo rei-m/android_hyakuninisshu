@@ -68,28 +68,18 @@ class KarutaRepositoryImpl(
         }
     }
 
-    override fun list(): Single<Karutas> {
-        val relation = KarutaSchema.relation(orma)
-        return relation.selector()
-            .orderBy(relation.schema.id.orderInAscending())
-            .executeAsObservable()
-            .map { KarutaFactory.create(it) }
-            .toList()
-            .map { Karutas(it) }
-    }
-
-    override fun list(color: Color?): Single<Karutas> {
+    override fun list(color: Color?): Karutas {
         val relation = KarutaSchema.relation(orma)
         var selector = relation.selector()
         if (color != null) {
             selector = selector.and().where("color = ?", color.value)
         }
+
         return selector
             .orderBy(relation.schema.id.orderInAscending())
-            .executeAsObservable()
             .map { KarutaFactory.create(it) }
             .toList()
-            .map { Karutas(it) }
+            .let { Karutas(it) }
     }
 
     override fun findIds(fromIdentifier: KarutaIdentifier,

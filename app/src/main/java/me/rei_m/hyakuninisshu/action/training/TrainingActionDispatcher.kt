@@ -53,7 +53,7 @@ class TrainingActionDispatcher @Inject constructor(
      * 力試しで過去に間違えた歌を練習対象にして練習を開始する.
      */
     fun startForExam() {
-        start(karutaExamRepository.list().map { it.totalWrongKarutaIds })
+//        start(karutaExamRepository.list().map { it.totalWrongKarutaIds })
     }
 
     /**
@@ -86,18 +86,18 @@ class TrainingActionDispatcher @Inject constructor(
     }
 
     private fun start(karutaIdsSingle: Single<KarutaIds>) {
-        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaIdsSingle, BiFunction { karutas, karutaIds ->
-            karutas.createQuizSet(karutaIds)
-        }).flatMap {
-            karutaQuizRepository.initialize(it).andThen(Single.just(it))
-        }.scheduler(schedulerProvider).subscribe({
-            if (it.isEmpty) {
-                dispatcher.dispatch(StartTrainingAction(null))
-            } else {
-                dispatcher.dispatch(StartTrainingAction(it.values.first().identifier()))
-            }
-        }, {
-            dispatcher.dispatch(StartTrainingAction(null, it))
-        })
+//        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaIdsSingle, BiFunction { karutas, karutaIds ->
+//            karutas.createQuizSet(karutaIds)
+//        }).flatMap {
+//            karutaQuizRepository.initialize(it).andThen(Single.just(it))
+//        }.scheduler(schedulerProvider).subscribe({
+//            if (it.isEmpty) {
+//                dispatcher.dispatch(StartTrainingAction(null))
+//            } else {
+//                dispatcher.dispatch(StartTrainingAction(it.values.first().identifier()))
+//            }
+//        }, {
+//            dispatcher.dispatch(StartTrainingAction(null, it))
+//        })
     }
 }

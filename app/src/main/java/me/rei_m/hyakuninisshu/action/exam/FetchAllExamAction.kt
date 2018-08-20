@@ -16,7 +16,14 @@ package me.rei_m.hyakuninisshu.action.exam
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-class FetchAllExamAction(val karutaExamList: List<KarutaExam>?,
-                         override val error: Throwable? = null) : Action {
+class FetchAllExamAction private constructor(
+    val karutaExamList: List<KarutaExam>?,
+    override val error: Throwable? = null
+) : Action {
     override fun toString(): String = "FetchAllExamAction(karutaExamList=$karutaExamList, error=$error)"
+
+    companion object {
+        fun createSuccess(karutaExamList: List<KarutaExam>?) = FetchAllExamAction(karutaExamList)
+        fun createError(error: Throwable) = FetchAllExamAction(null, error)
+    }
 }

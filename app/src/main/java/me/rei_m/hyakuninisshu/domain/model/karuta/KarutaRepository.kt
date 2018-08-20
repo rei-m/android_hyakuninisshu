@@ -46,17 +46,10 @@ interface KarutaRepository {
     /**
      * 歌コレクションを取得する.
      *
-     * @return 歌コレクション
-     */
-    fun list(): Single<Karutas>
-
-    /**
-     * 歌コレクションを取得する.
-     *
      * @param color 色
      * @return 歌コレクション
      */
-    fun list(color: Color?): Single<Karutas>
+    fun list(color: Color? = null): Karutas
 
     /**
      * 歌IDコレクションを取得する.
