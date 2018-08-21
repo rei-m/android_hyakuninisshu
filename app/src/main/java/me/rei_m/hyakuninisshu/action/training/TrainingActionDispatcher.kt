@@ -13,6 +13,7 @@
 
 package me.rei_m.hyakuninisshu.action.training
 
+import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
@@ -20,13 +21,15 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Singleton
 class TrainingActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val karutaQuizRepository: KarutaQuizRepository,
     private val karutaExamRepository: KarutaExamRepository,
-    private val dispatcher: Dispatcher
+    private val dispatcher: Dispatcher,
+    private val coroutineContext: CoroutineContext
 ) {
     /**
      * 練習を開始する.
@@ -40,32 +43,40 @@ class TrainingActionDispatcher @Inject constructor(
               toKarutaId: KarutaIdentifier,
               kimariji: Kimariji?,
               color: Color?) {
-        start(karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji))
+        launch(coroutineContext) {
+            start(karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji))
+        }
     }
 
     /**
      * 力試しで過去に間違えた歌を練習対象にして練習を開始する.
      */
     fun startForExam() {
-        start(karutaExamRepository.list().totalWrongKarutaIds)
+        launch(coroutineContext) {
+            start(karutaExamRepository.list().totalWrongKarutaIds)
+        }
     }
 
     /**
      * 練習で間違えた歌を練習対象にして練習を再開する.
      */
     fun restartForPractice() {
-        start(karutaQuizRepository.list().wrongKarutaIds)
+        launch(coroutineContext) {
+            start(karutaQuizRepository.list().wrongKarutaIds)
+        }
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        val nextQuiz = karutaQuizRepository.first()
-        if (nextQuiz == null) {
-            dispatcher.dispatch(OpenNextQuizAction(null, nextQuiz))
-        } else {
-            dispatcher.dispatch(OpenNextQuizAction(nextQuiz.identifier()))
+        launch(coroutineContext) {
+            val nextQuiz = karutaQuizRepository.first()
+            if (nextQuiz == null) {
+                dispatcher.dispatch(OpenNextQuizAction(null, nextQuiz))
+            } else {
+                dispatcher.dispatch(OpenNextQuizAction(nextQuiz.identifier()))
+            }
         }
     }
 
@@ -73,12 +84,14 @@ class TrainingActionDispatcher @Inject constructor(
      * 練習結果を集計する.
      */
     fun aggregateResults() {
-        val quizzes = karutaQuizRepository.list()
-        try {
-            val resultSummary = quizzes.resultSummary()
-            dispatcher.dispatch(AggregateResultsAction.createSuccess(TrainingResult(resultSummary)))
-        } catch (e: IllegalStateException) {
-            dispatcher.dispatch(AggregateResultsAction.createError(e))
+        launch(coroutineContext) {
+            val quizzes = karutaQuizRepository.list()
+            try {
+                val resultSummary = quizzes.resultSummary()
+                dispatcher.dispatch(AggregateResultsAction.createSuccess(TrainingResult(resultSummary)))
+            } catch (e: IllegalStateException) {
+                dispatcher.dispatch(AggregateResultsAction.createError(e))
+            }
         }
     }
 
