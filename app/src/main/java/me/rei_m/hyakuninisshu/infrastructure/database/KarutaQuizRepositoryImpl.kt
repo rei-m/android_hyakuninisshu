@@ -14,48 +14,13 @@
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.SingleAssociation
-import io.reactivex.Completable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import java.util.*
 
 class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepository {
 
-    private val funcConvertEntity = Function<KarutaQuizSchema, KarutaQuiz> { karutaQuizSchema ->
-        val karutaIdentifierList = ArrayList<KarutaIdentifier>()
-        karutaQuizSchema.getChoices(orma)
-            .selector()
-            .executeAsObservable()
-            .map { karutaQuizChoiceSchema -> KarutaIdentifier(karutaQuizChoiceSchema.karutaId.toInt()) }
-            .subscribe { karutaIdentifierList.add(it) }
-
-        if (karutaQuizSchema.startDate == null) {
-            KarutaQuiz.createReady(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                karutaIdentifierList,
-                KarutaIdentifier(karutaQuizSchema.collectId.toInt()))
-        } else {
-            if (karutaQuizSchema.answerTime!! > 0) {
-                KarutaQuiz.createAnswered(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                    karutaIdentifierList,
-                    KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
-                    karutaQuizSchema.startDate!!,
-                    karutaQuizSchema.answerTime!!,
-                    ChoiceNo.forValue(karutaQuizSchema.choiceNo!!),
-                    karutaQuizSchema.isCollect)
-            } else {
-                KarutaQuiz.createInAnswer(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                    karutaIdentifierList,
-                    KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
-                    karutaQuizSchema.startDate!!)
-            }
-        }
-    }
-
-    override fun initialize(karutaQuizzes: KarutaQuizzes): Completable {
-        return orma.transactionAsCompletable {
+    override fun initialize(karutaQuizzes: KarutaQuizzes) {
+        orma.transactionSync {
 
             KarutaQuizSchema.relation(orma).deleter().execute()
             KarutaQuizChoiceSchema.relation(orma).deleter().execute()
@@ -81,36 +46,34 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
         }
     }
 
-    override fun first(): Single<KarutaQuiz> {
+    override fun first(): KarutaQuiz? {
         return KarutaQuizSchema.relation(orma)
             .where("answerTime = ?", 0)
             .selector()
-            .executeAsObservable()
-            .firstOrError()
-            .map { karutaQuizSchema ->
-                val karutaIdentifierList = ArrayList<KarutaIdentifier>()
-                karutaQuizSchema.getChoices(orma)
+            .firstOrNull()?.let {
+                val karutaIdList = it.getChoices(orma)
                     .selector()
-                    .executeAsObservable()
-                    .map { karutaQuizChoiceSchema -> KarutaIdentifier(karutaQuizChoiceSchema.karutaId.toInt()) }
-                    .subscribe { karutaIdentifierList.add(it) }
-                KarutaQuiz.createReady(KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                    karutaIdentifierList,
-                    KarutaIdentifier(karutaQuizSchema.collectId.toInt()))
+                    .map { choice -> KarutaIdentifier(choice.karutaId.toInt()) }
+                    .toList()
+                KarutaQuiz.createReady(
+                    KarutaQuizIdentifier(it.quizId),
+                    karutaIdList,
+                    KarutaIdentifier(it.collectId.toInt())
+                )
             }
     }
 
-    override fun findBy(identifier: KarutaQuizIdentifier): Single<KarutaQuiz> {
+    override fun findBy(identifier: KarutaQuizIdentifier): KarutaQuiz? {
         return KarutaQuizSchema.relation(orma)
             .quizIdEq(identifier.value)
             .selector()
-            .executeAsObservable()
-            .firstOrError()
-            .map(funcConvertEntity)
+            .firstOrNull()?.let {
+                convertEntity(it)
+            }
     }
 
-    override fun store(karutaQuiz: KarutaQuiz): Completable {
-        return orma.transactionAsCompletable {
+    override fun store(karutaQuiz: KarutaQuiz) {
+        orma.transactionSync {
             val updater = KarutaQuizSchema.relation(orma)
                 .quizIdEq(karutaQuiz.identifier().value)
                 .updater()
@@ -126,29 +89,55 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
         }
     }
 
-    override fun list(): Single<KarutaQuizzes> {
-        return KarutaQuizSchema.relation(orma)
+    override fun list(): KarutaQuizzes {
+        return KarutaQuizzes(KarutaQuizSchema.relation(orma)
             .selector()
-            .executeAsObservable()
-            .map(funcConvertEntity)
-            .toList()
-            .map { KarutaQuizzes(it) }
+            .map { convertEntity(it) }
+            .toList())
     }
 
-    override fun countQuizByAnswered(): Single<KarutaQuizCounter> {
-        val totalCountSingle = KarutaQuizSchema.relation(orma)
+    override fun countQuizByAnswered(): KarutaQuizCounter {
+        val totalCount = KarutaQuizSchema.relation(orma)
             .selector()
-            .executeAsObservable()
             .count()
 
-        val answeredCountSingle = KarutaQuizSchema.relation(orma)
+        val answeredCount = KarutaQuizSchema.relation(orma)
             .where("startDate IS NOT NULL")
             .selector()
-            .executeAsObservable()
             .count()
 
-        return Single.zip(totalCountSingle, answeredCountSingle, BiFunction { totalCount, answeredCount ->
-            KarutaQuizCounter(totalCount.toInt(), answeredCount.toInt())
-        })
+        return KarutaQuizCounter(totalCount, answeredCount)
+    }
+
+
+    private fun convertEntity(karutaQuizSchema: KarutaQuizSchema): KarutaQuiz {
+        val karutaIdList = karutaQuizSchema
+            .getChoices(orma)
+            .map { KarutaIdentifier(it.karutaId.toInt()) }
+        if (karutaQuizSchema.startDate == null) {
+            return KarutaQuiz.createReady(
+                KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                karutaIdList,
+                KarutaIdentifier(karutaQuizSchema.collectId.toInt())
+            )
+        }
+        return if (karutaQuizSchema.answerTime!! > 0) {
+            KarutaQuiz.createAnswered(
+                KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                karutaIdList,
+                KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
+                karutaQuizSchema.startDate!!,
+                karutaQuizSchema.answerTime!!,
+                ChoiceNo.forValue(karutaQuizSchema.choiceNo!!),
+                karutaQuizSchema.isCollect
+            )
+        } else {
+            KarutaQuiz.createInAnswer(
+                KarutaQuizIdentifier(karutaQuizSchema.quizId),
+                karutaIdList,
+                KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
+                karutaQuizSchema.startDate!!
+            )
+        }
     }
 }

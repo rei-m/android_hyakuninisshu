@@ -16,7 +16,14 @@ package me.rei_m.hyakuninisshu.action.training
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
 
-class AggregateResultsAction(val trainingResult: TrainingResult?,
-                             override val error: Throwable? = null) : Action {
+class AggregateResultsAction private constructor(
+    val trainingResult: TrainingResult?,
+    override val error: Throwable? = null
+) : Action {
     override fun toString(): String = "AggregateResultsAction(trainingResult=$trainingResult, error=$error)"
+
+    companion object {
+        fun createSuccess(trainingResult: TrainingResult) = AggregateResultsAction(trainingResult)
+        fun createError(error: Throwable) = AggregateResultsAction(null, error)
+    }
 }

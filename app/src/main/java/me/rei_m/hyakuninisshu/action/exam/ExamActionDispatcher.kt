@@ -13,16 +13,10 @@
 
 package me.rei_m.hyakuninisshu.action.exam
 
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.ext.scheduler
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,7 +28,6 @@ class ExamActionDispatcher @Inject constructor(
     private val karutaQuizRepository: KarutaQuizRepository,
     private val karutaExamRepository: KarutaExamRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider,
     private val coroutineContext: CoroutineContext
 ) {
 
@@ -76,42 +69,39 @@ class ExamActionDispatcher @Inject constructor(
      * 力試しを開始する.
      */
     fun start() {
-
-//        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaRepository.findIds(), BiFunction { karutas, karutaIds ->
-//            karutas.createQuizSet(karutaIds)
-//        }).flatMap {
-//            karutaQuizRepository.initialize(it).andThen(Single.just(it))
-//        }.scheduler(schedulerProvider).subscribe({
-//            dispatcher.dispatch(StartExamAction(it.values.first().identifier()))
-//        }, {
-//            dispatcher.dispatch(StartExamAction(null, it))
-//        })
+        launch(coroutineContext) {
+            val karutas = karutaRepository.list()
+            val targetIds = karutaRepository.findIds()
+            val quizSet = karutas.createQuizSet(targetIds)
+            karutaQuizRepository.initialize(quizSet)
+            dispatcher.dispatch(StartExamAction(quizSet.values.first().identifier()))
+        }
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        karutaQuizRepository.first().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
-        }, {
-            dispatcher.dispatch(OpenNextQuizAction(null, it))
-        })
+        launch(coroutineContext) {
+            val action = karutaQuizRepository.first()?.let {
+                OpenNextQuizAction.createSuccess(it.identifier())
+            } ?: OpenNextQuizAction.createError(NoSuchElementException("KarutaQuiz"))
+            dispatcher.dispatch(action)
+        }
     }
 
     /**
      * 力試しを終了して結果を登録する.
      */
     fun finish() {
-//        karutaQuizRepository.list().flatMap {
-//            val result = KarutaExamResult(it.resultSummary(), it.wrongKarutaIds)
-//            karutaExamRepository.storeResult(result, Date())
-//        }.flatMap {
-//            karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(karutaExamRepository.findBy(it))
-//        }.scheduler(schedulerProvider).subscribe({
-//            dispatcher.dispatch(FinishExamAction(it))
-//        }, {
-//            dispatcher.dispatch(FinishExamAction(null, it))
-//        })
+        launch(coroutineContext) {
+            val quizzes = karutaQuizRepository.list()
+            val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
+            val storedExamId = karutaExamRepository.storeResult(result, Date())
+            val exam = karutaExamRepository.findBy(storedExamId)
+            karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+
+            dispatcher.dispatch(FinishExamAction(exam))
+        }
     }
 }

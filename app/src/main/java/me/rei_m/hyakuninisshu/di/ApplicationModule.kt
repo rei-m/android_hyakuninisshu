@@ -15,16 +15,13 @@ package me.rei_m.hyakuninisshu.di
 
 import android.app.Application
 import android.content.Context
-
-import javax.inject.Singleton
-
 import dagger.Module
 import dagger.Provides
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.experimental.CommonPool
 import me.rei_m.hyakuninisshu.action.AppDispatcher
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.util.rx.AppSchedulerProvider
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
+import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext
 
 @Module
@@ -42,9 +39,5 @@ class ApplicationModule(application: Application) {
 
     @Provides
     @Singleton
-    fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
-
-    @Provides
-    @Singleton
-    fun provideDispatcher(schedulerProvider: SchedulerProvider): Dispatcher = AppDispatcher(schedulerProvider)
+    fun provideDispatcher(): Dispatcher = AppDispatcher(AndroidSchedulers.mainThread())
 }

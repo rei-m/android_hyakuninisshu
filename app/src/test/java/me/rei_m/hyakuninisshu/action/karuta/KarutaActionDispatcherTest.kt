@@ -49,7 +49,7 @@ class KarutaActionDispatcherTest : TestHelper {
     fun fetch() {
         val karuta = createKaruta(id = 1)
 
-        whenever(karutaRepository.findBy2(karuta.identifier())).thenReturn(karuta)
+        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(karuta)
 
         actionDispatcher.fetch(karuta.identifier())
 
@@ -64,7 +64,7 @@ class KarutaActionDispatcherTest : TestHelper {
 
     @Test
     fun fetchWithTest() {
-        whenever(karutaRepository.findBy2(KarutaIdentifier(1))).thenReturn(null)
+        whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
         actionDispatcher.fetch(KarutaIdentifier(1))
 

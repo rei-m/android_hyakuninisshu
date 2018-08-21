@@ -13,7 +13,6 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
-import io.reactivex.Single
 import java.io.IOException
 
 /**
@@ -30,18 +29,10 @@ interface KarutaRepository {
     /**
      * 歌を取得する.
      *
-     * @param identifier 歌ID
-     * @return 歌
-     */
-    fun findBy(identifier: KarutaIdentifier): Single<Karuta>
-
-    /**
-     * 歌を取得する.
-     *
      * @param karutaId 歌ID
      * @return 歌
      */
-    fun findBy2(karutaId: KarutaIdentifier): Karuta?
+    fun findBy(karutaId: KarutaIdentifier): Karuta?
 
     /**
      * 歌コレクションを取得する.
@@ -56,7 +47,7 @@ interface KarutaRepository {
      *
      * @return 歌IDコレクション
      */
-    fun findIds(): Single<KarutaIds>
+    fun findIds(): KarutaIds
 
     /**
      * 歌IDコレクションを取得する.
@@ -70,7 +61,7 @@ interface KarutaRepository {
     fun findIds(fromIdentifier: KarutaIdentifier,
                 toIdentifier: KarutaIdentifier,
                 color: Color?,
-                kimariji: Kimariji?): Single<KarutaIds>
+                kimariji: Kimariji?): KarutaIds
 
     /**
      * 歌を永続化する,

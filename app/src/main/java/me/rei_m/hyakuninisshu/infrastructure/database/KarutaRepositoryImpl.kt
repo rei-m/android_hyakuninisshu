@@ -15,11 +15,8 @@ package me.rei_m.hyakuninisshu.infrastructure.database
 
 import android.content.Context
 import android.content.SharedPreferences
-import io.reactivex.Completable
-import io.reactivex.Single
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 
 class KarutaRepositoryImpl(
@@ -75,17 +72,16 @@ class KarutaRepositoryImpl(
             selector = selector.and().where("color = ?", color.value)
         }
 
-        return selector
+        return Karutas(selector
             .orderBy(relation.schema.id.orderInAscending())
             .map { KarutaFactory.create(it) }
-            .toList()
-            .let { Karutas(it) }
+            .toList())
     }
 
     override fun findIds(fromIdentifier: KarutaIdentifier,
                          toIdentifier: KarutaIdentifier,
                          color: Color?,
-                         kimariji: Kimariji?): Single<KarutaIds> {
+                         kimariji: Kimariji?): KarutaIds {
         val relation = KarutaSchema.relation(orma)
         var selector = relation.selector()
             .idGe(fromIdentifier.value.toLong())
@@ -100,33 +96,21 @@ class KarutaRepositoryImpl(
             selector = selector.and().where("kimariji = ?", kimariji.value)
         }
 
-        return selector
+        return KarutaIds(selector
             .orderBy(relation.schema.id.orderInAscending())
-            .executeAsObservable()
             .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
-            .toList()
-            .map { KarutaIds(it) }
+            .toList())
     }
 
-    override fun findIds(): Single<KarutaIds> {
+    override fun findIds(): KarutaIds {
         val relation = KarutaSchema.relation(orma)
-        return KarutaSchema.relation(orma).selector()
+        return KarutaIds(KarutaSchema.relation(orma).selector()
             .orderBy(relation.schema.id.orderInAscending())
-            .executeAsObservable()
             .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
-            .toList()
-            .map { KarutaIds(it) }
+            .toList())
     }
 
-    override fun findBy(identifier: KarutaIdentifier): Single<Karuta> {
-        return KarutaSchema.relation(orma).selector()
-            .idEq(identifier.value.toLong())
-            .executeAsObservable()
-            .map { KarutaFactory.create(it) }
-            .singleOrError()
-    }
-
-    override fun findBy2(karutaId: KarutaIdentifier): Karuta? {
+    override fun findBy(karutaId: KarutaIdentifier): Karuta? {
         return KarutaSchema.relation(orma).selector()
             .idEq(karutaId.value.toLong())
             .firstOrNull()?.let {

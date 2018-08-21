@@ -36,7 +36,7 @@ class KarutaActionDispatcher @Inject constructor(
      */
     fun fetch(karutaId: KarutaIdentifier) {
         launch(coroutineContext) {
-            val action = karutaRepository.findBy2(karutaId)?.let {
+            val action = karutaRepository.findBy(karutaId)?.let {
                 FetchKarutaAction.createSuccess(it)
             } ?: FetchKarutaAction.createError(NoSuchElementException(karutaId.toString()))
             dispatcher.dispatch(action)

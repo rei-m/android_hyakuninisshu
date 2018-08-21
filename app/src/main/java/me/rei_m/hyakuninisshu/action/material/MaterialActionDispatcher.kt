@@ -50,7 +50,7 @@ class MaterialActionDispatcher @Inject constructor(
      */
     fun startEdit(karutaId: KarutaIdentifier) {
         launch(coroutineContext) {
-            val action = karutaRepository.findBy2(karutaId)?.let {
+            val action = karutaRepository.findBy(karutaId)?.let {
                 StartEditMaterialAction.createSuccess(it)
             } ?: StartEditMaterialAction.createError(NoSuchElementException(karutaId.toString()))
             dispatcher.dispatch(action)
@@ -85,7 +85,7 @@ class MaterialActionDispatcher @Inject constructor(
              fifthPhraseKana: String) {
 
         launch(coroutineContext) {
-            val karuta = karutaRepository.findBy2(karutaId)
+            val karuta = karutaRepository.findBy(karutaId)
             if (karuta == null) {
                 dispatcher.dispatch(EditMaterialAction(null, NoSuchElementException(karutaId.toString())))
                 return@launch

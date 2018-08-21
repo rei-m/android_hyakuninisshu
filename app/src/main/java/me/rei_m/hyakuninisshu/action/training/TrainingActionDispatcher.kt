@@ -13,16 +13,11 @@
 
 package me.rei_m.hyakuninisshu.action.training
 
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
-import me.rei_m.hyakuninisshu.ext.scheduler
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,8 +26,7 @@ class TrainingActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val karutaQuizRepository: KarutaQuizRepository,
     private val karutaExamRepository: KarutaExamRepository,
-    private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider
+    private val dispatcher: Dispatcher
 ) {
     /**
      * 練習を開始する.
@@ -53,51 +47,49 @@ class TrainingActionDispatcher @Inject constructor(
      * 力試しで過去に間違えた歌を練習対象にして練習を開始する.
      */
     fun startForExam() {
-//        start(karutaExamRepository.list().map { it.totalWrongKarutaIds })
+        start(karutaExamRepository.list().totalWrongKarutaIds)
     }
 
     /**
      * 練習で間違えた歌を練習対象にして練習を再開する.
      */
     fun restartForPractice() {
-        start(karutaQuizRepository.list().map { it.wrongKarutaIds })
+        start(karutaQuizRepository.list().wrongKarutaIds)
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        karutaQuizRepository.first().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
-        }, {
-            dispatcher.dispatch(OpenNextQuizAction(null, it))
-        })
+        val nextQuiz = karutaQuizRepository.first()
+        if (nextQuiz == null) {
+            dispatcher.dispatch(OpenNextQuizAction(null, nextQuiz))
+        } else {
+            dispatcher.dispatch(OpenNextQuizAction(nextQuiz.identifier()))
+        }
     }
 
     /**
      * 練習結果を集計する.
      */
     fun aggregateResults() {
-        karutaQuizRepository.list().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(AggregateResultsAction(TrainingResult(it.resultSummary())))
-        }, {
-            dispatcher.dispatch(AggregateResultsAction(null, it))
-        })
+        val quizzes = karutaQuizRepository.list()
+        try {
+            val resultSummary = quizzes.resultSummary()
+            dispatcher.dispatch(AggregateResultsAction.createSuccess(TrainingResult(resultSummary)))
+        } catch (e: IllegalStateException) {
+            dispatcher.dispatch(AggregateResultsAction.createError(e))
+        }
     }
 
-    private fun start(karutaIdsSingle: Single<KarutaIds>) {
-//        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaIdsSingle, BiFunction { karutas, karutaIds ->
-//            karutas.createQuizSet(karutaIds)
-//        }).flatMap {
-//            karutaQuizRepository.initialize(it).andThen(Single.just(it))
-//        }.scheduler(schedulerProvider).subscribe({
-//            if (it.isEmpty) {
-//                dispatcher.dispatch(StartTrainingAction(null))
-//            } else {
-//                dispatcher.dispatch(StartTrainingAction(it.values.first().identifier()))
-//            }
-//        }, {
-//            dispatcher.dispatch(StartTrainingAction(null, it))
-//        })
+    private fun start(karutaIds: KarutaIds) {
+        val karutas = karutaRepository.list()
+        val quizSet = karutas.createQuizSet(karutaIds)
+        karutaQuizRepository.initialize(quizSet)
+        if (quizSet.isEmpty) {
+            dispatcher.dispatch(StartTrainingAction(null))
+        } else {
+            dispatcher.dispatch(StartTrainingAction(quizSet.values.first().identifier()))
+        }
     }
 }

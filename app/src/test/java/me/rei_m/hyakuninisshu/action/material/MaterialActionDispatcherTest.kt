@@ -81,7 +81,7 @@ class MaterialActionDispatcherTest : TestHelper {
     fun startEdit() {
         val karuta = createKaruta(id = 1)
 
-        whenever(karutaRepository.findBy2(karuta.identifier())).thenReturn(karuta)
+        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(karuta)
 
         actionDispatcher.startEdit(karuta.identifier())
 
@@ -96,7 +96,7 @@ class MaterialActionDispatcherTest : TestHelper {
 
     @Test
     fun startEditWithError() {
-        whenever(karutaRepository.findBy2(KarutaIdentifier(1))).thenReturn(null)
+        whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
         actionDispatcher.startEdit(KarutaIdentifier(1))
 
@@ -110,7 +110,7 @@ class MaterialActionDispatcherTest : TestHelper {
     fun edit() {
         val karuta = createKaruta(1)
 
-        whenever(karutaRepository.findBy2(karuta.identifier())).thenReturn(karuta)
+        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(karuta)
         whenever(karutaRepository.store(any())).thenAnswer {  }
 
         actionDispatcher.edit(
@@ -150,7 +150,7 @@ class MaterialActionDispatcherTest : TestHelper {
     fun editWithError() {
         val karuta = createKaruta(1)
 
-        whenever(karutaRepository.findBy2(karuta.identifier())).thenReturn(null)
+        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(null)
 
         actionDispatcher.edit(
             karuta.identifier(),
