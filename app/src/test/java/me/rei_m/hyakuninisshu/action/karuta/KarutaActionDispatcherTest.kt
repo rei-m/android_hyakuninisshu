@@ -63,7 +63,7 @@ class KarutaActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun fetchWithTest() {
+    fun fetchWhenNotFound() {
         whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
         actionDispatcher.fetch(KarutaIdentifier(1))

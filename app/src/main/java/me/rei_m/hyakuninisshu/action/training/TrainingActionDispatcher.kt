@@ -71,12 +71,10 @@ class TrainingActionDispatcher @Inject constructor(
      */
     fun fetchNext() {
         launch(coroutineContext) {
-            val nextQuiz = karutaQuizRepository.first()
-            if (nextQuiz == null) {
-                dispatcher.dispatch(OpenNextQuizAction(null, nextQuiz))
-            } else {
-                dispatcher.dispatch(OpenNextQuizAction(nextQuiz.identifier()))
-            }
+            val action = karutaQuizRepository.first()?.let {
+                OpenNextQuizAction.createSuccess(it.identifier())
+            } ?: OpenNextQuizAction.createError(NoSuchElementException("KarutaQuiz"))
+            dispatcher.dispatch(action)
         }
     }
 

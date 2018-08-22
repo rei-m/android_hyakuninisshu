@@ -14,12 +14,10 @@
 package me.rei_m.hyakuninisshu.action.training
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Completable
-import io.reactivex.Single
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.domain.util.rx.TestSchedulerProvider
+import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -50,7 +48,7 @@ class TrainingActionDispatcherTest : TestHelper {
                 karutaQuizRepository,
                 karutaExamRepository,
                 dispatcher,
-                TestSchedulerProvider()
+                DirectCoroutineContext
         )
     }
 
@@ -63,9 +61,9 @@ class TrainingActionDispatcherTest : TestHelper {
         val karutas = Karutas((0..10).map { createKaruta(it) })
 
         whenever(karutaRepository.findIds(fromId, toId, color, kimariji))
-                .thenReturn(Single.just(KarutaIds(listOf(KarutaIdentifier(1)))))
-        whenever(karutaRepository.list()).thenReturn(Single.just(karutas))
-        whenever(karutaQuizRepository.initialize(any())).thenReturn(Completable.complete())
+                .thenReturn(KarutaIds(listOf(KarutaIdentifier(1))))
+        whenever(karutaRepository.list()).thenReturn(karutas)
+        whenever(karutaQuizRepository.initialize(any())).thenAnswer {  }
 
         actionDispatcher.start(fromId, toId, kimariji, color)
 
@@ -96,9 +94,9 @@ class TrainingActionDispatcherTest : TestHelper {
 
         val karutas = Karutas((0..10).map { createKaruta(it) })
 
-        whenever(karutaExamRepository.list()).thenReturn(Single.just(KarutaExams(listOf(exam))))
-        whenever(karutaRepository.list()).thenReturn(Single.just(karutas))
-        whenever(karutaQuizRepository.initialize(any())).thenReturn(Completable.complete())
+        whenever(karutaExamRepository.list()).thenReturn(KarutaExams(listOf(exam)))
+        whenever(karutaRepository.list()).thenReturn(karutas)
+        whenever(karutaQuizRepository.initialize(any())).thenAnswer {  }
 
         actionDispatcher.startForExam()
 
@@ -119,9 +117,9 @@ class TrainingActionDispatcherTest : TestHelper {
         ))
         val karutas = Karutas((0..10).map { createKaruta(it) })
 
-        whenever(karutaRepository.list()).thenReturn(Single.just(karutas))
-        whenever(karutaQuizRepository.list()).thenReturn(Single.just(quizzes))
-        whenever(karutaQuizRepository.initialize(any())).thenReturn(Completable.complete())
+        whenever(karutaRepository.list()).thenReturn(karutas)
+        whenever(karutaQuizRepository.list()).thenReturn(quizzes)
+        whenever(karutaQuizRepository.initialize(any())).thenAnswer {  }
 
         actionDispatcher.restartForPractice()
 
@@ -139,9 +137,9 @@ class TrainingActionDispatcherTest : TestHelper {
         val fromId = KarutaIdentifier(1)
         val toId = KarutaIdentifier(10)
         val karutas = Karutas((0..10).map { createKaruta(it) })
-        whenever(karutaRepository.findIds(fromId, toId, null, null)).thenReturn(Single.just(KarutaIds(listOf())))
-        whenever(karutaRepository.list()).thenReturn(Single.just(karutas))
-        whenever(karutaQuizRepository.initialize(any())).thenReturn(Completable.complete())
+        whenever(karutaRepository.findIds(fromId, toId, null, null)).thenReturn(KarutaIds(listOf()))
+        whenever(karutaRepository.list()).thenReturn(karutas)
+        whenever(karutaQuizRepository.initialize(any())).thenAnswer {  }
 
         actionDispatcher.start(fromId, toId, null, null)
 
@@ -155,25 +153,10 @@ class TrainingActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun startWithError() {
-        val fromId = KarutaIdentifier(1)
-        val toId = KarutaIdentifier(10)
-        whenever(karutaRepository.findIds(fromId, toId, null, null)).thenReturn(Single.error(RuntimeException()))
-        whenever(karutaRepository.list()).thenReturn(Single.error(RuntimeException()))
-
-        actionDispatcher.start(fromId, toId, null, null)
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartTrainingAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
-    }
-
-    @Test
     fun fetchNext() {
         val quiz = createQuiz(1)
 
-        whenever(karutaQuizRepository.first()).thenReturn(Single.just(quiz))
+        whenever(karutaQuizRepository.first()).thenReturn(quiz)
 
         actionDispatcher.fetchNext()
 
@@ -187,8 +170,8 @@ class TrainingActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun fetchNextWithError() {
-        whenever(karutaQuizRepository.first()).thenReturn(Single.error(RuntimeException()))
+    fun fetchNextWhenNotFound() {
+        whenever(karutaQuizRepository.first()).thenReturn(null)
 
         actionDispatcher.fetchNext()
 
@@ -204,7 +187,7 @@ class TrainingActionDispatcherTest : TestHelper {
                 createAnsweredQuiz(1, Date(), 3000, ChoiceNo.FIRST, true),
                 createAnsweredQuiz(2, Date(), 3000, ChoiceNo.SECOND, false)
         ))
-        whenever(karutaQuizRepository.list()).thenReturn(Single.just(quizzes))
+        whenever(karutaQuizRepository.list()).thenReturn(quizzes)
 
         actionDispatcher.aggregateResults()
 
@@ -218,8 +201,12 @@ class TrainingActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun aggregateResultsWithError() {
-        whenever(karutaQuizRepository.list()).thenReturn(Single.error(RuntimeException()))
+    fun aggregateResultsExistsNotAnswered() {
+        val quizzes = KarutaQuizzes(listOf(
+            createAnsweredQuiz(1, Date(), 3000, ChoiceNo.FIRST, true),
+            createQuiz(2)
+        ))
+        whenever(karutaQuizRepository.list()).thenReturn(quizzes)
 
         actionDispatcher.aggregateResults()
 

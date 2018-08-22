@@ -95,13 +95,22 @@ class ExamActionDispatcher @Inject constructor(
      */
     fun finish() {
         launch(coroutineContext) {
-            val quizzes = karutaQuizRepository.list()
-            val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
-            val storedExamId = karutaExamRepository.storeResult(result, Date())
-            val exam = karutaExamRepository.findBy(storedExamId)
-            karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+            try {
+                val quizzes = karutaQuizRepository.list()
+                val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
+                val storedExamId = karutaExamRepository.storeResult(result, Date())
+                val exam = karutaExamRepository.findBy(storedExamId)
+                if (exam == null) {
+                    dispatcher.dispatch(FinishExamAction.createError(NoSuchElementException(storedExamId.toString())))
+                    return@launch
+                }
 
-            dispatcher.dispatch(FinishExamAction(exam))
+                karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+
+                dispatcher.dispatch(FinishExamAction.createSuccess(exam))
+            } catch (e: IllegalStateException) {
+                dispatcher.dispatch(FinishExamAction.createError(e))
+            }
         }
     }
 }

@@ -16,7 +16,14 @@ package me.rei_m.hyakuninisshu.action.exam
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-class FinishExamAction(val karutaExam: KarutaExam?,
-                       override val error: Throwable? = null) : Action {
+class FinishExamAction private constructor(
+    val karutaExam: KarutaExam?,
+    override val error: Throwable? = null
+) : Action {
     override fun toString() = "FinishExamAction(karutaExam=$karutaExam)"
+
+    companion object {
+        fun createSuccess(karutaExam: KarutaExam) = FinishExamAction(karutaExam)
+        fun createError(error: Throwable) = FinishExamAction(null, error)
+    }
 }

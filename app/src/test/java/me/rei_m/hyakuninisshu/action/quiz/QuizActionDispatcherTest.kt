@@ -14,15 +14,13 @@
 package me.rei_m.hyakuninisshu.action.quiz
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Completable
-import io.reactivex.Single
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizCounter
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
-import me.rei_m.hyakuninisshu.domain.util.rx.TestSchedulerProvider
+import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -44,21 +42,21 @@ class QuizActionDispatcherTest : TestHelper {
         karutaRepository = mock {}
         karutaQuizRepository = mock { }
         actionDispatcher = QuizActionDispatcher(
-                karutaRepository,
-                karutaQuizRepository,
-                dispatcher,
-                TestSchedulerProvider()
+            karutaRepository,
+            karutaQuizRepository,
+            dispatcher,
+            DirectCoroutineContext
         )
     }
 
     @Test
     fun fetch() {
         val quiz = createQuiz(1)
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(Single.just(quiz))
-        whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(Single.just(KarutaQuizCounter(10, 1)))
+        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(quiz)
+        whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(KarutaQuizCounter(10, 1))
         quiz.choiceList.forEach {
             val karuta = createKaruta(id = it.value)
-            whenever(karutaRepository.findBy(it)).thenReturn(Single.just(karuta))
+            whenever(karutaRepository.findBy(it)).thenReturn(karuta)
         }
 
         actionDispatcher.fetch(quiz.identifier())
@@ -73,9 +71,9 @@ class QuizActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun fetchWithTest() {
+    fun fetchWhenNotFound() {
         val quizId = KarutaQuizIdentifier()
-        whenever(karutaQuizRepository.findBy(quizId)).thenReturn(Single.error(RuntimeException()))
+        whenever(karutaQuizRepository.findBy(quizId)).thenReturn(null)
 
         actionDispatcher.fetch(quizId)
 
@@ -89,13 +87,13 @@ class QuizActionDispatcherTest : TestHelper {
     fun start() {
         val quiz = createQuiz(1)
         val startDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(Single.just(quiz))
-        whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(Single.just(KarutaQuizCounter(10, 1)))
+        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(quiz)
+        whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(KarutaQuizCounter(10, 1))
         quiz.choiceList.forEach {
             val karuta = createKaruta(id = it.value)
-            whenever(karutaRepository.findBy(it)).thenReturn(Single.just(karuta))
+            whenever(karutaRepository.findBy(it)).thenReturn(karuta)
         }
-        whenever(karutaQuizRepository.store(any())).thenReturn(Completable.complete())
+        whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
         actionDispatcher.start(quiz.identifier(), startDate)
 
@@ -109,16 +107,10 @@ class QuizActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun startWithError() {
+    fun startWhenNotFoundQuiz() {
         val quiz = createQuiz(1)
         val startDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(Single.just(quiz))
-        whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(Single.just(KarutaQuizCounter(10, 1)))
-        quiz.choiceList.forEach {
-            val karuta = createKaruta(id = it.value)
-            whenever(karutaRepository.findBy(it)).thenReturn(Single.just(karuta))
-        }
-        whenever(karutaQuizRepository.store(any())).thenReturn(Completable.error(RuntimeException()))
+        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(null)
 
         actionDispatcher.start(quiz.identifier(), startDate)
 
@@ -132,13 +124,13 @@ class QuizActionDispatcherTest : TestHelper {
     fun answer() {
         val quiz = createStartedQuiz(1, Date())
         val answerDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(Single.just(quiz))
-        whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(Single.just(KarutaQuizCounter(10, 1)))
+        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(quiz)
+        whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(KarutaQuizCounter(10, 1))
         quiz.choiceList.forEach {
             val karuta = createKaruta(id = it.value)
-            whenever(karutaRepository.findBy(it)).thenReturn(Single.just(karuta))
+            whenever(karutaRepository.findBy(it)).thenReturn(karuta)
         }
-        whenever(karutaQuizRepository.store(any())).thenReturn(Completable.complete())
+        whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
         actionDispatcher.answer(quiz.identifier(), ChoiceNo.FIRST, answerDate)
 
@@ -152,10 +144,10 @@ class QuizActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun answerWithError() {
+    fun answerWhenNotFoundQuiz() {
         val quiz = createStartedQuiz(1, Date())
         val answerDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(Single.error(RuntimeException()))
+        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(null)
 
         actionDispatcher.answer(quiz.identifier(), ChoiceNo.FIRST, answerDate)
 
