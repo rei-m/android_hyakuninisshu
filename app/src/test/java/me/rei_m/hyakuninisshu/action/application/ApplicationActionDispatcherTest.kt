@@ -13,14 +13,16 @@
 
 package me.rei_m.hyakuninisshu.action.application
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.check
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
 class ApplicationActionDispatcherTest {
 
@@ -46,18 +48,6 @@ class ApplicationActionDispatcherTest {
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartApplicationAction::class.java)
             assertThat(it.error).isNull()
-        })
-    }
-
-    @Test
-    fun startWithError() {
-        whenever(repository.initialize()).thenThrow(IOException("test"))
-
-        actionDispatcher.start()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartApplicationAction::class.java)
-            assertThat(it.error).isNotNull()
         })
     }
 }

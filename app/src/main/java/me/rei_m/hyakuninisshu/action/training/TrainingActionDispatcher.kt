@@ -71,10 +71,13 @@ class TrainingActionDispatcher @Inject constructor(
      */
     fun fetchNext() {
         launch(coroutineContext) {
-            val action = karutaQuizRepository.first()?.let {
-                OpenNextQuizAction.createSuccess(it.identifier())
-            } ?: OpenNextQuizAction.createError(NoSuchElementException("KarutaQuiz"))
-            dispatcher.dispatch(action)
+            try {
+                val karutaQuiz = karutaQuizRepository.first()
+                    ?: throw NoSuchElementException("NextKarutaQuiz")
+                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(OpenNextQuizAction.createError(e))
+            }
         }
     }
 
@@ -83,24 +86,28 @@ class TrainingActionDispatcher @Inject constructor(
      */
     fun aggregateResults() {
         launch(coroutineContext) {
-            val quizzes = karutaQuizRepository.list()
             try {
+                val quizzes = karutaQuizRepository.list()
                 val resultSummary = quizzes.resultSummary()
                 dispatcher.dispatch(AggregateResultsAction.createSuccess(TrainingResult(resultSummary)))
-            } catch (e: IllegalStateException) {
+            } catch (e: Exception) {
                 dispatcher.dispatch(AggregateResultsAction.createError(e))
             }
         }
     }
 
     private fun start(karutaIds: KarutaIds) {
-        val karutas = karutaRepository.list()
-        val quizSet = karutas.createQuizSet(karutaIds)
-        karutaQuizRepository.initialize(quizSet)
-        if (quizSet.isEmpty) {
-            dispatcher.dispatch(StartTrainingAction(null))
-        } else {
-            dispatcher.dispatch(StartTrainingAction(quizSet.values.first().identifier()))
+        try {
+            val karutas = karutaRepository.list()
+            val quizSet = karutas.createQuizSet(karutaIds)
+            karutaQuizRepository.initialize(quizSet)
+            if (quizSet.isEmpty) {
+                dispatcher.dispatch(StartTrainingAction.createSuccess(null))
+            } else {
+                dispatcher.dispatch(StartTrainingAction.createSuccess(quizSet.values.first().identifier()))
+            }
+        } catch (e: Exception) {
+            dispatcher.dispatch(StartTrainingAction.createError(e))
         }
     }
 }

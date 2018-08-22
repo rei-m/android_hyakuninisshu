@@ -38,10 +38,13 @@ class ExamActionDispatcher @Inject constructor(
      */
     fun fetch(karutaExamId: KarutaExamIdentifier) {
         launch(coroutineContext) {
-            val action = karutaExamRepository.findBy(karutaExamId)?.let {
-                FetchExamAction.createSuccess(it)
-            } ?: FetchExamAction.createError(NoSuchElementException(karutaExamId.toString()))
-            dispatcher.dispatch(action)
+            try {
+                val karutaExam = karutaExamRepository.findBy(karutaExamId)
+                    ?: throw NoSuchElementException(karutaExamId.toString())
+                dispatcher.dispatch(FetchExamAction.createSuccess(karutaExam))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchExamAction.createError(e))
+            }
         }
     }
 
@@ -50,8 +53,12 @@ class ExamActionDispatcher @Inject constructor(
      */
     fun fetchRecent() {
         launch(coroutineContext) {
-            val exams = karutaExamRepository.list()
-            dispatcher.dispatch(FetchRecentExamAction.createSuccess(exams.recent))
+            try {
+                val exams = karutaExamRepository.list()
+                dispatcher.dispatch(FetchRecentExamAction.createSuccess(exams.recent))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchRecentExamAction.createError(e))
+            }
         }
     }
 
@@ -60,8 +67,12 @@ class ExamActionDispatcher @Inject constructor(
      */
     fun fetchAll() {
         launch(coroutineContext) {
-            val exams = karutaExamRepository.list()
-            dispatcher.dispatch(FetchAllExamAction.createSuccess(exams.all))
+            try {
+                val exams = karutaExamRepository.list()
+                dispatcher.dispatch(FetchAllExamAction.createSuccess(exams.all))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchAllExamAction.createError(e))
+            }
         }
     }
 
@@ -70,11 +81,16 @@ class ExamActionDispatcher @Inject constructor(
      */
     fun start() {
         launch(coroutineContext) {
-            val karutas = karutaRepository.list()
-            val targetIds = karutaRepository.findIds()
-            val quizSet = karutas.createQuizSet(targetIds)
-            karutaQuizRepository.initialize(quizSet)
-            dispatcher.dispatch(StartExamAction(quizSet.values.first().identifier()))
+            try {
+                val karutas = karutaRepository.list()
+                val targetIds = karutaRepository.findIds()
+                val quizSet = karutas.createQuizSet(targetIds)
+                karutaQuizRepository.initialize(quizSet)
+                val firstQuizId = quizSet.values.first().identifier()
+                dispatcher.dispatch(StartExamAction.createSuccess(firstQuizId))
+            } catch (e: Exception) {
+                dispatcher.dispatch(StartExamAction.createError(e))
+            }
         }
     }
 
@@ -83,10 +99,13 @@ class ExamActionDispatcher @Inject constructor(
      */
     fun fetchNext() {
         launch(coroutineContext) {
-            val action = karutaQuizRepository.first()?.let {
-                OpenNextQuizAction.createSuccess(it.identifier())
-            } ?: OpenNextQuizAction.createError(NoSuchElementException("KarutaQuiz"))
-            dispatcher.dispatch(action)
+            try {
+                val karutaQuiz = karutaQuizRepository.first()
+                    ?: throw NoSuchElementException("NextKarutaQuiz")
+                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(OpenNextQuizAction.createError(e))
+            }
         }
     }
 
@@ -100,15 +119,10 @@ class ExamActionDispatcher @Inject constructor(
                 val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
                 val storedExamId = karutaExamRepository.storeResult(result, Date())
                 val exam = karutaExamRepository.findBy(storedExamId)
-                if (exam == null) {
-                    dispatcher.dispatch(FinishExamAction.createError(NoSuchElementException(storedExamId.toString())))
-                    return@launch
-                }
-
+                    ?: throw NoSuchElementException(storedExamId.toString())
                 karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
-
                 dispatcher.dispatch(FinishExamAction.createSuccess(exam))
-            } catch (e: IllegalStateException) {
+            } catch (e: Exception) {
                 dispatcher.dispatch(FinishExamAction.createError(e))
             }
         }

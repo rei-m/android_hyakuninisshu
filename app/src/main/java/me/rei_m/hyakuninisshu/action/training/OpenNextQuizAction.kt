@@ -18,12 +18,15 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 
 class OpenNextQuizAction private constructor(
     val karutaQuizId: KarutaQuizIdentifier?,
-    override val error: Throwable? = null
+    override val error: Exception? = null
 ) : Action {
-    override fun toString(): String = "OpenNextQuizAction(karutaQuizId=$karutaQuizId, error=$error)"
+
+    override val name = "OpenNextQuizAction"
+
+    override fun toString() = if (isSucceeded) "$name(karutaQuizId=$karutaQuizId)" else "$name(error=$error)"
 
     companion object {
         fun createSuccess(karutaQuizId: KarutaQuizIdentifier) = OpenNextQuizAction(karutaQuizId)
-        fun createError(error: Throwable) = OpenNextQuizAction(null, error)
+        fun createError(error: Exception) = OpenNextQuizAction(null, error)
     }
 }

@@ -13,8 +13,6 @@
 
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
-import java.io.IOException
-
 /**
  * 歌リポジトリ.
  */
@@ -23,7 +21,6 @@ interface KarutaRepository {
     /**
      * 歌セットを初期化する.
      */
-    @Throws(IOException::class)
     fun initialize()
 
     /**

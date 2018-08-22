@@ -18,12 +18,15 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
 
 class AggregateResultsAction private constructor(
     val trainingResult: TrainingResult?,
-    override val error: Throwable? = null
+    override val error: Exception? = null
 ) : Action {
-    override fun toString(): String = "AggregateResultsAction(trainingResult=$trainingResult, error=$error)"
+
+    override val name = "AggregateResultsAction"
+
+    override fun toString() = if (isSucceeded) "$name(trainingResult=$trainingResult)" else "$name(error=$error)"
 
     companion object {
         fun createSuccess(trainingResult: TrainingResult) = AggregateResultsAction(trainingResult)
-        fun createError(error: Throwable) = AggregateResultsAction(null, error)
+        fun createError(error: Exception) = AggregateResultsAction(null, error)
     }
 }

@@ -14,7 +14,12 @@
 package me.rei_m.hyakuninisshu.action
 
 interface Action {
-    val error: Throwable?
+    val error: Exception?
+
+    val isSucceeded: Boolean
+        get() = error == null
+
+    val name: String
 
     override fun toString(): String
 }

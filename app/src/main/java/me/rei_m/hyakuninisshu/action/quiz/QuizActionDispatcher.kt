@@ -37,10 +37,13 @@ class QuizActionDispatcher @Inject constructor(
      */
     fun fetch(karutaQuizId: KarutaQuizIdentifier) {
         launch(coroutineContext) {
-            val action = karutaQuizRepository.findBy(karutaQuizId)?.let {
-                FetchQuizAction.createSuccess(it.content())
-            } ?: FetchQuizAction.createError(NoSuchElementException(karutaQuizId.toString()))
-            dispatcher.dispatch(action)
+            try {
+                val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+                    ?: throw NoSuchElementException(karutaQuizId.toString())
+                dispatcher.dispatch(FetchQuizAction.createSuccess(karutaQuiz.content()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchQuizAction.createError(e))
+            }
         }
     }
 
@@ -52,15 +55,16 @@ class QuizActionDispatcher @Inject constructor(
      */
     fun start(karutaQuizId: KarutaQuizIdentifier, startTime: Date) {
         launch(coroutineContext) {
-            val quiz = karutaQuizRepository.findBy(karutaQuizId)
-            if (quiz == null) {
-                dispatcher.dispatch(StartQuizAction.createError(NoSuchElementException(karutaQuizId.toString())))
-                return@launch
+            try {
+                val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+                    ?: throw NoSuchElementException(karutaQuizId.toString())
+                if (karutaQuiz.state != KarutaQuiz.State.ANSWERED) {
+                    karutaQuizRepository.store(karutaQuiz.start(startTime))
+                }
+                dispatcher.dispatch(StartQuizAction.createSuccess(karutaQuiz.content()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(StartQuizAction.createError(e))
             }
-            if (quiz.state != KarutaQuiz.State.ANSWERED) {
-                karutaQuizRepository.store(quiz.start(startTime))
-            }
-            dispatcher.dispatch(StartQuizAction.createSuccess(quiz.content()))
         }
     }
 
@@ -73,13 +77,14 @@ class QuizActionDispatcher @Inject constructor(
      */
     fun answer(karutaQuizId: KarutaQuizIdentifier, choiceNo: ChoiceNo, answerTime: Date) {
         launch(coroutineContext) {
-            val quiz = karutaQuizRepository.findBy(karutaQuizId)
-            if (quiz == null) {
-                dispatcher.dispatch(AnswerQuizAction.createError(NoSuchElementException(karutaQuizId.toString())))
-                return@launch
+            try {
+                val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+                    ?: throw NoSuchElementException(karutaQuizId.toString())
+                karutaQuizRepository.store(karutaQuiz.verify(choiceNo, answerTime))
+                dispatcher.dispatch(AnswerQuizAction.createSuccess(karutaQuiz.content()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(AnswerQuizAction.createError(e))
             }
-            karutaQuizRepository.store(quiz.verify(choiceNo, answerTime))
-            dispatcher.dispatch(AnswerQuizAction.createSuccess(quiz.content()))
         }
     }
 

@@ -37,8 +37,11 @@ class MaterialActionDispatcher @Inject constructor(
      */
     fun fetch(colorFilter: ColorFilter) {
         launch(coroutineContext) {
-            karutaRepository.list(colorFilter.value).let {
-                dispatcher.dispatch(FetchMaterialAction.createSuccess(it))
+            try {
+                val karutaList = karutaRepository.list(colorFilter.value)
+                dispatcher.dispatch(FetchMaterialAction.createSuccess(karutaList))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchMaterialAction.createError(e))
             }
         }
     }
@@ -50,10 +53,13 @@ class MaterialActionDispatcher @Inject constructor(
      */
     fun startEdit(karutaId: KarutaIdentifier) {
         launch(coroutineContext) {
-            val action = karutaRepository.findBy(karutaId)?.let {
-                StartEditMaterialAction.createSuccess(it)
-            } ?: StartEditMaterialAction.createError(NoSuchElementException(karutaId.toString()))
-            dispatcher.dispatch(action)
+            try {
+                val karuta = karutaRepository.findBy(karutaId)
+                    ?: throw NoSuchElementException(karutaId.toString())
+                dispatcher.dispatch(StartEditMaterialAction.createSuccess(karuta))
+            } catch (e: Exception) {
+                dispatcher.dispatch(StartEditMaterialAction.createError(e))
+            }
         }
     }
 
@@ -85,26 +91,27 @@ class MaterialActionDispatcher @Inject constructor(
              fifthPhraseKana: String) {
 
         launch(coroutineContext) {
-            val karuta = karutaRepository.findBy(karutaId)
-            if (karuta == null) {
-                dispatcher.dispatch(EditMaterialAction(null, NoSuchElementException(karutaId.toString())))
-                return@launch
+            try {
+                val karuta = karutaRepository.findBy(karutaId)
+                    ?: throw NoSuchElementException(karutaId.toString())
+                karuta.updatePhrase(
+                    firstPhraseKanji,
+                    firstPhraseKana,
+                    secondPhraseKanji,
+                    secondPhraseKana,
+                    thirdPhraseKanji,
+                    thirdPhraseKana,
+                    fourthPhraseKanji,
+                    fourthPhraseKana,
+                    fifthPhraseKanji,
+                    fifthPhraseKana
+                ).let {
+                    karutaRepository.store(it)
+                }
+                dispatcher.dispatch(EditMaterialAction.createSuccess(karuta))
+            } catch (e: Exception) {
+                dispatcher.dispatch(EditMaterialAction.createError(e))
             }
-            karuta.updatePhrase(
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
-            ).let {
-                karutaRepository.store(it)
-            }
-            dispatcher.dispatch(EditMaterialAction(karuta))
         }
     }
 }

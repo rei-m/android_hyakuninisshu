@@ -18,12 +18,15 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
 class FetchRecentExamAction private constructor(
     val karutaExam: KarutaExam?,
-    override val error: Throwable? = null
+    override val error: Exception? = null
 ) : Action {
-    override fun toString(): String = "FetchRecentExamAction(karutaExam=$karutaExam, error=$error)"
+
+    override val name = "FetchRecentExamAction"
+
+    override fun toString() = if (isSucceeded) "$name(karutaExam=$karutaExam)" else "$name(error=$error)"
 
     companion object {
         fun createSuccess(karutaExam: KarutaExam?) = FetchRecentExamAction(karutaExam)
-        fun createError(error: Throwable) = FetchRecentExamAction(null, error)
+        fun createError(error: Exception) = FetchRecentExamAction(null, error)
     }
 }
