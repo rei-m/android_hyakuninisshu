@@ -53,8 +53,8 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
             .firstOrNull()?.let {
                 val karutaIdList = it.getChoices(orma)
                     .selector()
-                    .map { choice -> KarutaIdentifier(choice.karutaId.toInt()) }
                     .toList()
+                    .map { choice -> KarutaIdentifier(choice.karutaId.toInt()) }
                 KarutaQuiz.createReady(
                     KarutaQuizIdentifier(it.quizId),
                     karutaIdList,
@@ -68,7 +68,10 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
             .quizIdEq(identifier.value)
             .selector()
             .firstOrNull()?.let {
-                convertEntity(it)
+                val karutaIdList = it.getChoices(orma)
+                    .selector()
+                    .toList()
+                it.toModel(karutaIdList)
             }
     }
 
@@ -92,7 +95,12 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
     override fun list(): KarutaQuizzes {
         return KarutaQuizzes(KarutaQuizSchema.relation(orma)
             .selector()
-            .map { convertEntity(it) }
+            .map {
+                val karutaIdList = it.getChoices(orma)
+                    .selector()
+                    .toList()
+                it.toModel(karutaIdList)
+            }
             .toList())
     }
 
@@ -108,36 +116,34 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
 
         return KarutaQuizCounter(totalCount, answeredCount)
     }
+}
 
+private fun KarutaQuizSchema.toModel(choiceSchemaList: List<KarutaQuizChoiceSchema>): KarutaQuiz {
+    val karutaIdList = choiceSchemaList.map { KarutaIdentifier(it.karutaId.toInt()) }
 
-    private fun convertEntity(karutaQuizSchema: KarutaQuizSchema): KarutaQuiz {
-        val karutaIdList = karutaQuizSchema
-            .getChoices(orma)
-            .map { KarutaIdentifier(it.karutaId.toInt()) }
-        if (karutaQuizSchema.startDate == null) {
-            return KarutaQuiz.createReady(
-                KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                karutaIdList,
-                KarutaIdentifier(karutaQuizSchema.collectId.toInt())
-            )
-        }
-        return if (karutaQuizSchema.answerTime!! > 0) {
-            KarutaQuiz.createAnswered(
-                KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                karutaIdList,
-                KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
-                karutaQuizSchema.startDate!!,
-                karutaQuizSchema.answerTime!!,
-                ChoiceNo.forValue(karutaQuizSchema.choiceNo!!),
-                karutaQuizSchema.isCollect
-            )
-        } else {
-            KarutaQuiz.createInAnswer(
-                KarutaQuizIdentifier(karutaQuizSchema.quizId),
-                karutaIdList,
-                KarutaIdentifier(karutaQuizSchema.collectId.toInt()),
-                karutaQuizSchema.startDate!!
-            )
-        }
+    if (startDate == null) {
+        return KarutaQuiz.createReady(
+            KarutaQuizIdentifier(quizId),
+            karutaIdList,
+            KarutaIdentifier(collectId.toInt())
+        )
+    }
+    return if (answerTime!! > 0) {
+        KarutaQuiz.createAnswered(
+            KarutaQuizIdentifier(quizId),
+            karutaIdList,
+            KarutaIdentifier(collectId.toInt()),
+            startDate!!,
+            answerTime!!,
+            ChoiceNo.forValue(choiceNo!!),
+            isCollect
+        )
+    } else {
+        KarutaQuiz.createInAnswer(
+            KarutaQuizIdentifier(quizId),
+            karutaIdList,
+            KarutaIdentifier(collectId.toInt()),
+            startDate!!
+        )
     }
 }

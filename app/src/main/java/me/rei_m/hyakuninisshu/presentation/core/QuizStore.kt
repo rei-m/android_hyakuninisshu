@@ -36,19 +36,19 @@ class QuizStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaQuizContent.value = it.karutaQuizContent
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(StartQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaQuizContent.value = it.karutaQuizContent
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaQuizContent.value = it.karutaQuizContent
             } else {
                 _unhandledErrorEvent.value = Event(Unit)

@@ -22,18 +22,18 @@ import java.util.Date
 
 @Table
 data class KarutaExamSchema(
-        @Setter("id") @PrimaryKey(autoincrement = true) var id: Long = 0,
-        @Setter("tookExamDate") @Column var tookExamDate: Date,
-        @Setter("totalQuizCount") @Column var totalQuizCount: Int,
-        @Setter("averageAnswerTime") @Column var averageAnswerTime: Float
+    @Setter("id") @PrimaryKey(autoincrement = true) var id: Long = 0,
+    @Setter("tookExamDate") @Column var tookExamDate: Date,
+    @Setter("totalQuizCount") @Column var totalQuizCount: Int,
+    @Setter("averageAnswerTime") @Column var averageAnswerTime: Float
 ) {
+    fun getWrongKarutas(orma: OrmaDatabase): ExamWrongKarutaSchema_Relation {
+        return orma.relationOfExamWrongKarutaSchema().examSchemaEq(this)
+    }
+
     companion object {
         fun relation(orma: OrmaDatabase): KarutaExamSchema_Relation {
             return orma.relationOfKarutaExamSchema()
         }
-    }
-
-    fun getWrongKarutas(orma: OrmaDatabase): ExamWrongKarutaSchema_Relation {
-        return orma.relationOfExamWrongKarutaSchema().examSchemaEq(this)
     }
 }

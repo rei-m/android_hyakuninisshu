@@ -74,8 +74,8 @@ class KarutaRepositoryImpl(
 
         return Karutas(selector
             .orderBy(relation.schema.id.orderInAscending())
-            .map { KarutaFactory.create(it) }
-            .toList())
+            .toList()
+            .map { it.toModel() })
     }
 
     override fun findIds(fromIdentifier: KarutaIdentifier,
@@ -98,24 +98,22 @@ class KarutaRepositoryImpl(
 
         return KarutaIds(selector
             .orderBy(relation.schema.id.orderInAscending())
-            .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
-            .toList())
+            .toList()
+            .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) })
     }
 
     override fun findIds(): KarutaIds {
         val relation = KarutaSchema.relation(orma)
         return KarutaIds(KarutaSchema.relation(orma).selector()
             .orderBy(relation.schema.id.orderInAscending())
-            .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) }
-            .toList())
+            .toList()
+            .map { karutaSchema -> KarutaIdentifier(karutaSchema.id.toInt()) })
     }
 
     override fun findBy(karutaId: KarutaIdentifier): Karuta? {
         return KarutaSchema.relation(orma).selector()
-            .idEq(karutaId.value.toLong())
-            .firstOrNull()?.let {
-                KarutaFactory.create(it)
-            }
+                .idEq(karutaId.value.toLong())
+                .firstOrNull()?.toModel()
     }
 
     override fun store(karuta: Karuta) {
@@ -137,4 +135,31 @@ class KarutaRepositoryImpl(
             .isEdited(true)
             .execute()
     }
+}
+
+private fun KarutaSchema.toModel(): Karuta {
+
+    val identifier = KarutaIdentifier(id.toInt())
+
+    val firstPart = Phrase(firstKana, firstKanji)
+    val secondPart = Phrase(secondKana, secondKanji)
+    val thirdPart = Phrase(thirdKana, thirdKanji)
+    val fourthPart = Phrase(fourthKana, fourthKanji)
+    val fifthPart = Phrase(fifthKana, fifthKanji)
+
+    val kamiNoKu = KamiNoKu(KamiNoKuIdentifier(identifier.value), firstPart, secondPart, thirdPart)
+    val shimoNoKu = ShimoNoKu(ShimoNoKuIdentifier(identifier.value), fourthPart, fifthPart)
+
+    val kimariji = Kimariji.forValue(kimariji)
+
+    val color = Color.forValue(color)
+
+    return Karuta(identifier,
+        creator,
+        kamiNoKu,
+        shimoNoKu,
+        kimariji,
+        ImageNo(imageNo),
+        translation,
+        color)
 }

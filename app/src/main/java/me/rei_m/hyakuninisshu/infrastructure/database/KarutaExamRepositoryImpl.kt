@@ -14,6 +14,8 @@
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.SingleAssociation
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
 import java.util.*
 
@@ -74,7 +76,7 @@ class KarutaExamRepositoryImpl(private val orma: OrmaDatabase) : KarutaExamRepos
             .selector()
             .toList()
 
-        return KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList)
+        return examSchema.toModel(examWrongKarutaSchemaList)
     }
 
     override fun list(): KarutaExams {
@@ -88,9 +90,30 @@ class KarutaExamRepositoryImpl(private val orma: OrmaDatabase) : KarutaExamRepos
                 .getWrongKarutas(orma)
                 .selector()
                 .toList()
-            return@map KarutaExamFactory.create(examSchema, examWrongKarutaSchemaList)
+            return@map examSchema.toModel(examWrongKarutaSchemaList)
         }
 
         return KarutaExams(examList)
     }
+}
+
+private fun KarutaExamSchema.toModel(examWrongKarutaSchemaList: List<ExamWrongKarutaSchema>): KarutaExam {
+
+    val identifier = KarutaExamIdentifier(id)
+
+    val wrongKarutaIdentifierList = examWrongKarutaSchemaList.map {
+        KarutaIdentifier(it.karutaId.toInt())
+    }
+
+    val wrongKarutaIds = KarutaIds(wrongKarutaIdentifierList)
+
+    val resultSummary = KarutaQuizzesResultSummary(
+        totalQuizCount,
+        totalQuizCount - wrongKarutaIds.size,
+        averageAnswerTime
+    )
+
+    val result = KarutaExamResult(resultSummary, wrongKarutaIds)
+
+    return KarutaExam(identifier, tookExamDate, result)
 }

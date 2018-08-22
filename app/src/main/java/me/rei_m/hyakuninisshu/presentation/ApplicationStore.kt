@@ -33,7 +33,7 @@ class ApplicationStore(dispatcher: Dispatcher) : Store() {
     init {
         _isReady.value = false
         register(dispatcher.on(StartApplicationAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _isReady.value = true
             } else {
                 _unhandledErrorEvent.value = Event(Unit)

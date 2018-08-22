@@ -34,7 +34,7 @@ class ExamHistoryStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchAllExamAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaExamList.value = it.karutaExamList
             } else {
                 _unhandledErrorEvent.value = Event(Unit)

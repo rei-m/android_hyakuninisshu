@@ -21,24 +21,24 @@ import com.squareup.moshi.Json
 
 @Table
 data class KarutaSchema(
-        @Setter("id") @PrimaryKey(autoincrement = false) @Json(name = "id") var id: Long,
-        @Setter("creator") @Column @Json(name = "creator") var creator: String,
-        @Setter("firstKana") @Column @Json(name = "first_kana") var firstKana: String,
-        @Setter("firstKanji") @Column @Json(name = "first_kanji") var firstKanji: String,
-        @Setter("secondKana") @Column @Json(name = "second_kana") var secondKana: String,
-        @Setter("secondKanji") @Column @Json(name = "second_kanji") var secondKanji: String,
-        @Setter("thirdKana") @Column @Json(name = "third_kana") var thirdKana: String,
-        @Setter("thirdKanji") @Column @Json(name = "third_kanji") var thirdKanji: String,
-        @Setter("fourthKana") @Column @Json(name = "fourth_kana") var fourthKana: String,
-        @Setter("fourthKanji") @Column @Json(name = "fourth_kanji") var fourthKanji: String,
-        @Setter("fifthKana") @Column @Json(name = "fifth_kana") var fifthKana: String,
-        @Setter("fifthKanji") @Column @Json(name = "fifth_kanji") var fifthKanji: String,
-        @Setter("kimariji") @Column @Json(name = "kimariji") var kimariji: Int,
-        @Setter("imageNo") @Column @Json(name = "image_no") var imageNo: String,
-        @Setter("translation") @Column @Json(name = "translation") var translation: String,
-        @Setter("color") @Column @Json(name = "color") var color: String,
-        @Setter("colorNo") @Column @Json(name = "color_no") var colorNo: Int,
-        @Setter("isEdited") @Column var isEdited: Boolean? = false
+    @Setter("id") @PrimaryKey(autoincrement = false) @Json(name = "id") var id: Long,
+    @Setter("creator") @Column @Json(name = "creator") var creator: String,
+    @Setter("firstKana") @Column @Json(name = "first_kana") var firstKana: String,
+    @Setter("firstKanji") @Column @Json(name = "first_kanji") var firstKanji: String,
+    @Setter("secondKana") @Column @Json(name = "second_kana") var secondKana: String,
+    @Setter("secondKanji") @Column @Json(name = "second_kanji") var secondKanji: String,
+    @Setter("thirdKana") @Column @Json(name = "third_kana") var thirdKana: String,
+    @Setter("thirdKanji") @Column @Json(name = "third_kanji") var thirdKanji: String,
+    @Setter("fourthKana") @Column @Json(name = "fourth_kana") var fourthKana: String,
+    @Setter("fourthKanji") @Column @Json(name = "fourth_kanji") var fourthKanji: String,
+    @Setter("fifthKana") @Column @Json(name = "fifth_kana") var fifthKana: String,
+    @Setter("fifthKanji") @Column @Json(name = "fifth_kanji") var fifthKanji: String,
+    @Setter("kimariji") @Column @Json(name = "kimariji") var kimariji: Int,
+    @Setter("imageNo") @Column @Json(name = "image_no") var imageNo: String,
+    @Setter("translation") @Column @Json(name = "translation") var translation: String,
+    @Setter("color") @Column @Json(name = "color") var color: String,
+    @Setter("colorNo") @Column @Json(name = "color_no") var colorNo: Int,
+    @Setter("isEdited") @Column var isEdited: Boolean? = false
 ) {
     companion object {
         fun relation(orma: OrmaDatabase): KarutaSchema_Relation {
