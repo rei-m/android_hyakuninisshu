@@ -25,6 +25,6 @@ class KarutaTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     init {
-        typeface = KarutaFontHolder.INSTANCE.getTypeFace(context)
+        typeface = KarutaFontHolder.getTypeFace(context)
     }
 }
