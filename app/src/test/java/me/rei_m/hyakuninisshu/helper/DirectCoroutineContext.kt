@@ -20,8 +20,10 @@ import java.util.concurrent.TimeUnit
 import kotlin.coroutines.experimental.CoroutineContext
 
 object DirectCoroutineContext : CoroutineDispatcher(), Delay {
-    override fun scheduleResumeAfterDelay(time: Long, unit: TimeUnit,
-                                          continuation: CancellableContinuation<Unit>) {
+    override fun scheduleResumeAfterDelay(
+        time: Long, unit: TimeUnit,
+        continuation: CancellableContinuation<Unit>
+    ) {
         continuation.resume(Unit)
     }
 

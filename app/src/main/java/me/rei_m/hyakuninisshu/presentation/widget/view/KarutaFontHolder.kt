@@ -18,17 +18,14 @@ import android.graphics.Typeface
 
 import me.rei_m.hyakuninisshu.R
 
-enum class KarutaFontHolder {
-    INSTANCE;
+object KarutaFontHolder {
 
     private var typeface: Typeface? = null
 
-    fun getTypeFace(context: Context): Typeface {
-        return typeface ?: let {
-            val resources = context.resources
-            val asset = Typeface.createFromAsset(context.assets, resources.getString(R.string.app_font_file))
-            typeface = asset
-            return@let asset
-        }
+    fun getTypeFace(context: Context): Typeface = typeface ?: let {
+        val resources = context.resources
+        val asset = Typeface.createFromAsset(context.assets, resources.getString(R.string.app_font_file))
+        typeface = asset
+        return@let asset
     }
 }

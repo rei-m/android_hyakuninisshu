@@ -23,9 +23,9 @@ import android.view.View
 import me.rei_m.hyakuninisshu.R
 
 class VerticalSingleLineTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private val paint: Paint = Paint()
@@ -47,7 +47,7 @@ class VerticalSingleLineTextView @JvmOverloads constructor(
             isAntiAlias = true
             textSize = this@VerticalSingleLineTextView.textSize.toFloat()
             color = ResourcesCompat.getColor(resources, R.color.black8a, null)
-            typeface = KarutaFontHolder.INSTANCE.getTypeFace(context)
+            typeface = KarutaFontHolder.getTypeFace(context)
         }
     }
 
