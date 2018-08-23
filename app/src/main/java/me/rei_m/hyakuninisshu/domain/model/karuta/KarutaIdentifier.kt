@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import android.os.Parcel
@@ -20,7 +21,7 @@ import me.rei_m.hyakuninisshu.domain.EntityIdentifier
 
 data class KarutaIdentifier(val value: Int) : EntityIdentifier, Parcelable {
 
-    val position: Int =  value - 1
+    val position: Int = value - 1
 
     override fun describeContents(): Int = 0
 

@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.util
 
 import android.util.SparseIntArray
@@ -23,7 +24,7 @@ import java.util.Random
  * ex) generateRandomIndexArray(10, 4) では 0 ~ 9 の中からランダムに4個の要素を選んで配列にして返す.
  *
  * @param randomArraySize 生成する配列の要素数
- * @param size            生成した配列から返却する数
+ * @param size 生成した配列から返却する数
  * @return ランダム順にIndexを格納した配列
  */
 fun generateRandomIndexArray(randomArraySize: Int, size: Int): IntArray {

@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.material
 
 import kotlinx.coroutines.experimental.launch
@@ -18,7 +19,6 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext
@@ -78,17 +78,19 @@ class MaterialActionDispatcher @Inject constructor(
      * @param fifthPhraseKanji 五句 漢字.
      * @param fifthPhraseKana 五句 かな.
      */
-    fun edit(karutaId: KarutaIdentifier,
-             firstPhraseKanji: String,
-             firstPhraseKana: String,
-             secondPhraseKanji: String,
-             secondPhraseKana: String,
-             thirdPhraseKanji: String,
-             thirdPhraseKana: String,
-             fourthPhraseKanji: String,
-             fourthPhraseKana: String,
-             fifthPhraseKanji: String,
-             fifthPhraseKana: String) {
+    fun edit(
+        karutaId: KarutaIdentifier,
+        firstPhraseKanji: String,
+        firstPhraseKana: String,
+        secondPhraseKanji: String,
+        secondPhraseKana: String,
+        thirdPhraseKanji: String,
+        thirdPhraseKana: String,
+        fourthPhraseKanji: String,
+        fourthPhraseKana: String,
+        fifthPhraseKanji: String,
+        fifthPhraseKana: String
+    ) {
 
         launch(coroutineContext) {
             try {

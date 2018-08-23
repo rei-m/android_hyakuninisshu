@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
 import android.arch.lifecycle.LiveData
@@ -26,7 +27,8 @@ import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Device
 import me.rei_m.hyakuninisshu.util.Event
-import java.util.*
+import java.util.Arrays
+import java.util.Date
 import javax.inject.Inject
 
 class QuizViewModel(

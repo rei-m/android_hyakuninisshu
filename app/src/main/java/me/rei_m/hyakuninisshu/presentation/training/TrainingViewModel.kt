@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.training
 
 import android.arch.lifecycle.LiveData
@@ -39,10 +40,12 @@ class TrainingViewModel(
 
     val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
-    fun startTraining(trainingRangeFrom: TrainingRangeFrom,
-                      trainingRangeTo: TrainingRangeTo,
-                      kimarijiFilter: KimarijiFilter,
-                      colorFilter: ColorFilter) {
+    fun startTraining(
+        trainingRangeFrom: TrainingRangeFrom,
+        trainingRangeTo: TrainingRangeTo,
+        kimarijiFilter: KimarijiFilter,
+        colorFilter: ColorFilter
+    ) {
         actionDispatcher.start(trainingRangeFrom.value,
             trainingRangeTo.value,
             kimarijiFilter.value,

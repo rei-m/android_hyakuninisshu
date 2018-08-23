@@ -11,19 +11,22 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
-import java.util.*
+import java.util.Date
 
 /**
  * 百人一首の力試し.
  */
-class KarutaExam(identifier: KarutaExamIdentifier,
-                 val tookDate: Date,
-                 val result: KarutaExamResult) : AbstractEntity<KarutaExam, KarutaExamIdentifier>(identifier) {
+class KarutaExam(
+    identifier: KarutaExamIdentifier,
+    val tookDate: Date,
+    val result: KarutaExamResult
+) : AbstractEntity<KarutaExam, KarutaExamIdentifier>(identifier) {
 
-    override fun toString() = "KarutaExam(result=$result)"
+    override fun toString() = "KarutaExam(tookDate=$tookDate, result=$result)"
 
     companion object {
         const val MAX_HISTORY_COUNT = 10

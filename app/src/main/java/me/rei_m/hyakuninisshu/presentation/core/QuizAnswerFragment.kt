@@ -11,9 +11,9 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater

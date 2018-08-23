@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 /**
@@ -50,15 +51,17 @@ interface KarutaRepository {
      * 歌IDコレクションを取得する.
      *
      * @param fromIdentifier 取得対象のIDのFrom
-     * @param toIdentifier   取得対象のIDのTo
-     * @param color          取得対象の歌の色
-     * @param kimariji       取得対象の決まり字
+     * @param toIdentifier 取得対象のIDのTo
+     * @param color 取得対象の歌の色
+     * @param kimariji 取得対象の決まり字
      * @return 歌IDコレクション
      */
-    fun findIds(fromIdentifier: KarutaIdentifier,
-                toIdentifier: KarutaIdentifier,
-                color: Color?,
-                kimariji: Kimariji?): KarutaIds
+    fun findIds(
+        fromIdentifier: KarutaIdentifier,
+        toIdentifier: KarutaIdentifier,
+        color: Color?,
+        kimariji: Kimariji?
+    ): KarutaIds
 
     /**
      * 歌を永続化する,

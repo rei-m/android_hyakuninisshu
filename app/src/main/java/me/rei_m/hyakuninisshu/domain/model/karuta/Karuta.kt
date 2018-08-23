@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
@@ -18,37 +19,42 @@ import me.rei_m.hyakuninisshu.domain.AbstractEntity
 /**
  * 百人一首の歌.
  */
-class Karuta(identifier: KarutaIdentifier,
-             val creator: String,
-             var kamiNoKu: KamiNoKu,
-             var shimoNoKu: ShimoNoKu,
-             val kimariji: Kimariji,
-             val imageNo: ImageNo,
-             val translation: String,
-             val color: Color) : AbstractEntity<Karuta, KarutaIdentifier>(identifier) {
+class Karuta(
+    identifier: KarutaIdentifier,
+    val creator: String,
+    var kamiNoKu: KamiNoKu,
+    var shimoNoKu: ShimoNoKu,
+    val kimariji: Kimariji,
+    val imageNo: ImageNo,
+    val translation: String,
+    val color: Color
+) : AbstractEntity<Karuta, KarutaIdentifier>(identifier
+) {
 
-    fun updatePhrase(firstPhraseKanji: String,
-                     firstPhraseKana: String,
-                     secondPhraseKanji: String,
-                     secondPhraseKana: String,
-                     thirdPhraseKanji: String,
-                     thirdPhraseKana: String,
-                     fourthPhraseKanji: String,
-                     fourthPhraseKana: String,
-                     fifthPhraseKanji: String,
-                     fifthPhraseKana: String): Karuta {
+    fun updatePhrase(
+        firstPhraseKanji: String,
+        firstPhraseKana: String,
+        secondPhraseKanji: String,
+        secondPhraseKana: String,
+        thirdPhraseKanji: String,
+        thirdPhraseKana: String,
+        fourthPhraseKanji: String,
+        fourthPhraseKana: String,
+        fifthPhraseKanji: String,
+        fifthPhraseKana: String
+    ): Karuta {
 
         val kamiNoKu = KamiNoKu(
-                this.kamiNoKu.identifier(),
-                Phrase(firstPhraseKana, firstPhraseKanji),
-                Phrase(secondPhraseKana, secondPhraseKanji),
-                Phrase(thirdPhraseKana, thirdPhraseKanji)
+            this.kamiNoKu.identifier(),
+            Phrase(firstPhraseKana, firstPhraseKanji),
+            Phrase(secondPhraseKana, secondPhraseKanji),
+            Phrase(thirdPhraseKana, thirdPhraseKanji)
         )
 
         val shimoNoKu = ShimoNoKu(
-                this.shimoNoKu.identifier(),
-                Phrase(fourthPhraseKana, fourthPhraseKanji),
-                Phrase(fifthPhraseKana, fifthPhraseKanji)
+            this.shimoNoKu.identifier(),
+            Phrase(fourthPhraseKana, fourthPhraseKanji),
+            Phrase(fifthPhraseKana, fifthPhraseKanji)
         )
 
         this.kamiNoKu = kamiNoKu

@@ -11,9 +11,9 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.entrance
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
@@ -23,7 +23,11 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.presentation.enums.*
+import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.util.EventObserver

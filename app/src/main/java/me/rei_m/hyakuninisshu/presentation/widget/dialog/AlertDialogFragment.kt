@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.widget.dialog
 
 import android.app.Dialog
@@ -103,10 +104,12 @@ class AlertDialogFragment : DialogFragment() {
 
         private const val ARG_HAS_NEGATIVE_BUTTON = "hasNegativeButton"
 
-        fun newInstance(@StringRes title: Int,
-                        @StringRes message: Int,
-                        hasPositiveButton: Boolean,
-                        hasNegativeButton: Boolean) = AlertDialogFragment().withArgs {
+        fun newInstance(
+            @StringRes title: Int,
+            @StringRes message: Int,
+            hasPositiveButton: Boolean,
+            hasNegativeButton: Boolean
+        ) = AlertDialogFragment().withArgs {
             putInt(ARG_TITLE, title)
             putInt(ARG_MESSAGE, message)
             putBoolean(ARG_HAS_POSITIVE_BUTTON, hasPositiveButton)

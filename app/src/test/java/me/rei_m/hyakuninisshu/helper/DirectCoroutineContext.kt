@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.helper
 
 import kotlinx.coroutines.experimental.CancellableContinuation
@@ -20,8 +21,11 @@ import java.util.concurrent.TimeUnit
 import kotlin.coroutines.experimental.CoroutineContext
 
 object DirectCoroutineContext : CoroutineDispatcher(), Delay {
-    override fun scheduleResumeAfterDelay(time: Long, unit: TimeUnit,
-                                          continuation: CancellableContinuation<Unit>) {
+    override fun scheduleResumeAfterDelay(
+        time: Long,
+        unit: TimeUnit,
+        continuation: CancellableContinuation<Unit>
+    ) {
         continuation.resume(Unit)
     }
 

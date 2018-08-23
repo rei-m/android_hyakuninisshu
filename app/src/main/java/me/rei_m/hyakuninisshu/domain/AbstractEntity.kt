@@ -11,9 +11,12 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain
 
-abstract class AbstractEntity<T : Entity<T, I>, I : EntityIdentifier> constructor(private val identifier: I) : Entity<T, I> {
+abstract class AbstractEntity<T : Entity<T, I>, I : EntityIdentifier>(
+    private val identifier: I
+) : Entity<T, I> {
 
     override fun identifier(): I {
         return identifier

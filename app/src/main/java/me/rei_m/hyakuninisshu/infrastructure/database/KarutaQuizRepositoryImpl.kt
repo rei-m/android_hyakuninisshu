@@ -11,11 +11,17 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.SingleAssociation
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.domain.model.quiz.*
+import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizCounter
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
 
 class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepository {
 

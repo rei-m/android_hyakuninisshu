@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialdetail
 
 import android.arch.lifecycle.LiveData
@@ -23,7 +24,6 @@ import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
 import me.rei_m.hyakuninisshu.util.Event
-import java.util.*
 import javax.inject.Inject
 
 class MaterialDetailStore(dispatcher: Dispatcher) : Store() {

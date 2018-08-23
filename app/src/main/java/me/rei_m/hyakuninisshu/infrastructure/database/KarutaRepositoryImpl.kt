@@ -11,11 +11,24 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import android.content.Context
 import android.content.SharedPreferences
-import me.rei_m.hyakuninisshu.domain.model.karuta.*
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color
+import me.rei_m.hyakuninisshu.domain.model.karuta.ImageNo
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKuIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
+import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKuIdentifier
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -78,10 +91,12 @@ class KarutaRepositoryImpl(
             .map { it.toModel() })
     }
 
-    override fun findIds(fromIdentifier: KarutaIdentifier,
-                         toIdentifier: KarutaIdentifier,
-                         color: Color?,
-                         kimariji: Kimariji?): KarutaIds {
+    override fun findIds(
+        fromIdentifier: KarutaIdentifier,
+        toIdentifier: KarutaIdentifier,
+        color: Color?,
+        kimariji: Kimariji?
+    ): KarutaIds {
         val relation = KarutaSchema.relation(orma)
         var selector = relation.selector()
             .idGe(fromIdentifier.value.toLong())
@@ -112,8 +127,8 @@ class KarutaRepositoryImpl(
 
     override fun findBy(karutaId: KarutaIdentifier): Karuta? {
         return KarutaSchema.relation(orma).selector()
-                .idEq(karutaId.value.toLong())
-                .firstOrNull()?.toModel()
+            .idEq(karutaId.value.toLong())
+            .firstOrNull()?.toModel()
     }
 
     override fun store(karuta: Karuta) {
@@ -154,12 +169,14 @@ private fun KarutaSchema.toModel(): Karuta {
 
     val color = Color.forValue(color)
 
-    return Karuta(identifier,
+    return Karuta(
+        identifier,
         creator,
         kamiNoKu,
         shimoNoKu,
         kimariji,
         ImageNo(imageNo),
         translation,
-        color)
+        color
+    )
 }

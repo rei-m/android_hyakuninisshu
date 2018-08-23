@@ -11,9 +11,10 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import java.util.*
+import java.util.Date
 
 /**
  * 力試しリポジトリ.
@@ -24,7 +25,7 @@ interface KarutaExamRepository {
      * 力試しの結果を永続化する.
      *
      * @param karutaExamResult 力試しの結果
-     * @param tookExamDate     力試しを受けた日付
+     * @param tookExamDate 力試しを受けた日付
      * @return 登録した力試しのID
      */
     fun storeResult(karutaExamResult: KarutaExamResult, tookExamDate: Date): KarutaExamIdentifier

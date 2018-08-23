@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
 import android.app.Activity
@@ -133,8 +134,10 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
 
         private const val ARG_KARUTA_ID = "karutaId"
 
-        fun createIntent(context: Context,
-                         karutaId: KarutaIdentifier) = Intent(context, MaterialEditActivity::class.java).apply {
+        fun createIntent(
+            context: Context,
+            karutaId: KarutaIdentifier
+        ) = Intent(context, MaterialEditActivity::class.java).apply {
             putExtra(ARG_KARUTA_ID, karutaId)
         }
     }
