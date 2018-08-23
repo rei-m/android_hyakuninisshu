@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -30,18 +31,20 @@ class KarutaExamResultTest {
     @Before
     fun setUp() {
         resultSummary = KarutaQuizzesResultSummary(
-                quizCount = 100,
-                averageAnswerSec = 5.0f,
-                correctCount = 10
+            quizCount = 100,
+            averageAnswerSec = 5.0f,
+            correctCount = 10
         )
 
-        wrongKarutaIds = KarutaIds(arrayListOf(
+        wrongKarutaIds = KarutaIds(
+            arrayListOf(
                 KarutaIdentifier(1),
                 KarutaIdentifier(2),
                 KarutaIdentifier(3),
                 KarutaIdentifier(4),
                 KarutaIdentifier(5)
-        ))
+            )
+        )
         karutaExamResult = KarutaExamResult(resultSummary, wrongKarutaIds)
     }
 

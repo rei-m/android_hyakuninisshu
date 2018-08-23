@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.infrastructure.di
 
 import android.content.Context
@@ -23,15 +24,13 @@ import dagger.Provides
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
-import me.rei_m.hyakuninisshu.infrastructure.database.*
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaExamRepositoryImpl
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizRepositoryImpl
+import me.rei_m.hyakuninisshu.infrastructure.database.KarutaRepositoryImpl
+import me.rei_m.hyakuninisshu.infrastructure.database.OrmaProvider
 
 @Module
 class InfrastructureModule {
-
-    companion object {
-        private const val KEY_PREFERENCES = "B84UqpLA7W"
-    }
-
     @Provides
     @Singleton
     internal fun provideSharedPreferences(context: Context): SharedPreferences {
@@ -46,9 +45,11 @@ class InfrastructureModule {
 
     @Provides
     @Singleton
-    internal fun provideKarutaRepository(context: Context,
-                                         preferences: SharedPreferences,
-                                         orma: OrmaProvider): KarutaRepository {
+    internal fun provideKarutaRepository(
+        context: Context,
+        preferences: SharedPreferences,
+        orma: OrmaProvider
+    ): KarutaRepository {
         return KarutaRepositoryImpl(context, preferences, orma.ormaDatabase)
     }
 
@@ -62,5 +63,9 @@ class InfrastructureModule {
     @Singleton
     internal fun provideExamRepository(orma: OrmaProvider): KarutaExamRepository {
         return KarutaExamRepositoryImpl(orma.ormaDatabase)
+    }
+
+    companion object {
+        private const val KEY_PREFERENCES = "B84UqpLA7W"
     }
 }

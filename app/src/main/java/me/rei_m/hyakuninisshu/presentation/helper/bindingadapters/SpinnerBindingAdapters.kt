@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
 import android.databinding.BindingAdapter
@@ -19,7 +20,12 @@ import android.databinding.InverseBindingListener
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
-import me.rei_m.hyakuninisshu.presentation.enums.*
+import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.SpinnerItem
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
 
 @BindingAdapter("spinnerAdapter")
@@ -28,9 +34,11 @@ fun setSpinnerAdapter(spinner: Spinner, spinnerAdapter: SpinnerAdapter) {
 }
 
 @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
-fun bindTrainingRangeData(spinner: Spinner,
-                          newSelectedValue: TrainingRangeFrom,
-                          newTextAttrChanged: InverseBindingListener) {
+fun bindTrainingRangeData(
+    spinner: Spinner,
+    newSelectedValue: TrainingRangeFrom,
+    newTextAttrChanged: InverseBindingListener
+) {
     bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
 }
 
@@ -40,9 +48,11 @@ fun captureSelectedTrainingRangeFrom(spinner: Spinner): TrainingRangeFrom {
 }
 
 @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
-fun bindTrainingRangeData(spinner: Spinner,
-                          newSelectedValue: TrainingRangeTo,
-                          newTextAttrChanged: InverseBindingListener) {
+fun bindTrainingRangeData(
+    spinner: Spinner,
+    newSelectedValue: TrainingRangeTo,
+    newTextAttrChanged: InverseBindingListener
+) {
     bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
 }
 
@@ -52,9 +62,11 @@ fun captureSelectedTrainingRangeTo(spinner: Spinner): TrainingRangeTo {
 }
 
 @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
-fun bindKimariji(spinner: Spinner,
-                 newSelectedValue: KimarijiFilter,
-                 newTextAttrChanged: InverseBindingListener) {
+fun bindKimariji(
+    spinner: Spinner,
+    newSelectedValue: KimarijiFilter,
+    newTextAttrChanged: InverseBindingListener
+) {
     bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
 }
 
@@ -64,9 +76,11 @@ fun captureSelectedKimariji(spinner: Spinner): KimarijiFilter {
 }
 
 @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
-fun bindKarutaStyle(spinner: Spinner,
-                    newSelectedValue: KarutaStyleFilter,
-                    newTextAttrChanged: InverseBindingListener) {
+fun bindKarutaStyle(
+    spinner: Spinner,
+    newSelectedValue: KarutaStyleFilter,
+    newTextAttrChanged: InverseBindingListener
+) {
     bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
 }
 
@@ -76,9 +90,11 @@ fun captureSelectedKarutaStyle(spinner: Spinner): KarutaStyleFilter {
 }
 
 @BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
-fun bindColor(spinner: Spinner,
-              newSelectedValue: ColorFilter,
-              newTextAttrChanged: InverseBindingListener) {
+fun bindColor(
+    spinner: Spinner,
+    newSelectedValue: ColorFilter,
+    newTextAttrChanged: InverseBindingListener
+) {
     bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
 }
 
@@ -87,9 +103,11 @@ fun captureSelectedColor(spinner: Spinner): ColorFilter {
     return spinner.selectedItem as ColorFilter
 }
 
-private fun bindSpinner(spinner: Spinner,
-                        newSelectedValue: SpinnerItem?,
-                        newTextAttrChanged: InverseBindingListener) {
+private fun bindSpinner(
+    spinner: Spinner,
+    newSelectedValue: SpinnerItem?,
+    newTextAttrChanged: InverseBindingListener
+) {
     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
             newTextAttrChanged.onChange()

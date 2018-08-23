@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.ValueObject
@@ -19,8 +20,8 @@ import me.rei_m.hyakuninisshu.domain.ValueObject
  * 練習または力試しの中での問題のカウンター.
  */
 data class KarutaQuizCounter(
-        private val totalCount: Int,
-        private val startedCount: Int
+    private val totalCount: Int,
+    private val startedCount: Int
 ) : ValueObject {
     val value = "$startedCount / $totalCount"
 

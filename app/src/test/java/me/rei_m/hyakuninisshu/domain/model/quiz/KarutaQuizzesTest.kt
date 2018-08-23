@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -19,7 +20,7 @@ import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class KarutaQuizzesTest {
 
@@ -32,11 +33,11 @@ class KarutaQuizzesTest {
         @Before
         fun setUp() {
             value = listOf(
-                    createQuiz(1),
-                    createQuiz(2),
-                    createQuiz(3),
-                    createQuiz(4),
-                    createQuiz(5)
+                createQuiz(1),
+                createQuiz(2),
+                createQuiz(3),
+                createQuiz(4),
+                createQuiz(5)
             )
             value.forEachIndexed { i, v ->
                 val startDate = Date()
@@ -58,19 +59,21 @@ class KarutaQuizzesTest {
 
         @Test
         fun wrongKarutaIds() {
-            val expected = KarutaIds(listOf(
+            val expected = KarutaIds(
+                listOf(
                     KarutaIdentifier(2),
                     KarutaIdentifier(4)
-            ))
+                )
+            )
             assertThat(karutaQuizzes.wrongKarutaIds).isEqualTo(expected)
         }
 
         @Test
         fun resultSummary() {
             val expected = KarutaQuizzesResultSummary(
-                    5,
-                    3,
-                    5.0f
+                5,
+                3,
+                5.0f
             )
             assertThat(karutaQuizzes.resultSummary()).isEqualTo(expected)
         }
@@ -103,15 +106,15 @@ class KarutaQuizzesTest {
         @Test
         fun resultSummary() {
             val expected = KarutaQuizzesResultSummary(
-                    0,
-                    0,
-                    0.0f
+                0,
+                0,
+                0.0f
             )
             assertThat(karutaQuizzes.resultSummary()).isEqualTo(expected)
         }
     }
 
-    class WhenNotFinished: TestHelper {
+    class WhenNotFinished : TestHelper {
         private lateinit var karutaQuizzes: KarutaQuizzes
 
         private lateinit var value: List<KarutaQuiz>
@@ -119,8 +122,8 @@ class KarutaQuizzesTest {
         @Before
         fun setUp() {
             value = listOf(
-                    createQuiz(1),
-                    createQuiz(2)
+                createQuiz(1),
+                createQuiz(2)
             )
             value.first().start(Date()).verify(ChoiceNo.FIRST, Date())
             karutaQuizzes = KarutaQuizzes(value)

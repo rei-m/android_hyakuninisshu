@@ -11,13 +11,18 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.exam
 
 import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import java.util.*
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext

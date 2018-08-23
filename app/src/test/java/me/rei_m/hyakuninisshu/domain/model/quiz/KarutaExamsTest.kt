@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -18,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class KarutaExamsTest {
     class WhenNotEmpty {

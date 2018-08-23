@@ -11,15 +11,29 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.exam
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.check
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.domain.model.quiz.*
+import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzesResultSummary
+
 import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
@@ -27,7 +41,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import java.util.*
+import java.util.Date
 
 @RunWith(RobolectricTestRunner::class)
 class ExamActionDispatcherTest : TestHelper {
@@ -47,11 +61,11 @@ class ExamActionDispatcherTest : TestHelper {
         karutaQuizRepository = mock {}
         karutaExamRepository = mock {}
         actionDispatcher = ExamActionDispatcher(
-                karutaRepository,
-                karutaQuizRepository,
-                karutaExamRepository,
-                dispatcher,
-                DirectCoroutineContext
+            karutaRepository,
+            karutaQuizRepository,
+            karutaExamRepository,
+            dispatcher,
+            DirectCoroutineContext
         )
     }
 
@@ -59,16 +73,16 @@ class ExamActionDispatcherTest : TestHelper {
     fun fetch() {
         val examId = KarutaExamIdentifier(1)
         val exam = KarutaExam(
-                identifier = examId,
-                tookDate = Date(),
-                result = KarutaExamResult(
-                        resultSummary = KarutaQuizzesResultSummary(
-                                quizCount = 100,
-                                correctCount = 100,
-                                averageAnswerSec = 5f
-                        ),
-                        wrongKarutaIds = KarutaIds(listOf())
-                )
+            identifier = examId,
+            tookDate = Date(),
+            result = KarutaExamResult(
+                resultSummary = KarutaQuizzesResultSummary(
+                    quizCount = 100,
+                    correctCount = 100,
+                    averageAnswerSec = 5f
+                ),
+                wrongKarutaIds = KarutaIds(listOf())
+            )
         )
 
         whenever(karutaExamRepository.findBy(examId)).thenReturn(exam)
@@ -130,16 +144,16 @@ class ExamActionDispatcherTest : TestHelper {
     @Test
     fun start() {
         val karutaList: List<Karuta> = listOf(
-                createKaruta(id = 1),
-                createKaruta(id = 2),
-                createKaruta(id = 3),
-                createKaruta(id = 4),
-                createKaruta(id = 5)
+            createKaruta(id = 1),
+            createKaruta(id = 2),
+            createKaruta(id = 3),
+            createKaruta(id = 4),
+            createKaruta(id = 5)
         )
 
         whenever(karutaRepository.list()).thenReturn(Karutas(karutaList))
         whenever(karutaRepository.findIds()).thenReturn(KarutaIds(listOf(karutaList.first().identifier())))
-        whenever(karutaQuizRepository.initialize(any())).thenAnswer {  }
+        whenever(karutaQuizRepository.initialize(any())).thenAnswer { }
 
         actionDispatcher.start()
 
@@ -186,20 +200,20 @@ class ExamActionDispatcherTest : TestHelper {
         val quiz = createAnsweredQuiz(1, Date(), 500, ChoiceNo.FIRST, true)
         val examId = KarutaExamIdentifier(1)
         val exam = KarutaExam(
-                identifier = examId,
-                tookDate = Date(),
-                result = KarutaExamResult(
-                        resultSummary = KarutaQuizzesResultSummary(
-                                quizCount = 100,
-                                correctCount = 100,
-                                averageAnswerSec = 5f
-                        ),
-                        wrongKarutaIds = KarutaIds(listOf())
-                )
+            identifier = examId,
+            tookDate = Date(),
+            result = KarutaExamResult(
+                resultSummary = KarutaQuizzesResultSummary(
+                    quizCount = 100,
+                    correctCount = 100,
+                    averageAnswerSec = 5f
+                ),
+                wrongKarutaIds = KarutaIds(listOf())
+            )
         )
         whenever(karutaQuizRepository.list()).thenReturn(KarutaQuizzes(listOf(quiz)))
         whenever(karutaExamRepository.storeResult(any(), any())).thenReturn(examId)
-        whenever(karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)).thenAnswer {  }
+        whenever(karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)).thenAnswer { }
         whenever(karutaExamRepository.findBy(examId)).thenReturn(exam)
 
         actionDispatcher.finish()

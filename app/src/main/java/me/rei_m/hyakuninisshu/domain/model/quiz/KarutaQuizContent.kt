@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.ValueObject
@@ -21,11 +22,11 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle
  * 百人一首の問題内容.
  */
 data class KarutaQuizContent(
-        val quiz: KarutaQuiz,
-        val correct: Karuta,
-        private val choices: List<Karuta>,
-        private val position: KarutaQuizCounter,
-        val existNext: Boolean
+    val quiz: KarutaQuiz,
+    val correct: Karuta,
+    private val choices: List<Karuta>,
+    private val position: KarutaQuizCounter,
+    val existNext: Boolean
 ) : ValueObject {
 
     val currentPosition: String = position.value

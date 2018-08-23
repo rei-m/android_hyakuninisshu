@@ -11,13 +11,23 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.helper
 
-import me.rei_m.hyakuninisshu.domain.model.karuta.*
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color
+import me.rei_m.hyakuninisshu.domain.model.karuta.ImageNo
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKuIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
+import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKuIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import java.util.*
+import java.util.Date
 
 interface TestHelper {
     fun createKaruta(
@@ -81,7 +91,13 @@ interface TestHelper {
         )
     }
 
-    fun createAnsweredQuiz(correctId: Int, startDate: Date, answerMillSec: Long, choiceNo: ChoiceNo, isCorrect: Boolean): KarutaQuiz {
+    fun createAnsweredQuiz(
+        correctId: Int,
+        startDate: Date,
+        answerMillSec: Long,
+        choiceNo: ChoiceNo,
+        isCorrect: Boolean
+    ): KarutaQuiz {
         return KarutaQuiz.createAnswered(
             identifier = KarutaQuizIdentifier(),
             choiceList = listOf(

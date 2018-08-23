@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
@@ -27,11 +28,11 @@ class KarutaQuizzes(val values: List<KarutaQuiz>) {
      * @return 解答済みの問題のうち、間違えた問題の歌のID
      */
     val wrongKarutaIds: KarutaIds
-        get() = values
-                .mapNotNull { it.result }
-                .filterNot { it.judgement.isCorrect }
-                .map { it.judgement.karutaId }
-                .let { KarutaIds(it) }
+        get() = KarutaIds(values
+            .mapNotNull { it.result }
+            .filterNot { it.judgement.isCorrect }
+            .map { it.judgement.karutaId }
+        )
 
     /**
      * @return 解答結果を集計する

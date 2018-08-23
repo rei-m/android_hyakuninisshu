@@ -11,13 +11,19 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.SingleAssociation
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
-import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import java.util.*
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzesResultSummary
+import java.util.Date
 
 class KarutaExamRepositoryImpl(private val orma: OrmaDatabase) : KarutaExamRepository {
 
@@ -39,7 +45,8 @@ class KarutaExamRepositoryImpl(private val orma: OrmaDatabase) : KarutaExamRepos
 
             val examWrongKarutaSchemaInserter = ExamWrongKarutaSchema.relation(orma).inserter()
             karutaExamResult.wrongKarutaIds.values.forEach {
-                val examWrongKarutaSchema = ExamWrongKarutaSchema(SingleAssociation.just(karutaExamSchema), it.value.toLong())
+                val examWrongKarutaSchema =
+                    ExamWrongKarutaSchema(SingleAssociation.just(karutaExamSchema), it.value.toLong())
                 examWrongKarutaSchemaInserter.execute(examWrongKarutaSchema)
             }
         }

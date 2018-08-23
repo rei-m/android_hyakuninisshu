@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.util
 
 import android.app.Activity
@@ -64,5 +65,5 @@ class AnalyticsHelper @Inject constructor(context: Context) {
         private const val KEY_ACTION = "ui_action"
         private const val CONTENT_TYPE_SCREEN_VIEW = "screen"
         private const val CONTENT_TYPE_ACTION_EVENT = "action event"
-     }
+    }
 }

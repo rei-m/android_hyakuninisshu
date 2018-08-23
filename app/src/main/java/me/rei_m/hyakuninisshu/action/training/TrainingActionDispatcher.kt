@@ -11,11 +11,16 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.training
 
 import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.*
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
@@ -35,14 +40,16 @@ class TrainingActionDispatcher @Inject constructor(
      * 練習を開始する.
      *
      * @param fromKarutaId 練習範囲の開始歌ID
-     * @param toKarutaId   練習範囲の終了歌ID
-     * @param kimariji     決まり字
-     * @param color        色
+     * @param toKarutaId 練習範囲の終了歌ID
+     * @param kimariji 決まり字
+     * @param color 色
      */
-    fun start(fromKarutaId: KarutaIdentifier,
-              toKarutaId: KarutaIdentifier,
-              kimariji: Kimariji?,
-              color: Color?) {
+    fun start(
+        fromKarutaId: KarutaIdentifier,
+        toKarutaId: KarutaIdentifier,
+        kimariji: Kimariji?,
+        color: Color?
+    ) {
         launch(coroutineContext) {
             start(karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji))
         }

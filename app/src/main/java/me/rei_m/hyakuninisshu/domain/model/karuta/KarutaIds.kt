@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import me.rei_m.hyakuninisshu.domain.util.generateRandomIndexArray
@@ -51,7 +52,6 @@ class KarutaIds(val values: List<KarutaIdentifier>) {
     }
 
     override fun hashCode(): Int = values.hashCode()
-
 
     override fun toString(): String = "KarutaIds(values=$values)"
 }

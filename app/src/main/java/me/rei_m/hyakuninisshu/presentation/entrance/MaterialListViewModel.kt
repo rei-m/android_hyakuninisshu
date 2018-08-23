@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
@@ -23,10 +24,10 @@ import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
 
 class MaterialListViewModel(
-        store: EntranceStore,
-        private val actionDispatcher: MaterialActionDispatcher,
-        colorFilter: ColorFilter,
-        private val navigator: Navigator
+    store: EntranceStore,
+    private val actionDispatcher: MaterialActionDispatcher,
+    colorFilter: ColorFilter,
+    private val navigator: Navigator
 ) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
@@ -45,9 +46,11 @@ class MaterialListViewModel(
         navigator.navigateToMaterialDetail(position, colorFilter)
     }
 
-    class Factory @Inject constructor(private val actionDispatcher: MaterialActionDispatcher,
-                                      private val storeFactory: EntranceStore.Factory,
-                                      private val navigator: Navigator): ViewModelFactory {
+    class Factory @Inject constructor(
+        private val actionDispatcher: MaterialActionDispatcher,
+        private val storeFactory: EntranceStore.Factory,
+        private val navigator: Navigator
+    ) : ViewModelFactory {
         fun create(activity: FragmentActivity, colorFilter: ColorFilter): MaterialListViewModel = MaterialListViewModel(
                 obtainActivityStore(activity, EntranceStore::class.java, storeFactory),
                 actionDispatcher,

@@ -11,11 +11,12 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import java.util.*
+import java.util.Date
 
 /**
  * 百人一首の問題.
@@ -57,10 +58,10 @@ class KarutaQuiz private constructor(
     /**
      * 選択肢が正解か判定する.
      *
-     * @param choiceNo      選択肢番号
-     * @param answerDate    解答した時間
-     * @return              解答後の問題
-     * @throws IllegalStateException    解答開始していない場合
+     * @param choiceNo 選択肢番号
+     * @param answerDate 解答した時間
+     * @return 解答後の問題
+     * @throws IllegalStateException 解答開始していない場合
      */
     @Throws(IllegalStateException::class)
     fun verify(choiceNo: ChoiceNo, answerDate: Date): KarutaQuiz {
@@ -74,7 +75,8 @@ class KarutaQuiz private constructor(
         return this
     }
 
-    override fun toString() = "KarutaQuiz(choiceList=$choiceList, correctId=$correctId, startDate=$startDate, result=$result)"
+    override fun toString() =
+        "KarutaQuiz(choiceList=$choiceList, correctId=$correctId, startDate=$startDate, result=$result)"
 
     enum class State {
         READY, IN_ANSWER, ANSWERED,
@@ -104,10 +106,12 @@ class KarutaQuiz private constructor(
             isCorrect: Boolean
         ): KarutaQuiz {
 
-            val result = KarutaQuizResult(correctId,
+            val result = KarutaQuizResult(
+                correctId,
                 choiceNo,
                 isCorrect,
-                answerMillSec)
+                answerMillSec
+            )
 
             return KarutaQuiz(identifier, choiceList, correctId, startDate, result)
         }

@@ -11,11 +11,12 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.ext
 
 import android.content.Context
 import me.rei_m.hyakuninisshu.R
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 private const val COUNT_MONTHS_AT_YEAR = 12
