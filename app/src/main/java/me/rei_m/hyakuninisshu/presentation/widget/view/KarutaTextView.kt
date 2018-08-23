@@ -18,12 +18,12 @@ import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 
 class KarutaTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     init {
-        typeface = KarutaFontHolder.INSTANCE.getTypeFace(context)
+        typeface = KarutaFontHolder.getTypeFace(context)
     }
 }

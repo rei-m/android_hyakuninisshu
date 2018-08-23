@@ -53,8 +53,8 @@ open class App : DaggerApplication() {
 
     override fun applicationInjector(): AndroidInjector<App> {
         return DaggerApp_Component.builder()
-                .applicationModule(ApplicationModule(this))
-                .build()
+            .applicationModule(ApplicationModule(this))
+            .build()
     }
 
     protected open fun initLeakCanary() {

@@ -28,39 +28,39 @@ import me.rei_m.hyakuninisshu.infrastructure.database.*
 @Module
 class InfrastructureModule {
 
-    companion object {
-        private const val KEY_PREFERENCES = "B84UqpLA7W"
-    }
-
     @Provides
     @Singleton
-    internal fun provideSharedPreferences(context: Context): SharedPreferences {
+    fun provideSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(KEY_PREFERENCES, Context.MODE_PRIVATE)
     }
 
     @Provides
     @Singleton
-    internal fun provideOrmaProvider(context: Context): OrmaProvider {
+    fun provideOrmaProvider(context: Context): OrmaProvider {
         return OrmaProvider(context)
     }
 
     @Provides
     @Singleton
-    internal fun provideKarutaRepository(context: Context,
-                                         preferences: SharedPreferences,
-                                         orma: OrmaProvider): KarutaRepository {
+    fun provideKarutaRepository(context: Context,
+                                preferences: SharedPreferences,
+                                orma: OrmaProvider): KarutaRepository {
         return KarutaRepositoryImpl(context, preferences, orma.ormaDatabase)
     }
 
     @Provides
     @Singleton
-    internal fun provideKarutaQuizRepository(orma: OrmaProvider): KarutaQuizRepository {
+    fun provideKarutaQuizRepository(orma: OrmaProvider): KarutaQuizRepository {
         return KarutaQuizRepositoryImpl(orma.ormaDatabase)
     }
 
     @Provides
     @Singleton
-    internal fun provideExamRepository(orma: OrmaProvider): KarutaExamRepository {
+    fun provideExamRepository(orma: OrmaProvider): KarutaExamRepository {
         return KarutaExamRepositoryImpl(orma.ormaDatabase)
+    }
+
+    companion object {
+        private const val KEY_PREFERENCES = "B84UqpLA7W"
     }
 }
