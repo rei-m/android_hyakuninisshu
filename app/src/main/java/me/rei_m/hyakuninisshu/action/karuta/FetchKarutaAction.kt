@@ -16,7 +16,17 @@ package me.rei_m.hyakuninisshu.action.karuta
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
-class FetchKarutaAction(val karuta: Karuta?,
-                        override val error: Throwable? = null) : Action {
-    override fun toString(): String = "FetchKarutaAction(karuta=$karuta, error=$error)"
+class FetchKarutaAction private constructor(
+    val karuta: Karuta?,
+    override val error: Exception? = null
+) : Action {
+
+    override val name = "FetchKarutaAction"
+
+    override fun toString() = if (isSucceeded) "$name(karuta=$karuta)" else "$name(error=$error)"
+
+    companion object {
+        fun createSuccess(karuta: Karuta) = FetchKarutaAction(karuta)
+        fun createError(error: Exception) = FetchKarutaAction(null, error)
+    }
 }

@@ -16,7 +16,17 @@ package me.rei_m.hyakuninisshu.action.material
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
-class EditMaterialAction(val karuta: Karuta?,
-                         override val error: Throwable? = null) : Action {
-    override fun toString(): String = "EditMaterialAction(karuta=$karuta, error=$error)"
+class EditMaterialAction private constructor(
+    val karuta: Karuta?,
+    override val error: Exception? = null
+) : Action {
+
+    override val name = "EditMaterialAction"
+
+    override fun toString() = if (isSucceeded) "$name(karuta=$karuta)" else "$name(error=$error)"
+
+    companion object {
+        fun createSuccess(karuta: Karuta) = EditMaterialAction(karuta)
+        fun createError(error: Exception) = EditMaterialAction(null, error)
+    }
 }

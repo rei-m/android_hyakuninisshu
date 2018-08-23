@@ -16,7 +16,17 @@ package me.rei_m.hyakuninisshu.action.training
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 
-class StartTrainingAction(val karutaQuizId: KarutaQuizIdentifier? = null,
-                          override val error: Throwable? = null) : Action {
-    override fun toString(): String = "StartTrainingAction(karutaQuizId=$karutaQuizId, error=$error)"
+class StartTrainingAction private constructor(
+    val karutaQuizId: KarutaQuizIdentifier? = null,
+    override val error: Exception? = null
+) : Action {
+
+    override val name = "StartTrainingAction"
+
+    override fun toString() = if (isSucceeded) "$name(karutaQuizId=$karutaQuizId)" else "$name(error=$error)"
+
+    companion object {
+        fun createSuccess(karutaQuizId: KarutaQuizIdentifier?) = StartTrainingAction(karutaQuizId)
+        fun createError(error: Exception) = StartTrainingAction(null, error)
+    }
 }

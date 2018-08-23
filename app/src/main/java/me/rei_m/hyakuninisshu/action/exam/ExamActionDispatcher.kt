@@ -13,18 +13,14 @@
 
 package me.rei_m.hyakuninisshu.action.exam
 
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.ext.scheduler
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Singleton
 class ExamActionDispatcher @Inject constructor(
@@ -32,7 +28,7 @@ class ExamActionDispatcher @Inject constructor(
     private val karutaQuizRepository: KarutaQuizRepository,
     private val karutaExamRepository: KarutaExamRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider
+    private val coroutineContext: CoroutineContext
 ) {
 
     /**
@@ -41,74 +37,94 @@ class ExamActionDispatcher @Inject constructor(
      * @param karutaExamId 力試しID
      */
     fun fetch(karutaExamId: KarutaExamIdentifier) {
-        karutaExamRepository.findBy(karutaExamId).scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchExamAction(it))
-        }, {
-            dispatcher.dispatch(FetchExamAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val karutaExam = karutaExamRepository.findBy(karutaExamId)
+                    ?: throw NoSuchElementException(karutaExamId.toString())
+                dispatcher.dispatch(FetchExamAction.createSuccess(karutaExam))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchExamAction.createError(e))
+            }
+        }
     }
 
     /**
      * 最新の力試しを取得する.
      */
     fun fetchRecent() {
-        karutaExamRepository.list().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchRecentExamAction(it.recent))
-        }, {
-            dispatcher.dispatch(FetchRecentExamAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val exams = karutaExamRepository.list()
+                dispatcher.dispatch(FetchRecentExamAction.createSuccess(exams.recent))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchRecentExamAction.createError(e))
+            }
+        }
     }
 
     /**
      * 全ての力試しを取得する.
      */
     fun fetchAll() {
-        karutaExamRepository.list().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchAllExamAction(it.all))
-        }, {
-            dispatcher.dispatch(FetchAllExamAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val exams = karutaExamRepository.list()
+                dispatcher.dispatch(FetchAllExamAction.createSuccess(exams.all))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchAllExamAction.createError(e))
+            }
+        }
     }
 
     /**
      * 力試しを開始する.
      */
     fun start() {
-        Single.zip<Karutas, KarutaIds, KarutaQuizzes>(karutaRepository.list(), karutaRepository.findIds(), BiFunction { karutas, karutaIds ->
-            karutas.createQuizSet(karutaIds)
-        }).flatMap {
-            karutaQuizRepository.initialize(it).andThen(Single.just(it))
-        }.scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(StartExamAction(it.values.first().identifier()))
-        }, {
-            dispatcher.dispatch(StartExamAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val karutas = karutaRepository.list()
+                val targetIds = karutaRepository.findIds()
+                val quizSet = karutas.createQuizSet(targetIds)
+                karutaQuizRepository.initialize(quizSet)
+                val firstQuizId = quizSet.values.first().identifier()
+                dispatcher.dispatch(StartExamAction.createSuccess(firstQuizId))
+            } catch (e: Exception) {
+                dispatcher.dispatch(StartExamAction.createError(e))
+            }
+        }
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        karutaQuizRepository.first().scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(OpenNextQuizAction(it.identifier()))
-        }, {
-            dispatcher.dispatch(OpenNextQuizAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val karutaQuiz = karutaQuizRepository.first()
+                    ?: throw NoSuchElementException("NextKarutaQuiz")
+                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(OpenNextQuizAction.createError(e))
+            }
+        }
     }
 
     /**
      * 力試しを終了して結果を登録する.
      */
     fun finish() {
-        karutaQuizRepository.list().flatMap {
-            val result = KarutaExamResult(it.resultSummary(), it.wrongKarutaIds)
-            karutaExamRepository.storeResult(result, Date())
-        }.flatMap {
-            karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT).andThen(karutaExamRepository.findBy(it))
-        }.scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FinishExamAction(it))
-        }, {
-            dispatcher.dispatch(FinishExamAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val quizzes = karutaQuizRepository.list()
+                val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
+                val storedExamId = karutaExamRepository.storeResult(result, Date())
+                val exam = karutaExamRepository.findBy(storedExamId)
+                    ?: throw NoSuchElementException(storedExamId.toString())
+                karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+                dispatcher.dispatch(FinishExamAction.createSuccess(exam))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FinishExamAction.createError(e))
+            }
+        }
     }
 }

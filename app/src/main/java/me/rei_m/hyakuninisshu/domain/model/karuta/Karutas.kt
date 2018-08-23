@@ -74,7 +74,7 @@ class Karutas(private val values: List<Karuta>) {
             val correctPosition = generateRandomIndexArray(ChoiceNo.values().size, 1)[0]
             choices.add(correctPosition, it)
 
-            KarutaQuiz(KarutaQuizIdentifier(), choices, it)
+            KarutaQuiz.createReady(KarutaQuizIdentifier(), choices, it)
         }
 
         return KarutaQuizzes(quizzes)

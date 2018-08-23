@@ -18,7 +18,7 @@ import timber.log.Timber
 
 object Logger {
     fun action(a: Action) {
-        if (a.error == null) {
+        if (a.isSucceeded) {
             Timber.tag("Action").d(a.toString())
         } else {
             Timber.tag("Action").e(a.toString())

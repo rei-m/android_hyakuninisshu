@@ -38,13 +38,13 @@ class MaterialEditStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(StartEditMaterialAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karuta.value = it.karuta
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karuta.value = null
                 _completeEditEvent.value = Event(Unit)
             } else {

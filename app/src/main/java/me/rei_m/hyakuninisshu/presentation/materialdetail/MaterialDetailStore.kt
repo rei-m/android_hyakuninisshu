@@ -36,13 +36,13 @@ class MaterialDetailStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaList.value = it.karutas?.asList()
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
-            if (action.error != null) {
+            if (!action.isSucceeded) {
                 _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }

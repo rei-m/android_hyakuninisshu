@@ -16,7 +16,17 @@ package me.rei_m.hyakuninisshu.action.quiz
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 
-class FetchQuizAction(val karutaQuizContent: KarutaQuizContent?,
-                      override val error: Throwable? = null) : Action {
-    override fun toString(): String = "FetchQuizAction(karutaQuizContent=$karutaQuizContent, error=$error)"
+class FetchQuizAction private constructor(
+    val karutaQuizContent: KarutaQuizContent?,
+    override val error: Exception? = null
+) : Action {
+
+    override val name = "FetchQuizAction"
+
+    override fun toString() = if (isSucceeded) "$name(karutaQuizContent=$karutaQuizContent)" else "$name(error=$error)"
+
+    companion object {
+        fun createSuccess(karutaQuizContent: KarutaQuizContent) = FetchQuizAction(karutaQuizContent)
+        fun createError(error: Exception) = FetchQuizAction(null, error)
+    }
 }
