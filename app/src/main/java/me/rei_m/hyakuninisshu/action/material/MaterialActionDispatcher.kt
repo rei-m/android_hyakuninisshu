@@ -11,24 +11,23 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.material
 
-import io.reactivex.Single
+import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.ext.scheduler
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Singleton
 class MaterialActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider
+    private val coroutineContext: CoroutineContext
 ) {
 
     /**
@@ -37,11 +36,14 @@ class MaterialActionDispatcher @Inject constructor(
      *  @param colorFilter 五色絞り込み条件
      */
     fun fetch(colorFilter: ColorFilter) {
-        karutaRepository.list(colorFilter.value).scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchMaterialAction(it))
-        }, {
-            dispatcher.dispatch(FetchMaterialAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val karutaList = karutaRepository.list(colorFilter.value)
+                dispatcher.dispatch(FetchMaterialAction.createSuccess(karutaList))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchMaterialAction.createError(e))
+            }
+        }
     }
 
     /**
@@ -50,11 +52,15 @@ class MaterialActionDispatcher @Inject constructor(
      * @param karutaId 歌ID.
      */
     fun startEdit(karutaId: KarutaIdentifier) {
-        karutaRepository.findBy(karutaId).scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(StartEditMaterialAction(it))
-        }, {
-            dispatcher.dispatch(StartEditMaterialAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val karuta = karutaRepository.findBy(karutaId)
+                    ?: throw NoSuchElementException(karutaId.toString())
+                dispatcher.dispatch(StartEditMaterialAction.createSuccess(karuta))
+            } catch (e: Exception) {
+                dispatcher.dispatch(StartEditMaterialAction.createError(e))
+            }
+        }
     }
 
     /**
@@ -72,37 +78,42 @@ class MaterialActionDispatcher @Inject constructor(
      * @param fifthPhraseKanji 五句 漢字.
      * @param fifthPhraseKana 五句 かな.
      */
-    fun edit(karutaId: KarutaIdentifier,
-             firstPhraseKanji: String,
-             firstPhraseKana: String,
-             secondPhraseKanji: String,
-             secondPhraseKana: String,
-             thirdPhraseKanji: String,
-             thirdPhraseKana: String,
-             fourthPhraseKanji: String,
-             fourthPhraseKana: String,
-             fifthPhraseKanji: String,
-             fifthPhraseKana: String) {
+    fun edit(
+        karutaId: KarutaIdentifier,
+        firstPhraseKanji: String,
+        firstPhraseKana: String,
+        secondPhraseKanji: String,
+        secondPhraseKana: String,
+        thirdPhraseKanji: String,
+        thirdPhraseKana: String,
+        fourthPhraseKanji: String,
+        fourthPhraseKana: String,
+        fifthPhraseKanji: String,
+        fifthPhraseKana: String
+    ) {
 
-        karutaRepository.findBy(karutaId).flatMap<Karuta> { karuta ->
-            karuta.updatePhrase(
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
-            ).let {
-                return@flatMap karutaRepository.store(it).andThen(Single.just(karuta))
+        launch(coroutineContext) {
+            try {
+                val karuta = karutaRepository.findBy(karutaId)
+                    ?: throw NoSuchElementException(karutaId.toString())
+                karuta.updatePhrase(
+                    firstPhraseKanji,
+                    firstPhraseKana,
+                    secondPhraseKanji,
+                    secondPhraseKana,
+                    thirdPhraseKanji,
+                    thirdPhraseKana,
+                    fourthPhraseKanji,
+                    fourthPhraseKana,
+                    fifthPhraseKanji,
+                    fifthPhraseKana
+                ).let {
+                    karutaRepository.store(it)
+                }
+                dispatcher.dispatch(EditMaterialAction.createSuccess(karuta))
+            } catch (e: Exception) {
+                dispatcher.dispatch(EditMaterialAction.createError(e))
             }
-        }.scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(EditMaterialAction(it))
-        }, {
-            dispatcher.dispatch(EditMaterialAction(null, it))
-        })
+        }
     }
 }

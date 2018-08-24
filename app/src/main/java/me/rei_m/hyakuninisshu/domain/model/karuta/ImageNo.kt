@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import java.util.regex.Pattern
@@ -20,7 +21,9 @@ import me.rei_m.hyakuninisshu.domain.ValueObject
 /**
  * 歌の画像番号.
  */
-data class ImageNo @Throws(IllegalArgumentException::class) constructor(val value: String) : ValueObject {
+data class ImageNo @Throws(IllegalArgumentException::class) constructor(
+    val value: String
+) : ValueObject {
 
     init {
         if (!pattern.matcher(value).matches()) {

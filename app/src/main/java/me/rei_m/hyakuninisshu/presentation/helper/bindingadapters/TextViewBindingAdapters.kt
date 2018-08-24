@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
 import android.databinding.BindingAdapter
@@ -27,31 +28,40 @@ import me.rei_m.hyakuninisshu.ext.toKarutaNoStr
 import me.rei_m.hyakuninisshu.ext.toKimarijiStr
 import me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
 import me.rei_m.hyakuninisshu.util.SPACE
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 @BindingAdapter("verticalText")
-fun setVerticalText(view: VerticalSingleLineTextView,
-                    text: String?) {
+fun setVerticalText(
+    view: VerticalSingleLineTextView,
+    text: String?
+) {
     view.drawText(text)
 }
 
 @BindingAdapter("verticalTextSize")
-fun setVerticalTextSize(view: VerticalSingleLineTextView,
-                        @DimenRes dimenId: Int) {
+fun setVerticalTextSize(
+    view: VerticalSingleLineTextView,
+    @DimenRes dimenId: Int
+) {
     view.setTextSize(dimenId)
 }
 
 @BindingAdapter("verticalTextSizeByPx")
-fun setVerticalTextSizeByPx(view: VerticalSingleLineTextView,
-                            textSize: Int?) {
+fun setVerticalTextSizeByPx(
+    view: VerticalSingleLineTextView,
+    textSize: Int?
+) {
     textSize ?: return
     view.setTextSizeByPx(textSize)
 }
 
 @BindingAdapter("textForQuiz", "textPosition")
-fun setTextForQuiz(view: TextView,
-                   text: String?,
-                   textPosition: Int?) {
+fun setTextForQuiz(
+    view: TextView,
+    text: String?,
+    textPosition: Int?
+) {
     text ?: return
     textPosition ?: return
     if (text.length < textPosition) {
@@ -61,8 +71,10 @@ fun setTextForQuiz(view: TextView,
 }
 
 @BindingAdapter("textSizeByPx")
-fun setTextSizeByPx(view: TextView,
-                    textSize: Int?) {
+fun setTextSizeByPx(
+    view: TextView,
+    textSize: Int?
+) {
     textSize ?: return
     view.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize.toFloat())
 }
@@ -75,9 +87,11 @@ fun setKarutaNo(view: TextView, karutaNo: Int?) {
 }
 
 @BindingAdapter("karutaNo", "kimariji")
-fun setKarutaNoAndKimariji(view: TextView,
-                           karutaNo: Int?,
-                           kimariji: Int?) {
+fun setKarutaNoAndKimariji(
+    view: TextView,
+    karutaNo: Int?,
+    kimariji: Int?
+) {
     if (karutaNo == null || kimariji == null || kimariji <= 0) {
         return
     }
@@ -88,9 +102,11 @@ fun setKarutaNoAndKimariji(view: TextView,
 }
 
 @BindingAdapter("karutaNo", "creator")
-fun setKarutaNoAndCreator(view: TextView,
-                          karutaNo: Int?,
-                          creator: String?) {
+fun setKarutaNoAndCreator(
+    view: TextView,
+    karutaNo: Int?,
+    creator: String?
+) {
 
     if (karutaNo == null || creator == null) {
         return
@@ -102,9 +118,11 @@ fun setKarutaNoAndCreator(view: TextView,
 }
 
 @BindingAdapter("textKamiNoKuKana", "kimariji")
-fun setTextKamiNoKuKana(view: TextView,
-                        kamiNoKu: String?,
-                        kimariji: Int?) {
+fun setTextKamiNoKuKana(
+    view: TextView,
+    kamiNoKu: String?,
+    kimariji: Int?
+) {
     if (kamiNoKu == null || kimariji == null) {
         return
     }
@@ -131,8 +149,10 @@ fun setTextKamiNoKuKana(view: TextView,
 }
 
 @BindingAdapter("averageAnswerSec")
-fun setAverageAnswerTime(view: TextView,
-                         averageAnswerSec: Float?) {
+fun setAverageAnswerTime(
+    view: TextView,
+    averageAnswerSec: Float?
+) {
     averageAnswerSec ?: return
     val context = view.context.applicationContext
     val averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerSec)

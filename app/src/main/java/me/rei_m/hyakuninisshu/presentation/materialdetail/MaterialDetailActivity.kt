@@ -11,10 +11,10 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialdetail
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -176,9 +176,11 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
         private const val ARG_COLOR_FILTER = "colorFilter"
 
-        fun createIntent(context: Context,
-                         position: Int,
-                         colorFilter: ColorFilter) = Intent(context, MaterialDetailActivity::class.java).apply {
+        fun createIntent(
+            context: Context,
+            position: Int,
+            colorFilter: ColorFilter
+        ) = Intent(context, MaterialDetailActivity::class.java).apply {
             putExtra(ARG_LIST_POSITION, position)
             putExtra(ARG_COLOR_FILTER, colorFilter.ordinal)
         }

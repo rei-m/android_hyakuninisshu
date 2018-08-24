@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
 import android.content.Context
@@ -140,7 +141,6 @@ class MaterialEditFragment : DaggerFragment(),
     }
 
     override fun onClickBack() {
-
     }
 
     interface OnFragmentInteractionListener {

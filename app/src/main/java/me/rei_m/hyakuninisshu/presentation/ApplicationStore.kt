@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation
 
 import android.arch.lifecycle.LiveData
@@ -33,7 +34,7 @@ class ApplicationStore(dispatcher: Dispatcher) : Store() {
     init {
         _isReady.value = false
         register(dispatcher.on(StartApplicationAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _isReady.value = true
             } else {
                 _unhandledErrorEvent.value = Event(Unit)

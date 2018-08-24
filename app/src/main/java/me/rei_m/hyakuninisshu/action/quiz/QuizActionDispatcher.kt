@@ -11,28 +11,28 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.quiz
 
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.ext.scheduler
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
-import java.util.*
+import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.experimental.CoroutineContext
 
 @Singleton
 class QuizActionDispatcher @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val karutaQuizRepository: KarutaQuizRepository,
     private val dispatcher: Dispatcher,
-    private val schedulerProvider: SchedulerProvider
+    private val coroutineContext: CoroutineContext
 ) {
 
     /**
@@ -41,13 +41,15 @@ class QuizActionDispatcher @Inject constructor(
      * @param karutaQuizId 問題ID.
      */
     fun fetch(karutaQuizId: KarutaQuizIdentifier) {
-        karutaQuizRepository.findBy(karutaQuizId).flatMap {
-            it.content()
-        }.scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(FetchQuizAction(it))
-        }, {
-            dispatcher.dispatch(FetchQuizAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+                    ?: throw NoSuchElementException(karutaQuizId.toString())
+                dispatcher.dispatch(FetchQuizAction.createSuccess(karutaQuiz.content()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(FetchQuizAction.createError(e))
+            }
+        }
     }
 
     /**
@@ -57,18 +59,18 @@ class QuizActionDispatcher @Inject constructor(
      * @param startTime 開始時間.
      */
     fun start(karutaQuizId: KarutaQuizIdentifier, startTime: Date) {
-        karutaQuizRepository.findBy(karutaQuizId).flatMap {
-            if (it.result == null) {
-                return@flatMap karutaQuizRepository.store(it.start(startTime)).toSingleDefault(it)
+        launch(coroutineContext) {
+            try {
+                val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+                    ?: throw NoSuchElementException(karutaQuizId.toString())
+                if (karutaQuiz.state != KarutaQuiz.State.ANSWERED) {
+                    karutaQuizRepository.store(karutaQuiz.start(startTime))
+                }
+                dispatcher.dispatch(StartQuizAction.createSuccess(karutaQuiz.content()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(StartQuizAction.createError(e))
             }
-            return@flatMap Single.just(it)
-        }.flatMap {
-            it.content()
-        }.scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(StartQuizAction(it))
-        }, {
-            dispatcher.dispatch(StartQuizAction(null, it))
-        })
+        }
     }
 
     /**
@@ -79,27 +81,28 @@ class QuizActionDispatcher @Inject constructor(
      * @param answerTime 回答時間.
      */
     fun answer(karutaQuizId: KarutaQuizIdentifier, choiceNo: ChoiceNo, answerTime: Date) {
-        karutaQuizRepository.findBy(karutaQuizId).flatMap {
-            karutaQuizRepository.store(it.verify(choiceNo, answerTime)).toSingleDefault(it)
-        }.flatMap {
-            it.content()
-        }.scheduler(schedulerProvider).subscribe({
-            dispatcher.dispatch(AnswerQuizAction(it))
-        }, {
-            dispatcher.dispatch(AnswerQuizAction(null, it))
-        })
+        launch(coroutineContext) {
+            try {
+                val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+                    ?: throw NoSuchElementException(karutaQuizId.toString())
+                karutaQuizRepository.store(karutaQuiz.verify(choiceNo, answerTime))
+                dispatcher.dispatch(AnswerQuizAction.createSuccess(karutaQuiz.content()))
+            } catch (e: Exception) {
+                dispatcher.dispatch(AnswerQuizAction.createError(e))
+            }
+        }
     }
 
-    private fun KarutaQuiz.content(): Single<KarutaQuizContent> {
-        val choiceSingle: Single<List<Karuta>> = Observable.fromIterable<KarutaIdentifier>(choiceList)
-            .flatMapSingle<Karuta> { karutaRepository.findBy(it) }
-            .toList()
-
-        val countSingle: Single<KarutaQuizCounter> = karutaQuizRepository.countQuizByAnswered()
-
-        return Single.zip(choiceSingle, countSingle, BiFunction { choice, counter ->
-            val correct = choice[choiceList.indexOf(correctId)]
-            KarutaQuizContent(this, correct, choice, counter, counter.existNext)
-        })
+    private fun KarutaQuiz.content(): KarutaQuizContent {
+        val choiceKarutaList = choiceList.mapNotNull { karutaRepository.findBy(it) }
+        val counter = karutaQuizRepository.countQuizByAnswered()
+        val correctKaruta = choiceKarutaList[choiceList.indexOf(correctId)]
+        return KarutaQuizContent(
+            this,
+            correctKaruta,
+            choiceKarutaList,
+            counter,
+            counter.existNext
+        )
     }
 }

@@ -11,43 +11,53 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.helper
 
-import me.rei_m.hyakuninisshu.domain.model.karuta.*
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color
+import me.rei_m.hyakuninisshu.domain.model.karuta.ImageNo
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu
+import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKuIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
+import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu
+import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKuIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import java.util.*
+import java.util.Date
 
 interface TestHelper {
     fun createKaruta(
-            id: Int,
-            firstKanji: String = "初句_$id",
-            firstKana: String = "しょく_$id",
-            secondKanji: String = "二句_$id",
-            secondKana: String = "にく_$id",
-            thirdKanji: String = "三句_$id",
-            thirdKana: String = "さんく_$id",
-            fourthKanji: String = "四句_$id",
-            fourthKana: String = "よんく_$id",
-            fifthKanji: String = "五句_$id",
-            fifthKana: String = "ごく_$id",
-            translation: String = "歌の訳",
-            creator: String = "creator",
-            kimariji: Kimariji = Kimariji.ONE,
-            color: Color = Color.BLUE
+        id: Int,
+        firstKanji: String = "初句_$id",
+        firstKana: String = "しょく_$id",
+        secondKanji: String = "二句_$id",
+        secondKana: String = "にく_$id",
+        thirdKanji: String = "三句_$id",
+        thirdKana: String = "さんく_$id",
+        fourthKanji: String = "四句_$id",
+        fourthKana: String = "よんく_$id",
+        fifthKanji: String = "五句_$id",
+        fifthKana: String = "ごく_$id",
+        translation: String = "歌の訳",
+        creator: String = "creator",
+        kimariji: Kimariji = Kimariji.ONE,
+        color: Color = Color.BLUE
     ): Karuta {
         val identifier = KarutaIdentifier(id)
         val kamiNoKu = KamiNoKu(
-                KamiNoKuIdentifier(identifier.value),
-                Phrase(firstKana, firstKanji),
-                Phrase(secondKana, secondKanji),
-                Phrase(thirdKana, thirdKanji)
+            KamiNoKuIdentifier(identifier.value),
+            Phrase(firstKana, firstKanji),
+            Phrase(secondKana, secondKanji),
+            Phrase(thirdKana, thirdKanji)
         )
         val shimoNoKu = ShimoNoKu(
-                ShimoNoKuIdentifier(identifier.value),
-                Phrase(fourthKana, fourthKanji),
-                Phrase(fifthKana, fifthKanji)
+            ShimoNoKuIdentifier(identifier.value),
+            Phrase(fourthKana, fourthKanji),
+            Phrase(fifthKana, fifthKanji)
         )
         val imageNo = ImageNo("001")
 
@@ -55,46 +65,52 @@ interface TestHelper {
     }
 
     fun createQuiz(correctId: Int): KarutaQuiz {
-        return KarutaQuiz(
-                identifier = KarutaQuizIdentifier(),
-                choiceList = listOf(
-                        KarutaIdentifier(correctId),
-                        KarutaIdentifier(correctId + 1),
-                        KarutaIdentifier(correctId + 2),
-                        KarutaIdentifier(correctId + 3)
-                ),
-                correctId = KarutaIdentifier(correctId)
+        return KarutaQuiz.createReady(
+            identifier = KarutaQuizIdentifier(),
+            choiceList = listOf(
+                KarutaIdentifier(correctId),
+                KarutaIdentifier(correctId + 1),
+                KarutaIdentifier(correctId + 2),
+                KarutaIdentifier(correctId + 3)
+            ),
+            correctId = KarutaIdentifier(correctId)
         )
     }
 
     fun createStartedQuiz(correctId: Int, startDate: Date): KarutaQuiz {
-        return KarutaQuiz(
-                identifier = KarutaQuizIdentifier(),
-                choiceList = listOf(
-                        KarutaIdentifier(correctId),
-                        KarutaIdentifier(correctId + 1),
-                        KarutaIdentifier(correctId + 2),
-                        KarutaIdentifier(correctId + 3)
-                ),
-                correctId = KarutaIdentifier(correctId),
-                startDate = startDate
+        return KarutaQuiz.createInAnswer(
+            identifier = KarutaQuizIdentifier(),
+            choiceList = listOf(
+                KarutaIdentifier(correctId),
+                KarutaIdentifier(correctId + 1),
+                KarutaIdentifier(correctId + 2),
+                KarutaIdentifier(correctId + 3)
+            ),
+            correctId = KarutaIdentifier(correctId),
+            startDate = startDate
         )
     }
 
-    fun createAnsweredQuiz(correctId: Int, startDate: Date, answerMillSec: Long, choiceNo: ChoiceNo, isCorrect: Boolean): KarutaQuiz {
-        return KarutaQuiz(
-                identifier = KarutaQuizIdentifier(),
-                choiceList = listOf(
-                        KarutaIdentifier(correctId),
-                        KarutaIdentifier(correctId + 1),
-                        KarutaIdentifier(correctId + 2),
-                        KarutaIdentifier(correctId + 3)
-                ),
-                correctId = KarutaIdentifier(correctId),
-                startDate = startDate,
-                answerMillSec = answerMillSec,
-                choiceNo = choiceNo,
-                isCorrect = isCorrect
+    fun createAnsweredQuiz(
+        correctId: Int,
+        startDate: Date,
+        answerMillSec: Long,
+        choiceNo: ChoiceNo,
+        isCorrect: Boolean
+    ): KarutaQuiz {
+        return KarutaQuiz.createAnswered(
+            identifier = KarutaQuizIdentifier(),
+            choiceList = listOf(
+                KarutaIdentifier(correctId),
+                KarutaIdentifier(correctId + 1),
+                KarutaIdentifier(correctId + 2),
+                KarutaIdentifier(correctId + 3)
+            ),
+            correctId = KarutaIdentifier(correctId),
+            startDate = startDate,
+            answerMillSec = answerMillSec,
+            choiceNo = choiceNo,
+            isCorrect = isCorrect
         )
     }
 }

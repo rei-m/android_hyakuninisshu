@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import android.os.Parcel
@@ -20,7 +21,9 @@ import java.util.UUID
 
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier
 
-data class KarutaQuizIdentifier(val value: String = UUID.randomUUID().toString()) : EntityIdentifier, Parcelable {
+data class KarutaQuizIdentifier(
+    val value: String = UUID.randomUUID().toString()
+) : EntityIdentifier, Parcelable {
 
     override fun describeContents(): Int = 0
 

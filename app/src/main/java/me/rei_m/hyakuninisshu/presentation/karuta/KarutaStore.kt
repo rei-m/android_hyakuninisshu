@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.karuta
 
 import android.arch.lifecycle.LiveData
@@ -33,8 +34,9 @@ class KarutaStore(dispatcher: Dispatcher) : Store() {
     val notFoundKarutaEvent = _notFoundKarutaEvent
 
     init {
+        _karuta.value = null
         register(dispatcher.on(FetchKarutaAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karuta.value = it.karuta
             } else {
                 _notFoundKarutaEvent.value = Event(Unit)

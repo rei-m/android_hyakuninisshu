@@ -12,24 +12,24 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.domain.model.karuta
+package me.rei_m.hyakuninisshu.helper
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
+import kotlinx.coroutines.experimental.CancellableContinuation
+import kotlinx.coroutines.experimental.CoroutineDispatcher
+import kotlinx.coroutines.experimental.Delay
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.experimental.CoroutineContext
 
-class PhraseTest {
-
-    private lateinit var phrase: Phrase
-
-    @Before
-    fun setUp() {
-        phrase = Phrase("かな", "漢字")
+object DirectCoroutineContext : CoroutineDispatcher(), Delay {
+    override fun scheduleResumeAfterDelay(
+        time: Long,
+        unit: TimeUnit,
+        continuation: CancellableContinuation<Unit>
+    ) {
+        continuation.resume(Unit)
     }
 
-    @Test
-    fun createInstance() {
-        assertThat(phrase.kana).isEqualTo("かな")
-        assertThat(phrase.kanji).isEqualTo("漢字")
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        block.run()
     }
 }

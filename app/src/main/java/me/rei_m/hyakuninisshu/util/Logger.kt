@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.util
 
 import me.rei_m.hyakuninisshu.action.Action
@@ -18,7 +19,7 @@ import timber.log.Timber
 
 object Logger {
     fun action(a: Action) {
-        if (a.error == null) {
+        if (a.isSucceeded) {
             Timber.tag("Action").d(a.toString())
         } else {
             Timber.tag("Action").e(a.toString())

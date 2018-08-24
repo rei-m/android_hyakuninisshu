@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
 import android.arch.lifecycle.LiveData
@@ -38,13 +39,13 @@ class MaterialEditStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(StartEditMaterialAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karuta.value = it.karuta
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karuta.value = null
                 _completeEditEvent.value = Event(Unit)
             } else {

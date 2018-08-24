@@ -11,12 +11,23 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.quiz
 
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 
-class StartQuizAction(val karutaQuizContent: KarutaQuizContent?,
-                      override val error: Throwable? = null) : Action {
-    override fun toString(): String = "StartQuizAction(karutaQuizContent=$karutaQuizContent, error=$error)"
+class StartQuizAction private constructor(
+    val karutaQuizContent: KarutaQuizContent?,
+    override val error: Exception? = null
+) : Action {
+
+    override val name = "StartQuizAction"
+
+    override fun toString() = if (isSucceeded) "$name(karutaQuizContent=$karutaQuizContent)" else "$name(error=$error)"
+
+    companion object {
+        fun createSuccess(karutaQuizContent: KarutaQuizContent) = StartQuizAction(karutaQuizContent)
+        fun createError(error: Exception) = StartQuizAction(null, error)
+    }
 }

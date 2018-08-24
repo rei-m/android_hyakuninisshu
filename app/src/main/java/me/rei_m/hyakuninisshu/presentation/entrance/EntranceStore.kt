@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
@@ -25,7 +26,6 @@ import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.presentation.Store
-import java.util.*
 import javax.inject.Inject
 
 class EntranceStore(dispatcher: Dispatcher) : Store() {
@@ -38,7 +38,7 @@ class EntranceStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaList.value = it.karutas?.asList()
             }
         }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
@@ -48,11 +48,11 @@ class EntranceStore(dispatcher: Dispatcher) : Store() {
                 _karutaList.value = karutaList
             }
         }, dispatcher.on(FetchRecentExamAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _recentExam.value = it.karutaExam
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _recentExam.value = it.karutaExam
             }
         })

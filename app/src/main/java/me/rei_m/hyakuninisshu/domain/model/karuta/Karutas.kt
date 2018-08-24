@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
@@ -18,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
 import me.rei_m.hyakuninisshu.domain.util.generateRandomIndexArray
-import java.util.*
+import java.util.Collections
 
 /**
  * 全ての歌のコレクション.
@@ -74,7 +75,7 @@ class Karutas(private val values: List<Karuta>) {
             val correctPosition = generateRandomIndexArray(ChoiceNo.values().size, 1)[0]
             choices.add(correctPosition, it)
 
-            KarutaQuiz(KarutaQuizIdentifier(), choices, it)
+            KarutaQuiz.createReady(KarutaQuizIdentifier(), choices, it)
         }
 
         return KarutaQuizzes(quizzes)

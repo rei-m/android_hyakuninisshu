@@ -11,17 +11,17 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.karuta
 
 import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Single
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.util.rx.TestSchedulerProvider
+import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -40,9 +40,9 @@ class KarutaActionDispatcherTest : TestHelper {
         dispatcher = mock {}
         karutaRepository = mock {}
         actionDispatcher = KarutaActionDispatcher(
-                karutaRepository,
-                dispatcher,
-                TestSchedulerProvider()
+            karutaRepository,
+            dispatcher,
+            DirectCoroutineContext
         )
     }
 
@@ -50,7 +50,7 @@ class KarutaActionDispatcherTest : TestHelper {
     fun fetch() {
         val karuta = createKaruta(id = 1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(Single.just(karuta))
+        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(karuta)
 
         actionDispatcher.fetch(karuta.identifier())
 
@@ -64,8 +64,8 @@ class KarutaActionDispatcherTest : TestHelper {
     }
 
     @Test
-    fun fetchWithTest() {
-        whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(Single.error(RuntimeException()))
+    fun fetchWhenNotFound() {
+        whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
         actionDispatcher.fetch(KarutaIdentifier(1))
 

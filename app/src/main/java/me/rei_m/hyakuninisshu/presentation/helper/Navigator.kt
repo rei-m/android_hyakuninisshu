@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.helper
 
 import android.content.Intent
@@ -42,12 +43,14 @@ class Navigator(private val activity: AppCompatActivity) {
         activity.startActivity(intentToLaunch)
     }
 
-    fun navigateToTraining(trainingRangeFrom: TrainingRangeFrom,
-                           trainingRangeTo: TrainingRangeTo,
-                           kimarijiFilter: KimarijiFilter,
-                           colorFilter: ColorFilter,
-                           kamiNoKuStyle: KarutaStyleFilter,
-                           shimoNoKuStyle: KarutaStyleFilter) {
+    fun navigateToTraining(
+        trainingRangeFrom: TrainingRangeFrom,
+        trainingRangeTo: TrainingRangeTo,
+        kimarijiFilter: KimarijiFilter,
+        colorFilter: ColorFilter,
+        kamiNoKuStyle: KarutaStyleFilter,
+        shimoNoKuStyle: KarutaStyleFilter
+    ) {
         val intentToLaunch = TrainingActivity.createIntent(activity,
                 trainingRangeFrom,
                 trainingRangeTo,
@@ -73,8 +76,10 @@ class Navigator(private val activity: AppCompatActivity) {
         activity.startActivity(intentToLaunch)
     }
 
-    fun navigateToMaterialDetail(position: Int,
-                                 colorFilter: ColorFilter) {
+    fun navigateToMaterialDetail(
+        position: Int,
+        colorFilter: ColorFilter
+    ) {
         val intentToLaunch = MaterialDetailActivity.createIntent(activity, position, colorFilter)
         activity.startActivity(intentToLaunch)
     }

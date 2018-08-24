@@ -11,13 +11,18 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.ext.withValue
-import me.rei_m.hyakuninisshu.presentation.enums.*
+import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.util.Event
@@ -56,12 +61,14 @@ class TrainingMenuViewModel(
         }
 
         analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
-        navigator.navigateToTraining(trainingRangeFrom.value!!,
+        navigator.navigateToTraining(
+            trainingRangeFrom.value!!,
             trainingRangeTo.value!!,
             kimariji.value!!,
             color.value!!,
             kamiNoKuStyle.value!!,
-            shimoNoKuStyle.value!!)
+            shimoNoKuStyle.value!!
+        )
     }
 
     class Factory @Inject constructor(

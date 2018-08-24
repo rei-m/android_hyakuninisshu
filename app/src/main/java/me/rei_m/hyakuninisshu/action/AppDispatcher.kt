@@ -11,16 +11,17 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action
 
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.processors.PublishProcessor
 import me.rei_m.hyakuninisshu.util.Logger
-import me.rei_m.hyakuninisshu.util.rx.SchedulerProvider
 import javax.inject.Singleton
 
 @Singleton
-class AppDispatcher(private val schedulerProvider: SchedulerProvider) : Dispatcher {
+class AppDispatcher(private val uiScheduler: Scheduler) : Dispatcher {
 
     private val processor = PublishProcessor.create<Action>()
 
@@ -31,6 +32,6 @@ class AppDispatcher(private val schedulerProvider: SchedulerProvider) : Dispatch
 
     override fun <T : Action> on(clazz: Class<T>): Observable<T> = processor.onBackpressureBuffer()
         .ofType(clazz)
-        .observeOn(schedulerProvider.ui())
+        .observeOn(uiScheduler)
         .toObservable()
 }

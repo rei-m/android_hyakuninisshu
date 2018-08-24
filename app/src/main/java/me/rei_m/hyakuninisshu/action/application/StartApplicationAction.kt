@@ -11,10 +11,19 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.application
 
 import me.rei_m.hyakuninisshu.action.Action
 
-class StartApplicationAction(override val error: Throwable? = null) : Action {
-    override fun toString() = "StartApplicationAction(error=$error)"
+class StartApplicationAction private constructor(override val error: Exception? = null) : Action {
+
+    override val name = "StartApplicationAction"
+
+    override fun toString() = if (isSucceeded) "$name()" else "$name(error=$error)"
+
+    companion object {
+        fun createSuccess() = StartApplicationAction()
+        fun createError(e: Exception) = StartApplicationAction(e)
+    }
 }

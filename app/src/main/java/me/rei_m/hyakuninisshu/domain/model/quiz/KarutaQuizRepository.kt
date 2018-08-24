@@ -11,10 +11,8 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
-
-import io.reactivex.Completable
-import io.reactivex.Single
 
 /**
  * 問題リポジトリ.
@@ -25,16 +23,15 @@ interface KarutaQuizRepository {
      * 問題を初期化する.トレーニングまたは力試しを開始する毎に初期化する.
      *
      * @param karutaQuizzes 問題コレクション
-     * @return Completable
      */
-    fun initialize(karutaQuizzes: KarutaQuizzes): Completable
+    fun initialize(karutaQuizzes: KarutaQuizzes)
 
     /**
      * 先頭の問題を取得する.
      *
      * @return 問題
      */
-    fun first(): Single<KarutaQuiz>
+    fun first(): KarutaQuiz?
 
     /**
      * 指定した問題を取得する.
@@ -42,7 +39,7 @@ interface KarutaQuizRepository {
      * @param identifier 問題ID
      * @return 問題
      */
-    fun findBy(identifier: KarutaQuizIdentifier): Single<KarutaQuiz>
+    fun findBy(identifier: KarutaQuizIdentifier): KarutaQuiz?
 
     /**
      * 問題を保存する.
@@ -50,19 +47,19 @@ interface KarutaQuizRepository {
      * @param karutaQuiz 問題
      * @return Completable
      */
-    fun store(karutaQuiz: KarutaQuiz): Completable
+    fun store(karutaQuiz: KarutaQuiz)
 
     /**
      * 問題のコレクションを取得する.
      *
      * @return 問題コレクション
      */
-    fun list(): Single<KarutaQuizzes>
+    fun list(): KarutaQuizzes
 
     /**
      * 解答済みの問題をカウントする.
      *
      * @return 問題カウンター
      */
-    fun countQuizByAnswered(): Single<KarutaQuizCounter>
+    fun countQuizByAnswered(): KarutaQuizCounter
 }

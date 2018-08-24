@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.training
 
 import android.app.Activity
@@ -37,7 +38,11 @@ import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
-import me.rei_m.hyakuninisshu.presentation.enums.*
+import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.util.EventObserver
@@ -143,7 +148,6 @@ class TrainingActivity : DaggerAppCompatActivity(),
     }
 
     override fun onAlertNegativeClick() {
-
     }
 
     private fun setupAd() {
@@ -169,12 +173,14 @@ class TrainingActivity : DaggerAppCompatActivity(),
     }
 
     @ForActivity
-    @dagger.Subcomponent(modules = [
-        ActivityModule::class,
-        QuizFragment.Module::class,
-        QuizAnswerFragment.Module::class,
-        TrainingResultFragment.Module::class
-    ])
+    @dagger.Subcomponent(
+        modules = [
+            ActivityModule::class,
+            QuizFragment.Module::class,
+            QuizAnswerFragment.Module::class,
+            TrainingResultFragment.Module::class
+        ]
+    )
     interface Subcomponent : AndroidInjector<TrainingActivity> {
 
         @dagger.Subcomponent.Builder
@@ -210,13 +216,15 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
         private const val ARG_SHIMO_NO_KU_STYLE = "shimoNoKuStyle"
 
-        fun createIntent(context: Context,
-                         trainingRangeFrom: TrainingRangeFrom,
-                         trainingRangeTo: TrainingRangeTo,
-                         kimarijiFilter: KimarijiFilter,
-                         colorFilter: ColorFilter,
-                         kamiNoKuStyle: KarutaStyleFilter,
-                         shimoNoKuStyle: KarutaStyleFilter): Intent {
+        fun createIntent(
+            context: Context,
+            trainingRangeFrom: TrainingRangeFrom,
+            trainingRangeTo: TrainingRangeTo,
+            kimarijiFilter: KimarijiFilter,
+            colorFilter: ColorFilter,
+            kamiNoKuStyle: KarutaStyleFilter,
+            shimoNoKuStyle: KarutaStyleFilter
+        ): Intent {
             val intent = Intent(context, TrainingActivity::class.java)
             val bundle = Bundle()
             bundle.putInt(ARG_TRAINING_RANGE_FROM, trainingRangeFrom.ordinal)

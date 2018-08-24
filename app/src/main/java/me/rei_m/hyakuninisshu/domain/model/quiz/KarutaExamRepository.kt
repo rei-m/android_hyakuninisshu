@@ -11,12 +11,10 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import java.util.Date
-
-import io.reactivex.Completable
-import io.reactivex.Single
 
 /**
  * 力試しリポジトリ.
@@ -27,31 +25,30 @@ interface KarutaExamRepository {
      * 力試しの結果を永続化する.
      *
      * @param karutaExamResult 力試しの結果
-     * @param tookExamDate     力試しを受けた日付
+     * @param tookExamDate 力試しを受けた日付
      * @return 登録した力試しのID
      */
-    fun storeResult(karutaExamResult: KarutaExamResult, tookExamDate: Date): Single<KarutaExamIdentifier>
+    fun storeResult(karutaExamResult: KarutaExamResult, tookExamDate: Date): KarutaExamIdentifier
 
     /**
      * 力試しの受験履歴を調整する.
      *
      * @param historySize 調整する履歴数。指定された世代の履歴を保存し、古い受験履歴は削除する.
-     * @return Completable
      */
-    fun adjustHistory(historySize: Int): Completable
+    fun adjustHistory(historySize: Int)
 
     /**
      * 力試しを取得する.
      *
-     * @param identifier 力試しID
+     * @param karutaExamId 力試しID
      * @return 力試し
      */
-    fun findBy(identifier: KarutaExamIdentifier): Single<KarutaExam>
+    fun findBy(karutaExamId: KarutaExamIdentifier): KarutaExam?
 
     /**
      * 力試しコレクションを取得する.
      *
      * @return 力試しコレクション
      */
-    fun list(): Single<KarutaExams>
+    fun list(): KarutaExams
 }

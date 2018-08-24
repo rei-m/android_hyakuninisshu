@@ -7,6 +7,35 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    ktlint
+}
+
+dependencies {
+    ktlint "com.github.shyiko:ktlint:0.27.0"
+    // additional 3rd party ruleset(s) can be specified here
+    // just add them to the classpath (e.g. ktlint 'groupId:artifactId:version') and
+    // ktlint will pick them up
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.github.shyiko.ktlint.Main"
+    args "src/**/*.kt"
+    // to generate report in checkstyle format prepend following args:
+    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+    // see https://github.com/shyiko/ktlint#usage for more
+}
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.github.shyiko.ktlint.Main"
+    args "-F", "src/**/*.kt"
+}
+
 android {
     signingConfigs {
         releaseConfig
@@ -25,15 +54,18 @@ android {
         android.signingConfigs.releaseConfig.keyPassword = keyPassword
     }
 
-    compileSdkVersion 27
+    compileSdkVersion 28
+    buildToolsVersion "28.0.2"
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         multiDexEnabled true
-        versionCode 16
-        versionName "2.0.0"
+        versionCode 17
+        versionName "2.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [crashlyticsEnabled: true]
     }
 
     buildTypes {
@@ -41,12 +73,14 @@ android {
             debuggable true
             applicationIdSuffix ".debug"
             versionNameSuffix "d"
+            manifestPlaceholders = [crashlyticsEnabled: false]
         }
         release {
             signingConfig signingConfigs.releaseConfig
             debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [crashlyticsEnabled: true]
         }
     }
     packagingOptions {
@@ -73,9 +107,9 @@ android {
 }
 
 dependencies {
-    def android_support_lib_version = '27.1.1'
+    def android_support_lib_version = '28.0.0-rc01'
     def rxjava_version = '2.2.0'
-    def dagger_version = '2.16'
+    def dagger_version = '2.17'
     def leakcanary_version = '1.6.1'
     def lifecycle_version = "1.1.1"
     def coroutines_version = '0.24.0'
@@ -107,12 +141,12 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
     implementation 'com.squareup.moshi:moshi:1.6.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.6.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.github.hotchemi:android-rate:1.0.1'
 
@@ -124,7 +158,7 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.assertj:assertj-core:3.10.0'
+    testImplementation 'org.assertj:assertj-core:3.11.0'
     testImplementation 'org.robolectric:robolectric:3.6.1'
     testImplementation 'org.robolectric:shadows-multidex:3.6.1'
     testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'

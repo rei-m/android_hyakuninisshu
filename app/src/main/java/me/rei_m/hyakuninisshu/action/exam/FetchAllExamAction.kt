@@ -11,12 +11,23 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.exam
 
 import me.rei_m.hyakuninisshu.action.Action
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
-class FetchAllExamAction(val karutaExamList: List<KarutaExam>?,
-                         override val error: Throwable? = null) : Action {
-    override fun toString(): String = "FetchAllExamAction(karutaExamList=$karutaExamList, error=$error)"
+class FetchAllExamAction private constructor(
+    val karutaExamList: List<KarutaExam>?,
+    override val error: Exception? = null
+) : Action {
+
+    override val name = "FetchAllExamAction"
+
+    override fun toString() = if (isSucceeded) "$name(karutaExamList=$karutaExamList)" else "$name(error=$error)"
+
+    companion object {
+        fun createSuccess(karutaExamList: List<KarutaExam>) = FetchAllExamAction(karutaExamList)
+        fun createError(error: Exception) = FetchAllExamAction(null, error)
+    }
 }

@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.arch.lifecycle.LiveData
@@ -47,26 +48,26 @@ class ExamStore(dispatcher: Dispatcher) : Store() {
         _result.value = null
 
         register(dispatcher.on(StartExamAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _currentKarutaQuizId.value = it.karutaQuizId
             } else {
                 _notFoundQuizEvent.value = Event(Unit)
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _currentKarutaQuizId.value = it.karutaQuizId
             } else {
                 _notFoundQuizEvent.value = Event(Unit)
             }
         }, dispatcher.on(FinishExamAction::class.java).subscribe {
             _currentKarutaQuizId.value = null
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _result.value = it.karutaExam
             } else {
                 _notFoundExamEvent.value = Event(Unit)
             }
         }, dispatcher.on(FetchExamAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _result.value = it.karutaExam
             } else {
                 _notFoundExamEvent.value = Event(Unit)

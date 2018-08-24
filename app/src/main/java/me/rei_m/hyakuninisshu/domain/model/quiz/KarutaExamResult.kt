@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.ValueObject
@@ -21,8 +22,10 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 /**
  * 百人一首力試しの結果.
  */
-data class KarutaExamResult(private val resultSummary: KarutaQuizzesResultSummary,
-                            val wrongKarutaIds: KarutaIds) : ValueObject {
+data class KarutaExamResult(
+    private val resultSummary: KarutaQuizzesResultSummary,
+    val wrongKarutaIds: KarutaIds
+) : ValueObject {
 
     val judgements: List<KarutaQuizJudgement>
 

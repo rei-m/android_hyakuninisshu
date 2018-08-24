@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.ext
 
 import android.support.annotation.IdRes
@@ -21,19 +22,23 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 
-fun AppCompatActivity.addFragment(@IdRes containerViewId: Int,
-                                  fragment: Fragment,
-                                  tag: String) {
+fun AppCompatActivity.addFragment(
+    @IdRes containerViewId: Int,
+    fragment: Fragment,
+    tag: String
+) {
     supportFragmentManager
         .beginTransaction()
         .add(containerViewId, fragment, tag)
         .commit()
 }
 
-fun AppCompatActivity.replaceFragment(@IdRes containerViewId: Int,
-                                      fragment: Fragment,
-                                      tag: String,
-                                      transition: Int? = null) {
+fun AppCompatActivity.replaceFragment(
+    @IdRes containerViewId: Int,
+    fragment: Fragment,
+    tag: String,
+    transition: Int? = null
+) {
     val transaction = supportFragmentManager.beginTransaction()
     transition?.let { transaction.setTransition(it) }
     transaction

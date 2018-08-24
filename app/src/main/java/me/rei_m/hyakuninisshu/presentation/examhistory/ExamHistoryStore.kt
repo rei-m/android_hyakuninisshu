@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.examhistory
 
 import android.arch.lifecycle.LiveData
@@ -34,7 +35,7 @@ class ExamHistoryStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchAllExamAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaExamList.value = it.karutaExamList
             } else {
                 _unhandledErrorEvent.value = Event(Unit)

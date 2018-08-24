@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.annotation.Column
@@ -22,23 +23,23 @@ import java.util.Date
 
 @Table
 data class KarutaQuizSchema(
-        @Setter("id") @PrimaryKey(autoincrement = true) var id: Long = 0,
-        @Setter("quizId") @Column(indexed = true) var quizId: String,
-        @Setter("collectId") @Column var collectId: Long,
-        @Setter("startDate") @Column var startDate: Date? = null,
-        @Setter("choiceNo") @Column var choiceNo: Int? = null,
-        @Setter("isCollect") @Column var isCollect: Boolean = false,
-        @Setter("answerTime") @Column var answerTime: Long? = 0
+    @Setter("id") @PrimaryKey(autoincrement = true) var id: Long = 0,
+    @Setter("quizId") @Column(indexed = true) var quizId: String,
+    @Setter("collectId") @Column var collectId: Long,
+    @Setter("startDate") @Column var startDate: Date? = null,
+    @Setter("choiceNo") @Column var choiceNo: Int? = null,
+    @Setter("isCollect") @Column var isCollect: Boolean = false,
+    @Setter("answerTime") @Column var answerTime: Long? = 0
 ) {
+    fun getChoices(orma: OrmaDatabase): KarutaQuizChoiceSchema_Relation {
+        return orma.relationOfKarutaQuizChoiceSchema()
+            .karutaQuizSchemaEq(this)
+            .orderByOrderNoAsc()
+    }
+
     companion object {
         fun relation(orma: OrmaDatabase): KarutaQuizSchema_Relation {
             return orma.relationOfKarutaQuizSchema()
         }
-    }
-
-    fun getChoices(orma: OrmaDatabase): KarutaQuizChoiceSchema_Relation {
-        return orma.relationOfKarutaQuizChoiceSchema()
-                .karutaQuizSchemaEq(this)
-                .orderByOrderNoAsc()
     }
 }

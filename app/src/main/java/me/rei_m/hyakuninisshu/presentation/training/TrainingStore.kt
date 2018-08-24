@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.training
 
 import android.arch.lifecycle.LiveData
@@ -44,7 +45,7 @@ class TrainingStore(dispatcher: Dispatcher) : Store() {
     init {
         _empty.value = false
         register(dispatcher.on(StartTrainingAction::class.java).subscribe {
-            if (it.error != null) {
+            if (!it.isSucceeded) {
                 _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }
@@ -54,13 +55,13 @@ class TrainingStore(dispatcher: Dispatcher) : Store() {
                 _currentKarutaQuizId.value = it.karutaQuizId
             }
         }, dispatcher.on(OpenNextQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _currentKarutaQuizId.value = it.karutaQuizId
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(AggregateResultsAction::class.java).subscribe {
-            if (it.error != null) {
+            if (!it.isSucceeded) {
                 _unhandledErrorEvent.value = Event(Unit)
                 return@subscribe
             }

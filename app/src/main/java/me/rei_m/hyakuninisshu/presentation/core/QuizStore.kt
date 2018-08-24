@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
 import android.arch.lifecycle.LiveData
@@ -36,19 +37,19 @@ class QuizStore(dispatcher: Dispatcher) : Store() {
 
     init {
         register(dispatcher.on(FetchQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaQuizContent.value = it.karutaQuizContent
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(StartQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaQuizContent.value = it.karutaQuizContent
             } else {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         }, dispatcher.on(AnswerQuizAction::class.java).subscribe {
-            if (it.error == null) {
+            if (it.isSucceeded) {
                 _karutaQuizContent.value = it.karutaQuizContent
             } else {
                 _unhandledErrorEvent.value = Event(Unit)

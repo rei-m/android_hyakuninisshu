@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.ValueObject
@@ -19,4 +20,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 /**
  * 問題の正誤判定.
  */
-data class KarutaQuizJudgement(val karutaId: KarutaIdentifier, val isCorrect: Boolean) : ValueObject
+data class KarutaQuizJudgement(
+    val karutaId: KarutaIdentifier,
+    val isCorrect: Boolean
+) : ValueObject

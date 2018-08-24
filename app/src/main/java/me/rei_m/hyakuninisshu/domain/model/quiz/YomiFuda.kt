@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.ValueObject
@@ -19,7 +20,7 @@ import me.rei_m.hyakuninisshu.domain.ValueObject
  * 読み札.
  */
 data class YomiFuda(
-        val firstPhrase: String,
-        val secondPhrase: String,
-        val thirdPhrase: String
+    val firstPhrase: String,
+    val secondPhrase: String,
+    val thirdPhrase: String
 ) : ValueObject

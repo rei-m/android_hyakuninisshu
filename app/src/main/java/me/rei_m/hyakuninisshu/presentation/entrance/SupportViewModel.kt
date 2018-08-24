@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.content.Context
@@ -19,8 +20,10 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import javax.inject.Inject
 
-class SupportViewModel(val version: String,
-                       private val navigator: Navigator) {
+class SupportViewModel(
+    val version: String,
+    private val navigator: Navigator
+) {
 
     fun onClickReview() {
         navigator.navigateToAppStore()
@@ -30,8 +33,10 @@ class SupportViewModel(val version: String,
         navigator.openLicenceDialog()
     }
 
-    class Factory @Inject constructor(context: Context,
-                                      private val navigator: Navigator) {
+    class Factory @Inject constructor(
+        context: Context,
+        private val navigator: Navigator
+    ) {
 
         private val version = context.getString(R.string.version, BuildConfig.VERSION_NAME)
 

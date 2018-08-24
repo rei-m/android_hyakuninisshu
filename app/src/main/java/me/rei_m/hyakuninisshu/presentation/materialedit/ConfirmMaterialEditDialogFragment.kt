@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
 import android.app.Dialog
@@ -91,16 +92,18 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
         private const val ARG_FIFTH_KANJI = "fifthKanji"
         private const val ARG_FIFTH_KANA = "fifthKana"
 
-        fun newInstance(firstKanji: String,
-                        firstKana: String,
-                        secondKanji: String,
-                        secondKana: String,
-                        thirdKanji: String,
-                        thirdKana: String,
-                        fourthKanji: String,
-                        fourthKana: String,
-                        fifthKanji: String,
-                        fifthKana: String) = ConfirmMaterialEditDialogFragment().apply {
+        fun newInstance(
+            firstKanji: String,
+            firstKana: String,
+            secondKanji: String,
+            secondKana: String,
+            thirdKanji: String,
+            thirdKana: String,
+            fourthKanji: String,
+            fourthKana: String,
+            fifthKanji: String,
+            fifthKana: String
+        ) = ConfirmMaterialEditDialogFragment().apply {
             arguments = Bundle().apply {
                 putString(ARG_FIRST_KANJI, firstKanji)
                 putString(ARG_FIRST_KANA, firstKana)

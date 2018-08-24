@@ -11,13 +11,14 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import java.util.*
+import java.util.Date
 
 class KarutaQuizTest {
 
@@ -27,7 +28,7 @@ class KarutaQuizTest {
 
         @Before
         fun setUp() {
-            karutaQuiz = KarutaQuiz(KarutaQuizIdentifier(), choiceList, correctId)
+            karutaQuiz = KarutaQuiz.createReady(KarutaQuizIdentifier(), choiceList, correctId)
         }
 
         @Test
@@ -66,7 +67,7 @@ class KarutaQuizTest {
         @Before
         fun setUp() {
             startDate = Date()
-            karutaQuiz = KarutaQuiz(KarutaQuizIdentifier(), choiceList, correctId, startDate)
+            karutaQuiz = KarutaQuiz.createInAnswer(KarutaQuizIdentifier(), choiceList, correctId, startDate)
         }
 
         @Test
@@ -112,13 +113,15 @@ class KarutaQuizTest {
         @Before
         fun setUp() {
             startDate = Date()
-            karutaQuiz = KarutaQuiz(KarutaQuizIdentifier(),
-                    choiceList,
-                    correctId,
-                    startDate,
-                    5000,
-                    ChoiceNo.FIRST,
-                    true)
+            karutaQuiz = KarutaQuiz.createAnswered(
+                KarutaQuizIdentifier(),
+                choiceList,
+                correctId,
+                startDate,
+                5000,
+                ChoiceNo.FIRST,
+                true
+            )
         }
 
         @Test
@@ -126,11 +129,14 @@ class KarutaQuizTest {
             assertThat(karutaQuiz.choiceList).isEqualTo(choiceList)
             assertThat(karutaQuiz.correctId).isEqualTo(correctId)
             assertThat(karutaQuiz.startDate).isEqualTo(startDate)
-            assertThat(karutaQuiz.result).isEqualTo(KarutaQuizResult(correctId,
+            assertThat(karutaQuiz.result).isEqualTo(
+                KarutaQuizResult(
+                    correctId,
                     ChoiceNo.FIRST,
                     true,
                     5000
-            ))
+                )
+            )
         }
 
         @Test
@@ -141,10 +147,10 @@ class KarutaQuizTest {
 
     companion object {
         private val choiceList: List<KarutaIdentifier> = listOf(
-                KarutaIdentifier(1),
-                KarutaIdentifier(2),
-                KarutaIdentifier(3),
-                KarutaIdentifier(4)
+            KarutaIdentifier(1),
+            KarutaIdentifier(2),
+            KarutaIdentifier(3),
+            KarutaIdentifier(4)
         )
 
         private val correctId = KarutaIdentifier(1)

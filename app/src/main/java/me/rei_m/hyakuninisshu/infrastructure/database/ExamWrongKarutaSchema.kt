@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.SingleAssociation
@@ -20,8 +21,8 @@ import com.github.gfx.android.orma.annotation.Table
 
 @Table
 data class ExamWrongKarutaSchema(
-        @Setter("examSchema") @Column(indexed = true) var examSchema: SingleAssociation<KarutaExamSchema>,
-        @Setter("karutaId") @Column var karutaId: Long
+    @Setter("examSchema") @Column(indexed = true) var examSchema: SingleAssociation<KarutaExamSchema>,
+    @Setter("karutaId") @Column var karutaId: Long
 ) {
     companion object {
         fun relation(orma: OrmaDatabase): ExamWrongKarutaSchema_Relation {

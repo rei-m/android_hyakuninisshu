@@ -11,6 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
+/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
 import android.arch.lifecycle.Observer
@@ -36,7 +37,7 @@ import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.util.EventObserver
-import java.util.*
+import java.util.Arrays
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -85,7 +86,6 @@ class QuizFragment : DaggerFragment() {
             viewModel = quizViewModel
             setLifecycleOwner(this@QuizFragment)
         }
-
 
         quizViewModel.content.observe(this, Observer {
             it ?: return@Observer
@@ -141,9 +141,11 @@ class QuizFragment : DaggerFragment() {
     }
 
     // TODO: DataBindingに寄せることができるはず.
-    private fun startDisplayQuizAnimation(firstPhrase: String,
-                                          secondPhrase: String,
-                                          thirdPhrase: String) {
+    private fun startDisplayQuizAnimation(
+        firstPhrase: String,
+        secondPhrase: String,
+        thirdPhrase: String
+    ) {
         if (animationDisposable != null) {
             return
         }
@@ -227,9 +229,11 @@ class QuizFragment : DaggerFragment() {
 
         private const val SPEED_DISPLAY_ANIMATION_MILL_SEC: Long = 500
 
-        fun newInstance(karutaQuizId: KarutaQuizIdentifier,
-                        kamiNoKuStyle: KarutaStyleFilter,
-                        shimoNoKuStyle: KarutaStyleFilter) = QuizFragment().withArgs {
+        fun newInstance(
+            karutaQuizId: KarutaQuizIdentifier,
+            kamiNoKuStyle: KarutaStyleFilter,
+            shimoNoKuStyle: KarutaStyleFilter
+        ) = QuizFragment().withArgs {
             putParcelable(ARG_KARUTA_QUIZ_ID, karutaQuizId)
             putInt(ARG_KAMI_NO_KU_STYLE, kamiNoKuStyle.ordinal)
             putInt(ARG_SHIMO_NO_KU_STYLE, shimoNoKuStyle.ordinal)
