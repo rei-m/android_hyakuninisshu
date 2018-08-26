@@ -41,14 +41,8 @@ class KarutaIds(val values: List<KarutaIdentifier>) {
     operator fun contains(karutaId: KarutaIdentifier): Boolean = values.contains(karutaId)
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as KarutaIds
-
-        if (values != other.values) return false
-
-        return true
+        other as? KarutaIds ?: return false
+        return (values == other.values)
     }
 
     override fun hashCode(): Int = values.hashCode()
