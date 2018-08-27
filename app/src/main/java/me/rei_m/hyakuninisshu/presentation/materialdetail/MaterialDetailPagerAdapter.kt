@@ -24,7 +24,7 @@ class MaterialDetailPagerAdapter(
 ) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int) = MaterialDetailFragment.newInstance(
-        karutaList[position].identifier()
+        karutaList[position].identifier
     )
 
     override fun getCount() = karutaList.size

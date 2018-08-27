@@ -39,7 +39,7 @@ class Karutas(private val values: List<Karuta>) {
     /**
      * @return 歌のリスト
      */
-    fun asList(): List<Karuta> = Collections.unmodifiableList(values)
+    fun asList(): List<Karuta> = values
 
     /**
      * 保持している歌を色で絞り込む.

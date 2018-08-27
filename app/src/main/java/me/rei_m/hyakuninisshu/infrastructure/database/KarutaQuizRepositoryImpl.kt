@@ -36,7 +36,7 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
 
             for (karutaQuiz in karutaQuizzes.values) {
                 val karutaQuizSchema = KarutaQuizSchema(
-                    quizId = karutaQuiz.identifier().value,
+                    quizId = karutaQuiz.identifier.value,
                     collectId = karutaQuiz.correctId.value.toLong()
                 )
                 karutaQuizSchema.id = karutaQuizSchemaInserter.execute(karutaQuizSchema)
@@ -84,7 +84,7 @@ class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepos
     override fun store(karutaQuiz: KarutaQuiz) {
         orma.transactionSync {
             val updater = KarutaQuizSchema.relation(orma)
-                .quizIdEq(karutaQuiz.identifier().value)
+                .quizIdEq(karutaQuiz.identifier.value)
                 .updater()
 
             updater.startDate(karutaQuiz.startDate)

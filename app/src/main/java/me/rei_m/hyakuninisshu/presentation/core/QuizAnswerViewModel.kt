@@ -42,7 +42,7 @@ class QuizAnswerViewModel(
 
     val karuta: LiveData<Karuta> = content.map { it.correct }
 
-    val karutaNo: LiveData<Int> = karuta.map { it.identifier().value }
+    val karutaNo: LiveData<Int> = karuta.map { it.identifier.value }
 
     val kimariji: LiveData<Int> = karuta.map { it.kimariji.value }
 
@@ -72,7 +72,7 @@ class QuizAnswerViewModel(
 
     fun onClickAnswer() {
         karuta.value?.let {
-            navigator.navigateToKaruta(it.identifier())
+            navigator.navigateToKaruta(it.identifier)
         }
     }
 

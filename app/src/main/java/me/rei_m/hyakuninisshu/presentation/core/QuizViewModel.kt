@@ -21,6 +21,7 @@ import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
+import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
@@ -82,8 +83,8 @@ class QuizViewModel(
         thirdPhrase = yomiFuda.map { it.thirdPhrase }
 
         val toriFudas = content.map { it.toriFudas(shimoNoKuStyle.value) }
-        choiceFourthPhraseList = toriFudas.map { it.map { it.fourthPhrase } }
-        choiceFifthPhraseList = toriFudas.map { it.map { it.fifthPhrase } }
+        choiceFourthPhraseList = toriFudas.map { it.map(ToriFuda::fourthPhrase) }
+        choiceFifthPhraseList = toriFudas.map { it.map(ToriFuda::fifthPhrase) }
 
         val result = content.map { it.quiz.result }
         isVisibleChoiceList = result.map {

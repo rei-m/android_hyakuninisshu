@@ -46,7 +46,7 @@ class MaterialDetailViewModel(
 
     fun onClickEdit(currentPosition: Int) {
         karutaList.value?.let {
-            navigator.navigateToMaterialEdit(it[currentPosition].identifier())
+            navigator.navigateToMaterialEdit(it[currentPosition].identifier)
         }
     }
 

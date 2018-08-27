@@ -81,7 +81,7 @@ class TrainingActionDispatcher @Inject constructor(
             try {
                 val karutaQuiz = karutaQuizRepository.first()
                     ?: throw NoSuchElementException("NextKarutaQuiz")
-                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier()))
+                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier))
             } catch (e: Exception) {
                 dispatcher.dispatch(OpenNextQuizAction.createError(e))
             }
@@ -111,7 +111,7 @@ class TrainingActionDispatcher @Inject constructor(
             if (quizSet.isEmpty) {
                 dispatcher.dispatch(StartTrainingAction.createSuccess(null))
             } else {
-                dispatcher.dispatch(StartTrainingAction.createSuccess(quizSet.values.first().identifier()))
+                dispatcher.dispatch(StartTrainingAction.createSuccess(quizSet.values.first().identifier))
             }
         } catch (e: Exception) {
             dispatcher.dispatch(StartTrainingAction.createError(e))

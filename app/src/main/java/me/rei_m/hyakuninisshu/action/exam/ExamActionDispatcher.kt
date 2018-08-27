@@ -91,7 +91,7 @@ class ExamActionDispatcher @Inject constructor(
                 val targetIds = karutaRepository.findIds()
                 val quizSet = karutas.createQuizSet(targetIds)
                 karutaQuizRepository.initialize(quizSet)
-                val firstQuizId = quizSet.values.first().identifier()
+                val firstQuizId = quizSet.values.first().identifier
                 dispatcher.dispatch(StartExamAction.createSuccess(firstQuizId))
             } catch (e: Exception) {
                 dispatcher.dispatch(StartExamAction.createError(e))
@@ -107,7 +107,7 @@ class ExamActionDispatcher @Inject constructor(
             try {
                 val karutaQuiz = karutaQuizRepository.first()
                     ?: throw NoSuchElementException("NextKarutaQuiz")
-                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier()))
+                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier))
             } catch (e: Exception) {
                 dispatcher.dispatch(OpenNextQuizAction.createError(e))
             }
