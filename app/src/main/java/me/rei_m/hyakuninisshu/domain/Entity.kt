@@ -17,17 +17,15 @@ package me.rei_m.hyakuninisshu.domain
 interface Entity<T : Entity<T, I>, I : EntityIdentifier> {
 
     /**
-     * get identifier of entity
-     *
-     * @return [EntityIdentifier]
+     * identifier of entity
      */
-    fun identifier(): I
+    val identifier: I
 
     /**
      * compare equivalence of object. use identifier[.identifier]
      *
      * @param other target object
-     * @return if target has same identifier`true`
+     * @return if target has same identifier `true`
      */
     override fun equals(other: Any?): Boolean
 

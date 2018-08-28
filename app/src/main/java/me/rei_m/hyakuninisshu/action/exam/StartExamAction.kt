@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 
 class StartExamAction private constructor(
     val karutaQuizId: KarutaQuizIdentifier?,
-    override val error: Exception? = null
+    override val error: Throwable? = null
 ) : Action {
 
     override val name = "StartExamAction"
@@ -28,6 +28,6 @@ class StartExamAction private constructor(
 
     companion object {
         fun createSuccess(karutaQuizId: KarutaQuizIdentifier) = StartExamAction(karutaQuizId)
-        fun createError(error: Exception) = StartExamAction(null, error)
+        fun createError(error: Throwable) = StartExamAction(null, error)
     }
 }

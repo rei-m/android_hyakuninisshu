@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
 
 class AggregateResultsAction private constructor(
     val trainingResult: TrainingResult?,
-    override val error: Exception? = null
+    override val error: Throwable? = null
 ) : Action {
 
     override val name = "AggregateResultsAction"
@@ -28,6 +28,6 @@ class AggregateResultsAction private constructor(
 
     companion object {
         fun createSuccess(trainingResult: TrainingResult) = AggregateResultsAction(trainingResult)
-        fun createError(error: Exception) = AggregateResultsAction(null, error)
+        fun createError(error: Throwable) = AggregateResultsAction(null, error)
     }
 }

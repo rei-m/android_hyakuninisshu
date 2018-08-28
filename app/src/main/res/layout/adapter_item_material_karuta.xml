@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textSize="@dimen/text_xxs"
-            app:karutaNo="@{karuta.identifier().value}"
+            app:karutaNo="@{karuta.identifier.value}"
             app:layout_constraintBottom_toTopOf="@id/karuta_image"
             app:layout_constraintEnd_toStartOf="@id/karuta_kami_no_ku"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -71,9 +71,9 @@ class MaterialActionDispatcherTest : TestHelper {
     fun startEdit() {
         val karuta = createKaruta(id = 1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(karuta)
+        whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
 
-        actionDispatcher.startEdit(karuta.identifier())
+        actionDispatcher.startEdit(karuta.identifier)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartEditMaterialAction::class.java)
@@ -100,11 +100,11 @@ class MaterialActionDispatcherTest : TestHelper {
     fun edit() {
         val karuta = createKaruta(1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(karuta)
+        whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
         whenever(karutaRepository.store(any())).thenAnswer { }
 
         actionDispatcher.edit(
-            karuta.identifier(),
+            karuta.identifier,
             "初句改",
             "しょくかい",
             "二句改",
@@ -140,10 +140,10 @@ class MaterialActionDispatcherTest : TestHelper {
     fun editWhenNotFound() {
         val karuta = createKaruta(1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(null)
+        whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(null)
 
         actionDispatcher.edit(
-            karuta.identifier(),
+            karuta.identifier,
             "初句改",
             "しょくかい",
             "二句改",

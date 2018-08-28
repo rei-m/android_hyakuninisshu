@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
 class EditMaterialAction private constructor(
     val karuta: Karuta?,
-    override val error: Exception? = null
+    override val error: Throwable? = null
 ) : Action {
 
     override val name = "EditMaterialAction"
@@ -28,6 +28,6 @@ class EditMaterialAction private constructor(
 
     companion object {
         fun createSuccess(karuta: Karuta) = EditMaterialAction(karuta)
-        fun createError(error: Exception) = EditMaterialAction(null, error)
+        fun createError(error: Throwable) = EditMaterialAction(null, error)
     }
 }

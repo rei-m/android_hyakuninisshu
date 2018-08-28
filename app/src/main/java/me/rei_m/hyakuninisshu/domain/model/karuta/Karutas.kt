@@ -26,7 +26,7 @@ import java.util.Collections
  */
 class Karutas(private val values: List<Karuta>) {
 
-    private val ids: List<KarutaIdentifier> = values.map { it.identifier() }
+    private val ids: List<KarutaIdentifier> = values.map { it.identifier }
 
     /**
      * 指定の歌を取得する.
@@ -34,14 +34,12 @@ class Karutas(private val values: List<Karuta>) {
      * @param karutaId 歌ID
      * @return 歌
      */
-    operator fun get(karutaId: KarutaIdentifier): Karuta {
-        return values[ids.indexOf(karutaId)]
-    }
+    operator fun get(karutaId: KarutaIdentifier): Karuta = values[ids.indexOf(karutaId)]
 
     /**
      * @return 歌のリスト
      */
-    fun asList(): List<Karuta> = Collections.unmodifiableList(values)
+    fun asList(): List<Karuta> = values
 
     /**
      * 保持している歌を色で絞り込む.
@@ -49,12 +47,10 @@ class Karutas(private val values: List<Karuta>) {
      * @param color 歌の色
      * @return 歌のリスト
      */
-    fun asList(color: Color?): List<Karuta> {
-        return if (color == null) {
-            asList()
-        } else {
-            values.filter { it.color == color }
-        }
+    fun asList(color: Color?): List<Karuta> = if (color == null) {
+        asList()
+    } else {
+        values.filter { it.color == color }
     }
 
     /**
@@ -64,7 +60,6 @@ class Karutas(private val values: List<Karuta>) {
      * @return 問題のコレクション
      */
     fun createQuizSet(karutaIds: KarutaIds): KarutaQuizzes {
-
         val quizzes = karutaIds.asRandomized.map {
             val dupIds = ArrayList(this.ids).apply { remove(it) }
 
@@ -82,14 +77,8 @@ class Karutas(private val values: List<Karuta>) {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Karutas
-
-        if (values != other.values) return false
-
-        return true
+        other as? Karutas ?: return false
+        return (values == other.values)
     }
 
     override fun hashCode(): Int = values.hashCode()

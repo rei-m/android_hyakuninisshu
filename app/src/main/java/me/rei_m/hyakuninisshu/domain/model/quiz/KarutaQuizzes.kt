@@ -65,12 +65,8 @@ class KarutaQuizzes(val values: List<KarutaQuiz>) {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || javaClass != other.javaClass) return false
-
-        val that = other as KarutaQuizzes?
-
-        return values == that!!.values
+        other as? KarutaQuizzes ?: return false
+        return values == other.values
     }
 
     override fun hashCode(): Int = values.hashCode()

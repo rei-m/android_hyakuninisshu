@@ -14,10 +14,10 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.karuta
 
-import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
+import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext
@@ -28,21 +28,18 @@ class KarutaActionDispatcher @Inject constructor(
     private val dispatcher: Dispatcher,
     private val coroutineContext: CoroutineContext
 ) {
-
     /**
      * 指定の詩を取り出す.
      *
      * @param karutaId 歌ID.
      */
     fun fetch(karutaId: KarutaIdentifier) {
-        launch(coroutineContext) {
-            try {
-                val karuta = karutaRepository.findBy(karutaId)
-                    ?: throw NoSuchElementException(karutaId.toString())
-                dispatcher.dispatch(FetchKarutaAction.createSuccess(karuta))
-            } catch (e: Exception) {
-                dispatcher.dispatch(FetchKarutaAction.createError(e))
-            }
-        }
+        launchAction(coroutineContext, {
+            val karuta = karutaRepository.findBy(karutaId)
+                ?: throw NoSuchElementException(karutaId.toString())
+            dispatcher.dispatch(FetchKarutaAction.createSuccess(karuta))
+        }, {
+            dispatcher.dispatch(FetchKarutaAction.createError(it))
+        })
     }
 }

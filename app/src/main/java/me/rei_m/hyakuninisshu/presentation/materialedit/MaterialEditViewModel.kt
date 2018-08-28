@@ -49,7 +49,7 @@ class MaterialEditViewModel(
 
     private val karuta: LiveData<Karuta?> = store.karuta
 
-    val karutaNo: LiveData<Int?> = karuta.map { it?.identifier()?.value }
+    val karutaNo: LiveData<Int?> = karuta.map { it?.identifier?.value }
 
     val creator: LiveData<String?> = karuta.map { it?.creator }
 

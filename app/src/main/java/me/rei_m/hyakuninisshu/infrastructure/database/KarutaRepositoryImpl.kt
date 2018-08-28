@@ -136,7 +136,7 @@ class KarutaRepositoryImpl(
         val shimoNoKu = karuta.shimoNoKu
 
         KarutaSchema.relation(orma).updater()
-            .idEq(karuta.identifier().value.toLong())
+            .idEq(karuta.identifier.value.toLong())
             .firstKana(kamiNoKu.first.kana)
             .firstKanji(kamiNoKu.first.kanji)
             .secondKana(kamiNoKu.second.kana)

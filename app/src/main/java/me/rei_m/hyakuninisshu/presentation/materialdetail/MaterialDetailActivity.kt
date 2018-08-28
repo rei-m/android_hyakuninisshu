@@ -125,7 +125,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
     private fun trackInfoScreenView(position: Int) {
         val karutaList = materialDetailViewModel.karutaList.value ?: return
-        val karutaId = karutaList[position].identifier().value
+        val karutaId = karutaList[position].identifier.value
         analyticsHelper.sendScreenView("MaterialDetail-$karutaId", this)
     }
 

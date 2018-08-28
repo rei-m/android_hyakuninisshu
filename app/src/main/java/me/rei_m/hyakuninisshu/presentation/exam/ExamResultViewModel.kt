@@ -35,7 +35,7 @@ class ExamResultViewModel(
     private val analyticsHelper: AnalyticsHelper
 ) {
 
-    val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier() }
+    val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier }
 
     val score: LiveData<String?> = store.result.map { it?.result?.score }
 

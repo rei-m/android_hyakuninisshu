@@ -30,7 +30,7 @@ class KarutaViewModel(
 
     val isLoading: LiveData<Boolean> = store.karuta.map { it == null }
 
-    val karutaNo: LiveData<Int?> = store.karuta.map { it?.identifier()?.value }
+    val karutaNo: LiveData<Int?> = store.karuta.map { it?.identifier?.value }
 
     val karutaImageNo: LiveData<String?> = store.karuta.map { it?.imageNo?.value }
 

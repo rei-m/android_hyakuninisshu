@@ -57,14 +57,14 @@ class QuizActionDispatcherTest : TestHelper {
     @Test
     fun fetch() {
         val quiz = createQuiz(1)
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(quiz)
+        whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(quiz)
         whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(KarutaQuizCounter(10, 1))
         quiz.choiceList.forEach {
             val karuta = createKaruta(id = it.value)
             whenever(karutaRepository.findBy(it)).thenReturn(karuta)
         }
 
-        actionDispatcher.fetch(quiz.identifier())
+        actionDispatcher.fetch(quiz.identifier)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchQuizAction::class.java)
@@ -92,7 +92,7 @@ class QuizActionDispatcherTest : TestHelper {
     fun start() {
         val quiz = createQuiz(1)
         val startDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(quiz)
+        whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(quiz)
         whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(KarutaQuizCounter(10, 1))
         quiz.choiceList.forEach {
             val karuta = createKaruta(id = it.value)
@@ -100,7 +100,7 @@ class QuizActionDispatcherTest : TestHelper {
         }
         whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
-        actionDispatcher.start(quiz.identifier(), startDate)
+        actionDispatcher.start(quiz.identifier, startDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartQuizAction::class.java)
@@ -115,9 +115,9 @@ class QuizActionDispatcherTest : TestHelper {
     fun startWhenNotFoundQuiz() {
         val quiz = createQuiz(1)
         val startDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(null)
+        whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(null)
 
-        actionDispatcher.start(quiz.identifier(), startDate)
+        actionDispatcher.start(quiz.identifier, startDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartQuizAction::class.java)
@@ -129,7 +129,7 @@ class QuizActionDispatcherTest : TestHelper {
     fun answer() {
         val quiz = createStartedQuiz(1, Date())
         val answerDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(quiz)
+        whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(quiz)
         whenever(karutaQuizRepository.countQuizByAnswered()).thenReturn(KarutaQuizCounter(10, 1))
         quiz.choiceList.forEach {
             val karuta = createKaruta(id = it.value)
@@ -137,7 +137,7 @@ class QuizActionDispatcherTest : TestHelper {
         }
         whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
-        actionDispatcher.answer(quiz.identifier(), ChoiceNo.FIRST, answerDate)
+        actionDispatcher.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(AnswerQuizAction::class.java)
@@ -152,9 +152,9 @@ class QuizActionDispatcherTest : TestHelper {
     fun answerWhenNotFoundQuiz() {
         val quiz = createStartedQuiz(1, Date())
         val answerDate = Date()
-        whenever(karutaQuizRepository.findBy(quiz.identifier())).thenReturn(null)
+        whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(null)
 
-        actionDispatcher.answer(quiz.identifier(), ChoiceNo.FIRST, answerDate)
+        actionDispatcher.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(AnswerQuizAction::class.java)

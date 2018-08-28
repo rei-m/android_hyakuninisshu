@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 
 class FetchAllExamAction private constructor(
     val karutaExamList: List<KarutaExam>?,
-    override val error: Exception? = null
+    override val error: Throwable? = null
 ) : Action {
 
     override val name = "FetchAllExamAction"
@@ -28,6 +28,6 @@ class FetchAllExamAction private constructor(
 
     companion object {
         fun createSuccess(karutaExamList: List<KarutaExam>) = FetchAllExamAction(karutaExamList)
-        fun createError(error: Exception) = FetchAllExamAction(null, error)
+        fun createError(error: Throwable) = FetchAllExamAction(null, error)
     }
 }

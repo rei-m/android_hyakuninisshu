@@ -15,18 +15,13 @@
 package me.rei_m.hyakuninisshu.domain
 
 abstract class AbstractEntity<T : Entity<T, I>, I : EntityIdentifier>(
-    private val identifier: I
+    override val identifier: I
 ) : Entity<T, I> {
 
-    override fun identifier(): I {
-        return identifier
-    }
-
-    override fun hashCode(): Int {
-        return identifier.hashCode()
-    }
+    override fun hashCode(): Int = identifier.hashCode()
 
     override fun equals(other: Any?): Boolean {
-        return !(this !== other && !(other is Entity<*, *> && identifier == other.identifier()))
+        other as? Entity<*, *> ?: return false
+        return identifier == other.identifier
     }
 }

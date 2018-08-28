@@ -11,19 +11,16 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.action.application
+package me.rei_m.hyakuninisshu.util
 
-import me.rei_m.hyakuninisshu.action.Action
+import kotlinx.coroutines.experimental.CoroutineExceptionHandler
+import kotlinx.coroutines.experimental.launch
+import kotlin.coroutines.experimental.CoroutineContext
 
-class StartApplicationAction private constructor(override val error: Throwable? = null) : Action {
-
-    override val name = "StartApplicationAction"
-
-    override fun toString() = if (isSucceeded) "$name()" else "$name(error=$error)"
-
-    companion object {
-        fun createSuccess() = StartApplicationAction()
-        fun createError(e: Throwable) = StartApplicationAction(e)
+fun launchAction(context: CoroutineContext, block: () -> Unit, onFailure: (e: Throwable) -> Unit) {
+    launch(context + CoroutineExceptionHandler { _, throwable ->
+        onFailure(throwable)
+    }) {
+        block()
     }
 }
