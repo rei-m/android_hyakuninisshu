@@ -183,7 +183,7 @@ class TrainingActionDispatcherTest : TestHelper {
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(OpenNextQuizAction::class.java)
             if (it is OpenNextQuizAction) {
-                assertThat(it.karutaQuizId).isEqualTo(quiz.identifier())
+                assertThat(it.karutaQuizId).isEqualTo(quiz.identifier)
                 assertThat(it.error).isNull()
             }
         })

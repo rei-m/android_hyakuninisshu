@@ -14,16 +14,12 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.training
 
-import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.Color
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
+import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
+import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext
@@ -50,71 +46,69 @@ class TrainingActionDispatcher @Inject constructor(
         kimariji: Kimariji?,
         color: Color?
     ) {
-        launch(coroutineContext) {
+        launchAction(coroutineContext, {
             start(karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji))
-        }
+        }, {
+            dispatcher.dispatch(StartTrainingAction.createError(it))
+        })
     }
 
     /**
      * 力試しで過去に間違えた歌を練習対象にして練習を開始する.
      */
     fun startForExam() {
-        launch(coroutineContext) {
+        launchAction(coroutineContext, {
             start(karutaExamRepository.list().totalWrongKarutaIds)
-        }
+        }, {
+            dispatcher.dispatch(StartTrainingAction.createError(it))
+        })
     }
 
     /**
      * 練習で間違えた歌を練習対象にして練習を再開する.
      */
     fun restartForPractice() {
-        launch(coroutineContext) {
+        launchAction(coroutineContext, {
             start(karutaQuizRepository.list().wrongKarutaIds)
-        }
+        }, {
+            dispatcher.dispatch(StartTrainingAction.createError(it))
+        })
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        launch(coroutineContext) {
-            try {
-                val karutaQuiz = karutaQuizRepository.first()
-                    ?: throw NoSuchElementException("NextKarutaQuiz")
-                dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier()))
-            } catch (e: Exception) {
-                dispatcher.dispatch(OpenNextQuizAction.createError(e))
-            }
-        }
+        launchAction(coroutineContext, {
+            val karutaQuiz = karutaQuizRepository.first()
+                ?: throw NoSuchElementException("NextKarutaQuiz")
+            dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier))
+        }, {
+            dispatcher.dispatch(OpenNextQuizAction.createError(it))
+        })
     }
 
     /**
      * 練習結果を集計する.
      */
     fun aggregateResults() {
-        launch(coroutineContext) {
-            try {
-                val quizzes = karutaQuizRepository.list()
-                val resultSummary = quizzes.resultSummary()
-                dispatcher.dispatch(AggregateResultsAction.createSuccess(TrainingResult(resultSummary)))
-            } catch (e: Exception) {
-                dispatcher.dispatch(AggregateResultsAction.createError(e))
-            }
-        }
+        launchAction(coroutineContext, {
+            val quizzes = karutaQuizRepository.list()
+            val resultSummary = quizzes.resultSummary()
+            dispatcher.dispatch(AggregateResultsAction.createSuccess(TrainingResult(resultSummary)))
+        }, {
+            dispatcher.dispatch(AggregateResultsAction.createError(it))
+        })
     }
 
     private fun start(karutaIds: KarutaIds) {
-        try {
-            val karutas = karutaRepository.list()
-            val quizSet = karutas.createQuizSet(karutaIds)
-            karutaQuizRepository.initialize(quizSet)
-            if (quizSet.isEmpty) {
-                dispatcher.dispatch(StartTrainingAction.createSuccess(null))
-            } else {
-                dispatcher.dispatch(StartTrainingAction.createSuccess(quizSet.values.first().identifier()))
-            }
-        } catch (e: Exception) {
-            dispatcher.dispatch(StartTrainingAction.createError(e))
+        val karutas = karutaRepository.list()
+        val quizSet = karutas.createQuizSet(karutaIds)
+        karutaQuizRepository.initialize(quizSet)
+        if (quizSet.isEmpty) {
+            dispatcher.dispatch(StartTrainingAction.createSuccess(null))
+        } else {
+            dispatcher.dispatch(StartTrainingAction.createSuccess(quizSet.values.first().identifier))
         }
     }
 }

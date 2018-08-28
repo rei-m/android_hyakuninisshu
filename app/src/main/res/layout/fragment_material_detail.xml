@@ -52,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:creator="@{karuta.creator}"
-                app:karutaNo="@{karuta.identifier().value}"
+                app:karutaNo="@{karuta.identifier.value}"
                 app:layout_constraintBottom_toTopOf="@id/text_karuta_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

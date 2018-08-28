@@ -56,7 +56,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
         )
 
         materialDetailStore.karutaList.map {
-            it.find { karuta -> karuta.identifier() == karutaId }
+            it.find { karuta -> karuta.identifier == karutaId }
         }.observe(this, Observer {
             it ?: return@Observer
             binding.karuta = it

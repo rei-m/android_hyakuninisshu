@@ -50,9 +50,9 @@ class KarutaActionDispatcherTest : TestHelper {
     fun fetch() {
         val karuta = createKaruta(id = 1)
 
-        whenever(karutaRepository.findBy(karuta.identifier())).thenReturn(karuta)
+        whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
 
-        actionDispatcher.fetch(karuta.identifier())
+        actionDispatcher.fetch(karuta.identifier)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchKarutaAction::class.java)

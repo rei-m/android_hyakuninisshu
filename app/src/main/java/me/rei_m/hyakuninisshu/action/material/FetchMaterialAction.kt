@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
 
 class FetchMaterialAction private constructor(
     val karutas: Karutas?,
-    override val error: Exception? = null
+    override val error: Throwable? = null
 ) : Action {
 
     override val name = "FetchMaterialAction"
@@ -28,6 +28,6 @@ class FetchMaterialAction private constructor(
 
     companion object {
         fun createSuccess(karutas: Karutas) = FetchMaterialAction(karutas)
-        fun createError(error: Exception) = FetchMaterialAction(null, error)
+        fun createError(error: Throwable) = FetchMaterialAction(null, error)
     }
 }

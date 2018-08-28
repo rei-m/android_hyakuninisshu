@@ -14,11 +14,11 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.material
 
-import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext
@@ -29,21 +29,18 @@ class MaterialActionDispatcher @Inject constructor(
     private val dispatcher: Dispatcher,
     private val coroutineContext: CoroutineContext
 ) {
-
     /**
      * 指定した色の該当する歌をすべて取り出す.
      *
      *  @param colorFilter 五色絞り込み条件
      */
     fun fetch(colorFilter: ColorFilter) {
-        launch(coroutineContext) {
-            try {
-                val karutaList = karutaRepository.list(colorFilter.value)
-                dispatcher.dispatch(FetchMaterialAction.createSuccess(karutaList))
-            } catch (e: Exception) {
-                dispatcher.dispatch(FetchMaterialAction.createError(e))
-            }
-        }
+        launchAction(coroutineContext, {
+            val karutaList = karutaRepository.list(colorFilter.value)
+            dispatcher.dispatch(FetchMaterialAction.createSuccess(karutaList))
+        }, {
+            dispatcher.dispatch(FetchMaterialAction.createError(it))
+        })
     }
 
     /**
@@ -52,15 +49,13 @@ class MaterialActionDispatcher @Inject constructor(
      * @param karutaId 歌ID.
      */
     fun startEdit(karutaId: KarutaIdentifier) {
-        launch(coroutineContext) {
-            try {
-                val karuta = karutaRepository.findBy(karutaId)
-                    ?: throw NoSuchElementException(karutaId.toString())
-                dispatcher.dispatch(StartEditMaterialAction.createSuccess(karuta))
-            } catch (e: Exception) {
-                dispatcher.dispatch(StartEditMaterialAction.createError(e))
-            }
-        }
+        launchAction(coroutineContext, {
+            val karuta = karutaRepository.findBy(karutaId)
+                ?: throw NoSuchElementException(karutaId.toString())
+            dispatcher.dispatch(StartEditMaterialAction.createSuccess(karuta))
+        }, {
+            dispatcher.dispatch(StartEditMaterialAction.createError(it))
+        })
     }
 
     /**
@@ -92,28 +87,26 @@ class MaterialActionDispatcher @Inject constructor(
         fifthPhraseKana: String
     ) {
 
-        launch(coroutineContext) {
-            try {
-                val karuta = karutaRepository.findBy(karutaId)
-                    ?: throw NoSuchElementException(karutaId.toString())
-                karuta.updatePhrase(
-                    firstPhraseKanji,
-                    firstPhraseKana,
-                    secondPhraseKanji,
-                    secondPhraseKana,
-                    thirdPhraseKanji,
-                    thirdPhraseKana,
-                    fourthPhraseKanji,
-                    fourthPhraseKana,
-                    fifthPhraseKanji,
-                    fifthPhraseKana
-                ).let {
-                    karutaRepository.store(it)
-                }
-                dispatcher.dispatch(EditMaterialAction.createSuccess(karuta))
-            } catch (e: Exception) {
-                dispatcher.dispatch(EditMaterialAction.createError(e))
+        launchAction(coroutineContext, {
+            val karuta = karutaRepository.findBy(karutaId)
+                ?: throw NoSuchElementException(karutaId.toString())
+            karuta.updatePhrase(
+                firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana
+            ).let {
+                karutaRepository.store(it)
             }
-        }
+            dispatcher.dispatch(EditMaterialAction.createSuccess(karuta))
+        }, {
+            dispatcher.dispatch(EditMaterialAction.createError(it))
+        })
     }
 }

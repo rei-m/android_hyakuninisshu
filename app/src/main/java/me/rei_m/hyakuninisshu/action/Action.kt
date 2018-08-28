@@ -15,7 +15,7 @@
 package me.rei_m.hyakuninisshu.action
 
 interface Action {
-    val error: Exception?
+    val error: Throwable?
 
     val isSucceeded: Boolean
         get() = error == null
