@@ -14,9 +14,9 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.application
 
-import kotlinx.coroutines.experimental.launch
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
+import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.experimental.CoroutineContext
@@ -27,18 +27,15 @@ class ApplicationActionDispatcher @Inject constructor(
     private val dispatcher: Dispatcher,
     private val coroutineContext: CoroutineContext
 ) {
-
     /**
      * 百人一首の情報を準備してアプリの利用を開始する.
      */
     fun start() {
-        launch(coroutineContext) {
-            try {
-                karutaRepository.initialize()
-                dispatcher.dispatch(StartApplicationAction.createSuccess())
-            } catch (e: Exception) {
-                dispatcher.dispatch(StartApplicationAction.createError(e))
-            }
-        }
+        launchAction(coroutineContext, {
+            karutaRepository.initialize()
+            dispatcher.dispatch(StartApplicationAction.createSuccess())
+        }, {
+            dispatcher.dispatch(StartApplicationAction.createError(it))
+        })
     }
 }

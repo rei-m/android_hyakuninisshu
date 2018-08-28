@@ -17,9 +17,9 @@ import kotlinx.coroutines.experimental.CoroutineExceptionHandler
 import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.CoroutineContext
 
-fun launchAction(context: CoroutineContext, block: () -> Unit, onFailure: (e: Exception) -> Unit) {
+fun launchAction(context: CoroutineContext, block: () -> Unit, onFailure: (e: Throwable) -> Unit) {
     launch(context + CoroutineExceptionHandler { _, throwable ->
-        onFailure(Exception(throwable))
+        onFailure(throwable)
     }) {
         block()
     }

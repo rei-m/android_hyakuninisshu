@@ -16,7 +16,7 @@ package me.rei_m.hyakuninisshu.action.application
 
 import me.rei_m.hyakuninisshu.action.Action
 
-class StartApplicationAction private constructor(override val error: Exception? = null) : Action {
+class StartApplicationAction private constructor(override val error: Throwable? = null) : Action {
 
     override val name = "StartApplicationAction"
 
@@ -24,6 +24,6 @@ class StartApplicationAction private constructor(override val error: Exception? 
 
     companion object {
         fun createSuccess() = StartApplicationAction()
-        fun createError(e: Exception) = StartApplicationAction(e)
+        fun createError(e: Throwable) = StartApplicationAction(e)
     }
 }

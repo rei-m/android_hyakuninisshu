@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
 class FetchKarutaAction private constructor(
     val karuta: Karuta?,
-    override val error: Exception? = null
+    override val error: Throwable? = null
 ) : Action {
 
     override val name = "FetchKarutaAction"
@@ -28,6 +28,6 @@ class FetchKarutaAction private constructor(
 
     companion object {
         fun createSuccess(karuta: Karuta) = FetchKarutaAction(karuta)
-        fun createError(error: Exception) = FetchKarutaAction(null, error)
+        fun createError(error: Throwable) = FetchKarutaAction(null, error)
     }
 }
