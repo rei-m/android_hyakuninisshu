@@ -33,6 +33,10 @@ class SupportViewModel(
         navigator.openLicenceDialog()
     }
 
+    fun onClickPolicy() {
+        navigator.openPrivacyPolicy()
+    }
+
     class Factory @Inject constructor(
         context: Context,
         private val navigator: Navigator

@@ -20,6 +20,7 @@
     <string name="about_app">このアプリについて</string>
     <string name="post_review">レビューを書く</string>
     <string name="license">ライセンス</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
     <string name="version">version: %1$s</string>
     <string name="update">変更する</string>
     <string name="back">戻る</string>
@@ -170,6 +171,7 @@
     <string name="text_hint_input_fifth_kana">五句のかなを入力してください</string>
 
     <string name="url_credit">file:///android_asset/licenses.html</string>
+    <string name="url_policy">file:///android_asset/policy.html</string>
 
     <string name="app_font_file">Hannari.otf</string>
     <string name="action_settings">Settings</string>

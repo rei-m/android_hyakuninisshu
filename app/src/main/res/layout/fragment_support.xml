@@ -130,6 +130,24 @@
                 android:background="@color/black33" />
 
             <TextView
+                android:id="@+id/text_privacy_policy"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_line"
+                android:background="@drawable/bg_ripple"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> viewModel.onClickPolicy()}"
+                android:paddingEnd="0dp"
+                android:paddingLeft="@dimen/margin_m"
+                android:paddingRight="0dp"
+                android:paddingStart="@dimen/margin_m"
+                android:text="@string/privacy_policy" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/black33" />
+
+            <TextView
                 android:id="@+id/text_version"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_line"
