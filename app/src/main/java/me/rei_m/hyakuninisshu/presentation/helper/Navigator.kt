@@ -22,6 +22,7 @@ import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
 import me.rei_m.hyakuninisshu.presentation.entrance.LicenceDialogFragment
+import me.rei_m.hyakuninisshu.presentation.entrance.PrivacyPolicyDialogFragment
 import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
 import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
 import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
@@ -103,6 +104,13 @@ class Navigator(private val activity: AppCompatActivity) {
     fun openLicenceDialog() {
         if (activity.supportFragmentManager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
             LicenceDialogFragment.newInstance().show(activity.supportFragmentManager, LicenceDialogFragment.TAG)
+        }
+    }
+
+    fun openPrivacyPolicy() {
+        if (activity.supportFragmentManager.findFragmentByTag(PrivacyPolicyDialogFragment.TAG) == null) {
+            PrivacyPolicyDialogFragment
+                .newInstance().show(activity.supportFragmentManager, PrivacyPolicyDialogFragment.TAG)
         }
     }
 
