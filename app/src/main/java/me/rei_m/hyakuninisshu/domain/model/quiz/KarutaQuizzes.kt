@@ -28,10 +28,13 @@ class KarutaQuizzes(val values: List<KarutaQuiz>) {
      * @return 解答済みの問題のうち、間違えた問題の歌のID
      */
     val wrongKarutaIds: KarutaIds
-        get() = KarutaIds(values
-            .mapNotNull { it.result }
-            .filterNot { it.judgement.isCorrect }
-            .map { it.judgement.karutaId }
+        get() = KarutaIds(
+            values
+                .asSequence()
+                .mapNotNull { it.result }
+                .filterNot { it.judgement.isCorrect }
+                .map { it.judgement.karutaId }
+                .toList()
         )
 
     /**

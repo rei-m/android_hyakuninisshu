@@ -35,6 +35,7 @@
 
 -keep class com.crashlytics.** { *; }
 -keep class com.google.firebase.*.* { *; }
+-keep class com.google.android.gms.*.* { *; }
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule

@@ -19,7 +19,6 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
 import me.rei_m.hyakuninisshu.domain.util.generateRandomIndexArray
-import java.util.Collections
 
 /**
  * 全ての歌のコレクション.
