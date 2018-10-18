@@ -14,7 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.di
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.di.ForActivity

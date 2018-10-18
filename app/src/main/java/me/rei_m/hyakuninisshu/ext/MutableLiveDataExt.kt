@@ -14,7 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.ext
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 
 fun <T> MutableLiveData<T>.withValue(value: T): MutableLiveData<T> {
     this.value = value

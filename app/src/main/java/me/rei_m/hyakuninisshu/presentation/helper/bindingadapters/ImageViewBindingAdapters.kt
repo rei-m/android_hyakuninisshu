@@ -14,7 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
-import android.databinding.BindingAdapter
+import androidx.databinding.BindingAdapter
 import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.rei_m.hyakuninisshu.R

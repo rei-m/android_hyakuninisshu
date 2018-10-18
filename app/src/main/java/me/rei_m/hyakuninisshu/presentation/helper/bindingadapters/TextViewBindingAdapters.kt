@@ -14,9 +14,9 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
-import android.databinding.BindingAdapter
+import androidx.databinding.BindingAdapter
 import android.graphics.Color
-import android.support.annotation.DimenRes
+import androidx.annotation.DimenRes
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan

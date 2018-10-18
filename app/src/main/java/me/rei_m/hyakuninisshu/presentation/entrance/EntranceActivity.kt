@@ -17,12 +17,12 @@ package me.rei_m.hyakuninisshu.presentation.entrance
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
@@ -148,13 +148,15 @@ class EntranceActivity : DaggerAppCompatActivity() {
     }
 
     @ForActivity
-    @dagger.Subcomponent(modules = [
-        ActivityModule::class,
-        TrainingMenuFragment.Module::class,
-        ExamMenuFragment.Module::class,
-        MaterialListFragment.Module::class,
-        SupportFragment.Module::class
-    ])
+    @dagger.Subcomponent(
+        modules = [
+            ActivityModule::class,
+            TrainingMenuFragment.Module::class,
+            ExamMenuFragment.Module::class,
+            MaterialListFragment.Module::class,
+            SupportFragment.Module::class
+        ]
+    )
     interface Subcomponent : AndroidInjector<EntranceActivity> {
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<EntranceActivity>() {
