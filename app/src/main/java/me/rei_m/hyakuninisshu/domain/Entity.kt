@@ -14,7 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain
 
-interface Entity<T : Entity<T, I>, I : EntityIdentifier> {
+interface Entity<out I : EntityIdentifier> {
 
     /**
      * identifier of entity

@@ -28,7 +28,7 @@ class Karuta(
     val imageNo: ImageNo,
     val translation: String,
     val color: Color
-) : AbstractEntity<Karuta, KarutaIdentifier>(identifier) {
+) : AbstractEntity<KarutaIdentifier>(identifier) {
 
     fun updatePhrase(
         firstPhraseKanji: String,
@@ -45,15 +45,30 @@ class Karuta(
 
         val kamiNoKu = KamiNoKu(
             this.kamiNoKu.identifier,
-            Phrase(firstPhraseKana, firstPhraseKanji),
-            Phrase(secondPhraseKana, secondPhraseKanji),
-            Phrase(thirdPhraseKana, thirdPhraseKanji)
+            this.kamiNoKu.first.copy(
+                kana = firstPhraseKana,
+                kanji = firstPhraseKanji
+            ),
+            this.kamiNoKu.second.copy(
+                kana = secondPhraseKana,
+                kanji = secondPhraseKanji
+            ),
+            this.kamiNoKu.third.copy(
+                kana = thirdPhraseKana,
+                kanji = thirdPhraseKanji
+            )
         )
 
         val shimoNoKu = ShimoNoKu(
             this.shimoNoKu.identifier,
-            Phrase(fourthPhraseKana, fourthPhraseKanji),
-            Phrase(fifthPhraseKana, fifthPhraseKanji)
+            this.shimoNoKu.fourth.copy(
+                kana = fourthPhraseKana,
+                kanji = fourthPhraseKanji
+            ),
+            this.shimoNoKu.fifth.copy(
+                kana = fifthPhraseKana,
+                kanji = fifthPhraseKanji
+            )
         )
 
         this.kamiNoKu = kamiNoKu

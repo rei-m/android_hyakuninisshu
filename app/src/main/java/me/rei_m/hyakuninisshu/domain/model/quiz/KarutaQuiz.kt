@@ -27,7 +27,7 @@ class KarutaQuiz private constructor(
     val correctId: KarutaIdentifier,
     startDate: Date? = null,
     result: KarutaQuizResult? = null
-) : AbstractEntity<KarutaQuiz, KarutaQuizIdentifier>(identifier) {
+) : AbstractEntity<KarutaQuizIdentifier>(identifier) {
 
     var startDate: Date? = startDate
         private set
