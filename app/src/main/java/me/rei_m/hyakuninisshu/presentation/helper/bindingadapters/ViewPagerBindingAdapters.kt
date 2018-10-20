@@ -14,8 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
-import android.databinding.BindingAdapter
-import android.support.v4.view.ViewPager
+import androidx.databinding.BindingAdapter
+import androidx.viewpager.widget.ViewPager
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailPagerAdapter
 

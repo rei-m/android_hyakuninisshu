@@ -15,7 +15,7 @@
 package me.rei_m.hyakuninisshu
 
 import android.content.Context
-import android.support.multidex.MultiDex
+import androidx.multidex.MultiDex
 import com.google.android.gms.ads.MobileAds
 
 import com.squareup.leakcanary.LeakCanary

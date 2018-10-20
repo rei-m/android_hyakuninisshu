@@ -14,10 +14,10 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.StartEditMaterialAction

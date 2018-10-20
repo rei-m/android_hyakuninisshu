@@ -26,12 +26,24 @@
 -keep class **.R$*
 
 # Android Support Library
--dontwarn android.support.**
--dontwarn android.databinding.**
--dontwarn android.arch.**
--keep class android.support.** { *; }
--keep class android.databinding.** { *; }
--keep class android.arch.** { *; }
+-dontwarn androidx.appcompat.**
+-dontwarn androidx.legacy.**
+-dontwarn androidx.percentlayout.**
+-dontwarn androidx.constraintlayout.**
+-dontwarn androidx.browser.**
+-dontwarn androidx.multidex.**
+-dontwarn androidx.annotation.**
+-dontwarn androidx.databinding.**
+-dontwarn androidx.lifecycle.**
+-keep class androidx.appcompat.** { *; }
+-keep class androidx.legacy.** { *; }
+-keep class androidx.percentlayout.** { *; }
+-keep class androidx.constraintlayout.** { *; }
+-keep class androidx.browser.** { *; }
+-keep class androidx.multidex.** { *; }
+-keep class androidx.annotation.** { *; }
+-keep class androidx.databinding.** { *; }
+-keep class androidx.lifecycle.** { *; }
 
 -keep class com.crashlytics.** { *; }
 -keep class com.google.firebase.*.* { *; }

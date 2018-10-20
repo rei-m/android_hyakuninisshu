@@ -14,8 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.karuta
 
-import android.arch.lifecycle.LiveData
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
 import me.rei_m.hyakuninisshu.action.karuta.KarutaActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.map

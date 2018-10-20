@@ -15,14 +15,14 @@
 package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.FragmentTransaction
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.fragment.app.FragmentTransaction
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector

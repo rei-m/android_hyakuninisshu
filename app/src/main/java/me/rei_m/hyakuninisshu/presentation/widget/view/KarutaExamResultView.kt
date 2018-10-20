@@ -14,8 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.widget.view
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet

@@ -14,8 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
-import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.addFragment

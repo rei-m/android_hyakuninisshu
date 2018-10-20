@@ -16,7 +16,7 @@ package me.rei_m.hyakuninisshu.presentation.helper
 
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier

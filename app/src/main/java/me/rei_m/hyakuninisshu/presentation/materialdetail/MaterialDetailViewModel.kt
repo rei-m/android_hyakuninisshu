@@ -14,9 +14,9 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialdetail
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.ext.withValue
