@@ -15,7 +15,7 @@
 package me.rei_m.hyakuninisshu.presentation.enums
 
 import android.content.res.Resources
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 

@@ -14,11 +14,12 @@
 package me.rei_m.hyakuninisshu.util
 
 import kotlinx.coroutines.experimental.CoroutineExceptionHandler
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.CoroutineContext
 
 fun launchAction(context: CoroutineContext, block: () -> Unit, onFailure: (e: Throwable) -> Unit) {
-    launch(context + CoroutineExceptionHandler { _, throwable ->
+    GlobalScope.launch(context + CoroutineExceptionHandler { _, throwable ->
         onFailure(throwable)
     }) {
         block()

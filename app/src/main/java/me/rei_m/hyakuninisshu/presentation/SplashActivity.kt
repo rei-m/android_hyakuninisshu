@@ -15,8 +15,8 @@
 package me.rei_m.hyakuninisshu.presentation
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import dagger.Binds
 import dagger.android.ActivityKey

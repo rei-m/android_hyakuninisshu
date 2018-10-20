@@ -14,14 +14,14 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain
 
-abstract class AbstractEntity<T : Entity<T, I>, I : EntityIdentifier>(
+abstract class AbstractEntity<out I : EntityIdentifier>(
     override val identifier: I
-) : Entity<T, I> {
+) : Entity<I> {
 
     override fun hashCode(): Int = identifier.hashCode()
 
     override fun equals(other: Any?): Boolean {
-        other as? Entity<*, *> ?: return false
+        other as? Entity<*> ?: return false
         return identifier == other.identifier
     }
 }

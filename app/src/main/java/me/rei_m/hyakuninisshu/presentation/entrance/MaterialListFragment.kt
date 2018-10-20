@@ -15,7 +15,7 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater

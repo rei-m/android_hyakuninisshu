@@ -14,7 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.util
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 
 open class Event<out T>(private val content: T) {
 

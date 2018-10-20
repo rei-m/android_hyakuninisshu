@@ -14,8 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.ext
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 
 fun <X, Y> LiveData<X>.map(transform: (X) -> Y): LiveData<Y> {
     return Transformations.map(this, transform)

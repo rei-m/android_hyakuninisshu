@@ -25,7 +25,7 @@ class KamiNoKu(
     val first: Phrase,
     val second: Phrase,
     val third: Phrase
-) : AbstractEntity<KamiNoKu, KamiNoKuIdentifier>(identifier) {
+) : AbstractEntity<KamiNoKuIdentifier>(identifier) {
 
     val kanji: String = "${first.kanji}$SPACE${second.kanji}$SPACE${third.kanji}"
 

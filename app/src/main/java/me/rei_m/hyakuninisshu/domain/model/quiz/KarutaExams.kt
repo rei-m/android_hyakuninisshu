@@ -14,6 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 
 /**
@@ -34,14 +35,10 @@ class KarutaExams(private val values: List<KarutaExam>) {
     /**
      * 過去の力試しの結果から間違えた問題の歌のIDの集合.
      */
-    val totalWrongKarutaIds: KarutaIds = KarutaIds(values.fold(mutableListOf()) { karutaIdList, karutaExam ->
-        karutaExam.result.wrongKarutaIds.values.forEach { wrongKarutaId ->
-            if (!karutaIdList.contains(wrongKarutaId)) {
-                karutaIdList.add(wrongKarutaId)
-            }
-        }
-        karutaIdList
-    })
+    val totalWrongKarutaIds: KarutaIds = KarutaIds(values.asSequence().fold(mutableSetOf<KarutaIdentifier>()) { karutaIdSet, karutaExam ->
+        karutaIdSet.addAll(karutaExam.result.wrongKarutaIds.values)
+        karutaIdSet
+    }.toList())
 
     override fun equals(other: Any?): Boolean {
         other as? KarutaExams ?: return false
