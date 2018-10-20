@@ -39,6 +39,10 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
 android {
     if ((new File('./signingConfigs/releaseConfig.gradle')).exists()) {
         apply from: '../signingConfigs/releaseConfig.gradle', to: android
+    } else {
+        signingConfigs {
+            releaseConfig
+        }
     }
 
     compileSdkVersion 28
