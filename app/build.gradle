@@ -37,7 +37,9 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
 }
 
 android {
-    apply from: '../signingConfigs/releaseConfig.gradle', to: android
+    if ((new File('./signingConfigs/releaseConfig.gradle')).exists()) {
+        apply from: '../signingConfigs/releaseConfig.gradle', to: android
+    }
 
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
