@@ -24,7 +24,7 @@ class ShimoNoKu(
     identifier: ShimoNoKuIdentifier,
     val fourth: Phrase,
     val fifth: Phrase
-) : AbstractEntity<ShimoNoKu, ShimoNoKuIdentifier>(identifier) {
+) : AbstractEntity<ShimoNoKuIdentifier>(identifier) {
 
     val kanji = "${fourth.kanji}$SPACE${fifth.kanji}"
 

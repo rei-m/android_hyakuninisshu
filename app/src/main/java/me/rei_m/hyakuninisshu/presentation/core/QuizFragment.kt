@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +22,7 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import io.reactivex.Observable
@@ -31,6 +31,7 @@ import io.reactivex.disposables.Disposable
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
@@ -87,7 +88,7 @@ class QuizFragment : DaggerFragment() {
             setLifecycleOwner(this@QuizFragment)
         }
 
-        quizViewModel.content.observe(this, Observer {
+        quizViewModel.content.observe(this, Observer<KarutaQuizContent> {
             it ?: return@Observer
             when (it.quiz.state) {
                 KarutaQuiz.State.IN_ANSWER -> {

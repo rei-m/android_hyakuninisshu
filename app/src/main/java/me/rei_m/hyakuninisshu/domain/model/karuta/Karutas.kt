@@ -19,7 +19,6 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
 import me.rei_m.hyakuninisshu.domain.util.generateRandomIndexArray
-import java.util.Collections
 
 /**
  * 全ての歌のコレクション.
@@ -37,18 +36,13 @@ class Karutas(private val values: List<Karuta>) {
     operator fun get(karutaId: KarutaIdentifier): Karuta = values[ids.indexOf(karutaId)]
 
     /**
-     * @return 歌のリスト
-     */
-    fun asList(): List<Karuta> = values
-
-    /**
      * 保持している歌を色で絞り込む.
      *
      * @param color 歌の色
      * @return 歌のリスト
      */
-    fun asList(color: Color?): List<Karuta> = if (color == null) {
-        asList()
+    fun asList(color: Color? = null): List<Karuta> = if (color == null) {
+        values
     } else {
         values.filter { it.color == color }
     }
@@ -61,7 +55,8 @@ class Karutas(private val values: List<Karuta>) {
      */
     fun createQuizSet(karutaIds: KarutaIds): KarutaQuizzes {
         val quizzes = karutaIds.asRandomized.map {
-            val dupIds = ArrayList(this.ids).apply { remove(it) }
+
+            val dupIds = this.ids.toMutableList().apply { remove(it) }
 
             val choices = generateRandomIndexArray(dupIds.size, ChoiceNo.values().size - 1).map { choiceIndex ->
                 dupIds[choiceIndex]

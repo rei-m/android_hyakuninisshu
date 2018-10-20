@@ -21,6 +21,8 @@ import me.rei_m.hyakuninisshu.domain.ValueObject
 /**
  * 歌の画像番号.
  */
+private val pattern = Pattern.compile("^(?!000)(0\\d\\d|001|100)$")
+
 data class ImageNo @Throws(IllegalArgumentException::class) constructor(
     val value: String
 ) : ValueObject {
@@ -29,9 +31,5 @@ data class ImageNo @Throws(IllegalArgumentException::class) constructor(
         if (!pattern.matcher(value).matches()) {
             throw IllegalArgumentException("ImageNo is Invalid, value is $value")
         }
-    }
-
-    companion object {
-        private val pattern = Pattern.compile("^(?!000)(0\\d\\d|001|100)$")
     }
 }

@@ -24,7 +24,7 @@ class KarutaExam(
     identifier: KarutaExamIdentifier,
     val tookDate: Date,
     val result: KarutaExamResult
-) : AbstractEntity<KarutaExam, KarutaExamIdentifier>(identifier) {
+) : AbstractEntity<KarutaExamIdentifier>(identifier) {
 
     override fun toString() = "KarutaExam(tookDate=$tookDate, result=$result)"
 

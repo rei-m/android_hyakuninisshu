@@ -17,8 +17,8 @@ package me.rei_m.hyakuninisshu.presentation.widget.view
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.annotation.DimenRes
-import android.support.v4.content.res.ResourcesCompat
+import androidx.annotation.DimenRes
+import androidx.core.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.View
 import me.rei_m.hyakuninisshu.R

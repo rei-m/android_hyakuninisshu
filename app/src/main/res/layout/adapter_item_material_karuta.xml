@@ -19,7 +19,7 @@
             type="me.rei_m.hyakuninisshu.presentation.entrance.MaterialListAdapter.OnItemInteractionListener" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -110,6 +110,6 @@
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="天智天皇" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

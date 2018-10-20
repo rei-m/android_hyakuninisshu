@@ -19,7 +19,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Dispatchers
 import me.rei_m.hyakuninisshu.action.AppDispatcher
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import javax.inject.Singleton
@@ -36,7 +36,7 @@ class ApplicationModule(application: Application) {
 
     @Provides
     @Singleton
-    fun provideCoroutineContext(): CoroutineContext = CommonPool
+    fun provideCoroutineContext(): CoroutineContext = Dispatchers.Default
 
     @Provides
     @Singleton

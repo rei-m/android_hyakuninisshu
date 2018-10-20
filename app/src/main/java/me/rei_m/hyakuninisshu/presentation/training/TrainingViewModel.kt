@@ -14,8 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.training
 
-import android.arch.lifecycle.LiveData
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
 import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.map
@@ -46,10 +46,12 @@ class TrainingViewModel(
         kimarijiFilter: KimarijiFilter,
         colorFilter: ColorFilter
     ) {
-        actionDispatcher.start(trainingRangeFrom.value,
+        actionDispatcher.start(
+            trainingRangeFrom.value,
             trainingRangeTo.value,
             kimarijiFilter.value,
-            colorFilter.value)
+            colorFilter.value
+        )
     }
 
     fun startTraining() {

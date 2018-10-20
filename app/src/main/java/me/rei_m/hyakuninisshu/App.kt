@@ -15,7 +15,8 @@
 package me.rei_m.hyakuninisshu
 
 import android.content.Context
-import android.support.multidex.MultiDex
+import androidx.multidex.MultiDex
+import com.google.android.gms.ads.MobileAds
 
 import com.squareup.leakcanary.LeakCanary
 
@@ -45,6 +46,7 @@ open class App : DaggerApplication() {
         super.onCreate()
         initLeakCanary()
         initTimber()
+        initAdMob()
     }
 
     override fun attachBaseContext(base: Context) {
@@ -54,8 +56,8 @@ open class App : DaggerApplication() {
 
     override fun applicationInjector(): AndroidInjector<App> {
         return DaggerApp_Component.builder()
-                .applicationModule(ApplicationModule(this))
-                .build()
+            .applicationModule(ApplicationModule(this))
+            .build()
     }
 
     protected open fun initLeakCanary() {
@@ -72,20 +74,26 @@ open class App : DaggerApplication() {
         }
     }
 
+    protected open fun initAdMob() {
+        MobileAds.initialize(this, getString(R.string.ad_mob_app_id))
+    }
+
     @Singleton
-    @dagger.Component(modules = [
-        AndroidSupportInjectionModule::class,
-        ApplicationModule::class,
-        InfrastructureModule::class,
-        SplashActivity.Module::class,
-        EntranceActivity.Module::class,
-        ExamActivity.Module::class,
-        ExamHistoryActivity.Module::class,
-        MaterialDetailActivity.Module::class,
-        MaterialEditActivity.Module::class,
-        KarutaActivity.Module::class,
-        TrainingExamActivity.Module::class,
-        TrainingActivity.Module::class
-    ])
+    @dagger.Component(
+        modules = [
+            AndroidSupportInjectionModule::class,
+            ApplicationModule::class,
+            InfrastructureModule::class,
+            SplashActivity.Module::class,
+            EntranceActivity.Module::class,
+            ExamActivity.Module::class,
+            ExamHistoryActivity.Module::class,
+            MaterialDetailActivity.Module::class,
+            MaterialEditActivity.Module::class,
+            KarutaActivity.Module::class,
+            TrainingExamActivity.Module::class,
+            TrainingActivity.Module::class
+        ]
+    )
     interface Component : AndroidInjector<App>
 }

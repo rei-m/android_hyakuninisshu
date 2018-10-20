@@ -1,6 +1,5 @@
 *.iml
 .gradle
-gradle.properties
 /local.properties
 /.idea/
 .DS_Store
@@ -8,4 +7,5 @@ gradle.properties
 /captures
 /script/
 /keystores/
+/signingConfigs/
 *.log

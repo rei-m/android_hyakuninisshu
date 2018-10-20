@@ -15,7 +15,7 @@
 package me.rei_m.hyakuninisshu.ext
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit): T {
     arguments = Bundle().apply(block)
