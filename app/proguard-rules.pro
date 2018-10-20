@@ -25,7 +25,7 @@
 
 -keep class **.R$*
 
-# Android Support Library
+# Android Jetpack
 -dontwarn androidx.appcompat.**
 -dontwarn androidx.legacy.**
 -dontwarn androidx.percentlayout.**
@@ -46,8 +46,9 @@
 -keep class androidx.lifecycle.** { *; }
 
 -keep class com.crashlytics.** { *; }
--keep class com.google.firebase.*.* { *; }
+-keep class com.google.android.material.*.* { *; }
 -keep class com.google.android.gms.*.* { *; }
+-keep class com.google.firebase.*.* { *; }
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
