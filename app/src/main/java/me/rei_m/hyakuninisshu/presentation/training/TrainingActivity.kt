@@ -18,10 +18,10 @@ import android.app.Activity
 import androidx.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import dagger.Binds
 import dagger.android.ActivityKey

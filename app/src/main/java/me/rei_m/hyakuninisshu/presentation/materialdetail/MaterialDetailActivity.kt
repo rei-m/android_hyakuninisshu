@@ -17,12 +17,12 @@ package me.rei_m.hyakuninisshu.presentation.materialdetail
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import dagger.Binds
 import dagger.android.ActivityKey
@@ -145,10 +145,12 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     }
 
     @ForActivity
-    @dagger.Subcomponent(modules = [
-        ActivityModule::class,
-        MaterialDetailFragment.Module::class
-    ])
+    @dagger.Subcomponent(
+        modules = [
+            ActivityModule::class,
+            MaterialDetailFragment.Module::class
+        ]
+    )
     interface Subcomponent : AndroidInjector<MaterialDetailActivity> {
 
         @dagger.Subcomponent.Builder
