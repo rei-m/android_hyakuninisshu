@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.util.launchAction
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 @Singleton
 class ExamActionDispatcher @Inject constructor(

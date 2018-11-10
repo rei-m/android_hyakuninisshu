@@ -13,10 +13,10 @@
 
 package me.rei_m.hyakuninisshu.util
 
-import kotlinx.coroutines.experimental.CoroutineExceptionHandler
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 fun launchAction(context: CoroutineContext, block: () -> Unit, onFailure: (e: Throwable) -> Unit) {
     GlobalScope.launch(context + CoroutineExceptionHandler { _, throwable ->

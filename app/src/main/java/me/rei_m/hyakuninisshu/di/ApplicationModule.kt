@@ -19,11 +19,11 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.Dispatchers
 import me.rei_m.hyakuninisshu.action.AppDispatcher
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import javax.inject.Singleton
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 @Module
 class ApplicationModule(application: Application) {

@@ -14,11 +14,14 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.helper
 
-import kotlinx.coroutines.experimental.CancellableContinuation
-import kotlinx.coroutines.experimental.CoroutineDispatcher
-import kotlinx.coroutines.experimental.Delay
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.resume
 
+@InternalCoroutinesApi
 object DirectCoroutineContext : CoroutineDispatcher(), Delay {
     override fun scheduleResumeAfterDelay(timeMillis: Long, continuation: CancellableContinuation<Unit>) {
         continuation.resume(Unit)
