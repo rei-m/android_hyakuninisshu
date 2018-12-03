@@ -22,7 +22,7 @@ import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.NoSuchElementException
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 @Singleton
 class QuizActionDispatcher @Inject constructor(

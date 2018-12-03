@@ -17,11 +17,11 @@ package me.rei_m.hyakuninisshu.presentation.materialedit
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.databinding.DataBindingUtil
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
@@ -105,10 +105,12 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
     }
 
     @ForActivity
-    @dagger.Subcomponent(modules = [
-        ActivityModule::class,
-        MaterialEditFragment.Module::class
-    ])
+    @dagger.Subcomponent(
+        modules = [
+            ActivityModule::class,
+            MaterialEditFragment.Module::class
+        ]
+    )
     interface Subcomponent : AndroidInjector<MaterialEditActivity> {
 
         @dagger.Subcomponent.Builder

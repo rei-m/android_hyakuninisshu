@@ -21,7 +21,7 @@ import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 @Singleton
 class MaterialActionDispatcher @Inject constructor(
