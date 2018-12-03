@@ -18,6 +18,7 @@ import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import kotlinx.coroutines.InternalCoroutinesApi
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
@@ -35,6 +36,7 @@ class KarutaActionDispatcherTest : TestHelper {
 
     private lateinit var dispatcher: Dispatcher
 
+    @InternalCoroutinesApi
     @Before
     fun setUp() {
         dispatcher = mock {}
