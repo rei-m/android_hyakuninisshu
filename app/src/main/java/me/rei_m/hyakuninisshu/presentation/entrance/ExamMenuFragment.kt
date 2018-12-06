@@ -42,7 +42,7 @@ class ExamMenuFragment : DaggerFragment() {
 
         val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
             viewModel = examMenuViewModel
-            setLifecycleOwner(this@ExamMenuFragment)
+            setLifecycleOwner(this@ExamMenuFragment.viewLifecycleOwner)
         }
 
         return binding.root

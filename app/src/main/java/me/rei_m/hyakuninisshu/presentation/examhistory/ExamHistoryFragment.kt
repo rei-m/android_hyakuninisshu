@@ -47,7 +47,7 @@ class ExamHistoryFragment : DaggerFragment() {
 
         val binding = FragmentExamHistoryBinding.inflate(inflater, container, false).apply {
             viewModel = examHistoryViewModel
-            setLifecycleOwner(this@ExamHistoryFragment)
+            setLifecycleOwner(this@ExamHistoryFragment.viewLifecycleOwner)
         }
 
         with(binding.recyclerKarutaExamList) {

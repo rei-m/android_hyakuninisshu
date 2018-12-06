@@ -55,7 +55,7 @@ class QuizAnswerFragment : DaggerFragment() {
 
         val binding = FragmentQuizAnswerBinding.inflate(inflater, container, false).apply {
             viewModel = quizAnswerViewModel
-            setLifecycleOwner(this@QuizAnswerFragment)
+            setLifecycleOwner(this@QuizAnswerFragment.viewLifecycleOwner)
         }
 
         quizAnswerViewModel.openNextQuizEvent.observe(this, EventObserver {

@@ -47,8 +47,25 @@
 
 -keep class com.crashlytics.** { *; }
 -keep class com.google.android.material.*.* { *; }
--keep class com.google.android.gms.*.* { *; }
 -keep class com.google.firebase.*.* { *; }
+
+# https://github.com/googlesamples/android-ads/blob/master/admob/BannerExample/app/proguard-rules.pro
+-keep public class com.google.android.gms.ads.**{
+   public *;
+}
+-keep class * extends java.util.ListResourceBundle {
+   protected Object[][] getContents();
+}
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+   public static final *** NULL;
+}
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+   @com.google.android.gms.common.annotation.KeepName *;
+}
+-keepnames class * implements android.os.Parcelable {
+   public static final ** CREATOR;
+}
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule

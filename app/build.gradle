@@ -52,8 +52,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 21
-        versionName "2.2.0"
+        versionCode 22
+        versionName "2.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [crashlyticsEnabled: true]
@@ -117,8 +117,8 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.0.0'
 
     implementation 'com.google.android.material:material:1.0.0'
-    implementation "com.google.android.gms:play-services-ads:17.1.1"
-    implementation "com.google.firebase:firebase-core:16.0.5"
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-ads:17.1.2'
 
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation "com.google.dagger:dagger:$dagger_version"

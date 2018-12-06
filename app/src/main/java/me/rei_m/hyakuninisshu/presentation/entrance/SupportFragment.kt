@@ -42,7 +42,7 @@ class SupportFragment : DaggerFragment() {
 
         val binding = FragmentSupportBinding.inflate(inflater, container, false).apply {
             viewModel = supportViewModel
-            setLifecycleOwner(this@SupportFragment)
+            setLifecycleOwner(this@SupportFragment.viewLifecycleOwner)
         }
 
         return binding.root
