@@ -75,7 +75,7 @@ class MaterialEditFragment : DaggerFragment(),
 
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false).apply {
             viewModel = materialEditViewModel
-            setLifecycleOwner(this@MaterialEditFragment)
+            setLifecycleOwner(this@MaterialEditFragment.viewLifecycleOwner)
         }
 
         materialEditViewModel.confirmEditEvent.observe(this, EventObserver { dialog ->

@@ -54,7 +54,7 @@ class KarutaFragment : DaggerFragment() {
 
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
             viewModel = karutaViewModel
-            setLifecycleOwner(this@KarutaFragment)
+            setLifecycleOwner(this@KarutaFragment.viewLifecycleOwner)
         }
 
         karutaViewModel.notFoundKarutaEvent.observe(this, EventObserver {

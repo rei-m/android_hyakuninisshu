@@ -55,7 +55,7 @@ class MaterialListFragment : DaggerFragment() {
 
         val binding = FragmentMaterialListBinding.inflate(inflater, container, false).apply {
             viewModel = materialListViewModel
-            setLifecycleOwner(this@MaterialListFragment)
+            setLifecycleOwner(this@MaterialListFragment.viewLifecycleOwner)
         }
 
         with(binding.recyclerKarutaList) {

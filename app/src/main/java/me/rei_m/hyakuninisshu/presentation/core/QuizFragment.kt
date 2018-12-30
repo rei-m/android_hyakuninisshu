@@ -85,7 +85,7 @@ class QuizFragment : DaggerFragment() {
 
         binding = FragmentQuizBinding.inflate(inflater, container, false).apply {
             viewModel = quizViewModel
-            setLifecycleOwner(this@QuizFragment)
+            setLifecycleOwner(this@QuizFragment.viewLifecycleOwner)
         }
 
         quizViewModel.content.observe(this, Observer<KarutaQuizContent> {
