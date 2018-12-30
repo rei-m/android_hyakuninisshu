@@ -42,7 +42,7 @@ class TrainingResultFragment : DaggerFragment() {
 
         val binding = FragmentTrainingResultBinding.inflate(inflater, container, false).apply {
             viewModel = trainingResultViewModel
-            setLifecycleOwner(this@TrainingResultFragment)
+            setLifecycleOwner(this@TrainingResultFragment.viewLifecycleOwner)
         }
 
         return binding.root

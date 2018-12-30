@@ -46,7 +46,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentMaterialDetailBinding.inflate(inflater, container, false).apply {
-            setLifecycleOwner(this@MaterialDetailFragment)
+            setLifecycleOwner(this@MaterialDetailFragment.viewLifecycleOwner)
         }
 
         val materialDetailStore = obtainActivityStore(

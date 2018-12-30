@@ -64,7 +64,7 @@ class TrainingMenuFragment : DaggerFragment() {
 
         binding = FragmentTrainingMenuBinding.inflate(inflater, container, false).apply {
             viewModel = trainingMenuViewModel
-            setLifecycleOwner(this@TrainingMenuFragment)
+            setLifecycleOwner(this@TrainingMenuFragment.viewLifecycleOwner)
 
             trainingRangeFromAdapter = SpinnerAdapter.newInstance(root.context, TrainingRangeFrom.values().asList())
             trainingRangeToAdapter = SpinnerAdapter.newInstance(root.context, TrainingRangeTo.values().asList())

@@ -57,7 +57,7 @@ class ExamResultFragment : DaggerFragment() {
 
         binding = FragmentExamResultBinding.inflate(inflater, container, false).apply {
             viewModel = examResultViewModel
-            setLifecycleOwner(this@ExamResultFragment)
+            setLifecycleOwner(this@ExamResultFragment.viewLifecycleOwner)
         }
 
         examResultViewModel.karutaExamId.observe(this, Observer {
