@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,34 +12,27 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.action.karuta
+package me.rei_m.hyakuninisshu.action.application
 
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
 
 @Singleton
-class KarutaActionDispatcher @Inject constructor(
+class ApplicationActionCreator @Inject constructor(
     private val karutaRepository: KarutaRepository,
-    private val dispatcher: Dispatcher,
-    private val coroutineContext: CoroutineContext
+    private val dispatcher: Dispatcher
 ) {
     /**
-     * 指定の詩を取り出す.
-     *
-     * @param karutaId 歌ID.
+     * 百人一首の情報を準備してアプリの利用を開始する.
      */
-    fun fetch(karutaId: KarutaIdentifier) {
-        launchAction(coroutineContext, {
-            val karuta = karutaRepository.findBy(karutaId)
-                ?: throw NoSuchElementException(karutaId.toString())
-            dispatcher.dispatch(FetchKarutaAction.createSuccess(karuta))
-        }, {
-            dispatcher.dispatch(FetchKarutaAction.createError(it))
-        })
+    fun start() {
+        try {
+            karutaRepository.initialize()
+            dispatcher.dispatch(StartApplicationAction.createSuccess())
+        } catch (e: Exception) {
+            dispatcher.dispatch(StartApplicationAction.createError(e))
+        }
     }
 }

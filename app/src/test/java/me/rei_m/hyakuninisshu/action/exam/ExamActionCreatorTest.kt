@@ -34,8 +34,6 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzesResultSummary
-
-import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -45,9 +43,9 @@ import org.robolectric.RobolectricTestRunner
 import java.util.Date
 
 @RunWith(RobolectricTestRunner::class)
-class ExamActionDispatcherTest : TestHelper {
+class ExamActionCreatorTest : TestHelper {
 
-    private lateinit var actionDispatcher: ExamActionDispatcher
+    private lateinit var actionCreator: ExamActionCreator
 
     private lateinit var karutaRepository: KarutaRepository
     private lateinit var karutaQuizRepository: KarutaQuizRepository
@@ -62,12 +60,11 @@ class ExamActionDispatcherTest : TestHelper {
         karutaRepository = mock {}
         karutaQuizRepository = mock {}
         karutaExamRepository = mock {}
-        actionDispatcher = ExamActionDispatcher(
+        actionCreator = ExamActionCreator(
             karutaRepository,
             karutaQuizRepository,
             karutaExamRepository,
-            dispatcher,
-            DirectCoroutineContext
+            dispatcher
         )
     }
 
@@ -89,7 +86,7 @@ class ExamActionDispatcherTest : TestHelper {
 
         whenever(karutaExamRepository.findBy(examId)).thenReturn(exam)
 
-        actionDispatcher.fetch(examId)
+        actionCreator.fetch(examId)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchExamAction::class.java)
@@ -105,7 +102,7 @@ class ExamActionDispatcherTest : TestHelper {
         val examId = KarutaExamIdentifier(1)
         whenever(karutaExamRepository.findBy(examId)).thenReturn(null)
 
-        actionDispatcher.fetch(examId)
+        actionCreator.fetch(examId)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchExamAction::class.java)
@@ -117,7 +114,7 @@ class ExamActionDispatcherTest : TestHelper {
     fun fetchRecent() {
         whenever(karutaExamRepository.list()).thenReturn(KarutaExams(listOf()))
 
-        actionDispatcher.fetchRecent()
+        actionCreator.fetchRecent()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchRecentExamAction::class.java)
@@ -132,7 +129,7 @@ class ExamActionDispatcherTest : TestHelper {
     fun fetchAll() {
         whenever(karutaExamRepository.list()).thenReturn(KarutaExams(listOf()))
 
-        actionDispatcher.fetchAll()
+        actionCreator.fetchAll()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchAllExamAction::class.java)
@@ -157,7 +154,7 @@ class ExamActionDispatcherTest : TestHelper {
         whenever(karutaRepository.findIds()).thenReturn(KarutaIds(listOf(karutaList.first().identifier)))
         whenever(karutaQuizRepository.initialize(any())).thenAnswer { }
 
-        actionDispatcher.start()
+        actionCreator.start()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartExamAction::class.java)
@@ -174,7 +171,7 @@ class ExamActionDispatcherTest : TestHelper {
 
         whenever(karutaQuizRepository.first()).thenReturn(quiz)
 
-        actionDispatcher.fetchNext()
+        actionCreator.fetchNext()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(OpenNextQuizAction::class.java)
@@ -189,7 +186,7 @@ class ExamActionDispatcherTest : TestHelper {
     fun fetchNextWhenNotFound() {
         whenever(karutaQuizRepository.first()).thenReturn(null)
 
-        actionDispatcher.fetchNext()
+        actionCreator.fetchNext()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(OpenNextQuizAction::class.java)
@@ -218,7 +215,7 @@ class ExamActionDispatcherTest : TestHelper {
         whenever(karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)).thenAnswer { }
         whenever(karutaExamRepository.findBy(examId)).thenReturn(exam)
 
-        actionDispatcher.finish()
+        actionCreator.finish()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FinishExamAction::class.java)
@@ -235,7 +232,7 @@ class ExamActionDispatcherTest : TestHelper {
 
         whenever(karutaQuizRepository.list()).thenReturn(KarutaQuizzes(listOf(quiz)))
 
-        actionDispatcher.finish()
+        actionCreator.finish()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FinishExamAction::class.java)

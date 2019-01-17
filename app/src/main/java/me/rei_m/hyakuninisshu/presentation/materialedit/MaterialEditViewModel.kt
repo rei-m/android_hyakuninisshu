@@ -14,25 +14,29 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialedit
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.R
+import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.setIfNull
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.util.Event
 import me.rei_m.hyakuninisshu.util.EventObserver
-import javax.inject.Inject
-import me.rei_m.hyakuninisshu.R
+import kotlin.coroutines.CoroutineContext
 
 class MaterialEditViewModel(
     private val store: MaterialEditStore,
-    private val actionDispatcher: MaterialActionDispatcher,
+    private val actionCreator: MaterialActionCreator,
     private val karutaId: KarutaIdentifier,
     firstPhraseKanji: String?,
     firstPhraseKana: String?,
@@ -45,7 +49,11 @@ class MaterialEditViewModel(
     fifthPhraseKanji: String?,
     fifthPhraseKana: String?,
     private val navigator: Navigator
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     private val karuta: LiveData<Karuta?> = store.karuta
 
@@ -115,7 +123,15 @@ class MaterialEditViewModel(
         karuta.observeForever(karutaObserver)
         store.completeEditEvent.observeForever(completeEditEventObserver)
 
-        actionDispatcher.startEdit(karutaId)
+        launch {
+            actionCreator.startEdit(karutaId)
+        }
+    }
+
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
     }
 
     fun onDestroyView() {
@@ -146,19 +162,21 @@ class MaterialEditViewModel(
             return
         }
 
-        actionDispatcher.edit(
-            karutaId,
-            firstPhraseKanji,
-            firstPhraseKana,
-            secondPhraseKanji,
-            secondPhraseKana,
-            thirdPhraseKanji,
-            thirdPhraseKana,
-            fourthPhraseKanji,
-            fourthPhraseKana,
-            fifthPhraseKanji,
-            fifthPhraseKana
-        )
+        launch {
+            actionCreator.edit(
+                karutaId,
+                firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana
+            )
+        }
     }
 
     fun onClickEdit() {
@@ -184,25 +202,28 @@ class MaterialEditViewModel(
             return
         }
 
-        _confirmEditEvent.value = Event(ConfirmMaterialEditDialogFragment.newInstance(
-            firstPhraseKanji,
-            firstPhraseKana,
-            secondPhraseKanji,
-            secondPhraseKana,
-            thirdPhraseKanji,
-            thirdPhraseKana,
-            fourthPhraseKanji,
-            fourthPhraseKana,
-            fifthPhraseKanji,
-            fifthPhraseKana
-        ))
+        _confirmEditEvent.value = Event(
+            ConfirmMaterialEditDialogFragment.newInstance(
+                firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana
+            )
+        )
     }
 
-    class Factory @Inject constructor(
-        private val actionDispatcher: MaterialActionDispatcher,
-        private val storeFactory: MaterialEditStore.Factory,
-        private val navigator: Navigator
-    ) : ViewModelFactory {
+    class Factory(
+        private val store: MaterialEditStore,
+        private val actionCreator: MaterialActionCreator,
+        private val navigator: Navigator,
+        private val karutaId: KarutaIdentifier
+    ) : ViewModelProvider.Factory {
 
         var firstPhraseKanji: String? = null
         var firstPhraseKana: String? = null
@@ -215,21 +236,24 @@ class MaterialEditViewModel(
         var fifthPhraseKanji: String? = null
         var fifthPhraseKana: String? = null
 
-        fun create(activity: FragmentActivity, karutaId: KarutaIdentifier) = MaterialEditViewModel(
-            obtainActivityStore(activity, MaterialEditStore::class.java, storeFactory),
-            actionDispatcher,
-            karutaId,
-            firstPhraseKanji,
-            firstPhraseKana,
-            secondPhraseKanji,
-            secondPhraseKana,
-            thirdPhraseKanji,
-            thirdPhraseKana,
-            fourthPhraseKanji,
-            fourthPhraseKana,
-            fifthPhraseKanji,
-            fifthPhraseKana,
-            navigator
-        )
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return MaterialEditViewModel(
+                store,
+                actionCreator,
+                karutaId,
+                firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana,
+                navigator
+            ) as T
+        }
     }
 }

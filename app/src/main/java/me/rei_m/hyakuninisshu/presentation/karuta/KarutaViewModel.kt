@@ -14,19 +14,27 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.karuta
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import me.rei_m.hyakuninisshu.action.karuta.KarutaActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.karuta.KarutaActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
-import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class KarutaViewModel(
-    store: KarutaStore,
-    actionDispatcher: KarutaActionDispatcher,
+    private val store: KarutaStore,
+    actionCreator: KarutaActionCreator,
     karutaId: KarutaIdentifier
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val isLoading: LiveData<Boolean> = store.karuta.map { it == null }
 
@@ -52,18 +60,26 @@ class KarutaViewModel(
 
     init {
         if (store.karuta.value == null) {
-            actionDispatcher.fetch(karutaId)
+            launch {
+                actionCreator.fetch(karutaId)
+            }
         }
     }
 
-    class Factory @Inject constructor(
-        private val actionDispatcher: KarutaActionDispatcher,
-        private val storeFactory: KarutaStore.Factory
-    ) : ViewModelFactory {
-        fun create(activity: FragmentActivity, karutaId: KarutaIdentifier) = KarutaViewModel(
-            obtainActivityStore(activity, KarutaStore::class.java, storeFactory),
-            actionDispatcher,
-            karutaId
-        )
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
+    }
+
+    class Factory(
+        private val store: KarutaStore,
+        private val actionCreator: KarutaActionCreator,
+        private val karutaId: KarutaIdentifier
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return KarutaViewModel(store, actionCreator, karutaId) as T
+        }
     }
 }

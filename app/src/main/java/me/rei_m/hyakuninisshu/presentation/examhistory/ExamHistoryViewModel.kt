@@ -14,15 +14,27 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.examhistory
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
-class ExamHistoryViewModel(store: ExamHistoryStore, actionDispatcher: ExamActionDispatcher) {
+class ExamHistoryViewModel(
+    private val store: ExamHistoryStore,
+    private val actionCreator: ExamActionCreator
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
 
@@ -31,16 +43,22 @@ class ExamHistoryViewModel(store: ExamHistoryStore, actionDispatcher: ExamAction
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
-        actionDispatcher.fetchAll()
+        launch { actionCreator.fetchAll() }
+    }
+
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
     }
 
     class Factory @Inject constructor(
-        private val actionDispatcher: ExamActionDispatcher,
-        private val storeFactory: ExamHistoryStore.Factory
-    ) : ViewModelFactory {
-        fun create(activity: FragmentActivity) = ExamHistoryViewModel(
-            obtainActivityStore(activity, ExamHistoryStore::class.java, storeFactory),
-            actionDispatcher
-        )
+        private val store: ExamHistoryStore,
+        private val actionCreator: ExamActionCreator
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ExamHistoryViewModel(store, actionCreator) as T
+        }
     }
 }

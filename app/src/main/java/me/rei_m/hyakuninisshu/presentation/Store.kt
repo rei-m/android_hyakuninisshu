@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,11 +14,10 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation
 
-import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class Store : ViewModel() {
+abstract class Store {
 
     private val disposable = CompositeDisposable()
 
@@ -26,8 +25,7 @@ abstract class Store : ViewModel() {
         disposable.addAll(*ds)
     }
 
-    override fun onCleared() {
+    fun dispose() {
         disposable.dispose()
-        super.onCleared()
     }
 }

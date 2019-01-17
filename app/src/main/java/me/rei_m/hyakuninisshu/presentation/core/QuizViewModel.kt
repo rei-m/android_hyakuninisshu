@@ -14,32 +14,40 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.ToriFuda
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.withValue
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Device
 import me.rei_m.hyakuninisshu.util.Event
 import java.util.Arrays
 import java.util.Date
-import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class QuizViewModel(
-    store: QuizStore,
-    private val actionDispatcher: QuizActionDispatcher,
+    private val store: QuizStore,
+    private val actionCreator: QuizActionCreator,
     device: Device,
     private val quizId: KarutaQuizIdentifier,
     kamiNoKuStyle: KarutaStyleFilter,
     shimoNoKuStyle: KarutaStyleFilter
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
@@ -111,34 +119,41 @@ class QuizViewModel(
     }
 
     fun start() {
-        actionDispatcher.start(quizId, Date())
+        launch { actionCreator.start(quizId, Date()) }
     }
 
     fun onClickChoice(choiceNoValue: Int) {
-        actionDispatcher.answer(quizId, ChoiceNo.forValue(choiceNoValue), Date())
+        launch { actionCreator.answer(quizId, ChoiceNo.forValue(choiceNoValue), Date()) }
     }
 
     fun onClickResult() {
         _openAnswerEvent.value = Event(quizId)
     }
 
-    class Factory @Inject constructor(
-        private val actionDispatcher: QuizActionDispatcher,
-        private val storeFactory: QuizStore.Factory,
-        private val device: Device
-    ) : ViewModelFactory {
-        fun create(
-            fragment: Fragment,
-            quizId: KarutaQuizIdentifier,
-            kamiNoKuStyle: KarutaStyleFilter,
-            shimoNoKuStyle: KarutaStyleFilter
-        ) = QuizViewModel(
-            obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
-            actionDispatcher,
-            device,
-            quizId,
-            kamiNoKuStyle,
-            shimoNoKuStyle
-        )
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
+    }
+
+    class Factory(
+        private val store: QuizStore,
+        private val actionCreator: QuizActionCreator,
+        private val device: Device,
+        private val quizId: KarutaQuizIdentifier,
+        private val kamiNoKuStyle: KarutaStyleFilter,
+        private val shimoNoKuStyle: KarutaStyleFilter
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return QuizViewModel(
+                store,
+                actionCreator,
+                device,
+                quizId,
+                kamiNoKuStyle,
+                shimoNoKuStyle
+            ) as T
+        }
     }
 }

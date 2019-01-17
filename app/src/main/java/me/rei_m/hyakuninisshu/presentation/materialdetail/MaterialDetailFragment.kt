@@ -14,11 +14,11 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialdetail
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding
@@ -32,7 +32,7 @@ import javax.inject.Inject
 class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
 
     @Inject
-    lateinit var storeFactory: MaterialDetailStore.Factory
+    lateinit var store: MaterialDetailStore
 
     private val karutaId by lazy {
         requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
@@ -49,13 +49,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
             setLifecycleOwner(this@MaterialDetailFragment.viewLifecycleOwner)
         }
 
-        val materialDetailStore = obtainActivityStore(
-            requireActivity(),
-            MaterialDetailStore::class.java,
-            storeFactory
-        )
-
-        materialDetailStore.karutaList.map {
+        store.karutaList.map {
             it.find { karuta -> karuta.identifier == karutaId }
         }.observe(this, Observer {
             it ?: return@Observer

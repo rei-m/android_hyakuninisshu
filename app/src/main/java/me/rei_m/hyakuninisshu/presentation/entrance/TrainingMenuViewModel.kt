@@ -16,11 +16,14 @@ package me.rei_m.hyakuninisshu.presentation.entrance
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
@@ -35,9 +38,10 @@ class TrainingMenuViewModel(
     kamiNoKuStyle: KarutaStyleFilter,
     shimoNoKuStyle: KarutaStyleFilter,
     color: ColorFilter,
+    animationSpeed: QuizAnimationSpeed,
     private val navigator: Navigator,
     private val analyticsHelper: AnalyticsHelper
-) {
+) : ViewModel() {
     val trainingRangeFrom = MutableLiveData<TrainingRangeFrom>().withValue(trainingRangeFrom)
 
     val trainingRangeTo = MutableLiveData<TrainingRangeTo>().withValue(trainingRangeTo)
@@ -49,6 +53,8 @@ class TrainingMenuViewModel(
     val shimoNoKuStyle = MutableLiveData<KarutaStyleFilter>().withValue(shimoNoKuStyle)
 
     val color = MutableLiveData<ColorFilter>().withValue(color)
+
+    val animationSpeed = MutableLiveData<QuizAnimationSpeed>().withValue(animationSpeed)
 
     private val _snackBarMessage = MutableLiveData<Event<Int>>()
     val snackBarMessage: LiveData<Event<Int>> = _snackBarMessage
@@ -67,31 +73,36 @@ class TrainingMenuViewModel(
             kimariji.value!!,
             color.value!!,
             kamiNoKuStyle.value!!,
-            shimoNoKuStyle.value!!
+            shimoNoKuStyle.value!!,
+            animationSpeed.value!!
         )
     }
 
     class Factory @Inject constructor(
         private val navigator: Navigator,
         private val analyticsHelper: AnalyticsHelper
-    ) {
-
+    ) : ViewModelProvider.Factory {
         var trainingRangeFrom = TrainingRangeFrom.ONE
         var trainingRangeTo = TrainingRangeTo.ONE_HUNDRED
         var kimariji = KimarijiFilter.ALL
         var kamiNoKuStyle = KarutaStyleFilter.KANJI
         var shimoNoKuStyle = KarutaStyleFilter.KANA
         var color = ColorFilter.ALL
+        var animationSpeed = QuizAnimationSpeed.NORMAL
 
-        fun create(): TrainingMenuViewModel = TrainingMenuViewModel(
-            trainingRangeFrom,
-            trainingRangeTo,
-            kimariji,
-            kamiNoKuStyle,
-            shimoNoKuStyle,
-            color,
-            navigator,
-            analyticsHelper
-        )
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return TrainingMenuViewModel(
+                trainingRangeFrom,
+                trainingRangeTo,
+                kimariji,
+                kamiNoKuStyle,
+                shimoNoKuStyle,
+                color,
+                animationSpeed,
+                navigator,
+                analyticsHelper
+            ) as T
+        }
     }
 }

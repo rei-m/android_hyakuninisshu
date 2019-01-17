@@ -22,6 +22,7 @@ import me.rei_m.hyakuninisshu.ext.addFragment
 import me.rei_m.hyakuninisshu.ext.replaceFragment
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.training.TrainingResultFragment
 
 interface CoreInteractionListener {
@@ -29,6 +30,8 @@ interface CoreInteractionListener {
     val kamiNoKuStyle: KarutaStyleFilter
 
     val shimoNoKuStyle: KarutaStyleFilter
+
+    val animationSpeed: QuizAnimationSpeed
 
     fun onAnswered(quizId: KarutaQuizIdentifier)
 
@@ -42,7 +45,7 @@ interface CoreInteractionListener {
         if (supportFragmentManager.fragments.isEmpty()) {
             addFragment(
                 R.id.content,
-                QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
+                QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle, animationSpeed),
                 QuizFragment.TAG
             )
             return
@@ -52,7 +55,7 @@ interface CoreInteractionListener {
             if (fragment is QuizAnswerFragment && fragment.karutaQuizId != karutaQuizId) {
                 replaceFragment(
                     R.id.content,
-                    QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
+                    QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle, animationSpeed),
                     QuizFragment.TAG,
                     FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
                 )
@@ -60,10 +63,10 @@ interface CoreInteractionListener {
             return
         }
 
-        supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
+        supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let {
             replaceFragment(
                 R.id.content,
-                QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle),
+                QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle, animationSpeed),
                 QuizFragment.TAG,
                 FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
             )

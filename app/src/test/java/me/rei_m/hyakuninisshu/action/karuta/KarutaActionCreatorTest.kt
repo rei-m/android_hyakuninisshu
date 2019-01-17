@@ -22,15 +22,14 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class KarutaActionDispatcherTest : TestHelper {
+class KarutaActionCreatorTest : TestHelper {
 
-    private lateinit var actionDispatcher: KarutaActionDispatcher
+    private lateinit var actionCreator: KarutaActionCreator
 
     private lateinit var karutaRepository: KarutaRepository
 
@@ -41,10 +40,9 @@ class KarutaActionDispatcherTest : TestHelper {
     fun setUp() {
         dispatcher = mock {}
         karutaRepository = mock {}
-        actionDispatcher = KarutaActionDispatcher(
+        actionCreator = KarutaActionCreator(
             karutaRepository,
-            dispatcher,
-            DirectCoroutineContext
+            dispatcher
         )
     }
 
@@ -54,7 +52,7 @@ class KarutaActionDispatcherTest : TestHelper {
 
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
 
-        actionDispatcher.fetch(karuta.identifier)
+        actionCreator.fetch(karuta.identifier)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchKarutaAction::class.java)
@@ -69,7 +67,7 @@ class KarutaActionDispatcherTest : TestHelper {
     fun fetchWhenNotFound() {
         whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
-        actionDispatcher.fetch(KarutaIdentifier(1))
+        actionCreator.fetch(KarutaIdentifier(1))
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchKarutaAction::class.java)

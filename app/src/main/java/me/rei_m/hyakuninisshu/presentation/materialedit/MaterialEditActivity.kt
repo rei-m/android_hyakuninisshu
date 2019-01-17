@@ -35,6 +35,7 @@ import me.rei_m.hyakuninisshu.ext.addFragment
 import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.presentation.materialedit.di.MaterialEditActivityModule
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
@@ -108,6 +109,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
+            MaterialEditActivityModule::class,
             MaterialEditFragment.Module::class
         ]
     )
@@ -118,8 +120,11 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
 
             abstract fun activityModule(module: ActivityModule): Builder
 
+            abstract fun materialEditActivityModule(module: MaterialEditActivityModule): Builder
+
             override fun seedInstance(instance: MaterialEditActivity) {
                 activityModule(ActivityModule(instance))
+                materialEditActivityModule(MaterialEditActivityModule(instance.karutaId))
             }
         }
     }

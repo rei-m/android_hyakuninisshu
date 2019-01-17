@@ -25,16 +25,15 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class MaterialActionDispatcherTest : TestHelper {
+class MaterialActionCreatorTest : TestHelper {
 
-    private lateinit var actionDispatcher: MaterialActionDispatcher
+    private lateinit var actionCreator: MaterialActionCreator
 
     private lateinit var karutaRepository: KarutaRepository
 
@@ -45,10 +44,9 @@ class MaterialActionDispatcherTest : TestHelper {
     fun setUp() {
         dispatcher = mock {}
         karutaRepository = mock {}
-        actionDispatcher = MaterialActionDispatcher(
+        actionCreator = MaterialActionCreator(
             karutaRepository,
-            dispatcher,
-            DirectCoroutineContext
+            dispatcher
         )
     }
 
@@ -58,7 +56,7 @@ class MaterialActionDispatcherTest : TestHelper {
 
         whenever(karutaRepository.list(Color.BLUE)).thenReturn(karutas)
 
-        actionDispatcher.fetch(ColorFilter.BLUE)
+        actionCreator.fetch(ColorFilter.BLUE)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchMaterialAction::class.java)
@@ -75,7 +73,7 @@ class MaterialActionDispatcherTest : TestHelper {
 
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
 
-        actionDispatcher.startEdit(karuta.identifier)
+        actionCreator.startEdit(karuta.identifier)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartEditMaterialAction::class.java)
@@ -90,7 +88,7 @@ class MaterialActionDispatcherTest : TestHelper {
     fun startEditWhenNotFound() {
         whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
-        actionDispatcher.startEdit(KarutaIdentifier(1))
+        actionCreator.startEdit(KarutaIdentifier(1))
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartEditMaterialAction::class.java)
@@ -105,7 +103,7 @@ class MaterialActionDispatcherTest : TestHelper {
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
         whenever(karutaRepository.store(any())).thenAnswer { }
 
-        actionDispatcher.edit(
+        actionCreator.edit(
             karuta.identifier,
             "初句改",
             "しょくかい",
@@ -144,7 +142,7 @@ class MaterialActionDispatcherTest : TestHelper {
 
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(null)
 
-        actionDispatcher.edit(
+        actionCreator.edit(
             karuta.identifier,
             "初句改",
             "しょくかい",
