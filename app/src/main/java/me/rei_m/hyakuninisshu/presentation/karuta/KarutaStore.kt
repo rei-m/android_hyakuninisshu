@@ -16,16 +16,16 @@ package me.rei_m.hyakuninisshu.presentation.karuta
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.karuta.FetchKarutaAction
+import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
-class KarutaStore(dispatcher: Dispatcher) : Store() {
+@ForActivity
+class KarutaStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _karuta = MutableLiveData<Karuta?>()
     val karuta: LiveData<Karuta?> = _karuta
@@ -42,12 +42,5 @@ class KarutaStore(dispatcher: Dispatcher) : Store() {
                 _notFoundKarutaEvent.value = Event(Unit)
             }
         })
-    }
-
-    class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return KarutaStore(dispatcher) as T
-        }
     }
 }

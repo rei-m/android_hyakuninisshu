@@ -17,24 +17,24 @@ package me.rei_m.hyakuninisshu.presentation.helper
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
-
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
 import me.rei_m.hyakuninisshu.presentation.entrance.LicenceDialogFragment
 import me.rei_m.hyakuninisshu.presentation.entrance.PrivacyPolicyDialogFragment
-import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
-import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
-import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
-import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditActivity
-import me.rei_m.hyakuninisshu.presentation.training.TrainingExamActivity
-import me.rei_m.hyakuninisshu.presentation.training.TrainingActivity
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
 import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
+import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
+import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
+import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditActivity
+import me.rei_m.hyakuninisshu.presentation.training.TrainingActivity
+import me.rei_m.hyakuninisshu.presentation.training.TrainingExamActivity
 
 class Navigator(private val activity: AppCompatActivity) {
 
@@ -50,15 +50,19 @@ class Navigator(private val activity: AppCompatActivity) {
         kimarijiFilter: KimarijiFilter,
         colorFilter: ColorFilter,
         kamiNoKuStyle: KarutaStyleFilter,
-        shimoNoKuStyle: KarutaStyleFilter
+        shimoNoKuStyle: KarutaStyleFilter,
+        animationSpeed: QuizAnimationSpeed
     ) {
-        val intentToLaunch = TrainingActivity.createIntent(activity,
-                trainingRangeFrom,
-                trainingRangeTo,
-                kimarijiFilter,
-                colorFilter,
-                kamiNoKuStyle,
-                shimoNoKuStyle)
+        val intentToLaunch = TrainingActivity.createIntent(
+            activity,
+            trainingRangeFrom,
+            trainingRangeTo,
+            kimarijiFilter,
+            colorFilter,
+            kamiNoKuStyle,
+            shimoNoKuStyle,
+            animationSpeed
+        )
         activity.startActivity(intentToLaunch)
     }
 

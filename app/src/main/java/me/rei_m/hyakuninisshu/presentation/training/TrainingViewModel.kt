@@ -14,23 +14,32 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.training
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class TrainingViewModel(
-    store: TrainingStore,
-    private val actionDispatcher: TrainingActionDispatcher
-) {
+    private val store: TrainingStore,
+    private val actionCreator: TrainingActionCreator
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -40,35 +49,50 @@ class TrainingViewModel(
 
     val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
+    }
+
     fun startTraining(
         trainingRangeFrom: TrainingRangeFrom,
         trainingRangeTo: TrainingRangeTo,
         kimarijiFilter: KimarijiFilter,
         colorFilter: ColorFilter
     ) {
-        actionDispatcher.start(
-            trainingRangeFrom.value,
-            trainingRangeTo.value,
-            kimarijiFilter.value,
-            colorFilter.value
-        )
+        launch {
+            actionCreator.start(
+                trainingRangeFrom.value,
+                trainingRangeTo.value,
+                kimarijiFilter.value,
+                colorFilter.value
+            )
+        }
     }
 
     fun startTraining() {
-        actionDispatcher.startForExam()
+        launch {
+            actionCreator.startForExam()
+        }
     }
 
     fun fetchNext() {
-        actionDispatcher.fetchNext()
+        launch {
+            actionCreator.fetchNext()
+        }
     }
 
     class Factory @Inject constructor(
-        private val actionDispatcher: TrainingActionDispatcher,
-        private val storeFactory: TrainingStore.Factory
-    ) : ViewModelFactory {
-        fun create(activity: FragmentActivity) = TrainingViewModel(
-            obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
-            actionDispatcher
-        )
+        private val store: TrainingStore,
+        private val actionCreator: TrainingActionCreator
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return TrainingViewModel(
+                store,
+                actionCreator
+            ) as T
+        }
     }
 }

@@ -14,25 +14,33 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.core
 
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import me.rei_m.hyakuninisshu.action.quiz.QuizActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.util.Event
-import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class QuizAnswerViewModel(
-    store: QuizStore,
-    actionDispatcher: QuizActionDispatcher,
+    private val store: QuizStore,
+    actionCreator: QuizActionCreator,
     quizId: KarutaQuizIdentifier,
     private val navigator: Navigator
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
@@ -67,7 +75,9 @@ class QuizAnswerViewModel(
     val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
-        actionDispatcher.fetch(quizId)
+        launch {
+            actionCreator.fetch(quizId)
+        }
     }
 
     fun onClickAnswer() {
@@ -84,16 +94,26 @@ class QuizAnswerViewModel(
         _openResultEvent.value = Event(Unit)
     }
 
-    class Factory @Inject constructor(
-        private val actionDispatcher: QuizActionDispatcher,
-        private val storeFactory: QuizStore.Factory,
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
+    }
+
+    class Factory(
+        private val store: QuizStore,
+        private val actionCreator: QuizActionCreator,
+        private val quizId: KarutaQuizIdentifier,
         private val navigator: Navigator
-    ) : ViewModelFactory {
-        fun create(fragment: Fragment, quizId: KarutaQuizIdentifier) = QuizAnswerViewModel(
-            obtainFragmentStore(fragment, QuizStore::class.java, storeFactory),
-            actionDispatcher,
-            quizId,
-            navigator
-        )
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return QuizAnswerViewModel(
+                store,
+                actionCreator,
+                quizId,
+                navigator
+            ) as T
+        }
     }
 }

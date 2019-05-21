@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamMenuBinding
@@ -38,7 +39,8 @@ class ExamMenuFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val examMenuViewModel = viewModelFactory.create(requireActivity())
+        val examMenuViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(ExamMenuViewModel::class.java)
 
         val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
             viewModel = examMenuViewModel

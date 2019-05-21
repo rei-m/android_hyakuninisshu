@@ -14,25 +14,33 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialdetail
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import me.rei_m.hyakuninisshu.action.material.MaterialActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.ext.withValue
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.util.Event
-import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class MaterialDetailViewModel(
-    store: MaterialDetailStore,
-    actionDispatcher: MaterialActionDispatcher,
+    private val store: MaterialDetailStore,
+    actionCreator: MaterialActionCreator,
     colorFilter: ColorFilter,
     initialPosition: Int,
     private val navigator: Navigator
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
@@ -41,7 +49,15 @@ class MaterialDetailViewModel(
     val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
-        actionDispatcher.fetch(colorFilter)
+        launch {
+            actionCreator.fetch(colorFilter)
+        }
+    }
+
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
     }
 
     fun onClickEdit(currentPosition: Int) {
@@ -50,21 +66,16 @@ class MaterialDetailViewModel(
         }
     }
 
-    class Factory @Inject constructor(
-        private val actionDispatcher: MaterialActionDispatcher,
-        private val storeFactory: MaterialDetailStore.Factory,
-        private val navigator: Navigator
-    ) : ViewModelFactory {
-        fun create(
-            activity: FragmentActivity,
-            colorFilter: ColorFilter,
-            initialPosition: Int
-        ) = MaterialDetailViewModel(
-            obtainActivityStore(activity, MaterialDetailStore::class.java, storeFactory),
-            actionDispatcher,
-            colorFilter,
-            initialPosition,
-            navigator
-        )
+    class Factory(
+        private val store: MaterialDetailStore,
+        private val actionCreator: MaterialActionCreator,
+        private val navigator: Navigator,
+        private val colorFilter: ColorFilter,
+        private val initialPosition: Int
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return MaterialDetailViewModel(store, actionCreator, colorFilter, initialPosition, navigator) as T
+        }
     }
 }

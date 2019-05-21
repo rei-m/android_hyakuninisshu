@@ -16,20 +16,20 @@ package me.rei_m.hyakuninisshu.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.StartApplicationAction
+import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
-class ApplicationStore(dispatcher: Dispatcher) : Store() {
+@ForActivity
+class ApplicationStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _isReady = MutableLiveData<Boolean>()
     val isReady: LiveData<Boolean> = _isReady
 
     private val _unhandledErrorEvent = MutableLiveData<Event<Unit>>()
-    val unhandledErrorEvent = _unhandledErrorEvent
+    val unhandledErrorEvent: LiveData<Event<Unit>> = _unhandledErrorEvent
 
     init {
         _isReady.value = false
@@ -40,12 +40,5 @@ class ApplicationStore(dispatcher: Dispatcher) : Store() {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         })
-    }
-
-    class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ApplicationStore(dispatcher) as T
-        }
     }
 }

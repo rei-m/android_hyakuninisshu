@@ -16,16 +16,16 @@ package me.rei_m.hyakuninisshu.presentation.examhistory
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.FetchAllExamAction
+import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.presentation.Store
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
-class ExamHistoryStore(dispatcher: Dispatcher) : Store() {
+@ForActivity
+class ExamHistoryStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _karutaExamList = MutableLiveData<List<KarutaExam>>()
     val karutaExamList: LiveData<List<KarutaExam>?> = _karutaExamList
@@ -41,12 +41,5 @@ class ExamHistoryStore(dispatcher: Dispatcher) : Store() {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         })
-    }
-
-    class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamHistoryStore(dispatcher) as T
-        }
     }
 }

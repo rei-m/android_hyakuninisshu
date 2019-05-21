@@ -15,13 +15,14 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialListBinding
@@ -45,13 +46,11 @@ class MaterialListFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val colorFilter = if (savedInstanceState == null) {
-            ColorFilter.ALL
-        } else {
-            ColorFilter[savedInstanceState.getInt(KEY_MATERIAL_COLOR_FILTER)]
+        if (savedInstanceState != null) {
+            viewModelFactory.colorFilter = ColorFilter[savedInstanceState.getInt(KEY_MATERIAL_COLOR_FILTER)]
         }
-
-        materialListViewModel = viewModelFactory.create(requireActivity(), colorFilter)
+        materialListViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(MaterialListViewModel::class.java)
 
         val binding = FragmentMaterialListBinding.inflate(inflater, container, false).apply {
             viewModel = materialListViewModel

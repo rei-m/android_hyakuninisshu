@@ -14,26 +14,35 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.exam
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class ExamResultViewModel(
-    store: ExamStore,
-    actionDispatcher: ExamActionDispatcher,
+    private val store: ExamStore,
+    actionCreator: ExamActionCreator,
     initialKarutaExamId: KarutaExamIdentifier?,
     private val navigator: Navigator,
     private val analyticsHelper: AnalyticsHelper
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier }
 
@@ -47,9 +56,13 @@ class ExamResultViewModel(
 
     init {
         if (initialKarutaExamId == null) {
-            actionDispatcher.finish()
+            launch {
+                actionCreator.finish()
+            }
         } else {
-            actionDispatcher.fetch(initialKarutaExamId)
+            launch {
+                actionCreator.fetch(initialKarutaExamId)
+            }
         }
     }
 
@@ -62,21 +75,29 @@ class ExamResultViewModel(
         navigator.back()
     }
 
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
+    }
+
     class Factory @Inject constructor(
-        private val actionDispatcher: ExamActionDispatcher,
-        private val storeFactory: ExamStore.Factory,
+        private val store: ExamStore,
+        private val actionCreator: ExamActionCreator,
         private val navigator: Navigator,
         private val analyticsHelper: AnalyticsHelper
-    ) : ViewModelFactory {
-
+    ) : ViewModelProvider.Factory {
         var initialKarutaExamId: KarutaExamIdentifier? = null
 
-        fun create(activity: FragmentActivity) = ExamResultViewModel(
-            obtainActivityStore(activity, ExamStore::class.java, storeFactory),
-            actionDispatcher,
-            initialKarutaExamId,
-            navigator,
-            analyticsHelper
-        )
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ExamResultViewModel(
+                store,
+                actionCreator,
+                initialKarutaExamId,
+                navigator,
+                analyticsHelper
+            ) as T
+        }
     }
 }

@@ -14,21 +14,31 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.entrance
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class ExamMenuViewModel(
-    store: EntranceStore,
-    actionDispatcher: ExamActionDispatcher,
+    private val store: EntranceStore,
+    actionCreator: ExamActionCreator,
     private val navigator: Navigator,
     private val analyticsHelper: AnalyticsHelper
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
 
     val score: LiveData<String?> = store.recentExam.map { it?.result?.score }
@@ -36,7 +46,15 @@ class ExamMenuViewModel(
     val averageAnswerSec: LiveData<Float?> = store.recentExam.map { it?.result?.averageAnswerSec }
 
     init {
-        actionDispatcher.fetchRecent()
+        launch {
+            actionCreator.fetchRecent()
+        }
+    }
+
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
     }
 
     fun onClickShowAllExamResults() {
@@ -54,16 +72,19 @@ class ExamMenuViewModel(
     }
 
     class Factory @Inject constructor(
-        private val actionDispatcher: ExamActionDispatcher,
-        private val storeFactory: EntranceStore.Factory,
+        private val store: EntranceStore,
+        private val actionCreator: ExamActionCreator,
         private val navigator: Navigator,
         private val analyticsHelper: AnalyticsHelper
-    ) : ViewModelFactory {
-        fun create(activity: FragmentActivity) = ExamMenuViewModel(
-            obtainActivityStore(activity, EntranceStore::class.java, storeFactory),
-            actionDispatcher,
-            navigator,
-            analyticsHelper
-        )
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ExamMenuViewModel(
+                store,
+                actionCreator,
+                navigator,
+                analyticsHelper
+            ) as T
+        }
     }
 }

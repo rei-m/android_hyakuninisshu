@@ -15,6 +15,8 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.BuildConfig
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
@@ -23,7 +25,7 @@ import javax.inject.Inject
 class SupportViewModel(
     val version: String,
     private val navigator: Navigator
-) {
+) : ViewModel() {
 
     fun onClickReview() {
         navigator.navigateToAppStore()
@@ -38,12 +40,15 @@ class SupportViewModel(
     }
 
     class Factory @Inject constructor(
-        context: Context,
+        private val context: Context,
         private val navigator: Navigator
-    ) {
-
-        private val version = context.getString(R.string.version, BuildConfig.VERSION_NAME)
-
-        fun create(): SupportViewModel = SupportViewModel(version, navigator)
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return SupportViewModel(
+                context.getString(R.string.version, BuildConfig.VERSION_NAME),
+                navigator
+            ) as T
+        }
     }
 }

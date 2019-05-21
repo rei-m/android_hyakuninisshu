@@ -34,8 +34,9 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.addFragment
 import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.presentation.karuta.di.KarutaActivityModule
+import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
@@ -108,6 +109,7 @@ class KarutaActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
+            KarutaActivityModule::class,
             KarutaFragment.Module::class
         ]
     )
@@ -118,8 +120,11 @@ class KarutaActivity : DaggerAppCompatActivity(),
 
             abstract fun activityModule(module: ActivityModule): Builder
 
+            abstract fun karutaActivityModule(module: KarutaActivityModule): Builder
+
             override fun seedInstance(instance: KarutaActivity) {
                 activityModule(ActivityModule(instance))
+                karutaActivityModule(KarutaActivityModule(instance.karutaId))
             }
         }
     }

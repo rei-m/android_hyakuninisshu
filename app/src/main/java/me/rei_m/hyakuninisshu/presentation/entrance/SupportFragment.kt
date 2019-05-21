@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding
@@ -38,7 +39,8 @@ class SupportFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val supportViewModel = viewModelFactory.create()
+        val supportViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(SupportViewModel::class.java)
 
         val binding = FragmentSupportBinding.inflate(inflater, container, false).apply {
             viewModel = supportViewModel
