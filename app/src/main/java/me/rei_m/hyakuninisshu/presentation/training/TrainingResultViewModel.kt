@@ -45,16 +45,16 @@ class TrainingResultViewModel(
 
     val canRestartTraining: LiveData<Boolean> = store.result.map { it.canRestartTraining }
 
-    init {
-        launch {
-            actionCreator.aggregateResults()
-        }
-    }
-
     override fun onCleared() {
         job.cancel()
         store.dispose()
         super.onCleared()
+    }
+
+    fun onCreateView() {
+        launch {
+            actionCreator.aggregateResults()
+        }
     }
 
     fun onClickPracticeWrongKarutas() {

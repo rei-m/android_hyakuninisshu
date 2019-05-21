@@ -47,6 +47,9 @@ class TrainingResultFragment : DaggerFragment() {
             setLifecycleOwner(this@TrainingResultFragment.viewLifecycleOwner)
         }
 
+        // TODO: 暫定措置。。。
+        trainingResultViewModel.onCreateView()
+
         return binding.root
     }
 
