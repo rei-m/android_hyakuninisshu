@@ -16,10 +16,11 @@ package me.rei_m.hyakuninisshu.presentation.materialedit
 
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding
@@ -70,8 +71,8 @@ class MaterialEditFragment : DaggerFragment(),
                 fifthPhraseKana = savedInstanceState.getString(KEY_FIFTH_KANA, "")
             }
         }
-
-        materialEditViewModel = viewModelFactory.create(requireActivity(), karutaId)
+        materialEditViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(MaterialEditViewModel::class.java)
 
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false).apply {
             viewModel = materialEditViewModel

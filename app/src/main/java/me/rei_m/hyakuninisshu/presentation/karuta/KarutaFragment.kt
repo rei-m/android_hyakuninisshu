@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentKarutaBinding
@@ -50,7 +51,8 @@ class KarutaFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val karutaViewModel = viewModelFactory.create(requireActivity(), karutaId)
+        val karutaViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(KarutaViewModel::class.java)
 
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
             viewModel = karutaViewModel

@@ -41,7 +41,7 @@ class KarutaIds(val values: List<KarutaIdentifier>) {
     operator fun contains(karutaId: KarutaIdentifier): Boolean = values.contains(karutaId)
 
     override fun equals(other: Any?): Boolean {
-        other as? KarutaIds ?: return false
+        if (other !is KarutaIds) return false
         return (values == other.values)
     }
 

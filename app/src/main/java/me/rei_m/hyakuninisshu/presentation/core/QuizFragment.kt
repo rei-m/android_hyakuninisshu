@@ -22,9 +22,14 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import dagger.android.ContributesAndroidInjector
+import androidx.lifecycle.ViewModelProviders
+import dagger.Binds
+import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
+import dagger.android.support.FragmentKey
+import dagger.multibindings.IntoMap
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -34,7 +39,9 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
+import me.rei_m.hyakuninisshu.presentation.core.di.QuizFragmentModule
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.util.EventObserver
@@ -74,6 +81,12 @@ class QuizFragment : DaggerFragment() {
         }
     }
 
+    private val animationSpeed by lazy {
+        requireNotNull(arguments?.getInt(ARG_ANIMATION_SPEED)?.let { QuizAnimationSpeed[it] }) {
+            "$ARG_ANIMATION_SPEED is missing"
+        }
+    }
+
     private var animationDisposable: Disposable? = null
 
     override fun onCreateView(
@@ -81,7 +94,7 @@ class QuizFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        quizViewModel = viewModelFactory.create(this, karutaQuizId, kamiNoKuStyle, shimoNoKuStyle)
+        quizViewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizViewModel::class.java)
 
         binding = FragmentQuizBinding.inflate(inflater, container, false).apply {
             viewModel = quizViewModel
@@ -151,6 +164,8 @@ class QuizFragment : DaggerFragment() {
             return
         }
 
+        val animationSpeedValue = animationSpeed.value ?: return
+
         val firstLine = Arrays.asList<KarutaTextView>(
             binding.phrase11,
             binding.phrase12,
@@ -190,7 +205,7 @@ class QuizFragment : DaggerFragment() {
             addAll(thirdLine.take(thirdPhrase.length))
         }
 
-        animationDisposable = Observable.interval(SPEED_DISPLAY_ANIMATION_MILL_SEC, TimeUnit.MILLISECONDS)
+        animationDisposable = Observable.interval(animationSpeedValue, TimeUnit.MILLISECONDS)
             .zipWith(totalKarutaTextViewList) { _, textView -> textView }
             .observeOn(AndroidSchedulers.mainThread())
             .doOnDispose {
@@ -199,7 +214,7 @@ class QuizFragment : DaggerFragment() {
             .subscribe { textView ->
                 val fadeIn = AlphaAnimation(0f, 1f).apply {
                     interpolator = DecelerateInterpolator()
-                    duration = SPEED_DISPLAY_ANIMATION_MILL_SEC
+                    duration = animationSpeedValue
                 }
                 textView.visibility = View.VISIBLE
                 textView.startAnimation(fadeIn)
@@ -211,11 +226,36 @@ class QuizFragment : DaggerFragment() {
         animationDisposable = null
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(
+        modules = [
+            QuizFragmentModule::class
+        ]
+    )
+    interface Subcomponent : AndroidInjector<QuizFragment> {
+        @dagger.Subcomponent.Builder
+        abstract class Builder : AndroidInjector.Builder<QuizFragment>() {
+
+            abstract fun quizFragmentModule(module: QuizFragmentModule): Builder
+
+            override fun seedInstance(instance: QuizFragment) {
+                quizFragmentModule(
+                    QuizFragmentModule(
+                        instance.karutaQuizId,
+                        instance.kamiNoKuStyle,
+                        instance.shimoNoKuStyle
+                    )
+                )
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = [Subcomponent::class])
     abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector
-        abstract fun contributeInjector(): QuizFragment
+        @Binds
+        @IntoMap
+        @FragmentKey(QuizFragment::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Fragment>
     }
 
     companion object {
@@ -228,16 +268,18 @@ class QuizFragment : DaggerFragment() {
 
         private const val ARG_SHIMO_NO_KU_STYLE = "shimoNoKuStyle"
 
-        private const val SPEED_DISPLAY_ANIMATION_MILL_SEC: Long = 500
+        private const val ARG_ANIMATION_SPEED = "animationSpeed"
 
         fun newInstance(
             karutaQuizId: KarutaQuizIdentifier,
             kamiNoKuStyle: KarutaStyleFilter,
-            shimoNoKuStyle: KarutaStyleFilter
+            shimoNoKuStyle: KarutaStyleFilter,
+            animationSpeed: QuizAnimationSpeed
         ) = QuizFragment().withArgs {
             putParcelable(ARG_KARUTA_QUIZ_ID, karutaQuizId)
             putInt(ARG_KAMI_NO_KU_STYLE, kamiNoKuStyle.ordinal)
             putInt(ARG_SHIMO_NO_KU_STYLE, shimoNoKuStyle.ordinal)
+            putInt(ARG_ANIMATION_SPEED, animationSpeed.ordinal)
         }
     }
 }

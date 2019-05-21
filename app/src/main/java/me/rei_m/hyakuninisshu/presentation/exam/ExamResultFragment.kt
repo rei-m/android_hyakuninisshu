@@ -14,12 +14,13 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.exam
 
-import androidx.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding
@@ -53,7 +54,8 @@ class ExamResultFragment : DaggerFragment() {
         if (savedInstanceState != null) {
             viewModelFactory.initialKarutaExamId = savedInstanceState.getParcelable(KEY_EXAM_ID)
         }
-        examResultViewModel = viewModelFactory.create(requireActivity())
+        examResultViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(ExamResultViewModel::class.java)
 
         binding = FragmentExamResultBinding.inflate(inflater, container, false).apply {
             viewModel = examResultViewModel

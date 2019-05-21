@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,46 +12,34 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.presentation
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.action.application.ApplicationActionCreator
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class MaterialListViewModel(
-    private val store: EntranceStore,
-    private val actionCreator: MaterialActionCreator,
-    colorFilter: ColorFilter,
-    private val navigator: Navigator
+class ApplicationViewModel(
+    private val store: ApplicationStore,
+    actionCreator: ApplicationActionCreator
 ) : ViewModel(), CoroutineScope {
 
     private val job = Job()
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
-    val karutaList: LiveData<List<Karuta>> = store.karutaList
+    val isReady = store.isReady
 
-    var colorFilter = colorFilter
-        set(value) {
-            launch {
-                actionCreator.fetch(value)
-            }
-            field = value
-        }
+    val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
         launch {
-            actionCreator.fetch(colorFilter)
+            actionCreator.start()
         }
     }
 
@@ -61,25 +49,13 @@ class MaterialListViewModel(
         super.onCleared()
     }
 
-    fun onClickItem(position: Int) {
-        navigator.navigateToMaterialDetail(position, colorFilter)
-    }
-
     class Factory @Inject constructor(
-        private val store: EntranceStore,
-        private val actionCreator: MaterialActionCreator,
-        private val navigator: Navigator
+        private val store: ApplicationStore,
+        private val actionCreator: ApplicationActionCreator
     ) : ViewModelProvider.Factory {
-        var colorFilter = ColorFilter.ALL
-
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MaterialListViewModel(
-                store,
-                actionCreator,
-                colorFilter,
-                navigator
-            ) as T
+            return ApplicationViewModel(store, actionCreator) as T
         }
     }
 }

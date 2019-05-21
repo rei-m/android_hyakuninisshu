@@ -26,16 +26,15 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizCounter
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
-import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import java.util.Date
 
-class QuizActionDispatcherTest : TestHelper {
+class QuizActionCreatorTest : TestHelper {
 
-    private lateinit var actionDispatcher: QuizActionDispatcher
+    private lateinit var actionCreator: QuizActionCreator
 
     private lateinit var karutaRepository: KarutaRepository
     private lateinit var karutaQuizRepository: KarutaQuizRepository
@@ -48,11 +47,10 @@ class QuizActionDispatcherTest : TestHelper {
         dispatcher = mock {}
         karutaRepository = mock {}
         karutaQuizRepository = mock { }
-        actionDispatcher = QuizActionDispatcher(
+        actionCreator = QuizActionCreator(
             karutaRepository,
             karutaQuizRepository,
-            dispatcher,
-            DirectCoroutineContext
+            dispatcher
         )
     }
 
@@ -66,7 +64,7 @@ class QuizActionDispatcherTest : TestHelper {
             whenever(karutaRepository.findBy(it)).thenReturn(karuta)
         }
 
-        actionDispatcher.fetch(quiz.identifier)
+        actionCreator.fetch(quiz.identifier)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchQuizAction::class.java)
@@ -82,7 +80,7 @@ class QuizActionDispatcherTest : TestHelper {
         val quizId = KarutaQuizIdentifier()
         whenever(karutaQuizRepository.findBy(quizId)).thenReturn(null)
 
-        actionDispatcher.fetch(quizId)
+        actionCreator.fetch(quizId)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchQuizAction::class.java)
@@ -102,7 +100,7 @@ class QuizActionDispatcherTest : TestHelper {
         }
         whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
-        actionDispatcher.start(quiz.identifier, startDate)
+        actionCreator.start(quiz.identifier, startDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartQuizAction::class.java)
@@ -119,7 +117,7 @@ class QuizActionDispatcherTest : TestHelper {
         val startDate = Date()
         whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(null)
 
-        actionDispatcher.start(quiz.identifier, startDate)
+        actionCreator.start(quiz.identifier, startDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartQuizAction::class.java)
@@ -139,7 +137,7 @@ class QuizActionDispatcherTest : TestHelper {
         }
         whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
-        actionDispatcher.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
+        actionCreator.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(AnswerQuizAction::class.java)
@@ -156,7 +154,7 @@ class QuizActionDispatcherTest : TestHelper {
         val answerDate = Date()
         whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(null)
 
-        actionDispatcher.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
+        actionCreator.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(AnswerQuizAction::class.java)

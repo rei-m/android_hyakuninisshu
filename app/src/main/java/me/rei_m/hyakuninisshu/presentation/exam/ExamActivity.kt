@@ -15,7 +15,6 @@
 package me.rei_m.hyakuninisshu.presentation.exam
 
 import android.app.Activity
-import androidx.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +22,8 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
@@ -40,6 +41,7 @@ import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.util.EventObserver
@@ -64,9 +66,11 @@ class ExamActivity : DaggerAppCompatActivity(),
 
     override val shimoNoKuStyle = KarutaStyleFilter.KANA
 
+    override val animationSpeed = QuizAnimationSpeed.NORMAL
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = viewModelFactory.create(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamViewModel::class.java)
         with(viewModel) {
             isVisibleAd.observe(this@ExamActivity, Observer {
                 if (it == true) {

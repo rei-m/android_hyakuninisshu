@@ -15,10 +15,11 @@
 package me.rei_m.hyakuninisshu.presentation.entrance
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding
@@ -26,6 +27,7 @@ import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
@@ -58,9 +60,11 @@ class TrainingMenuFragment : DaggerFragment() {
                 kamiNoKuStyle = KarutaStyleFilter[savedInstanceState.getInt(KEY_KAMI_NO_KU_STYLE)]
                 shimoNoKuStyle = KarutaStyleFilter[savedInstanceState.getInt(KEY_SHIMO_NO_KU_STYLE)]
                 color = ColorFilter[savedInstanceState.getInt(KEY_COLOR)]
+                animationSpeed = QuizAnimationSpeed[savedInstanceState.getInt(KEY_ANIMATION_SPEED)]
             }
         }
-        trainingMenuViewModel = viewModelFactory.create()
+        trainingMenuViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(TrainingMenuViewModel::class.java)
 
         binding = FragmentTrainingMenuBinding.inflate(inflater, container, false).apply {
             viewModel = trainingMenuViewModel
@@ -71,6 +75,7 @@ class TrainingMenuFragment : DaggerFragment() {
             kimarijiAdapter = SpinnerAdapter.newInstance(root.context, KimarijiFilter.values().asList())
             karutaStyleAdapter = SpinnerAdapter.newInstance(root.context, KarutaStyleFilter.values().asList())
             colorAdapter = SpinnerAdapter.newInstance(root.context, ColorFilter.values().asList())
+            animationSpeedAdapter = SpinnerAdapter.newInstance(root.context, QuizAnimationSpeed.values().asList())
         }
 
         trainingMenuViewModel.snackBarMessage.observe(this, EventObserver {
@@ -92,6 +97,7 @@ class TrainingMenuFragment : DaggerFragment() {
         outState.putInt(KEY_KAMI_NO_KU_STYLE, trainingMenuViewModel.kamiNoKuStyle.value!!.ordinal)
         outState.putInt(KEY_SHIMO_NO_KU_STYLE, trainingMenuViewModel.shimoNoKuStyle.value!!.ordinal)
         outState.putInt(KEY_COLOR, trainingMenuViewModel.color.value!!.ordinal)
+        outState.putInt(KEY_ANIMATION_SPEED, trainingMenuViewModel.animationSpeed.value!!.ordinal)
         super.onSaveInstanceState(outState)
     }
 
@@ -117,6 +123,8 @@ class TrainingMenuFragment : DaggerFragment() {
         private const val KEY_KAMI_NO_KU_STYLE = "kamiNoKuStyle"
 
         private const val KEY_SHIMO_NO_KU_STYLE = "shimoNoKuStyle"
+
+        private const val KEY_ANIMATION_SPEED = "animationSpeed"
 
         fun newInstance() = TrainingMenuFragment()
     }

@@ -23,6 +23,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import dagger.Binds
 import dagger.android.ActivityKey
@@ -36,6 +37,7 @@ import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.presentation.materialdetail.di.MaterialDetailActivityModule
 import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
@@ -68,7 +70,8 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        materialDetailViewModel = viewModelFactory.create(this, colorFilter, lastPosition)
+        materialDetailViewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(MaterialDetailViewModel::class.java)
         materialDetailViewModel.unhandledErrorEvent.observe(this, EventObserver {
             showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
         })
@@ -148,6 +151,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
+            MaterialDetailActivityModule::class,
             MaterialDetailFragment.Module::class
         ]
     )
@@ -158,8 +162,11 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
             abstract fun activityModule(module: ActivityModule): Builder
 
+            abstract fun materialDetailActivityModule(module: MaterialDetailActivityModule): Builder
+
             override fun seedInstance(instance: MaterialDetailActivity) {
                 activityModule(ActivityModule(instance))
+                materialDetailActivityModule(MaterialDetailActivityModule(instance.colorFilter, instance.lastPosition))
             }
         }
     }

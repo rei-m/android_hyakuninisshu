@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -15,22 +15,23 @@
 package me.rei_m.hyakuninisshu.action.training
 
 import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.domain.model.karuta.*
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
+import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
+import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
-import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
 
 @Singleton
-class TrainingActionDispatcher @Inject constructor(
+class TrainingActionCreator @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val karutaQuizRepository: KarutaQuizRepository,
     private val karutaExamRepository: KarutaExamRepository,
-    private val dispatcher: Dispatcher,
-    private val coroutineContext: CoroutineContext
+    private val dispatcher: Dispatcher
 ) {
     /**
      * 練習を開始する.
@@ -46,59 +47,59 @@ class TrainingActionDispatcher @Inject constructor(
         kimariji: Kimariji?,
         color: Color?
     ) {
-        launchAction(coroutineContext, {
+        try {
             start(karutaRepository.findIds(fromKarutaId, toKarutaId, color, kimariji))
-        }, {
-            dispatcher.dispatch(StartTrainingAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(StartTrainingAction.createError(e))
+        }
     }
 
     /**
      * 力試しで過去に間違えた歌を練習対象にして練習を開始する.
      */
     fun startForExam() {
-        launchAction(coroutineContext, {
+        try {
             start(karutaExamRepository.list().totalWrongKarutaIds)
-        }, {
-            dispatcher.dispatch(StartTrainingAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(StartTrainingAction.createError(e))
+        }
     }
 
     /**
      * 練習で間違えた歌を練習対象にして練習を再開する.
      */
     fun restartForPractice() {
-        launchAction(coroutineContext, {
+        try {
             start(karutaQuizRepository.list().wrongKarutaIds)
-        }, {
-            dispatcher.dispatch(StartTrainingAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(StartTrainingAction.createError(e))
+        }
     }
 
     /**
      * 次の問題を取り出す.
      */
     fun fetchNext() {
-        launchAction(coroutineContext, {
+        try {
             val karutaQuiz = karutaQuizRepository.first()
                 ?: throw NoSuchElementException("NextKarutaQuiz")
             dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier))
-        }, {
-            dispatcher.dispatch(OpenNextQuizAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(OpenNextQuizAction.createError(e))
+        }
     }
 
     /**
      * 練習結果を集計する.
      */
     fun aggregateResults() {
-        launchAction(coroutineContext, {
+        try {
             val quizzes = karutaQuizRepository.list()
             val resultSummary = quizzes.resultSummary()
             dispatcher.dispatch(AggregateResultsAction.createSuccess(TrainingResult(resultSummary)))
-        }, {
-            dispatcher.dispatch(AggregateResultsAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(AggregateResultsAction.createError(e))
+        }
     }
 
     private fun start(karutaIds: KarutaIds) {

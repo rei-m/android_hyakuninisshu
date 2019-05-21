@@ -15,16 +15,15 @@
 package me.rei_m.hyakuninisshu.presentation
 
 import android.app.Activity
+import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.action.application.ApplicationActionDispatcher
 import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
@@ -37,10 +36,7 @@ class SplashActivity : DaggerAppCompatActivity(),
     AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
-    lateinit var storeFactory: ApplicationStore.Factory
-
-    @Inject
-    lateinit var actionDispatcher: ApplicationActionDispatcher
+    lateinit var viewModelFactory: ApplicationViewModel.Factory
 
     @Inject
     lateinit var navigator: Navigator
@@ -49,21 +45,16 @@ class SplashActivity : DaggerAppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        val store = ViewModelProviders.of(this, storeFactory).get(ApplicationStore::class.java)
-        store.isReady.observe(this, Observer {
+        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(ApplicationViewModel::class.java)
+        viewModel.isReady.observe(this, Observer {
             if (it == true) {
                 navigator.navigateToEntrance()
                 finish()
             }
         })
-        store.unhandledErrorEvent.observe(this, EventObserver {
+        viewModel.unhandledErrorEvent.observe(this, EventObserver {
             showAlertDialog(R.string.text_title_error, R.string.text_message_boot_error)
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        actionDispatcher.start()
     }
 
     override fun onAlertPositiveClick() {

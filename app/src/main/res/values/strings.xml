@@ -59,6 +59,7 @@
     <string name="edit_karuta">歌を編集する</string>
     <string name="editing_material">資料編集</string>
     <string name="char_material">資</string>
+    <string name="animation_condition">読み札のアニメーション表示</string>
 
     <string name="one">一</string>
     <string name="two">二</string>
@@ -113,6 +114,11 @@
     <string name="color_yellow">黄色</string>
     <string name="color_green">緑色</string>
     <string name="color_orange">橙色</string>
+
+    <string name="animation_none">なし</string>
+    <string name="animation_slow">おそめ</string>
+    <string name="animation_normal">ふつう</string>
+    <string name="animation_fast">はやめ</string>
 
     <string name="past_second">%1$d秒前</string>
     <string name="past_minute">%1$d分前</string>

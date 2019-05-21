@@ -16,19 +16,19 @@ package me.rei_m.hyakuninisshu.presentation.entrance
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.FetchRecentExamAction
 import me.rei_m.hyakuninisshu.action.exam.FinishExamAction
 import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
+import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.presentation.Store
 import javax.inject.Inject
 
-class EntranceStore(dispatcher: Dispatcher) : Store() {
+@ForActivity
+class EntranceStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _recentExam = MutableLiveData<KarutaExam?>()
     val recentExam: LiveData<KarutaExam?> = _recentExam
@@ -56,12 +56,5 @@ class EntranceStore(dispatcher: Dispatcher) : Store() {
                 _recentExam.value = it.karutaExam
             }
         })
-    }
-
-    class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return EntranceStore(dispatcher) as T
-        }
     }
 }

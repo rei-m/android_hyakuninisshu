@@ -14,15 +14,16 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
 
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.enums.SpinnerItem
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
@@ -93,6 +94,20 @@ fun captureSelectedKarutaStyle(spinner: Spinner): KarutaStyleFilter {
 fun bindColor(
     spinner: Spinner,
     newSelectedValue: ColorFilter,
+    newTextAttrChanged: InverseBindingListener
+) {
+    bindSpinner(spinner, newSelectedValue, newTextAttrChanged)
+}
+
+@InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+fun captureSelectedAnimationSpeed(spinner: Spinner): QuizAnimationSpeed {
+    return spinner.selectedItem as QuizAnimationSpeed
+}
+
+@BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
+fun bindColor(
+    spinner: Spinner,
+    newSelectedValue: QuizAnimationSpeed,
     newTextAttrChanged: InverseBindingListener
 ) {
     bindSpinner(spinner, newSelectedValue, newTextAttrChanged)

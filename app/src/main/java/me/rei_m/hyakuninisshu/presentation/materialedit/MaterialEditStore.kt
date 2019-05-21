@@ -16,17 +16,17 @@ package me.rei_m.hyakuninisshu.presentation.materialedit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.StartEditMaterialAction
+import me.rei_m.hyakuninisshu.di.ForActivity
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
-class MaterialEditStore(dispatcher: Dispatcher) : Store() {
+@ForActivity
+class MaterialEditStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _karuta = MutableLiveData<Karuta?>()
     val karuta: LiveData<Karuta?> = _karuta
@@ -52,12 +52,5 @@ class MaterialEditStore(dispatcher: Dispatcher) : Store() {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         })
-    }
-
-    class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MaterialEditStore(dispatcher) as T
-        }
     }
 }

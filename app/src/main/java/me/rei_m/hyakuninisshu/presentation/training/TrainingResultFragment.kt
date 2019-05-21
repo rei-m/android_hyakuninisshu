@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingResultBinding
@@ -38,12 +39,16 @@ class TrainingResultFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val trainingResultViewModel = viewModelFactory.create(requireActivity())
+        val trainingResultViewModel =
+            ViewModelProviders.of(requireActivity(), viewModelFactory).get(TrainingResultViewModel::class.java)
 
         val binding = FragmentTrainingResultBinding.inflate(inflater, container, false).apply {
             viewModel = trainingResultViewModel
             setLifecycleOwner(this@TrainingResultFragment.viewLifecycleOwner)
         }
+
+        // TODO: 暫定措置。。。
+        trainingResultViewModel.onCreateView()
 
         return binding.root
     }

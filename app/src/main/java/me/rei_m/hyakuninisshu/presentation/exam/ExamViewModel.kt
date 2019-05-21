@@ -14,16 +14,28 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.exam
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import me.rei_m.hyakuninisshu.action.exam.ExamActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
-class ExamViewModel(store: ExamStore, private val actionDispatcher: ExamActionDispatcher) {
+class ExamViewModel(
+    private val store: ExamStore,
+    private val actionCreator: ExamActionCreator
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -32,20 +44,30 @@ class ExamViewModel(store: ExamStore, private val actionDispatcher: ExamActionDi
     val notFoundQuizEvent: LiveData<Event<Unit>> = store.notFoundQuizEvent
 
     fun startExam() {
-        actionDispatcher.start()
+        launch {
+            actionCreator.start()
+        }
     }
 
     fun fetchNext() {
-        actionDispatcher.fetchNext()
+        launch {
+            actionCreator.fetchNext()
+        }
+    }
+
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
     }
 
     class Factory @Inject constructor(
-        private val actionDispatcher: ExamActionDispatcher,
-        private val storeFactory: ExamStore.Factory
-    ) : ViewModelFactory {
-        fun create(activity: FragmentActivity) = ExamViewModel(
-            obtainActivityStore(activity, ExamStore::class.java, storeFactory),
-            actionDispatcher
-        )
+        private val store: ExamStore,
+        private val actionCreator: ExamActionCreator
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ExamViewModel(store, actionCreator) as T
+        }
     }
 }

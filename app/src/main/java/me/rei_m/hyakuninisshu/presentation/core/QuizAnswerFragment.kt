@@ -19,12 +19,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dagger.android.ContributesAndroidInjector
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import dagger.Binds
+import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
+import dagger.android.support.FragmentKey
+import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding
 import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
+import me.rei_m.hyakuninisshu.presentation.core.di.QuizAnswerFragmentModule
 import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import me.rei_m.hyakuninisshu.util.EventObserver
 import javax.inject.Inject
@@ -50,8 +56,7 @@ class QuizAnswerFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val quizAnswerViewModel = viewModelFactory.create(this, karutaQuizId)
+        val quizAnswerViewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizAnswerViewModel::class.java)
 
         val binding = FragmentQuizAnswerBinding.inflate(inflater, container, false).apply {
             viewModel = quizAnswerViewModel
@@ -90,11 +95,30 @@ class QuizAnswerFragment : DaggerFragment() {
         super.onDetach()
     }
 
-    @dagger.Module
+    @ForFragment
+    @dagger.Subcomponent(
+        modules = [
+            QuizAnswerFragmentModule::class
+        ]
+    )
+    interface Subcomponent : AndroidInjector<QuizAnswerFragment> {
+        @dagger.Subcomponent.Builder
+        abstract class Builder : AndroidInjector.Builder<QuizAnswerFragment>() {
+
+            abstract fun quizAnswerFragmentModule(module: QuizAnswerFragmentModule): Builder
+
+            override fun seedInstance(instance: QuizAnswerFragment) {
+                quizAnswerFragmentModule(QuizAnswerFragmentModule(instance.karutaQuizId))
+            }
+        }
+    }
+
+    @dagger.Module(subcomponents = [Subcomponent::class])
     abstract class Module {
-        @ForFragment
-        @ContributesAndroidInjector
-        abstract fun contributeInjector(): QuizAnswerFragment
+        @Binds
+        @IntoMap
+        @FragmentKey(QuizAnswerFragment::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Fragment>
     }
 
     companion object {

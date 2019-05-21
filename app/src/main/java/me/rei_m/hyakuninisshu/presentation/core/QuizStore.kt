@@ -16,18 +16,18 @@ package me.rei_m.hyakuninisshu.presentation.core
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.AnswerQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.FetchQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.StartQuizAction
+import me.rei_m.hyakuninisshu.di.ForFragment
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.presentation.Store
 import me.rei_m.hyakuninisshu.util.Event
 import javax.inject.Inject
 
-class QuizStore(dispatcher: Dispatcher) : Store() {
+@ForFragment
+class QuizStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _karutaQuizContent = MutableLiveData<KarutaQuizContent>()
     val karutaQuizContent: LiveData<KarutaQuizContent> = _karutaQuizContent
@@ -55,12 +55,5 @@ class QuizStore(dispatcher: Dispatcher) : Store() {
                 _unhandledErrorEvent.value = Event(Unit)
             }
         })
-    }
-
-    class Factory @Inject constructor(private val dispatcher: Dispatcher) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return QuizStore(dispatcher) as T
-        }
     }
 }

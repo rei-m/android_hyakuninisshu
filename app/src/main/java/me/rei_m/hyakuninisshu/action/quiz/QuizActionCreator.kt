@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -16,20 +16,20 @@ package me.rei_m.hyakuninisshu.action.quiz
 
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.quiz.*
-import me.rei_m.hyakuninisshu.util.launchAction
+import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.NoSuchElementException
-import kotlin.coroutines.CoroutineContext
 
 @Singleton
-class QuizActionDispatcher @Inject constructor(
+class QuizActionCreator @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val karutaQuizRepository: KarutaQuizRepository,
-    private val dispatcher: Dispatcher,
-    private val coroutineContext: CoroutineContext
+    private val dispatcher: Dispatcher
 ) {
     /**
      * 指定の問題を取り出す.
@@ -37,13 +37,13 @@ class QuizActionDispatcher @Inject constructor(
      * @param karutaQuizId 問題ID.
      */
     fun fetch(karutaQuizId: KarutaQuizIdentifier) {
-        launchAction(coroutineContext, {
+        try {
             val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
                 ?: throw NoSuchElementException(karutaQuizId.toString())
             dispatcher.dispatch(FetchQuizAction.createSuccess(karutaQuiz.content()))
-        }, {
-            dispatcher.dispatch(FetchQuizAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(FetchQuizAction.createError(e))
+        }
     }
 
     /**
@@ -53,16 +53,16 @@ class QuizActionDispatcher @Inject constructor(
      * @param startTime 開始時間.
      */
     fun start(karutaQuizId: KarutaQuizIdentifier, startTime: Date) {
-        launchAction(coroutineContext, {
+        try {
             val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
                 ?: throw NoSuchElementException(karutaQuizId.toString())
             if (karutaQuiz.state != KarutaQuiz.State.ANSWERED) {
                 karutaQuizRepository.store(karutaQuiz.start(startTime))
             }
             dispatcher.dispatch(StartQuizAction.createSuccess(karutaQuiz.content()))
-        }, {
-            dispatcher.dispatch(StartQuizAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(StartQuizAction.createError(e))
+        }
     }
 
     /**
@@ -73,14 +73,14 @@ class QuizActionDispatcher @Inject constructor(
      * @param answerTime 回答時間.
      */
     fun answer(karutaQuizId: KarutaQuizIdentifier, choiceNo: ChoiceNo, answerTime: Date) {
-        launchAction(coroutineContext, {
+        try {
             val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
                 ?: throw NoSuchElementException(karutaQuizId.toString())
             karutaQuizRepository.store(karutaQuiz.verify(choiceNo, answerTime))
             dispatcher.dispatch(AnswerQuizAction.createSuccess(karutaQuiz.content()))
-        }, {
-            dispatcher.dispatch(AnswerQuizAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(AnswerQuizAction.createError(e))
+        }
     }
 
     private fun KarutaQuiz.content(): KarutaQuizContent {

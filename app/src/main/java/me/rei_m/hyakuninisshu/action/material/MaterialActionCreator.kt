@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,16 +18,13 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.util.launchAction
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
 
 @Singleton
-class MaterialActionDispatcher @Inject constructor(
+class MaterialActionCreator @Inject constructor(
     private val karutaRepository: KarutaRepository,
-    private val dispatcher: Dispatcher,
-    private val coroutineContext: CoroutineContext
+    private val dispatcher: Dispatcher
 ) {
     /**
      * 指定した色の該当する歌をすべて取り出す.
@@ -35,12 +32,12 @@ class MaterialActionDispatcher @Inject constructor(
      *  @param colorFilter 五色絞り込み条件
      */
     fun fetch(colorFilter: ColorFilter) {
-        launchAction(coroutineContext, {
+        try {
             val karutaList = karutaRepository.list(colorFilter.value)
             dispatcher.dispatch(FetchMaterialAction.createSuccess(karutaList))
-        }, {
-            dispatcher.dispatch(FetchMaterialAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(FetchMaterialAction.createError(e))
+        }
     }
 
     /**
@@ -49,13 +46,13 @@ class MaterialActionDispatcher @Inject constructor(
      * @param karutaId 歌ID.
      */
     fun startEdit(karutaId: KarutaIdentifier) {
-        launchAction(coroutineContext, {
+        try {
             val karuta = karutaRepository.findBy(karutaId)
                 ?: throw NoSuchElementException(karutaId.toString())
             dispatcher.dispatch(StartEditMaterialAction.createSuccess(karuta))
-        }, {
-            dispatcher.dispatch(StartEditMaterialAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(StartEditMaterialAction.createError(e))
+        }
     }
 
     /**
@@ -86,8 +83,7 @@ class MaterialActionDispatcher @Inject constructor(
         fifthPhraseKanji: String,
         fifthPhraseKana: String
     ) {
-
-        launchAction(coroutineContext, {
+        try {
             val karuta = karutaRepository.findBy(karutaId)
                 ?: throw NoSuchElementException(karutaId.toString())
             karuta.updatePhrase(
@@ -105,8 +101,8 @@ class MaterialActionDispatcher @Inject constructor(
                 karutaRepository.store(it)
             }
             dispatcher.dispatch(EditMaterialAction.createSuccess(karuta))
-        }, {
-            dispatcher.dispatch(EditMaterialAction.createError(it))
-        })
+        } catch (e: Exception) {
+            dispatcher.dispatch(EditMaterialAction.createError(e))
+        }
     }
 }

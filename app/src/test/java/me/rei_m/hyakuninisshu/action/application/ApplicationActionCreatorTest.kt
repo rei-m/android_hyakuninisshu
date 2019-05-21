@@ -21,14 +21,13 @@ import com.nhaarman.mockito_kotlin.whenever
 import kotlinx.coroutines.InternalCoroutinesApi
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.helper.DirectCoroutineContext
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class ApplicationActionDispatcherTest {
+class ApplicationActionCreatorTest {
 
-    private lateinit var actionDispatcher: ApplicationActionDispatcher
+    private lateinit var actionCreator: ApplicationActionCreator
 
     private lateinit var repository: KarutaRepository
 
@@ -39,14 +38,14 @@ class ApplicationActionDispatcherTest {
     fun setUp() {
         dispatcher = mock {}
         repository = mock {}
-        actionDispatcher = ApplicationActionDispatcher(repository, dispatcher, DirectCoroutineContext)
+        actionCreator = ApplicationActionCreator(repository, dispatcher)
     }
 
     @Test
     fun start() {
         whenever(repository.initialize()).thenAnswer { }
 
-        actionDispatcher.start()
+        actionCreator.start()
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(StartApplicationAction::class.java)

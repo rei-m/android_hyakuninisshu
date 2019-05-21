@@ -14,21 +14,30 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.training
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
-import me.rei_m.hyakuninisshu.action.training.TrainingActionDispatcher
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.util.AnalyticsHelper
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class TrainingResultViewModel(
-    store: TrainingStore,
-    private val actionDispatcher: TrainingActionDispatcher,
+    private val store: TrainingStore,
+    private val actionCreator: TrainingActionCreator,
     private val navigator: Navigator,
     private val analyticsHelper: AnalyticsHelper
-) {
+) : ViewModel(), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
 
     val score: LiveData<String> = store.result.map { "${it.correctCount}/${it.quizCount}" }
 
@@ -36,13 +45,23 @@ class TrainingResultViewModel(
 
     val canRestartTraining: LiveData<Boolean> = store.result.map { it.canRestartTraining }
 
-    init {
-        actionDispatcher.aggregateResults()
+    override fun onCleared() {
+        job.cancel()
+        store.dispose()
+        super.onCleared()
+    }
+
+    fun onCreateView() {
+        launch {
+            actionCreator.aggregateResults()
+        }
     }
 
     fun onClickPracticeWrongKarutas() {
         analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.RESTART_TRAINING)
-        actionDispatcher.restartForPractice()
+        launch {
+            actionCreator.restartForPractice()
+        }
     }
 
     fun onClickBackMenu() {
@@ -51,16 +70,19 @@ class TrainingResultViewModel(
     }
 
     class Factory @Inject constructor(
-        private val actionDispatcher: TrainingActionDispatcher,
-        private val storeFactory: TrainingStore.Factory,
+        private val store: TrainingStore,
+        private val actionCreator: TrainingActionCreator,
         private val navigator: Navigator,
         private val analyticsHelper: AnalyticsHelper
-    ) : ViewModelFactory {
-        fun create(activity: FragmentActivity) = TrainingResultViewModel(
-            obtainActivityStore(activity, TrainingStore::class.java, storeFactory),
-            actionDispatcher,
-            navigator,
-            analyticsHelper
-        )
+    ) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return TrainingResultViewModel(
+                store,
+                actionCreator,
+                navigator,
+                analyticsHelper
+            ) as T
+        }
     }
 }
