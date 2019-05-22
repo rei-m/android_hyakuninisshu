@@ -24,11 +24,11 @@ import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 

@@ -20,14 +20,14 @@ import android.widget.Spinner
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.presentation.enums.SpinnerItem
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.SpinnerItem
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter
 
 @BindingAdapter("spinnerAdapter")
 fun setSpinnerAdapter(spinner: Spinner, spinnerAdapter: SpinnerAdapter) {

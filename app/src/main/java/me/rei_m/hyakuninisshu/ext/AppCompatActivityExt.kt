@@ -20,7 +20,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 
 fun AppCompatActivity.addFragment(
     @IdRes containerViewId: Int,

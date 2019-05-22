@@ -26,9 +26,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialListBinding
-import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import javax.inject.Inject
 
 class MaterialListFragment : DaggerFragment() {
@@ -91,7 +91,7 @@ class MaterialListFragment : DaggerFragment() {
 
     @dagger.Module
     abstract class Module {
-        @ForFragment
+        @FragmentScope
         @ContributesAndroidInjector
         abstract fun contributeInjector(): MaterialListFragment
     }

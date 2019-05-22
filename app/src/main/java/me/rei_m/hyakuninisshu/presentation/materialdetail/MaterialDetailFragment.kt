@@ -22,7 +22,7 @@ import androidx.lifecycle.Observer
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding
-import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.withArgs
@@ -61,7 +61,7 @@ class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
 
     @dagger.Module
     abstract class Module {
-        @ForFragment
+        @FragmentScope
         @ContributesAndroidInjector
         abstract fun contributeInjector(): MaterialDetailFragment
     }

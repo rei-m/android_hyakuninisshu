@@ -20,14 +20,14 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.training.AggregateResultsAction
 import me.rei_m.hyakuninisshu.action.training.OpenNextQuizAction
 import me.rei_m.hyakuninisshu.action.training.StartTrainingAction
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
 import javax.inject.Inject
 
-@ForActivity
+@ActivityScope
 class TrainingStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _currentKarutaQuizId = MutableLiveData<KarutaQuizIdentifier?>()

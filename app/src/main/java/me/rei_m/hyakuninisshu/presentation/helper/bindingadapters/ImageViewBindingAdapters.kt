@@ -18,7 +18,7 @@ import androidx.databinding.BindingAdapter
 import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.presentation.helper.GlideApp
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.GlideApp
 
 @BindingAdapter("karutaSrc")
 fun setKarutaSrc(view: ImageView, resIdString: String?) {

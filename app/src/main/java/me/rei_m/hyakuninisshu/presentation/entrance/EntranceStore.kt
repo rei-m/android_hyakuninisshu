@@ -21,13 +21,13 @@ import me.rei_m.hyakuninisshu.action.exam.FetchRecentExamAction
 import me.rei_m.hyakuninisshu.action.exam.FinishExamAction
 import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.presentation.Store
 import javax.inject.Inject
 
-@ForActivity
+@ActivityScope
 class EntranceStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _recentExam = MutableLiveData<KarutaExam?>()

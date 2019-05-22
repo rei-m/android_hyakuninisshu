@@ -24,10 +24,10 @@ import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding
-import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
-import me.rei_m.hyakuninisshu.util.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
 import javax.inject.Inject
 
 class ExamResultFragment : DaggerFragment() {
@@ -103,7 +103,7 @@ class ExamResultFragment : DaggerFragment() {
 
     @dagger.Module
     abstract class Module {
-        @ForFragment
+        @FragmentScope
         @ContributesAndroidInjector
         abstract fun contributeInjector(): ExamResultFragment
     }

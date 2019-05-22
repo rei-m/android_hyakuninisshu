@@ -29,15 +29,16 @@ import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialEditBinding
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.addFragment
 import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
-import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import me.rei_m.hyakuninisshu.presentation.materialedit.di.MaterialEditActivityModule
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class MaterialEditActivity : DaggerAppCompatActivity(),
@@ -105,10 +106,11 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         adViewObserver.loadAd()
     }
 
-    @ForActivity
+    @ActivityScope
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
+            OldActivityModule::class,
             MaterialEditActivityModule::class,
             MaterialEditFragment.Module::class
         ]
@@ -118,12 +120,15 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<MaterialEditActivity>() {
 
+            abstract fun oldActivityModule(module: OldActivityModule): Builder
+
             abstract fun activityModule(module: ActivityModule): Builder
 
             abstract fun materialEditActivityModule(module: MaterialEditActivityModule): Builder
 
             override fun seedInstance(instance: MaterialEditActivity) {
                 activityModule(ActivityModule(instance))
+                oldActivityModule(OldActivityModule(instance))
                 materialEditActivityModule(MaterialEditActivityModule(instance.karutaId))
             }
         }

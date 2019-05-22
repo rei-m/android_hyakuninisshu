@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="number">
+        <item>@string/one</item>
+        <item>@string/two</item>
+        <item>@string/three</item>
+        <item>@string/four</item>
+        <item>@string/five</item>
+        <item>@string/six</item>
+        <item>@string/seven</item>
+        <item>@string/eight</item>
+        <item>@string/nine</item>
+    </array>
+
+    <array name="kimariji">
+        <item>@string/kimariji_1</item>
+        <item>@string/kimariji_2</item>
+        <item>@string/kimariji_3</item>
+        <item>@string/kimariji_4</item>
+        <item>@string/kimariji_5</item>
+        <item>@string/kimariji_6</item>
+    </array>
+
+    <array name="display_style">
+        <item>@string/display_style_kanji</item>
+        <item>@string/display_style_kana</item>
+    </array>
+
+</resources>

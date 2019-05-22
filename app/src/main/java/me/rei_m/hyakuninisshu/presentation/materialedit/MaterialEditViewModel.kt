@@ -30,8 +30,8 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.setIfNull
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.util.Event
-import me.rei_m.hyakuninisshu.util.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
 import kotlin.coroutines.CoroutineContext
 
 class MaterialEditViewModel(

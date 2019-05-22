@@ -17,8 +17,8 @@ package me.rei_m.hyakuninisshu.presentation.materialdetail.di
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
-import me.rei_m.hyakuninisshu.di.ForActivity
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailStore
 import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailViewModel
@@ -29,7 +29,7 @@ class MaterialDetailActivityModule(
     private val initialPosition: Int
 ) {
     @Provides
-    @ForActivity
+    @ActivityScope
     fun provideMaterialDetailViewModelFactory(
         store: MaterialDetailStore,
         actionCreator: MaterialActionCreator,

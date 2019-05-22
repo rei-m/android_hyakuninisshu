@@ -26,7 +26,7 @@ import android.widget.LinearLayout
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
 
 class KarutaExamResultView @JvmOverloads constructor(
     context: Context,

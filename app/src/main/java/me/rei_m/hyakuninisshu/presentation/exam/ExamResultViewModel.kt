@@ -27,8 +27,8 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
-import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
