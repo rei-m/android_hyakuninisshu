@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/34c38aa0be440a611e9ef6c04ee3641f/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/34c38aa0be440a611e9ef6c04ee3641f/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/layout-v21/notification_action.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/34c38aa0be440a611e9ef6c04ee3641f/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/34c38aa0be440a611e9ef6c04ee3641f/res/layout-v21/notification_template_custom_big.xml"
+    }
+]

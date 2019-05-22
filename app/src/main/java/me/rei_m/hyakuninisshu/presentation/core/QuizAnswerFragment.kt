@@ -32,7 +32,7 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.core.di.QuizAnswerFragmentModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import javax.inject.Inject
 
 class QuizAnswerFragment : DaggerFragment() {
@@ -63,15 +63,18 @@ class QuizAnswerFragment : DaggerFragment() {
             setLifecycleOwner(this@QuizAnswerFragment.viewLifecycleOwner)
         }
 
-        quizAnswerViewModel.openNextQuizEvent.observe(this, EventObserver {
-            listener?.onGoToNext()
-        })
-        quizAnswerViewModel.openResultEvent.observe(this, EventObserver {
-            listener?.onGoToResult()
-        })
-        quizAnswerViewModel.unhandledErrorEvent.observe(this, EventObserver {
-            listener?.onErrorQuiz()
-        })
+        quizAnswerViewModel.openNextQuizEvent.observe(this,
+            EventObserver {
+                listener?.onGoToNext()
+            })
+        quizAnswerViewModel.openResultEvent.observe(this,
+            EventObserver {
+                listener?.onGoToResult()
+            })
+        quizAnswerViewModel.unhandledErrorEvent.observe(this,
+            EventObserver {
+                listener?.onErrorQuiz()
+            })
 
         return binding.root
     }

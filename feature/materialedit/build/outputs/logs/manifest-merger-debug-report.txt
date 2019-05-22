@@ -1,0 +1,37 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+	package
+		ADDED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:2:5-58
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+		ADDED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+		ADDED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:1-2:61
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml:1:11-69
+uses-sdk
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+		ADDED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+		ADDED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml
+		INJECTED from /Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/src/main/AndroidManifest.xml

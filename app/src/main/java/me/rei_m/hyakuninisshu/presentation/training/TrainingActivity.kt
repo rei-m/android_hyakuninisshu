@@ -48,7 +48,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import javax.inject.Inject
 
 class TrainingActivity : DaggerAppCompatActivity(),
@@ -109,9 +109,10 @@ class TrainingActivity : DaggerAppCompatActivity(),
                 it ?: return@Observer
                 onReceiveKarutaQuizId(it)
             })
-            unhandledErrorEvent.observe(this@TrainingActivity, EventObserver {
-                onErrorQuiz()
-            })
+            unhandledErrorEvent.observe(this@TrainingActivity,
+                EventObserver {
+                    onErrorQuiz()
+                })
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training)

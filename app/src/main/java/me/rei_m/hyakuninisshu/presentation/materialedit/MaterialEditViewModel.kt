@@ -19,9 +19,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
@@ -29,12 +26,12 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.setIfNull
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import kotlin.coroutines.CoroutineContext
 
 class MaterialEditViewModel(
+    coroutineContext: CoroutineContext,
     private val store: MaterialEditStore,
     private val actionCreator: MaterialActionCreator,
     private val karutaId: KarutaIdentifier,
@@ -47,14 +44,8 @@ class MaterialEditViewModel(
     fourthPhraseKanji: String?,
     fourthPhraseKana: String?,
     fifthPhraseKanji: String?,
-    fifthPhraseKana: String?,
-    private val navigator: Navigator
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
-
+    fifthPhraseKana: String?
+) : AbstractViewModel(coroutineContext) {
     private val karuta: LiveData<Karuta?> = store.karuta
 
     val karutaNo: LiveData<Int?> = karuta.map { it?.identifier?.value }
@@ -86,6 +77,8 @@ class MaterialEditViewModel(
     private val _confirmEditEvent = MutableLiveData<Event<ConfirmMaterialEditDialogFragment>>()
     val confirmEditEvent: LiveData<Event<ConfirmMaterialEditDialogFragment>> = _confirmEditEvent
 
+    val completeEditEvent = store.completeEditEvent
+
     private val _snackBarMessage = MutableLiveData<Event<Int>>()
     val snackBarMessage: LiveData<Event<Int>> = _snackBarMessage
 
@@ -105,10 +98,6 @@ class MaterialEditViewModel(
         this.fifthPhraseKana.setIfNull(it.shimoNoKu.fifth.kana)
     }
 
-    private val completeEditEventObserver = EventObserver<Unit> {
-        navigator.back()
-    }
-
     init {
         this.firstPhraseKanji.value = firstPhraseKanji
         this.firstPhraseKana.value = firstPhraseKana
@@ -121,7 +110,6 @@ class MaterialEditViewModel(
         this.fifthPhraseKanji.value = fifthPhraseKanji
         this.fifthPhraseKana.value = fifthPhraseKana
         karuta.observeForever(karutaObserver)
-        store.completeEditEvent.observeForever(completeEditEventObserver)
 
         launch {
             actionCreator.startEdit(karutaId)
@@ -129,14 +117,12 @@ class MaterialEditViewModel(
     }
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
 
     fun onDestroyView() {
         karuta.removeObserver(karutaObserver)
-        store.completeEditEvent.removeObserver(completeEditEventObserver)
     }
 
     fun updateMaterial() {
@@ -158,7 +144,8 @@ class MaterialEditViewModel(
             fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
             fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
         ) {
-            _snackBarMessage.value = Event(R.string.text_message_edit_error)
+            _snackBarMessage.value =
+                Event(R.string.text_message_edit_error)
             return
         }
 
@@ -198,7 +185,8 @@ class MaterialEditViewModel(
             fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
             fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
         ) {
-            _snackBarMessage.value = Event(R.string.text_message_edit_error)
+            _snackBarMessage.value =
+                Event(R.string.text_message_edit_error)
             return
         }
 
@@ -219,9 +207,9 @@ class MaterialEditViewModel(
     }
 
     class Factory(
+        private val coroutineContext: CoroutineContext,
         private val store: MaterialEditStore,
         private val actionCreator: MaterialActionCreator,
-        private val navigator: Navigator,
         private val karutaId: KarutaIdentifier
     ) : ViewModelProvider.Factory {
 
@@ -239,6 +227,7 @@ class MaterialEditViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MaterialEditViewModel(
+                coroutineContext,
                 store,
                 actionCreator,
                 karutaId,
@@ -251,8 +240,7 @@ class MaterialEditViewModel(
                 fourthPhraseKanji,
                 fourthPhraseKana,
                 fifthPhraseKanji,
-                fifthPhraseKana,
-                navigator
+                fifthPhraseKana
             ) as T
         }
     }

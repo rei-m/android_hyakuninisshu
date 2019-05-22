@@ -28,7 +28,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import javax.inject.Inject
 
 class TrainingMenuViewModel(
@@ -62,7 +62,8 @@ class TrainingMenuViewModel(
     fun onClickStartTraining() {
 
         if (trainingRangeFrom.value!!.ordinal > trainingRangeTo.value!!.ordinal) {
-            _snackBarMessage.value = Event(R.string.text_message_invalid_training_range)
+            _snackBarMessage.value =
+                Event(R.string.text_message_invalid_training_range)
             return
         }
 

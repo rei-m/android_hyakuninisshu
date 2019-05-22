@@ -24,11 +24,12 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentMaterialEditBinding
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Navigator
 import javax.inject.Inject
 
 class MaterialEditFragment : DaggerFragment(),
@@ -36,6 +37,9 @@ class MaterialEditFragment : DaggerFragment(),
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
+
+    @Inject
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var viewModelFactory: MaterialEditViewModel.Factory
@@ -79,20 +83,26 @@ class MaterialEditFragment : DaggerFragment(),
             setLifecycleOwner(this@MaterialEditFragment.viewLifecycleOwner)
         }
 
-        materialEditViewModel.confirmEditEvent.observe(this, EventObserver { dialog ->
-            fragmentManager?.let {
-                dialog.setTargetFragment(this, 0)
-                dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
-            }
+        materialEditViewModel.confirmEditEvent.observe(this,
+            EventObserver { dialog ->
+                fragmentManager?.let {
+                    dialog.setTargetFragment(this, 0)
+                    dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
+                }
+            })
+        materialEditViewModel.completeEditEvent.observe(this, EventObserver {
+            navigator.back()
         })
-        materialEditViewModel.snackBarMessage.observe(this, EventObserver {
-            Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
-                .setAction("Action", null)
-                .show()
-        })
-        materialEditViewModel.unhandledErrorEvent.observe(this, EventObserver {
-            listener?.onError()
-        })
+        materialEditViewModel.snackBarMessage.observe(this,
+            EventObserver {
+                Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null)
+                    .show()
+            })
+        materialEditViewModel.unhandledErrorEvent.observe(this,
+            EventObserver {
+                listener?.onError()
+            })
 
         return binding.root
     }

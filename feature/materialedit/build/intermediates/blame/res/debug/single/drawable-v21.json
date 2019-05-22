@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/bg_ripple.xml",
+        "source": "/Users/matsushitar/github/android_hyakuninisshu/feature/corecomponent/build/intermediates/packaged_res/debug/drawable-v21/bg_ripple.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/bg_karuta_inner.xml",
+        "source": "/Users/matsushitar/github/android_hyakuninisshu/feature/corecomponent/build/intermediates/packaged_res/debug/drawable-v21/bg_karuta_inner.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/bg_button_accent.xml",
+        "source": "/Users/matsushitar/github/android_hyakuninisshu/feature/corecomponent/build/intermediates/packaged_res/debug/drawable-v21/bg_button_accent.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/notification_action_background.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/34c38aa0be440a611e9ef6c04ee3641f/res/drawable-v21/notification_action_background.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/design_bottom_navigation_item_background.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/e3efee04f4cfab5072db9ce464d2f219/res/drawable-v21/design_bottom_navigation_item_background.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/3c85e329be9648967690545c24fddb5c/res/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/avd_hide_password.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/e3efee04f4cfab5072db9ce464d2f219/res/drawable-v21/avd_hide_password.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/3c85e329be9648967690545c24fddb5c/res/drawable-v21/abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/avd_show_password.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/e3efee04f4cfab5072db9ce464d2f219/res/drawable-v21/avd_show_password.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/abc_dialog_material_background.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/3c85e329be9648967690545c24fddb5c/res/drawable-v21/abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/design_password_eye.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/e3efee04f4cfab5072db9ce464d2f219/res/drawable-v21/design_password_eye.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/abc_list_divider_material.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/3c85e329be9648967690545c24fddb5c/res/drawable-v21/abc_list_divider_material.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/bg_karuta_choice.xml",
+        "source": "/Users/matsushitar/github/android_hyakuninisshu/feature/corecomponent/build/intermediates/packaged_res/debug/drawable-v21/bg_karuta_choice.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/drawable-v21/abc_edit_text_material.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/3c85e329be9648967690545c24fddb5c/res/drawable-v21/abc_edit_text_material.xml"
+    }
+]

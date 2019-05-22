@@ -27,7 +27,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import javax.inject.Inject
 
 class KarutaFragment : DaggerFragment() {
@@ -59,9 +59,10 @@ class KarutaFragment : DaggerFragment() {
             setLifecycleOwner(this@KarutaFragment.viewLifecycleOwner)
         }
 
-        karutaViewModel.notFoundKarutaEvent.observe(this, EventObserver {
-            listener?.onError()
-        })
+        karutaViewModel.notFoundKarutaEvent.observe(this,
+            EventObserver {
+                listener?.onError()
+            })
 
         return binding.root
     }

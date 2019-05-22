@@ -22,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import me.rei_m.hyakuninisshu.action.AppDispatcher
 import me.rei_m.hyakuninisshu.action.Dispatcher
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
@@ -36,7 +37,8 @@ class ApplicationModule(application: Application) {
 
     @Provides
     @Singleton
-    fun provideCoroutineContext(): CoroutineContext = Dispatchers.Default
+    @Named("vmCoroutineContext")
+    fun provideViewModelCoroutineContext(): CoroutineContext = Dispatchers.IO
 
     @Provides
     @Singleton

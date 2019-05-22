@@ -17,18 +17,10 @@ package me.rei_m.hyakuninisshu.presentation.di
 import androidx.appcompat.app.AppCompatActivity
 import dagger.Module
 import dagger.Provides
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 
 @Module
 class OldActivityModule(private val activity: AppCompatActivity) {
-
-    @Provides
-    @ActivityScope
-    fun provideActivity(): AppCompatActivity {
-        return activity
-    }
-
     @Provides
     fun provideNavigator(): Navigator {
         return Navigator(activity)

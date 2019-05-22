@@ -26,7 +26,7 @@ import android.widget.LinearLayout
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 
 class KarutaExamResultView @JvmOverloads constructor(
     context: Context,
@@ -75,7 +75,9 @@ class KarutaExamResultView @JvmOverloads constructor(
             val (karutaId, isCorrect) = karutaQuizJudgement
             with(findViewById<KarutaExamResultCellView>(cellViewIdList[index])) {
                 setResult(karutaId.value, isCorrect)
-                setOnClickListener { _onClickKarutaEvent.value = Event(karutaId) }
+                setOnClickListener { _onClickKarutaEvent.value =
+                    Event(karutaId)
+                }
             }
         }
     }

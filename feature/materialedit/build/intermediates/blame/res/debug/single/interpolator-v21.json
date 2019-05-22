@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/interpolator-v21/mtrl_fast_out_slow_in.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/e3efee04f4cfab5072db9ce464d2f219/res/interpolator-v21/mtrl_fast_out_slow_in.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/interpolator-v21/mtrl_linear_out_slow_in.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/e3efee04f4cfab5072db9ce464d2f219/res/interpolator-v21/mtrl_linear_out_slow_in.xml"
+    },
+    {
+        "merged": "/Users/matsushitar/github/android_hyakuninisshu/feature/materialedit/build/intermediates/res/merged/debug/interpolator-v21/mtrl_fast_out_linear_in.xml",
+        "source": "/Users/matsushitar/.gradle/caches/transforms-2/files-2.1/e3efee04f4cfab5072db9ce464d2f219/res/interpolator-v21/mtrl_fast_out_linear_in.xml"
+    }
+]
