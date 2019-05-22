@@ -21,8 +21,8 @@ import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import javax.inject.Inject
 
 @ActivityScope

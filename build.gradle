@@ -42,6 +42,7 @@ ext {
     mockitoKotlinVersion = '1.6.0'
     timberVersion = '4.7.1'
     lifecycleVersion = '2.0.0'
+    coroutinesVersion = '1.0.1'
 }
 
 task clean(type: Delete) {

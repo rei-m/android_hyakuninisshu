@@ -24,13 +24,13 @@ import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
 import javax.inject.Inject
 
 class SplashActivity : DaggerAppCompatActivity(),
@@ -67,10 +67,12 @@ class SplashActivity : DaggerAppCompatActivity(),
     }
 
     @ActivityScope
-    @dagger.Subcomponent(modules = [
-        ActivityModule::class,
-        OldActivityModule::class
-    ])
+    @dagger.Subcomponent(
+        modules = [
+            ActivityModule::class,
+            OldActivityModule::class
+        ]
+    )
     interface Subcomponent : AndroidInjector<SplashActivity> {
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<SplashActivity>() {

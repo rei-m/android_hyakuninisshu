@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 

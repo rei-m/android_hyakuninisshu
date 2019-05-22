@@ -42,7 +42,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.materialdetail.di.MaterialDetailActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import javax.inject.Inject
 
 class MaterialDetailActivity : DaggerAppCompatActivity(),
@@ -73,9 +73,10 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         super.onCreate(savedInstanceState)
         materialDetailViewModel =
             ViewModelProviders.of(this, viewModelFactory).get(MaterialDetailViewModel::class.java)
-        materialDetailViewModel.unhandledErrorEvent.observe(this, EventObserver {
-            showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
-        })
+        materialDetailViewModel.unhandledErrorEvent.observe(this,
+            EventObserver {
+                showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
+            })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail)
         binding.viewModel = materialDetailViewModel

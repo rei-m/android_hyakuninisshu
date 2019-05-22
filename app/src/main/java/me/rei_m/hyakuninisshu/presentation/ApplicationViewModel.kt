@@ -16,22 +16,18 @@ package me.rei_m.hyakuninisshu.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.application.ApplicationActionCreator
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class ApplicationViewModel(
+    coroutineContext: CoroutineContext,
     private val store: ApplicationStore,
     actionCreator: ApplicationActionCreator
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+) : AbstractViewModel(coroutineContext) {
 
     val isReady = store.isReady
 
@@ -44,18 +40,18 @@ class ApplicationViewModel(
     }
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
 
     class Factory @Inject constructor(
+        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
         private val store: ApplicationStore,
         private val actionCreator: ApplicationActionCreator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ApplicationViewModel(store, actionCreator) as T
+            return ApplicationViewModel(coroutineContext, store, actionCreator) as T
         }
     }
 }

@@ -24,7 +24,7 @@ import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
-import me.rei_m.hyakuninisshu.presentation.Store
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
 import javax.inject.Inject
 
 @ActivityScope

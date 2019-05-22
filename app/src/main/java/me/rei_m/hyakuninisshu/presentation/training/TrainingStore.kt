@@ -23,8 +23,8 @@ import me.rei_m.hyakuninisshu.action.training.StartTrainingAction
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
-import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import javax.inject.Inject
 
 @ActivityScope

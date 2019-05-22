@@ -44,7 +44,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -118,9 +118,10 @@ class QuizFragment : DaggerFragment() {
         quizViewModel.openAnswerEvent.observe(this, EventObserver {
             listener?.onAnswered(it)
         })
-        quizViewModel.unhandledErrorEvent.observe(this, EventObserver {
-            listener?.onErrorQuiz()
-        })
+        quizViewModel.unhandledErrorEvent.observe(this,
+            EventObserver {
+                listener?.onErrorQuiz()
+            })
 
         return binding.root
     }

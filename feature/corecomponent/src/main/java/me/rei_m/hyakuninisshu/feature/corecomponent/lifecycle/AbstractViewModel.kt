@@ -11,21 +11,21 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation
+package me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle
 
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 
-abstract class Store {
+abstract class AbstractViewModel(coroutineContext: CoroutineContext) : ViewModel(), CoroutineScope {
 
-    private val disposable = CompositeDisposable()
+    private val job = Job()
 
-    protected fun register(vararg ds: Disposable) {
-        disposable.addAll(*ds)
-    }
+    override val coroutineContext: CoroutineContext = coroutineContext + job
 
-    fun dispose() {
-        disposable.dispose()
+    override fun onCleared() {
+        job.cancel()
+        super.onCleared()
     }
 }

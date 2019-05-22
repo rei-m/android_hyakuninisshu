@@ -31,7 +31,7 @@ import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Device
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import java.util.Arrays
 import java.util.Date
 import kotlin.coroutines.CoroutineContext

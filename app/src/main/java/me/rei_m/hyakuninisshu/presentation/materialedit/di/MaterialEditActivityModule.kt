@@ -14,14 +14,17 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.presentation.materialedit.di
 
+import androidx.appcompat.app.AppCompatActivity
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditStore
 import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditViewModel
+import javax.inject.Named
+import kotlin.coroutines.CoroutineContext
 
 @Module
 class MaterialEditActivityModule(
@@ -29,16 +32,18 @@ class MaterialEditActivityModule(
 ) {
     @Provides
     @ActivityScope
+    fun provideNavigator(activity: AppCompatActivity): Navigator = Navigator(activity)
+
+    @Provides
+    @ActivityScope
     fun provideMaterialEditViewModelFactory(
+        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
         store: MaterialEditStore,
-        actionCreator: MaterialActionCreator,
-        navigator: Navigator
-    ): MaterialEditViewModel.Factory {
-        return MaterialEditViewModel.Factory(
-            store,
-            actionCreator,
-            navigator,
-            karutaId
-        )
-    }
+        actionCreator: MaterialActionCreator
+    ): MaterialEditViewModel.Factory = MaterialEditViewModel.Factory(
+        coroutineContext,
+        store,
+        actionCreator,
+        karutaId
+    )
 }

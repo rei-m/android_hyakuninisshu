@@ -32,7 +32,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import javax.inject.Inject
 
 class TrainingMenuFragment : DaggerFragment() {
@@ -78,9 +78,10 @@ class TrainingMenuFragment : DaggerFragment() {
             animationSpeedAdapter = SpinnerAdapter.newInstance(root.context, QuizAnimationSpeed.values().asList())
         }
 
-        trainingMenuViewModel.snackBarMessage.observe(this, EventObserver {
-            Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
-        })
+        trainingMenuViewModel.snackBarMessage.observe(this,
+            EventObserver {
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+            })
 
         return binding.root
     }

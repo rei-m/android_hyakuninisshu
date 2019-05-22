@@ -27,7 +27,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import kotlin.coroutines.CoroutineContext
 
 class MaterialDetailViewModel(

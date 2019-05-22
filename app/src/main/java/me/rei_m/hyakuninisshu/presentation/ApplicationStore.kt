@@ -19,7 +19,8 @@ import androidx.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.StartApplicationAction
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
 import javax.inject.Inject
 
 @ActivityScope

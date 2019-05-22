@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.feature.corecomponent.event
+package me.rei_m.hyakuninisshu.feature.corecomponent.flux
 
 open class Event<out T>(private val content: T) {
 

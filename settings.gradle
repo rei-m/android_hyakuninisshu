@@ -1,1 +1,1 @@
-include ':app', ':domain', ':infrastructure', ':action', ':feature:corecomponent'
+include ':app', ':domain', ':infrastructure', ':action', ':feature:corecomponent', ':feature:materialedit'
