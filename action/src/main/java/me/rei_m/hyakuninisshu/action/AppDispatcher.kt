@@ -17,8 +17,8 @@ package me.rei_m.hyakuninisshu.action
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.processors.PublishProcessor
-import me.rei_m.hyakuninisshu.util.Logger
 import javax.inject.Singleton
+import timber.log.Timber
 
 @Singleton
 class AppDispatcher(private val uiScheduler: Scheduler) : Dispatcher {
@@ -26,7 +26,11 @@ class AppDispatcher(private val uiScheduler: Scheduler) : Dispatcher {
     private val processor = PublishProcessor.create<Action>()
 
     override fun dispatch(action: Action) {
-        Logger.action(action)
+        if (action.isSucceeded) {
+            Timber.tag("Action").d(action.toString())
+        } else {
+            Timber.tag("Action").e(action.toString())
+        }
         processor.onNext(action)
     }
 

@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.action.material
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,11 +29,11 @@ class MaterialActionCreator @Inject constructor(
     /**
      * 指定した色の該当する歌をすべて取り出す.
      *
-     *  @param colorFilter 五色絞り込み条件
+     *  @param color 五色絞り込み条件
      */
-    fun fetch(colorFilter: ColorFilter) {
+    fun fetch(color: Color?) {
         try {
-            val karutaList = karutaRepository.list(colorFilter.value)
+            val karutaList = karutaRepository.list(color)
             dispatcher.dispatch(FetchMaterialAction.createSuccess(karutaList))
         } catch (e: Exception) {
             dispatcher.dispatch(FetchMaterialAction.createError(e))

@@ -103,6 +103,7 @@ ext {
 dependencies {
     implementation project(":domain")
     implementation project(":infrastructure")
+    implementation project(":action")
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -141,7 +142,7 @@ dependencies {
     implementation 'com.github.maskarade.android.orma:orma:6.0.1'
     kapt 'com.github.maskarade.android.orma:orma-processor:6.0.1'
 
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.google.firebase:firebase-ads:17.1.2'
@@ -151,7 +152,7 @@ dependencies {
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
-    testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
+    testImplementation "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
     testImplementation('androidx.test:runner:1.1.0-beta02') {
         exclude module: 'support-annotations'
     }

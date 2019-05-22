@@ -24,16 +24,16 @@ dependencies {
     implementation project(":domain")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
 
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
-    implementation "com.squareup.moshi:moshi:$moshiVersion"
-    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 
-    implementation 'com.github.maskarade.android.orma:orma:6.0.1'
-    kapt 'com.github.maskarade.android.orma:orma-processor:6.0.1'
-    implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
 }

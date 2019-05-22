@@ -39,6 +39,8 @@ ext {
     daggerVersion = '2.16'
     moshiVersion = '1.7.0'
     rxjavaVersion = '2.2.2'
+    mockitoKotlinVersion = '1.6.0'
+    timberVersion = '4.7.1'
 }
 
 task clean(type: Delete) {

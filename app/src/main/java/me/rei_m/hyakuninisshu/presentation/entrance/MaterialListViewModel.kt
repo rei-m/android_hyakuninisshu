@@ -44,14 +44,14 @@ class MaterialListViewModel(
     var colorFilter = colorFilter
         set(value) {
             launch {
-                actionCreator.fetch(value)
+                actionCreator.fetch(value.value)
             }
             field = value
         }
 
     init {
         launch {
-            actionCreator.fetch(colorFilter)
+            actionCreator.fetch(colorFilter.value)
         }
     }
 

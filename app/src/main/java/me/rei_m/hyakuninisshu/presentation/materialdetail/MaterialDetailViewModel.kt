@@ -50,7 +50,7 @@ class MaterialDetailViewModel(
 
     init {
         launch {
-            actionCreator.fetch(colorFilter)
+            actionCreator.fetch(colorFilter.value)
         }
     }
 

@@ -19,14 +19,13 @@ import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import kotlinx.coroutines.InternalCoroutinesApi
 import me.rei_m.hyakuninisshu.action.Dispatcher
+import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.helper.TestHelper
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+//import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -39,7 +38,6 @@ class MaterialActionCreatorTest : TestHelper {
 
     private lateinit var dispatcher: Dispatcher
 
-    @InternalCoroutinesApi
     @Before
     fun setUp() {
         dispatcher = mock {}
@@ -56,7 +54,7 @@ class MaterialActionCreatorTest : TestHelper {
 
         whenever(karutaRepository.list(Color.BLUE)).thenReturn(karutas)
 
-        actionCreator.fetch(ColorFilter.BLUE.value)
+        actionCreator.fetch(Color.BLUE)
 
         verify(dispatcher).dispatch(check {
             assertThat(it).isInstanceOf(FetchMaterialAction::class.java)
