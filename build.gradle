@@ -36,6 +36,9 @@ ext {
     junitVersion = '4.12'
     assertjVersion = '3.11.1'
     robolectricVersion = '4.2'
+    daggerVersion = '2.16'
+    moshiVersion = '1.7.0'
+    rxjavaVersion = '2.2.2'
 }
 
 task clean(type: Delete) {

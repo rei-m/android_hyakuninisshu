@@ -27,7 +27,7 @@ import java.util.Random
  * @param size 生成した配列から返却する数
  * @return ランダム順にIndexを格納した配列
  */
-fun generateRandomIndexArray(randomArraySize: Int, size: Int): IntArray {
+internal fun generateRandomIndexArray(randomArraySize: Int, size: Int): IntArray {
 
     val randArray = IntArray(size)
     val conversion = SparseIntArray()
