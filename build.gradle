@@ -26,6 +26,18 @@ allprojects {
     }
 }
 
+ext {
+    compileSdkVersion = 28
+    minSdkVersion = 16
+    targetSdkVersion = 28
+    versionCode = 23
+    versionName = '2.3.0'
+
+    junitVersion = '4.12'
+    assertjVersion = '3.11.1'
+    robolectricVersion = '4.2'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

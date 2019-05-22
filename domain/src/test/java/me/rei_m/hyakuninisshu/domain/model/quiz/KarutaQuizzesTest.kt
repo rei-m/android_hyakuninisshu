@@ -14,9 +14,9 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
+import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
-import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

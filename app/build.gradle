@@ -45,15 +45,15 @@ android {
         }
     }
 
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true
-        versionCode 23
-        versionName "2.3.0"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [crashlyticsEnabled: true]
@@ -101,6 +101,8 @@ ext {
 }
 
 dependencies {
+    implementation project(":domain")
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -144,10 +146,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-ads:17.1.2'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.assertj:assertj-core:3.11.1'
-    testImplementation 'org.robolectric:robolectric:4.2'
-    testImplementation 'org.robolectric:shadows-multidex:4.2'
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
     testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
     testImplementation('androidx.test:runner:1.1.0-beta02') {
         exclude module: 'support-annotations'

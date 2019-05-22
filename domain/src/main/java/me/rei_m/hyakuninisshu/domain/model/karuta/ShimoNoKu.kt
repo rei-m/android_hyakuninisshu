@@ -15,21 +15,19 @@
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
-import me.rei_m.hyakuninisshu.util.SPACE
 
 /**
- * 上の句.
+ * 下の句.
  */
-class KamiNoKu(
-    identifier: KamiNoKuIdentifier,
-    val first: Phrase,
-    val second: Phrase,
-    val third: Phrase
-) : AbstractEntity<KamiNoKuIdentifier>(identifier) {
+class ShimoNoKu(
+    identifier: ShimoNoKuIdentifier,
+    val fourth: Phrase,
+    val fifth: Phrase
+) : AbstractEntity<ShimoNoKuIdentifier>(identifier) {
 
-    val kanji: String = "${first.kanji}$SPACE${second.kanji}$SPACE${third.kanji}"
+    val kanji = "${fourth.kanji}　${fifth.kanji}"
 
-    val kana: String = "${first.kana}$SPACE${second.kana}$SPACE${third.kana}"
+    val kana = "${fourth.kana}　${fifth.kana}"
 
-    override fun toString() = "KamiNoKu(first=$first, second=$second, third=$third, kanji='$kanji', kana='$kana')"
+    override fun toString(): String = "ShimoNoKu(fourth=$fourth, fifth=$fifth)"
 }

@@ -14,9 +14,9 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
+import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaStyle
-import me.rei_m.hyakuninisshu.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -62,10 +62,10 @@ class KarutaQuizContentTest : TestHelper {
     @Test
     fun toriFudasByKana() {
         val expected = listOf(
-                ToriFuda("よんく_1", "ごく_1"),
-                ToriFuda("よんく_2", "ごく_2"),
-                ToriFuda("よんく_3", "ごく_3"),
-                ToriFuda("よんく_4", "ごく_4")
+            ToriFuda("よんく_1", "ごく_1"),
+            ToriFuda("よんく_2", "ごく_2"),
+            ToriFuda("よんく_3", "ごく_3"),
+            ToriFuda("よんく_4", "ごく_4")
         )
         assertThat(karutaQuizContent.toriFudas(KarutaStyle.KANA)).isEqualTo(expected)
     }
@@ -73,10 +73,10 @@ class KarutaQuizContentTest : TestHelper {
     @Test
     fun toriFudasByKanji() {
         val expected = listOf(
-                ToriFuda("四句_1", "五句_1"),
-                ToriFuda("四句_2", "五句_2"),
-                ToriFuda("四句_3", "五句_3"),
-                ToriFuda("四句_4", "五句_4")
+            ToriFuda("四句_1", "五句_1"),
+            ToriFuda("四句_2", "五句_2"),
+            ToriFuda("四句_3", "五句_3"),
+            ToriFuda("四句_4", "五句_4")
         )
         assertThat(karutaQuizContent.toriFudas(KarutaStyle.KANJI)).isEqualTo(expected)
     }

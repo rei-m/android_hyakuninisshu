@@ -14,7 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
-import me.rei_m.hyakuninisshu.helper.TestHelper
+import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -31,10 +31,10 @@ class KarutasTest : TestHelper {
     @Before
     fun setUp() {
         karutasValue = arrayListOf(
-                createKaruta(id = 1, color = Color.BLUE),
-                createKaruta(id = 2, color = Color.BLUE),
-                createKaruta(id = 3, color = Color.PINK),
-                createKaruta(id = 4, color = Color.PINK)
+            createKaruta(id = 1, color = Color.BLUE),
+            createKaruta(id = 2, color = Color.BLUE),
+            createKaruta(id = 3, color = Color.PINK),
+            createKaruta(id = 4, color = Color.PINK)
         )
         karutas = Karutas(karutasValue)
     }
