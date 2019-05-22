@@ -23,16 +23,16 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding
-import me.rei_m.hyakuninisshu.di.ForFragment
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
-import me.rei_m.hyakuninisshu.util.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
 import javax.inject.Inject
 
 class TrainingMenuFragment : DaggerFragment() {
@@ -103,7 +103,7 @@ class TrainingMenuFragment : DaggerFragment() {
 
     @dagger.Module
     abstract class Module {
-        @ForFragment
+        @FragmentScope
         @ContributesAndroidInjector
         abstract fun contributeInjector(): TrainingMenuFragment
     }

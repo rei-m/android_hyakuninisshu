@@ -18,11 +18,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.StartApplicationAction
-import me.rei_m.hyakuninisshu.di.ForActivity
-import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
 import javax.inject.Inject
 
-@ForActivity
+@ActivityScope
 class ApplicationStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _isReady = MutableLiveData<Boolean>()

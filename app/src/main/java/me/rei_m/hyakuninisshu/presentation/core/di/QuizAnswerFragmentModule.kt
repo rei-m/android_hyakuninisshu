@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.presentation.core.di
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
-import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerViewModel
 import me.rei_m.hyakuninisshu.presentation.core.QuizStore
@@ -28,7 +28,7 @@ class QuizAnswerFragmentModule(
     private val quizId: KarutaQuizIdentifier
 ) {
     @Provides
-    @ForFragment
+    @FragmentScope
     fun provideQuizAnswerViewModelFactory(
         store: QuizStore,
         actionCreator: QuizActionCreator,

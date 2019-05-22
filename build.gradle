@@ -41,6 +41,7 @@ ext {
     rxjavaVersion = '2.2.2'
     mockitoKotlinVersion = '1.6.0'
     timberVersion = '4.7.1'
+    lifecycleVersion = '2.0.0'
 }
 
 task clean(type: Delete) {

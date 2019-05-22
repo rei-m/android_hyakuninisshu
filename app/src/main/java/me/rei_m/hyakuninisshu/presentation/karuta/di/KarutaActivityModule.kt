@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.presentation.karuta.di
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.karuta.KarutaActionCreator
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.presentation.karuta.KarutaStore
 import me.rei_m.hyakuninisshu.presentation.karuta.KarutaViewModel
@@ -27,7 +27,7 @@ class KarutaActivityModule(
     private val karutaId: KarutaIdentifier
 ) {
     @Provides
-    @ForActivity
+    @ActivityScope
     fun provideKarutaViewModelFactory(
         store: KarutaStore,
         actionCreator: KarutaActionCreator

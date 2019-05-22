@@ -27,12 +27,12 @@ import dagger.android.support.DaggerFragment
 import dagger.android.support.FragmentKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding
-import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.withArgs
 import me.rei_m.hyakuninisshu.presentation.core.di.QuizAnswerFragmentModule
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
-import me.rei_m.hyakuninisshu.util.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
 import javax.inject.Inject
 
 class QuizAnswerFragment : DaggerFragment() {
@@ -95,7 +95,7 @@ class QuizAnswerFragment : DaggerFragment() {
         super.onDetach()
     }
 
-    @ForFragment
+    @FragmentScope
     @dagger.Subcomponent(
         modules = [
             QuizAnswerFragmentModule::class

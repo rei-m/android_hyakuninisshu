@@ -31,23 +31,24 @@ import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityTrainingBinding
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.replaceFragment
 import me.rei_m.hyakuninisshu.ext.setupActionBar
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
 import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
-import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.presentation.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.presentation.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.util.EventObserver
+import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
 import javax.inject.Inject
 
 class TrainingActivity : DaggerAppCompatActivity(),
@@ -179,10 +180,11 @@ class TrainingActivity : DaggerAppCompatActivity(),
         adViewObserver.loadAd()
     }
 
-    @ForActivity
+    @ActivityScope
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
+            OldActivityModule::class,
             QuizFragment.Module::class,
             QuizAnswerFragment.Module::class,
             TrainingResultFragment.Module::class
@@ -193,10 +195,13 @@ class TrainingActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<TrainingActivity>() {
 
+            abstract fun oldActivityModule(module: OldActivityModule): Builder
+
             abstract fun activityModule(module: ActivityModule): Builder
 
             override fun seedInstance(instance: TrainingActivity) {
                 activityModule(ActivityModule(instance))
+                oldActivityModule(OldActivityModule(instance))
             }
         }
     }

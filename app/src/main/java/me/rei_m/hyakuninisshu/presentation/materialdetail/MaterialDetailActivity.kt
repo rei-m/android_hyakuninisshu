@@ -32,16 +32,17 @@ import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
-import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
-import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.presentation.materialdetail.di.MaterialDetailActivityModule
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.util.AnalyticsHelper
-import me.rei_m.hyakuninisshu.util.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.EventObserver
 import javax.inject.Inject
 
 class MaterialDetailActivity : DaggerAppCompatActivity(),
@@ -147,10 +148,11 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         adViewObserver.loadAd()
     }
 
-    @ForActivity
+    @ActivityScope
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
+            OldActivityModule::class,
             MaterialDetailActivityModule::class,
             MaterialDetailFragment.Module::class
         ]
@@ -160,12 +162,15 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<MaterialDetailActivity>() {
 
+            abstract fun oldActivityModule(module: OldActivityModule): Builder
+
             abstract fun activityModule(module: ActivityModule): Builder
 
             abstract fun materialDetailActivityModule(module: MaterialDetailActivityModule): Builder
 
             override fun seedInstance(instance: MaterialDetailActivity) {
                 activityModule(ActivityModule(instance))
+                oldActivityModule(OldActivityModule(instance))
                 materialDetailActivityModule(MaterialDetailActivityModule(instance.colorFilter, instance.lastPosition))
             }
         }

@@ -40,5 +40,5 @@ class ApplicationModule(application: Application) {
 
     @Provides
     @Singleton
-    fun provideDispatcher(): Dispatcher = AppDispatcher(AndroidSchedulers.mainThread())
+    fun provideActionDispatcher(): Dispatcher = AppDispatcher(AndroidSchedulers.mainThread())
 }

@@ -21,8 +21,8 @@ import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.addFragment
 import me.rei_m.hyakuninisshu.ext.replaceFragment
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
-import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.presentation.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.presentation.training.TrainingResultFragment
 
 interface CoreInteractionListener {

@@ -29,13 +29,14 @@ import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityExamHistoryBinding
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.ext.addFragment
 import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
-import me.rei_m.hyakuninisshu.presentation.di.ActivityModule
-import me.rei_m.hyakuninisshu.presentation.widget.ad.AdViewObserver
-import me.rei_m.hyakuninisshu.presentation.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import javax.inject.Inject
 
 class ExamHistoryActivity : DaggerAppCompatActivity(),
@@ -99,10 +100,11 @@ class ExamHistoryActivity : DaggerAppCompatActivity(),
         adViewObserver.loadAd()
     }
 
-    @ForActivity
+    @ActivityScope
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
+            OldActivityModule::class,
             ExamHistoryFragment.Module::class
         ]
     )
@@ -111,10 +113,13 @@ class ExamHistoryActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<ExamHistoryActivity>() {
 
+            abstract fun oldActivityModule(module: OldActivityModule): Builder
+
             abstract fun activityModule(module: ActivityModule): Builder
 
             override fun seedInstance(instance: ExamHistoryActivity) {
                 activityModule(ActivityModule(instance))
+                oldActivityModule(OldActivityModule(instance))
             }
         }
     }

@@ -8,27 +8,27 @@
 
         <variable
             name="trainingRangeFromAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="trainingRangeToAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="colorAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="kimarijiAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="karutaStyleAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="animationSpeedAdapter"
-            type="me.rei_m.hyakuninisshu.presentation.widget.adapter.SpinnerAdapter" />
+            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
 
         <variable
             name="viewModel"

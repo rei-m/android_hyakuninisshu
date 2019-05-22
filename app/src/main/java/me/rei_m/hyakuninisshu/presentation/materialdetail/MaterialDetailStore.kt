@@ -19,13 +19,13 @@ import androidx.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
 import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
 import javax.inject.Inject
 
-@ForActivity
+@ActivityScope
 class MaterialDetailStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _karutaList = MutableLiveData<List<Karuta>>()

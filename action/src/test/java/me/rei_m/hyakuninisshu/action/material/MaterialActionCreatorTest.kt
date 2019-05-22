@@ -25,7 +25,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-//import me.rei_m.hyakuninisshu.presentation.enums.ColorFilter
+//import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

@@ -20,13 +20,13 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.AnswerQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.FetchQuizAction
 import me.rei_m.hyakuninisshu.action.quiz.StartQuizAction
-import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.presentation.Store
-import me.rei_m.hyakuninisshu.util.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.event.Event
 import javax.inject.Inject
 
-@ForFragment
+@FragmentScope
 class QuizStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _karutaQuizContent = MutableLiveData<KarutaQuizContent>()

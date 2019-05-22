@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.presentation.materialedit.di
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
-import me.rei_m.hyakuninisshu.di.ForActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.presentation.helper.Navigator
 import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditStore
@@ -28,7 +28,7 @@ class MaterialEditActivityModule(
     private val karutaId: KarutaIdentifier
 ) {
     @Provides
-    @ForActivity
+    @ActivityScope
     fun provideMaterialEditViewModelFactory(
         store: MaterialEditStore,
         actionCreator: MaterialActionCreator,

@@ -17,12 +17,12 @@ package me.rei_m.hyakuninisshu.presentation.core.di
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
-import me.rei_m.hyakuninisshu.di.ForFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Device
 import me.rei_m.hyakuninisshu.presentation.core.QuizStore
 import me.rei_m.hyakuninisshu.presentation.core.QuizViewModel
-import me.rei_m.hyakuninisshu.presentation.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.presentation.helper.Device
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 
 @Module
 class QuizFragmentModule(
@@ -31,7 +31,7 @@ class QuizFragmentModule(
     private val shimoNoKuStyle: KarutaStyleFilter
 ) {
     @Provides
-    @ForFragment
+    @FragmentScope
     fun provideQuizViewModelFactory(
         store: QuizStore,
         actionCreator: QuizActionCreator,
