@@ -25,6 +25,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
 
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation "com.google.dagger:dagger:$daggerVersion"

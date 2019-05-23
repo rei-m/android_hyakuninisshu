@@ -12,33 +12,34 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.materialdetail.di
+package me.rei_m.hyakuninisshu.feature.materialdetail.di
 
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailStore
-import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailViewModel
+import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailStore
+import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailViewModel
+import javax.inject.Named
+import kotlin.coroutines.CoroutineContext
 
 @Module
-class MaterialDetailActivityModule(
+class MaterialDetailModule(
     private val colorFilter: ColorFilter,
     private val initialPosition: Int
 ) {
     @Provides
     @ActivityScope
     fun provideMaterialDetailViewModelFactory(
+        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
         store: MaterialDetailStore,
-        actionCreator: MaterialActionCreator,
-        navigator: Navigator
+        actionCreator: MaterialActionCreator
     ): MaterialDetailViewModel.Factory {
         return MaterialDetailViewModel.Factory(
+            coroutineContext,
             store,
             actionCreator,
-            navigator,
             colorFilter,
             initialPosition
         )

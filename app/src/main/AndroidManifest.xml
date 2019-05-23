@@ -64,7 +64,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.materialdetail.MaterialDetailActivity"
+            android:name=".feature.materialdetail.ui.MaterialDetailActivity"
             android:label="@string/function_material"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

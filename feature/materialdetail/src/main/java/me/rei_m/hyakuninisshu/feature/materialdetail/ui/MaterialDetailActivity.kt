@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.materialdetail
+package me.rei_m.hyakuninisshu.feature.materialdetail.ui
 
 import android.app.Activity
 import android.content.Context
@@ -30,32 +30,35 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.databinding.ActivityMaterialDetailBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.ext.setupActionBar
-import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
-import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.materialdetail.di.MaterialDetailActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.materialdetail.R
+import me.rei_m.hyakuninisshu.feature.materialdetail.databinding.ActivityMaterialDetailBinding
+import me.rei_m.hyakuninisshu.feature.materialdetail.di.MaterialDetailModule
+import me.rei_m.hyakuninisshu.feature.materialdetail.helper.Navigator
 import javax.inject.Inject
 
 class MaterialDetailActivity : DaggerAppCompatActivity(),
     AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var viewModelFactory: MaterialDetailViewModel.Factory
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     private lateinit var materialDetailViewModel: MaterialDetailViewModel
 
@@ -113,7 +116,9 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
                 return true
             }
             R.id.activity_material_detail_edit -> {
-                materialDetailViewModel.onClickEdit(binding.pager.currentItem)
+                materialDetailViewModel.karutaList.value?.let {
+                    navigator.navigateToMaterialEdit(it[binding.pager.currentItem].identifier)
+                }
                 return true
             }
         }
@@ -153,8 +158,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
-            OldActivityModule::class,
-            MaterialDetailActivityModule::class,
+            MaterialDetailModule::class,
             MaterialDetailFragment.Module::class
         ]
     )
@@ -163,16 +167,13 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<MaterialDetailActivity>() {
 
-            abstract fun oldActivityModule(module: OldActivityModule): Builder
-
             abstract fun activityModule(module: ActivityModule): Builder
 
-            abstract fun materialDetailActivityModule(module: MaterialDetailActivityModule): Builder
+            abstract fun materialDetailModule(module: MaterialDetailModule): Builder
 
             override fun seedInstance(instance: MaterialDetailActivity) {
                 activityModule(ActivityModule(instance))
-                oldActivityModule(OldActivityModule(instance))
-                materialDetailActivityModule(MaterialDetailActivityModule(instance.colorFilter, instance.lastPosition))
+                materialDetailModule(MaterialDetailModule(instance.colorFilter, instance.lastPosition))
             }
         }
     }

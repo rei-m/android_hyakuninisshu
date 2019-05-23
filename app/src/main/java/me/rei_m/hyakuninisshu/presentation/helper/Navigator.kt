@@ -28,11 +28,11 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailActivity
 import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditActivity
 import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
 import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
-import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingExamActivity
 

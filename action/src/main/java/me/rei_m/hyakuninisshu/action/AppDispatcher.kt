@@ -17,10 +17,8 @@ package me.rei_m.hyakuninisshu.action
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.processors.PublishProcessor
-import javax.inject.Singleton
 import timber.log.Timber
 
-@Singleton
 class AppDispatcher(private val uiScheduler: Scheduler) : Dispatcher {
 
     private val processor = PublishProcessor.create<Action>()

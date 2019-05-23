@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.materialdetail
+package me.rei_m.hyakuninisshu.feature.materialdetail.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,15 +21,14 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentMaterialDetailBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.ext.withArgs
-import me.rei_m.hyakuninisshu.presentation.ViewModelFactory
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
+import me.rei_m.hyakuninisshu.feature.materialdetail.databinding.FragmentMaterialDetailBinding
 import javax.inject.Inject
 
-class MaterialDetailFragment : DaggerFragment(), ViewModelFactory {
+class MaterialDetailFragment : DaggerFragment() {
 
     @Inject
     lateinit var store: MaterialDetailStore

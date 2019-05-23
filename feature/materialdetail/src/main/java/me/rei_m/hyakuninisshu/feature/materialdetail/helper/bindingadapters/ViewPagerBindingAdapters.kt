@@ -12,25 +12,21 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.materialdetail
+package me.rei_m.hyakuninisshu.feature.materialdetail.helper.bindingadapters
 
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.databinding.BindingAdapter
+import androidx.viewpager.widget.ViewPager
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailPagerAdapter
 
-class MaterialDetailPagerAdapter(
-    fm: FragmentManager,
-    private var karutaList: List<Karuta> = listOf()
-) : FragmentStatePagerAdapter(fm) {
-
-    override fun getItem(position: Int) = MaterialDetailFragment.newInstance(
-        karutaList[position].identifier
-    )
-
-    override fun getCount() = karutaList.size
-
-    fun replaceData(karutaList: List<Karuta>) {
-        this.karutaList = karutaList
-        notifyDataSetChanged()
+@BindingAdapter("materials", "initialPosition")
+fun setMaterial(pager: ViewPager, karutaList: List<Karuta>?, initialPosition: Int?) {
+    karutaList ?: return
+    initialPosition ?: return
+    val adapter = pager.adapter as MaterialDetailPagerAdapter
+    val isFirstSetValue = adapter.count == 0
+    adapter.replaceData(karutaList)
+    if (isFirstSetValue) {
+        pager.setCurrentItem(initialPosition, false)
     }
 }

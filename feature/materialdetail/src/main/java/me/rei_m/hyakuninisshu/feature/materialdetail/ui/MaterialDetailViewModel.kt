@@ -12,35 +12,28 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.materialdetail
+package me.rei_m.hyakuninisshu.feature.materialdetail.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import kotlin.coroutines.CoroutineContext
 
 class MaterialDetailViewModel(
+    coroutineContext: CoroutineContext,
     private val store: MaterialDetailStore,
     actionCreator: MaterialActionCreator,
     colorFilter: ColorFilter,
-    initialPosition: Int,
-    private val navigator: Navigator
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+    initialPosition: Int
+) : AbstractViewModel(coroutineContext) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
@@ -55,27 +48,20 @@ class MaterialDetailViewModel(
     }
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
 
-    fun onClickEdit(currentPosition: Int) {
-        karutaList.value?.let {
-            navigator.navigateToMaterialEdit(it[currentPosition].identifier)
-        }
-    }
-
     class Factory(
+        private val coroutineContext: CoroutineContext,
         private val store: MaterialDetailStore,
         private val actionCreator: MaterialActionCreator,
-        private val navigator: Navigator,
         private val colorFilter: ColorFilter,
         private val initialPosition: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MaterialDetailViewModel(store, actionCreator, colorFilter, initialPosition, navigator) as T
+            return MaterialDetailViewModel(coroutineContext, store, actionCreator, colorFilter, initialPosition) as T
         }
     }
 }
