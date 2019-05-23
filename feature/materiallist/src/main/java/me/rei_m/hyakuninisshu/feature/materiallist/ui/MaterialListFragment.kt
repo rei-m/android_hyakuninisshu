@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.materiallist.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,25 +21,29 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentMaterialListBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.materiallist.databinding.FragmentMaterialListBinding
+import me.rei_m.hyakuninisshu.feature.materiallist.helper.Navigator
 import javax.inject.Inject
 
-class MaterialListFragment : DaggerFragment() {
+class MaterialListFragment : DaggerFragment(), MaterialListAdapter.OnItemInteractionListener {
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var viewModelFactory: MaterialListViewModel.Factory
 
-    private lateinit var materialListViewModel: MaterialListViewModel
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
+    private lateinit var viewModel: MaterialListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,16 +53,15 @@ class MaterialListFragment : DaggerFragment() {
         if (savedInstanceState != null) {
             viewModelFactory.colorFilter = ColorFilter[savedInstanceState.getInt(KEY_MATERIAL_COLOR_FILTER)]
         }
-        materialListViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(MaterialListViewModel::class.java)
+        viewModel = provideActivityViewModel(MaterialListViewModel::class.java, viewModelFactory)
 
         val binding = FragmentMaterialListBinding.inflate(inflater, container, false).apply {
-            viewModel = materialListViewModel
+            viewModel = this@MaterialListFragment.viewModel
             setLifecycleOwner(this@MaterialListFragment.viewLifecycleOwner)
         }
 
         with(binding.recyclerKarutaList) {
-            adapter = MaterialListAdapter(requireContext(), listOf(), materialListViewModel)
+            adapter = MaterialListAdapter(requireContext(), listOf(), this@MaterialListFragment)
             addItemDecoration(DividerItemDecoration(inflater.context, DividerItemDecoration.VERTICAL))
         }
 
@@ -73,7 +76,7 @@ class MaterialListFragment : DaggerFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(KEY_MATERIAL_COLOR_FILTER, materialListViewModel.colorFilter.ordinal)
+        outState.putInt(KEY_MATERIAL_COLOR_FILTER, viewModel.colorFilter.ordinal)
         super.onSaveInstanceState(outState)
     }
 
@@ -83,10 +86,14 @@ class MaterialListFragment : DaggerFragment() {
             val menuItem = menu!!.add(Menu.NONE, colorFilter.ordinal, Menu.NONE, colorFilter.label(resources))
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             menuItem.setOnMenuItemClickListener {
-                materialListViewModel.colorFilter = colorFilter
+                viewModel.colorFilter = colorFilter
                 false
             }
         }
+    }
+
+    override fun onItemClicked(position: Int) {
+        navigator.navigateToMaterialDetail(position, viewModel.colorFilter)
     }
 
     @dagger.Module

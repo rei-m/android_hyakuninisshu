@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,21 +12,21 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.materiallist.ui
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.databinding.AdapterItemMaterialKarutaBinding
+import androidx.recyclerview.widget.RecyclerView
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.ext.adHeight
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.adHeight
+import me.rei_m.hyakuninisshu.feature.materiallist.R
+import me.rei_m.hyakuninisshu.feature.materiallist.databinding.AdapterItemMaterialKarutaBinding
 
 class MaterialListAdapter(
     context: Context,
     private var karutaList: List<Karuta>,
-    private var viewModel: MaterialListViewModel
+    private val listener: OnItemInteractionListener
 ) : RecyclerView.Adapter<MaterialListAdapter.ItemViewHolder>() {
 
     private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.padding_s)
@@ -39,11 +39,8 @@ class MaterialListAdapter(
             parent,
             false
         )
-        binding.listener = object : OnItemInteractionListener {
-            override fun onItemClicked(position: Int) {
-                viewModel.onClickItem(position)
-            }
-        }
+        binding.listener = listener
+
         return ItemViewHolder(binding)
     }
 

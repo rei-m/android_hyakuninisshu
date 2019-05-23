@@ -23,7 +23,6 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import dagger.Binds
 import dagger.android.ActivityKey
@@ -34,6 +33,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
@@ -60,7 +60,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private lateinit var materialDetailViewModel: MaterialDetailViewModel
+    private lateinit var viewModel: MaterialDetailViewModel
 
     private lateinit var binding: ActivityMaterialDetailBinding
 
@@ -74,15 +74,14 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        materialDetailViewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(MaterialDetailViewModel::class.java)
-        materialDetailViewModel.unhandledErrorEvent.observe(this,
+        viewModel = provideViewModel(MaterialDetailViewModel::class.java, viewModelFactory)
+        viewModel.unhandledErrorEvent.observe(this,
             EventObserver {
                 showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
             })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail)
-        binding.viewModel = materialDetailViewModel
+        binding.viewModel = viewModel
         binding.setLifecycleOwner(this)
 
         setupActionBar(binding.toolbar) {
@@ -116,7 +115,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
                 return true
             }
             R.id.activity_material_detail_edit -> {
-                materialDetailViewModel.karutaList.value?.let {
+                viewModel.karutaList.value?.let {
                     navigator.navigateToMaterialEdit(it[binding.pager.currentItem].identifier)
                 }
                 return true
@@ -134,7 +133,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     }
 
     private fun trackInfoScreenView(position: Int) {
-        val karutaList = materialDetailViewModel.karutaList.value ?: return
+        val karutaList = viewModel.karutaList.value ?: return
         val karutaId = karutaList[position].identifier.value
         analyticsHelper.sendScreenView("MaterialDetail-$karutaId", this)
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,17 +12,17 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
+package me.rei_m.hyakuninisshu.feature.materiallist.helper.bindingadapters
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
-import me.rei_m.hyakuninisshu.presentation.examhistory.KarutaExamListAdapter
+import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
+import me.rei_m.hyakuninisshu.feature.materiallist.ui.MaterialListAdapter
 
-@BindingAdapter("karutaExamList")
-fun setKarutaExamList(view: RecyclerView, karutaExamList: List<KarutaExam>?) {
-    karutaExamList ?: return
-    with(view.adapter as KarutaExamListAdapter) {
-        replaceData(karutaExamList)
+@BindingAdapter("materials")
+fun setMaterial(view: RecyclerView, karutaList: List<Karuta>?) {
+    karutaList ?: return
+    with(view.adapter as MaterialListAdapter) {
+        replaceData(karutaList)
     }
 }

@@ -107,6 +107,7 @@ dependencies {
     implementation project(':feature:corecomponent')
     implementation project(':feature:materialedit')
     implementation project(':feature:materialdetail')
+    implementation project(':feature:materiallist')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

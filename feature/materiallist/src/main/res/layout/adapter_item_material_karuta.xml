@@ -16,7 +16,7 @@
 
         <variable
             name="listener"
-            type="me.rei_m.hyakuninisshu.presentation.entrance.MaterialListAdapter.OnItemInteractionListener" />
+            type="me.rei_m.hyakuninisshu.feature.materiallist.ui.MaterialListAdapter.OnItemInteractionListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

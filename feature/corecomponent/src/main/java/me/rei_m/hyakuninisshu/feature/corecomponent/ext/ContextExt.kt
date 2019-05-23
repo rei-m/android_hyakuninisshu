@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,17 +12,10 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
+package me.rei_m.hyakuninisshu.feature.corecomponent.ext
 
-import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
-import me.rei_m.hyakuninisshu.presentation.examhistory.KarutaExamListAdapter
+import android.content.Context
+import com.google.android.gms.ads.AdSize
 
-@BindingAdapter("karutaExamList")
-fun setKarutaExamList(view: RecyclerView, karutaExamList: List<KarutaExam>?) {
-    karutaExamList ?: return
-    with(view.adapter as KarutaExamListAdapter) {
-        replaceData(karutaExamList)
-    }
-}
+val Context.adHeight
+    get() = AdSize.SMART_BANNER.getHeightInPixels(this)

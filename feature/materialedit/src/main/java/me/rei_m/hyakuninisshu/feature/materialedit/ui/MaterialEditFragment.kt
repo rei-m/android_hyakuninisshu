@@ -19,12 +19,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
@@ -46,7 +46,7 @@ class MaterialEditFragment : DaggerFragment(),
 
     private lateinit var binding: FragmentMaterialEditBinding
 
-    private lateinit var materialEditViewModel: MaterialEditViewModel
+    private lateinit var viewModel: MaterialEditViewModel
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -75,31 +75,30 @@ class MaterialEditFragment : DaggerFragment(),
                 fifthPhraseKana = savedInstanceState.getString(KEY_FIFTH_KANA, "")
             }
         }
-        materialEditViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(MaterialEditViewModel::class.java)
+        viewModel = provideActivityViewModel(MaterialEditViewModel::class.java, viewModelFactory)
 
         binding = FragmentMaterialEditBinding.inflate(inflater, container, false).apply {
-            viewModel = materialEditViewModel
+            viewModel = this@MaterialEditFragment.viewModel
             setLifecycleOwner(this@MaterialEditFragment.viewLifecycleOwner)
         }
 
-        materialEditViewModel.confirmEditEvent.observe(this,
+        viewModel.confirmEditEvent.observe(this,
             EventObserver { dialog ->
                 fragmentManager?.let {
                     dialog.setTargetFragment(this, 0)
                     dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
                 }
             })
-        materialEditViewModel.completeEditEvent.observe(this, EventObserver {
+        viewModel.completeEditEvent.observe(this, EventObserver {
             navigator.back()
         })
-        materialEditViewModel.snackBarMessage.observe(this,
+        viewModel.snackBarMessage.observe(this,
             EventObserver {
                 Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
                     .setAction("Action", null)
                     .show()
             })
-        materialEditViewModel.unhandledErrorEvent.observe(this,
+        viewModel.unhandledErrorEvent.observe(this,
             EventObserver {
                 listener?.onError()
             })
@@ -113,7 +112,7 @@ class MaterialEditFragment : DaggerFragment(),
     }
 
     override fun onDestroyView() {
-        materialEditViewModel.onDestroyView()
+        viewModel.onDestroyView()
         super.onDestroyView()
     }
 
@@ -133,22 +132,22 @@ class MaterialEditFragment : DaggerFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         with(outState) {
-            putString(KEY_FIRST_KANJI, materialEditViewModel.firstPhraseKanji.value)
-            putString(KEY_FIRST_KANA, materialEditViewModel.firstPhraseKana.value)
-            putString(KEY_SECOND_KANJI, materialEditViewModel.secondPhraseKanji.value)
-            putString(KEY_SECOND_KANA, materialEditViewModel.secondPhraseKana.value)
-            putString(KEY_THIRD_KANJI, materialEditViewModel.thirdPhraseKanji.value)
-            putString(KEY_THIRD_KANA, materialEditViewModel.thirdPhraseKana.value)
-            putString(KEY_FOURTH_KANJI, materialEditViewModel.fourthPhraseKanji.value)
-            putString(KEY_FOURTH_KANA, materialEditViewModel.fourthPhraseKana.value)
-            putString(KEY_FIFTH_KANJI, materialEditViewModel.fifthPhraseKanji.value)
-            putString(KEY_FIFTH_KANA, materialEditViewModel.fifthPhraseKana.value)
+            putString(KEY_FIRST_KANJI, viewModel.firstPhraseKanji.value)
+            putString(KEY_FIRST_KANA, viewModel.firstPhraseKana.value)
+            putString(KEY_SECOND_KANJI, viewModel.secondPhraseKanji.value)
+            putString(KEY_SECOND_KANA, viewModel.secondPhraseKana.value)
+            putString(KEY_THIRD_KANJI, viewModel.thirdPhraseKanji.value)
+            putString(KEY_THIRD_KANA, viewModel.thirdPhraseKana.value)
+            putString(KEY_FOURTH_KANJI, viewModel.fourthPhraseKanji.value)
+            putString(KEY_FOURTH_KANA, viewModel.fourthPhraseKana.value)
+            putString(KEY_FIFTH_KANJI, viewModel.fifthPhraseKanji.value)
+            putString(KEY_FIFTH_KANA, viewModel.fifthPhraseKana.value)
         }
         super.onSaveInstanceState(outState)
     }
 
     override fun onClickUpdate() {
-        materialEditViewModel.updateMaterial()
+        viewModel.updateMaterial()
     }
 
     override fun onClickBack() {

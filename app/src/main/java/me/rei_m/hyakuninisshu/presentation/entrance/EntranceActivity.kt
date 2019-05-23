@@ -31,12 +31,13 @@ import dagger.multibindings.IntoMap
 import hotchemi.android.rate.AppRate
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.ext.addFragment
 import me.rei_m.hyakuninisshu.ext.replaceFragment
 import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.feature.materiallist.ui.MaterialListFragment
 import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import javax.inject.Inject
 

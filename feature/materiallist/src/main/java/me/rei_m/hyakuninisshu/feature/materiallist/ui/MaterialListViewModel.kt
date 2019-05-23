@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,32 +12,26 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.materiallist.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class MaterialListViewModel(
-    private val store: EntranceStore,
+    coroutineContext: CoroutineContext,
+    private val store: MaterialListStore,
     private val actionCreator: MaterialActionCreator,
-    colorFilter: ColorFilter,
-    private val navigator: Navigator
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+    colorFilter: ColorFilter
+) : AbstractViewModel(coroutineContext) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
@@ -56,29 +50,24 @@ class MaterialListViewModel(
     }
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
 
-    fun onClickItem(position: Int) {
-        navigator.navigateToMaterialDetail(position, colorFilter)
-    }
-
     class Factory @Inject constructor(
-        private val store: EntranceStore,
-        private val actionCreator: MaterialActionCreator,
-        private val navigator: Navigator
+        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        private val store: MaterialListStore,
+        private val actionCreator: MaterialActionCreator
     ) : ViewModelProvider.Factory {
         var colorFilter = ColorFilter.ALL
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MaterialListViewModel(
+                coroutineContext,
                 store,
                 actionCreator,
-                colorFilter,
-                navigator
+                colorFilter
             ) as T
         }
     }
