@@ -26,6 +26,7 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.DaggerApplication
 import me.rei_m.hyakuninisshu.di.ApplicationModule
+import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditActivity
 import me.rei_m.hyakuninisshu.infrastructure.di.InfrastructureModule
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
 import me.rei_m.hyakuninisshu.presentation.SplashActivity
@@ -33,7 +34,6 @@ import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
 import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
 import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
-import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingExamActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingActivity
 import me.rei_m.hyakuninisshu.util.CrashlyticsTree

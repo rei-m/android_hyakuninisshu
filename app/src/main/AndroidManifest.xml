@@ -74,7 +74,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.materialedit.MaterialEditActivity"
+            android:name=".feature.materialedit.ui.MaterialEditActivity"
             android:label="@string/editing_material"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
