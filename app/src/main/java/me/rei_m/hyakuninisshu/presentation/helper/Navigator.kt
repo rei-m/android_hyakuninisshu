@@ -15,21 +15,10 @@
 package me.rei_m.hyakuninisshu.presentation.helper
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
-import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
-import me.rei_m.hyakuninisshu.presentation.entrance.LicenceDialogFragment
-import me.rei_m.hyakuninisshu.presentation.entrance.PrivacyPolicyDialogFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailActivity
-import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditActivity
 import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
 import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
@@ -81,41 +70,9 @@ class Navigator(private val activity: AppCompatActivity) {
         activity.startActivity(intentToLaunch)
     }
 
-    fun navigateToMaterialDetail(
-        position: Int,
-        colorFilter: ColorFilter
-    ) {
-        val intentToLaunch = MaterialDetailActivity.createIntent(activity, position, colorFilter)
-        activity.startActivity(intentToLaunch)
-    }
-
-    fun navigateToMaterialEdit(karutaId: KarutaIdentifier) {
-        val intentToLaunch = MaterialEditActivity.createIntent(activity, karutaId)
-        activity.startActivity(intentToLaunch)
-    }
-
     fun navigateToKaruta(karutaId: KarutaIdentifier) {
         val intentToLaunch = KarutaActivity.createIntent(activity, karutaId)
         activity.startActivity(intentToLaunch)
-    }
-
-    fun navigateToAppStore() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.app_url)))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        activity.startActivity(intent)
-    }
-
-    fun openLicenceDialog() {
-        if (activity.supportFragmentManager.findFragmentByTag(LicenceDialogFragment.TAG) == null) {
-            LicenceDialogFragment.newInstance().show(activity.supportFragmentManager, LicenceDialogFragment.TAG)
-        }
-    }
-
-    fun openPrivacyPolicy() {
-        if (activity.supportFragmentManager.findFragmentByTag(PrivacyPolicyDialogFragment.TAG) == null) {
-            PrivacyPolicyDialogFragment
-                .newInstance().show(activity.supportFragmentManager, PrivacyPolicyDialogFragment.TAG)
-        }
     }
 
     fun back() {

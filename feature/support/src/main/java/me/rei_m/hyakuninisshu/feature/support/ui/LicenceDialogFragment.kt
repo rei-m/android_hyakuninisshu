@@ -12,15 +12,14 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.support.ui
 
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import android.webkit.WebView
-
-import me.rei_m.hyakuninisshu.R
+import me.rei_m.hyakuninisshu.feature.support.R
 
 class LicenceDialogFragment : DialogFragment() {
 

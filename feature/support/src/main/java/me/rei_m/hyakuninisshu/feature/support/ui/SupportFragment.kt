@@ -12,39 +12,47 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.support.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentSupportBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.support.BuildConfig
+import me.rei_m.hyakuninisshu.feature.support.R
+import me.rei_m.hyakuninisshu.feature.support.databinding.FragmentSupportBinding
+import me.rei_m.hyakuninisshu.feature.support.helper.Navigator
 import javax.inject.Inject
 
 class SupportFragment : DaggerFragment() {
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    lateinit var navigator: Navigator
 
     @Inject
-    lateinit var viewModelFactory: SupportViewModel.Factory
+    lateinit var analyticsHelper: AnalyticsHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val supportViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(SupportViewModel::class.java)
+        val versionName = getString(R.string.version, BuildConfig.VERSION_NAME)
 
-        val binding = FragmentSupportBinding.inflate(inflater, container, false).apply {
-            viewModel = supportViewModel
-            setLifecycleOwner(this@SupportFragment.viewLifecycleOwner)
+        val binding = FragmentSupportBinding.inflate(inflater, container, false)
+        binding.textVersion.text = versionName
+        binding.textLicense.setOnClickListener {
+            navigator.openLicenceDialog()
+        }
+        binding.textPrivacyPolicy.setOnClickListener {
+            navigator.openPrivacyPolicy()
+        }
+        binding.textReview.setOnClickListener {
+            navigator.navigateToAppStore()
         }
 
         return binding.root
