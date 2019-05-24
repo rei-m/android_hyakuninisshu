@@ -1,13 +1,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.karuta.KarutaFragment">
+    tools:context=".ui.KarutaFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.karuta.KarutaViewModel" />
+            type="me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaViewModel" />
     </data>
 
     <ScrollView

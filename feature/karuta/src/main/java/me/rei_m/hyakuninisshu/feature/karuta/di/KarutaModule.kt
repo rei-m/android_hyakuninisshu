@@ -12,27 +12,31 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.karuta.di
+package me.rei_m.hyakuninisshu.feature.karuta.di
 
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.karuta.KarutaActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.presentation.karuta.KarutaStore
-import me.rei_m.hyakuninisshu.presentation.karuta.KarutaViewModel
+import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaStore
+import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaViewModel
+import javax.inject.Named
+import kotlin.coroutines.CoroutineContext
 
 @Module
-class KarutaActivityModule(
+class KarutaModule(
     private val karutaId: KarutaIdentifier
 ) {
     @Provides
     @ActivityScope
     fun provideKarutaViewModelFactory(
+        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
         store: KarutaStore,
         actionCreator: KarutaActionCreator
     ): KarutaViewModel.Factory {
         return KarutaViewModel.Factory(
+            coroutineContext,
             store,
             actionCreator,
             karutaId

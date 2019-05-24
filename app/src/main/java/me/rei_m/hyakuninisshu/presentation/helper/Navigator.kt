@@ -18,10 +18,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
+import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaActivity
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
 import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
 import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
-import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingActivity
 import me.rei_m.hyakuninisshu.presentation.training.TrainingExamActivity
 

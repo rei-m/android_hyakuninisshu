@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.karuta
+package me.rei_m.hyakuninisshu.feature.karuta.ui
 
 import android.app.Activity
 import android.content.Context
@@ -27,18 +27,17 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.databinding.ActivityKarutaBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.addFragment
-import me.rei_m.hyakuninisshu.ext.setupActionBar
-import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.addFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
-import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
-import me.rei_m.hyakuninisshu.presentation.karuta.di.KarutaActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.karuta.R
+import me.rei_m.hyakuninisshu.feature.karuta.databinding.ActivityKarutaBinding
+import me.rei_m.hyakuninisshu.feature.karuta.di.KarutaModule
 import javax.inject.Inject
 
 class KarutaActivity : DaggerAppCompatActivity(),
@@ -110,8 +109,7 @@ class KarutaActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
-            OldActivityModule::class,
-            KarutaActivityModule::class,
+            KarutaModule::class,
             KarutaFragment.Module::class
         ]
     )
@@ -120,16 +118,13 @@ class KarutaActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<KarutaActivity>() {
 
-            abstract fun oldActivityModule(module: OldActivityModule): Builder
-
             abstract fun activityModule(module: ActivityModule): Builder
 
-            abstract fun karutaActivityModule(module: KarutaActivityModule): Builder
+            abstract fun karutaModule(module: KarutaModule): Builder
 
             override fun seedInstance(instance: KarutaActivity) {
                 activityModule(ActivityModule(instance))
-                oldActivityModule(OldActivityModule(instance))
-                karutaActivityModule(KarutaActivityModule(instance.karutaId))
+                karutaModule(KarutaModule(instance.karutaId))
             }
         }
     }

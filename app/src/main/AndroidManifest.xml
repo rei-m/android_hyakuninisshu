@@ -64,12 +64,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".feature.materialdetail.ui.MaterialDetailActivity"
+            android:name=".feature.karuta.ui.KarutaActivity"
             android:label="@string/function_material"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.karuta.KarutaActivity"
+            android:name=".feature.materialdetail.ui.MaterialDetailActivity"
             android:label="@string/function_material"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

@@ -12,29 +12,24 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.karuta
+package me.rei_m.hyakuninisshu.feature.karuta.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.karuta.KarutaActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.map
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import kotlin.coroutines.CoroutineContext
 
 class KarutaViewModel(
+    coroutineContext: CoroutineContext,
     private val store: KarutaStore,
     actionCreator: KarutaActionCreator,
     karutaId: KarutaIdentifier
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+) : AbstractViewModel(coroutineContext) {
 
     val isLoading: LiveData<Boolean> = store.karuta.map { it == null }
 
@@ -67,19 +62,19 @@ class KarutaViewModel(
     }
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
 
     class Factory(
+        private val coroutineContext: CoroutineContext,
         private val store: KarutaStore,
         private val actionCreator: KarutaActionCreator,
         private val karutaId: KarutaIdentifier
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return KarutaViewModel(store, actionCreator, karutaId) as T
+            return KarutaViewModel(coroutineContext, store, actionCreator, karutaId) as T
         }
     }
 }

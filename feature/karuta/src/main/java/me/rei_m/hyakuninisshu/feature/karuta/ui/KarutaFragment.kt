@@ -12,22 +12,22 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.karuta
+package me.rei_m.hyakuninisshu.feature.karuta.ui
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentKarutaBinding
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.ext.withArgs
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.karuta.databinding.FragmentKarutaBinding
 import javax.inject.Inject
 
 class KarutaFragment : DaggerFragment() {
@@ -51,8 +51,7 @@ class KarutaFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val karutaViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(KarutaViewModel::class.java)
+        val karutaViewModel = provideActivityViewModel(KarutaViewModel::class.java, viewModelFactory)
 
         val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
             viewModel = karutaViewModel
