@@ -30,7 +30,8 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Device
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
-import java.util.*
+import java.util.Arrays
+import java.util.Date
 import kotlin.coroutines.CoroutineContext
 
 class QuizViewModel(
@@ -137,7 +138,7 @@ class QuizViewModel(
         private val kamiNoKuStyle: KarutaStyleFilter,
         private val shimoNoKuStyle: KarutaStyleFilter,
         private val device: Device
-        ) : ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return QuizViewModel(

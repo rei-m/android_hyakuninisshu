@@ -12,20 +12,22 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.core.di
+package me.rei_m.hyakuninisshu.feature.quiz.di
 
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Device
-import me.rei_m.hyakuninisshu.presentation.core.QuizStore
-import me.rei_m.hyakuninisshu.presentation.core.QuizViewModel
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Device
+import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizStore
+import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizViewModel
+import javax.inject.Named
+import kotlin.coroutines.CoroutineContext
 
 @Module
-class QuizFragmentModule(
+class QuizModule(
     private val quizId: KarutaQuizIdentifier,
     private val kamiNoKuStyle: KarutaStyleFilter,
     private val shimoNoKuStyle: KarutaStyleFilter
@@ -33,17 +35,19 @@ class QuizFragmentModule(
     @Provides
     @FragmentScope
     fun provideQuizViewModelFactory(
+        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
         store: QuizStore,
         actionCreator: QuizActionCreator,
         device: Device
     ): QuizViewModel.Factory {
         return QuizViewModel.Factory(
+            coroutineContext,
             store,
             actionCreator,
-            device,
             quizId,
             kamiNoKuStyle,
-            shimoNoKuStyle
+            shimoNoKuStyle,
+            device
         )
     }
 }

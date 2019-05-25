@@ -12,33 +12,34 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.core.di
+package me.rei_m.hyakuninisshu.feature.quiz.di
 
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerViewModel
-import me.rei_m.hyakuninisshu.presentation.core.QuizStore
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizAnswerViewModel
+import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizStore
+import javax.inject.Named
+import kotlin.coroutines.CoroutineContext
 
 @Module
-class QuizAnswerFragmentModule(
+class QuizAnswerModule(
     private val quizId: KarutaQuizIdentifier
 ) {
     @Provides
     @FragmentScope
     fun provideQuizAnswerViewModelFactory(
+        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
         store: QuizStore,
-        actionCreator: QuizActionCreator,
-        navigator: Navigator
+        actionCreator: QuizActionCreator
     ): QuizAnswerViewModel.Factory {
         return QuizAnswerViewModel.Factory(
+            coroutineContext,
             store,
             actionCreator,
-            quizId,
-            navigator
+            quizId
         )
     }
 }

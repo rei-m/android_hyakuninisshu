@@ -24,7 +24,6 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import dagger.Binds
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
@@ -33,18 +32,19 @@ import dagger.multibindings.IntoMap
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import me.rei_m.hyakuninisshu.databinding.FragmentQuizBinding
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.withArgs
-import me.rei_m.hyakuninisshu.presentation.core.di.QuizFragmentModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideFragmentViewModel
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.quiz.databinding.FragmentQuizBinding
+import me.rei_m.hyakuninisshu.feature.quiz.di.QuizModule
+import me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -61,7 +61,7 @@ class QuizFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentQuizBinding
 
-    private var listener: CoreInteractionListener? = null
+    private var listener: QuizInteractionListener? = null
 
     private val karutaQuizId by lazy {
         requireNotNull(arguments?.getParcelable<KarutaQuizIdentifier>(ARG_KARUTA_QUIZ_ID)) {
@@ -94,7 +94,7 @@ class QuizFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        quizViewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizViewModel::class.java)
+        quizViewModel = provideFragmentViewModel(QuizViewModel::class.java, viewModelFactory)
 
         binding = FragmentQuizBinding.inflate(inflater, container, false).apply {
             viewModel = quizViewModel
@@ -143,10 +143,10 @@ class QuizFragment : DaggerFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is CoreInteractionListener) {
+        if (context is QuizInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException("$context must implement CoreInteractionListener")
+            throw RuntimeException("$context must implement QuizInteractionListener")
         }
     }
 
@@ -230,18 +230,18 @@ class QuizFragment : DaggerFragment() {
     @FragmentScope
     @dagger.Subcomponent(
         modules = [
-            QuizFragmentModule::class
+            QuizModule::class
         ]
     )
     interface Subcomponent : AndroidInjector<QuizFragment> {
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<QuizFragment>() {
 
-            abstract fun quizFragmentModule(module: QuizFragmentModule): Builder
+            abstract fun quizModule(module: QuizModule): Builder
 
             override fun seedInstance(instance: QuizFragment) {
-                quizFragmentModule(
-                    QuizFragmentModule(
+                quizModule(
+                    QuizModule(
                         instance.karutaQuizId,
                         instance.kamiNoKuStyle,
                         instance.shimoNoKuStyle

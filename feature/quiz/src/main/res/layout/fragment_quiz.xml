@@ -1,7 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.core.QuizFragment">
+    tools:context=".ui.QuizFragment">
 
     <data>
 
@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.core.QuizViewModel" />
+            type="me.rei_m.hyakuninisshu.feature.quiz.ui.QuizViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,74 +54,74 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/phrase_2"
                     android:layout_toRightOf="@+id/phrase_2"
-                    android:paddingBottom="@dimen/padding_m"
-                    android:paddingTop="@dimen/padding_m">
+                    android:paddingTop="@dimen/padding_m"
+                    android:paddingBottom="@dimen/padding_m">
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_1_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_s"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{1}"
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="秋" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_1_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_1_1"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{2}"
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="の" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_1_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_1_2"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{3}"
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="田" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_1_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_1_3"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{4}"
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="の" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_1_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_1_4"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{5}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_1_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_1_5"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.firstPhrase}"
                         app:textPosition="@{6}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
@@ -134,12 +134,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="@dimen/margin_s"
-                    android:layout_marginRight="@dimen/margin_s"
                     android:layout_marginTop="@dimen/margin_ll"
-                    android:paddingBottom="@dimen/padding_m"
-                    android:paddingTop="@dimen/padding_m">
+                    android:layout_marginRight="@dimen/margin_s"
+                    android:paddingTop="@dimen/padding_m"
+                    android:paddingBottom="@dimen/padding_m">
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,79 +148,79 @@
                         app:textPosition="@{1}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_2_1"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.secondPhrase}"
                         app:textPosition="@{2}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_2_2"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.secondPhrase}"
                         app:textPosition="@{3}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_2_3"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.secondPhrase}"
                         app:textPosition="@{4}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_2_4"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.secondPhrase}"
                         app:textPosition="@{5}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_2_5"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.secondPhrase}"
                         app:textPosition="@{6}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_2_6"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.secondPhrase}"
                         app:textPosition="@{7}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_2_8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_2_7"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.secondPhrase}"
                         app:textPosition="@{8}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
@@ -231,12 +231,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_xxl"
-                    android:layout_toLeftOf="@+id/phrase_2"
                     android:layout_toStartOf="@+id/phrase_2"
-                    android:paddingBottom="@dimen/padding_m"
-                    android:paddingTop="@dimen/padding_m">
+                    android:layout_toLeftOf="@+id/phrase_2"
+                    android:paddingTop="@dimen/padding_m"
+                    android:paddingBottom="@dimen/padding_m">
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_3_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -245,57 +245,57 @@
                         app:textPosition="@{1}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_3_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_3_1"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.thirdPhrase}"
                         app:textPosition="@{2}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_3_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_3_2"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.thirdPhrase}"
                         app:textPosition="@{3}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_3_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_3_3"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.thirdPhrase}"
                         app:textPosition="@{4}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_3_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_3_4"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         app:textForQuiz="@{viewModel.thirdPhrase}"
                         app:textPosition="@{5}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.presentation.widget.view.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
                         android:id="@+id/phrase_3_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/phrase_3_5"
-                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                        android:layout_marginBottom="@dimen/margin_karuta_text_bottom"
                         android:visibility="invisible"
                         app:textForQuiz="@{viewModel.thirdPhrase}"
                         app:textPosition="@{6}"
@@ -310,8 +310,8 @@
             style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_m"
             android:layout_marginStart="@dimen/margin_m"
+            android:layout_marginLeft="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickChoice(1)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(0).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
@@ -331,18 +331,18 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(0)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_xs"
                     android:layout_marginStart="@dimen/margin_xs"
+                    android:layout_marginLeft="@dimen/margin_xs"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(0)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
@@ -374,18 +374,18 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(1)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_xs"
                     android:layout_marginStart="@dimen/margin_xs"
+                    android:layout_marginLeft="@dimen/margin_xs"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(1)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
             </LinearLayout>
@@ -415,18 +415,18 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(2)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_xs"
                     android:layout_marginStart="@dimen/margin_xs"
+                    android:layout_marginLeft="@dimen/margin_xs"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(2)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
             </LinearLayout>
@@ -458,18 +458,18 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(3)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.presentation.widget.view.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_xs"
                     android:layout_marginStart="@dimen/margin_xs"
+                    android:layout_marginLeft="@dimen/margin_xs"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(3)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
             </LinearLayout>

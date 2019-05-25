@@ -20,19 +20,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import dagger.Binds
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
 import dagger.android.support.FragmentKey
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.databinding.FragmentQuizAnswerBinding
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.withArgs
-import me.rei_m.hyakuninisshu.presentation.core.di.QuizAnswerFragmentModule
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideFragmentViewModel
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.quiz.databinding.FragmentQuizAnswerBinding
+import me.rei_m.hyakuninisshu.feature.quiz.di.QuizAnswerModule
+import me.rei_m.hyakuninisshu.feature.quiz.helper.Navigator
 import javax.inject.Inject
 
 class QuizAnswerFragment : DaggerFragment() {
@@ -41,9 +42,12 @@ class QuizAnswerFragment : DaggerFragment() {
     lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
+    lateinit var navigator: Navigator
+
+    @Inject
     lateinit var viewModelFactory: QuizAnswerViewModel.Factory
 
-    private var listener: CoreInteractionListener? = null
+    private var listener: QuizInteractionListener? = null
 
     val karutaQuizId by lazy {
         requireNotNull(arguments?.getParcelable<KarutaQuizIdentifier>(ARG_KARUTA_QUIZ_ID)) {
@@ -56,11 +60,16 @@ class QuizAnswerFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val quizAnswerViewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizAnswerViewModel::class.java)
+        val quizAnswerViewModel = provideFragmentViewModel(QuizAnswerViewModel::class.java, viewModelFactory)
 
         val binding = FragmentQuizAnswerBinding.inflate(inflater, container, false).apply {
             viewModel = quizAnswerViewModel
             setLifecycleOwner(this@QuizAnswerFragment.viewLifecycleOwner)
+        }
+        binding.textMaterial.setOnClickListener {
+            quizAnswerViewModel.karuta.value?.let {
+                navigator.navigateToKaruta(it.identifier)
+            }
         }
 
         quizAnswerViewModel.openNextQuizEvent.observe(this,
@@ -86,10 +95,10 @@ class QuizAnswerFragment : DaggerFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is CoreInteractionListener) {
+        if (context is QuizInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException("$context must implement CoreInteractionListener")
+            throw RuntimeException("$context must implement QuizInteractionListener")
         }
     }
 
@@ -101,17 +110,17 @@ class QuizAnswerFragment : DaggerFragment() {
     @FragmentScope
     @dagger.Subcomponent(
         modules = [
-            QuizAnswerFragmentModule::class
+            QuizAnswerModule::class
         ]
     )
     interface Subcomponent : AndroidInjector<QuizAnswerFragment> {
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<QuizAnswerFragment>() {
 
-            abstract fun quizAnswerFragmentModule(module: QuizAnswerFragmentModule): Builder
+            abstract fun quizAnswerModule(module: QuizAnswerModule): Builder
 
             override fun seedInstance(instance: QuizAnswerFragment) {
-                quizAnswerFragmentModule(QuizAnswerFragmentModule(instance.karutaQuizId))
+                quizAnswerModule(QuizAnswerModule(instance.karutaQuizId))
             }
         }
     }

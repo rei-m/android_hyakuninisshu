@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,19 +12,20 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.widget.view
+package me.rei_m.hyakuninisshu.feature.quiz.ui.widget
 
 import android.content.Context
-import androidx.appcompat.widget.AppCompatTextView
-import android.util.AttributeSet
+import android.graphics.Typeface
+import me.rei_m.hyakuninisshu.feature.quiz.R
 
-class KarutaTextView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
+object KarutaFontHolder {
 
-    init {
-        typeface = KarutaFontHolder.getTypeFace(context)
+    private var typeface: Typeface? = null
+
+    fun getTypeFace(context: Context): Typeface = typeface ?: let {
+        val resources = context.resources
+        val asset = Typeface.createFromAsset(context.assets, resources.getString(R.string.app_font_file))
+        typeface = asset
+        return@let asset
     }
 }

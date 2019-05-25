@@ -12,20 +12,19 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.core
+package me.rei_m.hyakuninisshu.feature.quiz.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.addFragment
-import me.rei_m.hyakuninisshu.ext.replaceFragment
-import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.presentation.training.TrainingResultFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.addFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
+import me.rei_m.hyakuninisshu.feature.quiz.R
 
-interface CoreInteractionListener {
+interface QuizInteractionListener {
 
     val kamiNoKuStyle: KarutaStyleFilter
 
@@ -60,16 +59,6 @@ interface CoreInteractionListener {
                     FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
                 )
             }
-            return
-        }
-
-        supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let {
-            replaceFragment(
-                R.id.content,
-                QuizFragment.newInstance(karutaQuizId, kamiNoKuStyle, shimoNoKuStyle, animationSpeed),
-                QuizFragment.TAG,
-                FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
-            )
             return
         }
     }

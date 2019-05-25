@@ -31,25 +31,25 @@ import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.databinding.ActivityExamBinding
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.ext.replaceFragment
 import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
-import me.rei_m.hyakuninisshu.presentation.core.CoreInteractionListener
-import me.rei_m.hyakuninisshu.presentation.core.QuizAnswerFragment
-import me.rei_m.hyakuninisshu.presentation.core.QuizFragment
-import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizAnswerFragment
+import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizFragment
+import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizInteractionListener
+import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import javax.inject.Inject
 
 class ExamActivity : DaggerAppCompatActivity(),
-    CoreInteractionListener,
+    QuizInteractionListener,
     ExamResultFragment.OnFragmentInteractionListener,
     AlertDialogFragment.OnDialogInteractionListener {
 

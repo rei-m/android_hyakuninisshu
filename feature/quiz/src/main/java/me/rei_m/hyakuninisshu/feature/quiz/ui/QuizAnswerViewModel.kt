@@ -73,12 +73,6 @@ class QuizAnswerViewModel(
         }
     }
 
-    fun onClickAnswer() {
-        karuta.value?.let {
-            navigator.navigateToKaruta(it.identifier)
-        }
-    }
-
     fun onClickNextQuiz() {
         _openNextQuizEvent.value = Event(Unit)
     }
