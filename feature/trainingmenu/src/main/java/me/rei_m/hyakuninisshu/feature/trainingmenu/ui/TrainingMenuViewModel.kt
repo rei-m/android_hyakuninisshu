@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,23 +12,19 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import javax.inject.Inject
 
 class TrainingMenuViewModel(
@@ -39,7 +35,6 @@ class TrainingMenuViewModel(
     shimoNoKuStyle: KarutaStyleFilter,
     color: ColorFilter,
     animationSpeed: QuizAnimationSpeed,
-    private val navigator: Navigator,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
     val trainingRangeFrom = MutableLiveData<TrainingRangeFrom>().withValue(trainingRangeFrom)
@@ -56,31 +51,7 @@ class TrainingMenuViewModel(
 
     val animationSpeed = MutableLiveData<QuizAnimationSpeed>().withValue(animationSpeed)
 
-    private val _snackBarMessage = MutableLiveData<Event<Int>>()
-    val snackBarMessage: LiveData<Event<Int>> = _snackBarMessage
-
-    fun onClickStartTraining() {
-
-        if (trainingRangeFrom.value!!.ordinal > trainingRangeTo.value!!.ordinal) {
-            _snackBarMessage.value =
-                Event(R.string.text_message_invalid_training_range)
-            return
-        }
-
-        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
-        navigator.navigateToTraining(
-            trainingRangeFrom.value!!,
-            trainingRangeTo.value!!,
-            kimariji.value!!,
-            color.value!!,
-            kamiNoKuStyle.value!!,
-            shimoNoKuStyle.value!!,
-            animationSpeed.value!!
-        )
-    }
-
     class Factory @Inject constructor(
-        private val navigator: Navigator,
         private val analyticsHelper: AnalyticsHelper
     ) : ViewModelProvider.Factory {
         var trainingRangeFrom = TrainingRangeFrom.ONE
@@ -101,7 +72,6 @@ class TrainingMenuViewModel(
                 shimoNoKuStyle,
                 color,
                 animationSpeed,
-                navigator,
                 analyticsHelper
             ) as T
         }

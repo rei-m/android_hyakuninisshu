@@ -39,6 +39,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.feature.materiallist.ui.MaterialListFragment
 import me.rei_m.hyakuninisshu.feature.support.ui.SupportFragment
+import me.rei_m.hyakuninisshu.feature.trainingmenu.ui.TrainingMenuFragment
 import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import javax.inject.Inject
 

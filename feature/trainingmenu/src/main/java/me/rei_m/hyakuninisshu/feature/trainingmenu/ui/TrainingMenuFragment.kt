@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +22,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentTrainingMenuBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
@@ -30,12 +29,17 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter
+import me.rei_m.hyakuninisshu.feature.trainingmenu.R
+import me.rei_m.hyakuninisshu.feature.trainingmenu.databinding.FragmentTrainingMenuBinding
+import me.rei_m.hyakuninisshu.feature.trainingmenu.helper.Navigator
 import javax.inject.Inject
 
 class TrainingMenuFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -78,10 +82,22 @@ class TrainingMenuFragment : DaggerFragment() {
             animationSpeedAdapter = SpinnerAdapter.newInstance(root.context, QuizAnimationSpeed.values().asList())
         }
 
-        trainingMenuViewModel.snackBarMessage.observe(this,
-            EventObserver {
-                Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
-            })
+        binding.buttonStartTraining.setOnClickListener {
+            if (trainingMenuViewModel.trainingRangeFrom.value!!.ordinal > trainingMenuViewModel.trainingRangeTo.value!!.ordinal) {
+                Snackbar.make(binding.root, R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
+            navigator.navigateToTraining(
+                trainingMenuViewModel.trainingRangeFrom.value!!,
+                trainingMenuViewModel.trainingRangeTo.value!!,
+                trainingMenuViewModel.kimariji.value!!,
+                trainingMenuViewModel.color.value!!,
+                trainingMenuViewModel.kamiNoKuStyle.value!!,
+                trainingMenuViewModel.shimoNoKuStyle.value!!,
+                trainingMenuViewModel.animationSpeed.value!!
+            )
+        }
 
         return binding.root
     }

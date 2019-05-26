@@ -33,28 +33,6 @@ class Navigator(private val activity: AppCompatActivity) {
         activity.startActivity(intentToLaunch)
     }
 
-    fun navigateToTraining(
-        trainingRangeFrom: TrainingRangeFrom,
-        trainingRangeTo: TrainingRangeTo,
-        kimarijiFilter: KimarijiFilter,
-        colorFilter: ColorFilter,
-        kamiNoKuStyle: KarutaStyleFilter,
-        shimoNoKuStyle: KarutaStyleFilter,
-        animationSpeed: QuizAnimationSpeed
-    ) {
-        val intentToLaunch = TrainingActivity.createIntent(
-            activity,
-            trainingRangeFrom,
-            trainingRangeTo,
-            kimarijiFilter,
-            colorFilter,
-            kamiNoKuStyle,
-            shimoNoKuStyle,
-            animationSpeed
-        )
-        activity.startActivity(intentToLaunch)
-    }
-
     fun navigateToExam() {
         val intentToLaunch = ExamActivity.createIntent(activity)
         activity.startActivity(intentToLaunch)

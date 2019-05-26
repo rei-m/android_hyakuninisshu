@@ -112,6 +112,7 @@ dependencies {
     implementation project(':feature:karuta')
     implementation project(':feature:training')
     implementation project(':feature:quiz')
+    implementation project(':feature:trainingmenu')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
