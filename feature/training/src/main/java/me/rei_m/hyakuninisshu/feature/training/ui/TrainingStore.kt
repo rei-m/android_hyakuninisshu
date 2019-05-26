@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.training
+package me.rei_m.hyakuninisshu.feature.training.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,11 +20,11 @@ import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.training.AggregateResultsAction
 import me.rei_m.hyakuninisshu.action.training.OpenNextQuizAction
 import me.rei_m.hyakuninisshu.action.training.StartTrainingAction
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.TrainingResult
-import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
 import javax.inject.Inject
 
 @ActivityScope

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.training
+package me.rei_m.hyakuninisshu.feature.training.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,12 +21,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentTrainingResultBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.training.databinding.FragmentTrainingResultBinding
 import javax.inject.Inject
 
 class TrainingResultFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -45,6 +49,10 @@ class TrainingResultFragment : DaggerFragment() {
         val binding = FragmentTrainingResultBinding.inflate(inflater, container, false).apply {
             viewModel = trainingResultViewModel
             setLifecycleOwner(this@TrainingResultFragment.viewLifecycleOwner)
+        }
+
+        binding.buttonBack.setOnClickListener {
+            navigator.back()
         }
 
         // TODO: 暫定措置。。。

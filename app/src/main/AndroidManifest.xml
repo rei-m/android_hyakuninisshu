@@ -49,7 +49,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.training.TrainingActivity"
+            android:name=".feature.training.ui.TrainingActivity"
             android:label="@string/function_training"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -59,7 +59,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.training.TrainingExamActivity"
+            android:name=".feature.training.ui.TrainingExamActivity"
             android:label="@string/function_training"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.training
+package me.rei_m.hyakuninisshu.feature.training.ui
 
 import android.app.Activity
 import android.content.Context
@@ -29,22 +29,22 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.databinding.ActivityTrainingExamBinding
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.replaceFragment
-import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizFragment
 import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizInteractionListener
-import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
+import me.rei_m.hyakuninisshu.feature.training.R
+import me.rei_m.hyakuninisshu.feature.training.databinding.ActivityTrainingExamBinding
+import me.rei_m.hyakuninisshu.feature.training.di.TrainingModule
 import javax.inject.Inject
 
 class TrainingExamActivity : DaggerAppCompatActivity(),
@@ -166,7 +166,7 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
-            OldActivityModule::class,
+            TrainingModule::class,
             QuizAnswerFragment.Module::class,
             QuizFragment.Module::class,
             TrainingResultFragment.Module::class
@@ -176,13 +176,10 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<TrainingExamActivity>() {
 
-            abstract fun oldActivityModule(module: OldActivityModule): Builder
-
             abstract fun activityModule(module: ActivityModule): Builder
 
             override fun seedInstance(instance: TrainingExamActivity) {
                 activityModule(ActivityModule(instance))
-                oldActivityModule(OldActivityModule(instance))
             }
         }
     }

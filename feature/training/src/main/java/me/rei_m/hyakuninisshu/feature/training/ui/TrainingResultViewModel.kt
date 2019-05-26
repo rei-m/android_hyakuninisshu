@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,32 +12,26 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.training
+package me.rei_m.hyakuninisshu.feature.training.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
-import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class TrainingResultViewModel(
+    coroutineContext: CoroutineContext,
     private val store: TrainingStore,
     private val actionCreator: TrainingActionCreator,
-    private val navigator: Navigator,
     private val analyticsHelper: AnalyticsHelper
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+) : AbstractViewModel(coroutineContext) {
 
     val score: LiveData<String> = store.result.map { "${it.correctCount}/${it.quizCount}" }
 
@@ -46,7 +40,6 @@ class TrainingResultViewModel(
     val canRestartTraining: LiveData<Boolean> = store.result.map { it.canRestartTraining }
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
@@ -65,22 +58,22 @@ class TrainingResultViewModel(
     }
 
     fun onClickBackMenu() {
-        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.FINISH_TRAINING)
-        navigator.back()
+//        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.FINISH_TRAINING)
+//        navigator.back()
     }
 
     class Factory @Inject constructor(
+        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
         private val store: TrainingStore,
         private val actionCreator: TrainingActionCreator,
-        private val navigator: Navigator,
         private val analyticsHelper: AnalyticsHelper
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TrainingResultViewModel(
+                coroutineContext,
                 store,
                 actionCreator,
-                navigator,
                 analyticsHelper
             ) as T
         }

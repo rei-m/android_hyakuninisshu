@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,34 +12,30 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.training
+package me.rei_m.hyakuninisshu.feature.training.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class TrainingViewModel(
+    coroutineContext: CoroutineContext,
     private val store: TrainingStore,
     private val actionCreator: TrainingActionCreator
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+) : AbstractViewModel(coroutineContext) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -50,7 +46,6 @@ class TrainingViewModel(
     val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
@@ -84,12 +79,14 @@ class TrainingViewModel(
     }
 
     class Factory @Inject constructor(
+        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
         private val store: TrainingStore,
         private val actionCreator: TrainingActionCreator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TrainingViewModel(
+                coroutineContext,
                 store,
                 actionCreator
             ) as T
