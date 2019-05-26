@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.examhistory
+package me.rei_m.hyakuninisshu.feature.examhistory.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -22,10 +22,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentExamHistoryBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.examhistory.databinding.FragmentExamHistoryBinding
 import javax.inject.Inject
 
 class ExamHistoryFragment : DaggerFragment() {

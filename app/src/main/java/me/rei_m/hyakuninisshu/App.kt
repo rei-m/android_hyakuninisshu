@@ -24,6 +24,7 @@ import dagger.android.support.DaggerApplication
 import me.rei_m.hyakuninisshu.action.di.ActionModule
 import me.rei_m.hyakuninisshu.di.ApplicationModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ViewModelModule
+import me.rei_m.hyakuninisshu.feature.examhistory.ui.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaActivity
 import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailActivity
 import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditActivity
@@ -33,7 +34,6 @@ import me.rei_m.hyakuninisshu.infrastructure.di.InfrastructureModule
 import me.rei_m.hyakuninisshu.presentation.SplashActivity
 import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
 import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
-import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree

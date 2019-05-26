@@ -1,13 +1,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.examhistory.ExamHistoryFragment">
+    tools:context=".ui.ExamHistoryFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryViewModel" />
+            type="me.rei_m.hyakuninisshu.feature.examhistory.ui.ExamHistoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,12 +33,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:paddingBottom="@dimen/padding_m"
-            android:paddingEnd="@dimen/padding_m"
-            android:paddingLeft="0dp"
-            android:paddingRight="@dimen/padding_m"
             android:paddingStart="0dp"
+            android:paddingLeft="0dp"
             android:paddingTop="@dimen/padding_m"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingRight="@dimen/padding_m"
+            android:paddingBottom="@dimen/padding_m"
             android:text="@string/average_response_time"
             app:layout_constraintBottom_toTopOf="@id/view_separate_title"
             app:layout_constraintEnd_toEndOf="parent"

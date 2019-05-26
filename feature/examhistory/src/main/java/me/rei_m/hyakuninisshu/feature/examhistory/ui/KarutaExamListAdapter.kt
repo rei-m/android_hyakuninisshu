@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,15 +12,15 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.examhistory
+package me.rei_m.hyakuninisshu.feature.examhistory.ui
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import me.rei_m.hyakuninisshu.databinding.AdapterItemKarutaExamBinding
+import androidx.recyclerview.widget.RecyclerView
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
-import me.rei_m.hyakuninisshu.ext.adHeight
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.adHeight
+import me.rei_m.hyakuninisshu.feature.examhistory.databinding.AdapterItemKarutaExamBinding
 
 class KarutaExamListAdapter(
     context: Context,

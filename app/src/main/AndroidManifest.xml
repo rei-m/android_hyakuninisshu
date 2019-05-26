@@ -79,7 +79,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.examhistory.ExamHistoryActivity"
+            android:name=".feature.examhistory.ui.ExamHistoryActivity"
             android:label="@string/exam_history"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
