@@ -1,34 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+apply from: rootProject.file('gradle/android.gradle')
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
-    }
+android.testOptions.unitTests.includeAndroidResources = true
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
-}
+apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.annotation:annotation:1.0.1'
-
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.assertj:assertj-core:$assertjVersion"
-    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    implementation "androidx.annotation:annotation:$androidxAnnotationVersion"
 }
