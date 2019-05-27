@@ -1,11 +1,13 @@
 package me.rei_m.hyakuninisshu.domain.helper
 
+import androidx.annotation.VisibleForTesting
 import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import java.util.*
 
+@VisibleForTesting
 interface TestHelper {
     fun createKaruta(
         id: Int,
