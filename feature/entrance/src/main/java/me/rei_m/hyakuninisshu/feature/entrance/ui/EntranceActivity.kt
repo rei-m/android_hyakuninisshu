@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.entrance.ui
 
 import android.app.Activity
 import android.content.Context
@@ -29,19 +29,18 @@ import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import hotchemi.android.rate.AppRate
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.databinding.ActivityEntranceBinding
-import me.rei_m.hyakuninisshu.ext.addFragment
-import me.rei_m.hyakuninisshu.ext.replaceFragment
-import me.rei_m.hyakuninisshu.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.addFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.feature.entrance.R
+import me.rei_m.hyakuninisshu.feature.entrance.databinding.ActivityEntranceBinding
 import me.rei_m.hyakuninisshu.feature.exammenu.ui.ExamMenuFragment
 import me.rei_m.hyakuninisshu.feature.materiallist.ui.MaterialListFragment
 import me.rei_m.hyakuninisshu.feature.support.ui.SupportFragment
 import me.rei_m.hyakuninisshu.feature.trainingmenu.ui.TrainingMenuFragment
-import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import javax.inject.Inject
 
 class EntranceActivity : DaggerAppCompatActivity() {
@@ -156,7 +155,6 @@ class EntranceActivity : DaggerAppCompatActivity() {
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
-            OldActivityModule::class,
             TrainingMenuFragment.Module::class,
             ExamMenuFragment.Module::class,
             MaterialListFragment.Module::class,
@@ -167,13 +165,10 @@ class EntranceActivity : DaggerAppCompatActivity() {
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<EntranceActivity>() {
 
-            abstract fun oldActivityModule(module: OldActivityModule): Builder
-
             abstract fun activityModule(module: ActivityModule): Builder
 
             override fun seedInstance(instance: EntranceActivity) {
                 activityModule(ActivityModule(instance))
-                oldActivityModule(OldActivityModule(instance))
             }
         }
     }

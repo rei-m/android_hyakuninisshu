@@ -16,31 +16,13 @@ package me.rei_m.hyakuninisshu.presentation.helper
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import me.rei_m.hyakuninisshu.feature.exam.ui.ExamActivity
-import me.rei_m.hyakuninisshu.feature.examhistory.ui.ExamHistoryActivity
-import me.rei_m.hyakuninisshu.feature.training.ui.TrainingExamActivity
-import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
+import me.rei_m.hyakuninisshu.feature.entrance.ui.EntranceActivity
 
 class Navigator(private val activity: AppCompatActivity) {
 
     fun navigateToEntrance() {
         val intentToLaunch = EntranceActivity.createIntent(activity)
         intentToLaunch.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        activity.startActivity(intentToLaunch)
-    }
-
-    fun navigateToExam() {
-        val intentToLaunch = ExamActivity.createIntent(activity)
-        activity.startActivity(intentToLaunch)
-    }
-
-    fun navigateToExamHistory() {
-        val intentToLaunch = ExamHistoryActivity.createIntent(activity)
-        activity.startActivity(intentToLaunch)
-    }
-
-    fun navigateToTrainingExam() {
-        val intentToLaunch = TrainingExamActivity.createIntent(activity)
         activity.startActivity(intentToLaunch)
     }
 }

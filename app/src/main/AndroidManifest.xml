@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.entrance.EntranceActivity"
+            android:name=".feature.entrance.ui.EntranceActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

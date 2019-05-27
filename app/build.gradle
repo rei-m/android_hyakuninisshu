@@ -105,17 +105,24 @@ dependencies {
     implementation project(':infrastructure')
     implementation project(':action')
     implementation project(':feature:corecomponent')
-    implementation project(':feature:training')
-    implementation project(':feature:exam')
-    implementation project(':feature:examhistory')
+
+    implementation project(':feature:entrance')
+    implementation project(':feature:trainingmenu')
     implementation project(':feature:exammenu')
-    implementation project(':feature:materialedit')
-    implementation project(':feature:materialdetail')
     implementation project(':feature:materiallist')
     implementation project(':feature:support')
-    implementation project(':feature:karuta')
+
+    implementation project(':feature:training')
+
+    implementation project(':feature:exam')
+    implementation project(':feature:examhistory')
+
     implementation project(':feature:quiz')
-    implementation project(':feature:trainingmenu')
+
+    implementation project(':feature:materialedit')
+    implementation project(':feature:materialdetail')
+
+    implementation project(':feature:karuta')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
