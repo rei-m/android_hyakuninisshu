@@ -106,6 +106,8 @@ dependencies {
     implementation project(':action')
     implementation project(':feature:corecomponent')
 
+    implementation project(':feature:splash')
+
     implementation project(':feature:entrance')
     implementation project(':feature:trainingmenu')
     implementation project(':feature:exammenu')

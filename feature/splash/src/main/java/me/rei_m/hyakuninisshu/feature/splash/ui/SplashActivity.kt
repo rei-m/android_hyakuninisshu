@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation
+package me.rei_m.hyakuninisshu.feature.splash.ui
 
 import android.app.Activity
 import android.os.Bundle
@@ -23,14 +23,13 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.splash.R
+import me.rei_m.hyakuninisshu.feature.splash.helper.Navigator
 import javax.inject.Inject
 
 class SplashActivity : DaggerAppCompatActivity(),
@@ -69,21 +68,17 @@ class SplashActivity : DaggerAppCompatActivity(),
     @ActivityScope
     @dagger.Subcomponent(
         modules = [
-            ActivityModule::class,
-            OldActivityModule::class
+            ActivityModule::class
         ]
     )
     interface Subcomponent : AndroidInjector<SplashActivity> {
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<SplashActivity>() {
 
-            abstract fun oldActivityModule(module: OldActivityModule): Builder
-
             abstract fun activityModule(module: ActivityModule): Builder
 
             override fun seedInstance(instance: SplashActivity) {
                 activityModule(ActivityModule(instance))
-                oldActivityModule(OldActivityModule(instance))
             }
         }
     }

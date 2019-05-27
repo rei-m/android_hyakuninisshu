@@ -30,10 +30,10 @@ import me.rei_m.hyakuninisshu.feature.examhistory.ui.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaActivity
 import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailActivity
 import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditActivity
+import me.rei_m.hyakuninisshu.feature.splash.ui.SplashActivity
 import me.rei_m.hyakuninisshu.feature.training.ui.TrainingActivity
 import me.rei_m.hyakuninisshu.feature.training.ui.TrainingExamActivity
 import me.rei_m.hyakuninisshu.infrastructure.di.InfrastructureModule
-import me.rei_m.hyakuninisshu.presentation.SplashActivity
 import me.rei_m.hyakuninisshu.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree

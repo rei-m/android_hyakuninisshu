@@ -12,13 +12,16 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.helper
+package me.rei_m.hyakuninisshu.feature.splash.helper
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.entrance.ui.EntranceActivity
+import javax.inject.Inject
 
-class Navigator(private val activity: AppCompatActivity) {
+@ActivityScope
+class Navigator @Inject constructor(private val activity: AppCompatActivity) {
 
     fun navigateToEntrance() {
         val intentToLaunch = EntranceActivity.createIntent(activity)

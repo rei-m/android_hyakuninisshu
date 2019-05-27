@@ -12,6 +12,6 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.util
+package me.rei_m.hyakuninisshu.feature.corecomponent.constant
 
 const val SPACE = "　"
