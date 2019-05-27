@@ -12,32 +12,24 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.exammenu.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
-import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class ExamMenuViewModel(
-    private val store: EntranceStore,
-    actionCreator: ExamActionCreator,
-    private val navigator: Navigator,
-    private val analyticsHelper: AnalyticsHelper
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+    coroutineContext: CoroutineContext,
+    private val store: ExamMenuStore,
+    actionCreator: ExamActionCreator
+) : AbstractViewModel(coroutineContext) {
 
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
 
@@ -52,38 +44,21 @@ class ExamMenuViewModel(
     }
 
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
 
-    fun onClickShowAllExamResults() {
-        navigator.navigateToExamHistory()
-    }
-
-    fun onClickStartExam() {
-        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_EXAM)
-        navigator.navigateToExam()
-    }
-
-    fun onClickStartTraining() {
-        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING_FOR_EXAM)
-        navigator.navigateToTrainingExam()
-    }
-
     class Factory @Inject constructor(
-        private val store: EntranceStore,
-        private val actionCreator: ExamActionCreator,
-        private val navigator: Navigator,
-        private val analyticsHelper: AnalyticsHelper
+        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        private val store: ExamMenuStore,
+        private val actionCreator: ExamActionCreator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ExamMenuViewModel(
+                coroutineContext,
                 store,
-                actionCreator,
-                navigator,
-                analyticsHelper
+                actionCreator
             ) as T
         }
     }

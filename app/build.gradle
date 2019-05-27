@@ -108,6 +108,7 @@ dependencies {
     implementation project(':feature:training')
     implementation project(':feature:exam')
     implementation project(':feature:examhistory')
+    implementation project(':feature:exammenu')
     implementation project(':feature:materialedit')
     implementation project(':feature:materialdetail')
     implementation project(':feature:materiallist')

@@ -12,42 +12,26 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.exammenu.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.FetchRecentExamAction
 import me.rei_m.hyakuninisshu.action.exam.FinishExamAction
-import me.rei_m.hyakuninisshu.action.material.EditMaterialAction
-import me.rei_m.hyakuninisshu.action.material.FetchMaterialAction
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
 import javax.inject.Inject
 
 @ActivityScope
-class EntranceStore @Inject constructor(dispatcher: Dispatcher) : Store() {
+class ExamMenuStore @Inject constructor(dispatcher: Dispatcher) : Store() {
 
     private val _recentExam = MutableLiveData<KarutaExam?>()
     val recentExam: LiveData<KarutaExam?> = _recentExam
 
-    private val _karutaList = MutableLiveData<List<Karuta>>()
-    val karutaList: LiveData<List<Karuta>> = _karutaList
-
     init {
-        register(dispatcher.on(FetchMaterialAction::class.java).subscribe {
-            if (it.isSucceeded) {
-                _karutaList.value = it.karutas?.asList()
-            }
-        }, dispatcher.on(EditMaterialAction::class.java).subscribe { action ->
-            _karutaList.value?.let {
-                val karutaList = ArrayList(it)
-                karutaList[karutaList.indexOf(action.karuta)] = action.karuta
-                _karutaList.value = karutaList
-            }
-        }, dispatcher.on(FetchRecentExamAction::class.java).subscribe {
+        register(dispatcher.on(FetchRecentExamAction::class.java).subscribe {
             if (it.isSucceeded) {
                 _recentExam.value = it.karutaExam
             }

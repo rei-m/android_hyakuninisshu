@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.entrance
+package me.rei_m.hyakuninisshu.feature.exammenu.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,12 +21,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentExamMenuBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.exammenu.databinding.FragmentExamMenuBinding
+import me.rei_m.hyakuninisshu.feature.exammenu.helper.Navigator
 import javax.inject.Inject
 
 class ExamMenuFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -45,6 +49,18 @@ class ExamMenuFragment : DaggerFragment() {
         val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
             viewModel = examMenuViewModel
             setLifecycleOwner(this@ExamMenuFragment.viewLifecycleOwner)
+        }
+
+        binding.buttonShowAllExamResults.setOnClickListener {
+            navigator.navigateToExamHistory()
+        }
+        binding.buttonStartExam.setOnClickListener {
+            analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_EXAM)
+            navigator.navigateToExam()
+        }
+        binding.buttonStartTrainingFailedQuiz.setOnClickListener {
+            analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING_FOR_EXAM)
+            navigator.navigateToTrainingExam()
         }
 
         return binding.root

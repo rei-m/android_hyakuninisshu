@@ -12,22 +12,17 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.helper
+package me.rei_m.hyakuninisshu.feature.exammenu.helper
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.exam.ui.ExamActivity
 import me.rei_m.hyakuninisshu.feature.examhistory.ui.ExamHistoryActivity
 import me.rei_m.hyakuninisshu.feature.training.ui.TrainingExamActivity
-import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
+import javax.inject.Inject
 
-class Navigator(private val activity: AppCompatActivity) {
-
-    fun navigateToEntrance() {
-        val intentToLaunch = EntranceActivity.createIntent(activity)
-        intentToLaunch.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        activity.startActivity(intentToLaunch)
-    }
+@ActivityScope
+class Navigator @Inject constructor(private val activity: AppCompatActivity) {
 
     fun navigateToExam() {
         val intentToLaunch = ExamActivity.createIntent(activity)
