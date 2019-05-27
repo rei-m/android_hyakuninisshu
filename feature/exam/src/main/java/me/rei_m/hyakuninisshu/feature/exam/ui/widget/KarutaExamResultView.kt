@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.widget.view
+package me.rei_m.hyakuninisshu.feature.exam.ui.widget
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,6 +27,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.ViewIdHolder
 
 class KarutaExamResultView @JvmOverloads constructor(
     context: Context,
@@ -75,8 +76,9 @@ class KarutaExamResultView @JvmOverloads constructor(
             val (karutaId, isCorrect) = karutaQuizJudgement
             with(findViewById<KarutaExamResultCellView>(cellViewIdList[index])) {
                 setResult(karutaId.value, isCorrect)
-                setOnClickListener { _onClickKarutaEvent.value =
-                    Event(karutaId)
+                setOnClickListener {
+                    _onClickKarutaEvent.value =
+                        Event(karutaId)
                 }
             }
         }

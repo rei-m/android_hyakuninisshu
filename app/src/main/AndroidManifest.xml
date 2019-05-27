@@ -54,7 +54,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.exam.ExamActivity"
+            android:name=".feature.exam.ui.ExamActivity"
             android:label="@string/function_exam"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

@@ -12,11 +12,11 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.helper.bindingadapters
+package me.rei_m.hyakuninisshu.feature.exam.helper.bindingadapters
 
 import androidx.databinding.BindingAdapter
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.presentation.widget.view.KarutaExamResultView
+import me.rei_m.hyakuninisshu.feature.exam.ui.widget.KarutaExamResultView
 
 @BindingAdapter("examJudgements")
 fun setKarutaExamResult(

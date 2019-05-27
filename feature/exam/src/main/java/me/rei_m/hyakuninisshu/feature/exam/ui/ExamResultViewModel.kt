@@ -12,37 +12,30 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.exam
+package me.rei_m.hyakuninisshu.feature.exam.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
-import me.rei_m.hyakuninisshu.ext.map
-import me.rei_m.hyakuninisshu.presentation.helper.Navigator
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class ExamResultViewModel(
+    coroutineContext: CoroutineContext,
     private val store: ExamStore,
     actionCreator: ExamActionCreator,
     initialKarutaExamId: KarutaExamIdentifier?,
-    private val navigator: Navigator,
     private val analyticsHelper: AnalyticsHelper
-) : ViewModel(), CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + job
+) : AbstractViewModel(coroutineContext) {
 
     val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier }
 
@@ -66,25 +59,15 @@ class ExamResultViewModel(
         }
     }
 
-    fun openKaruta(karutaId: KarutaIdentifier) {
-        navigator.navigateToKaruta(karutaId)
-    }
-
-    fun finish() {
-        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.FINISH_EXAM)
-        navigator.back()
-    }
-
     override fun onCleared() {
-        job.cancel()
         store.dispose()
         super.onCleared()
     }
 
     class Factory @Inject constructor(
+        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
         private val store: ExamStore,
         private val actionCreator: ExamActionCreator,
-        private val navigator: Navigator,
         private val analyticsHelper: AnalyticsHelper
     ) : ViewModelProvider.Factory {
         var initialKarutaExamId: KarutaExamIdentifier? = null
@@ -92,10 +75,10 @@ class ExamResultViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ExamResultViewModel(
+                coroutineContext,
                 store,
                 actionCreator,
                 initialKarutaExamId,
-                navigator,
                 analyticsHelper
             ) as T
         }

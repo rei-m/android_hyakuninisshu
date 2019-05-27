@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.exam
+package me.rei_m.hyakuninisshu.feature.exam.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

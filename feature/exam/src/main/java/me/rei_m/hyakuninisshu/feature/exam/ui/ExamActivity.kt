@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.exam
+package me.rei_m.hyakuninisshu.feature.exam.ui
 
 import android.app.Activity
 import android.content.Context
@@ -29,23 +29,22 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.databinding.ActivityExamBinding
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.ext.replaceFragment
-import me.rei_m.hyakuninisshu.ext.setupActionBar
-import me.rei_m.hyakuninisshu.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
+import me.rei_m.hyakuninisshu.feature.exam.R
+import me.rei_m.hyakuninisshu.feature.exam.databinding.ActivityExamBinding
 import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizAnswerFragment
 import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizFragment
 import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizInteractionListener
-import me.rei_m.hyakuninisshu.presentation.di.OldActivityModule
 import javax.inject.Inject
 
 class ExamActivity : DaggerAppCompatActivity(),
@@ -163,7 +162,6 @@ class ExamActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
-            OldActivityModule::class,
             QuizAnswerFragment.Module::class,
             QuizFragment.Module::class,
             ExamResultFragment.Module::class
@@ -173,13 +171,10 @@ class ExamActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Builder<ExamActivity>() {
 
-            abstract fun oldActivityModule(module: OldActivityModule): Builder
-
             abstract fun activityModule(module: ActivityModule): Builder
 
             override fun seedInstance(instance: ExamActivity) {
                 activityModule(ActivityModule(instance))
-                oldActivityModule(OldActivityModule(instance))
             }
         }
     }

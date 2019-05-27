@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.widget.view
+package me.rei_m.hyakuninisshu.feature.exam.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
@@ -20,9 +20,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-
-import me.rei_m.hyakuninisshu.R
-import me.rei_m.hyakuninisshu.ext.toKarutaNoStr
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.toKarutaNoStr
+import me.rei_m.hyakuninisshu.feature.exam.R
 
 class KarutaExamResultCellView @JvmOverloads constructor(
     context: Context,

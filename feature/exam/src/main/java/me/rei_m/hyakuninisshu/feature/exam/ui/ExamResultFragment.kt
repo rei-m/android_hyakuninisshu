@@ -12,7 +12,7 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.presentation.exam
+package me.rei_m.hyakuninisshu.feature.exam.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -23,14 +23,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.databinding.FragmentExamResultBinding
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.exam.databinding.FragmentExamResultBinding
+import me.rei_m.hyakuninisshu.feature.exam.helper.Navigator
 import javax.inject.Inject
 
 class ExamResultFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -61,6 +65,9 @@ class ExamResultFragment : DaggerFragment() {
             viewModel = examResultViewModel
             setLifecycleOwner(this@ExamResultFragment.viewLifecycleOwner)
         }
+        binding.buttonBack.setOnClickListener {
+            navigator.back()
+        }
 
         examResultViewModel.karutaExamId.observe(this, Observer {
             karutaExamId = it
@@ -79,9 +86,7 @@ class ExamResultFragment : DaggerFragment() {
         analyticsHelper.sendScreenView("ExamResult", requireActivity())
 
         binding.viewResult.onClickKarutaEvent.observe(this,
-            EventObserver {
-                examResultViewModel.openKaruta(it)
-            })
+            EventObserver { navigator.navigateToKaruta(it) })
     }
 
     override fun onAttach(context: Context?) {
