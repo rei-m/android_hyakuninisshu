@@ -33,10 +33,10 @@ import javax.inject.Inject
 class KarutaFragment : DaggerFragment() {
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    lateinit var viewModelFactory: KarutaViewModel.Factory
 
     @Inject
-    lateinit var viewModelFactory: KarutaViewModel.Factory
+    lateinit var analyticsHelper: AnalyticsHelper
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -51,17 +51,14 @@ class KarutaFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val karutaViewModel = provideActivityViewModel(KarutaViewModel::class.java, viewModelFactory)
+        val viewModel = provideActivityViewModel(KarutaViewModel::class.java, viewModelFactory)
+        viewModel.notFoundKarutaEvent.observe(this, EventObserver {
+            listener?.onError()
+        })
 
-        val binding = FragmentKarutaBinding.inflate(inflater, container, false).apply {
-            viewModel = karutaViewModel
-            setLifecycleOwner(this@KarutaFragment.viewLifecycleOwner)
-        }
-
-        karutaViewModel.notFoundKarutaEvent.observe(this,
-            EventObserver {
-                listener?.onError()
-            })
+        val binding = FragmentKarutaBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }

@@ -18,10 +18,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.karuta.FetchKarutaAction
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
+import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Store
 import javax.inject.Inject
 
 @ActivityScope

@@ -43,7 +43,7 @@ class ExamViewModel(
 
     fun startExam() {
         launch {
-            withContext(ioContext) {actionCreator.start() }
+            withContext(ioContext) { actionCreator.start() }
         }
     }
 

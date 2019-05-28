@@ -57,7 +57,7 @@
                     android:paddingTop="@dimen/padding_m"
                     android:paddingBottom="@dimen/padding_m">
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="秋" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="の" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="田" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                         app:textSizeByPx="@{viewModel.quizTextSize}"
                         tools:text="の" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                         app:textPosition="@{5}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_1_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
                     android:paddingTop="@dimen/padding_m"
                     android:paddingBottom="@dimen/padding_m">
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                         app:textPosition="@{1}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                         app:textPosition="@{2}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                         app:textPosition="@{3}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
                         app:textPosition="@{4}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                         app:textPosition="@{5}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
                         app:textPosition="@{6}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -214,7 +214,7 @@
                         app:textPosition="@{7}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_2_8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -236,7 +236,7 @@
                     android:paddingTop="@dimen/padding_m"
                     android:paddingBottom="@dimen/padding_m">
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_3_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -245,7 +245,7 @@
                         app:textPosition="@{1}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_3_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -256,7 +256,7 @@
                         app:textPosition="@{2}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_3_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                         app:textPosition="@{3}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_3_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -278,7 +278,7 @@
                         app:textPosition="@{4}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_3_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -289,7 +289,7 @@
                         app:textPosition="@{5}"
                         app:textSizeByPx="@{viewModel.quizTextSize}" />
 
-                    <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
+                    <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
                         android:id="@+id/phrase_3_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -331,14 +331,14 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(0)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"
@@ -374,14 +374,14 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(1)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"
@@ -415,14 +415,14 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(2)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"
@@ -458,14 +458,14 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/padding_s">
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(3)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
-                <me.rei_m.hyakuninisshu.feature.quiz.ui.widget.VerticalSingleLineTextView
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"

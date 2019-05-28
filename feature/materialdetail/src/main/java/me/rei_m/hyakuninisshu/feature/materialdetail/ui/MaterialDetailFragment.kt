@@ -21,8 +21,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.materialdetail.databinding.FragmentMaterialDetailBinding
@@ -44,9 +44,8 @@ class MaterialDetailFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentMaterialDetailBinding.inflate(inflater, container, false).apply {
-            setLifecycleOwner(this@MaterialDetailFragment.viewLifecycleOwner)
-        }
+        val binding = FragmentMaterialDetailBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         store.karutaList.map {
             it.find { karuta -> karuta.identifier == karutaId }

@@ -16,9 +16,6 @@ package me.rei_m.hyakuninisshu.infrastructure.di
 
 import android.content.Context
 import android.content.SharedPreferences
-
-import javax.inject.Singleton
-
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
@@ -28,6 +25,7 @@ import me.rei_m.hyakuninisshu.infrastructure.database.KarutaExamRepositoryImpl
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaQuizRepositoryImpl
 import me.rei_m.hyakuninisshu.infrastructure.database.KarutaRepositoryImpl
 import me.rei_m.hyakuninisshu.infrastructure.database.OrmaProvider
+import javax.inject.Singleton
 
 @Module
 class InfrastructureModule {

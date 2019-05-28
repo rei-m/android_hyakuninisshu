@@ -39,13 +39,17 @@ import javax.inject.Inject
 class QuizAnswerFragment : DaggerFragment() {
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    lateinit var viewModelFactory: QuizAnswerViewModel.Factory
 
     @Inject
     lateinit var navigator: Navigator
 
     @Inject
-    lateinit var viewModelFactory: QuizAnswerViewModel.Factory
+    lateinit var analyticsHelper: AnalyticsHelper
+
+    private lateinit var viewModel: QuizAnswerViewModel
+
+    private lateinit var binding: FragmentQuizAnswerBinding
 
     private var listener: QuizInteractionListener? = null
 
@@ -60,30 +64,20 @@ class QuizAnswerFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val quizAnswerViewModel = provideFragmentViewModel(QuizAnswerViewModel::class.java, viewModelFactory)
+        viewModel = provideFragmentViewModel(QuizAnswerViewModel::class.java, viewModelFactory)
+        viewModel.openNextQuizEvent.observe(this, EventObserver {
+            listener?.onGoToNext()
+        })
+        viewModel.openResultEvent.observe(this, EventObserver {
+            listener?.onGoToResult()
+        })
+        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+            listener?.onErrorQuiz()
+        })
 
-        val binding = FragmentQuizAnswerBinding.inflate(inflater, container, false).apply {
-            viewModel = quizAnswerViewModel
-            setLifecycleOwner(this@QuizAnswerFragment.viewLifecycleOwner)
-        }
-        binding.textMaterial.setOnClickListener {
-            quizAnswerViewModel.karuta.value?.let {
-                navigator.navigateToKaruta(it.identifier)
-            }
-        }
-
-        quizAnswerViewModel.openNextQuizEvent.observe(this,
-            EventObserver {
-                listener?.onGoToNext()
-            })
-        quizAnswerViewModel.openResultEvent.observe(this,
-            EventObserver {
-                listener?.onGoToResult()
-            })
-        quizAnswerViewModel.unhandledErrorEvent.observe(this,
-            EventObserver {
-                listener?.onErrorQuiz()
-            })
+        binding = FragmentQuizAnswerBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -91,6 +85,10 @@ class QuizAnswerFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("QuizAnswer", requireActivity())
+
+        binding.textMaterial.setOnClickListener {
+            viewModel.karuta.value?.let { navigator.navigateToKaruta(it.identifier) }
+        }
     }
 
     override fun onAttach(context: Context) {

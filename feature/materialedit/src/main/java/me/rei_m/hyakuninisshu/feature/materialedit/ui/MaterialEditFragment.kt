@@ -36,13 +36,13 @@ class MaterialEditFragment : DaggerFragment(),
     ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
 
     @Inject
+    lateinit var viewModelFactory: MaterialEditViewModel.Factory
+
+    @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
     @Inject
     lateinit var navigator: Navigator
-
-    @Inject
-    lateinit var viewModelFactory: MaterialEditViewModel.Factory
 
     private lateinit var binding: FragmentMaterialEditBinding
 
@@ -77,31 +77,27 @@ class MaterialEditFragment : DaggerFragment(),
         }
         viewModel = provideActivityViewModel(MaterialEditViewModel::class.java, viewModelFactory)
 
-        binding = FragmentMaterialEditBinding.inflate(inflater, container, false).apply {
-            viewModel = this@MaterialEditFragment.viewModel
-            setLifecycleOwner(this@MaterialEditFragment.viewLifecycleOwner)
-        }
-
-        viewModel.confirmEditEvent.observe(this,
-            EventObserver { dialog ->
-                fragmentManager?.let {
-                    dialog.setTargetFragment(this, 0)
-                    dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
-                }
-            })
+        viewModel.confirmEditEvent.observe(this, EventObserver { dialog ->
+            fragmentManager?.let {
+                dialog.setTargetFragment(this, 0)
+                dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
+            }
+        })
         viewModel.completeEditEvent.observe(this, EventObserver {
             navigator.back()
         })
-        viewModel.snackBarMessage.observe(this,
-            EventObserver {
-                Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null)
-                    .show()
-            })
-        viewModel.unhandledErrorEvent.observe(this,
-            EventObserver {
-                listener?.onError()
-            })
+        viewModel.snackBarMessage.observe(this, EventObserver {
+            Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
+                .setAction("Action", null)
+                .show()
+        })
+        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+            listener?.onError()
+        })
+
+        binding = FragmentMaterialEditBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }

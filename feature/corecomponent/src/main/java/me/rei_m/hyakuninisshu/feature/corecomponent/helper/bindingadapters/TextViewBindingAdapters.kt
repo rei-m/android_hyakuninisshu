@@ -14,20 +14,18 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.helper.bindingadapters
 
-import androidx.databinding.BindingAdapter
 import android.graphics.Color
-import androidx.annotation.DimenRes
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.widget.TextView
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.diffString
+import androidx.annotation.DimenRes
+import androidx.databinding.BindingAdapter
+import me.rei_m.hyakuninisshu.feature.corecomponent.R
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.toKarutaNoStr
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.toKimarijiStr
-import me.rei_m.hyakuninisshu.feature.corecomponent.R
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
-import java.util.Date
 import java.util.Locale
 
 @BindingAdapter("verticalText")
@@ -142,10 +140,4 @@ fun setAverageAnswerTime(
     val context = view.context.applicationContext
     val averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerSec)
     view.text = context.getString(R.string.seconds, averageAnswerTimeString)
-}
-
-@BindingAdapter("examTime")
-fun setExamTime(view: TextView, value: Date?) {
-    value ?: return
-    view.text = value.diffString(view.context.applicationContext, Date())
 }

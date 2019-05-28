@@ -27,9 +27,9 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.addFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog

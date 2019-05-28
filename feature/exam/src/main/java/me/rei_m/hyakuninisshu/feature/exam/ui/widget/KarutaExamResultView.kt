@@ -14,8 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.exam.ui.widget
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
@@ -23,6 +21,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement

@@ -7,7 +7,7 @@ import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditActivity
 import javax.inject.Inject
 
 @ActivityScope
-class Navigator @Inject constructor (private val activity: AppCompatActivity) {
+class Navigator @Inject constructor(private val activity: AppCompatActivity) {
     fun navigateToMaterialEdit(karutaId: KarutaIdentifier) {
         val intentToLaunch = MaterialEditActivity.createIntent(activity, karutaId)
         activity.startActivity(intentToLaunch)

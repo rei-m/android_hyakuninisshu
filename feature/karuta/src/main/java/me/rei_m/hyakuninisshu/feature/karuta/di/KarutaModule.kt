@@ -17,8 +17,8 @@ package me.rei_m.hyakuninisshu.feature.karuta.di
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.karuta.KarutaActionCreator
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaStore
 import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaViewModel
 import javax.inject.Named

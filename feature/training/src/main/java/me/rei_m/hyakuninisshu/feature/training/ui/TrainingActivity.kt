@@ -23,7 +23,6 @@ import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
@@ -38,6 +37,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
@@ -94,42 +94,37 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TrainingViewModel::class.java)
-
-        with(viewModel) {
-            isVisibleAd.observe(this@TrainingActivity, Observer {
-                if (it == true) {
-                    adViewObserver.showAd()
-                } else {
-                    adViewObserver.hideAd()
-                }
-            })
-            currentKarutaQuizId.observe(this@TrainingActivity, Observer {
-                it ?: return@Observer
-                onReceiveKarutaQuizId(it)
-                supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
-                    replaceFragment(
-                        R.id.content,
-                        QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle, animationSpeed),
-                        QuizFragment.TAG,
-                        FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
-                    )
-                }
-            })
-            unhandledErrorEvent.observe(this@TrainingActivity,
-                EventObserver {
-                    onErrorQuiz()
-                })
-        }
+        viewModel = provideViewModel(TrainingViewModel::class.java, viewModelFactory)
+        viewModel.isVisibleAd.observe(this@TrainingActivity, Observer {
+            if (it == true) {
+                adViewObserver.showAd()
+            } else {
+                adViewObserver.hideAd()
+            }
+        })
+        viewModel.currentKarutaQuizId.observe(this@TrainingActivity, Observer {
+            it ?: return@Observer
+            onReceiveKarutaQuizId(it)
+            supportFragmentManager.findFragmentByTag(TrainingResultFragment.TAG)?.let { _ ->
+                replaceFragment(
+                    R.id.content,
+                    QuizFragment.newInstance(it, kamiNoKuStyle, shimoNoKuStyle, animationSpeed),
+                    QuizFragment.TAG,
+                    FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
+                )
+            }
+        })
+        viewModel.unhandledErrorEvent.observe(this@TrainingActivity, EventObserver {
+            onErrorQuiz()
+        })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_training)
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
         setupActionBar(binding.toolbar) {
         }
         setupAd()
-
-        binding.viewModel = viewModel
 
         if (supportFragmentManager.fragments.isEmpty()) {
             viewModel.startTraining(trainingRangeFrom, trainingRangeTo, kimarijiFilter, colorFilter)

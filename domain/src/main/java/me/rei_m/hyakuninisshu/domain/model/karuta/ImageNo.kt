@@ -14,9 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.karuta
 
-import java.util.regex.Pattern
-
 import me.rei_m.hyakuninisshu.domain.ValueObject
+import java.util.regex.Pattern
 
 /**
  * 歌の画像番号.

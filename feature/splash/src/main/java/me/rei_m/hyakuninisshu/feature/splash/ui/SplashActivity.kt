@@ -17,7 +17,6 @@ package me.rei_m.hyakuninisshu.feature.splash.ui
 import android.app.Activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
@@ -25,6 +24,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
@@ -44,8 +44,7 @@ class SplashActivity : DaggerAppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
-        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(ApplicationViewModel::class.java)
+        val viewModel = provideViewModel(ApplicationViewModel::class.java, viewModelFactory)
         viewModel.isReady.observe(this, Observer {
             if (it == true) {
                 navigator.navigateToEntrance()

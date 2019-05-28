@@ -62,7 +62,8 @@ class KarutaQuizzes(val values: List<KarutaQuiz>) {
             }
         }
 
-        val averageAnswerTime = totalAnswerTimeMillSec.toFloat() / quizCount.toFloat() / TimeUnit.SECONDS.toMillis(1).toFloat()
+        val averageAnswerTime =
+            totalAnswerTimeMillSec.toFloat() / quizCount.toFloat() / TimeUnit.SECONDS.toMillis(1).toFloat()
 
         return KarutaQuizzesResultSummary(quizCount, collectCount, averageAnswerTime)
     }

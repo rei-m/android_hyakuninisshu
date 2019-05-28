@@ -34,8 +34,7 @@ class TrainingMenuViewModel(
     kamiNoKuStyle: KarutaStyleFilter,
     shimoNoKuStyle: KarutaStyleFilter,
     color: ColorFilter,
-    animationSpeed: QuizAnimationSpeed,
-    private val analyticsHelper: AnalyticsHelper
+    animationSpeed: QuizAnimationSpeed
 ) : ViewModel() {
     val trainingRangeFrom = MutableLiveData<TrainingRangeFrom>().withValue(trainingRangeFrom)
 
@@ -51,9 +50,7 @@ class TrainingMenuViewModel(
 
     val animationSpeed = MutableLiveData<QuizAnimationSpeed>().withValue(animationSpeed)
 
-    class Factory @Inject constructor(
-        private val analyticsHelper: AnalyticsHelper
-    ) : ViewModelProvider.Factory {
+    class Factory @Inject constructor() : ViewModelProvider.Factory {
         var trainingRangeFrom = TrainingRangeFrom.ONE
         var trainingRangeTo = TrainingRangeTo.ONE_HUNDRED
         var kimariji = KimarijiFilter.ALL
@@ -71,8 +68,7 @@ class TrainingMenuViewModel(
                 kamiNoKuStyle,
                 shimoNoKuStyle,
                 color,
-                animationSpeed,
-                analyticsHelper
+                animationSpeed
             ) as T
         }
     }

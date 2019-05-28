@@ -29,16 +29,16 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 import me.rei_m.hyakuninisshu.feature.materialdetail.R
 import me.rei_m.hyakuninisshu.feature.materialdetail.databinding.ActivityMaterialDetailBinding
 import me.rei_m.hyakuninisshu.feature.materialdetail.di.MaterialDetailModule
@@ -49,10 +49,10 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     AlertDialogFragment.OnDialogInteractionListener {
 
     @Inject
-    lateinit var navigator: Navigator
+    lateinit var viewModelFactory: MaterialDetailViewModel.Factory
 
     @Inject
-    lateinit var viewModelFactory: MaterialDetailViewModel.Factory
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var adViewObserver: AdViewObserver
@@ -75,14 +75,13 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = provideViewModel(MaterialDetailViewModel::class.java, viewModelFactory)
-        viewModel.unhandledErrorEvent.observe(this,
-            EventObserver {
-                showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
-            })
+        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+            showAlertDialog(R.string.text_title_error, R.string.text_message_unhandled_error)
+        })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_material_detail)
         binding.viewModel = viewModel
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         setupActionBar(binding.toolbar) {
             setDisplayHomeAsUpEnabled(true)

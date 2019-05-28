@@ -18,7 +18,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
@@ -29,6 +28,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter
 import me.rei_m.hyakuninisshu.feature.trainingmenu.R
@@ -39,17 +39,17 @@ import javax.inject.Inject
 class TrainingMenuFragment : DaggerFragment() {
 
     @Inject
+    lateinit var viewModelFactory: TrainingMenuViewModel.Factory
+
+    @Inject
     lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    @Inject
-    lateinit var viewModelFactory: TrainingMenuViewModel.Factory
-
     private lateinit var binding: FragmentTrainingMenuBinding
 
-    private lateinit var trainingMenuViewModel: TrainingMenuViewModel
+    private lateinit var viewModel: TrainingMenuViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,13 +67,9 @@ class TrainingMenuFragment : DaggerFragment() {
                 animationSpeed = QuizAnimationSpeed[savedInstanceState.getInt(KEY_ANIMATION_SPEED)]
             }
         }
-        trainingMenuViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(TrainingMenuViewModel::class.java)
+        viewModel = provideActivityViewModel(TrainingMenuViewModel::class.java, viewModelFactory)
 
         binding = FragmentTrainingMenuBinding.inflate(inflater, container, false).apply {
-            viewModel = trainingMenuViewModel
-            setLifecycleOwner(this@TrainingMenuFragment.viewLifecycleOwner)
-
             trainingRangeFromAdapter = SpinnerAdapter.newInstance(root.context, TrainingRangeFrom.values().asList())
             trainingRangeToAdapter = SpinnerAdapter.newInstance(root.context, TrainingRangeTo.values().asList())
             kimarijiAdapter = SpinnerAdapter.newInstance(root.context, KimarijiFilter.values().asList())
@@ -81,23 +77,8 @@ class TrainingMenuFragment : DaggerFragment() {
             colorAdapter = SpinnerAdapter.newInstance(root.context, ColorFilter.values().asList())
             animationSpeedAdapter = SpinnerAdapter.newInstance(root.context, QuizAnimationSpeed.values().asList())
         }
-
-        binding.buttonStartTraining.setOnClickListener {
-            if (trainingMenuViewModel.trainingRangeFrom.value!!.ordinal > trainingMenuViewModel.trainingRangeTo.value!!.ordinal) {
-                Snackbar.make(binding.root, R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
-            navigator.navigateToTraining(
-                trainingMenuViewModel.trainingRangeFrom.value!!,
-                trainingMenuViewModel.trainingRangeTo.value!!,
-                trainingMenuViewModel.kimariji.value!!,
-                trainingMenuViewModel.color.value!!,
-                trainingMenuViewModel.kamiNoKuStyle.value!!,
-                trainingMenuViewModel.shimoNoKuStyle.value!!,
-                trainingMenuViewModel.animationSpeed.value!!
-            )
-        }
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -105,16 +86,33 @@ class TrainingMenuFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("Entrance - TrainingMenu", requireActivity())
+
+        binding.buttonStartTraining.setOnClickListener {
+            if (viewModel.trainingRangeFrom.value!!.ordinal > viewModel.trainingRangeTo.value!!.ordinal) {
+                Snackbar.make(binding.root, R.string.text_message_invalid_training_range, Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
+            navigator.navigateToTraining(
+                viewModel.trainingRangeFrom.value!!,
+                viewModel.trainingRangeTo.value!!,
+                viewModel.kimariji.value!!,
+                viewModel.color.value!!,
+                viewModel.kamiNoKuStyle.value!!,
+                viewModel.shimoNoKuStyle.value!!,
+                viewModel.animationSpeed.value!!
+            )
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(KEY_TRAINING_RANGE_FROM, trainingMenuViewModel.trainingRangeFrom.value!!.ordinal)
-        outState.putInt(KEY_TRAINING_RANGE_TO, trainingMenuViewModel.trainingRangeTo.value!!.ordinal)
-        outState.putInt(KEY_KIMARIJI, trainingMenuViewModel.kimariji.value!!.ordinal)
-        outState.putInt(KEY_KAMI_NO_KU_STYLE, trainingMenuViewModel.kamiNoKuStyle.value!!.ordinal)
-        outState.putInt(KEY_SHIMO_NO_KU_STYLE, trainingMenuViewModel.shimoNoKuStyle.value!!.ordinal)
-        outState.putInt(KEY_COLOR, trainingMenuViewModel.color.value!!.ordinal)
-        outState.putInt(KEY_ANIMATION_SPEED, trainingMenuViewModel.animationSpeed.value!!.ordinal)
+        outState.putInt(KEY_TRAINING_RANGE_FROM, viewModel.trainingRangeFrom.value!!.ordinal)
+        outState.putInt(KEY_TRAINING_RANGE_TO, viewModel.trainingRangeTo.value!!.ordinal)
+        outState.putInt(KEY_KIMARIJI, viewModel.kimariji.value!!.ordinal)
+        outState.putInt(KEY_KAMI_NO_KU_STYLE, viewModel.kamiNoKuStyle.value!!.ordinal)
+        outState.putInt(KEY_SHIMO_NO_KU_STYLE, viewModel.shimoNoKuStyle.value!!.ordinal)
+        outState.putInt(KEY_COLOR, viewModel.color.value!!.ordinal)
+        outState.putInt(KEY_ANIMATION_SPEED, viewModel.animationSpeed.value!!.ordinal)
         super.onSaveInstanceState(outState)
     }
 

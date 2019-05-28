@@ -35,10 +35,11 @@ class KarutaExams(private val values: List<KarutaExam>) {
     /**
      * 過去の力試しの結果から間違えた問題の歌のIDの集合.
      */
-    val totalWrongKarutaIds: KarutaIds = KarutaIds(values.asSequence().fold(mutableSetOf<KarutaIdentifier>()) { karutaIdSet, karutaExam ->
-        karutaIdSet.addAll(karutaExam.result.wrongKarutaIds.values)
-        karutaIdSet
-    }.toList())
+    val totalWrongKarutaIds: KarutaIds =
+        KarutaIds(values.asSequence().fold(mutableSetOf<KarutaIdentifier>()) { karutaIdSet, karutaExam ->
+            karutaIdSet.addAll(karutaExam.result.wrongKarutaIds.values)
+            karutaIdSet
+        }.toList())
 
     override fun equals(other: Any?): Boolean {
         other as? KarutaExams ?: return false

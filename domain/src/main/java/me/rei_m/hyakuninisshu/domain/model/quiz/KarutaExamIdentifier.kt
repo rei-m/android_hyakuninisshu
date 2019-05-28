@@ -30,7 +30,8 @@ data class KarutaExamIdentifier(val value: Long) : EntityIdentifier, Parcelable 
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<KarutaExamIdentifier> = object : Parcelable.Creator<KarutaExamIdentifier> {
-            override fun createFromParcel(source: Parcel): KarutaExamIdentifier = KarutaExamIdentifier(source.readLong())
+            override fun createFromParcel(source: Parcel): KarutaExamIdentifier =
+                KarutaExamIdentifier(source.readLong())
 
             override fun newArray(size: Int): Array<KarutaExamIdentifier?> = arrayOfNulls(size)
         }

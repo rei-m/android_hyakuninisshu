@@ -36,6 +36,8 @@ class SupportFragment : DaggerFragment() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
+    private lateinit var binding: FragmentSupportBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,8 +45,16 @@ class SupportFragment : DaggerFragment() {
     ): View? {
         val versionName = getString(R.string.version, BuildConfig.VERSION_NAME)
 
-        val binding = FragmentSupportBinding.inflate(inflater, container, false)
+        binding = FragmentSupportBinding.inflate(inflater, container, false)
         binding.textVersion.text = versionName
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Entrance - Support", requireActivity())
+
         binding.textLicense.setOnClickListener {
             navigator.openLicenceDialog()
         }
@@ -54,13 +64,6 @@ class SupportFragment : DaggerFragment() {
         binding.textReview.setOnClickListener {
             navigator.navigateToAppStore()
         }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        analyticsHelper.sendScreenView("Entrance - Support", requireActivity())
     }
 
     @dagger.Module

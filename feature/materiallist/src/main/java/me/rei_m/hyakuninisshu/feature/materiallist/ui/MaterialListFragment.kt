@@ -35,10 +35,10 @@ import javax.inject.Inject
 class MaterialListFragment : DaggerFragment(), MaterialListAdapter.OnItemInteractionListener {
 
     @Inject
-    lateinit var navigator: Navigator
+    lateinit var viewModelFactory: MaterialListViewModel.Factory
 
     @Inject
-    lateinit var viewModelFactory: MaterialListViewModel.Factory
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -55,10 +55,9 @@ class MaterialListFragment : DaggerFragment(), MaterialListAdapter.OnItemInterac
         }
         viewModel = provideActivityViewModel(MaterialListViewModel::class.java, viewModelFactory)
 
-        val binding = FragmentMaterialListBinding.inflate(inflater, container, false).apply {
-            viewModel = this@MaterialListFragment.viewModel
-            setLifecycleOwner(this@MaterialListFragment.viewLifecycleOwner)
-        }
+        val binding = FragmentMaterialListBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         with(binding.recyclerKarutaList) {
             adapter = MaterialListAdapter(requireContext(), listOf(), this@MaterialListFragment)

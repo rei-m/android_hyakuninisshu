@@ -16,9 +16,9 @@ package me.rei_m.hyakuninisshu.feature.support.ui
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.appcompat.app.AlertDialog
 import android.webkit.WebView
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import me.rei_m.hyakuninisshu.feature.support.R
 
 class PrivacyPolicyDialogFragment : DialogFragment() {
@@ -32,8 +32,8 @@ class PrivacyPolicyDialogFragment : DialogFragment() {
         }
 
         val builder = AlertDialog.Builder(activityContext)
-                .setPositiveButton(getString(R.string.back), null)
-                .setView(webView)
+            .setPositiveButton(getString(R.string.back), null)
+            .setView(webView)
 
         return builder.create()
     }

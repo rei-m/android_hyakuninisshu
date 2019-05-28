@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2019. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -12,16 +12,19 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.feature.quiz.helper.bindingadapters
+package me.rei_m.hyakuninisshu.feature.corecomponent.widget.view
 
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
-import me.rei_m.hyakuninisshu.feature.corecomponent.R
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.GlideApp
+import android.content.Context
+import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatTextView
 
-@BindingAdapter("isCorrect")
-fun setIsCorrect(imageView: ImageView, isCorrect: Boolean?) {
-    isCorrect ?: return
-    val resId = if (isCorrect) R.drawable.check_correct else R.drawable.check_incorrect
-    GlideApp.with(imageView.context).load(resId).dontAnimate().into(imageView)
+class KarutaTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AppCompatTextView(context, attrs, defStyleAttr) {
+
+    init {
+        typeface = KarutaFontHolder.getTypeFace(context)
+    }
 }

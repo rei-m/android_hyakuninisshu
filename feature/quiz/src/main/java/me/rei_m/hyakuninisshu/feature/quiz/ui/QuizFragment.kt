@@ -42,9 +42,9 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideFragmentViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
+import me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
 import me.rei_m.hyakuninisshu.feature.quiz.databinding.FragmentQuizBinding
 import me.rei_m.hyakuninisshu.feature.quiz.di.QuizModule
-import me.rei_m.hyakuninisshu.feature.quiz.ui.widget.KarutaTextView
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -52,12 +52,12 @@ import javax.inject.Inject
 class QuizFragment : DaggerFragment() {
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
-
-    @Inject
     lateinit var viewModelFactory: QuizViewModel.Factory
 
-    private lateinit var quizViewModel: QuizViewModel
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
+    private lateinit var viewModel: QuizViewModel
 
     private lateinit var binding: FragmentQuizBinding
 
@@ -94,14 +94,8 @@ class QuizFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        quizViewModel = provideFragmentViewModel(QuizViewModel::class.java, viewModelFactory)
-
-        binding = FragmentQuizBinding.inflate(inflater, container, false).apply {
-            viewModel = quizViewModel
-            setLifecycleOwner(this@QuizFragment.viewLifecycleOwner)
-        }
-
-        quizViewModel.content.observe(this, Observer<KarutaQuizContent> {
+        viewModel = provideFragmentViewModel(QuizViewModel::class.java, viewModelFactory)
+        viewModel.content.observe(this, Observer<KarutaQuizContent> {
             it ?: return@Observer
             when (it.quiz.state) {
                 KarutaQuiz.State.IN_ANSWER -> {
@@ -115,13 +109,16 @@ class QuizFragment : DaggerFragment() {
                 }
             }
         })
-        quizViewModel.openAnswerEvent.observe(this, EventObserver {
+        viewModel.openAnswerEvent.observe(this, EventObserver {
             listener?.onAnswered(it)
         })
-        quizViewModel.unhandledErrorEvent.observe(this,
-            EventObserver {
-                listener?.onErrorQuiz()
-            })
+        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+            listener?.onErrorQuiz()
+        })
+
+        binding = FragmentQuizBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -133,7 +130,7 @@ class QuizFragment : DaggerFragment() {
 
     override fun onResume() {
         super.onResume()
-        quizViewModel.start()
+        viewModel.start()
     }
 
     override fun onPause() {

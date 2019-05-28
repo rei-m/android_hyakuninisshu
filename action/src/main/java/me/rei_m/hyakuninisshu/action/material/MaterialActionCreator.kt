@@ -15,9 +15,9 @@
 package me.rei_m.hyakuninisshu.action.material
 
 import me.rei_m.hyakuninisshu.action.Dispatcher
+import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import javax.inject.Inject
 import javax.inject.Singleton
 
