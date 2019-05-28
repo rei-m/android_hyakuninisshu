@@ -26,10 +26,10 @@ import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class ExamMenuViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
     private val store: ExamMenuStore,
     actionCreator: ExamActionCreator
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
 
@@ -49,14 +49,14 @@ class ExamMenuViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        @Named("mainContext") private val mainContext: CoroutineContext,
         private val store: ExamMenuStore,
         private val actionCreator: ExamActionCreator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ExamMenuViewModel(
-                coroutineContext,
+                mainContext,
                 store,
                 actionCreator
             ) as T

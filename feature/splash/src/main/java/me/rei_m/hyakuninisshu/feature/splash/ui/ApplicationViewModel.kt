@@ -17,6 +17,7 @@ package me.rei_m.hyakuninisshu.feature.splash.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.application.ApplicationActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
@@ -24,10 +25,11 @@ import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class ApplicationViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: ApplicationStore,
     actionCreator: ApplicationActionCreator
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val isReady = store.isReady
 
@@ -35,7 +37,7 @@ class ApplicationViewModel(
 
     init {
         launch {
-            actionCreator.start()
+            withContext(ioContext) { actionCreator.start() }
         }
     }
 
@@ -45,13 +47,14 @@ class ApplicationViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        @Named("mainContext") private val mainContext: CoroutineContext,
+        @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: ApplicationStore,
         private val actionCreator: ApplicationActionCreator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ApplicationViewModel(coroutineContext, store, actionCreator) as T
+            return ApplicationViewModel(mainContext, ioContext, store, actionCreator) as T
         }
     }
 }

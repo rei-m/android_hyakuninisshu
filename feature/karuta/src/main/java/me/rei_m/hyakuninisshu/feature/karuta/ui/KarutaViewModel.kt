@@ -25,11 +25,11 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import kotlin.coroutines.CoroutineContext
 
 class KarutaViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
     private val store: KarutaStore,
     actionCreator: KarutaActionCreator,
     karutaId: KarutaIdentifier
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val isLoading: LiveData<Boolean> = store.karuta.map { it == null }
 
@@ -67,14 +67,14 @@ class KarutaViewModel(
     }
 
     class Factory(
-        private val coroutineContext: CoroutineContext,
+        private val mainContext: CoroutineContext,
         private val store: KarutaStore,
         private val actionCreator: KarutaActionCreator,
         private val karutaId: KarutaIdentifier
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return KarutaViewModel(coroutineContext, store, actionCreator, karutaId) as T
+            return KarutaViewModel(mainContext, store, actionCreator, karutaId) as T
         }
     }
 }

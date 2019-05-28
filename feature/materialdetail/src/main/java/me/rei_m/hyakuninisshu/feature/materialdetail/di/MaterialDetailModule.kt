@@ -32,12 +32,12 @@ class MaterialDetailModule(
     @Provides
     @ActivityScope
     fun provideMaterialDetailViewModelFactory(
-        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
+        @Named("mainContext") mainContext: CoroutineContext,
         store: MaterialDetailStore,
         actionCreator: MaterialActionCreator
     ): MaterialDetailViewModel.Factory {
         return MaterialDetailViewModel.Factory(
-            coroutineContext,
+            mainContext,
             store,
             actionCreator,
             colorFilter,

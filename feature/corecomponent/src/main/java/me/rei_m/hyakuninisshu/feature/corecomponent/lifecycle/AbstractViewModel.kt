@@ -15,14 +15,14 @@ package me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.CoroutineContext
 
-abstract class AbstractViewModel(coroutineContext: CoroutineContext) : ViewModel(), CoroutineScope {
+abstract class AbstractViewModel(context: CoroutineContext) : ViewModel(), CoroutineScope {
 
-    private val job = Job()
+    private val job = SupervisorJob()
 
-    override val coroutineContext: CoroutineContext = coroutineContext + job
+    override val coroutineContext: CoroutineContext = context + job
 
     override fun onCleared() {
         job.cancel()

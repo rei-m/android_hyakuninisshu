@@ -17,7 +17,9 @@ package me.rei_m.hyakuninisshu.feature.training.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
@@ -32,10 +34,11 @@ import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class TrainingViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
+    private val ioContext: CoroutineContext,
     private val store: TrainingStore,
     private val actionCreator: TrainingActionCreator
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -57,18 +60,20 @@ class TrainingViewModel(
         colorFilter: ColorFilter
     ) {
         launch {
-            actionCreator.start(
-                trainingRangeFrom.value,
-                trainingRangeTo.value,
-                kimarijiFilter.value,
-                colorFilter.value
-            )
+            withContext(ioContext) {
+                actionCreator.start(
+                    trainingRangeFrom.value,
+                    trainingRangeTo.value,
+                    kimarijiFilter.value,
+                    colorFilter.value
+                )
+            }
         }
     }
 
     fun startTraining() {
         launch {
-            actionCreator.startForExam()
+            withContext(ioContext) { actionCreator.startForExam() }
         }
     }
 
@@ -79,14 +84,16 @@ class TrainingViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        @Named("mainContext") private val mainContext: CoroutineContext,
+        @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: TrainingStore,
         private val actionCreator: TrainingActionCreator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TrainingViewModel(
-                coroutineContext,
+                mainContext,
+                ioContext,
                 store,
                 actionCreator
             ) as T

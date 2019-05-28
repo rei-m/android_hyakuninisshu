@@ -11,6 +11,11 @@ import kotlin.coroutines.CoroutineContext
 class ViewModelModule {
     @Provides
     @Singleton
-    @Named("vmCoroutineContext")
-    fun provideViewModelCoroutineContext(): CoroutineContext = Dispatchers.IO
+    @Named("mainContext")
+    fun provideMainContext(): CoroutineContext = Dispatchers.Main
+
+    @Provides
+    @Singleton
+    @Named("ioContext")
+    fun provideIOContext(): CoroutineContext = Dispatchers.IO
 }

@@ -31,12 +31,12 @@ class QuizAnswerModule(
     @Provides
     @FragmentScope
     fun provideQuizAnswerViewModelFactory(
-        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
+        @Named("mainContext") mainContext: CoroutineContext,
         store: QuizStore,
         actionCreator: QuizActionCreator
     ): QuizAnswerViewModel.Factory {
         return QuizAnswerViewModel.Factory(
-            coroutineContext,
+            mainContext,
             store,
             actionCreator,
             quizId

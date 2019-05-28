@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -31,7 +32,8 @@ import me.rei_m.hyakuninisshu.feature.materialedit.R
 import kotlin.coroutines.CoroutineContext
 
 class MaterialEditViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
+    private val ioContext: CoroutineContext,
     private val store: MaterialEditStore,
     private val actionCreator: MaterialActionCreator,
     private val karutaId: KarutaIdentifier,
@@ -45,7 +47,7 @@ class MaterialEditViewModel(
     fourthPhraseKana: String?,
     fifthPhraseKanji: String?,
     fifthPhraseKana: String?
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
     private val karuta: LiveData<Karuta?> = store.karuta
 
     val karutaNo: LiveData<Int?> = karuta.map { it?.identifier?.value }
@@ -150,19 +152,21 @@ class MaterialEditViewModel(
         }
 
         launch {
-            actionCreator.edit(
-                karutaId,
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
-            )
+            withContext(ioContext) {
+                actionCreator.edit(
+                    karutaId,
+                    firstPhraseKanji,
+                    firstPhraseKana,
+                    secondPhraseKanji,
+                    secondPhraseKana,
+                    thirdPhraseKanji,
+                    thirdPhraseKana,
+                    fourthPhraseKanji,
+                    fourthPhraseKana,
+                    fifthPhraseKanji,
+                    fifthPhraseKana
+                )
+            }
         }
     }
 
@@ -207,7 +211,8 @@ class MaterialEditViewModel(
     }
 
     class Factory(
-        private val coroutineContext: CoroutineContext,
+        private val mainContext: CoroutineContext,
+        private val ioContext: CoroutineContext,
         private val store: MaterialEditStore,
         private val actionCreator: MaterialActionCreator,
         private val karutaId: KarutaIdentifier
@@ -227,7 +232,8 @@ class MaterialEditViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MaterialEditViewModel(
-                coroutineContext,
+                mainContext,
+                ioContext,
                 store,
                 actionCreator,
                 karutaId,

@@ -18,23 +18,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class ExamResultViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: ExamStore,
     actionCreator: ExamActionCreator,
     initialKarutaExamId: KarutaExamIdentifier?
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier }
 
@@ -47,12 +48,10 @@ class ExamResultViewModel(
     val notFoundExamEvent: LiveData<Event<Unit>> = store.notFoundExamEvent
 
     init {
-        if (initialKarutaExamId == null) {
-            launch {
-                actionCreator.finish()
-            }
-        } else {
-            launch {
+        launch {
+            if (initialKarutaExamId == null) {
+                withContext(ioContext) { actionCreator.finish() }
+            } else {
                 actionCreator.fetch(initialKarutaExamId)
             }
         }
@@ -64,7 +63,8 @@ class ExamResultViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        @Named("mainContext") private val mainContext: CoroutineContext,
+        @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: ExamStore,
         private val actionCreator: ExamActionCreator
     ) : ViewModelProvider.Factory {
@@ -73,7 +73,8 @@ class ExamResultViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ExamResultViewModel(
-                coroutineContext,
+                mainContext,
+                ioContext,
                 store,
                 actionCreator,
                 initialKarutaExamId

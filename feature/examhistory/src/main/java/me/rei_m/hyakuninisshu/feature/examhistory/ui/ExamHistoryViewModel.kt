@@ -27,10 +27,10 @@ import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class ExamHistoryViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
     private val store: ExamHistoryStore,
     private val actionCreator: ExamActionCreator
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
 
@@ -48,13 +48,13 @@ class ExamHistoryViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        @Named("mainContext") private val mainContext: CoroutineContext,
         private val store: ExamHistoryStore,
         private val actionCreator: ExamActionCreator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamHistoryViewModel(coroutineContext, store, actionCreator) as T
+            return ExamHistoryViewModel(mainContext, store, actionCreator) as T
         }
     }
 }

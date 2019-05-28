@@ -31,11 +31,13 @@ class MaterialEditModule(
     @Provides
     @ActivityScope
     fun provideMaterialEditViewModelFactory(
-        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
+        @Named("mainContext") mainContext: CoroutineContext,
+        @Named("ioContext") ioContext: CoroutineContext,
         store: MaterialEditStore,
         actionCreator: MaterialActionCreator
     ): MaterialEditViewModel.Factory = MaterialEditViewModel.Factory(
-        coroutineContext,
+        mainContext,
+        ioContext,
         store,
         actionCreator,
         karutaId

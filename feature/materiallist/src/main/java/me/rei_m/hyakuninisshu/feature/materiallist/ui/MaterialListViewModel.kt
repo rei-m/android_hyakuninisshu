@@ -27,11 +27,11 @@ import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class MaterialListViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
     private val store: MaterialListStore,
     private val actionCreator: MaterialActionCreator,
     colorFilter: ColorFilter
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
@@ -55,7 +55,7 @@ class MaterialListViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        @Named("mainContext") private val mainContext: CoroutineContext,
         private val store: MaterialListStore,
         private val actionCreator: MaterialActionCreator
     ) : ViewModelProvider.Factory {
@@ -64,7 +64,7 @@ class MaterialListViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MaterialListViewModel(
-                coroutineContext,
+                mainContext,
                 store,
                 actionCreator,
                 colorFilter

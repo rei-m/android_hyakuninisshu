@@ -31,12 +31,12 @@ class KarutaModule(
     @Provides
     @ActivityScope
     fun provideKarutaViewModelFactory(
-        @Named("vmCoroutineContext") coroutineContext: CoroutineContext,
+        @Named("mainContext") mainContext: CoroutineContext,
         store: KarutaStore,
         actionCreator: KarutaActionCreator
     ): KarutaViewModel.Factory {
         return KarutaViewModel.Factory(
-            coroutineContext,
+            mainContext,
             store,
             actionCreator,
             karutaId

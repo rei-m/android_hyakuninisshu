@@ -18,6 +18,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
@@ -27,11 +28,12 @@ import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 class TrainingResultViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
+    private val ioContext: CoroutineContext,
     private val store: TrainingStore,
     private val actionCreator: TrainingActionCreator,
     private val analyticsHelper: AnalyticsHelper
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val score: LiveData<String> = store.result.map { "${it.correctCount}/${it.quizCount}" }
 
@@ -53,17 +55,13 @@ class TrainingResultViewModel(
     fun onClickPracticeWrongKarutas() {
         analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.RESTART_TRAINING)
         launch {
-            actionCreator.restartForPractice()
+            withContext(ioContext) { actionCreator.restartForPractice() }
         }
     }
 
-    fun onClickBackMenu() {
-//        analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.FINISH_TRAINING)
-//        navigator.back()
-    }
-
     class Factory @Inject constructor(
-        @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
+        @Named("mainContext") private val mainContext: CoroutineContext,
+        @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: TrainingStore,
         private val actionCreator: TrainingActionCreator,
         private val analyticsHelper: AnalyticsHelper
@@ -71,7 +69,8 @@ class TrainingResultViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TrainingResultViewModel(
-                coroutineContext,
+                mainContext,
+                ioContext,
                 store,
                 actionCreator,
                 analyticsHelper

@@ -29,11 +29,11 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import kotlin.coroutines.CoroutineContext
 
 class QuizAnswerViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
     private val store: QuizStore,
     actionCreator: QuizActionCreator,
     quizId: KarutaQuizIdentifier
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
@@ -87,7 +87,7 @@ class QuizAnswerViewModel(
     }
 
     class Factory(
-        private val coroutineContext: CoroutineContext,
+        private val mainContext: CoroutineContext,
         private val store: QuizStore,
         private val actionCreator: QuizActionCreator,
         private val quizId: KarutaQuizIdentifier
@@ -95,7 +95,7 @@ class QuizAnswerViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return QuizAnswerViewModel(
-                coroutineContext,
+                mainContext,
                 store,
                 actionCreator,
                 quizId

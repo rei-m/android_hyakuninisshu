@@ -28,12 +28,12 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import kotlin.coroutines.CoroutineContext
 
 class MaterialDetailViewModel(
-    coroutineContext: CoroutineContext,
+    mainContext: CoroutineContext,
     private val store: MaterialDetailStore,
     actionCreator: MaterialActionCreator,
     colorFilter: ColorFilter,
     initialPosition: Int
-) : AbstractViewModel(coroutineContext) {
+) : AbstractViewModel(mainContext) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
@@ -53,7 +53,7 @@ class MaterialDetailViewModel(
     }
 
     class Factory(
-        private val coroutineContext: CoroutineContext,
+        private val mainContext: CoroutineContext,
         private val store: MaterialDetailStore,
         private val actionCreator: MaterialActionCreator,
         private val colorFilter: ColorFilter,
@@ -61,7 +61,7 @@ class MaterialDetailViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MaterialDetailViewModel(coroutineContext, store, actionCreator, colorFilter, initialPosition) as T
+            return MaterialDetailViewModel(mainContext, store, actionCreator, colorFilter, initialPosition) as T
         }
     }
 }
