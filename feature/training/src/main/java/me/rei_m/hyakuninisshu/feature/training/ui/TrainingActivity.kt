@@ -48,7 +48,6 @@ import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizFragment
 import me.rei_m.hyakuninisshu.feature.quiz.ui.QuizInteractionListener
 import me.rei_m.hyakuninisshu.feature.training.R
 import me.rei_m.hyakuninisshu.feature.training.databinding.ActivityTrainingBinding
-import me.rei_m.hyakuninisshu.feature.training.di.TrainingModule
 import javax.inject.Inject
 
 class TrainingActivity : DaggerAppCompatActivity(),
@@ -193,7 +192,6 @@ class TrainingActivity : DaggerAppCompatActivity(),
     @dagger.Subcomponent(
         modules = [
             ActivityModule::class,
-            TrainingModule::class,
             QuizFragment.Module::class,
             QuizAnswerFragment.Module::class,
             TrainingResultFragment.Module::class

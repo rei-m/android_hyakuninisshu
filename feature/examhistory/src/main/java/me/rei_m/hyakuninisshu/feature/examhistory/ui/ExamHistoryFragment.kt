@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.examhistory.databinding.FragmentExamHistoryBinding
@@ -31,10 +32,10 @@ import javax.inject.Inject
 class ExamHistoryFragment : DaggerFragment() {
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    lateinit var viewModelFactory: ExamHistoryViewModel.Factory
 
     @Inject
-    lateinit var viewModelFactory: ExamHistoryViewModel.Factory
+    lateinit var analyticsHelper: AnalyticsHelper
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -44,22 +45,19 @@ class ExamHistoryFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val examHistoryViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(ExamHistoryViewModel::class.java)
+        val viewModel = provideActivityViewModel(ExamHistoryViewModel::class.java, viewModelFactory)
 
-        val binding = FragmentExamHistoryBinding.inflate(inflater, container, false).apply {
-            viewModel = examHistoryViewModel
-            setLifecycleOwner(this@ExamHistoryFragment.viewLifecycleOwner)
-        }
+        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+            listener?.onError()
+        })
+
+        val binding = FragmentExamHistoryBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         with(binding.recyclerKarutaExamList) {
             adapter = KarutaExamListAdapter(requireContext(), listOf())
         }
-
-        examHistoryViewModel.unhandledErrorEvent.observe(this,
-            EventObserver {
-                listener?.onError()
-            })
 
         return binding.root
     }
@@ -79,8 +77,8 @@ class ExamHistoryFragment : DaggerFragment() {
     }
 
     override fun onDetach() {
-        super.onDetach()
         listener = null
+        super.onDetach()
     }
 
     @dagger.Module

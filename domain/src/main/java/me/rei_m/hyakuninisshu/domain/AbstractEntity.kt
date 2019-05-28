@@ -21,7 +21,7 @@ abstract class AbstractEntity<out I : EntityIdentifier>(
     override fun hashCode(): Int = identifier.hashCode()
 
     override fun equals(other: Any?): Boolean {
-        other as? Entity<*> ?: return false
+        if (other !is Entity<*>) return false
         return identifier == other.identifier
     }
 }

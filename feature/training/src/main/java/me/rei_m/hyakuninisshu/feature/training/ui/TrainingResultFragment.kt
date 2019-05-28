@@ -23,8 +23,8 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Navigator
 import me.rei_m.hyakuninisshu.feature.training.databinding.FragmentTrainingResultBinding
+import me.rei_m.hyakuninisshu.feature.training.helper.Navigator
 import javax.inject.Inject
 
 class TrainingResultFragment : DaggerFragment() {

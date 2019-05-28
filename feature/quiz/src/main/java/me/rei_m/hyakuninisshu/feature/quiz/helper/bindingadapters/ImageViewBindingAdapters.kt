@@ -12,21 +12,16 @@
  */
 
 /* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad
+package me.rei_m.hyakuninisshu.feature.quiz.helper.bindingadapters
 
-import android.content.Context
-
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import me.rei_m.hyakuninisshu.feature.corecomponent.R
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.GlideApp
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class AdViewFactory @Inject constructor(private val context: Context) {
-    fun create(): AdView = AdView(context).apply {
-        adSize = AdSize.SMART_BANNER
-        adUnitId = context.getString(R.string.banner_ad_unit_id)
-    }
+@BindingAdapter("isCorrect")
+fun setIsCorrect(imageView: ImageView, isCorrect: Boolean?) {
+    isCorrect ?: return
+    val resId = if (isCorrect) R.drawable.check_correct else R.drawable.check_incorrect
+    GlideApp.with(imageView.context).load(resId).dontAnimate().into(imageView)
 }

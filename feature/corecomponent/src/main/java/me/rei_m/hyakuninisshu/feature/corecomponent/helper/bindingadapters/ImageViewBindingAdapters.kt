@@ -14,10 +14,9 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.helper.bindingadapters
 
-import androidx.databinding.BindingAdapter
 import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import me.rei_m.hyakuninisshu.feature.corecomponent.R
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.GlideApp
 
 @BindingAdapter("karutaSrc")
@@ -34,11 +33,4 @@ fun setKarutaSrc(view: ImageView, resIdString: String?) {
         .load(resId)
         .transition(DrawableTransitionOptions.withCrossFade())
         .into(view)
-}
-
-@BindingAdapter("isCorrect")
-fun setIsCorrect(imageView: ImageView, isCorrect: Boolean?) {
-    isCorrect ?: return
-    val resId = if (isCorrect) R.drawable.check_correct else R.drawable.check_incorrect
-    GlideApp.with(imageView.context).load(resId).dontAnimate().into(imageView)
 }

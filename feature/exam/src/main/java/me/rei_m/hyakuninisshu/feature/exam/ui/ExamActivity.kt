@@ -23,7 +23,6 @@ import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import dagger.Binds
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
@@ -34,6 +33,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.showAlertDialog
@@ -70,27 +70,25 @@ class ExamActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ExamViewModel::class.java)
-        with(viewModel) {
-            isVisibleAd.observe(this@ExamActivity, Observer {
-                if (it == true) {
-                    adViewObserver.showAd()
-                } else {
-                    adViewObserver.hideAd()
-                }
-            })
-            currentKarutaQuizId.observe(this@ExamActivity, Observer {
-                it ?: return@Observer
-                onReceiveKarutaQuizId(it)
-            })
-            notFoundQuizEvent.observe(this@ExamActivity,
-                EventObserver {
-                    onErrorQuiz()
-                })
-        }
+        viewModel = provideViewModel(ExamViewModel::class.java, viewModelFactory)
+
+        viewModel.isVisibleAd.observe(this, Observer {
+            if (it == true) {
+                adViewObserver.showAd()
+            } else {
+                adViewObserver.hideAd()
+            }
+        })
+        viewModel.currentKarutaQuizId.observe(this, Observer {
+            it ?: return@Observer
+            onReceiveKarutaQuizId(it)
+        })
+        viewModel.notFoundQuizEvent.observe(this, EventObserver {
+            onErrorQuiz()
+        })
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exam)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         setupActionBar(binding.toolbar) {
         }

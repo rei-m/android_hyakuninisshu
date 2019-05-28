@@ -28,8 +28,8 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Navigator
 import me.rei_m.hyakuninisshu.feature.materialedit.databinding.FragmentMaterialEditBinding
+import me.rei_m.hyakuninisshu.feature.materialedit.helper.Navigator
 import javax.inject.Inject
 
 class MaterialEditFragment : DaggerFragment(),

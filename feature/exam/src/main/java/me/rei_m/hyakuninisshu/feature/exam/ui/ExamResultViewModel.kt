@@ -33,8 +33,7 @@ class ExamResultViewModel(
     coroutineContext: CoroutineContext,
     private val store: ExamStore,
     actionCreator: ExamActionCreator,
-    initialKarutaExamId: KarutaExamIdentifier?,
-    private val analyticsHelper: AnalyticsHelper
+    initialKarutaExamId: KarutaExamIdentifier?
 ) : AbstractViewModel(coroutineContext) {
 
     val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier }
@@ -67,8 +66,7 @@ class ExamResultViewModel(
     class Factory @Inject constructor(
         @Named("vmCoroutineContext") private val coroutineContext: CoroutineContext,
         private val store: ExamStore,
-        private val actionCreator: ExamActionCreator,
-        private val analyticsHelper: AnalyticsHelper
+        private val actionCreator: ExamActionCreator
     ) : ViewModelProvider.Factory {
         var initialKarutaExamId: KarutaExamIdentifier? = null
 
@@ -78,8 +76,7 @@ class ExamResultViewModel(
                 coroutineContext,
                 store,
                 actionCreator,
-                initialKarutaExamId,
-                analyticsHelper
+                initialKarutaExamId
             ) as T
         }
     }

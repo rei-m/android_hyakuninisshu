@@ -14,13 +14,11 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.di
 
-import androidx.appcompat.app.AppCompatActivity
 import dagger.Module
 import dagger.Provides
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Navigator
 import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditStore
 import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditViewModel
 import javax.inject.Named
@@ -30,10 +28,6 @@ import kotlin.coroutines.CoroutineContext
 class MaterialEditModule(
     private val karutaId: KarutaIdentifier
 ) {
-    @Provides
-    @ActivityScope
-    fun provideNavigator(activity: AppCompatActivity): Navigator = Navigator(activity)
-
     @Provides
     @ActivityScope
     fun provideMaterialEditViewModelFactory(

@@ -22,7 +22,5 @@ import dagger.Provides
 class ActivityModule(private val activity: AppCompatActivity) {
     @Provides
     @ActivityScope
-    fun provideActivity(): AppCompatActivity {
-        return activity
-    }
+    fun provideActivity(): AppCompatActivity = activity
 }

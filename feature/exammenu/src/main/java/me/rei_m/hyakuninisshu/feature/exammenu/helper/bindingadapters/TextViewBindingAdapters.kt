@@ -30,9 +30,3 @@ fun setAverageAnswerTime(
     val averageAnswerTimeString = String.format(Locale.JAPAN, "%.2f", averageAnswerSec)
     view.text = context.getString(R.string.seconds, averageAnswerTimeString)
 }
-
-@BindingAdapter("examTime")
-fun setExamTime(view: TextView, value: Date?) {
-    value ?: return
-    view.text = value.diffString(view.context.applicationContext, Date())
-}

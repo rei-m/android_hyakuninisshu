@@ -11,18 +11,15 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.feature.training.di
+package me.rei_m.hyakuninisshu.feature.materialedit.helper
 
 import androidx.appcompat.app.AppCompatActivity
-import dagger.Module
-import dagger.Provides
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Navigator
+import javax.inject.Inject
 
-@Module
-class TrainingModule {
-    @Provides
-    @ActivityScope
-    fun provideNavigator(activity: AppCompatActivity): Navigator = Navigator(activity)
+@ActivityScope
+class Navigator @Inject constructor(private val activity: AppCompatActivity) {
+    fun back() {
+        activity.finish()
+    }
 }

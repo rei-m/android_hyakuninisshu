@@ -18,10 +18,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.exammenu.databinding.FragmentExamMenuBinding
 import me.rei_m.hyakuninisshu.feature.exammenu.helper.Navigator
@@ -30,26 +30,31 @@ import javax.inject.Inject
 class ExamMenuFragment : DaggerFragment() {
 
     @Inject
+    lateinit var viewModelFactory: ExamMenuViewModel.Factory
+
+    @Inject
     lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    @Inject
-    lateinit var viewModelFactory: ExamMenuViewModel.Factory
+    private lateinit var binding: FragmentExamMenuBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val examMenuViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(ExamMenuViewModel::class.java)
+        binding = FragmentExamMenuBinding.inflate(inflater, container, false)
+        binding.viewModel = provideActivityViewModel(ExamMenuViewModel::class.java, viewModelFactory)
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        val binding = FragmentExamMenuBinding.inflate(inflater, container, false).apply {
-            viewModel = examMenuViewModel
-            setLifecycleOwner(this@ExamMenuFragment.viewLifecycleOwner)
-        }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("Entrance - ExamMenu", requireActivity())
 
         binding.buttonShowAllExamResults.setOnClickListener {
             navigator.navigateToExamHistory()
@@ -62,13 +67,6 @@ class ExamMenuFragment : DaggerFragment() {
             analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING_FOR_EXAM)
             navigator.navigateToTrainingExam()
         }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        analyticsHelper.sendScreenView("Entrance - ExamMenu", requireActivity())
     }
 
     @dagger.Module

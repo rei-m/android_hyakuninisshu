@@ -25,6 +25,7 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.exam.databinding.FragmentExamResultBinding
@@ -34,15 +35,15 @@ import javax.inject.Inject
 class ExamResultFragment : DaggerFragment() {
 
     @Inject
+    lateinit var viewModelFactory: ExamResultViewModel.Factory
+
+    @Inject
     lateinit var navigator: Navigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    @Inject
-    lateinit var viewModelFactory: ExamResultViewModel.Factory
-
-    private lateinit var examResultViewModel: ExamResultViewModel
+    private lateinit var viewModel: ExamResultViewModel
 
     private lateinit var binding: FragmentExamResultBinding
 
@@ -58,25 +59,18 @@ class ExamResultFragment : DaggerFragment() {
         if (savedInstanceState != null) {
             viewModelFactory.initialKarutaExamId = savedInstanceState.getParcelable(KEY_EXAM_ID)
         }
-        examResultViewModel =
-            ViewModelProviders.of(requireActivity(), viewModelFactory).get(ExamResultViewModel::class.java)
+        viewModel = provideActivityViewModel(ExamResultViewModel::class.java, viewModelFactory)
 
-        binding = FragmentExamResultBinding.inflate(inflater, container, false).apply {
-            viewModel = examResultViewModel
-            setLifecycleOwner(this@ExamResultFragment.viewLifecycleOwner)
-        }
-        binding.buttonBack.setOnClickListener {
-            navigator.back()
-        }
-
-        examResultViewModel.karutaExamId.observe(this, Observer {
+        viewModel.karutaExamId.observe(this, Observer {
             karutaExamId = it
         })
+        viewModel.notFoundExamEvent.observe(this, EventObserver {
+            listener?.onErrorFinish()
+        })
 
-        examResultViewModel.notFoundExamEvent.observe(this,
-            EventObserver {
-                listener?.onErrorFinish()
-            })
+        binding = FragmentExamResultBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -85,8 +79,12 @@ class ExamResultFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("ExamResult", requireActivity())
 
-        binding.viewResult.onClickKarutaEvent.observe(this,
-            EventObserver { navigator.navigateToKaruta(it) })
+        binding.viewResult.clickKarutaEvent.observe(this, EventObserver {
+            navigator.navigateToKaruta(it)
+        })
+        binding.buttonBack.setOnClickListener {
+            navigator.back()
+        }
     }
 
     override fun onAttach(context: Context?) {

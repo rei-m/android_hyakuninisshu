@@ -39,11 +39,11 @@ class KarutaExamResultView @JvmOverloads constructor(
         initialize(context)
     }
 
-    private val _onClickKarutaEvent = MutableLiveData<Event<KarutaIdentifier>>()
-    val onClickKarutaEvent: LiveData<Event<KarutaIdentifier>> = _onClickKarutaEvent
+    private val _clickKarutaEvent = MutableLiveData<Event<KarutaIdentifier>>()
+    val clickKarutaEvent: LiveData<Event<KarutaIdentifier>> = _clickKarutaEvent
 
     private fun initialize(context: Context) {
-        orientation = LinearLayout.VERTICAL
+        orientation = VERTICAL
         for (i in 0 until NUMBER_OF_KARUTA_ROW) {
             addView(createRow(context, i))
         }
@@ -52,10 +52,10 @@ class KarutaExamResultView @JvmOverloads constructor(
     private fun createRow(context: Context, rowIndex: Int): LinearLayout {
 
         val linearLayout = LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
+            orientation = HORIZONTAL
         }
 
-        val layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        val layoutParams = LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
 
         val currentRowTopIndex = rowIndex * NUMBER_OF_KARUTA_PER_ROW
 
@@ -77,8 +77,7 @@ class KarutaExamResultView @JvmOverloads constructor(
             with(findViewById<KarutaExamResultCellView>(cellViewIdList[index])) {
                 setResult(karutaId.value, isCorrect)
                 setOnClickListener {
-                    _onClickKarutaEvent.value =
-                        Event(karutaId)
+                    _clickKarutaEvent.value = Event(karutaId)
                 }
             }
         }

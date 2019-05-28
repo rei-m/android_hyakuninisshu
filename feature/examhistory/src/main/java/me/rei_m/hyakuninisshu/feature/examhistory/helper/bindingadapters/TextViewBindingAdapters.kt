@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Rei Matsushita
+ * Copyright (c) 2018. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,12 +11,16 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.rei_m.hyakuninisshu.feature.corecomponent.helper
+/* ktlint-disable package-name */
+package me.rei_m.hyakuninisshu.feature.examhistory.helper.bindingadapters
 
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
+import androidx.databinding.BindingAdapter
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.diffString
+import java.util.*
 
-open class Navigator(private val activity: AppCompatActivity) {
-    fun back() {
-        activity.finish()
-    }
+@BindingAdapter("examTime")
+fun setExamTime(view: TextView, value: Date?) {
+    value ?: return
+    view.text = value.diffString(view.context.applicationContext, Date())
 }
