@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">[debug] さくさく覚える百人一首</string>
+    <string name="app_name">[debug] 百人一首 簡単に暗記</string>
     <string name="ad_mob_app_id">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

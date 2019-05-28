@@ -26,6 +26,19 @@ allprojects {
     }
 }
 
+ext {
+    compileSdkVersion = 28
+    minSdkVersion = 16
+    targetSdkVersion = 28
+    versionCode = 23
+    versionName = '2.3.0'
+
+    rxjavaVersion = '2.2.2'
+    rxandroidVersion = '2.1.0'
+    timberVersion = '4.7.1'
+    androidxAnnotationVersion = '1.0.1'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

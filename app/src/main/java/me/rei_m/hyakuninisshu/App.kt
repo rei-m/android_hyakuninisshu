@@ -17,28 +17,27 @@ package me.rei_m.hyakuninisshu
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.google.android.gms.ads.MobileAds
-
 import com.squareup.leakcanary.LeakCanary
-
-import javax.inject.Singleton
-
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.DaggerApplication
+import me.rei_m.hyakuninisshu.action.di.ActionModule
 import me.rei_m.hyakuninisshu.di.ApplicationModule
+import me.rei_m.hyakuninisshu.feature.corecomponent.di.ViewModelModule
+import me.rei_m.hyakuninisshu.feature.entrance.ui.EntranceActivity
+import me.rei_m.hyakuninisshu.feature.exam.ui.ExamActivity
+import me.rei_m.hyakuninisshu.feature.examhistory.ui.ExamHistoryActivity
+import me.rei_m.hyakuninisshu.feature.karuta.ui.KarutaActivity
+import me.rei_m.hyakuninisshu.feature.materialdetail.ui.MaterialDetailActivity
+import me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditActivity
+import me.rei_m.hyakuninisshu.feature.splash.ui.SplashActivity
+import me.rei_m.hyakuninisshu.feature.training.ui.TrainingActivity
+import me.rei_m.hyakuninisshu.feature.training.ui.TrainingExamActivity
 import me.rei_m.hyakuninisshu.infrastructure.di.InfrastructureModule
-import me.rei_m.hyakuninisshu.presentation.entrance.EntranceActivity
-import me.rei_m.hyakuninisshu.presentation.SplashActivity
-import me.rei_m.hyakuninisshu.presentation.exam.ExamActivity
-import me.rei_m.hyakuninisshu.presentation.examhistory.ExamHistoryActivity
-import me.rei_m.hyakuninisshu.presentation.karuta.KarutaActivity
-import me.rei_m.hyakuninisshu.presentation.materialdetail.MaterialDetailActivity
-import me.rei_m.hyakuninisshu.presentation.materialedit.MaterialEditActivity
-import me.rei_m.hyakuninisshu.presentation.training.TrainingExamActivity
-import me.rei_m.hyakuninisshu.presentation.training.TrainingActivity
 import me.rei_m.hyakuninisshu.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree
+import javax.inject.Singleton
 
 open class App : DaggerApplication() {
 
@@ -84,6 +83,8 @@ open class App : DaggerApplication() {
             AndroidSupportInjectionModule::class,
             ApplicationModule::class,
             InfrastructureModule::class,
+            ActionModule::class,
+            ViewModelModule::class,
             SplashActivity.Module::class,
             EntranceActivity.Module::class,
             ExamActivity.Module::class,
