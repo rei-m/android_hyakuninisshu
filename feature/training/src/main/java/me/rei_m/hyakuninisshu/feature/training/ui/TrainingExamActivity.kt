@@ -24,7 +24,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import dagger.Binds
-import dagger.android.ActivityKey
+import dagger.multibindings.ClassKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
@@ -168,13 +168,13 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
     )
     interface Subcomponent : AndroidInjector<TrainingExamActivity> {
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<TrainingExamActivity>() {
+        abstract class Builder : AndroidInjector.Factory<TrainingExamActivity> {
+            override fun create(instance: TrainingExamActivity): AndroidInjector<TrainingExamActivity> =
+                activityModule(ActivityModule(instance)).build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
-            override fun seedInstance(instance: TrainingExamActivity) {
-                activityModule(ActivityModule(instance))
-            }
+            abstract fun build(): AndroidInjector<TrainingExamActivity>
         }
     }
 
@@ -182,8 +182,8 @@ class TrainingExamActivity : DaggerAppCompatActivity(),
     abstract class Module {
         @Binds
         @IntoMap
-        @ActivityKey(TrainingExamActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(TrainingExamActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {

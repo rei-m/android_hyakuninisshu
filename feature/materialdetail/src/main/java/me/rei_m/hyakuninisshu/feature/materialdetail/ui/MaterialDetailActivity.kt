@@ -25,7 +25,7 @@ import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import dagger.Binds
-import dagger.android.ActivityKey
+import dagger.multibindings.ClassKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
@@ -161,18 +161,18 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         ]
     )
     interface Subcomponent : AndroidInjector<MaterialDetailActivity> {
-
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<MaterialDetailActivity>() {
+        abstract class Builder : AndroidInjector.Factory<MaterialDetailActivity> {
+            override fun create(instance: MaterialDetailActivity): AndroidInjector<MaterialDetailActivity> =
+                activityModule(ActivityModule(instance)).
+                    materialDetailModule(MaterialDetailModule(instance.colorFilter, instance.lastPosition))
+                    .build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
             abstract fun materialDetailModule(module: MaterialDetailModule): Builder
 
-            override fun seedInstance(instance: MaterialDetailActivity) {
-                activityModule(ActivityModule(instance))
-                materialDetailModule(MaterialDetailModule(instance.colorFilter, instance.lastPosition))
-            }
+            abstract fun build(): AndroidInjector<MaterialDetailActivity>
         }
     }
 
@@ -180,8 +180,8 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
     abstract class Module {
         @Binds
         @IntoMap
-        @ActivityKey(MaterialDetailActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(MaterialDetailActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {

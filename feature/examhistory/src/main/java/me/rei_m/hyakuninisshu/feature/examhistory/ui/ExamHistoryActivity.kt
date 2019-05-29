@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import dagger.Binds
-import dagger.android.ActivityKey
+import dagger.multibindings.ClassKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.multibindings.IntoMap
@@ -107,15 +107,14 @@ class ExamHistoryActivity : DaggerAppCompatActivity(),
         ]
     )
     interface Subcomponent : AndroidInjector<ExamHistoryActivity> {
-
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<ExamHistoryActivity>() {
+        abstract class Builder : AndroidInjector.Factory<ExamHistoryActivity> {
+            override fun create(instance: ExamHistoryActivity): AndroidInjector<ExamHistoryActivity> =
+                activityModule(ActivityModule(instance)).build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
-            override fun seedInstance(instance: ExamHistoryActivity) {
-                activityModule(ActivityModule(instance))
-            }
+            abstract fun build(): AndroidInjector<ExamHistoryActivity>
         }
     }
 
@@ -123,8 +122,8 @@ class ExamHistoryActivity : DaggerAppCompatActivity(),
     abstract class Module {
         @Binds
         @IntoMap
-        @ActivityKey(ExamHistoryActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(ExamHistoryActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {

@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment
 import dagger.Binds
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
-import dagger.android.support.FragmentKey
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
@@ -113,13 +113,13 @@ class QuizAnswerFragment : DaggerFragment() {
     )
     interface Subcomponent : AndroidInjector<QuizAnswerFragment> {
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<QuizAnswerFragment>() {
+        abstract class Builder : AndroidInjector.Factory<QuizAnswerFragment> {
+            override fun create(instance: QuizAnswerFragment): AndroidInjector<QuizAnswerFragment> =
+                quizAnswerModule(QuizAnswerModule(instance.karutaQuizId)).build()
 
             abstract fun quizAnswerModule(module: QuizAnswerModule): Builder
 
-            override fun seedInstance(instance: QuizAnswerFragment) {
-                quizAnswerModule(QuizAnswerModule(instance.karutaQuizId))
-            }
+            abstract fun build(): AndroidInjector<QuizAnswerFragment>
         }
     }
 
@@ -127,8 +127,8 @@ class QuizAnswerFragment : DaggerFragment() {
     abstract class Module {
         @Binds
         @IntoMap
-        @FragmentKey(QuizAnswerFragment::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Fragment>
+        @ClassKey(QuizAnswerFragment::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {
