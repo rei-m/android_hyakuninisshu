@@ -15,12 +15,12 @@
 package me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter
 
 import android.content.Context
-import androidx.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import me.rei_m.hyakuninisshu.feature.corecomponent.R
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.SpinnerItem
 

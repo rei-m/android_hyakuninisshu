@@ -14,13 +14,12 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.splash.ui
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import dagger.Binds
-import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
@@ -72,13 +71,13 @@ class SplashActivity : DaggerAppCompatActivity(),
     )
     interface Subcomponent : AndroidInjector<SplashActivity> {
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<SplashActivity>() {
+        abstract class Builder : AndroidInjector.Factory<SplashActivity> {
+            override fun create(instance: SplashActivity): AndroidInjector<SplashActivity> =
+                activityModule(ActivityModule(instance)).build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
-            override fun seedInstance(instance: SplashActivity) {
-                activityModule(ActivityModule(instance))
-            }
+            abstract fun build(): AndroidInjector<SplashActivity>
         }
     }
 
@@ -86,7 +85,7 @@ class SplashActivity : DaggerAppCompatActivity(),
     abstract inner class Module {
         @Binds
         @IntoMap
-        @ActivityKey(SplashActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(SplashActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 }

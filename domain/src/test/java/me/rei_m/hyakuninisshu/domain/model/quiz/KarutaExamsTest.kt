@@ -20,6 +20,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import java.util.Date
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.arrayListOf
+import kotlin.collections.first
+import kotlin.collections.listOf
+import kotlin.collections.map
 
 class KarutaExamsTest {
     class WhenNotEmpty {
@@ -31,9 +37,9 @@ class KarutaExamsTest {
         @Before
         fun setUp() {
             values = arrayListOf(
-                    createExam(createKarutaIds(listOf(1))),
-                    createExam(createKarutaIds(listOf(1, 2, 3))),
-                    createExam(createKarutaIds(listOf()))
+                createExam(createKarutaIds(listOf(1))),
+                createExam(createKarutaIds(listOf(1, 2, 3))),
+                createExam(createKarutaIds(listOf()))
             )
             karutaExams = KarutaExams(values)
         }
@@ -70,12 +76,12 @@ class KarutaExamsTest {
         private fun createExam(wrongKarutaIds: KarutaIds): KarutaExam {
 
             val karutaExamResult = KarutaExamResult(
-                    KarutaQuizzesResultSummary(
-                            quizCount = 100,
-                            correctCount = 100 - wrongKarutaIds.size,
-                            averageAnswerSec = 3.4f
-                    ),
-                    wrongKarutaIds
+                KarutaQuizzesResultSummary(
+                    quizCount = 100,
+                    correctCount = 100 - wrongKarutaIds.size,
+                    averageAnswerSec = 3.4f
+                ),
+                wrongKarutaIds
             )
 
             return KarutaExam(KarutaExamIdentifier(1), Date(), karutaExamResult)

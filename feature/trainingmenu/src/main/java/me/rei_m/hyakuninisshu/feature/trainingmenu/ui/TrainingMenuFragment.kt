@@ -22,12 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter

@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,9 +22,9 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import dagger.Binds
-import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
@@ -114,18 +113,17 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         ]
     )
     interface Subcomponent : AndroidInjector<MaterialEditActivity> {
-
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<MaterialEditActivity>() {
+        abstract class Builder : AndroidInjector.Factory<MaterialEditActivity> {
+            override fun create(instance: MaterialEditActivity): AndroidInjector<MaterialEditActivity> =
+                activityModule(ActivityModule(instance)).materialEditModule(MaterialEditModule(instance.karutaId))
+                    .build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
             abstract fun materialEditModule(module: MaterialEditModule): Builder
 
-            override fun seedInstance(instance: MaterialEditActivity) {
-                activityModule(ActivityModule(instance))
-                materialEditModule(MaterialEditModule(instance.karutaId))
-            }
+            abstract fun build(): AndroidInjector<MaterialEditActivity>
         }
     }
 
@@ -133,8 +131,8 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
     abstract class Module {
         @Binds
         @IntoMap
-        @ActivityKey(MaterialEditActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(MaterialEditActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {

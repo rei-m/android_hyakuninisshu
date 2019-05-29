@@ -26,7 +26,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.R
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.toKarutaNoStr
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.toKimarijiStr
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
-import java.util.Locale
+import java.util.*
 
 @BindingAdapter("verticalText")
 fun setVerticalText(

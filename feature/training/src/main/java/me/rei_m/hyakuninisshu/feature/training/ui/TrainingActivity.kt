@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.training.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,19 +23,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import dagger.Binds
-import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
@@ -193,15 +187,14 @@ class TrainingActivity : DaggerAppCompatActivity(),
         ]
     )
     interface Subcomponent : AndroidInjector<TrainingActivity> {
-
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<TrainingActivity>() {
+        abstract class Builder : AndroidInjector.Factory<TrainingActivity> {
+            override fun create(instance: TrainingActivity): AndroidInjector<TrainingActivity> =
+                activityModule(ActivityModule(instance)).build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
-            override fun seedInstance(instance: TrainingActivity) {
-                activityModule(ActivityModule(instance))
-            }
+            abstract fun build(): AndroidInjector<TrainingActivity>
         }
     }
 
@@ -209,8 +202,8 @@ class TrainingActivity : DaggerAppCompatActivity(),
     abstract class Module {
         @Binds
         @IntoMap
-        @ActivityKey(TrainingActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(TrainingActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {

@@ -18,8 +18,7 @@ import com.github.gfx.android.orma.annotation.Column
 import com.github.gfx.android.orma.annotation.PrimaryKey
 import com.github.gfx.android.orma.annotation.Setter
 import com.github.gfx.android.orma.annotation.Table
-
-import java.util.Date
+import java.util.*
 
 @Table
 data class KarutaQuizSchema(

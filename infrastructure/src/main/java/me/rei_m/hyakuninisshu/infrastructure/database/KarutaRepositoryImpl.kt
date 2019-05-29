@@ -16,19 +16,7 @@ package me.rei_m.hyakuninisshu.infrastructure.database
 
 import android.content.Context
 import android.content.SharedPreferences
-import me.rei_m.hyakuninisshu.domain.model.karuta.Color
-import me.rei_m.hyakuninisshu.domain.model.karuta.ImageNo
-import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKu
-import me.rei_m.hyakuninisshu.domain.model.karuta.KamiNoKuIdentifier
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karutas
-import me.rei_m.hyakuninisshu.domain.model.karuta.Kimariji
-import me.rei_m.hyakuninisshu.domain.model.karuta.Phrase
-import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKu
-import me.rei_m.hyakuninisshu.domain.model.karuta.ShimoNoKuIdentifier
+import me.rei_m.hyakuninisshu.domain.model.karuta.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

@@ -93,7 +93,8 @@ class ExamActionCreator @Inject constructor(
      */
     fun fetchNext() {
         try {
-            val karutaQuiz = karutaQuizRepository.first() ?: throw NoSuchElementException("NextKarutaQuiz")
+            val karutaQuiz = karutaQuizRepository.first()
+                ?: throw NoSuchElementException("NextKarutaQuiz")
             dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier))
         } catch (e: Exception) {
             dispatcher.dispatch(OpenNextQuizAction.createError(e))

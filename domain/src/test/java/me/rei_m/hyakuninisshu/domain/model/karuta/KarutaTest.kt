@@ -32,15 +32,15 @@ class KarutaTest {
         val identifier = KarutaIdentifier(1)
         creator = "creator"
         kamiNoKu = KamiNoKu(
-                KamiNoKuIdentifier(1),
-                Phrase("しょく", "初句"),
-                Phrase("にく", "二句"),
-                Phrase("さんく", "三句")
+            KamiNoKuIdentifier(1),
+            Phrase("しょく", "初句"),
+            Phrase("にく", "二句"),
+            Phrase("さんく", "三句")
         )
         shimoNoKu = ShimoNoKu(
-                ShimoNoKuIdentifier(1),
-                Phrase("よんく", "四句"),
-                Phrase("ごく", "五句")
+            ShimoNoKuIdentifier(1),
+            Phrase("よんく", "四句"),
+            Phrase("ごく", "五句")
         )
         imageNo = ImageNo("001")
         translation = "歌の訳"
@@ -61,16 +61,16 @@ class KarutaTest {
     @Test
     fun updatePhrase() {
         val updated = karuta.updatePhrase(
-                "新初句",
-                "しんしょく",
-                "新二句",
-                "しんにく",
-                "新三句",
-                "しんさんく",
-                "新四句",
-                "しんよんく",
-                "新五句",
-                "しんごく"
+            "新初句",
+            "しんしょく",
+            "新二句",
+            "しんにく",
+            "新三句",
+            "しんさんく",
+            "新四句",
+            "しんよんく",
+            "新五句",
+            "しんごく"
         )
         assertThat(updated.kamiNoKu.first.kanji).isEqualTo("新初句")
         assertThat(updated.kamiNoKu.first.kana).isEqualTo("しんしょく")

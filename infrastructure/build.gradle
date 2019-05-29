@@ -7,8 +7,8 @@ apply from: rootProject.file('gradle/dependencies/dagger.gradle'), to: dependenc
 apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
 
 ext {
-    ormaVersion = '6.0.1'
-    moshiVersion = '1.7.0'
+    ormaVersion = '6.0.2'
+    moshiVersion = '1.8.0'
 }
 
 dependencies {

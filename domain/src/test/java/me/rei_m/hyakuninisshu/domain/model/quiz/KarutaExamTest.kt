@@ -19,7 +19,7 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import java.util.Date
+import java.util.*
 
 class KarutaExamTest {
 

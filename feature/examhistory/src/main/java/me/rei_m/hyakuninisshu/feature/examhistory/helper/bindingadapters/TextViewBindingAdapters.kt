@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.feature.examhistory.helper.bindingadapters
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.diffString
-import java.util.Date
+import java.util.*
 
 @BindingAdapter("examTime")
 fun setExamTime(view: TextView, value: Date?) {

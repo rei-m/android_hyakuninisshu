@@ -17,14 +17,8 @@ package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withValue
-import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import javax.inject.Inject
 
 class TrainingMenuViewModel(

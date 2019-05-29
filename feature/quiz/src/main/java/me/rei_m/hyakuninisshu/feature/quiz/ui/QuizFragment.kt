@@ -22,12 +22,11 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import dagger.Binds
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerFragment
-import dagger.android.support.FragmentKey
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -48,6 +47,9 @@ import me.rei_m.hyakuninisshu.feature.quiz.di.QuizModule
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.forEach
+import kotlin.collections.take
 
 class QuizFragment : DaggerFragment() {
 
@@ -232,19 +234,13 @@ class QuizFragment : DaggerFragment() {
     )
     interface Subcomponent : AndroidInjector<QuizFragment> {
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<QuizFragment>() {
+        abstract class Builder : AndroidInjector.Factory<QuizFragment> {
+            override fun create(instance: QuizFragment): AndroidInjector<QuizFragment> =
+                quizModule(QuizModule(instance.karutaQuizId, instance.kamiNoKuStyle, instance.shimoNoKuStyle)).build()
 
             abstract fun quizModule(module: QuizModule): Builder
 
-            override fun seedInstance(instance: QuizFragment) {
-                quizModule(
-                    QuizModule(
-                        instance.karutaQuizId,
-                        instance.kamiNoKuStyle,
-                        instance.shimoNoKuStyle
-                    )
-                )
-            }
+            abstract fun build(): AndroidInjector<QuizFragment>
         }
     }
 
@@ -252,8 +248,8 @@ class QuizFragment : DaggerFragment() {
     abstract class Module {
         @Binds
         @IntoMap
-        @FragmentKey(QuizFragment::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Fragment>
+        @ClassKey(QuizFragment::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {

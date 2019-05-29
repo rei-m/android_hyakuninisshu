@@ -302,7 +302,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_fifth_phrase_kana" />
-            
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

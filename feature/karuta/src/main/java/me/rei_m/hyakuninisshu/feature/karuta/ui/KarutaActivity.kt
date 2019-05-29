@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.karuta.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,9 +22,9 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import dagger.Binds
-import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
@@ -114,18 +113,17 @@ class KarutaActivity : DaggerAppCompatActivity(),
         ]
     )
     interface Subcomponent : AndroidInjector<KarutaActivity> {
-
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<KarutaActivity>() {
+        abstract class Builder : AndroidInjector.Factory<KarutaActivity> {
+            override fun create(instance: KarutaActivity): AndroidInjector<KarutaActivity> =
+                activityModule(ActivityModule(instance)).karutaModule(KarutaModule(instance.karutaId))
+                    .build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
             abstract fun karutaModule(module: KarutaModule): Builder
 
-            override fun seedInstance(instance: KarutaActivity) {
-                activityModule(ActivityModule(instance))
-                karutaModule(KarutaModule(instance.karutaId))
-            }
+            abstract fun build(): AndroidInjector<KarutaActivity>
         }
     }
 
@@ -133,8 +131,8 @@ class KarutaActivity : DaggerAppCompatActivity(),
     abstract class Module {
         @Binds
         @IntoMap
-        @ActivityKey(KarutaActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(KarutaActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {

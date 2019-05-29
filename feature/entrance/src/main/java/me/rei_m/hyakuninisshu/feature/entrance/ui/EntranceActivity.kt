@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.entrance.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,9 +23,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import dagger.Binds
-import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import hotchemi.android.rate.AppRate
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
@@ -163,13 +162,13 @@ class EntranceActivity : DaggerAppCompatActivity() {
     )
     interface Subcomponent : AndroidInjector<EntranceActivity> {
         @dagger.Subcomponent.Builder
-        abstract class Builder : AndroidInjector.Builder<EntranceActivity>() {
+        abstract class Builder : AndroidInjector.Factory<EntranceActivity> {
+            override fun create(instance: EntranceActivity): AndroidInjector<EntranceActivity> =
+                activityModule(ActivityModule(instance)).build()
 
             abstract fun activityModule(module: ActivityModule): Builder
 
-            override fun seedInstance(instance: EntranceActivity) {
-                activityModule(ActivityModule(instance))
-            }
+            abstract fun build(): AndroidInjector<EntranceActivity>
         }
     }
 
@@ -177,8 +176,8 @@ class EntranceActivity : DaggerAppCompatActivity() {
     abstract class Module {
         @Binds
         @IntoMap
-        @ActivityKey(EntranceActivity::class)
-        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<out Activity>
+        @ClassKey(EntranceActivity::class)
+        abstract fun bind(builder: Subcomponent.Builder): AndroidInjector.Factory<*>
     }
 
     companion object {
