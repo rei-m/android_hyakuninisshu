@@ -1,0 +1,177 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.QuizAnswerFragment">
+
+    <data>
+
+        <import type="me.rei_m.hyakuninisshu.feature.quiz.R" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.feature.quiz.ui.QuizAnswerViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/tatami">
+
+        <TextView
+            android:id="@+id/karuta_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_m"
+            android:background="@android:color/white"
+            android:paddingStart="@dimen/padding_m"
+            android:paddingLeft="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_s"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingRight="@dimen/padding_m"
+            android:paddingBottom="@dimen/padding_s"
+            android:textSize="@dimen/text_s"
+            app:karutaNo="@{viewModel.karutaNo}"
+            app:kimariji="@{viewModel.kimariji}"
+            app:layout_constraintBottom_toTopOf="@id/layout_karuta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/text_material"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/layout_karuta"
+            android:layout_marginStart="@dimen/margin_s"
+            android:layout_marginLeft="@dimen/margin_s"
+            android:layout_marginBottom="@dimen/margin_m"
+            android:background="@android:color/white"
+            android:paddingStart="@dimen/padding_s"
+            android:paddingLeft="@dimen/padding_s"
+            android:paddingTop="@dimen/padding_s"
+            android:paddingEnd="@dimen/padding_s"
+            android:paddingRight="@dimen/padding_s"
+            android:paddingBottom="@dimen/padding_s"
+            android:text="@string/char_material"
+            android:textSize="@dimen/text_s"
+            app:layout_constraintBottom_toTopOf="@id/layout_karuta"
+            app:layout_constraintLeft_toRightOf="@id/karuta_no"
+            app:layout_constraintStart_toEndOf="@id/karuta_no" />
+
+        <FrameLayout
+            android:id="@+id/layout_karuta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_karuta"
+            android:padding="@dimen/padding_s"
+            app:elevation="@{@dimen/elevation_level_ms}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_karuta_inner"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/padding_m"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingTop="@dimen/padding_xl"
+                android:paddingEnd="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:paddingBottom="@dimen/padding_xl">
+
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginEnd="@dimen/margin_ms"
+                    android:layout_marginRight="@dimen/margin_ms"
+                    app:verticalText="@{viewModel.creator}"
+                    app:verticalTextSize="@{R.dimen.text_m}" />
+
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_xl"
+                    app:verticalText="@{viewModel.fifthPhrase}"
+                    app:verticalTextSize="@{R.dimen.text_ll}" />
+
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_s"
+                    android:layout_marginLeft="@dimen/margin_s"
+                    android:layout_marginTop="@dimen/margin_m"
+                    app:verticalText="@{viewModel.fourthPhrase}"
+                    app:verticalTextSize="@{R.dimen.text_ll}" />
+
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_s"
+                    android:layout_marginTop="@dimen/margin_xxl"
+                    android:layout_marginEnd="@dimen/margin_s"
+                    app:verticalText="@{viewModel.thirdPhrase}"
+                    app:verticalTextSize="@{R.dimen.text_ll}" />
+
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_l"
+                    android:layout_marginEnd="@dimen/margin_s"
+                    android:layout_marginRight="@dimen/margin_s"
+                    app:verticalText="@{viewModel.secondPhrase}"
+                    app:verticalTextSize="@{R.dimen.text_ll}" />
+
+                <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:verticalText="@{viewModel.firstPhrase}"
+                    app:verticalTextSize="@{R.dimen.text_ll}" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_l"
+            android:onClick="@{() -> viewModel.onClickNextQuiz()}"
+            android:paddingStart="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_m"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingBottom="@dimen/padding_m"
+            android:text="@string/go_to_next"
+            android:textSize="@dimen/text_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_karuta"
+            app:visibleOrGone="@{viewModel.existNextQuiz}" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_l"
+            android:onClick="@{() -> viewModel.onClickConfirmResult()}"
+            android:paddingTop="@dimen/padding_m"
+            android:paddingBottom="@dimen/padding_m"
+            android:text="@string/confirm_result"
+            android:textSize="@dimen/text_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_karuta"
+            app:visibleOrGone="@{viewModel.canGoToResult}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

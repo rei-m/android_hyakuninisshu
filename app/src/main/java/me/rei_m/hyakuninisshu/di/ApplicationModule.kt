@@ -18,12 +18,7 @@ import android.app.Application
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.Dispatchers
-import me.rei_m.hyakuninisshu.action.AppDispatcher
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
 
 @Module
 class ApplicationModule(application: Application) {
@@ -33,12 +28,4 @@ class ApplicationModule(application: Application) {
     @Provides
     @Singleton
     fun provideContext(): Context = context
-
-    @Provides
-    @Singleton
-    fun provideCoroutineContext(): CoroutineContext = Dispatchers.Default
-
-    @Provides
-    @Singleton
-    fun provideDispatcher(): Dispatcher = AppDispatcher(AndroidSchedulers.mainThread())
 }

@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2019. Rei Matsushita
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+ * the License for the specific language governing permissions and limitations under the License.
+ */
+
+/* ktlint-disable package-name */
+package me.rei_m.hyakuninisshu.feature.examhistory.ui
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.adHeight
+import me.rei_m.hyakuninisshu.feature.examhistory.databinding.AdapterItemKarutaExamBinding
+
+class KarutaExamListAdapter(
+    context: Context,
+    private var karutaExamList: List<KarutaExam>
+) : RecyclerView.Adapter<KarutaExamListAdapter.ItemViewHolder>() {
+
+    private val itemPaddingBottom = 0
+
+    private val lastItemPaddingBottom = context.adHeight
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        val binding = AdapterItemKarutaExamBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ItemViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        with(holder.binding) {
+            val paddingBottom = if (position == karutaExamList.lastIndex) {
+                lastItemPaddingBottom
+            } else {
+                itemPaddingBottom
+            }
+            holder.binding.layoutRoot.setPadding(
+                holder.binding.layoutRoot.paddingLeft,
+                holder.binding.layoutRoot.paddingTop,
+                holder.binding.layoutRoot.paddingRight,
+                paddingBottom
+            )
+            exam = karutaExamList[position]
+            executePendingBindings()
+        }
+    }
+
+    override fun getItemCount() = karutaExamList.size
+
+    fun replaceData(karutaExamList: List<KarutaExam>) {
+        this.karutaExamList = karutaExamList
+        notifyDataSetChanged()
+    }
+
+    class ItemViewHolder(
+        val binding: AdapterItemKarutaExamBinding
+    ) : RecyclerView.ViewHolder(binding.root)
+}

@@ -1,0 +1,198 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.ExamMenuFragment">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.feature.exammenu.ui.ExamMenuViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_m">
+
+            <TextView
+                android:id="@+id/text_about_exam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_exam_about"
+                android:textSize="@dimen/text_m"
+                app:layout_constraintBottom_toTopOf="@id/text_recent_exam_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_recent_exam_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_m"
+                android:background="#F1F8E9"
+                android:padding="@dimen/padding_m"
+                android:text="@string/previous_result_of_exam"
+                app:layout_constraintBottom_toTopOf="@id/text_number_of_correct_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_about_exam"
+                app:visibleOrInvisible="@{viewModel.hasResult}" />
+
+            <TextView
+                android:id="@+id/text_number_of_correct_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#F1F8E9"
+                android:paddingEnd="@dimen/padding_m"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:paddingStart="@dimen/padding_m"
+                android:paddingTop="@dimen/padding_s"
+                android:text="@string/number_of_correct"
+                app:layout_constraintBottom_toTopOf="@id/text_number_of_correct"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_recent_exam_title"
+                app:visibleOrInvisible="@{viewModel.hasResult}" />
+
+            <TextView
+                android:id="@+id/text_number_of_correct"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#F1F8E9"
+                android:paddingBottom="@dimen/padding_s"
+                android:paddingEnd="@dimen/padding_m"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:paddingStart="@dimen/padding_m"
+                android:text="@{viewModel.score}"
+                app:layout_constraintBottom_toTopOf="@id/text_average_response_time_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_number_of_correct_title"
+                app:visibleOrInvisible="@{viewModel.hasResult}"
+                tools:text="28/100" />
+
+            <TextView
+                android:id="@+id/text_average_response_time_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#F1F8E9"
+                android:paddingEnd="@dimen/padding_m"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:paddingStart="@dimen/padding_m"
+                android:paddingTop="@dimen/padding_s"
+                android:text="@string/average_response_time"
+                app:layout_constraintBottom_toTopOf="@id/average_response_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_number_of_correct"
+                app:visibleOrInvisible="@{viewModel.hasResult}" />
+
+            <TextView
+                android:id="@+id/average_response_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#F1F8E9"
+                android:paddingBottom="@dimen/padding_s"
+                android:paddingEnd="@dimen/padding_m"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:paddingStart="@dimen/padding_m"
+                app:averageAnswerSec="@{viewModel.averageAnswerSec}"
+                app:layout_constraintBottom_toTopOf="@id/layout_show_all_exam_results"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_average_response_time_title"
+                app:visibleOrInvisible="@{viewModel.hasResult}"
+                tools:text="2.40秒" />
+
+            <FrameLayout
+                android:id="@+id/layout_show_all_exam_results"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#F1F8E9"
+                android:paddingBottom="@dimen/padding_m"
+                android:paddingEnd="@dimen/padding_m"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:paddingStart="@dimen/padding_m"
+                app:layout_constraintBottom_toTopOf="@id/button_start_exam"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/average_response_time"
+                app:visibleOrInvisible="@{viewModel.hasResult}">
+
+                <Button
+                    android:id="@+id/button_show_all_exam_results"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@drawable/bg_ripple"
+                    android:paddingLeft="@dimen/padding_s"
+                    android:paddingRight="@dimen/padding_s"
+                    android:text="@string/show_all_exam_results"
+                    android:textColor="@color/black8a"
+                    app:elevation="0dp" />
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/button_start_exam"
+                style="@style/AccentButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_xxl"
+                android:text="@string/start_exam"
+                app:layout_constraintBottom_toTopOf="@id/button_start_training_failed_quiz"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_show_all_exam_results" />
+
+            <Button
+                android:id="@+id/button_start_training_failed_quiz"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/height_ad_banner"
+                android:layout_marginTop="@dimen/margin_m"
+                android:paddingLeft="@dimen/padding_m"
+                android:paddingRight="@dimen/padding_m"
+                android:text="@string/start_training_of_exam"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button_start_exam"
+                app:visibleOrInvisible="@{viewModel.hasResult}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>
