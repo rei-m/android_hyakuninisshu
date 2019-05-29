@@ -17,13 +17,8 @@ package me.rei_m.hyakuninisshu.infrastructure.database
 import com.github.gfx.android.orma.SingleAssociation
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamRepository
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamResult
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExams
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzesResultSummary
-import java.util.Date
+import me.rei_m.hyakuninisshu.domain.model.quiz.*
+import java.util.*
 
 class KarutaExamRepositoryImpl(private val orma: OrmaDatabase) : KarutaExamRepository {
 

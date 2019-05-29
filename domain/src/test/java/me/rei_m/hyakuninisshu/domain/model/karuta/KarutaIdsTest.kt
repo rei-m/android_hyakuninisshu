@@ -28,18 +28,18 @@ class KarutaIdsTest {
     @Before
     fun setUp() {
         karutaIds = KarutaIds(arrayListOf(
-                KarutaIdentifier(1),
-                KarutaIdentifier(2),
-                KarutaIdentifier(3)
+            KarutaIdentifier(1),
+            KarutaIdentifier(2),
+            KarutaIdentifier(3)
         ))
     }
 
     @Test
     fun createInstance() {
         val expected = arrayListOf(
-                KarutaIdentifier(1),
-                KarutaIdentifier(2),
-                KarutaIdentifier(3)
+            KarutaIdentifier(1),
+            KarutaIdentifier(2),
+            KarutaIdentifier(3)
         )
         assertThat(karutaIds.values).isEqualTo(expected)
         assertThat(karutaIds.size).isEqualTo(3)

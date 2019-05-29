@@ -14,11 +14,11 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad
 
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import android.view.View
-import android.view.ViewGroup
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope

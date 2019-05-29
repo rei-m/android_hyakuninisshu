@@ -16,7 +16,7 @@ package me.rei_m.hyakuninisshu.feature.corecomponent.ext
 
 import android.content.Context
 import me.rei_m.hyakuninisshu.feature.corecomponent.R
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private const val COUNT_MONTHS_AT_YEAR = 12

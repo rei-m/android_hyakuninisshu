@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,9 +22,9 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import dagger.Binds
-import dagger.multibindings.ClassKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
@@ -117,8 +116,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Factory<MaterialEditActivity> {
             override fun create(instance: MaterialEditActivity): AndroidInjector<MaterialEditActivity> =
-                activityModule(ActivityModule(instance)).
-                    materialEditModule(MaterialEditModule(instance.karutaId))
+                activityModule(ActivityModule(instance)).materialEditModule(MaterialEditModule(instance.karutaId))
                     .build()
 
             abstract fun activityModule(module: ActivityModule): Builder

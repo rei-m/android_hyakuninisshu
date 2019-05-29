@@ -20,13 +20,7 @@ import android.widget.Spinner
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.SpinnerItem
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter
 
 @BindingAdapter("spinnerAdapter")

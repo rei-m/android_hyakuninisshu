@@ -17,10 +17,10 @@ package me.rei_m.hyakuninisshu.feature.corecomponent.widget.view
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import androidx.annotation.DimenRes
-import androidx.core.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.DimenRes
+import androidx.core.content.res.ResourcesCompat
 import me.rei_m.hyakuninisshu.feature.corecomponent.R
 
 class VerticalSingleLineTextView @JvmOverloads constructor(

@@ -16,12 +16,7 @@ package me.rei_m.hyakuninisshu.infrastructure.database
 
 import com.github.gfx.android.orma.SingleAssociation
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizCounter
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizRepository
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizzes
+import me.rei_m.hyakuninisshu.domain.model.quiz.*
 
 class KarutaQuizRepositoryImpl(private val orma: OrmaDatabase) : KarutaQuizRepository {
 

@@ -11,5 +11,4 @@
   ~ the License for the specific language governing permissions and limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.rei_m.hyakuninisshu.feature.materiallist" />
+<manifest package="me.rei_m.hyakuninisshu.feature.materiallist" />

@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialdetail.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,9 +24,9 @@ import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import dagger.Binds
-import dagger.multibindings.ClassKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
@@ -164,8 +163,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Factory<MaterialDetailActivity> {
             override fun create(instance: MaterialDetailActivity): AndroidInjector<MaterialDetailActivity> =
-                activityModule(ActivityModule(instance)).
-                    materialDetailModule(MaterialDetailModule(instance.colorFilter, instance.lastPosition))
+                activityModule(ActivityModule(instance)).materialDetailModule(MaterialDetailModule(instance.colorFilter, instance.lastPosition))
                     .build()
 
             abstract fun activityModule(module: ActivityModule): Builder

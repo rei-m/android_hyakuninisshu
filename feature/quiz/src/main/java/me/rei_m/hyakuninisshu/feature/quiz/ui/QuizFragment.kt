@@ -22,7 +22,6 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import dagger.Binds
 import dagger.android.AndroidInjector
@@ -48,6 +47,9 @@ import me.rei_m.hyakuninisshu.feature.quiz.di.QuizModule
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.forEach
+import kotlin.collections.take
 
 class QuizFragment : DaggerFragment() {
 

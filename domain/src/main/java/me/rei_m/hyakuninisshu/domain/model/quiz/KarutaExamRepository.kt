@@ -14,7 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
-import java.util.Date
+import java.util.*
 
 /**
  * 力試しリポジトリ.

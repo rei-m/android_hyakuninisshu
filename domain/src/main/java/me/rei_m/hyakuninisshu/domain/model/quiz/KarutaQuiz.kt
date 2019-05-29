@@ -16,7 +16,7 @@ package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import java.util.Date
+import java.util.*
 
 /**
  * 百人一首の問題.

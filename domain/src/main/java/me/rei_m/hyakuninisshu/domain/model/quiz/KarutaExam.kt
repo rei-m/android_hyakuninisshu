@@ -15,7 +15,7 @@
 package me.rei_m.hyakuninisshu.domain.model.quiz
 
 import me.rei_m.hyakuninisshu.domain.AbstractEntity
-import java.util.Date
+import java.util.*
 
 /**
  * 百人一首の力試し.

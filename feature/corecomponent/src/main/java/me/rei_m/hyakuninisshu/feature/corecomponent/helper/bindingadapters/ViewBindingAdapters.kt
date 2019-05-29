@@ -14,8 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.helper.bindingadapters
 
-import androidx.databinding.BindingAdapter
 import android.view.View
+import androidx.databinding.BindingAdapter
 
 @BindingAdapter("visibleOrGone")
 fun setVisibleOrGone(view: View, visible: Boolean?) {

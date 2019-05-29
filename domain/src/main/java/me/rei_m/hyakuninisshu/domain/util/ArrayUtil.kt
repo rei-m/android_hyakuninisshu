@@ -15,8 +15,7 @@
 package me.rei_m.hyakuninisshu.domain.util
 
 import android.util.SparseIntArray
-
-import java.util.Random
+import java.util.*
 
 /**
  * ランダムなインデックスの配列を生成する.

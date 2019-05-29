@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.examhistory.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,9 +22,9 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import dagger.Binds
-import dagger.multibindings.ClassKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope

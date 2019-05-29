@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.domain.model.quiz
 import android.os.Parcel
 import android.os.Parcelable
 import me.rei_m.hyakuninisshu.domain.EntityIdentifier
-import java.util.UUID
+import java.util.*
 
 data class KarutaQuizIdentifier(
     val value: String = UUID.randomUUID().toString()

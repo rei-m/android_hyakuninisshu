@@ -14,13 +14,12 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.splash.ui
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import dagger.Binds
-import dagger.multibindings.ClassKey
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope

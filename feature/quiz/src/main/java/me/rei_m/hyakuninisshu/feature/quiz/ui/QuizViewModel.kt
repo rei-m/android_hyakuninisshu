@@ -31,8 +31,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Device
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
-import java.util.Arrays
-import java.util.Date
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class QuizViewModel(

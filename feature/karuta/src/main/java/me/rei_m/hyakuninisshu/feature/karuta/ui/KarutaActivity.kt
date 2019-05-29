@@ -116,8 +116,7 @@ class KarutaActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Factory<KarutaActivity> {
             override fun create(instance: KarutaActivity): AndroidInjector<KarutaActivity> =
-                activityModule(ActivityModule(instance)).
-                    karutaModule(KarutaModule(instance.karutaId))
+                activityModule(ActivityModule(instance)).karutaModule(KarutaModule(instance.karutaId))
                     .build()
 
             abstract fun activityModule(module: ActivityModule): Builder
