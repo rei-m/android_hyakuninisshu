@@ -99,7 +99,7 @@ apply from: rootProject.file('gradle/dependencies/androidTest.gradle'), to: depe
 ext {
     multidexVersion = '2.0.1'
     crashlyticsVersion = '2.10.1'
-    leakcanaryVersion = '1.6.3'
+    leakcanaryVersion = '2.1'
 }
 
 dependencies {
@@ -136,9 +136,6 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
-    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

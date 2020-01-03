@@ -17,7 +17,6 @@ package me.rei_m.hyakuninisshu
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.google.android.gms.ads.MobileAds
-import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.DaggerApplication
@@ -43,7 +42,6 @@ open class App : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        initLeakCanary()
         initTimber()
         initAdMob()
     }
@@ -57,12 +55,6 @@ open class App : DaggerApplication() {
         return DaggerApp_Component.builder()
             .applicationModule(ApplicationModule(this))
             .build()
-    }
-
-    protected open fun initLeakCanary() {
-        if (BuildConfig.DEBUG) {
-            LeakCanary.install(this)
-        }
     }
 
     protected open fun initTimber() {
