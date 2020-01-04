@@ -33,7 +33,7 @@ ext {
     versionCode = 25
     versionName = '2.5.0'
 
-    rxjavaVersion = '2.2.8'
+    rxjavaVersion = '2.2.16'
     rxandroidVersion = '2.1.1'
     timberVersion = '4.7.1'
     androidxAnnotationVersion = '1.1.0'
