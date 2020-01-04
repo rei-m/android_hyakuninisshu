@@ -52,7 +52,7 @@ class KarutaFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val viewModel = provideActivityViewModel(KarutaViewModel::class.java, viewModelFactory)
-        viewModel.notFoundKarutaEvent.observe(this, EventObserver {
+        viewModel.notFoundKarutaEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onError()
         })
 
@@ -68,7 +68,7 @@ class KarutaFragment : DaggerFragment() {
         analyticsHelper.sendScreenView("Karuta-${karutaId.value}", requireActivity())
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

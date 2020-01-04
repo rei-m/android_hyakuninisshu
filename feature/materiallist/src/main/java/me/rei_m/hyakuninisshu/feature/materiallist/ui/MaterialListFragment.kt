@@ -74,10 +74,12 @@ class MaterialListFragment : DaggerFragment(), MaterialListAdapter.OnItemInterac
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         for (colorFilter in ColorFilter.values()) {
-            val menuItem = menu!!.add(Menu.NONE, colorFilter.ordinal, Menu.NONE, colorFilter.label(resources))
+            val menuItem = menu.add(Menu.NONE, colorFilter.ordinal, Menu.NONE, colorFilter.label(resources))
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             menuItem.setOnMenuItemClickListener {
                 viewModel.colorFilter = colorFilter

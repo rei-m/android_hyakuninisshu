@@ -58,7 +58,7 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
         return builder.create()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         val parentFragment = targetFragment
         if (parentFragment is OnDialogInteractionListener) {
