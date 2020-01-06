@@ -14,25 +14,21 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.application
 
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ApplicationActionCreator @Inject constructor(
-    private val karutaRepository: KarutaRepository,
-    private val dispatcher: Dispatcher
+    private val karutaRepository: KarutaRepository
 ) {
     /**
      * 百人一首の情報を準備してアプリの利用を開始する.
      */
-    fun start() {
-        try {
-            karutaRepository.initialize()
-            dispatcher.dispatch(StartApplicationAction.createSuccess())
-        } catch (e: Exception) {
-            dispatcher.dispatch(StartApplicationAction.createError(e))
-        }
+    fun start(): StartApplicationAction = try {
+        karutaRepository.initialize()
+        StartApplicationAction.createSuccess()
+    } catch (e: Exception) {
+        StartApplicationAction.createError(e)
     }
 }

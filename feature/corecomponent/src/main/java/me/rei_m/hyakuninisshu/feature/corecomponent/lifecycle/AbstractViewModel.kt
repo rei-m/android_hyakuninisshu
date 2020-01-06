@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.CoroutineContext
 
+// ktx使えばいらないやつ（気が向いたら置き換える）
 abstract class AbstractViewModel(context: CoroutineContext) : ViewModel(), CoroutineScope {
 
     private val job = SupervisorJob()

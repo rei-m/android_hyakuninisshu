@@ -17,11 +17,12 @@ package me.rei_m.hyakuninisshu
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.google.android.gms.ads.MobileAds
+import dagger.BindsInstance
+import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.DaggerApplication
 import me.rei_m.hyakuninisshu.action.di.ActionModule
-import me.rei_m.hyakuninisshu.di.ApplicationModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ViewModelModule
 import me.rei_m.hyakuninisshu.feature.entrance.ui.EntranceActivity
 import me.rei_m.hyakuninisshu.feature.exam.ui.ExamActivity
@@ -51,11 +52,8 @@ open class App : DaggerApplication() {
         MultiDex.install(this)
     }
 
-    override fun applicationInjector(): AndroidInjector<App> {
-        return DaggerApp_Component.builder()
-            .applicationModule(ApplicationModule(this))
-            .build()
-    }
+    override fun applicationInjector(): AndroidInjector<App> =
+        DaggerApp_AppComponent.factory().create(applicationContext)
 
     protected open fun initTimber() {
         if (BuildConfig.DEBUG) {
@@ -70,10 +68,9 @@ open class App : DaggerApplication() {
     }
 
     @Singleton
-    @dagger.Component(
+    @Component(
         modules = [
             AndroidSupportInjectionModule::class,
-            ApplicationModule::class,
             InfrastructureModule::class,
             ActionModule::class,
             ViewModelModule::class,
@@ -88,5 +85,10 @@ open class App : DaggerApplication() {
             TrainingActivity.Module::class
         ]
     )
-    interface Component : AndroidInjector<App>
+    interface AppComponent : AndroidInjector<App> {
+        @Component.Factory
+        interface Factory {
+            fun create(@BindsInstance context: Context): AppComponent
+        }
+    }
 }

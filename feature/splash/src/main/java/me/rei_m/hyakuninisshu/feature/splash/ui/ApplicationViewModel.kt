@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.ApplicationActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
@@ -28,7 +29,8 @@ class ApplicationViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
     private val store: ApplicationStore,
-    actionCreator: ApplicationActionCreator
+    actionCreator: ApplicationActionCreator,
+    dispatcher: Dispatcher
 ) : AbstractViewModel(mainContext) {
 
     val isReady = store.isReady
@@ -36,8 +38,10 @@ class ApplicationViewModel(
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
+        println(dispatcher)
         launch {
-            withContext(ioContext) { actionCreator.start() }
+            val action = withContext(ioContext) { actionCreator.start() }
+            dispatcher.dispatch(action)
         }
     }
 
@@ -50,11 +54,18 @@ class ApplicationViewModel(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: ApplicationStore,
-        private val actionCreator: ApplicationActionCreator
+        private val actionCreator: ApplicationActionCreator,
+        private val dispatcher: Dispatcher
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ApplicationViewModel(mainContext, ioContext, store, actionCreator) as T
+            return ApplicationViewModel(
+                mainContext,
+                ioContext,
+                store,
+                actionCreator,
+                dispatcher
+            ) as T
         }
     }
 }
