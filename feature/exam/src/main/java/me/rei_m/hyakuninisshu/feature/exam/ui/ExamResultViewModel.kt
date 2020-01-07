@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
@@ -34,6 +35,7 @@ class ExamResultViewModel(
     ioContext: CoroutineContext,
     private val store: ExamStore,
     actionCreator: ExamActionCreator,
+    dispatcher: Dispatcher,
     initialKarutaExamId: KarutaExamIdentifier?
 ) : AbstractViewModel(mainContext) {
 
@@ -43,17 +45,21 @@ class ExamResultViewModel(
 
     val averageAnswerSec: LiveData<Float?> = store.result.map { it?.result?.averageAnswerSec }
 
-    val karutaQuizJudgements: LiveData<List<KarutaQuizJudgement>?> = store.result.map { it?.result?.judgements }
+    val karutaQuizJudgements: LiveData<List<KarutaQuizJudgement>?> =
+        store.result.map { it?.result?.judgements }
 
     val notFoundExamEvent: LiveData<Event<Unit>> = store.notFoundExamEvent
 
     init {
         launch {
-            if (initialKarutaExamId == null) {
-                withContext(ioContext) { actionCreator.finish() }
-            } else {
-                actionCreator.fetch(initialKarutaExamId)
+            val action = withContext(ioContext) {
+                if (initialKarutaExamId == null) {
+                    actionCreator.finish()
+                } else {
+                    actionCreator.fetch(initialKarutaExamId)
+                }
             }
+            dispatcher.dispatch((action))
         }
     }
 
@@ -66,7 +72,8 @@ class ExamResultViewModel(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: ExamStore,
-        private val actionCreator: ExamActionCreator
+        private val actionCreator: ExamActionCreator,
+        private val dispatcher: Dispatcher
     ) : ViewModelProvider.Factory {
         var initialKarutaExamId: KarutaExamIdentifier? = null
 
@@ -77,6 +84,7 @@ class ExamResultViewModel(
                 ioContext,
                 store,
                 actionCreator,
+                dispatcher,
                 initialKarutaExamId
             ) as T
         }

@@ -38,7 +38,6 @@ class ApplicationViewModel(
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
-        println(dispatcher)
         launch {
             val action = withContext(ioContext) { actionCreator.start() }
             dispatcher.dispatch(action)

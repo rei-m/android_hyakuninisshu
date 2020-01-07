@@ -18,6 +18,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
@@ -27,8 +29,10 @@ import kotlin.coroutines.CoroutineContext
 
 class ExamMenuViewModel(
     mainContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: ExamMenuStore,
-    actionCreator: ExamActionCreator
+    actionCreator: ExamActionCreator,
+    dispatcher: Dispatcher
 ) : AbstractViewModel(mainContext) {
 
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
@@ -39,7 +43,10 @@ class ExamMenuViewModel(
 
     init {
         launch {
-            actionCreator.fetchRecent()
+            val action = withContext(ioContext) {
+                actionCreator.fetchRecent()
+            }
+            dispatcher.dispatch((action))
         }
     }
 
@@ -50,15 +57,19 @@ class ExamMenuViewModel(
 
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
+        @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: ExamMenuStore,
-        private val actionCreator: ExamActionCreator
+        private val actionCreator: ExamActionCreator,
+        private val dispatcher: Dispatcher
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ExamMenuViewModel(
                 mainContext,
+                ioContext,
                 store,
-                actionCreator
+                actionCreator,
+                dispatcher
             ) as T
         }
     }

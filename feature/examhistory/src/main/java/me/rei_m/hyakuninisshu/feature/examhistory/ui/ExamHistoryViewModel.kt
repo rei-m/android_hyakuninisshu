@@ -18,6 +18,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
@@ -28,8 +30,10 @@ import kotlin.coroutines.CoroutineContext
 
 class ExamHistoryViewModel(
     mainContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: ExamHistoryStore,
-    private val actionCreator: ExamActionCreator
+    actionCreator: ExamActionCreator,
+    dispatcher: Dispatcher
 ) : AbstractViewModel(mainContext) {
 
     val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
@@ -39,7 +43,12 @@ class ExamHistoryViewModel(
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
-        launch { actionCreator.fetchAll() }
+        launch {
+            val action = withContext(ioContext) {
+                actionCreator.fetchAll()
+            }
+            dispatcher.dispatch((action))
+        }
     }
 
     override fun onCleared() {
@@ -49,12 +58,20 @@ class ExamHistoryViewModel(
 
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
+        @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: ExamHistoryStore,
-        private val actionCreator: ExamActionCreator
+        private val actionCreator: ExamActionCreator,
+        private val dispatcher: Dispatcher
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamHistoryViewModel(mainContext, store, actionCreator) as T
+            return ExamHistoryViewModel(
+                mainContext,
+                ioContext,
+                store,
+                actionCreator,
+                dispatcher
+            ) as T
         }
     }
 }

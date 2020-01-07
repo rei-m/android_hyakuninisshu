@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
@@ -32,7 +33,8 @@ class ExamViewModel(
     mainContext: CoroutineContext,
     private val ioContext: CoroutineContext,
     private val store: ExamStore,
-    private val actionCreator: ExamActionCreator
+    private val actionCreator: ExamActionCreator,
+    private val dispatcher: Dispatcher
 ) : AbstractViewModel(mainContext) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
@@ -43,13 +45,15 @@ class ExamViewModel(
 
     fun startExam() {
         launch {
-            withContext(ioContext) { actionCreator.start() }
+            val action = withContext(ioContext) { actionCreator.start() }
+            dispatcher.dispatch((action))
         }
     }
 
     fun fetchNext() {
         launch {
-            actionCreator.fetchNext()
+            val action = withContext(ioContext) { actionCreator.fetchNext() }
+            dispatcher.dispatch((action))
         }
     }
 
@@ -62,11 +66,12 @@ class ExamViewModel(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: ExamStore,
-        private val actionCreator: ExamActionCreator
+        private val actionCreator: ExamActionCreator,
+        private val dispatcher: Dispatcher
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamViewModel(mainContext, ioContext, store, actionCreator) as T
+            return ExamViewModel(mainContext, ioContext, store, actionCreator, dispatcher) as T
         }
     }
 }
