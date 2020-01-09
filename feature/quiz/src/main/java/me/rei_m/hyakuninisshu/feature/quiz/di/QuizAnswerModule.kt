@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.feature.quiz.di
 
 import dagger.Module
 import dagger.Provides
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
@@ -32,13 +33,17 @@ class QuizAnswerModule(
     @FragmentScope
     fun provideQuizAnswerViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
+        @Named("ioContext") ioContext: CoroutineContext,
         store: QuizStore,
-        actionCreator: QuizActionCreator
+        actionCreator: QuizActionCreator,
+        dispatcher: Dispatcher
     ): QuizAnswerViewModel.Factory {
         return QuizAnswerViewModel.Factory(
             mainContext,
+            ioContext,
             store,
             actionCreator,
+            dispatcher,
             quizId
         )
     }

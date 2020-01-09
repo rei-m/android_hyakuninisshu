@@ -16,8 +16,6 @@ package me.rei_m.hyakuninisshu.feature.splash.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.ApplicationActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
@@ -31,17 +29,14 @@ class ApplicationViewModel(
     private val store: ApplicationStore,
     actionCreator: ApplicationActionCreator,
     dispatcher: Dispatcher
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val isReady = store.isReady
 
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
-        launch {
-            val action = withContext(ioContext) { actionCreator.start() }
-            dispatcher.dispatch(action)
-        }
+        dispatchAction { actionCreator.start() }
     }
 
     override fun onCleared() {

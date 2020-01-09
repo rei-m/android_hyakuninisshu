@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.feature.karuta.di
 
 import dagger.Module
 import dagger.Provides
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.karuta.KarutaActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
@@ -32,13 +33,17 @@ class KarutaModule(
     @ActivityScope
     fun provideKarutaViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
+        @Named("ioContext") ioContext: CoroutineContext,
         store: KarutaStore,
-        actionCreator: KarutaActionCreator
+        actionCreator: KarutaActionCreator,
+        dispatcher: Dispatcher
     ): KarutaViewModel.Factory {
         return KarutaViewModel.Factory(
             mainContext,
+            ioContext,
             store,
             actionCreator,
+            dispatcher,
             karutaId
         )
     }

@@ -16,17 +16,32 @@ package me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Action
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import kotlin.coroutines.CoroutineContext
 
-// ktx使えばいらないやつ（気が向いたら置き換える）
-abstract class AbstractViewModel(context: CoroutineContext) : ViewModel(), CoroutineScope {
+// mainContextはktx使えばいらないやつ（気が向いたら置き換える）
+abstract class AbstractViewModel(
+    mainContext: CoroutineContext,
+    private val ioContext: CoroutineContext,
+    private val dispatcher: Dispatcher
+) : ViewModel(), CoroutineScope {
 
     private val job = SupervisorJob()
 
-    override val coroutineContext: CoroutineContext = context + job
+    override val coroutineContext: CoroutineContext = mainContext + job
 
     override fun onCleared() {
         job.cancel()
         super.onCleared()
+    }
+
+    fun dispatchAction(block: suspend CoroutineScope.() -> Action) {
+        launch {
+            val action = withContext(ioContext, block)
+            dispatcher.dispatch(action)
+        }
     }
 }

@@ -17,8 +17,6 @@ package me.rei_m.hyakuninisshu.feature.examhistory.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
@@ -34,7 +32,7 @@ class ExamHistoryViewModel(
     private val store: ExamHistoryStore,
     actionCreator: ExamActionCreator,
     dispatcher: Dispatcher
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
 
@@ -43,12 +41,7 @@ class ExamHistoryViewModel(
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
-        launch {
-            val action = withContext(ioContext) {
-                actionCreator.fetchAll()
-            }
-            dispatcher.dispatch((action))
-        }
+        dispatchAction { actionCreator.fetchAll() }
     }
 
     override fun onCleared() {

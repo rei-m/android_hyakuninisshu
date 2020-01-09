@@ -24,8 +24,10 @@ class ApplicationActionCreator @Inject constructor(
 ) {
     /**
      * 百人一首の情報を準備してアプリの利用を開始する.
+     *
+     * @return StartApplicationAction
      */
-    fun start(): StartApplicationAction = try {
+    fun start() = try {
         karutaRepository.initialize()
         StartApplicationAction.createSuccess()
     } catch (e: Exception) {

@@ -17,8 +17,6 @@ package me.rei_m.hyakuninisshu.feature.exam.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
@@ -31,11 +29,11 @@ import kotlin.coroutines.CoroutineContext
 
 class ExamViewModel(
     mainContext: CoroutineContext,
-    private val ioContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: ExamStore,
     private val actionCreator: ExamActionCreator,
-    private val dispatcher: Dispatcher
-) : AbstractViewModel(mainContext) {
+    dispatcher: Dispatcher
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -44,17 +42,11 @@ class ExamViewModel(
     val notFoundQuizEvent: LiveData<Event<Unit>> = store.notFoundQuizEvent
 
     fun startExam() {
-        launch {
-            val action = withContext(ioContext) { actionCreator.start() }
-            dispatcher.dispatch((action))
-        }
+        dispatchAction { actionCreator.start() }
     }
 
     fun fetchNext() {
-        launch {
-            val action = withContext(ioContext) { actionCreator.fetchNext() }
-            dispatcher.dispatch((action))
-        }
+        dispatchAction { actionCreator.fetchNext() }
     }
 
     override fun onCleared() {

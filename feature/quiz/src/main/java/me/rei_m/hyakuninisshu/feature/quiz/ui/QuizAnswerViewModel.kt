@@ -18,7 +18,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
@@ -30,10 +30,12 @@ import kotlin.coroutines.CoroutineContext
 
 class QuizAnswerViewModel(
     mainContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: QuizStore,
     actionCreator: QuizActionCreator,
+    dispatcher: Dispatcher,
     quizId: KarutaQuizIdentifier
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
@@ -68,9 +70,7 @@ class QuizAnswerViewModel(
     val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
-        launch {
-            actionCreator.fetch(quizId)
-        }
+        dispatchAction { actionCreator.fetch(quizId) }
     }
 
     fun onClickNextQuiz() {
@@ -88,16 +88,20 @@ class QuizAnswerViewModel(
 
     class Factory(
         private val mainContext: CoroutineContext,
+        private val ioContext: CoroutineContext,
         private val store: QuizStore,
         private val actionCreator: QuizActionCreator,
+        private val dispatcher: Dispatcher,
         private val quizId: KarutaQuizIdentifier
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return QuizAnswerViewModel(
                 mainContext,
+                ioContext,
                 store,
                 actionCreator,
+                dispatcher,
                 quizId
             ) as T
         }

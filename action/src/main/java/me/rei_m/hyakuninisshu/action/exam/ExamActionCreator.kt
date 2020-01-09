@@ -35,8 +35,9 @@ class ExamActionCreator @Inject constructor(
      * 力試しを取得する.
      *
      * @param karutaExamId 力試しID
+     * @return FetchExamAction
      */
-    fun fetch(karutaExamId: KarutaExamIdentifier): FetchExamAction = try {
+    fun fetch(karutaExamId: KarutaExamIdentifier) = try {
         val karutaExam = karutaExamRepository.findBy(karutaExamId)
             ?: throw NoSuchElementException(karutaExamId.toString())
         FetchExamAction.createSuccess(karutaExam)
@@ -46,30 +47,34 @@ class ExamActionCreator @Inject constructor(
 
     /**
      * 最新の力試しを取得する.
+     *
+     * @return FetchRecentExamAction
      */
-    fun fetchRecent(): FetchRecentExamAction =
-        try {
-            val exams = karutaExamRepository.list()
-            FetchRecentExamAction.createSuccess(exams.recent)
-        } catch (e: Exception) {
-            FetchRecentExamAction.createError(e)
-        }
+    fun fetchRecent() = try {
+        val exams = karutaExamRepository.list()
+        FetchRecentExamAction.createSuccess(exams.recent)
+    } catch (e: Exception) {
+        FetchRecentExamAction.createError(e)
+    }
 
     /**
      * 全ての力試しを取得する.
+     *
+     * @return FetchAllExamAction
      */
-    fun fetchAll(): FetchAllExamAction =
-        try {
-            val exams = karutaExamRepository.list()
-            FetchAllExamAction.createSuccess(exams.all)
-        } catch (e: Exception) {
-            FetchAllExamAction.createError(e)
-        }
+    fun fetchAll() = try {
+        val exams = karutaExamRepository.list()
+        FetchAllExamAction.createSuccess(exams.all)
+    } catch (e: Exception) {
+        FetchAllExamAction.createError(e)
+    }
 
     /**
      * 力試しを開始する.
+     *
+     * @return StartExamAction
      */
-    fun start(): StartExamAction = try {
+    fun start() = try {
         val karutas = karutaRepository.list()
         val targetIds = karutaRepository.findIds()
         val quizSet = karutas.createQuizSet(targetIds)
@@ -82,29 +87,31 @@ class ExamActionCreator @Inject constructor(
 
     /**
      * 次の問題を取り出す.
+     *
+     * @return OpenNextQuizAction
      */
-    fun fetchNext(): OpenNextQuizAction =
-        try {
-            val karutaQuiz = karutaQuizRepository.first()
-                ?: throw NoSuchElementException("NextKarutaQuiz")
-            OpenNextQuizAction.createSuccess(karutaQuiz.identifier)
-        } catch (e: Exception) {
-            OpenNextQuizAction.createError(e)
-        }
+    fun fetchNext() = try {
+        val karutaQuiz = karutaQuizRepository.first()
+            ?: throw NoSuchElementException("NextKarutaQuiz")
+        OpenNextQuizAction.createSuccess(karutaQuiz.identifier)
+    } catch (e: Exception) {
+        OpenNextQuizAction.createError(e)
+    }
 
     /**
      * 力試しを終了して結果を登録する.
+     *
+     * @return FinishExamAction
      */
-    fun finish(): FinishExamAction =
-        try {
-            val quizzes = karutaQuizRepository.list()
-            val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
-            val storedExamId = karutaExamRepository.storeResult(result, Date())
-            val exam = karutaExamRepository.findBy(storedExamId)
-                ?: throw NoSuchElementException(storedExamId.toString())
-            karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
-            FinishExamAction.createSuccess(exam)
-        } catch (e: Exception) {
-            FinishExamAction.createError(e)
-        }
+    fun finish() = try {
+        val quizzes = karutaQuizRepository.list()
+        val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
+        val storedExamId = karutaExamRepository.storeResult(result, Date())
+        val exam = karutaExamRepository.findBy(storedExamId)
+            ?: throw NoSuchElementException(storedExamId.toString())
+        karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+        FinishExamAction.createSuccess(exam)
+    } catch (e: Exception) {
+        FinishExamAction.createError(e)
+    }
 }

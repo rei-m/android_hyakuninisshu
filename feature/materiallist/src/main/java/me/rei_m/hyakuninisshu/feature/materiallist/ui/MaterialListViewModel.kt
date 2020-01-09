@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.feature.materiallist.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
@@ -28,25 +28,23 @@ import kotlin.coroutines.CoroutineContext
 
 class MaterialListViewModel(
     mainContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: MaterialListStore,
     private val actionCreator: MaterialActionCreator,
+    dispatcher: Dispatcher,
     colorFilter: ColorFilter
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
     var colorFilter = colorFilter
         set(value) {
-            launch {
-                actionCreator.fetch(value.value)
-            }
+            dispatchAction { actionCreator.fetch(value.value) }
             field = value
         }
 
     init {
-        launch {
-            actionCreator.fetch(colorFilter.value)
-        }
+        dispatchAction { actionCreator.fetch(colorFilter.value) }
     }
 
     override fun onCleared() {
@@ -56,8 +54,10 @@ class MaterialListViewModel(
 
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
+        @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: MaterialListStore,
-        private val actionCreator: MaterialActionCreator
+        private val actionCreator: MaterialActionCreator,
+        private val dispatcher: Dispatcher
     ) : ViewModelProvider.Factory {
         var colorFilter = ColorFilter.ALL
 
@@ -65,8 +65,10 @@ class MaterialListViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MaterialListViewModel(
                 mainContext,
+                ioContext,
                 store,
                 actionCreator,
+                dispatcher,
                 colorFilter
             ) as T
         }

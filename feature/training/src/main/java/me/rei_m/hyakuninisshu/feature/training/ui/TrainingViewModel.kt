@@ -17,8 +17,7 @@ package me.rei_m.hyakuninisshu.feature.training.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
@@ -34,10 +33,11 @@ import kotlin.coroutines.CoroutineContext
 
 class TrainingViewModel(
     mainContext: CoroutineContext,
-    private val ioContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: TrainingStore,
-    private val actionCreator: TrainingActionCreator
-) : AbstractViewModel(mainContext) {
+    private val actionCreator: TrainingActionCreator,
+    dispatcher: Dispatcher
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -58,35 +58,30 @@ class TrainingViewModel(
         kimarijiFilter: KimarijiFilter,
         colorFilter: ColorFilter
     ) {
-        launch {
-            withContext(ioContext) {
-                actionCreator.start(
-                    trainingRangeFrom.value,
-                    trainingRangeTo.value,
-                    kimarijiFilter.value,
-                    colorFilter.value
-                )
-            }
+        dispatchAction {
+            actionCreator.start(
+                trainingRangeFrom.value,
+                trainingRangeTo.value,
+                kimarijiFilter.value,
+                colorFilter.value
+            )
         }
     }
 
     fun startTraining() {
-        launch {
-            withContext(ioContext) { actionCreator.startForExam() }
-        }
+        dispatchAction { actionCreator.startForExam() }
     }
 
     fun fetchNext() {
-        launch {
-            actionCreator.fetchNext()
-        }
+        dispatchAction { actionCreator.fetchNext() }
     }
 
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
         private val store: TrainingStore,
-        private val actionCreator: TrainingActionCreator
+        private val actionCreator: TrainingActionCreator,
+        private val dispatcher: Dispatcher
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -94,7 +89,8 @@ class TrainingViewModel(
                 mainContext,
                 ioContext,
                 store,
-                actionCreator
+                actionCreator,
+                dispatcher
             ) as T
         }
     }

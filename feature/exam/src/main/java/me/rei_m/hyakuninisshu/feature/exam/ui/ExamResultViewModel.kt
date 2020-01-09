@@ -17,8 +17,6 @@ package me.rei_m.hyakuninisshu.feature.exam.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
@@ -37,7 +35,7 @@ class ExamResultViewModel(
     actionCreator: ExamActionCreator,
     dispatcher: Dispatcher,
     initialKarutaExamId: KarutaExamIdentifier?
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val karutaExamId: LiveData<KarutaExamIdentifier?> = store.result.map { it?.identifier }
 
@@ -51,15 +49,12 @@ class ExamResultViewModel(
     val notFoundExamEvent: LiveData<Event<Unit>> = store.notFoundExamEvent
 
     init {
-        launch {
-            val action = withContext(ioContext) {
-                if (initialKarutaExamId == null) {
-                    actionCreator.finish()
-                } else {
-                    actionCreator.fetch(initialKarutaExamId)
-                }
+        dispatchAction {
+            if (initialKarutaExamId == null) {
+                actionCreator.finish()
+            } else {
+                actionCreator.fetch(initialKarutaExamId)
             }
-            dispatcher.dispatch((action))
         }
     }
 

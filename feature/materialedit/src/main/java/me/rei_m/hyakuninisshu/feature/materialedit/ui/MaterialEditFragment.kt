@@ -77,21 +77,21 @@ class MaterialEditFragment : DaggerFragment(),
         }
         viewModel = provideActivityViewModel(MaterialEditViewModel::class.java, viewModelFactory)
 
-        viewModel.confirmEditEvent.observe(this, EventObserver { dialog ->
+        viewModel.confirmEditEvent.observe(viewLifecycleOwner, EventObserver { dialog ->
             fragmentManager?.let {
                 dialog.setTargetFragment(this, 0)
                 dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
             }
         })
-        viewModel.completeEditEvent.observe(this, EventObserver {
+        viewModel.completeEditEvent.observe(viewLifecycleOwner, EventObserver {
             navigator.back()
         })
-        viewModel.snackBarMessage.observe(this, EventObserver {
+        viewModel.snackBarMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
                 .setAction("Action", null)
                 .show()
         })
-        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+        viewModel.unhandledErrorEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onError()
         })
 

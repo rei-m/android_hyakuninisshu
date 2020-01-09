@@ -15,11 +15,8 @@
 package me.rei_m.hyakuninisshu.action.material
 
 import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -35,16 +32,10 @@ class MaterialActionCreatorTest : TestHelper {
 
     private lateinit var karutaRepository: KarutaRepository
 
-    private lateinit var dispatcher: Dispatcher
-
     @Before
     fun setUp() {
-        dispatcher = mock {}
         karutaRepository = mock {}
-        actionCreator = MaterialActionCreator(
-            karutaRepository,
-            dispatcher
-        )
+        actionCreator = MaterialActionCreator(karutaRepository)
     }
 
     @Test
@@ -53,15 +44,10 @@ class MaterialActionCreatorTest : TestHelper {
 
         whenever(karutaRepository.list(Color.BLUE)).thenReturn(karutas)
 
-        actionCreator.fetch(Color.BLUE)
+        val actual = actionCreator.fetch(Color.BLUE)
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchMaterialAction::class.java)
-            if (it is FetchMaterialAction) {
-                assertThat(it.karutas).isEqualTo(karutas)
-                assertThat(it.error).isNull()
-            }
-        })
+        assertThat(actual.karutas).isEqualTo(karutas)
+        assertThat(actual.error).isNull()
     }
 
     @Test
@@ -70,27 +56,20 @@ class MaterialActionCreatorTest : TestHelper {
 
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
 
-        actionCreator.startEdit(karuta.identifier)
+        val actual = actionCreator.startEdit(karuta.identifier)
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartEditMaterialAction::class.java)
-            if (it is StartEditMaterialAction) {
-                assertThat(it.karuta).isEqualTo(karuta)
-                assertThat(it.error).isNull()
-            }
-        })
+        assertThat(actual.karuta).isEqualTo(karuta)
+        assertThat(actual.error).isNull()
     }
 
     @Test
     fun startEditWhenNotFound() {
         whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
-        actionCreator.startEdit(KarutaIdentifier(1))
+        val actual = actionCreator.startEdit(KarutaIdentifier(1))
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartEditMaterialAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        assertThat(actual).isInstanceOf(StartEditMaterialAction::class.java)
+        assertThat(actual.error).isNotNull()
     }
 
     @Test
@@ -100,7 +79,7 @@ class MaterialActionCreatorTest : TestHelper {
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
         whenever(karutaRepository.store(any())).thenAnswer { }
 
-        actionCreator.edit(
+        val actual = actionCreator.edit(
             karuta.identifier,
             "初句改",
             "しょくかい",
@@ -114,23 +93,18 @@ class MaterialActionCreatorTest : TestHelper {
             "ごくかい"
         )
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(EditMaterialAction::class.java)
-            if (it is EditMaterialAction) {
-                assertThat(it.karuta).isEqualTo(karuta)
-                assertThat(it.karuta!!.kamiNoKu.first.kanji).isEqualTo("初句改")
-                assertThat(it.karuta!!.kamiNoKu.first.kana).isEqualTo("しょくかい")
-                assertThat(it.karuta!!.kamiNoKu.second.kanji).isEqualTo("二句改")
-                assertThat(it.karuta!!.kamiNoKu.second.kana).isEqualTo("にくかい")
-                assertThat(it.karuta!!.kamiNoKu.third.kanji).isEqualTo("三句改")
-                assertThat(it.karuta!!.kamiNoKu.third.kana).isEqualTo("さんくかい")
-                assertThat(it.karuta!!.shimoNoKu.fourth.kanji).isEqualTo("四句改")
-                assertThat(it.karuta!!.shimoNoKu.fourth.kana).isEqualTo("よんくかい")
-                assertThat(it.karuta!!.shimoNoKu.fifth.kanji).isEqualTo("五句改")
-                assertThat(it.karuta!!.shimoNoKu.fifth.kana).isEqualTo("ごくかい")
-                assertThat(it.error).isNull()
-            }
-        })
+        assertThat(actual.karuta).isEqualTo(karuta)
+        assertThat(actual.karuta!!.kamiNoKu.first.kanji).isEqualTo("初句改")
+        assertThat(actual.karuta!!.kamiNoKu.first.kana).isEqualTo("しょくかい")
+        assertThat(actual.karuta!!.kamiNoKu.second.kanji).isEqualTo("二句改")
+        assertThat(actual.karuta!!.kamiNoKu.second.kana).isEqualTo("にくかい")
+        assertThat(actual.karuta!!.kamiNoKu.third.kanji).isEqualTo("三句改")
+        assertThat(actual.karuta!!.kamiNoKu.third.kana).isEqualTo("さんくかい")
+        assertThat(actual.karuta!!.shimoNoKu.fourth.kanji).isEqualTo("四句改")
+        assertThat(actual.karuta!!.shimoNoKu.fourth.kana).isEqualTo("よんくかい")
+        assertThat(actual.karuta!!.shimoNoKu.fifth.kanji).isEqualTo("五句改")
+        assertThat(actual.karuta!!.shimoNoKu.fifth.kana).isEqualTo("ごくかい")
+        assertThat(actual.error).isNull()
     }
 
     @Test
@@ -139,7 +113,7 @@ class MaterialActionCreatorTest : TestHelper {
 
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(null)
 
-        actionCreator.edit(
+        val actual = actionCreator.edit(
             karuta.identifier,
             "初句改",
             "しょくかい",
@@ -153,9 +127,7 @@ class MaterialActionCreatorTest : TestHelper {
             "ごくかい"
         )
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(EditMaterialAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        assertThat(actual).isInstanceOf(EditMaterialAction::class.java)
+        assertThat(actual.error).isNotNull()
     }
 }

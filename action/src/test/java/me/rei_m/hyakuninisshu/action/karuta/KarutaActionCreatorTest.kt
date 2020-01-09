@@ -14,11 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.karuta
 
-import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
@@ -32,16 +29,10 @@ class KarutaActionCreatorTest : TestHelper {
 
     private lateinit var karutaRepository: KarutaRepository
 
-    private lateinit var dispatcher: Dispatcher
-
     @Before
     fun setUp() {
-        dispatcher = mock {}
         karutaRepository = mock {}
-        actionCreator = KarutaActionCreator(
-            karutaRepository,
-            dispatcher
-        )
+        actionCreator = KarutaActionCreator(karutaRepository)
     }
 
     @Test
@@ -50,26 +41,18 @@ class KarutaActionCreatorTest : TestHelper {
 
         whenever(karutaRepository.findBy(karuta.identifier)).thenReturn(karuta)
 
-        actionCreator.fetch(karuta.identifier)
+        val actual = actionCreator.fetch(karuta.identifier)
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchKarutaAction::class.java)
-            if (it is FetchKarutaAction) {
-                assertThat(it.karuta).isEqualTo(karuta)
-                assertThat(it.error).isNull()
-            }
-        })
+        assertThat(actual).isInstanceOf(FetchKarutaAction::class.java)
+        assertThat(actual.karuta).isEqualTo(karuta)
+        assertThat(actual.error).isNull()
     }
 
     @Test
     fun fetchWhenNotFound() {
         whenever(karutaRepository.findBy(KarutaIdentifier(1))).thenReturn(null)
 
-        actionCreator.fetch(KarutaIdentifier(1))
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchKarutaAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        val actual = actionCreator.fetch(KarutaIdentifier(1))
+        assertThat(actual.error).isNotNull()
     }
 }

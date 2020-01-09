@@ -14,9 +14,12 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
-import androidx.lifecycle.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
@@ -29,9 +32,10 @@ import kotlin.coroutines.CoroutineContext
 
 class MaterialEditViewModel(
     mainContext: CoroutineContext,
-    private val ioContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: MaterialEditStore,
     private val actionCreator: MaterialActionCreator,
+    dispatcher: Dispatcher,
     private val karutaId: KarutaIdentifier,
     firstPhraseKanji: String?,
     firstPhraseKana: String?,
@@ -43,7 +47,7 @@ class MaterialEditViewModel(
     fourthPhraseKana: String?,
     fifthPhraseKanji: String?,
     fifthPhraseKana: String?
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
     private val karuta: LiveData<Karuta?> = store.karuta
 
     val karutaNo: LiveData<Int?> = karuta.map { it?.identifier?.value }
@@ -109,9 +113,7 @@ class MaterialEditViewModel(
         this.fifthPhraseKana.value = fifthPhraseKana
         karuta.observeForever(karutaObserver)
 
-        launch {
-            actionCreator.startEdit(karutaId)
-        }
+        dispatchAction { actionCreator.startEdit(karutaId) }
     }
 
     override fun onCleared() {
@@ -147,22 +149,20 @@ class MaterialEditViewModel(
             return
         }
 
-        launch {
-            withContext(ioContext) {
-                actionCreator.edit(
-                    karutaId,
-                    firstPhraseKanji,
-                    firstPhraseKana,
-                    secondPhraseKanji,
-                    secondPhraseKana,
-                    thirdPhraseKanji,
-                    thirdPhraseKana,
-                    fourthPhraseKanji,
-                    fourthPhraseKana,
-                    fifthPhraseKanji,
-                    fifthPhraseKana
-                )
-            }
+        dispatchAction {
+            actionCreator.edit(
+                karutaId,
+                firstPhraseKanji,
+                firstPhraseKana,
+                secondPhraseKanji,
+                secondPhraseKana,
+                thirdPhraseKanji,
+                thirdPhraseKana,
+                fourthPhraseKanji,
+                fourthPhraseKana,
+                fifthPhraseKanji,
+                fifthPhraseKana
+            )
         }
     }
 
@@ -211,6 +211,7 @@ class MaterialEditViewModel(
         private val ioContext: CoroutineContext,
         private val store: MaterialEditStore,
         private val actionCreator: MaterialActionCreator,
+        private val dispatcher: Dispatcher,
         private val karutaId: KarutaIdentifier
     ) : ViewModelProvider.Factory {
 
@@ -232,6 +233,7 @@ class MaterialEditViewModel(
                 ioContext,
                 store,
                 actionCreator,
+                dispatcher,
                 karutaId,
                 firstPhraseKanji,
                 firstPhraseKana,

@@ -18,9 +18,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.quiz.QuizActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizContent
@@ -32,19 +30,21 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withValue
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.Device
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
-import java.util.*
+import java.util.Arrays
+import java.util.Date
 import kotlin.coroutines.CoroutineContext
 
 class QuizViewModel(
     mainContext: CoroutineContext,
-    private val ioContext: CoroutineContext,
+    ioContext: CoroutineContext,
     private val store: QuizStore,
     private val actionCreator: QuizActionCreator,
+    dispatcher: Dispatcher,
     private val quizId: KarutaQuizIdentifier,
     kamiNoKuStyle: KarutaStyleFilter,
     shimoNoKuStyle: KarutaStyleFilter,
     device: Device
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val content: LiveData<KarutaQuizContent> = store.karutaQuizContent
 
@@ -116,14 +116,16 @@ class QuizViewModel(
     }
 
     fun start() {
-        launch {
-            withContext(ioContext) { actionCreator.start(quizId, Date()) }
-        }
+        dispatchAction { actionCreator.start(quizId, Date()) }
     }
 
     fun onClickChoice(choiceNoValue: Int) {
-        launch {
-            withContext(ioContext) { actionCreator.answer(quizId, ChoiceNo.forValue(choiceNoValue), Date()) }
+        dispatchAction {
+            actionCreator.answer(
+                quizId,
+                ChoiceNo.forValue(choiceNoValue),
+                Date()
+            )
         }
     }
 
@@ -141,6 +143,7 @@ class QuizViewModel(
         private val ioContext: CoroutineContext,
         private val store: QuizStore,
         private val actionCreator: QuizActionCreator,
+        private val dispatcher: Dispatcher,
         private val quizId: KarutaQuizIdentifier,
         private val kamiNoKuStyle: KarutaStyleFilter,
         private val shimoNoKuStyle: KarutaStyleFilter,
@@ -153,6 +156,7 @@ class QuizViewModel(
                 ioContext,
                 store,
                 actionCreator,
+                dispatcher,
                 quizId,
                 kamiNoKuStyle,
                 shimoNoKuStyle,

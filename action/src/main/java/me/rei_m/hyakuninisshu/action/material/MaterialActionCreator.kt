@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.material
 
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.Color
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
@@ -22,37 +21,33 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MaterialActionCreator @Inject constructor(
-    private val karutaRepository: KarutaRepository,
-    private val dispatcher: Dispatcher
-) {
+class MaterialActionCreator @Inject constructor(private val karutaRepository: KarutaRepository) {
     /**
      * 指定した色の該当する歌をすべて取り出す.
      *
      *  @param color 五色絞り込み条件
+     *  @return FetchMaterialAction
      */
-    fun fetch(color: Color?) {
-        try {
-            val karutaList = karutaRepository.list(color)
-            dispatcher.dispatch(FetchMaterialAction.createSuccess(karutaList))
-        } catch (e: Exception) {
-            dispatcher.dispatch(FetchMaterialAction.createError(e))
-        }
+    fun fetch(color: Color?) = try {
+        val karutaList = karutaRepository.list(color)
+        FetchMaterialAction.createSuccess(karutaList)
+    } catch (e: Exception) {
+        FetchMaterialAction.createError(e)
     }
 
     /**
      * 指定した歌の編集を開始する.
      *
      * @param karutaId 歌ID.
+     * @return StartEditMaterialAction
+     * @throws NoSuchElementException 歌が見つからなかった場合
      */
-    fun startEdit(karutaId: KarutaIdentifier) {
-        try {
-            val karuta = karutaRepository.findBy(karutaId)
-                ?: throw NoSuchElementException(karutaId.toString())
-            dispatcher.dispatch(StartEditMaterialAction.createSuccess(karuta))
-        } catch (e: Exception) {
-            dispatcher.dispatch(StartEditMaterialAction.createError(e))
-        }
+    fun startEdit(karutaId: KarutaIdentifier) = try {
+        val karuta = karutaRepository.findBy(karutaId)
+            ?: throw NoSuchElementException(karutaId.toString())
+        StartEditMaterialAction.createSuccess(karuta)
+    } catch (e: Exception) {
+        StartEditMaterialAction.createError(e)
     }
 
     /**
@@ -69,6 +64,7 @@ class MaterialActionCreator @Inject constructor(
      * @param fourthPhraseKana 四句 かな.
      * @param fifthPhraseKanji 五句 漢字.
      * @param fifthPhraseKana 五句 かな.
+     * @return EditMaterialAction
      */
     fun edit(
         karutaId: KarutaIdentifier,
@@ -82,27 +78,25 @@ class MaterialActionCreator @Inject constructor(
         fourthPhraseKana: String,
         fifthPhraseKanji: String,
         fifthPhraseKana: String
-    ) {
-        try {
-            val karuta = karutaRepository.findBy(karutaId)
-                ?: throw NoSuchElementException(karutaId.toString())
-            karuta.updatePhrase(
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
-            ).let {
-                karutaRepository.store(it)
-            }
-            dispatcher.dispatch(EditMaterialAction.createSuccess(karuta))
-        } catch (e: Exception) {
-            dispatcher.dispatch(EditMaterialAction.createError(e))
+    ) = try {
+        val karuta = karutaRepository.findBy(karutaId)
+            ?: throw NoSuchElementException(karutaId.toString())
+        karuta.updatePhrase(
+            firstPhraseKanji,
+            firstPhraseKana,
+            secondPhraseKanji,
+            secondPhraseKana,
+            thirdPhraseKanji,
+            thirdPhraseKana,
+            fourthPhraseKanji,
+            fourthPhraseKana,
+            fifthPhraseKanji,
+            fifthPhraseKana
+        ).let {
+            karutaRepository.store(it)
         }
+        EditMaterialAction.createSuccess(karuta)
+    } catch (e: Exception) {
+        EditMaterialAction.createError(e)
     }
 }

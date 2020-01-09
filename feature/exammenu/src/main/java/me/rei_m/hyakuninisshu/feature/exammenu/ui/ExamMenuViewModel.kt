@@ -17,8 +17,6 @@ package me.rei_m.hyakuninisshu.feature.exammenu.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
@@ -33,7 +31,7 @@ class ExamMenuViewModel(
     private val store: ExamMenuStore,
     actionCreator: ExamActionCreator,
     dispatcher: Dispatcher
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
 
@@ -42,12 +40,7 @@ class ExamMenuViewModel(
     val averageAnswerSec: LiveData<Float?> = store.recentExam.map { it?.result?.averageAnswerSec }
 
     init {
-        launch {
-            val action = withContext(ioContext) {
-                actionCreator.fetchRecent()
-            }
-            dispatcher.dispatch((action))
-        }
+        dispatchAction { actionCreator.fetchRecent() }
     }
 
     override fun onCleared() {
