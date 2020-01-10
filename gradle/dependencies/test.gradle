@@ -15,7 +15,7 @@ ext {
     junitVersion = '4.13'
     assertjVersion = '3.14.0'
     robolectricVersion = '4.3.1'
-    androidxTestVersion = '1.2.0-beta01'
+    androidxTestVersion = '1.1.1'
 }
 
 testImplementation "junit:junit:$junitVersion"
@@ -23,9 +23,4 @@ testImplementation "org.assertj:assertj-core:$assertjVersion"
 testImplementation "org.robolectric:robolectric:$robolectricVersion"
 testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
 testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
-testImplementation("androidx.test:runner:$androidxTestVersion") {
-    exclude module: 'support-annotations'
-}
-testImplementation("androidx.test:rules:$androidxTestVersion") {
-    exclude module: 'support-annotations'
-}
+androidTestImplementation "androidx.test.ext:junit:$androidxTestVersion"
