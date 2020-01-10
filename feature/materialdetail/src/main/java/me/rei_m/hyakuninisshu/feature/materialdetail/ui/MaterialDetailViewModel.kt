@@ -30,9 +30,9 @@ import kotlin.coroutines.CoroutineContext
 class MaterialDetailViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: MaterialDetailStore,
-    actionCreator: MaterialActionCreator,
     dispatcher: Dispatcher,
+    actionCreator: MaterialActionCreator,
+    private val store: MaterialDetailStore,
     colorFilter: ColorFilter,
     initialPosition: Int
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
@@ -55,23 +55,21 @@ class MaterialDetailViewModel(
     class Factory(
         private val mainContext: CoroutineContext,
         private val ioContext: CoroutineContext,
-        private val store: MaterialDetailStore,
-        private val actionCreator: MaterialActionCreator,
         private val dispatcher: Dispatcher,
+        private val actionCreator: MaterialActionCreator,
+        private val store: MaterialDetailStore,
         private val colorFilter: ColorFilter,
         private val initialPosition: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MaterialDetailViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher,
-                colorFilter,
-                initialPosition
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = MaterialDetailViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            colorFilter,
+            initialPosition
+        ) as T
     }
 }

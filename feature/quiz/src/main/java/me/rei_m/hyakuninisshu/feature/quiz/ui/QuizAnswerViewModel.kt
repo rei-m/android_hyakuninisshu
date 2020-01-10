@@ -31,9 +31,9 @@ import kotlin.coroutines.CoroutineContext
 class QuizAnswerViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: QuizStore,
-    actionCreator: QuizActionCreator,
     dispatcher: Dispatcher,
+    actionCreator: QuizActionCreator,
+    private val store: QuizStore,
     quizId: KarutaQuizIdentifier
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
@@ -89,21 +89,19 @@ class QuizAnswerViewModel(
     class Factory(
         private val mainContext: CoroutineContext,
         private val ioContext: CoroutineContext,
-        private val store: QuizStore,
-        private val actionCreator: QuizActionCreator,
         private val dispatcher: Dispatcher,
+        private val actionCreator: QuizActionCreator,
+        private val store: QuizStore,
         private val quizId: KarutaQuizIdentifier
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return QuizAnswerViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher,
-                quizId
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = QuizAnswerViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            quizId
+        ) as T
     }
 }

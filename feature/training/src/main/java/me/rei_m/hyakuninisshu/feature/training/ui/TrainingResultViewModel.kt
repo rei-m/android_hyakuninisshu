@@ -29,9 +29,9 @@ import kotlin.coroutines.CoroutineContext
 class TrainingResultViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: TrainingStore,
-    private val actionCreator: TrainingActionCreator,
     dispatcher: Dispatcher,
+    private val actionCreator: TrainingActionCreator,
+    private val store: TrainingStore,
     private val analyticsHelper: AnalyticsHelper
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
@@ -58,21 +58,19 @@ class TrainingResultViewModel(
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: TrainingStore,
-        private val actionCreator: TrainingActionCreator,
         private val dispatcher: Dispatcher,
+        private val actionCreator: TrainingActionCreator,
+        private val store: TrainingStore,
         private val analyticsHelper: AnalyticsHelper
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TrainingResultViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher,
-                analyticsHelper
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = TrainingResultViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            analyticsHelper
+        ) as T
     }
 }

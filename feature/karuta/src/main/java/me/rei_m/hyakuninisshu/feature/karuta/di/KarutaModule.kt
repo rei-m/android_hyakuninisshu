@@ -34,17 +34,15 @@ class KarutaModule(
     fun provideKarutaViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
         @Named("ioContext") ioContext: CoroutineContext,
-        store: KarutaStore,
+        dispatcher: Dispatcher,
         actionCreator: KarutaActionCreator,
-        dispatcher: Dispatcher
-    ): KarutaViewModel.Factory {
-        return KarutaViewModel.Factory(
-            mainContext,
-            ioContext,
-            store,
-            actionCreator,
-            dispatcher,
-            karutaId
-        )
-    }
+        store: KarutaStore
+    ): KarutaViewModel.Factory = KarutaViewModel.Factory(
+        mainContext,
+        ioContext,
+        dispatcher,
+        actionCreator,
+        store,
+        karutaId
+    )
 }

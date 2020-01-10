@@ -46,7 +46,7 @@ class ExamHistoryFragment : DaggerFragment() {
 
         val viewModel = provideActivityViewModel(ExamHistoryViewModel::class.java, viewModelFactory)
 
-        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+        viewModel.unhandledErrorEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onError()
         })
 

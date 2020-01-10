@@ -35,18 +35,16 @@ class MaterialDetailModule(
     fun provideMaterialDetailViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
         @Named("ioContext") ioContext: CoroutineContext,
-        store: MaterialDetailStore,
+        dispatcher: Dispatcher,
         actionCreator: MaterialActionCreator,
-        dispatcher: Dispatcher
-    ): MaterialDetailViewModel.Factory {
-        return MaterialDetailViewModel.Factory(
-            mainContext,
-            ioContext,
-            store,
-            actionCreator,
-            dispatcher,
-            colorFilter,
-            initialPosition
-        )
-    }
+        store: MaterialDetailStore
+    ): MaterialDetailViewModel.Factory = MaterialDetailViewModel.Factory(
+        mainContext,
+        ioContext,
+        dispatcher,
+        actionCreator,
+        store,
+        colorFilter,
+        initialPosition
+    )
 }

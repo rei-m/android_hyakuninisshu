@@ -27,9 +27,9 @@ import kotlin.coroutines.CoroutineContext
 class KarutaViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: KarutaStore,
-    actionCreator: KarutaActionCreator,
     dispatcher: Dispatcher,
+    actionCreator: KarutaActionCreator,
+    private val store: KarutaStore,
     karutaId: KarutaIdentifier
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
@@ -69,21 +69,19 @@ class KarutaViewModel(
     class Factory(
         private val mainContext: CoroutineContext,
         private val ioContext: CoroutineContext,
-        private val store: KarutaStore,
-        private val actionCreator: KarutaActionCreator,
         private val dispatcher: Dispatcher,
+        private val actionCreator: KarutaActionCreator,
+        private val store: KarutaStore,
         private val karutaId: KarutaIdentifier
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return KarutaViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher,
-                karutaId
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = KarutaViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            karutaId
+        ) as T
     }
 }

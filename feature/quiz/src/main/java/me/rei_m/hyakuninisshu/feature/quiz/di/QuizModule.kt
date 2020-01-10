@@ -38,21 +38,19 @@ class QuizModule(
     fun provideQuizViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
         @Named("ioContext") ioContext: CoroutineContext,
-        store: QuizStore,
-        actionCreator: QuizActionCreator,
         dispatcher: Dispatcher,
+        actionCreator: QuizActionCreator,
+        store: QuizStore,
         device: Device
-    ): QuizViewModel.Factory {
-        return QuizViewModel.Factory(
-            mainContext,
-            ioContext,
-            store,
-            actionCreator,
-            dispatcher,
-            quizId,
-            kamiNoKuStyle,
-            shimoNoKuStyle,
-            device
-        )
-    }
+    ): QuizViewModel.Factory = QuizViewModel.Factory(
+        mainContext,
+        ioContext,
+        dispatcher,
+        actionCreator,
+        store,
+        device,
+        quizId,
+        kamiNoKuStyle,
+        shimoNoKuStyle
+    )
 }

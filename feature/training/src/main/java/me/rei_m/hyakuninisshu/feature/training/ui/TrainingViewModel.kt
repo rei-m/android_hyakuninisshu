@@ -34,9 +34,9 @@ import kotlin.coroutines.CoroutineContext
 class TrainingViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: TrainingStore,
+    dispatcher: Dispatcher,
     private val actionCreator: TrainingActionCreator,
-    dispatcher: Dispatcher
+    private val store: TrainingStore
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
@@ -79,19 +79,17 @@ class TrainingViewModel(
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: TrainingStore,
+        private val dispatcher: Dispatcher,
         private val actionCreator: TrainingActionCreator,
-        private val dispatcher: Dispatcher
+        private val store: TrainingStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TrainingViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = TrainingViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store
+        ) as T
     }
 }

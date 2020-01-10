@@ -60,10 +60,10 @@ class ExamResultFragment : DaggerFragment() {
         }
         viewModel = provideActivityViewModel(ExamResultViewModel::class.java, viewModelFactory)
 
-        viewModel.karutaExamId.observe(this, Observer {
+        viewModel.karutaExamId.observe(viewLifecycleOwner, Observer {
             karutaExamId = it
         })
-        viewModel.notFoundExamEvent.observe(this, EventObserver {
+        viewModel.notFoundExamEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onErrorFinish()
         })
 
@@ -78,7 +78,7 @@ class ExamResultFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("ExamResult", requireActivity())
 
-        binding.viewResult.clickKarutaEvent.observe(this, EventObserver {
+        binding.viewResult.clickKarutaEvent.observe(viewLifecycleOwner, EventObserver {
             navigator.navigateToKaruta(it)
         })
         binding.buttonBack.setOnClickListener {

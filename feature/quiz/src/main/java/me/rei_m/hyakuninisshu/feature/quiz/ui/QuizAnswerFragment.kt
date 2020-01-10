@@ -64,13 +64,13 @@ class QuizAnswerFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = provideFragmentViewModel(QuizAnswerViewModel::class.java, viewModelFactory)
-        viewModel.openNextQuizEvent.observe(this, EventObserver {
+        viewModel.openNextQuizEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onGoToNext()
         })
-        viewModel.openResultEvent.observe(this, EventObserver {
+        viewModel.openResultEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onGoToResult()
         })
-        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+        viewModel.unhandledErrorEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onErrorQuiz()
         })
 

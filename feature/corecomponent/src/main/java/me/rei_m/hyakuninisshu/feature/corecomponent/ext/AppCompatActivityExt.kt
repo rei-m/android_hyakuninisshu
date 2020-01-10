@@ -61,8 +61,8 @@ fun AppCompatActivity.showAlertDialog(@StringRes titleId: Int, @StringRes messag
         AlertDialogFragment.newInstance(
             titleId,
             messageId,
-            true,
-            false
+            hasPositiveButton = true,
+            hasNegativeButton = false
         ).show(supportFragmentManager, AlertDialogFragment.TAG)
     }
 }

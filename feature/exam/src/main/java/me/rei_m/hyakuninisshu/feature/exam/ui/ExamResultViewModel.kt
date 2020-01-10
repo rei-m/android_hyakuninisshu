@@ -31,9 +31,9 @@ import kotlin.coroutines.CoroutineContext
 class ExamResultViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: ExamStore,
-    actionCreator: ExamActionCreator,
     dispatcher: Dispatcher,
+    actionCreator: ExamActionCreator,
+    private val store: ExamStore,
     initialKarutaExamId: KarutaExamIdentifier?
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
@@ -66,22 +66,20 @@ class ExamResultViewModel(
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: ExamStore,
+        private val dispatcher: Dispatcher,
         private val actionCreator: ExamActionCreator,
-        private val dispatcher: Dispatcher
+        private val store: ExamStore
     ) : ViewModelProvider.Factory {
         var initialKarutaExamId: KarutaExamIdentifier? = null
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamResultViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher,
-                initialKarutaExamId
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ExamResultViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            initialKarutaExamId
+        ) as T
     }
 }

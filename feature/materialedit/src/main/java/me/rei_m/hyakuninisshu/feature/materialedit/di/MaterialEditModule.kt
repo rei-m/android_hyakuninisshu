@@ -34,15 +34,15 @@ class MaterialEditModule(
     fun provideMaterialEditViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
         @Named("ioContext") ioContext: CoroutineContext,
-        store: MaterialEditStore,
+        dispatcher: Dispatcher,
         actionCreator: MaterialActionCreator,
-        dispatcher: Dispatcher
+        store: MaterialEditStore
     ): MaterialEditViewModel.Factory = MaterialEditViewModel.Factory(
         mainContext,
         ioContext,
-        store,
-        actionCreator,
         dispatcher,
+        actionCreator,
+        store,
         karutaId
     )
 }

@@ -26,9 +26,9 @@ import kotlin.coroutines.CoroutineContext
 class ApplicationViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: ApplicationStore,
+    dispatcher: Dispatcher,
     actionCreator: ApplicationActionCreator,
-    dispatcher: Dispatcher
+    private val store: ApplicationStore
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val isReady = store.isReady
@@ -47,19 +47,17 @@ class ApplicationViewModel(
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: ApplicationStore,
+        private val dispatcher: Dispatcher,
         private val actionCreator: ApplicationActionCreator,
-        private val dispatcher: Dispatcher
+        private val store: ApplicationStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ApplicationViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ApplicationViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store
+        ) as T
     }
 }

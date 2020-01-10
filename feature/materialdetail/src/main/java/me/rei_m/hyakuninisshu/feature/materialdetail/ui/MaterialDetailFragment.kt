@@ -49,7 +49,7 @@ class MaterialDetailFragment : DaggerFragment() {
 
         store.karutaList.map {
             it.find { karuta -> karuta.identifier == karutaId }
-        }.observe(this, Observer {
+        }.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             binding.karuta = it
         })

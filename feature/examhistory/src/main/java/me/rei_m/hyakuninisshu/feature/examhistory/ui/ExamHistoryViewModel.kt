@@ -29,9 +29,9 @@ import kotlin.coroutines.CoroutineContext
 class ExamHistoryViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: ExamHistoryStore,
+    dispatcher: Dispatcher,
     actionCreator: ExamActionCreator,
-    dispatcher: Dispatcher
+    private val store: ExamHistoryStore
 ) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
@@ -52,19 +52,17 @@ class ExamHistoryViewModel(
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: ExamHistoryStore,
+        private val dispatcher: Dispatcher,
         private val actionCreator: ExamActionCreator,
-        private val dispatcher: Dispatcher
+        private val store: ExamHistoryStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamHistoryViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ExamHistoryViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store
+        ) as T
     }
 }

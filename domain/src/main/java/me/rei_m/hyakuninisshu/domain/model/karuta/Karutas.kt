@@ -58,7 +58,10 @@ class Karutas(private val values: List<Karuta>) {
 
             val dupIds = this.ids.toMutableList().apply { remove(it) }
 
-            val choices = generateRandomIndexArray(dupIds.size, ChoiceNo.values().size - 1).map { choiceIndex ->
+            val choices = generateRandomIndexArray(
+                dupIds.size,
+                ChoiceNo.values().size - 1
+            ).map { choiceIndex ->
                 dupIds[choiceIndex]
             }.toMutableList()
 
@@ -72,7 +75,7 @@ class Karutas(private val values: List<Karuta>) {
     }
 
     override fun equals(other: Any?): Boolean {
-        other as? Karutas ?: return false
+        if (other !is Karutas) return false
         return (values == other.values)
     }
 

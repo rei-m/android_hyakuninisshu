@@ -33,9 +33,9 @@ import kotlin.coroutines.CoroutineContext
 class MaterialEditViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: MaterialEditStore,
-    private val actionCreator: MaterialActionCreator,
     dispatcher: Dispatcher,
+    private val actionCreator: MaterialActionCreator,
+    private val store: MaterialEditStore,
     private val karutaId: KarutaIdentifier,
     firstPhraseKanji: String?,
     firstPhraseKana: String?,
@@ -209,9 +209,9 @@ class MaterialEditViewModel(
     class Factory(
         private val mainContext: CoroutineContext,
         private val ioContext: CoroutineContext,
-        private val store: MaterialEditStore,
-        private val actionCreator: MaterialActionCreator,
         private val dispatcher: Dispatcher,
+        private val actionCreator: MaterialActionCreator,
+        private val store: MaterialEditStore,
         private val karutaId: KarutaIdentifier
     ) : ViewModelProvider.Factory {
 
@@ -227,25 +227,23 @@ class MaterialEditViewModel(
         var fifthPhraseKana: String? = null
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MaterialEditViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                dispatcher,
-                karutaId,
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = MaterialEditViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            karutaId,
+            firstPhraseKanji,
+            firstPhraseKana,
+            secondPhraseKanji,
+            secondPhraseKana,
+            thirdPhraseKanji,
+            thirdPhraseKana,
+            fourthPhraseKanji,
+            fourthPhraseKana,
+            fifthPhraseKanji,
+            fifthPhraseKana
+        ) as T
     }
 }
