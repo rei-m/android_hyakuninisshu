@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import dagger.Binds
 import dagger.android.AndroidInjector
@@ -88,7 +89,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
         setupAd()
 
-        binding.pager.adapter = MaterialDetailPagerAdapter(supportFragmentManager)
+        binding.pager.adapter = MaterialDetailPagerAdapter(supportFragmentManager, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
 
         binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {}

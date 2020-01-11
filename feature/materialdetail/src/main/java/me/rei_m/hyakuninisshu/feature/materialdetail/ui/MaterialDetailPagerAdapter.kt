@@ -20,8 +20,9 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 
 class MaterialDetailPagerAdapter(
     fm: FragmentManager,
+    behavior: Int,
     private var karutaList: List<Karuta> = listOf()
-) : FragmentStatePagerAdapter(fm) {
+) : FragmentStatePagerAdapter(fm, behavior) {
 
     override fun getItem(position: Int) = MaterialDetailFragment.newInstance(
         karutaList[position].identifier

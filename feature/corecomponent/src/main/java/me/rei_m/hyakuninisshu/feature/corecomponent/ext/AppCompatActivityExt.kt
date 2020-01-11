@@ -22,7 +22,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
 
 fun AppCompatActivity.addFragment(
@@ -70,4 +69,4 @@ fun AppCompatActivity.showAlertDialog(@StringRes titleId: Int, @StringRes messag
 fun <T : ViewModel> AppCompatActivity.provideViewModel(
     viewModelClass: Class<T>,
     factory: ViewModelProvider.Factory
-) = ViewModelProviders.of(this, factory).get(viewModelClass)
+) = ViewModelProvider(this, factory).get(viewModelClass)
