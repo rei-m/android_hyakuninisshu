@@ -12,15 +12,14 @@
  */
 
 ext {
-    junitVersion = '4.13'
+    androidxTestVersion = '1.1.1'
     assertjVersion = '3.14.0'
     robolectricVersion = '4.3.1'
-    androidxTestVersion = '1.1.1'
 }
 
-testImplementation "junit:junit:$junitVersion"
+testImplementation "androidx.test.ext:junit:$androidxTestVersion"
+testImplementation "android.arch.core:core-testing:1.2.0"
 testImplementation "org.assertj:assertj-core:$assertjVersion"
 testImplementation "org.robolectric:robolectric:$robolectricVersion"
 testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
 testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
-androidTestImplementation "androidx.test.ext:junit:$androidxTestVersion"
