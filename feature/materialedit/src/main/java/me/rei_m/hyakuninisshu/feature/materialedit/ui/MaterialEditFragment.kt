@@ -78,10 +78,8 @@ class MaterialEditFragment : DaggerFragment(),
         viewModel = provideActivityViewModel(MaterialEditViewModel::class.java, viewModelFactory)
 
         viewModel.confirmEditEvent.observe(viewLifecycleOwner, EventObserver { dialog ->
-            fragmentManager?.let {
-                dialog.setTargetFragment(this, 0)
-                dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
-            }
+            dialog.setTargetFragment(this, 0)
+            dialog.show(requireFragmentManager(), ConfirmMaterialEditDialogFragment.TAG)
         })
         viewModel.completeEditEvent.observe(viewLifecycleOwner, EventObserver {
             navigator.back()

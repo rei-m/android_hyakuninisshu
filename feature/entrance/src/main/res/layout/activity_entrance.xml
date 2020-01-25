@@ -11,20 +11,18 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
+                android:background="@color/colorPrimary" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <RelativeLayout
-            android:id="@+id/root"
+            android:id="@+id/container_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:elevation="@{@dimen/elevation_level_none}"

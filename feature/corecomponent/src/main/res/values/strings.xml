@@ -58,6 +58,9 @@
     <string name="editing_material">資料編集</string>
     <string name="char_material">資</string>
     <string name="animation_condition">読み札のアニメーション表示</string>
+    <string name="range_start">出題開始</string>
+    <string name="range_end">出題終了</string>
+
 
     <string name="one">一</string>
     <string name="two">二</string>
