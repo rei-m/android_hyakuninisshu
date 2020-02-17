@@ -36,6 +36,9 @@ class ExamHistoryFragment : DaggerFragment() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
+    private var _binding: FragmentExamHistoryBinding? = null
+    private val binding get() = _binding!!
+
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(
@@ -50,7 +53,7 @@ class ExamHistoryFragment : DaggerFragment() {
             listener?.onError()
         })
 
-        val binding = FragmentExamHistoryBinding.inflate(inflater, container, false)
+        _binding = FragmentExamHistoryBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -59,6 +62,11 @@ class ExamHistoryFragment : DaggerFragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

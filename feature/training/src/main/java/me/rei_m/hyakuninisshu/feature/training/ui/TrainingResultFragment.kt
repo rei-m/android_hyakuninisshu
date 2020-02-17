@@ -38,16 +38,18 @@ class TrainingResultFragment : DaggerFragment() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private lateinit var binding: FragmentTrainingResultBinding
+    private var _binding: FragmentTrainingResultBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val viewModel = provideActivityViewModel(TrainingResultViewModel::class.java, viewModelFactory)
+        val viewModel =
+            provideActivityViewModel(TrainingResultViewModel::class.java, viewModelFactory)
 
-        binding = FragmentTrainingResultBinding.inflate(inflater, container, false)
+        _binding = FragmentTrainingResultBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -57,6 +59,11 @@ class TrainingResultFragment : DaggerFragment() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("TrainingResult", requireActivity())

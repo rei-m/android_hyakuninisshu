@@ -44,7 +44,8 @@ class ExamResultFragment : DaggerFragment() {
 
     private lateinit var viewModel: ExamResultViewModel
 
-    private lateinit var binding: FragmentExamResultBinding
+    private var _binding: FragmentExamResultBinding? = null
+    private val binding get() = _binding!!
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -67,11 +68,16 @@ class ExamResultFragment : DaggerFragment() {
             listener?.onErrorFinish()
         })
 
-        binding = FragmentExamResultBinding.inflate(inflater, container, false)
+        _binding = FragmentExamResultBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

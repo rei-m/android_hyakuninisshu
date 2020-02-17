@@ -33,6 +33,9 @@ class MaterialDetailFragment : DaggerFragment() {
     @Inject
     lateinit var store: MaterialDetailStore
 
+    private var _binding: FragmentMaterialDetailBinding? = null
+    private val binding get() = _binding!!
+
     private val karutaId by lazy {
         requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
             "$ARG_KARUTA_ID is missing"
@@ -44,7 +47,7 @@ class MaterialDetailFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentMaterialDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentMaterialDetailBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
         store.karutaList.map {
@@ -55,6 +58,11 @@ class MaterialDetailFragment : DaggerFragment() {
         })
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     @dagger.Module

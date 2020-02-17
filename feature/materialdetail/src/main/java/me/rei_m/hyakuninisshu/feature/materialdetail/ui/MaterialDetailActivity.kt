@@ -89,7 +89,10 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
         setupAd()
 
-        binding.pager.adapter = MaterialDetailPagerAdapter(supportFragmentManager, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+        binding.pager.adapter = MaterialDetailPagerAdapter(
+            supportFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+        )
 
         binding.pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {}
@@ -164,7 +167,12 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Factory<MaterialDetailActivity> {
             override fun create(instance: MaterialDetailActivity): AndroidInjector<MaterialDetailActivity> =
-                activityModule(ActivityModule(instance)).materialDetailModule(MaterialDetailModule(instance.colorFilter, instance.lastPosition))
+                activityModule(ActivityModule(instance)).materialDetailModule(
+                    MaterialDetailModule(
+                        instance.colorFilter,
+                        instance.lastPosition
+                    )
+                )
                     .build()
 
             abstract fun activityModule(module: ActivityModule): Builder
