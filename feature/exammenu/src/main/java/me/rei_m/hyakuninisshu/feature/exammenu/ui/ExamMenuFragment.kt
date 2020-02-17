@@ -38,18 +38,25 @@ class ExamMenuFragment : DaggerFragment() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private lateinit var binding: FragmentExamMenuBinding
+    private var _binding: FragmentExamMenuBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentExamMenuBinding.inflate(inflater, container, false)
-        binding.viewModel = provideActivityViewModel(ExamMenuViewModel::class.java, viewModelFactory)
+        _binding = FragmentExamMenuBinding.inflate(inflater, container, false)
+        binding.viewModel =
+            provideActivityViewModel(ExamMenuViewModel::class.java, viewModelFactory)
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

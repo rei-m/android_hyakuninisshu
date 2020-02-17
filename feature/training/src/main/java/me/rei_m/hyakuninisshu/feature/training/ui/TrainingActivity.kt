@@ -30,7 +30,12 @@ import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar

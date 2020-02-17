@@ -63,7 +63,11 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         setupAd()
 
         if (savedInstanceState == null) {
-            addFragment(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
+            addFragment(
+                R.id.content,
+                MaterialEditFragment.newInstance(karutaId),
+                MaterialEditFragment.TAG
+            )
         }
     }
 
@@ -116,7 +120,11 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Factory<MaterialEditActivity> {
             override fun create(instance: MaterialEditActivity): AndroidInjector<MaterialEditActivity> =
-                activityModule(ActivityModule(instance)).materialEditModule(MaterialEditModule(instance.karutaId))
+                activityModule(ActivityModule(instance)).materialEditModule(
+                    MaterialEditModule(
+                        instance.karutaId
+                    )
+                )
                     .build()
 
             abstract fun activityModule(module: ActivityModule): Builder

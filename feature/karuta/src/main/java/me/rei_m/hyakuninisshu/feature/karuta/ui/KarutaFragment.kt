@@ -38,6 +38,9 @@ class KarutaFragment : DaggerFragment() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
+    private var _binding: FragmentKarutaBinding? = null
+    private val binding get() = _binding!!
+
     private var listener: OnFragmentInteractionListener? = null
 
     private val karutaId by lazy {
@@ -56,11 +59,16 @@ class KarutaFragment : DaggerFragment() {
             listener?.onError()
         })
 
-        val binding = FragmentKarutaBinding.inflate(inflater, container, false)
+        _binding = FragmentKarutaBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

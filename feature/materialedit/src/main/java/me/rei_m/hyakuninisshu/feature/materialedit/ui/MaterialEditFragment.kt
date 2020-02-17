@@ -44,7 +44,8 @@ class MaterialEditFragment : DaggerFragment(),
     @Inject
     lateinit var navigator: Navigator
 
-    private lateinit var binding: FragmentMaterialEditBinding
+    private var _binding: FragmentMaterialEditBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: MaterialEditViewModel
 
@@ -93,21 +94,22 @@ class MaterialEditFragment : DaggerFragment(),
             listener?.onError()
         })
 
-        binding = FragmentMaterialEditBinding.inflate(inflater, container, false)
+        _binding = FragmentMaterialEditBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
 
+    override fun onDestroyView() {
+        viewModel.onDestroyView()
+        _binding = null
+        super.onDestroyView()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("MaterialEdit-${karutaId.value}", requireActivity())
-    }
-
-    override fun onDestroyView() {
-        viewModel.onDestroyView()
-        super.onDestroyView()
     }
 
     override fun onAttach(context: Context) {

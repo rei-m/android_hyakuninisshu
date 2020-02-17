@@ -48,7 +48,8 @@ class QuizAnswerFragment : DaggerFragment() {
 
     private lateinit var viewModel: QuizAnswerViewModel
 
-    private lateinit var binding: FragmentQuizAnswerBinding
+    private var _binding: FragmentQuizAnswerBinding? = null
+    private val binding get() = _binding!!
 
     private var listener: QuizInteractionListener? = null
 
@@ -74,11 +75,16 @@ class QuizAnswerFragment : DaggerFragment() {
             listener?.onErrorQuiz()
         })
 
-        binding = FragmentQuizAnswerBinding.inflate(inflater, container, false)
+        _binding = FragmentQuizAnswerBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -15,7 +15,12 @@
 package me.rei_m.hyakuninisshu.feature.materiallist.ui
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.DaggerFragment
@@ -38,6 +43,9 @@ class MaterialListFragment : DaggerFragment(), MaterialListAdapter.OnItemInterac
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
+    private var _binding: FragmentMaterialListBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var viewModel: MaterialListViewModel
 
     override fun onCreateView(
@@ -46,22 +54,33 @@ class MaterialListFragment : DaggerFragment(), MaterialListAdapter.OnItemInterac
         savedInstanceState: Bundle?
     ): View? {
         if (savedInstanceState != null) {
-            viewModelFactory.colorFilter = ColorFilter[savedInstanceState.getInt(KEY_MATERIAL_COLOR_FILTER)]
+            viewModelFactory.colorFilter =
+                ColorFilter[savedInstanceState.getInt(KEY_MATERIAL_COLOR_FILTER)]
         }
         viewModel = provideActivityViewModel(MaterialListViewModel::class.java, viewModelFactory)
 
-        val binding = FragmentMaterialListBinding.inflate(inflater, container, false)
+        _binding = FragmentMaterialListBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         with(binding.recyclerKarutaList) {
             adapter = MaterialListAdapter(requireContext(), listOf(), this@MaterialListFragment)
-            addItemDecoration(DividerItemDecoration(inflater.context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(
+                DividerItemDecoration(
+                    inflater.context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
         }
 
         setHasOptionsMenu(true)
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,12 +93,11 @@ class MaterialListFragment : DaggerFragment(), MaterialListAdapter.OnItemInterac
         super.onSaveInstanceState(outState)
     }
 
-
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         for (colorFilter in ColorFilter.values()) {
-            val menuItem = menu.add(Menu.NONE, colorFilter.ordinal, Menu.NONE, colorFilter.label(resources))
+            val menuItem =
+                menu.add(Menu.NONE, colorFilter.ordinal, Menu.NONE, colorFilter.label(resources))
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             menuItem.setOnMenuItemClickListener {
                 viewModel.colorFilter = colorFilter
