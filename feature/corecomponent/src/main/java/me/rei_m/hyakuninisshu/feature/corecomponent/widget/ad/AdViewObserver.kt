@@ -14,12 +14,14 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad
 
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import javax.inject.Inject
@@ -72,4 +74,21 @@ class AdViewObserver @Inject constructor(private val adViewFactory: AdViewFactor
     fun pauseAd() {
         adView?.pause()
     }
+
+//    private val adSize: AdSize
+//        get() {
+//            val display = windowManager.defaultDisplay
+//            val outMetrics = DisplayMetrics()
+//            display.getMetrics(outMetrics)
+//
+//            val density = outMetrics.density
+//
+//            var adWidthPixels = ad_view_container.width.toFloat()
+//            if (adWidthPixels == 0f) {
+//                adWidthPixels = outMetrics.widthPixels.toFloat()
+//            }
+//
+//            val adWidth = (adWidthPixels / density).toInt()
+//            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
+//        }
 }
