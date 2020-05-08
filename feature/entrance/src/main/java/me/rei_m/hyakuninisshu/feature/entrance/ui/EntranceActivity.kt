@@ -17,8 +17,6 @@ package me.rei_m.hyakuninisshu.feature.entrance.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import dagger.Binds
 import dagger.android.AndroidInjector
@@ -97,17 +95,7 @@ class EntranceActivity : DaggerAppCompatActivity() {
 
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
-        val adView = adViewObserver.adView()
-        val params = RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            addRule(RelativeLayout.ABOVE, R.id.bottom_navigation)
-        }
-        adView.layoutParams = params
-        binding.containerLayout.addView(adView)
-
-        adViewObserver.loadAd()
+        adViewObserver.loadAd(this, binding.adViewContainer)
     }
 
     private fun setupAppRate() {
