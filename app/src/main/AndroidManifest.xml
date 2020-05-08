@@ -14,7 +14,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
         <uses-library
@@ -78,17 +78,20 @@
             android:name=".feature.materialdetail.ui.MaterialDetailActivity"
             android:label="@string/function_material"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".feature.materialedit.ui.MaterialEditActivity"
             android:label="@string/editing_material"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".feature.examhistory.ui.ExamHistoryActivity"
             android:label="@string/exam_history"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- Include the AdActivity configChanges and theme. -->
         <activity
