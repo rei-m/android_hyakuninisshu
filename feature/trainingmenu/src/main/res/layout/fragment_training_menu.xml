@@ -206,9 +206,9 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_start_training"
-                style="@style/AccentButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
@@ -218,6 +218,10 @@
                 android:layout_marginRight="@dimen/margin_m"
                 android:layout_marginBottom="@dimen/height_ad_banner"
                 android:text="@string/start_training"
+                android:textSize="@dimen/text_m"
+                app:backgroundTint="@color/colorSecondary"
+                app:icon="@drawable/ic_edit_white_24dp"
+                app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
