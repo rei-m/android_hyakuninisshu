@@ -6,11 +6,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/height_ad_banner">
 
             <TextView
                 android:id="@+id/text_title_setting"
@@ -19,6 +21,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/training_setting"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintBottom_toTopOf="@id/input_layout_range_from"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -216,7 +219,6 @@
                 android:layout_marginTop="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginRight="@dimen/margin_m"
-                android:layout_marginBottom="@dimen/height_ad_banner"
                 android:text="@string/start_training"
                 android:textSize="@dimen/text_m"
                 app:backgroundTint="@color/colorSecondary"
