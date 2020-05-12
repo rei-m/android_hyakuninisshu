@@ -61,13 +61,13 @@ class SupportFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("Entrance - Support", requireActivity())
 
-        binding.textLicense.setOnClickListener {
+        binding.buttonLicense.setOnClickListener {
             navigator.openLicenceDialog()
         }
-        binding.textPrivacyPolicy.setOnClickListener {
+        binding.buttonPrivacyPolicy.setOnClickListener {
             navigator.openPrivacyPolicy()
         }
-        binding.textReview.setOnClickListener {
+        binding.buttonReview.setOnClickListener {
             navigator.navigateToAppStore()
         }
     }
