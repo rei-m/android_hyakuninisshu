@@ -13,108 +13,143 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/tatami">
+        android:background="@drawable/tatami"
+        android:theme="@style/AppTheme">
 
-        <TextView
-            android:id="@+id/text_training_score_title"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_m"
+            android:layout_margin="@dimen/margin_m"
+            app:cardBackgroundColor="#f6fff8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_training_score_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xs"
+                    android:paddingStart="@dimen/padding_m"
+                    android:paddingTop="@dimen/padding_m"
+                    android:paddingEnd="@dimen/padding_m"
+                    android:text="@string/number_of_correct_answers"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_training_score"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_s"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/padding_m"
+                    android:paddingEnd="@dimen/padding_m"
+                    android:text="@{viewModel.score}"
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    android:textSize="@dimen/text_xl"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_training_score_title"
+                    tools:text="10 / 100" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_average_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_m"
             android:layout_marginTop="@dimen/margin_m"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:background="@color/white99"
-            android:gravity="start"
-            android:padding="@dimen/padding_xs"
-            android:text="@string/number_of_correct_answers"
-            app:layout_constraintBottom_toTopOf="@id/text_training_score"
+            app:cardBackgroundColor="#f6fff8"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/card_score">
 
-        <TextView
-            android:id="@+id/text_training_score"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_m"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:background="@color/white99"
-            android:gravity="center"
-            android:text="@{viewModel.score}"
-            android:textSize="@dimen/text_xl"
-            app:layout_constraintBottom_toTopOf="@id/text_training_average_time_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_training_score_title"
-            tools:text="10 / 100" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/text_training_average_time_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_m"
-            android:layout_marginTop="@dimen/margin_m"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:background="@color/white99"
-            android:gravity="start"
-            android:padding="@dimen/padding_xs"
-            android:text="@string/average_response_time"
-            app:layout_constraintBottom_toTopOf="@id/text_training_average_time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_training_score" />
+                <TextView
+                    android:id="@+id/text_training_average_time_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xs"
+                    android:paddingStart="@dimen/padding_m"
+                    android:paddingTop="@dimen/padding_m"
+                    android:paddingEnd="@dimen/padding_m"
+                    android:text="@string/average_response_time"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/text_training_average_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_m"
-            android:layout_marginEnd="@dimen/margin_m"
-            android:layout_marginBottom="@dimen/margin_l"
-            android:background="@color/white99"
-            android:gravity="center"
-            android:textSize="@dimen/text_xl"
-            app:averageAnswerSec="@{viewModel.averageAnswerSec}"
-            app:layout_constraintBottom_toTopOf="@id/button_restart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_training_average_time_title"
-            tools:text="1.24秒" />
+                <TextView
+                    android:id="@+id/text_training_average_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_s"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/padding_m"
+                    android:paddingEnd="@dimen/padding_m"
+                    android:text="@{viewModel.score}"
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    android:textSize="@dimen/text_xl"
+                    app:averageAnswerSec="@{viewModel.averageAnswerSec}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_training_average_time_title"
+                    tools:text="1.24秒" />
 
-        <Button
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_restart"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_m"
+            android:layout_marginTop="@dimen/margin_ll"
             android:layout_marginEnd="@dimen/margin_m"
-            android:layout_marginBottom="@dimen/margin_m"
             android:onClick="@{() -> viewModel.onClickPracticeWrongKarutas()}"
+            android:paddingLeft="@dimen/padding_m"
+            android:paddingRight="@dimen/padding_m"
             android:text="@string/practice_wrong_karutas"
-            app:layout_constraintBottom_toTopOf="@id/button_back"
+            app:icon="@drawable/ic_rotate_right_white_24dp"
+            app:iconGravity="textStart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_training_average_time"
+            app:layout_constraintTop_toBottomOf="@id/card_average_time"
             app:visibleOrGone="@{viewModel.canRestartTraining}" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_back"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_m"
+            android:layout_marginTop="@dimen/margin_m"
             android:layout_marginEnd="@dimen/margin_m"
+            android:backgroundTint="#e0e0e0"
+            android:paddingLeft="@dimen/padding_m"
+            android:paddingRight="@dimen/padding_m"
             android:text="@string/back_menu"
+            android:textColor="@android:color/primary_text_light"
+            app:icon="@drawable/ic_arrow_back_black_24dp"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/primary_text_light"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_restart" />
 
