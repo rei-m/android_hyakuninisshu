@@ -16,7 +16,6 @@ package me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad
 
 import android.util.DisplayMetrics
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -57,12 +56,8 @@ class AdViewObserver @Inject constructor() :
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun releaseAd() {
-        adView?.let {
-            it.adListener = null
-            val parent = it.parent as ViewGroup
-            parent.removeView(adView)
-            it.destroy()
-        }
+        adView?.adListener = null
+        adView?.destroy()
         adView = null
     }
 
