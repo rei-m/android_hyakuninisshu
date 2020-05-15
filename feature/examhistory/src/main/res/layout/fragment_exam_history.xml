@@ -12,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
 
         <TextView
             android:id="@+id/text_number_of_correct_title"
@@ -21,10 +22,10 @@
             android:gravity="start"
             android:padding="@dimen/padding_m"
             android:text="@string/number_of_correct"
+            android:textAppearance="?attr/textAppearanceHeadline3"
+            android:textSize="@dimen/text_m"
             app:layout_constraintBottom_toTopOf="@id/view_separate_title"
             app:layout_constraintEnd_toStartOf="@id/average_response_time_title"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/average_response_time_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,16 +35,14 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:paddingStart="0dp"
-            android:paddingLeft="0dp"
             android:paddingTop="@dimen/padding_m"
             android:paddingEnd="@dimen/padding_m"
-            android:paddingRight="@dimen/padding_m"
             android:paddingBottom="@dimen/padding_m"
             android:text="@string/average_response_time"
+            android:textAppearance="?attr/textAppearanceHeadline3"
+            android:textSize="@dimen/text_m"
             app:layout_constraintBottom_toTopOf="@id/view_separate_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/text_number_of_correct_title"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@id/text_number_of_correct_title"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,8 +53,6 @@
             android:background="@color/black22"
             app:layout_constraintBottom_toTopOf="@id/recycler_karuta_exam_list"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_number_of_correct_title" />
 
@@ -67,8 +64,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_separate_title" />
 
@@ -78,8 +73,6 @@
             android:background="@color/whiteSmoke"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:visibleOrGone="@{viewModel.isLoading}"

@@ -20,6 +20,7 @@
     <string name="license">ライセンス</string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="version">version: %1$s</string>
+    <string name="update_confirm">変更の確認</string>
     <string name="update">変更する</string>
     <string name="back">戻る</string>
 
