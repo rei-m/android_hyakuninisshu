@@ -94,7 +94,7 @@ class QuizFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = provideFragmentViewModel(QuizViewModel::class.java, viewModelFactory)
-        viewModel.content.observe(viewLifecycleOwner, Observer<KarutaQuizContent> {
+        viewModel.content.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             when (it.quiz.state) {
                 KarutaQuiz.State.IN_ANSWER -> {
@@ -168,7 +168,7 @@ class QuizFragment : DaggerFragment() {
 
         val animationSpeedValue = animationSpeed.value ?: return
 
-        val firstLine = listOf<KarutaTextView>(
+        val firstLine = listOf(
             binding.phrase11,
             binding.phrase12,
             binding.phrase13,
@@ -178,7 +178,7 @@ class QuizFragment : DaggerFragment() {
         )
         firstLine.forEach { it.visibility = View.INVISIBLE }
 
-        val secondLine = listOf<KarutaTextView>(
+        val secondLine = listOf(
             binding.phrase21,
             binding.phrase22,
             binding.phrase23,
@@ -190,7 +190,7 @@ class QuizFragment : DaggerFragment() {
         )
         secondLine.forEach { it.visibility = View.INVISIBLE }
 
-        val thirdLine = listOf<KarutaTextView>(
+        val thirdLine = listOf(
             binding.phrase31,
             binding.phrase32,
             binding.phrase33,

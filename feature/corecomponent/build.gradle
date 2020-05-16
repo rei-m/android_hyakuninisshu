@@ -28,13 +28,13 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.1.0'
     api 'androidx.legacy:legacy-support-v4:1.0.0'
     api "androidx.annotation:annotation:$androidxAnnotationVersion"
-    api 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
+    api 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
     api "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     api "androidx.lifecycle:lifecycle-reactivestreams:$lifecycleVersion"
 
     api 'com.google.android.material:material:1.1.0'
 
-    api 'com.google.firebase:firebase-core:17.4.0'
+    api 'com.google.firebase:firebase-core:17.4.1'
     api 'com.google.firebase:firebase-ads:19.1.0'
 
     api "com.github.bumptech.glide:glide:$glideVersion"
