@@ -12,24 +12,28 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_m">
+            android:paddingLeft="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_m"
+            android:paddingRight="@dimen/padding_m"
+            android:paddingBottom="@dimen/height_ad_banner">
 
             <ImageView
                 android:id="@+id/image_karuta"
                 android:layout_width="@dimen/width_karuta_thumbnail"
-                android:layout_height="@dimen/height_karuta_thumbnail"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
+                android:background="@android:color/white"
                 android:contentDescription="@string/karuta"
+                android:elevation="@dimen/elevation_level_m"
                 app:karutaSrc="@{viewModel.karutaImageNo}"
                 app:layout_constraintBottom_toTopOf="@id/text_creator_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 tools:src="@drawable/karuta_001" />
@@ -40,11 +44,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/creator"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/text_creator"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/image_karuta" />
 
@@ -52,12 +55,11 @@
                 android:id="@+id/text_creator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:creator="@{viewModel.creator}"
                 app:karutaNo="@{viewModel.karutaNo}"
                 app:layout_constraintBottom_toTopOf="@id/text_karuta_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_creator_title"
                 tools:text="一番 / 天智天皇" />
@@ -68,11 +70,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/original_text"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/text_kami_no_ku_kanji"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_creator" />
 
@@ -81,10 +82,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.kamiNoKuKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintBottom_toTopOf="@id/text_shimo_no_ku_kanji"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_karuta_title"
                 tools:text="秋の田の　かりほの庵の　苫をあらみ" />
@@ -94,10 +94,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.shimoNoKuKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintBottom_toTopOf="@id/text_kami_no_ku_kana"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_kami_no_ku_kanji"
                 tools:text="わが衣手は　露にぬれつつ" />
@@ -106,11 +105,10 @@
                 android:id="@+id/text_kami_no_ku_kana"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:kimariji="@{viewModel.kimariji}"
                 app:layout_constraintBottom_toTopOf="@id/text_shimo_no_ku_kana"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_shimo_no_ku_kanji"
                 app:textKamiNoKuKana="@{viewModel.kamiNoKuKana}"
@@ -121,10 +119,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.shimoNoKuKana}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintBottom_toTopOf="@id/text_translation_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_kami_no_ku_kana"
                 tools:text="わがころもでは　つゆにねれつつ" />
@@ -135,11 +132,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/translation"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/text_translation"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_shimo_no_ku_kana" />
 
@@ -147,12 +143,10 @@
                 android:id="@+id/text_translation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/height_ad_banner"
                 android:text="@{viewModel.translation}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_translation_title"
                 tools:text="秋の田圃のほとりにある仮小屋の、屋根を葺いた苫の編み目が粗いので、私の衣の袖は露に濡れていくばかりだ。" />
@@ -163,8 +157,6 @@
                 android:background="@color/whiteSmoke"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:visibleOrGone="@{viewModel.isLoading}"

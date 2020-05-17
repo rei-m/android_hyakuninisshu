@@ -17,8 +17,6 @@ package me.rei_m.hyakuninisshu.feature.exam.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -135,24 +133,12 @@ class ExamActivity : DaggerAppCompatActivity(),
 
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
-        val adView = adViewObserver.adView()
-
-        val params = RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
-        }
-        adView.layoutParams = params
-        binding.root.addView(adView)
-
+        adViewObserver.loadAd(this, binding.adViewContainer)
         if (viewModel.isVisibleAd.value == true) {
             adViewObserver.showAd()
         } else {
             adViewObserver.hideAd()
         }
-
-        adViewObserver.loadAd()
     }
 
     @ActivityScope

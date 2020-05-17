@@ -99,7 +99,7 @@ apply from: rootProject.file('gradle/dependencies/androidTest.gradle'), to: depe
 ext {
     multidexVersion = '2.0.1'
     crashlyticsVersion = '2.10.1'
-    leakcanaryVersion = '2.1'
+    leakcanaryVersion = '2.2'
 }
 
 dependencies {

@@ -48,7 +48,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,6 +63,7 @@
                 android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@string/text_confirm_edit"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -70,6 +72,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@string/text_caution_edit"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="@dimen/text_xs" />
 
@@ -80,6 +83,7 @@
                 android:layout_marginTop="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@string/first_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -88,6 +92,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{firstPhraseKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="秋の田の" />
 
             <TextView
@@ -96,6 +101,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{firstPhraseKana}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="あきのたの" />
 
             <TextView
@@ -105,6 +111,7 @@
                 android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@string/second_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -113,6 +120,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{secondPhraseKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="かりほの庵の" />
 
             <TextView
@@ -121,6 +129,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{secondPhraseKana}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="かりほのいほの" />
 
             <TextView
@@ -130,6 +139,7 @@
                 android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@string/third_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -138,6 +148,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{thirdPhraseKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="苫をあらみ" />
 
             <TextView
@@ -146,6 +157,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{thirdPhraseKana}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="とまをあらみ" />
 
             <TextView
@@ -155,6 +167,7 @@
                 android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@string/fourth_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -163,6 +176,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{fourthPhraseKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="わが衣手は" />
 
             <TextView
@@ -171,6 +185,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{fourthPhraseKana}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="わがころもでは" />
 
             <TextView
@@ -180,6 +195,7 @@
                 android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@string/fifth_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
@@ -188,6 +204,7 @@
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:text="@{fifthPhraseKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="露にぬれつつ" />
 
             <TextView
@@ -197,6 +214,7 @@
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginBottom="@dimen/margin_m"
                 android:text="@{fifthPhraseKana}"
+                android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="つゆにぬれつつ" />
 
         </LinearLayout>

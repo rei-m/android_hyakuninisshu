@@ -64,7 +64,9 @@ open class App : DaggerApplication() {
     }
 
     protected open fun initAdMob() {
-        MobileAds.initialize(this, getString(R.string.ad_mob_app_id))
+        MobileAds.initialize(this) {
+            Timber.i("initialize Ad")
+        }
     }
 
     @Singleton

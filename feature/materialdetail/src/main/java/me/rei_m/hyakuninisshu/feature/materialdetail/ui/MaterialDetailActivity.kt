@@ -19,8 +19,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -142,17 +140,7 @@ class MaterialDetailActivity : DaggerAppCompatActivity(),
 
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
-        val adView = adViewObserver.adView()
-        val params = RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
-        }
-        adView.layoutParams = params
-        binding.root.addView(adView)
-
-        adViewObserver.loadAd()
+        adViewObserver.loadAd(this, binding.adViewContainer)
     }
 
     @ActivityScope

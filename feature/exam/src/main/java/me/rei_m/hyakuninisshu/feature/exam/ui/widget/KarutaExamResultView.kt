@@ -15,7 +15,6 @@
 package me.rei_m.hyakuninisshu.feature.exam.ui.widget
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -27,7 +26,6 @@ import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizJudgement
 import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.ViewIdHolder
 
 class KarutaExamResultView @JvmOverloads constructor(
     context: Context,
@@ -93,12 +91,7 @@ class KarutaExamResultView @JvmOverloads constructor(
 
         init {
             for (i in 0 until Karuta.NUMBER_OF_KARUTA) {
-                val viewId: Int = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
-                    View.generateViewId()
-                } else {
-                    ViewIdHolder.generateViewId()
-                }
-                cellViewIdList[i] = viewId
+                cellViewIdList[i] = View.generateViewId()
             }
         }
     }

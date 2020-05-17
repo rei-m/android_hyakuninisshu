@@ -16,16 +16,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/tatami"
+        android:theme="@style/AppTheme"
         app:visibleOrGone="@{viewModel.isVisibleContent}">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white66"
-            android:padding="@dimen/padding_m"
+            android:background="@color/whiteSmoke"
+            android:paddingStart="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_s"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingBottom="@dimen/padding_s"
             android:text="@{viewModel.quizCount}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="1 / 100" />
 
@@ -35,11 +38,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_m"
             android:background="@drawable/bg_karuta"
+            android:elevation="@dimen/elevation_level_m"
             android:padding="@dimen/padding_s"
-            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -53,7 +54,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/phrase_2"
-                    android:layout_toRightOf="@+id/phrase_2"
                     android:paddingTop="@dimen/padding_m"
                     android:paddingBottom="@dimen/padding_m">
 
@@ -133,9 +133,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="@dimen/margin_s"
+                    android:layout_marginStart="@dimen/margin_s"
                     android:layout_marginTop="@dimen/margin_ll"
-                    android:layout_marginRight="@dimen/margin_s"
+                    android:layout_marginEnd="@dimen/margin_s"
                     android:paddingTop="@dimen/padding_m"
                     android:paddingBottom="@dimen/padding_m">
 
@@ -232,7 +232,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_xxl"
                     android:layout_toStartOf="@+id/phrase_2"
-                    android:layout_toLeftOf="@+id/phrase_2"
                     android:paddingTop="@dimen/padding_m"
                     android:paddingBottom="@dimen/padding_m">
 
@@ -311,16 +310,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_m"
-            android:layout_marginLeft="@dimen/margin_m"
+            android:elevation="@dimen/elevation_level_m"
             android:onClick="@{() -> viewModel.onClickChoice(1)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(0).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/layout_choice_2"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/layout_choice_2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
@@ -335,6 +331,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(0)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
@@ -342,7 +339,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"
-                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(0)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
@@ -355,15 +352,13 @@
             style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_level_m"
             android:onClick="@{() -> viewModel.onClickChoice(2)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(1).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/layout_choice_3"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toRightOf="@id/layout_choice_1"
-            app:layout_constraintRight_toLeftOf="@id/layout_choice_3"
             app:layout_constraintStart_toEndOf="@id/layout_choice_1"
             app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
@@ -378,6 +373,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(1)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
@@ -385,7 +381,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"
-                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(1)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
             </LinearLayout>
@@ -396,15 +392,13 @@
             style="@style/KarutaChoicePhrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_level_m"
             android:onClick="@{() -> viewModel.onClickChoice(3)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(2).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/layout_choice_4"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toRightOf="@id/layout_choice_2"
-            app:layout_constraintRight_toLeftOf="@id/layout_choice_4"
             app:layout_constraintStart_toEndOf="@id/layout_choice_2"
             app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
@@ -419,6 +413,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(2)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
@@ -426,7 +421,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"
-                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(2)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
             </LinearLayout>
@@ -438,16 +433,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_m"
-            android:layout_marginRight="@dimen/margin_m"
+            android:elevation="@dimen/elevation_level_m"
             android:onClick="@{() -> viewModel.onClickChoice(4)}"
             android:padding="@dimen/padding_xs"
             android:visibility="@{viewModel.isVisibleChoiceList.get(3).booleanValue() ? View.VISIBLE : View.INVISIBLE}"
-            app:elevation="@{@dimen/elevation_level_xs}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toRightOf="@id/layout_choice_3"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@id/layout_choice_3"
             app:layout_constraintTop_toBottomOf="@id/layout_quiz_phrase">
 
@@ -462,6 +454,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFifthPhraseList.get(3)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
 
@@ -469,7 +462,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_xs"
-                    android:layout_marginLeft="@dimen/margin_xs"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     app:verticalText="@{viewModel.choiceFourthPhraseList.get(3)}"
                     app:verticalTextSizeByPx="@{viewModel.choiceTextSize}" />
             </LinearLayout>
@@ -479,12 +472,10 @@
             android:id="@+id/layout_quiz_result"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:elevation="@dimen/elevation_level_m"
             android:onClick="@{() -> viewModel.onClickResult()}"
-            app:elevation="@{@dimen/elevation_level_ms}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:visibleOrGone="@{viewModel.isVisibleResult}"
