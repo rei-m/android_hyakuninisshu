@@ -47,7 +47,7 @@ class VerticalSingleLineTextView @JvmOverloads constructor(
         with(paint) {
             isAntiAlias = true
             textSize = this@VerticalSingleLineTextView.textSize.toFloat()
-            color = ResourcesCompat.getColor(resources, R.color.black8a, null)
+            color = ResourcesCompat.getColor(resources, R.color.blackba, null)
             typeface = KarutaFontHolder.getTypeFace(context)
         }
     }

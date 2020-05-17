@@ -17,11 +17,7 @@ package me.rei_m.hyakuninisshu.feature.entrance.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.RelativeLayout
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import dagger.Binds
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
@@ -55,8 +51,9 @@ class EntranceActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_entrance)
+        binding = ActivityEntranceBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         setupActionBar(binding.toolbar) {
         }
@@ -87,24 +84,18 @@ class EntranceActivity : DaggerAppCompatActivity() {
                 return@setOnNavigationItemSelectedListener false
             }
             currentPageIndex = page.ordinal
-            replaceFragment(R.id.content, page.newInstance(), page.tag, FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            replaceFragment(
+                R.id.content,
+                page.newInstance(),
+                page.tag
+            )
             return@setOnNavigationItemSelectedListener true
         }
     }
 
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
-        val adView = adViewObserver.adView()
-        val params = RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            addRule(RelativeLayout.ABOVE, R.id.bottom_navigation)
-        }
-        adView.layoutParams = params
-        binding.root.addView(adView)
-
-        adViewObserver.loadAd()
+        adViewObserver.loadAd(this, binding.adViewContainer)
     }
 
     private fun setupAppRate() {

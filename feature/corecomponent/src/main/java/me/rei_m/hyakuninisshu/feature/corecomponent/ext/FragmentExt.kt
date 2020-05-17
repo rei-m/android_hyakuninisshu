@@ -18,7 +18,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 
 fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit): T {
     arguments = Bundle().apply(block)
@@ -28,9 +27,9 @@ fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit): T {
 fun <T : ViewModel> Fragment.provideActivityViewModel(
     viewModelClass: Class<T>,
     factory: ViewModelProvider.Factory
-) = ViewModelProviders.of(requireActivity(), factory).get(viewModelClass)
+) = ViewModelProvider(requireActivity(), factory).get(viewModelClass)
 
 fun <T : ViewModel> Fragment.provideFragmentViewModel(
     viewModelClass: Class<T>,
     factory: ViewModelProvider.Factory
-) = ViewModelProviders.of(this, factory).get(viewModelClass)
+) = ViewModelProvider(this, factory).get(viewModelClass)

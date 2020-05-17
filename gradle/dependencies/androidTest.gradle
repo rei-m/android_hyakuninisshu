@@ -12,24 +12,14 @@
  */
 
 ext {
-    espressoVersion = '3.2.0-beta01'
-    androidxTestVersion = '1.2.0-beta01'
+    espressoVersion = '3.2.0'
+    androidxTestVersion = '1.1.1'
 }
 
-androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion") {
-    exclude module: 'support-annotations'
-    exclude group: 'com.google.code.findbugs'
-}
-androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion") {
-    exclude module: 'support-annotations'
-    exclude group: 'com.google.code.findbugs'
-}
-androidTestImplementation("androidx.test:runner:$androidxTestVersion") {
-    exclude module: 'support-annotations'
-}
-androidTestImplementation("androidx.test:rules:$androidxTestVersion") {
-    exclude module: 'support-annotations'
-}
+androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+androidTestImplementation "androidx.test.ext:junit:$androidxTestVersion"
 androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
 androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 androidTestImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
+

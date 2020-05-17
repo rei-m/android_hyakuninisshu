@@ -15,11 +15,8 @@
 package me.rei_m.hyakuninisshu.action.exam
 
 import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIds
@@ -50,19 +47,15 @@ class ExamActionCreatorTest : TestHelper {
     private lateinit var karutaQuizRepository: KarutaQuizRepository
     private lateinit var karutaExamRepository: KarutaExamRepository
 
-    private lateinit var dispatcher: Dispatcher
-
     @Before
     fun setUp() {
-        dispatcher = mock {}
         karutaRepository = mock {}
         karutaQuizRepository = mock {}
         karutaExamRepository = mock {}
         actionCreator = ExamActionCreator(
             karutaRepository,
             karutaQuizRepository,
-            karutaExamRepository,
-            dispatcher
+            karutaExamRepository
         )
     }
 
@@ -84,15 +77,9 @@ class ExamActionCreatorTest : TestHelper {
 
         whenever(karutaExamRepository.findBy(examId)).thenReturn(exam)
 
-        actionCreator.fetch(examId)
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchExamAction::class.java)
-            if (it is FetchExamAction) {
-                assertThat(it.karutaExam).isEqualTo(exam)
-                assertThat(it.error).isNull()
-            }
-        })
+        val actualAction = actionCreator.fetch(examId)
+        assertThat(actualAction.karutaExam).isEqualTo(exam)
+        assertThat(actualAction.error).isNull()
     }
 
     @Test
@@ -100,42 +87,26 @@ class ExamActionCreatorTest : TestHelper {
         val examId = KarutaExamIdentifier(1)
         whenever(karutaExamRepository.findBy(examId)).thenReturn(null)
 
-        actionCreator.fetch(examId)
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchExamAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        val actualAction = actionCreator.fetch(examId)
+        assertThat(actualAction.error).isNotNull()
     }
 
     @Test
     fun fetchRecent() {
         whenever(karutaExamRepository.list()).thenReturn(KarutaExams(listOf()))
 
-        actionCreator.fetchRecent()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchRecentExamAction::class.java)
-            if (it is FetchRecentExamAction) {
-                assertThat(it.karutaExam).isNull()
-                assertThat(it.error).isNull()
-            }
-        })
+        val actualAction = actionCreator.fetchRecent()
+        assertThat(actualAction.karutaExam).isNull()
+        assertThat(actualAction.error).isNull()
     }
 
     @Test
     fun fetchAll() {
         whenever(karutaExamRepository.list()).thenReturn(KarutaExams(listOf()))
 
-        actionCreator.fetchAll()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchAllExamAction::class.java)
-            if (it is FetchAllExamAction) {
-                assertThat(it.karutaExamList).isNotNull
-                assertThat(it.error).isNull()
-            }
-        })
+        val actualAction = actionCreator.fetchAll()
+        assertThat(actualAction.karutaExamList).isNotNull
+        assertThat(actualAction.error).isNull()
     }
 
     @Test
@@ -152,15 +123,9 @@ class ExamActionCreatorTest : TestHelper {
         whenever(karutaRepository.findIds()).thenReturn(KarutaIds(listOf(karutaList.first().identifier)))
         whenever(karutaQuizRepository.initialize(any())).thenAnswer { }
 
-        actionCreator.start()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartExamAction::class.java)
-            if (it is StartExamAction) {
-                assertThat(it.karutaQuizId).isNotNull
-                assertThat(it.error).isNull()
-            }
-        })
+        val actualAction = actionCreator.start()
+        assertThat(actualAction.karutaQuizId).isNotNull
+        assertThat(actualAction.error).isNull()
     }
 
     @Test
@@ -169,27 +134,17 @@ class ExamActionCreatorTest : TestHelper {
 
         whenever(karutaQuizRepository.first()).thenReturn(quiz)
 
-        actionCreator.fetchNext()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(OpenNextQuizAction::class.java)
-            if (it is OpenNextQuizAction) {
-                assertThat(it.karutaQuizId).isEqualTo(quiz.identifier)
-                assertThat(it.error).isNull()
-            }
-        })
+        val actualAction = actionCreator.fetchNext()
+        assertThat(actualAction.karutaQuizId).isEqualTo(quiz.identifier)
+        assertThat(actualAction.error).isNull()
     }
 
     @Test
     fun fetchNextWhenNotFound() {
         whenever(karutaQuizRepository.first()).thenReturn(null)
 
-        actionCreator.fetchNext()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(OpenNextQuizAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        val actualAction = actionCreator.fetchNext()
+        assertThat(actualAction.error).isNotNull()
     }
 
     @Test
@@ -213,15 +168,10 @@ class ExamActionCreatorTest : TestHelper {
         whenever(karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)).thenAnswer { }
         whenever(karutaExamRepository.findBy(examId)).thenReturn(exam)
 
-        actionCreator.finish()
+        val actualAction = actionCreator.finish()
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FinishExamAction::class.java)
-            if (it is FinishExamAction) {
-                assertThat(it.karutaExam).isEqualTo(exam)
-                assertThat(it.error).isNull()
-            }
-        })
+        assertThat(actualAction.karutaExam).isEqualTo(exam)
+        assertThat(actualAction.error).isNull()
     }
 
     @Test
@@ -230,11 +180,7 @@ class ExamActionCreatorTest : TestHelper {
 
         whenever(karutaQuizRepository.list()).thenReturn(KarutaQuizzes(listOf(quiz)))
 
-        actionCreator.finish()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FinishExamAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        val actualAction = actionCreator.finish()
+        assertThat(actualAction.error).isNotNull()
     }
 }

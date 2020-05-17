@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.feature.materialedit.di
 
 import dagger.Module
 import dagger.Provides
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
@@ -33,13 +34,15 @@ class MaterialEditModule(
     fun provideMaterialEditViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
         @Named("ioContext") ioContext: CoroutineContext,
-        store: MaterialEditStore,
-        actionCreator: MaterialActionCreator
+        dispatcher: Dispatcher,
+        actionCreator: MaterialActionCreator,
+        store: MaterialEditStore
     ): MaterialEditViewModel.Factory = MaterialEditViewModel.Factory(
         mainContext,
         ioContext,
-        store,
+        dispatcher,
         actionCreator,
+        store,
         karutaId
     )
 }

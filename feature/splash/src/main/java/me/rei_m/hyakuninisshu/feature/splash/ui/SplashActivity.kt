@@ -15,6 +15,10 @@
 package me.rei_m.hyakuninisshu.feature.splash.ui
 
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import dagger.Binds
 import dagger.android.AndroidInjector
@@ -42,7 +46,17 @@ class SplashActivity : DaggerAppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        val layoutParams = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = Gravity.CENTER
+        }
+        val progressBar = ProgressBar(this).apply {
+            this.layoutParams = layoutParams
+        }
+        setContentView(progressBar)
+
         val viewModel = provideViewModel(ApplicationViewModel::class.java, viewModelFactory)
         viewModel.isReady.observe(this, Observer {
             if (it == true) {

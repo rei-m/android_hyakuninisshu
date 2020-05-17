@@ -18,7 +18,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
@@ -29,11 +29,13 @@ import kotlin.coroutines.CoroutineContext
 
 class MaterialDetailViewModel(
     mainContext: CoroutineContext,
-    private val store: MaterialDetailStore,
+    ioContext: CoroutineContext,
+    dispatcher: Dispatcher,
     actionCreator: MaterialActionCreator,
+    private val store: MaterialDetailStore,
     colorFilter: ColorFilter,
     initialPosition: Int
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val karutaList: LiveData<List<Karuta>> = store.karutaList
 
@@ -42,9 +44,7 @@ class MaterialDetailViewModel(
     val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
 
     init {
-        launch {
-            actionCreator.fetch(colorFilter.value)
-        }
+        dispatchAction { actionCreator.fetch(colorFilter.value) }
     }
 
     override fun onCleared() {
@@ -54,14 +54,22 @@ class MaterialDetailViewModel(
 
     class Factory(
         private val mainContext: CoroutineContext,
-        private val store: MaterialDetailStore,
+        private val ioContext: CoroutineContext,
+        private val dispatcher: Dispatcher,
         private val actionCreator: MaterialActionCreator,
+        private val store: MaterialDetailStore,
         private val colorFilter: ColorFilter,
         private val initialPosition: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MaterialDetailViewModel(mainContext, store, actionCreator, colorFilter, initialPosition) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = MaterialDetailViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            colorFilter,
+            initialPosition
+        ) as T
     }
 }

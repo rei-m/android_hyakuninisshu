@@ -20,6 +20,7 @@
     <string name="license">ライセンス</string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="version">version: %1$s</string>
+    <string name="update_confirm">変更の確認</string>
     <string name="update">変更する</string>
     <string name="back">戻る</string>
 
@@ -58,6 +59,9 @@
     <string name="editing_material">資料編集</string>
     <string name="char_material">資</string>
     <string name="animation_condition">読み札のアニメーション表示</string>
+    <string name="range_start">出題開始</string>
+    <string name="range_end">出題終了</string>
+
 
     <string name="one">一</string>
     <string name="two">二</string>

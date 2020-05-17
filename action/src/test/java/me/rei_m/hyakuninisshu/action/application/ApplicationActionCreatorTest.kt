@@ -14,11 +14,8 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.application
 
-import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -30,24 +27,18 @@ class ApplicationActionCreatorTest {
 
     private lateinit var repository: KarutaRepository
 
-    private lateinit var dispatcher: Dispatcher
-
     @Before
     fun setUp() {
-        dispatcher = mock {}
         repository = mock {}
-        actionCreator = ApplicationActionCreator(repository, dispatcher)
+        actionCreator = ApplicationActionCreator(repository)
     }
 
     @Test
     fun start() {
         whenever(repository.initialize()).thenAnswer { }
 
-        actionCreator.start()
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartApplicationAction::class.java)
-            assertThat(it.error).isNull()
-        })
+        val actual = actionCreator.start()
+        assertThat(actual).isInstanceOf(StartApplicationAction::class.java)
+        assertThat(actual.error).isNull()
     }
 }

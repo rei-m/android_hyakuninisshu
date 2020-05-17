@@ -14,9 +14,4 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu
 
-class TestApp : App() {
-
-    override fun initLeakCanary() {
-        // テスト時は設定しない.
-    }
-}
+class TestApp : App()

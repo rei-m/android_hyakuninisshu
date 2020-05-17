@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.feature.exammenu.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
@@ -27,9 +27,11 @@ import kotlin.coroutines.CoroutineContext
 
 class ExamMenuViewModel(
     mainContext: CoroutineContext,
-    private val store: ExamMenuStore,
-    actionCreator: ExamActionCreator
-) : AbstractViewModel(mainContext) {
+    ioContext: CoroutineContext,
+    dispatcher: Dispatcher,
+    actionCreator: ExamActionCreator,
+    private val store: ExamMenuStore
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
 
@@ -38,9 +40,7 @@ class ExamMenuViewModel(
     val averageAnswerSec: LiveData<Float?> = store.recentExam.map { it?.result?.averageAnswerSec }
 
     init {
-        launch {
-            actionCreator.fetchRecent()
-        }
+        dispatchAction { actionCreator.fetchRecent() }
     }
 
     override fun onCleared() {
@@ -50,16 +50,18 @@ class ExamMenuViewModel(
 
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
-        private val store: ExamMenuStore,
-        private val actionCreator: ExamActionCreator
+        @Named("ioContext") private val ioContext: CoroutineContext,
+        private val dispatcher: Dispatcher,
+        private val actionCreator: ExamActionCreator,
+        private val store: ExamMenuStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamMenuViewModel(
-                mainContext,
-                store,
-                actionCreator
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ExamMenuViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store
+        ) as T
     }
 }

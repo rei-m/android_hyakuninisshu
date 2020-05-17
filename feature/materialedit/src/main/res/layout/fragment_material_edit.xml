@@ -9,29 +9,30 @@
         <variable
             name="viewModel"
             type="me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditViewModel" />
-
     </data>
-
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_m">
+            android:paddingStart="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_m"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingBottom="@dimen/height_ad_banner">
 
             <TextView
                 android:id="@+id/text_edit_explain"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/text_explain_edit"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/text_creator_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,11 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/creator"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/text_creator"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_edit_explain" />
 
@@ -53,12 +53,11 @@
                 android:id="@+id/text_creator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:creator="@{viewModel.creator}"
                 app:karutaNo="@{viewModel.karutaNo}"
                 app:layout_constraintBottom_toTopOf="@id/text_first_phrase_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_creator_title"
                 tools:text="一番 / 天智天皇" />
@@ -69,11 +68,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_l"
                 android:text="@string/first_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/edit_first_phrase_kanji"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_creator" />
 
@@ -86,8 +84,6 @@
                 android:text="@={viewModel.firstPhraseKanji}"
                 app:layout_constraintBottom_toTopOf="@id/edit_first_phrase_kana"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_first_phrase_title"
                 tools:text="秋の田の" />
@@ -101,8 +97,6 @@
                 android:text="@={viewModel.firstPhraseKana}"
                 app:layout_constraintBottom_toTopOf="@id/text_second_phrase_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_first_phrase_kanji"
                 tools:text="あきのたの" />
@@ -113,11 +107,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/second_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/edit_second_phrase_kanji"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_first_phrase_kana" />
 
@@ -130,8 +123,6 @@
                 android:text="@={viewModel.secondPhraseKanji}"
                 app:layout_constraintBottom_toTopOf="@id/edit_second_phrase_kana"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_second_phrase_title"
                 tools:text="かりほの庵の" />
@@ -145,8 +136,6 @@
                 android:text="@={viewModel.secondPhraseKana}"
                 app:layout_constraintBottom_toTopOf="@id/text_third_phrase_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_second_phrase_kanji"
                 tools:text="かりほのいほの" />
@@ -157,11 +146,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/third_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/edit_third_phrase_kanji"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_second_phrase_kana" />
 
@@ -174,8 +162,6 @@
                 android:text="@={viewModel.thirdPhraseKanji}"
                 app:layout_constraintBottom_toTopOf="@id/edit_third_phrase_kana"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_third_phrase_title"
                 tools:text="苫をあらみ" />
@@ -189,8 +175,6 @@
                 android:text="@={viewModel.thirdPhraseKana}"
                 app:layout_constraintBottom_toTopOf="@id/text_fourth_phrase_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_third_phrase_kanji"
                 tools:text="とまをあらみ" />
@@ -201,11 +185,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/fourth_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/edit_fourth_phrase_kanji"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_third_phrase_kana" />
 
@@ -218,8 +201,6 @@
                 android:text="@={viewModel.fourthPhraseKanji}"
                 app:layout_constraintBottom_toTopOf="@id/edit_fourth_phrase_kana"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_fourth_phrase_title"
                 tools:text="わが衣手は" />
@@ -233,8 +214,6 @@
                 android:text="@={viewModel.fourthPhraseKana}"
                 app:layout_constraintBottom_toTopOf="@id/text_fifth_phrase_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_fourth_phrase_kanji"
                 tools:text="わがころもでは" />
@@ -245,11 +224,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/fifth_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/text_xs"
                 app:layout_constraintBottom_toTopOf="@id/edit_fifth_phrase_kanji"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_fourth_phrase_kana" />
 
@@ -262,8 +240,6 @@
                 android:text="@={viewModel.fifthPhraseKanji}"
                 app:layout_constraintBottom_toTopOf="@id/edit_fifth_phrase_kana"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_fifth_phrase_title"
                 tools:text="露にぬれつつ" />
@@ -277,29 +253,24 @@
                 android:text="@={viewModel.fifthPhraseKana}"
                 app:layout_constraintBottom_toTopOf="@id/button_edit_material"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_fifth_phrase_kanji"
                 tools:text="つゆにぬれつつ" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_edit_material"
-                android:layout_width="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_l"
-                android:layout_marginBottom="@dimen/height_ad_banner"
                 android:onClick="@{() -> viewModel.onClickEdit()}"
-                android:paddingStart="@dimen/padding_m"
-                android:paddingTop="@dimen/padding_m"
-                android:paddingEnd="@dimen/padding_m"
-                android:paddingBottom="@dimen/padding_m"
-                android:text="@string/update"
+                android:text="@string/update_confirm"
                 android:textSize="@dimen/text_m"
+                app:backgroundTint="@color/colorSecondary"
+                app:icon="@drawable/ic_edit_white_24dp"
+                app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_fifth_phrase_kana" />
 

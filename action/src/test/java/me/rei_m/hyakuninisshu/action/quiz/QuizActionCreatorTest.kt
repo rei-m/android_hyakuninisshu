@@ -15,11 +15,8 @@
 package me.rei_m.hyakuninisshu.action.quiz
 
 import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.check
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.helper.TestHelper
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
@@ -38,17 +35,13 @@ class QuizActionCreatorTest : TestHelper {
     private lateinit var karutaRepository: KarutaRepository
     private lateinit var karutaQuizRepository: KarutaQuizRepository
 
-    private lateinit var dispatcher: Dispatcher
-
     @Before
     fun setUp() {
-        dispatcher = mock {}
         karutaRepository = mock {}
         karutaQuizRepository = mock { }
         actionCreator = QuizActionCreator(
             karutaRepository,
-            karutaQuizRepository,
-            dispatcher
+            karutaQuizRepository
         )
     }
 
@@ -62,28 +55,17 @@ class QuizActionCreatorTest : TestHelper {
             whenever(karutaRepository.findBy(it)).thenReturn(karuta)
         }
 
-        actionCreator.fetch(quiz.identifier)
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchQuizAction::class.java)
-            if (it is FetchQuizAction) {
-                assertThat(it.karutaQuizContent?.quiz).isEqualTo(quiz)
-                assertThat(it.error).isNull()
-            }
-        })
+        val actual = actionCreator.fetch(quiz.identifier)
+        assertThat(actual.karutaQuizContent?.quiz).isEqualTo(quiz)
+        assertThat(actual.error).isNull()
     }
 
     @Test
     fun fetchWhenNotFound() {
         val quizId = KarutaQuizIdentifier()
         whenever(karutaQuizRepository.findBy(quizId)).thenReturn(null)
-
-        actionCreator.fetch(quizId)
-
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(FetchQuizAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        val actual = actionCreator.fetch(quizId)
+        assertThat(actual.error).isNotNull()
     }
 
     @Test
@@ -98,15 +80,10 @@ class QuizActionCreatorTest : TestHelper {
         }
         whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
-        actionCreator.start(quiz.identifier, startDate)
+        val actual = actionCreator.start(quiz.identifier, startDate)
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartQuizAction::class.java)
-            if (it is StartQuizAction) {
-                assertThat(it.karutaQuizContent?.quiz?.startDate).isEqualTo(startDate)
-                assertThat(it.error).isNull()
-            }
-        })
+        assertThat(actual.karutaQuizContent?.quiz?.startDate).isEqualTo(startDate)
+        assertThat(actual.error).isNull()
     }
 
     @Test
@@ -115,12 +92,9 @@ class QuizActionCreatorTest : TestHelper {
         val startDate = Date()
         whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(null)
 
-        actionCreator.start(quiz.identifier, startDate)
+        val actual = actionCreator.start(quiz.identifier, startDate)
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(StartQuizAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        assertThat(actual.error).isNotNull()
     }
 
     @Test
@@ -135,15 +109,10 @@ class QuizActionCreatorTest : TestHelper {
         }
         whenever(karutaQuizRepository.store(any())).thenAnswer { }
 
-        actionCreator.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
+        val actual = actionCreator.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(AnswerQuizAction::class.java)
-            if (it is AnswerQuizAction) {
-                assertThat(it.karutaQuizContent?.quiz?.result).isNotNull
-                assertThat(it.error).isNull()
-            }
-        })
+        assertThat(actual.karutaQuizContent?.quiz?.result).isNotNull
+        assertThat(actual.error).isNull()
     }
 
     @Test
@@ -152,11 +121,8 @@ class QuizActionCreatorTest : TestHelper {
         val answerDate = Date()
         whenever(karutaQuizRepository.findBy(quiz.identifier)).thenReturn(null)
 
-        actionCreator.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
+        val actual = actionCreator.answer(quiz.identifier, ChoiceNo.FIRST, answerDate)
 
-        verify(dispatcher).dispatch(check {
-            assertThat(it).isInstanceOf(AnswerQuizAction::class.java)
-            assertThat(it.error).isNotNull()
-        })
+        assertThat(actual.error).isNotNull()
     }
 }

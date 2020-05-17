@@ -12,7 +12,7 @@
  */
 
 ext {
-    daggerVersion = '2.22.1'
+    daggerVersion = '2.26'
 }
 
 compileOnly 'javax.annotation:jsr250-api:1.0'

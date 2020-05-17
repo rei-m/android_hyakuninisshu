@@ -44,7 +44,8 @@ class MaterialEditFragment : DaggerFragment(),
     @Inject
     lateinit var navigator: Navigator
 
-    private lateinit var binding: FragmentMaterialEditBinding
+    private var _binding: FragmentMaterialEditBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: MaterialEditViewModel
 
@@ -77,29 +78,33 @@ class MaterialEditFragment : DaggerFragment(),
         }
         viewModel = provideActivityViewModel(MaterialEditViewModel::class.java, viewModelFactory)
 
-        viewModel.confirmEditEvent.observe(this, EventObserver { dialog ->
-            fragmentManager?.let {
-                dialog.setTargetFragment(this, 0)
-                dialog.show(it, ConfirmMaterialEditDialogFragment.TAG)
-            }
+        viewModel.confirmEditEvent.observe(viewLifecycleOwner, EventObserver { dialog ->
+            dialog.setTargetFragment(this, 0)
+            dialog.show(requireFragmentManager(), ConfirmMaterialEditDialogFragment.TAG)
         })
-        viewModel.completeEditEvent.observe(this, EventObserver {
+        viewModel.completeEditEvent.observe(viewLifecycleOwner, EventObserver {
             navigator.back()
         })
-        viewModel.snackBarMessage.observe(this, EventObserver {
+        viewModel.snackBarMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
                 .setAction("Action", null)
                 .show()
         })
-        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+        viewModel.unhandledErrorEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onError()
         })
 
-        binding = FragmentMaterialEditBinding.inflate(inflater, container, false)
+        _binding = FragmentMaterialEditBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        viewModel.onDestroyView()
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,12 +112,7 @@ class MaterialEditFragment : DaggerFragment(),
         analyticsHelper.sendScreenView("MaterialEdit-${karutaId.value}", requireActivity())
     }
 
-    override fun onDestroyView() {
-        viewModel.onDestroyView()
-        super.onDestroyView()
-    }
-
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

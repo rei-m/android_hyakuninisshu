@@ -1,275 +1,217 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright (c) 2019. Rei Matsushita
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
-  ~ compliance with the License. You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software distributed under the License is
-  ~ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
-  ~ the License for the specific language governing permissions and limitations under the License.
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.TrainingMenuFragment">
 
-    <data>
-
-        <variable
-            name="trainingRangeFromAdapter"
-            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
-
-        <variable
-            name="trainingRangeToAdapter"
-            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
-
-        <variable
-            name="colorAdapter"
-            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
-
-        <variable
-            name="kimarijiAdapter"
-            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
-
-        <variable
-            name="karutaStyleAdapter"
-            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
-
-        <variable
-            name="animationSpeedAdapter"
-            type="me.rei_m.hyakuninisshu.feature.corecomponent.widget.adapter.SpinnerAdapter" />
-
-        <variable
-            name="viewModel"
-            type="me.rei_m.hyakuninisshu.feature.trainingmenu.ui.TrainingMenuViewModel" />
-    </data>
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/height_ad_banner">
 
             <TextView
                 android:id="@+id/text_title_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/training_setting"
-                app:layout_constraintBottom_toTopOf="@id/text_title_range_question"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                app:layout_constraintBottom_toTopOf="@id/input_layout_range_from"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/text_title_range_question"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/range_question"
-                app:layout_constraintBottom_toTopOf="@id/spinner_range_from"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title_setting" />
-
-            <Spinner
-                android:id="@+id/spinner_range_from"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_range_from"
+                style="@style/SelectInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
-                app:layout_constraintEnd_toStartOf="@id/spinner_range_separate"
+                android:layout_marginTop="@dimen/margin_m"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:hint="@string/range_start"
+                android:labelFor="@id/dropdown_range_from"
+                app:layout_constraintBottom_toTopOf="@id/input_kimariji"
+                app:layout_constraintEnd_toStartOf="@id/range_separate"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/spinner_range_separate"
+                app:layout_constraintRight_toLeftOf="@id/range_separate"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title_range_question"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:selectedValue="@={viewModel.trainingRangeFrom}"
-                app:spinnerAdapter="@{trainingRangeFromAdapter}" />
+                app:layout_constraintTop_toBottomOf="@id/text_title_setting"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_range_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/spinner_range_separate"
+                android:id="@+id/range_separate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_m"
-                android:layout_marginRight="@dimen/margin_m"
+                android:layout_marginLeft="@dimen/margin_s"
+                android:layout_marginTop="@dimen/margin_m"
+                android:layout_marginRight="@dimen/margin_s"
                 android:paddingTop="@dimen/padding_m"
                 android:paddingBottom="@dimen/padding_m"
                 android:text="@string/training_range_separate"
-                app:layout_constraintEnd_toStartOf="@id/spinner_range_to"
-                app:layout_constraintLeft_toRightOf="@id/spinner_range_from"
-                app:layout_constraintRight_toLeftOf="@id/spinner_range_to"
-                app:layout_constraintStart_toEndOf="@id/spinner_range_from"
-                app:layout_constraintTop_toBottomOf="@id/text_title_range_question"
+                app:layout_constraintEnd_toStartOf="@id/input_layout_range_to"
+                app:layout_constraintLeft_toRightOf="@id/input_layout_range_from"
+                app:layout_constraintRight_toLeftOf="@id/input_layout_range_to"
+                app:layout_constraintStart_toEndOf="@id/input_layout_range_from"
+                app:layout_constraintTop_toBottomOf="@id/text_title_setting"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-            <Spinner
-                android:id="@+id/spinner_range_to"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_range_to"
+                style="@style/SelectInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
-                android:layout_marginRight="@dimen/margin_m"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/spinner_range_separate"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toEndOf="@id/spinner_range_separate"
-                app:layout_constraintTop_toBottomOf="@id/text_title_range_question"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:selectedValue="@={viewModel.trainingRangeTo}"
-                app:spinnerAdapter="@{trainingRangeToAdapter}" />
-
-            <TextView
-                android:id="@+id/text_title_kimariji"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/kimariji"
-                app:layout_constraintBottom_toTopOf="@id/spinner_kimariji"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinner_range_from" />
-
-            <Spinner
-                android:id="@+id/spinner_kimariji"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
-                app:layout_constraintBottom_toTopOf="@id/text_title_color"
+                android:hint="@string/range_end"
+                android:labelFor="@id/dropdown_range_to"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/range_separate"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title_kimariji"
-                app:selectedValue="@={viewModel.kimariji}"
-                app:spinnerAdapter="@{kimarijiAdapter}" />
+                app:layout_constraintStart_toEndOf="@id/range_separate"
+                app:layout_constraintTop_toBottomOf="@id/text_title_setting"
+                app:layout_constraintVertical_chainStyle="packed">
 
-            <TextView
-                android:id="@+id/text_title_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/color"
-                app:layout_constraintBottom_toTopOf="@id/spinner_color"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinner_kimariji" />
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_range_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <Spinner
-                android:id="@+id/spinner_color"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_kimariji"
+                style="@style/SelectInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
-                app:layout_constraintBottom_toTopOf="@id/text_title_top_phrase_style"
+                android:hint="@string/kimariji"
+                android:labelFor="@id/dropdown_kimariji"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title_color"
-                app:selectedValue="@={viewModel.color}"
-                app:spinnerAdapter="@{colorAdapter}" />
+                app:layout_constraintTop_toBottomOf="@id/input_layout_range_from">
 
-            <TextView
-                android:id="@+id/text_title_top_phrase_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/kami_no_ku"
-                app:layout_constraintBottom_toTopOf="@id/spinner_top_phrase_style"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinner_color" />
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_kimariji"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <Spinner
-                android:id="@+id/spinner_top_phrase_style"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_color"
+                style="@style/SelectInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
-                app:layout_constraintBottom_toTopOf="@id/text_title_bottom_phrase_style"
+                android:hint="@string/color"
+                android:labelFor="@id/dropdown_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title_top_phrase_style"
-                app:selectedValue="@={viewModel.kamiNoKuStyle}"
-                app:spinnerAdapter="@{karutaStyleAdapter}" />
+                app:layout_constraintTop_toBottomOf="@id/input_kimariji">
 
-            <TextView
-                android:id="@+id/text_title_bottom_phrase_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/shimo_no_ku"
-                app:layout_constraintBottom_toTopOf="@id/spinner_shimonoku_style"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinner_top_phrase_style" />
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <Spinner
-                android:id="@+id/spinner_shimonoku_style"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_top_phrase_style"
+                style="@style/SelectInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
-                app:layout_constraintBottom_toTopOf="@id/text_title_animation_speed"
+                android:hint="@string/kami_no_ku"
+                android:labelFor="@id/dropdown_top_phrase_style"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title_bottom_phrase_style"
-                app:selectedValue="@={viewModel.shimoNoKuStyle}"
-                app:spinnerAdapter="@{karutaStyleAdapter}" />
+                app:layout_constraintTop_toBottomOf="@id/input_color">
 
-            <TextView
-                android:id="@+id/text_title_animation_speed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginLeft="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
-                android:text="@string/animation_condition"
-                app:layout_constraintBottom_toTopOf="@id/spinner_animation_speed"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinner_shimonoku_style" />
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_top_phrase_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <Spinner
-                android:id="@+id/spinner_animation_speed"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_bottom_phrase_style"
+                style="@style/SelectInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 android:layout_marginEnd="@dimen/margin_m"
+                android:hint="@string/shimo_no_ku"
+                android:labelFor="@id/dropdown_bottom_phrase_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_top_phrase_style">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_bottom_phrase_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_animation_speed"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:hint="@string/animation_condition"
+                android:labelFor="@id/dropdown_animation_speed"
                 app:layout_constraintBottom_toTopOf="@id/button_start_training"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_title_animation_speed"
-                app:selectedValue="@={viewModel.animationSpeed}"
-                app:spinnerAdapter="@{animationSpeedAdapter}" />
+                app:layout_constraintTop_toBottomOf="@id/input_bottom_phrase_style">
 
-            <Button
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_animation_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_start_training"
-                style="@style/AccentButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_m"
@@ -277,14 +219,17 @@
                 android:layout_marginTop="@dimen/margin_l"
                 android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginRight="@dimen/margin_m"
-                android:layout_marginBottom="@dimen/height_ad_banner"
                 android:text="@string/start_training"
+                android:textSize="@dimen/text_m"
+                app:backgroundTint="@color/colorSecondary"
+                app:icon="@drawable/ic_edit_white_24dp"
+                app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinner_animation_speed" />
+                app:layout_constraintTop_toBottomOf="@id/input_layout_animation_speed" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -17,8 +17,8 @@ package me.rei_m.hyakuninisshu.feature.materialedit.ui
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import me.rei_m.hyakuninisshu.feature.materialedit.R
 import me.rei_m.hyakuninisshu.feature.materialedit.databinding.DialogConfirmMaterialEditBinding
 
@@ -46,7 +46,7 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
             fifthPhraseKana = arguments?.getString(ARG_FIFTH_KANA)
         }
 
-        val builder = AlertDialog.Builder(parentActivity)
+        val builder = MaterialAlertDialogBuilder(parentActivity)
             .setView(binding.root)
             .setPositiveButton(R.string.update) { _, _ ->
                 listener?.onClickUpdate()
@@ -58,7 +58,7 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
         return builder.create()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         val parentFragment = targetFragment
         if (parentFragment is OnDialogInteractionListener) {

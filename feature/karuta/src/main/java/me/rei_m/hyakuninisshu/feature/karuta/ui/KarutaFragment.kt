@@ -38,6 +38,9 @@ class KarutaFragment : DaggerFragment() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
+    private var _binding: FragmentKarutaBinding? = null
+    private val binding get() = _binding!!
+
     private var listener: OnFragmentInteractionListener? = null
 
     private val karutaId by lazy {
@@ -52,15 +55,20 @@ class KarutaFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val viewModel = provideActivityViewModel(KarutaViewModel::class.java, viewModelFactory)
-        viewModel.notFoundKarutaEvent.observe(this, EventObserver {
+        viewModel.notFoundKarutaEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onError()
         })
 
-        val binding = FragmentKarutaBinding.inflate(inflater, container, false)
+        _binding = FragmentKarutaBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,7 +76,7 @@ class KarutaFragment : DaggerFragment() {
         analyticsHelper.sendScreenView("Karuta-${karutaId.value}", requireActivity())
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context
