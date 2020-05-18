@@ -193,15 +193,14 @@ private fun <T : SpinnerItem> AutoCompleteTextView.setUp(
     inputType = InputType.TYPE_NULL
     keyListener = null
 
-    setText(initialValue.label(resources))
-
-    ArrayAdapter(
+    val adapter = ArrayAdapter(
         context,
         R.layout.dropdown_menu_popup_item,
         itemList.map { it.label(resources) }
-    ).let {
-        setAdapter(it)
-    }
+    )
+    setAdapter(adapter)
 
+    setText(initialValue.label((resources)), false)
     setOnItemClickListener { _, _, position, _ -> onSelected(itemList[position]) }
 }
+

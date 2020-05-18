@@ -34,7 +34,7 @@ class KarutaRepositoryImpl(
         )
 
         if (karutaJsonVersion < KarutaJsonConstant.KARUTA_VERSION) {
-            val inputStream = context.assets.open("karuta_list.json")
+            val inputStream = context.assets.open("karuta_list_v_2.json")
             val reader = BufferedReader(InputStreamReader(inputStream))
             val stringBuilder = StringBuilder()
             var line: String?
