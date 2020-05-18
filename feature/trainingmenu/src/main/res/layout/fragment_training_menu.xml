@@ -48,7 +48,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_range_from"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +90,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_range_to"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +114,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_kimariji"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +138,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_color"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -158,7 +162,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_top_phrase_style"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -181,7 +186,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_bottom_phrase_style"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -205,7 +211,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_animation_speed"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

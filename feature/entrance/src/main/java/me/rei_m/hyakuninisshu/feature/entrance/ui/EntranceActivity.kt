@@ -68,6 +68,8 @@ class EntranceActivity : DaggerAppCompatActivity() {
             addFragment(R.id.content, initialPage.newInstance(), initialPage.tag)
         } else {
             currentPageIndex = savedInstanceState.getInt(KEY_PAGE_INDEX, 0)
+            val page = Page.values()[currentPageIndex]
+            replaceFragment(R.id.content, page.newInstance(), page.tag)
             binding.bottomNavigation.menu.getItem(currentPageIndex).isChecked = true
         }
     }
