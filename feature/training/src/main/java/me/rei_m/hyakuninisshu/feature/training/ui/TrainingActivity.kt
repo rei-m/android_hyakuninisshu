@@ -17,8 +17,6 @@ package me.rei_m.hyakuninisshu.feature.training.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -30,7 +28,12 @@ import dagger.multibindings.IntoMap
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityModule
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideViewModel
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.replaceFragment
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
@@ -157,24 +160,12 @@ class TrainingActivity : DaggerAppCompatActivity(),
 
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
-        val adView = adViewObserver.adView()
-
-        val params = RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
-        }
-        adView.layoutParams = params
-        binding.root.addView(adView)
-
+        adViewObserver.loadAd(this, binding.adViewContainer)
         if (viewModel.isVisibleAd.value == true) {
             adViewObserver.showAd()
         } else {
             adViewObserver.hideAd()
         }
-
-        adViewObserver.loadAd()
     }
 
     @ActivityScope

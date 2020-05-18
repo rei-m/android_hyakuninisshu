@@ -16,8 +16,7 @@ package me.rei_m.hyakuninisshu.feature.splash.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.application.ApplicationActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
 import javax.inject.Inject
@@ -27,18 +26,17 @@ import kotlin.coroutines.CoroutineContext
 class ApplicationViewModel(
     mainContext: CoroutineContext,
     ioContext: CoroutineContext,
-    private val store: ApplicationStore,
-    actionCreator: ApplicationActionCreator
-) : AbstractViewModel(mainContext) {
+    dispatcher: Dispatcher,
+    actionCreator: ApplicationActionCreator,
+    private val store: ApplicationStore
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val isReady = store.isReady
 
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
-        launch {
-            withContext(ioContext) { actionCreator.start() }
-        }
+        dispatchAction { actionCreator.start() }
     }
 
     override fun onCleared() {
@@ -49,12 +47,17 @@ class ApplicationViewModel(
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: ApplicationStore,
-        private val actionCreator: ApplicationActionCreator
+        private val dispatcher: Dispatcher,
+        private val actionCreator: ApplicationActionCreator,
+        private val store: ApplicationStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ApplicationViewModel(mainContext, ioContext, store, actionCreator) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ApplicationViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store
+        ) as T
     }
 }

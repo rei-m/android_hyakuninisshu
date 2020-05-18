@@ -16,6 +16,7 @@ package me.rei_m.hyakuninisshu.feature.materialdetail.di
 
 import dagger.Module
 import dagger.Provides
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
@@ -33,15 +34,17 @@ class MaterialDetailModule(
     @ActivityScope
     fun provideMaterialDetailViewModelFactory(
         @Named("mainContext") mainContext: CoroutineContext,
-        store: MaterialDetailStore,
-        actionCreator: MaterialActionCreator
-    ): MaterialDetailViewModel.Factory {
-        return MaterialDetailViewModel.Factory(
-            mainContext,
-            store,
-            actionCreator,
-            colorFilter,
-            initialPosition
-        )
-    }
+        @Named("ioContext") ioContext: CoroutineContext,
+        dispatcher: Dispatcher,
+        actionCreator: MaterialActionCreator,
+        store: MaterialDetailStore
+    ): MaterialDetailViewModel.Factory = MaterialDetailViewModel.Factory(
+        mainContext,
+        ioContext,
+        dispatcher,
+        actionCreator,
+        store,
+        colorFilter,
+        initialPosition
+    )
 }

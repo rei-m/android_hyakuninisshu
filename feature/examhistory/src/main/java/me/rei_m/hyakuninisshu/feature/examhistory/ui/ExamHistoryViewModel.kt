@@ -17,7 +17,7 @@ package me.rei_m.hyakuninisshu.feature.examhistory.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
@@ -28,9 +28,11 @@ import kotlin.coroutines.CoroutineContext
 
 class ExamHistoryViewModel(
     mainContext: CoroutineContext,
-    private val store: ExamHistoryStore,
-    private val actionCreator: ExamActionCreator
-) : AbstractViewModel(mainContext) {
+    ioContext: CoroutineContext,
+    dispatcher: Dispatcher,
+    actionCreator: ExamActionCreator,
+    private val store: ExamHistoryStore
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
 
@@ -39,7 +41,7 @@ class ExamHistoryViewModel(
     val unhandledErrorEvent = store.unhandledErrorEvent
 
     init {
-        launch { actionCreator.fetchAll() }
+        dispatchAction { actionCreator.fetchAll() }
     }
 
     override fun onCleared() {
@@ -49,12 +51,18 @@ class ExamHistoryViewModel(
 
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
-        private val store: ExamHistoryStore,
-        private val actionCreator: ExamActionCreator
+        @Named("ioContext") private val ioContext: CoroutineContext,
+        private val dispatcher: Dispatcher,
+        private val actionCreator: ExamActionCreator,
+        private val store: ExamHistoryStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamHistoryViewModel(mainContext, store, actionCreator) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = ExamHistoryViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store
+        ) as T
     }
 }

@@ -14,29 +14,26 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.karuta
 
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class KarutaActionCreator @Inject constructor(
-    private val karutaRepository: KarutaRepository,
-    private val dispatcher: Dispatcher
-) {
+class KarutaActionCreator @Inject constructor(private val karutaRepository: KarutaRepository) {
     /**
      * 指定の詩を取り出す.
      *
      * @param karutaId 歌ID.
+     * @return FetchKarutaAction
+     * @throws NoSuchElementException 指定した歌が見つからなかった場合
      */
-    fun fetch(karutaId: KarutaIdentifier) {
-        try {
-            val karuta = karutaRepository.findBy(karutaId)
-                ?: throw NoSuchElementException(karutaId.toString())
-            dispatcher.dispatch(FetchKarutaAction.createSuccess(karuta))
-        } catch (e: Exception) {
-            dispatcher.dispatch(FetchKarutaAction.createError(e))
-        }
+    fun fetch(karutaId: KarutaIdentifier) = try {
+        val karuta = karutaRepository.findBy(karutaId)
+            ?: throw NoSuchElementException(karutaId.toString())
+        FetchKarutaAction.createSuccess(karuta)
+    } catch (e: Exception) {
+        FetchKarutaAction.createError(e)
     }
 }
+

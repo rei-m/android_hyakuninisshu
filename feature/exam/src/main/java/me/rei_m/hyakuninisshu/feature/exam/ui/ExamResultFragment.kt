@@ -44,7 +44,8 @@ class ExamResultFragment : DaggerFragment() {
 
     private lateinit var viewModel: ExamResultViewModel
 
-    private lateinit var binding: FragmentExamResultBinding
+    private var _binding: FragmentExamResultBinding? = null
+    private val binding get() = _binding!!
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -60,25 +61,30 @@ class ExamResultFragment : DaggerFragment() {
         }
         viewModel = provideActivityViewModel(ExamResultViewModel::class.java, viewModelFactory)
 
-        viewModel.karutaExamId.observe(this, Observer {
+        viewModel.karutaExamId.observe(viewLifecycleOwner, Observer {
             karutaExamId = it
         })
-        viewModel.notFoundExamEvent.observe(this, EventObserver {
+        viewModel.notFoundExamEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onErrorFinish()
         })
 
-        binding = FragmentExamResultBinding.inflate(inflater, container, false)
+        _binding = FragmentExamResultBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("ExamResult", requireActivity())
 
-        binding.viewResult.clickKarutaEvent.observe(this, EventObserver {
+        binding.viewResult.clickKarutaEvent.observe(viewLifecycleOwner, EventObserver {
             navigator.navigateToKaruta(it)
         })
         binding.buttonBack.setOnClickListener {
@@ -86,7 +92,7 @@ class ExamResultFragment : DaggerFragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

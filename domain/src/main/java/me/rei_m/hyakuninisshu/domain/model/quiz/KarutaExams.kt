@@ -42,7 +42,7 @@ class KarutaExams(private val values: List<KarutaExam>) {
         }.toList())
 
     override fun equals(other: Any?): Boolean {
-        other as? KarutaExams ?: return false
+        if (other !is KarutaExams) return false
         return values == other.values
     }
 

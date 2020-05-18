@@ -17,8 +17,7 @@ package me.rei_m.hyakuninisshu.feature.training.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.training.TrainingActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
@@ -29,11 +28,12 @@ import kotlin.coroutines.CoroutineContext
 
 class TrainingResultViewModel(
     mainContext: CoroutineContext,
-    private val ioContext: CoroutineContext,
-    private val store: TrainingStore,
+    ioContext: CoroutineContext,
+    dispatcher: Dispatcher,
     private val actionCreator: TrainingActionCreator,
+    private val store: TrainingStore,
     private val analyticsHelper: AnalyticsHelper
-) : AbstractViewModel(mainContext) {
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val score: LiveData<String> = store.result.map { "${it.correctCount}/${it.quizCount}" }
 
@@ -47,34 +47,30 @@ class TrainingResultViewModel(
     }
 
     fun onCreateView() {
-        launch {
-            actionCreator.aggregateResults()
-        }
+        dispatchAction { actionCreator.aggregateResults() }
     }
 
     fun onClickPracticeWrongKarutas() {
         analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.RESTART_TRAINING)
-        launch {
-            withContext(ioContext) { actionCreator.restartForPractice() }
-        }
+        dispatchAction { actionCreator.restartForPractice() }
     }
 
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: TrainingStore,
+        private val dispatcher: Dispatcher,
         private val actionCreator: TrainingActionCreator,
+        private val store: TrainingStore,
         private val analyticsHelper: AnalyticsHelper
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TrainingResultViewModel(
-                mainContext,
-                ioContext,
-                store,
-                actionCreator,
-                analyticsHelper
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = TrainingResultViewModel(
+            mainContext,
+            ioContext,
+            dispatcher,
+            actionCreator,
+            store,
+            analyticsHelper
+        ) as T
     }
 }

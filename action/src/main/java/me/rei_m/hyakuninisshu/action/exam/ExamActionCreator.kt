@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.exam
 
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExamIdentifier
@@ -29,92 +28,90 @@ import javax.inject.Singleton
 class ExamActionCreator @Inject constructor(
     private val karutaRepository: KarutaRepository,
     private val karutaQuizRepository: KarutaQuizRepository,
-    private val karutaExamRepository: KarutaExamRepository,
-    private val dispatcher: Dispatcher
+    private val karutaExamRepository: KarutaExamRepository
 ) {
 
     /**
      * 力試しを取得する.
      *
      * @param karutaExamId 力試しID
+     * @return FetchExamAction
      */
-    fun fetch(karutaExamId: KarutaExamIdentifier) {
-        try {
-            val karutaExam = karutaExamRepository.findBy(karutaExamId)
-                ?: throw NoSuchElementException(karutaExamId.toString())
-            dispatcher.dispatch(FetchExamAction.createSuccess(karutaExam))
-        } catch (e: Exception) {
-            dispatcher.dispatch(FetchExamAction.createError(e))
-        }
+    fun fetch(karutaExamId: KarutaExamIdentifier) = try {
+        val karutaExam = karutaExamRepository.findBy(karutaExamId)
+            ?: throw NoSuchElementException(karutaExamId.toString())
+        FetchExamAction.createSuccess(karutaExam)
+    } catch (e: Exception) {
+        FetchExamAction.createError(e)
     }
 
     /**
      * 最新の力試しを取得する.
+     *
+     * @return FetchRecentExamAction
      */
-    fun fetchRecent() {
-        try {
-            val exams = karutaExamRepository.list()
-            dispatcher.dispatch(FetchRecentExamAction.createSuccess(exams.recent))
-        } catch (e: Exception) {
-            dispatcher.dispatch(FetchRecentExamAction.createError(e))
-        }
+    fun fetchRecent() = try {
+        val exams = karutaExamRepository.list()
+        FetchRecentExamAction.createSuccess(exams.recent)
+    } catch (e: Exception) {
+        FetchRecentExamAction.createError(e)
     }
 
     /**
      * 全ての力試しを取得する.
+     *
+     * @return FetchAllExamAction
      */
-    fun fetchAll() {
-        try {
-            val exams = karutaExamRepository.list()
-            dispatcher.dispatch(FetchAllExamAction.createSuccess(exams.all))
-        } catch (e: Exception) {
-            dispatcher.dispatch(FetchAllExamAction.createError(e))
-        }
+    fun fetchAll() = try {
+        val exams = karutaExamRepository.list()
+        FetchAllExamAction.createSuccess(exams.all)
+    } catch (e: Exception) {
+        FetchAllExamAction.createError(e)
     }
 
     /**
      * 力試しを開始する.
+     *
+     * @return StartExamAction
      */
-    fun start() {
-        try {
-            val karutas = karutaRepository.list()
-            val targetIds = karutaRepository.findIds()
-            val quizSet = karutas.createQuizSet(targetIds)
-            karutaQuizRepository.initialize(quizSet)
-            val firstQuizId = quizSet.values.first().identifier
-            dispatcher.dispatch(StartExamAction.createSuccess(firstQuizId))
-        } catch (e: Exception) {
-            dispatcher.dispatch(StartExamAction.createError(e))
-        }
+    fun start() = try {
+        val karutas = karutaRepository.list()
+        val targetIds = karutaRepository.findIds()
+        val quizSet = karutas.createQuizSet(targetIds)
+        karutaQuizRepository.initialize(quizSet)
+        val firstQuizId = quizSet.values.first().identifier
+        StartExamAction.createSuccess(firstQuizId)
+    } catch (e: Exception) {
+        StartExamAction.createError(e)
     }
 
     /**
      * 次の問題を取り出す.
+     *
+     * @return OpenNextQuizAction
      */
-    fun fetchNext() {
-        try {
-            val karutaQuiz = karutaQuizRepository.first()
-                ?: throw NoSuchElementException("NextKarutaQuiz")
-            dispatcher.dispatch(OpenNextQuizAction.createSuccess(karutaQuiz.identifier))
-        } catch (e: Exception) {
-            dispatcher.dispatch(OpenNextQuizAction.createError(e))
-        }
+    fun fetchNext() = try {
+        val karutaQuiz = karutaQuizRepository.first()
+            ?: throw NoSuchElementException("NextKarutaQuiz")
+        OpenNextQuizAction.createSuccess(karutaQuiz.identifier)
+    } catch (e: Exception) {
+        OpenNextQuizAction.createError(e)
     }
 
     /**
      * 力試しを終了して結果を登録する.
+     *
+     * @return FinishExamAction
      */
-    fun finish() {
-        try {
-            val quizzes = karutaQuizRepository.list()
-            val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
-            val storedExamId = karutaExamRepository.storeResult(result, Date())
-            val exam = karutaExamRepository.findBy(storedExamId)
-                ?: throw NoSuchElementException(storedExamId.toString())
-            karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
-            dispatcher.dispatch(FinishExamAction.createSuccess(exam))
-        } catch (e: Exception) {
-            dispatcher.dispatch(FinishExamAction.createError(e))
-        }
+    fun finish() = try {
+        val quizzes = karutaQuizRepository.list()
+        val result = KarutaExamResult(quizzes.resultSummary(), quizzes.wrongKarutaIds)
+        val storedExamId = karutaExamRepository.storeResult(result, Date())
+        val exam = karutaExamRepository.findBy(storedExamId)
+            ?: throw NoSuchElementException(storedExamId.toString())
+        karutaExamRepository.adjustHistory(KarutaExam.MAX_HISTORY_COUNT)
+        FinishExamAction.createSuccess(exam)
+    } catch (e: Exception) {
+        FinishExamAction.createError(e)
     }
 }

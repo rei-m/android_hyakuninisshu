@@ -18,8 +18,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.databinding.DataBindingUtil
 import dagger.Binds
 import dagger.android.AndroidInjector
@@ -63,7 +61,11 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         setupAd()
 
         if (savedInstanceState == null) {
-            addFragment(R.id.content, MaterialEditFragment.newInstance(karutaId), MaterialEditFragment.TAG)
+            addFragment(
+                R.id.content,
+                MaterialEditFragment.newInstance(karutaId),
+                MaterialEditFragment.TAG
+            )
         }
     }
 
@@ -91,17 +93,7 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
 
     private fun setupAd() {
         lifecycle.addObserver(adViewObserver)
-        val adView = adViewObserver.adView()
-        val params = RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, adView.id)
-        }
-        adView.layoutParams = params
-        binding.root.addView(adView)
-
-        adViewObserver.loadAd()
+        adViewObserver.loadAd(this, binding.adViewContainer)
     }
 
     @ActivityScope
@@ -116,7 +108,11 @@ class MaterialEditActivity : DaggerAppCompatActivity(),
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Factory<MaterialEditActivity> {
             override fun create(instance: MaterialEditActivity): AndroidInjector<MaterialEditActivity> =
-                activityModule(ActivityModule(instance)).materialEditModule(MaterialEditModule(instance.karutaId))
+                activityModule(ActivityModule(instance)).materialEditModule(
+                    MaterialEditModule(
+                        instance.karutaId
+                    )
+                )
                     .build()
 
             abstract fun activityModule(module: ActivityModule): Builder

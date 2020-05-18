@@ -17,8 +17,7 @@ package me.rei_m.hyakuninisshu.feature.exam.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuizIdentifier
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
@@ -30,10 +29,11 @@ import kotlin.coroutines.CoroutineContext
 
 class ExamViewModel(
     mainContext: CoroutineContext,
-    private val ioContext: CoroutineContext,
-    private val store: ExamStore,
-    private val actionCreator: ExamActionCreator
-) : AbstractViewModel(mainContext) {
+    ioContext: CoroutineContext,
+    dispatcher: Dispatcher,
+    private val actionCreator: ExamActionCreator,
+    private val store: ExamStore
+) : AbstractViewModel(mainContext, ioContext, dispatcher) {
 
     val currentKarutaQuizId: LiveData<KarutaQuizIdentifier?> = store.currentKarutaQuizId
 
@@ -42,15 +42,11 @@ class ExamViewModel(
     val notFoundQuizEvent: LiveData<Event<Unit>> = store.notFoundQuizEvent
 
     fun startExam() {
-        launch {
-            withContext(ioContext) { actionCreator.start() }
-        }
+        dispatchAction { actionCreator.start() }
     }
 
     fun fetchNext() {
-        launch {
-            actionCreator.fetchNext()
-        }
+        dispatchAction { actionCreator.fetchNext() }
     }
 
     override fun onCleared() {
@@ -61,12 +57,12 @@ class ExamViewModel(
     class Factory @Inject constructor(
         @Named("mainContext") private val mainContext: CoroutineContext,
         @Named("ioContext") private val ioContext: CoroutineContext,
-        private val store: ExamStore,
-        private val actionCreator: ExamActionCreator
+        private val dispatcher: Dispatcher,
+        private val actionCreator: ExamActionCreator,
+        private val store: ExamStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ExamViewModel(mainContext, ioContext, store, actionCreator) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            ExamViewModel(mainContext, ioContext, dispatcher, actionCreator, store) as T
     }
 }

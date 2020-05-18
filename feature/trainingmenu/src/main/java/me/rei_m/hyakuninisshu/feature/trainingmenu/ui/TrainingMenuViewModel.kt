@@ -14,35 +14,25 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.*
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withValue
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
+import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
 import javax.inject.Inject
 
 class TrainingMenuViewModel(
-    trainingRangeFrom: TrainingRangeFrom,
-    trainingRangeTo: TrainingRangeTo,
-    kimariji: KimarijiFilter,
-    kamiNoKuStyle: KarutaStyleFilter,
-    shimoNoKuStyle: KarutaStyleFilter,
-    color: ColorFilter,
-    animationSpeed: QuizAnimationSpeed
+    var trainingRangeFrom: TrainingRangeFrom,
+    var trainingRangeTo: TrainingRangeTo,
+    var kimariji: KimarijiFilter,
+    var kamiNoKuStyle: KarutaStyleFilter,
+    var shimoNoKuStyle: KarutaStyleFilter,
+    var color: ColorFilter,
+    var animationSpeed: QuizAnimationSpeed
 ) : ViewModel() {
-    val trainingRangeFrom = MutableLiveData<TrainingRangeFrom>().withValue(trainingRangeFrom)
-
-    val trainingRangeTo = MutableLiveData<TrainingRangeTo>().withValue(trainingRangeTo)
-
-    val kimariji = MutableLiveData<KimarijiFilter>().withValue(kimariji)
-
-    val kamiNoKuStyle = MutableLiveData<KarutaStyleFilter>().withValue(kamiNoKuStyle)
-
-    val shimoNoKuStyle = MutableLiveData<KarutaStyleFilter>().withValue(shimoNoKuStyle)
-
-    val color = MutableLiveData<ColorFilter>().withValue(color)
-
-    val animationSpeed = MutableLiveData<QuizAnimationSpeed>().withValue(animationSpeed)
 
     class Factory @Inject constructor() : ViewModelProvider.Factory {
         var trainingRangeFrom = TrainingRangeFrom.ONE
@@ -54,16 +44,14 @@ class TrainingMenuViewModel(
         var animationSpeed = QuizAnimationSpeed.NORMAL
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TrainingMenuViewModel(
-                trainingRangeFrom,
-                trainingRangeTo,
-                kimariji,
-                kamiNoKuStyle,
-                shimoNoKuStyle,
-                color,
-                animationSpeed
-            ) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = TrainingMenuViewModel(
+            trainingRangeFrom,
+            trainingRangeTo,
+            kimariji,
+            kamiNoKuStyle,
+            shimoNoKuStyle,
+            color,
+            animationSpeed
+        ) as T
     }
 }

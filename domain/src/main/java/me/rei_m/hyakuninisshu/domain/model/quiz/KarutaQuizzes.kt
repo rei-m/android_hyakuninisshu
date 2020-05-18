@@ -69,7 +69,7 @@ class KarutaQuizzes(val values: List<KarutaQuiz>) {
     }
 
     override fun equals(other: Any?): Boolean {
-        other as? KarutaQuizzes ?: return false
+        if (other !is KarutaQuizzes) return false
         return values == other.values
     }
 

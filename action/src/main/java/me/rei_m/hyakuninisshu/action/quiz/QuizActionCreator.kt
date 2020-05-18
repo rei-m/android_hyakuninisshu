@@ -14,7 +14,6 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.action.quiz
 
-import me.rei_m.hyakuninisshu.action.Dispatcher
 import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaRepository
 import me.rei_m.hyakuninisshu.domain.model.quiz.ChoiceNo
 import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaQuiz
@@ -28,22 +27,21 @@ import javax.inject.Singleton
 @Singleton
 class QuizActionCreator @Inject constructor(
     private val karutaRepository: KarutaRepository,
-    private val karutaQuizRepository: KarutaQuizRepository,
-    private val dispatcher: Dispatcher
+    private val karutaQuizRepository: KarutaQuizRepository
 ) {
     /**
      * 指定の問題を取り出す.
      *
      * @param karutaQuizId 問題ID.
+     * @return FetchQuizAction
+     * @throws NoSuchElementException 歌が見つからなかった場合
      */
-    fun fetch(karutaQuizId: KarutaQuizIdentifier) {
-        try {
-            val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
-                ?: throw NoSuchElementException(karutaQuizId.toString())
-            dispatcher.dispatch(FetchQuizAction.createSuccess(karutaQuiz.content()))
-        } catch (e: Exception) {
-            dispatcher.dispatch(FetchQuizAction.createError(e))
-        }
+    fun fetch(karutaQuizId: KarutaQuizIdentifier) = try {
+        val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+            ?: throw NoSuchElementException(karutaQuizId.toString())
+        FetchQuizAction.createSuccess(karutaQuiz.content())
+    } catch (e: Exception) {
+        FetchQuizAction.createError(e)
     }
 
     /**
@@ -51,18 +49,18 @@ class QuizActionCreator @Inject constructor(
      *
      * @param karutaQuizId 問題ID.
      * @param startTime 開始時間.
+     * @return StartQuizAction
+     * @throws NoSuchElementException 問題が見つからなかった場合
      */
-    fun start(karutaQuizId: KarutaQuizIdentifier, startTime: Date) {
-        try {
-            val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
-                ?: throw NoSuchElementException(karutaQuizId.toString())
-            if (karutaQuiz.state != KarutaQuiz.State.ANSWERED) {
-                karutaQuizRepository.store(karutaQuiz.start(startTime))
-            }
-            dispatcher.dispatch(StartQuizAction.createSuccess(karutaQuiz.content()))
-        } catch (e: Exception) {
-            dispatcher.dispatch(StartQuizAction.createError(e))
+    fun start(karutaQuizId: KarutaQuizIdentifier, startTime: Date) = try {
+        val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+            ?: throw NoSuchElementException(karutaQuizId.toString())
+        if (karutaQuiz.state != KarutaQuiz.State.ANSWERED) {
+            karutaQuizRepository.store(karutaQuiz.start(startTime))
         }
+        StartQuizAction.createSuccess(karutaQuiz.content())
+    } catch (e: Exception) {
+        StartQuizAction.createError(e)
     }
 
     /**
@@ -71,16 +69,16 @@ class QuizActionCreator @Inject constructor(
      * @param karutaQuizId 問題ID.
      * @param choiceNo 選択した回答の番号.
      * @param answerTime 回答時間.
+     * @return AnswerQuizAction
+     * @throws NoSuchElementException 問題が見つからなかった場合
      */
-    fun answer(karutaQuizId: KarutaQuizIdentifier, choiceNo: ChoiceNo, answerTime: Date) {
-        try {
-            val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
-                ?: throw NoSuchElementException(karutaQuizId.toString())
-            karutaQuizRepository.store(karutaQuiz.verify(choiceNo, answerTime))
-            dispatcher.dispatch(AnswerQuizAction.createSuccess(karutaQuiz.content()))
-        } catch (e: Exception) {
-            dispatcher.dispatch(AnswerQuizAction.createError(e))
-        }
+    fun answer(karutaQuizId: KarutaQuizIdentifier, choiceNo: ChoiceNo, answerTime: Date) = try {
+        val karutaQuiz = karutaQuizRepository.findBy(karutaQuizId)
+            ?: throw NoSuchElementException(karutaQuizId.toString())
+        karutaQuizRepository.store(karutaQuiz.verify(choiceNo, answerTime))
+        AnswerQuizAction.createSuccess(karutaQuiz.content())
+    } catch (e: Exception) {
+        AnswerQuizAction.createError(e)
     }
 
     private fun KarutaQuiz.content(): KarutaQuizContent {

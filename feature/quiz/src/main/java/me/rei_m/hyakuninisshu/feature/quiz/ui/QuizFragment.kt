@@ -44,12 +44,8 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.KarutaTextView
 import me.rei_m.hyakuninisshu.feature.quiz.databinding.FragmentQuizBinding
 import me.rei_m.hyakuninisshu.feature.quiz.di.QuizModule
-import java.util.Arrays
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.forEach
-import kotlin.collections.take
 
 class QuizFragment : DaggerFragment() {
 
@@ -61,7 +57,8 @@ class QuizFragment : DaggerFragment() {
 
     private lateinit var viewModel: QuizViewModel
 
-    private lateinit var binding: FragmentQuizBinding
+    private var _binding: FragmentQuizBinding? = null
+    private val binding get() = _binding!!
 
     private var listener: QuizInteractionListener? = null
 
@@ -97,7 +94,7 @@ class QuizFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = provideFragmentViewModel(QuizViewModel::class.java, viewModelFactory)
-        viewModel.content.observe(this, Observer<KarutaQuizContent> {
+        viewModel.content.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             when (it.quiz.state) {
                 KarutaQuiz.State.IN_ANSWER -> {
@@ -111,18 +108,23 @@ class QuizFragment : DaggerFragment() {
                 }
             }
         })
-        viewModel.openAnswerEvent.observe(this, EventObserver {
+        viewModel.openAnswerEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onAnswered(it)
         })
-        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+        viewModel.unhandledErrorEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onErrorQuiz()
         })
 
-        binding = FragmentQuizBinding.inflate(inflater, container, false)
+        _binding = FragmentQuizBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -166,7 +168,7 @@ class QuizFragment : DaggerFragment() {
 
         val animationSpeedValue = animationSpeed.value ?: return
 
-        val firstLine = Arrays.asList<KarutaTextView>(
+        val firstLine = listOf(
             binding.phrase11,
             binding.phrase12,
             binding.phrase13,
@@ -176,7 +178,7 @@ class QuizFragment : DaggerFragment() {
         )
         firstLine.forEach { it.visibility = View.INVISIBLE }
 
-        val secondLine = Arrays.asList<KarutaTextView>(
+        val secondLine = listOf(
             binding.phrase21,
             binding.phrase22,
             binding.phrase23,
@@ -188,7 +190,7 @@ class QuizFragment : DaggerFragment() {
         )
         secondLine.forEach { it.visibility = View.INVISIBLE }
 
-        val thirdLine = Arrays.asList<KarutaTextView>(
+        val thirdLine = listOf(
             binding.phrase31,
             binding.phrase32,
             binding.phrase33,
@@ -236,7 +238,13 @@ class QuizFragment : DaggerFragment() {
         @dagger.Subcomponent.Builder
         abstract class Builder : AndroidInjector.Factory<QuizFragment> {
             override fun create(instance: QuizFragment): AndroidInjector<QuizFragment> =
-                quizModule(QuizModule(instance.karutaQuizId, instance.kamiNoKuStyle, instance.shimoNoKuStyle)).build()
+                quizModule(
+                    QuizModule(
+                        instance.karutaQuizId,
+                        instance.kamiNoKuStyle,
+                        instance.shimoNoKuStyle
+                    )
+                ).build()
 
             abstract fun quizModule(module: QuizModule): Builder
 

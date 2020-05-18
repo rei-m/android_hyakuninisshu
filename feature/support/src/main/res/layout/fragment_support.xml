@@ -4,155 +4,153 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/height_ad_banner">
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:background="@color/black33" />
+                android:layout_height="@dimen/padding_m"
+                android:background="@color/whiteSmoke" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:layout_marginTop="@dimen/margin_m"
                 android:text="@string/about_app"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@string/text_explain_app" />
+                android:layout_marginEnd="@dimen/margin_m"
+                android:text="@string/text_explain_app"
+                android:textAppearance="?attr/textAppearanceBody2" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_xs"
+                android:layout_marginTop="@dimen/margin_s"
                 android:text="@string/function_training"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@string/text_explain_app_training" />
+                android:layout_marginEnd="@dimen/margin_m"
+                android:text="@string/text_explain_app_training"
+                android:textAppearance="?attr/textAppearanceBody2" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_xs"
+                android:layout_marginTop="@dimen/margin_s"
                 android:text="@string/function_exam"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@string/text_explain_app_exam" />
+                android:layout_marginEnd="@dimen/margin_m"
+                android:text="@string/text_explain_app_exam"
+                android:textAppearance="?attr/textAppearanceBody2" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_xs"
+                android:layout_marginTop="@dimen/margin_s"
                 android:text="@string/function_material"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textSize="@dimen/text_xs" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
-                android:text="@string/text_explain_app_material" />
+                android:layout_marginEnd="@dimen/margin_m"
+                android:text="@string/text_explain_app_material"
+                android:textAppearance="?attr/textAppearanceBody2" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
+                android:layout_height="@dimen/padding_m"
                 android:layout_marginTop="@dimen/margin_m"
-                android:background="@color/black33" />
+                android:background="@color/whiteSmoke" />
 
-            <TextView
-                android:id="@+id/text_review"
+            <Button
+                android:id="@+id/button_review"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_line"
-                android:background="@drawable/bg_ripple"
-                android:gravity="center_vertical"
-                android:paddingEnd="0dp"
-                android:paddingLeft="@dimen/margin_m"
-                android:paddingRight="0dp"
-                android:paddingStart="@dimen/margin_m"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_s"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginBottom="@dimen/margin_s"
                 android:text="@string/post_review" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:background="@color/black33" />
+                android:layout_height="@dimen/padding_m"
+                android:background="@color/whiteSmoke" />
 
-            <TextView
-                android:id="@+id/text_license"
+            <Button
+                android:id="@+id/button_license"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_line"
-                android:background="@drawable/bg_ripple"
-                android:gravity="center_vertical"
-                android:paddingEnd="0dp"
-                android:paddingLeft="@dimen/margin_m"
-                android:paddingRight="0dp"
-                android:paddingStart="@dimen/margin_m"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_s"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginBottom="@dimen/margin_s"
                 android:text="@string/license" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:background="@color/black33" />
+                android:layout_height="@dimen/padding_m"
+                android:background="@color/whiteSmoke" />
 
-            <TextView
-                android:id="@+id/text_privacy_policy"
+            <Button
+                android:id="@+id/button_privacy_policy"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_line"
-                android:background="@drawable/bg_ripple"
-                android:gravity="center_vertical"
-                android:paddingEnd="0dp"
-                android:paddingLeft="@dimen/margin_m"
-                android:paddingRight="0dp"
-                android:paddingStart="@dimen/margin_m"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_s"
+                android:layout_marginEnd="@dimen/margin_m"
+                android:layout_marginBottom="@dimen/margin_s"
                 android:text="@string/privacy_policy" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:background="@color/black33" />
+                android:layout_height="@dimen/padding_m"
+                android:background="@color/whiteSmoke" />
 
             <TextView
                 android:id="@+id/text_version"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_line"
-                android:layout_marginLeft="@dimen/margin_m"
                 android:layout_marginStart="@dimen/margin_m"
                 android:gravity="center_vertical" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:background="@color/black33" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_ad_banner" />
+                android:layout_height="@dimen/padding_m"
+                android:background="@color/whiteSmoke" />
 
         </LinearLayout>
 

@@ -36,6 +36,9 @@ class ExamHistoryFragment : DaggerFragment() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
+    private var _binding: FragmentExamHistoryBinding? = null
+    private val binding get() = _binding!!
+
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(
@@ -46,11 +49,11 @@ class ExamHistoryFragment : DaggerFragment() {
 
         val viewModel = provideActivityViewModel(ExamHistoryViewModel::class.java, viewModelFactory)
 
-        viewModel.unhandledErrorEvent.observe(this, EventObserver {
+        viewModel.unhandledErrorEvent.observe(viewLifecycleOwner, EventObserver {
             listener?.onError()
         })
 
-        val binding = FragmentExamHistoryBinding.inflate(inflater, container, false)
+        _binding = FragmentExamHistoryBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -61,12 +64,17 @@ class ExamHistoryFragment : DaggerFragment() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("ExamHistory", requireActivity())
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context

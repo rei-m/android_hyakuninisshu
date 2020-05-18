@@ -15,7 +15,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/tatami">
+        android:background="@drawable/tatami"
+        android:theme="@style/AppTheme">
 
         <TextView
             android:id="@+id/karuta_no"
@@ -23,40 +24,33 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_m"
             android:background="@android:color/white"
+            android:elevation="@dimen/elevation_level_m"
             android:paddingStart="@dimen/padding_m"
-            android:paddingLeft="@dimen/padding_m"
             android:paddingTop="@dimen/padding_s"
             android:paddingEnd="@dimen/padding_m"
-            android:paddingRight="@dimen/padding_m"
             android:paddingBottom="@dimen/padding_s"
             android:textSize="@dimen/text_s"
             app:karutaNo="@{viewModel.karutaNo}"
             app:kimariji="@{viewModel.kimariji}"
             app:layout_constraintBottom_toTopOf="@id/layout_karuta"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/text_material"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/layout_karuta"
             android:layout_marginStart="@dimen/margin_s"
-            android:layout_marginLeft="@dimen/margin_s"
             android:layout_marginBottom="@dimen/margin_m"
             android:background="@android:color/white"
+            android:elevation="@dimen/elevation_level_m"
             android:paddingStart="@dimen/padding_s"
-            android:paddingLeft="@dimen/padding_s"
             android:paddingTop="@dimen/padding_s"
             android:paddingEnd="@dimen/padding_s"
-            android:paddingRight="@dimen/padding_s"
             android:paddingBottom="@dimen/padding_s"
             android:text="@string/char_material"
             android:textSize="@dimen/text_s"
             app:layout_constraintBottom_toTopOf="@id/layout_karuta"
-            app:layout_constraintLeft_toRightOf="@id/karuta_no"
             app:layout_constraintStart_toEndOf="@id/karuta_no" />
 
         <FrameLayout
@@ -64,12 +58,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_karuta"
+            android:elevation="@dimen/elevation_level_m"
             android:padding="@dimen/padding_s"
-            app:elevation="@{@dimen/elevation_level_ms}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -80,10 +72,8 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/padding_m"
-                android:paddingLeft="@dimen/padding_m"
                 android:paddingTop="@dimen/padding_xl"
                 android:paddingEnd="@dimen/padding_m"
-                android:paddingRight="@dimen/padding_m"
                 android:paddingBottom="@dimen/padding_xl">
 
                 <me.rei_m.hyakuninisshu.feature.corecomponent.widget.view.VerticalSingleLineTextView
@@ -91,7 +81,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginEnd="@dimen/margin_ms"
-                    android:layout_marginRight="@dimen/margin_ms"
                     app:verticalText="@{viewModel.creator}"
                     app:verticalTextSize="@{R.dimen.text_m}" />
 
@@ -106,7 +95,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_s"
-                    android:layout_marginLeft="@dimen/margin_s"
                     android:layout_marginTop="@dimen/margin_m"
                     app:verticalText="@{viewModel.fourthPhrase}"
                     app:verticalTextSize="@{R.dimen.text_ll}" />
@@ -125,7 +113,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_l"
                     android:layout_marginEnd="@dimen/margin_s"
-                    android:layout_marginRight="@dimen/margin_s"
                     app:verticalText="@{viewModel.secondPhrase}"
                     app:verticalTextSize="@{R.dimen.text_ll}" />
 
@@ -139,36 +126,33 @@
 
         </FrameLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_l"
             android:onClick="@{() -> viewModel.onClickNextQuiz()}"
-            android:paddingStart="@dimen/padding_m"
-            android:paddingTop="@dimen/padding_m"
-            android:paddingEnd="@dimen/padding_m"
-            android:paddingBottom="@dimen/padding_m"
             android:text="@string/go_to_next"
             android:textSize="@dimen/text_m"
+            app:icon="@drawable/ic_navigate_next_white_24dp"
+            app:iconGravity="textStart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_karuta"
             app:visibleOrGone="@{viewModel.existNextQuiz}" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_l"
             android:onClick="@{() -> viewModel.onClickConfirmResult()}"
-            android:paddingTop="@dimen/padding_m"
-            android:paddingBottom="@dimen/padding_m"
             android:text="@string/confirm_result"
             android:textSize="@dimen/text_m"
+            app:backgroundTint="@color/colorSecondary"
+            app:icon="@drawable/ic_note_white_24dp"
+            app:iconGravity="textStart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_karuta"
             app:visibleOrGone="@{viewModel.canGoToResult}" />
