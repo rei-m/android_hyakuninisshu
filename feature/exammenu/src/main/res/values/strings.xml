@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under the License is
+  ~ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+  ~ the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<resources>
+    <string name="text_exam_about">全百首から出題され、出題順は毎回変わります。結果は過去10回分が保存され、間違えた問題は振り返りで練習することができます。</string>
+    <string name="previous_result_of_exam">前回の力試しの結果</string>
+    <string name="show_all_exam_results">過去の結果を全て見る</string>
+    <string name="start_exam">力試しをはじめる</string>
+    <string name="start_training_of_exam">過去間違えた問題を練習する</string>
+</resources>

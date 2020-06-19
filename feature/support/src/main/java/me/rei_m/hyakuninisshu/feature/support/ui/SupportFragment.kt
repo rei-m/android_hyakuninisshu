@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2020. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,30 +14,37 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.support.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dagger.android.ContributesAndroidInjector
-import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.support.BuildConfig
 import me.rei_m.hyakuninisshu.feature.support.R
-import me.rei_m.hyakuninisshu.feature.support.databinding.FragmentSupportBinding
-import me.rei_m.hyakuninisshu.feature.support.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.support.databinding.SupportFragmentBinding
+import me.rei_m.hyakuninisshu.feature.support.di.SupportComponent
 import javax.inject.Inject
 
-class SupportFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var navigator: Navigator
+class SupportFragment : Fragment() {
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private var _binding: FragmentSupportBinding? = null
+    private var _binding: SupportFragmentBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        (requireActivity() as SupportComponent.Injector)
+            .supportComponent()
+            .create()
+            .inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +53,7 @@ class SupportFragment : DaggerFragment() {
     ): View? {
         val versionName = getString(R.string.version, BuildConfig.VERSION_NAME)
 
-        _binding = FragmentSupportBinding.inflate(inflater, container, false)
+        _binding = SupportFragmentBinding.inflate(inflater, container, false)
         binding.textVersion.text = versionName
 
         return binding.root
@@ -59,29 +66,18 @@ class SupportFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        analyticsHelper.sendScreenView("Entrance - Support", requireActivity())
+        analyticsHelper.sendScreenView("Support", requireActivity())
 
         binding.buttonLicense.setOnClickListener {
-            navigator.openLicenceDialog()
+            startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
         }
         binding.buttonPrivacyPolicy.setOnClickListener {
-            navigator.openPrivacyPolicy()
+            findNavController().navigate(R.id.action_support_to_privacyPolicyDialog)
         }
         binding.buttonReview.setOnClickListener {
-            navigator.navigateToAppStore()
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            requireActivity().startActivity(intent)
         }
-    }
-
-    @dagger.Module
-    abstract class Module {
-        @FragmentScope
-        @ContributesAndroidInjector
-        abstract fun contributeInjector(): SupportFragment
-    }
-
-    companion object {
-        const val TAG: String = "SupportFragment"
-
-        fun newInstance() = SupportFragment()
     }
 }

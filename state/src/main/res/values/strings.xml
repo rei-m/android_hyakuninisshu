@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under the License is
+  ~ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+  ~ the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<resources>
+    <string name="training_range_1">一番</string>
+    <string name="training_range_11">十一番</string>
+    <string name="training_range_21">二十一番</string>
+    <string name="training_range_31">三十一番</string>
+    <string name="training_range_41">四十一番</string>
+    <string name="training_range_51">五十一番</string>
+    <string name="training_range_61">六十一番</string>
+    <string name="training_range_71">七十一番</string>
+    <string name="training_range_81">八十一番</string>
+    <string name="training_range_91">九十一番</string>
+
+    <string name="training_range_10">十番</string>
+    <string name="training_range_20">二十番</string>
+    <string name="training_range_30">三十番</string>
+    <string name="training_range_40">四十番</string>
+    <string name="training_range_50">五十番</string>
+    <string name="training_range_60">六十番</string>
+    <string name="training_range_70">七十番</string>
+    <string name="training_range_80">八十番</string>
+    <string name="training_range_90">九十番</string>
+    <string name="training_range_100">百番</string>
+
+    <string name="kimariji_not_select">指定しない</string>
+    <string name="kimariji_1">一字決まり</string>
+    <string name="kimariji_2">二字決まり</string>
+    <string name="kimariji_3">三字決まり</string>
+    <string name="kimariji_4">四字決まり</string>
+    <string name="kimariji_5">五字決まり</string>
+    <string name="kimariji_6">六字決まり</string>
+
+    <string name="color_not_select">指定しない</string>
+    <string name="color_blue">青色</string>
+    <string name="color_pink">桃色</string>
+    <string name="color_yellow">黄色</string>
+    <string name="color_green">緑色</string>
+    <string name="color_orange">橙色</string>
+
+    <string name="animation_none">なし</string>
+    <string name="animation_slow">おそめ</string>
+    <string name="animation_normal">ふつう</string>
+    <string name="animation_fast">はやめ</string>
+
+    <string name="display_style_kana">すべて仮名で表示</string>
+    <string name="display_style_kanji">漢字と仮名で表示</string>
+
+    <string name="one">一</string>
+    <string name="two">二</string>
+    <string name="three">三</string>
+    <string name="four">四</string>
+    <string name="five">五</string>
+    <string name="six">六</string>
+    <string name="seven">七</string>
+    <string name="eight">八</string>
+    <string name="nine">九</string>
+    <string name="ten">十</string>
+    <string name="hundred">百</string>
+
+    <string name="karuta_number">%1$s番</string>
+    <string name="seconds">%1$s秒</string>
+
+    <string name="past_second">%1$d秒前</string>
+    <string name="past_minute">%1$d分前</string>
+    <string name="past_hour">%1$d時間前</string>
+    <string name="yesterday">昨日</string>
+    <string name="past_day">%1$d日前</string>
+    <string name="last_week">先週</string>
+    <string name="past_week">%1$d週間前</string>
+    <string name="last_month">先月</string>
+    <string name="past_month">%1$dヶ月前</string>
+    <string name="last_year">昨年</string>
+    <string name="past_year">%1$d年前</string>
+</resources>

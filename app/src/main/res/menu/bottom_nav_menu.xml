@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_training_menu"
+        android:icon="@drawable/ic_edit_white_24dp"
+        android:title="@string/navigation_label_training_menu" />
+
+    <item
+        android:id="@+id/navigation_exam_menu"
+        android:icon="@drawable/ic_note_white_24dp"
+        android:title="@string/navigation_label_exam" />
+
+    <item
+        android:id="@+id/navigation_material_list"
+        android:icon="@drawable/ic_library_books_white_24dp"
+        android:title="@string/navigation_label_material_list" />
+
+    <item
+        android:id="@+id/navigation_support"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/navigation_label_support" />
+</menu>

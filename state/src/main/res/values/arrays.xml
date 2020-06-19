@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under the License is
+  ~ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+  ~ the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<resources>
+    <array name="number">
+        <item>@string/one</item>
+        <item>@string/two</item>
+        <item>@string/three</item>
+        <item>@string/four</item>
+        <item>@string/five</item>
+        <item>@string/six</item>
+        <item>@string/seven</item>
+        <item>@string/eight</item>
+        <item>@string/nine</item>
+    </array>
+
+    <array name="kimariji">
+        <item>@string/kimariji_1</item>
+        <item>@string/kimariji_2</item>
+        <item>@string/kimariji_3</item>
+        <item>@string/kimariji_4</item>
+        <item>@string/kimariji_5</item>
+        <item>@string/kimariji_6</item>
+    </array>
+
+    <array name="karuta_image">
+        <item>@drawable/karuta_001</item>
+        <item>@drawable/karuta_002</item>
+        <item>@drawable/karuta_003</item>
+        <item>@drawable/karuta_004</item>
+        <item>@drawable/karuta_005</item>
+        <item>@drawable/karuta_006</item>
+        <item>@drawable/karuta_007</item>
+        <item>@drawable/karuta_008</item>
+        <item>@drawable/karuta_009</item>
+        <item>@drawable/karuta_010</item>
+        <item>@drawable/karuta_011</item>
+        <item>@drawable/karuta_012</item>
+        <item>@drawable/karuta_013</item>
+        <item>@drawable/karuta_014</item>
+        <item>@drawable/karuta_015</item>
+        <item>@drawable/karuta_016</item>
+        <item>@drawable/karuta_017</item>
+        <item>@drawable/karuta_018</item>
+        <item>@drawable/karuta_019</item>
+        <item>@drawable/karuta_020</item>
+        <item>@drawable/karuta_021</item>
+        <item>@drawable/karuta_022</item>
+        <item>@drawable/karuta_023</item>
+        <item>@drawable/karuta_024</item>
+        <item>@drawable/karuta_025</item>
+        <item>@drawable/karuta_026</item>
+        <item>@drawable/karuta_027</item>
+        <item>@drawable/karuta_028</item>
+        <item>@drawable/karuta_029</item>
+        <item>@drawable/karuta_030</item>
+        <item>@drawable/karuta_031</item>
+        <item>@drawable/karuta_032</item>
+        <item>@drawable/karuta_033</item>
+        <item>@drawable/karuta_034</item>
+        <item>@drawable/karuta_035</item>
+        <item>@drawable/karuta_036</item>
+        <item>@drawable/karuta_037</item>
+        <item>@drawable/karuta_038</item>
+        <item>@drawable/karuta_039</item>
+        <item>@drawable/karuta_040</item>
+        <item>@drawable/karuta_041</item>
+        <item>@drawable/karuta_042</item>
+        <item>@drawable/karuta_043</item>
+        <item>@drawable/karuta_044</item>
+        <item>@drawable/karuta_045</item>
+        <item>@drawable/karuta_046</item>
+        <item>@drawable/karuta_047</item>
+        <item>@drawable/karuta_048</item>
+        <item>@drawable/karuta_049</item>
+        <item>@drawable/karuta_050</item>
+        <item>@drawable/karuta_051</item>
+        <item>@drawable/karuta_052</item>
+        <item>@drawable/karuta_053</item>
+        <item>@drawable/karuta_054</item>
+        <item>@drawable/karuta_055</item>
+        <item>@drawable/karuta_056</item>
+        <item>@drawable/karuta_057</item>
+        <item>@drawable/karuta_058</item>
+        <item>@drawable/karuta_059</item>
+        <item>@drawable/karuta_060</item>
+        <item>@drawable/karuta_061</item>
+        <item>@drawable/karuta_062</item>
+        <item>@drawable/karuta_063</item>
+        <item>@drawable/karuta_064</item>
+        <item>@drawable/karuta_065</item>
+        <item>@drawable/karuta_066</item>
+        <item>@drawable/karuta_067</item>
+        <item>@drawable/karuta_068</item>
+        <item>@drawable/karuta_069</item>
+        <item>@drawable/karuta_070</item>
+        <item>@drawable/karuta_071</item>
+        <item>@drawable/karuta_072</item>
+        <item>@drawable/karuta_073</item>
+        <item>@drawable/karuta_074</item>
+        <item>@drawable/karuta_075</item>
+        <item>@drawable/karuta_076</item>
+        <item>@drawable/karuta_077</item>
+        <item>@drawable/karuta_078</item>
+        <item>@drawable/karuta_079</item>
+        <item>@drawable/karuta_080</item>
+        <item>@drawable/karuta_081</item>
+        <item>@drawable/karuta_082</item>
+        <item>@drawable/karuta_083</item>
+        <item>@drawable/karuta_084</item>
+        <item>@drawable/karuta_085</item>
+        <item>@drawable/karuta_086</item>
+        <item>@drawable/karuta_087</item>
+        <item>@drawable/karuta_088</item>
+        <item>@drawable/karuta_089</item>
+        <item>@drawable/karuta_090</item>
+        <item>@drawable/karuta_091</item>
+        <item>@drawable/karuta_092</item>
+        <item>@drawable/karuta_093</item>
+        <item>@drawable/karuta_094</item>
+        <item>@drawable/karuta_095</item>
+        <item>@drawable/karuta_096</item>
+        <item>@drawable/karuta_097</item>
+        <item>@drawable/karuta_098</item>
+        <item>@drawable/karuta_099</item>
+        <item>@drawable/karuta_100</item>
+    </array>
+</resources>

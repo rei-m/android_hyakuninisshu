@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under the License is
+  ~ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+  ~ the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.MaterialDetailPageFragment">
+
+    <data>
+
+        <variable
+            name="material"
+            type="me.rei_m.hyakuninisshu.state.material.model.Material" />
+    </data>
+
+    <ScrollView
+        android:id="@+id/root_material_detail_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_material_detail_page"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/spacing_2"
+            android:paddingTop="@dimen/spacing_2"
+            android:paddingEnd="@dimen/spacing_2"
+            android:paddingBottom="@dimen/height_ad_banner">
+
+            <ImageView
+                android:id="@+id/image_karuta"
+                android:layout_width="@dimen/width_karuta_thumbnail"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:contentDescription="@string/karuta"
+                android:elevation="@dimen/elevation_level_m"
+                app:karutaSrc="@{material.imageResId}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_creator_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/creator"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_karuta" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_creator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{material.noTxt + ` / ` + material.creator}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator_title"
+                tools:text="一番 / 天智天皇" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_karuta_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/original_text"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_kami_no_ku_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{material.kamiNoKuKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_karuta_title"
+                tools:text="秋の田の　かりほの庵の　苫をあらみ" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_shimo_no_ku_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{material.shimoNoKuKanji}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_kami_no_ku_kanji"
+                tools:text="わが衣手は　露にぬれつつ" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_kami_no_ku_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:kimariji="@{material.kimariji}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_shimo_no_ku_kanji"
+                app:textKamiNoKuKana="@{material.kamiNoKuKana}"
+                tools:text="あきのたの　かりほのいほの　とまをあらみ" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_shimo_no_ku_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{material.shimoNoKuKana}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_kami_no_ku_kana"
+                tools:text="わがころもでは　つゆにねれつつ" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_translation_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/translation"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_shimo_no_ku_kana" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_translation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{material.translation}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_translation_title"
+                tools:text="秋の田圃のほとりにある仮小屋の、屋根を葺いた苫の編み目が粗いので、私の衣の袖は露に濡れていくばかりだ。" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

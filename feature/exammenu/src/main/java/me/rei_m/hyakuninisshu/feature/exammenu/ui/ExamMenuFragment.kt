@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2020. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,37 +18,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dagger.android.ContributesAndroidInjector
-import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.exammenu.databinding.FragmentExamMenuBinding
-import me.rei_m.hyakuninisshu.feature.exammenu.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.exammenu.databinding.ExamMenuFragmentBinding
+import me.rei_m.hyakuninisshu.feature.exammenu.di.ExamMenuComponent
 import javax.inject.Inject
 
-class ExamMenuFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ExamMenuViewModel.Factory
-
-    @Inject
-    lateinit var navigator: Navigator
+class ExamMenuFragment : Fragment() {
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private var _binding: FragmentExamMenuBinding? = null
+    @Inject
+    lateinit var viewModelFactory: ExamMenuViewModel.Factory
+
+    private var _binding: ExamMenuFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel by activityViewModels<ExamMenuViewModel> { viewModelFactory }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        (requireActivity() as ExamMenuComponent.Injector)
+            .examMenuComponent()
+            .create()
+            .inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentExamMenuBinding.inflate(inflater, container, false)
-        binding.viewModel =
-            provideActivityViewModel(ExamMenuViewModel::class.java, viewModelFactory)
+        _binding = ExamMenuFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
@@ -61,32 +65,26 @@ class ExamMenuFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        analyticsHelper.sendScreenView("Entrance - ExamMenu", requireActivity())
+        analyticsHelper.sendScreenView("ExamMenu", requireActivity())
 
         binding.buttonShowAllExamResults.setOnClickListener {
-            navigator.navigateToExamHistory()
+            val action = ExamMenuFragmentDirections.actionExamMenuToExamHistory()
+            findNavController().navigate(action)
         }
         binding.buttonStartExam.setOnClickListener {
             analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_EXAM)
-            navigator.navigateToExam()
+            val action = ExamMenuFragmentDirections.actionExamMenuToExamStarter()
+            findNavController().navigate(action)
         }
-        binding.buttonStartTrainingFailedQuiz.setOnClickListener {
+        binding.buttonStartTrainingFailedQuestion.setOnClickListener {
             analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING_FOR_EXAM)
-            navigator.navigateToTrainingExam()
+            val action = ExamMenuFragmentDirections.actionExamMenuToExamPracticeTrainingStarter()
+            findNavController().navigate(action)
         }
     }
 
-    @dagger.Module
-    abstract class Module {
-        @FragmentScope
-        @ContributesAndroidInjector
-        abstract fun contributeInjector(): ExamMenuFragment
-    }
-
-    companion object {
-
-        const val TAG: String = "ExamMenuFragment"
-
-        fun newInstance() = ExamMenuFragment()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.viewModel = viewModel
     }
 }

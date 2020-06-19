@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.TrainingMenuFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/height_ad_banner">
+
+            <TextView
+                android:id="@+id/text_title_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/training_setting"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_range_from"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:hint="@string/range_start"
+                android:labelFor="@id/dropdown_range_from"
+                app:layout_constraintEnd_toStartOf="@id/range_separate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_title_setting"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_range_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/range_separate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_1"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_1"
+                android:paddingTop="@dimen/spacing_2"
+                android:paddingBottom="@dimen/spacing_2"
+                android:text="@string/training_range_separate"
+                app:layout_constraintEnd_toStartOf="@id/input_layout_range_to"
+                app:layout_constraintStart_toEndOf="@id/input_layout_range_from"
+                app:layout_constraintTop_toBottomOf="@id/text_title_setting"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_range_to"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:hint="@string/range_end"
+                android:labelFor="@id/dropdown_range_to"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/range_separate"
+                app:layout_constraintTop_toBottomOf="@id/text_title_setting"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_range_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_kimariji"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:hint="@string/kimariji"
+                android:labelFor="@id/dropdown_kimariji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_layout_range_from">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_kimariji"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_color"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:hint="@string/color"
+                android:labelFor="@id/dropdown_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_kimariji">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_top_phrase_style"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:hint="@string/kami_no_ku"
+                android:labelFor="@id/dropdown_top_phrase_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_color">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_top_phrase_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_bottom_phrase_style"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:hint="@string/shimo_no_ku"
+                android:labelFor="@id/dropdown_bottom_phrase_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_top_phrase_style">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_bottom_phrase_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_animation_speed"
+                style="@style/SelectInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:hint="@string/animation_condition"
+                android:labelFor="@id/dropdown_animation_speed"
+                app:layout_constraintBottom_toTopOf="@id/button_start_training"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_bottom_phrase_style">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_animation_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_start_training"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_3"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:text="@string/start_training"
+                android:textSize="@dimen/text_m"
+                app:backgroundTint="@color/colorSecondary"
+                app:icon="@drawable/ic_edit_white_24dp"
+                app:iconGravity="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_layout_animation_speed" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
