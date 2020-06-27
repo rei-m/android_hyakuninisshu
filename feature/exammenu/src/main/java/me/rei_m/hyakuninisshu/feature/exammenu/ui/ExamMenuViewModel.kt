@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2020. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -14,33 +14,27 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.exammenu.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
-import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
+import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
+import me.rei_m.hyakuninisshu.state.core.Dispatcher
+import me.rei_m.hyakuninisshu.state.exam.action.ExamActionCreator
+import me.rei_m.hyakuninisshu.state.exam.store.ExamMenuStore
 import javax.inject.Inject
-import javax.inject.Named
-import kotlin.coroutines.CoroutineContext
 
 class ExamMenuViewModel(
-    mainContext: CoroutineContext,
-    ioContext: CoroutineContext,
     dispatcher: Dispatcher,
-    actionCreator: ExamActionCreator,
+    private val actionCreator: ExamActionCreator,
     private val store: ExamMenuStore
-) : AbstractViewModel(mainContext, ioContext, dispatcher) {
+) : AbstractViewModel(dispatcher) {
 
-    val hasResult: LiveData<Boolean> = store.recentExam.map { it != null }
-
-    val score: LiveData<String?> = store.recentExam.map { it?.result?.score }
-
-    val averageAnswerSec: LiveData<Float?> = store.recentExam.map { it?.result?.averageAnswerSec }
+    val hasResult = store.recentResult.map { it != null }
+    val score = store.recentResult.map { it?.score }
+    val averageAnswerSec = store.recentResult.map { it?.averageAnswerSecText }
 
     init {
-        dispatchAction { actionCreator.fetchRecent() }
+        dispatchAction { actionCreator.fetchRecentResult() }
     }
 
     override fun onCleared() {
@@ -49,16 +43,12 @@ class ExamMenuViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("mainContext") private val mainContext: CoroutineContext,
-        @Named("ioContext") private val ioContext: CoroutineContext,
         private val dispatcher: Dispatcher,
         private val actionCreator: ExamActionCreator,
         private val store: ExamMenuStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T = ExamMenuViewModel(
-            mainContext,
-            ioContext,
             dispatcher,
             actionCreator,
             store

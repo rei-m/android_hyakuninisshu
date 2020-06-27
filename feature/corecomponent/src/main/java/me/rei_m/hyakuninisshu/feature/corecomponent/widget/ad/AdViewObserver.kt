@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -29,25 +30,21 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
 import javax.inject.Inject
 
 @ActivityScope
-class AdViewObserver @Inject constructor() :
-    LifecycleObserver {
+class AdViewObserver @Inject constructor() : LifecycleObserver {
 
     private var adView: AdView? = null
 
-    fun loadAd(activity: AppCompatActivity, container: FrameLayout) {
-        if (adView == null) {
-            val adView = AdView(activity)
-            container.addView(adView)
-            adView.adUnitId = activity.getString(R.string.banner_ad_unit_id)
-            adView.adSize = calcAdSize(activity, container)
-            val adRequest = AdRequest.Builder().build()
-            adView.loadAd(adRequest)
-            this.adView = adView
-        }
-    }
+    private var isLoadedAd = false
 
-    fun showAd() {
-        adView?.visibility = View.VISIBLE
+    fun showAd(activity: AppCompatActivity, container: FrameLayout) {
+        setup(activity, container)
+
+        adView?.let {
+            if (!it.isLoading && !isLoadedAd) {
+                loadAd()
+            }
+            it.visibility = View.VISIBLE
+        }
     }
 
     fun hideAd() {
@@ -69,6 +66,29 @@ class AdViewObserver @Inject constructor() :
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun pauseAd() {
         adView?.pause()
+    }
+
+    private fun setup(activity: AppCompatActivity, container: FrameLayout) {
+        if (adView == null) {
+            val adView = AdView(activity).apply {
+                adUnitId = activity.getString(R.string.banner_ad_unit_id)
+                adSize = calcAdSize(activity, container)
+                adListener = object : AdListener() {
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
+                        isLoadedAd = true
+                    }
+                }
+            }
+            container.addView(adView)
+
+            this.adView = adView
+        }
+    }
+
+    private fun loadAd() {
+        val adRequest = AdRequest.Builder().build()
+        adView?.loadAd(adRequest)
     }
 
     private fun calcAdSize(activity: AppCompatActivity, container: FrameLayout): AdSize {

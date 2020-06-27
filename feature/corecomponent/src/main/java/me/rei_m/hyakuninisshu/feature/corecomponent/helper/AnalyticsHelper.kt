@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2020. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,36 +18,37 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import timber.log.Timber
 
 import javax.inject.Inject
 import javax.inject.Singleton
 
+// GMSでエラーが出る・・・（ただアプリが落ちるわけではないんだけど）ので一旦無効にしている
 @Singleton
 class AnalyticsHelper @Inject constructor(context: Context) {
 
-    private val analytics = FirebaseAnalytics.getInstance(context)
+//    private val analytics = FirebaseAnalytics.getInstance(context)
 
     fun sendScreenView(screenName: String, activity: Activity) {
         val params = Bundle().apply {
-            putString(FirebaseAnalytics.Param.ITEM_ID, screenName)
-            putString(FirebaseAnalytics.Param.CONTENT_TYPE, CONTENT_TYPE_SCREEN_VIEW)
+//            putString(FirebaseAnalytics.Param.ITEM_ID, screenName)
+//            putString(FirebaseAnalytics.Param.CONTENT_TYPE, CONTENT_TYPE_SCREEN_VIEW)
         }
-        analytics.run {
-            setCurrentScreen(activity, screenName, null)
-            logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
-        }
+//        analytics.run {
+//            setCurrentScreen(activity, screenName, null)
+//            logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+//        }
         log("Screen($screenName) recorded")
     }
 
     fun logActionEvent(event: ActionEvent) {
         val params = Bundle().apply {
-            putString(FirebaseAnalytics.Param.ITEM_ID, event.id)
-            putString(FirebaseAnalytics.Param.CONTENT_TYPE, CONTENT_TYPE_ACTION_EVENT)
-            putString(KEY_ACTION, event.event)
+//            putString(FirebaseAnalytics.Param.ITEM_ID, event.id)
+//            putString(FirebaseAnalytics.Param.CONTENT_TYPE, CONTENT_TYPE_ACTION_EVENT)
+//            putString(KEY_ACTION, event.event)
         }
-        analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
+//        analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params)
         log("$event recorded")
     }
 

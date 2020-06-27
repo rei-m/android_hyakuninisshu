@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.QuestionFragment">
+
+    <data>
+
+        <variable
+            name="yomiFudaTextSize"
+            type="Integer" />
+
+        <variable
+            name="toriFudaTextSize"
+            type="Integer" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.feature.question.ui.QuestionViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root_question"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/tatami"
+        android:theme="@style/AppTheme">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/whiteSmoke"
+            android:paddingStart="@dimen/spacing_2"
+            android:paddingTop="@dimen/spacing_1"
+            android:paddingEnd="@dimen/spacing_2"
+            android:paddingBottom="@dimen/spacing_1"
+            android:text="@{viewModel.position}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1 / 100" />
+
+        <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaView
+            android:id="@+id/view_yomi_fuda"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_2"
+            android:elevation="@dimen/elevation_level_m"
+            android:padding="@dimen/spacing_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:textSizeByPx="@{yomiFudaTextSize}" />
+
+        <me.rei_m.hyakuninisshu.feature.question.ui.widget.ToriFudaView
+            android:id="@+id/view_tori_fuda_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_level_m"
+            android:onClick="@{() -> viewModel.onSelected(0)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/view_tori_fuda_2"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_yomi_fuda"
+            app:textSizeByPx="@{toriFudaTextSize}"
+            app:toriFuda="@{viewModel.toriFudaList[0]}"
+            app:visibleOrInvisible="@{viewModel.selectedTorifudaIndex == null || viewModel.selectedTorifudaIndex == 0}" />
+
+        <me.rei_m.hyakuninisshu.feature.question.ui.widget.ToriFudaView
+            android:id="@+id/view_tori_fuda_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_level_m"
+            android:onClick="@{() -> viewModel.onSelected(1)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/view_tori_fuda_3"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/view_tori_fuda_1"
+            app:layout_constraintTop_toBottomOf="@id/view_yomi_fuda"
+            app:textSizeByPx="@{toriFudaTextSize}"
+            app:toriFuda="@{viewModel.toriFudaList[1]}"
+            app:visibleOrInvisible="@{viewModel.selectedTorifudaIndex == null || viewModel.selectedTorifudaIndex == 1}" />
+
+        <me.rei_m.hyakuninisshu.feature.question.ui.widget.ToriFudaView
+            android:id="@+id/view_tori_fuda_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_level_m"
+            android:onClick="@{() -> viewModel.onSelected(2)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/view_tori_fuda_4"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/view_tori_fuda_2"
+            app:layout_constraintTop_toBottomOf="@id/view_yomi_fuda"
+            app:textSizeByPx="@{toriFudaTextSize}"
+            app:toriFuda="@{viewModel.toriFudaList[2]}"
+            app:visibleOrInvisible="@{viewModel.selectedTorifudaIndex == null || viewModel.selectedTorifudaIndex == 2}" />
+
+        <me.rei_m.hyakuninisshu.feature.question.ui.widget.ToriFudaView
+            android:id="@+id/view_tori_fuda_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_level_m"
+            android:onClick="@{() -> viewModel.onSelected(3)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/view_tori_fuda_3"
+            app:layout_constraintTop_toBottomOf="@id/view_yomi_fuda"
+            app:textSizeByPx="@{toriFudaTextSize}"
+            app:toriFuda="@{viewModel.toriFudaList[3]}"
+            app:visibleOrInvisible="@{viewModel.selectedTorifudaIndex == null || viewModel.selectedTorifudaIndex == 3}" />
+
+        <FrameLayout
+            android:id="@+id/layout_question_result"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:elevation="@dimen/elevation_level_l"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleOrGone="@{viewModel.isVisibleResult}"
+            tools:visibility="gone">
+
+            <ImageView
+                android:id="@+id/image_question_result"
+                android:layout_width="@dimen/size_karuta_question_result_mark"
+                android:layout_height="@dimen/size_karuta_question_result_mark"
+                android:layout_gravity="center"
+                android:src="@{viewModel.isCorrectResId}"
+                app:visibleOrGone="@{viewModel.isVisibleResult}" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,40 @@
+/*
+ * Copyright (c) 2020. Rei Matsushita.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply from: rootProject.file('gradle/android.gradle')
+apply from: rootProject.file('gradle/android-feature.gradle')
+
+apply from: rootProject.file('gradle/dependencies/dagger.gradle'), to: dependencies
+apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
+    implementation "androidx.annotation:annotation:$rootProject.androidx_annotation_version"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$rootProject.androidx_lifecycle_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroid_version"
+    implementation "com.jakewharton.timber:timber:$rootProject.timber_version"
+
+    implementation project(':domain')
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
+}

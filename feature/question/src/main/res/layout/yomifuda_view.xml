@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under the License is
+  ~ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+  ~ the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_fuda_inner">
+
+        <RelativeLayout
+            android:id="@+id/phrase_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/phrase_2"
+            android:paddingTop="@dimen/spacing_2"
+            android:paddingBottom="@dimen/spacing_2">
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_1_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_1"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="1"
+                tools:text="秋" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_1_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_1_1"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="2"
+                tools:text="の" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_1_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_1_2"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="3"
+                tools:text="田" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_1_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_1_3"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="4"
+                tools:text="の" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_1_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_1_4"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="5" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_1_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_1_5"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="6" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/phrase_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/spacing_1"
+            android:layout_marginTop="@dimen/spacing_4"
+            android:layout_marginEnd="@dimen/spacing_1"
+            android:paddingTop="@dimen/spacing_2"
+            android:paddingBottom="@dimen/spacing_2">
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="1" />
+            <!--            app:textForQuiz="@{viewModel.secondPhrase}"-->
+            <!--            app:textPosition="@{1}"-->
+            <!--            app:textSizeByPx="@{viewModel.quizTextSize}"-->
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_2_1"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="2" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_2_2"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="3" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_2_3"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="4" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_2_4"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="5" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_2_5"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="6" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_2_6"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="7" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_2_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_2_7"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="8" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_8"
+            android:layout_toStartOf="@+id/phrase_2"
+            android:paddingTop="@dimen/spacing_2"
+            android:paddingBottom="@dimen/spacing_2">
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_3_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="1" />
+
+            <!--            app:textForQuiz="@{viewModel.thirdPhrase}"-->
+            <!--            app:textPosition="@{1}"-->
+            <!--            app:textSizeByPx="@{viewModel.quizTextSize}"-->
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_3_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_3_1"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="2" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_3_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_3_2"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="3" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_3_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_3_3"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="4" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_3_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_3_4"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                app:position="5" />
+
+            <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaWordView
+                android:id="@+id/phrase_3_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phrase_3_5"
+                android:layout_marginTop="@dimen/margin_karuta_word_adjust"
+                android:layout_marginBottom="@dimen/spacing_1"
+                android:visibility="invisible"
+                app:position="6" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+</merge>

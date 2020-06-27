@@ -15,66 +15,51 @@
 package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.ContributesAndroidInjector
-import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.SpinnerItem
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setUp
+import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setUpDropDown
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.trainingmenu.R
-import me.rei_m.hyakuninisshu.feature.trainingmenu.databinding.FragmentTrainingMenuBinding
-import me.rei_m.hyakuninisshu.feature.trainingmenu.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.trainingmenu.databinding.TrainingMenuFragmentBinding
+import me.rei_m.hyakuninisshu.feature.trainingmenu.di.TrainingMenuComponent
+import me.rei_m.hyakuninisshu.state.training.model.ColorCondition
+import me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition
+import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
+import me.rei_m.hyakuninisshu.state.training.model.KimarijiCondition
+import me.rei_m.hyakuninisshu.state.training.model.RangeFromCondition
+import me.rei_m.hyakuninisshu.state.training.model.RangeToCondition
 import javax.inject.Inject
 
-class TrainingMenuFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: TrainingMenuViewModel.Factory
-
-    @Inject
-    lateinit var navigator: Navigator
+class TrainingMenuFragment : Fragment() {
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    private var _binding: FragmentTrainingMenuBinding? = null
+    private var _binding: TrainingMenuFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: TrainingMenuViewModel
+    private val viewModel by activityViewModels<TrainingMenuViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        (requireActivity() as TrainingMenuComponent.Injector)
+            .trainingMenuComponent()
+            .create()
+            .inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (savedInstanceState != null) {
-            with(viewModelFactory) {
-                trainingRangeFrom =
-                    TrainingRangeFrom[savedInstanceState.getInt(KEY_TRAINING_RANGE_FROM)]
-                trainingRangeTo = TrainingRangeTo[savedInstanceState.getInt(KEY_TRAINING_RANGE_TO)]
-                kimariji = KimarijiFilter[savedInstanceState.getInt(KEY_KIMARIJI)]
-                kamiNoKuStyle = KarutaStyleFilter[savedInstanceState.getInt(KEY_KAMI_NO_KU_STYLE)]
-                shimoNoKuStyle = KarutaStyleFilter[savedInstanceState.getInt(KEY_SHIMO_NO_KU_STYLE)]
-                color = ColorFilter[savedInstanceState.getInt(KEY_COLOR)]
-                animationSpeed = QuizAnimationSpeed[savedInstanceState.getInt(KEY_ANIMATION_SPEED)]
-            }
-        }
-        viewModel = provideActivityViewModel(TrainingMenuViewModel::class.java, viewModelFactory)
-
-        _binding = FragmentTrainingMenuBinding.inflate(inflater, container, false)
+        _binding = TrainingMenuFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
@@ -87,10 +72,31 @@ class TrainingMenuFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        analyticsHelper.sendScreenView("Entrance - TrainingMenu", requireActivity())
+        analyticsHelper.sendScreenView("TrainingMenu", requireActivity())
+        binding.dropdownRangeFrom.setUpDropDown(
+            RangeFromCondition.values().map { it.label(resources) }
+        )
+        binding.dropdownRangeTo.setUpDropDown(
+            RangeToCondition.values().map { it.label(resources) }
+        )
+        binding.dropdownKimariji.setUpDropDown(
+            KimarijiCondition.values().map { it.label(resources) }
+        )
+        binding.dropdownTopPhraseStyle.setUpDropDown(
+            DisplayStyleCondition.values().map { it.label(resources) }
+        )
+        binding.dropdownBottomPhraseStyle.setUpDropDown(
+            DisplayStyleCondition.values().map { it.label(resources) }
+        )
+        binding.dropdownColor.setUpDropDown(
+            ColorCondition.values().map { it.label(resources) }
+        )
+        binding.dropdownAnimationSpeed.setUpDropDown(
+            DisplayAnimationSpeedCondition.values().map { it.label(resources) }
+        )
 
         binding.buttonStartTraining.setOnClickListener {
-            if (viewModel.trainingRangeFrom.ordinal > viewModel.trainingRangeTo.ordinal) {
+            if (viewModel.rangeTo.ordinal < viewModel.rangeFrom.ordinal) {
                 Snackbar.make(
                     binding.root,
                     R.string.text_message_invalid_training_range,
@@ -99,108 +105,42 @@ class TrainingMenuFragment : DaggerFragment() {
                 return@setOnClickListener
             }
             analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
-            navigator.navigateToTraining(
-                viewModel.trainingRangeFrom,
-                viewModel.trainingRangeTo,
-                viewModel.kimariji,
-                viewModel.color,
-                viewModel.kamiNoKuStyle,
-                viewModel.shimoNoKuStyle,
-                viewModel.animationSpeed
+
+            val action = TrainingMenuFragmentDirections.actionTrainingMenuToTrainingStarter(
+                rangeFrom = viewModel.rangeFrom,
+                rangeTo = viewModel.rangeTo,
+                kimariji = viewModel.kimariji,
+                color = viewModel.color,
+                kamiNoKuStyle = viewModel.kamiNoKuStyle,
+                shimoNoKuStyle = viewModel.shimoNoKuStyle,
+                animationSpeed = viewModel.animationSpeed
             )
-        }
-
-        binding.dropdownRangeFrom.setUp(TrainingRangeFrom.values(), viewModel.trainingRangeFrom) {
-            viewModel.trainingRangeFrom = it
-        }
-
-        binding.dropdownRangeTo.setUp(TrainingRangeTo.values(), viewModel.trainingRangeTo) {
-            viewModel.trainingRangeTo = it
-        }
-
-        binding.dropdownKimariji.setUp(KimarijiFilter.values(), viewModel.kimariji) {
-            viewModel.kimariji = it
-        }
-
-        binding.dropdownColor.setUp(ColorFilter.values(), viewModel.color) {
-            viewModel.color = it
-        }
-
-        binding.dropdownTopPhraseStyle.setUp(KarutaStyleFilter.values(), viewModel.kamiNoKuStyle) {
-            viewModel.kamiNoKuStyle = it
-        }
-
-        binding.dropdownBottomPhraseStyle.setUp(
-            KarutaStyleFilter.values(),
-            viewModel.shimoNoKuStyle
-        ) {
-            viewModel.shimoNoKuStyle = it
-        }
-
-        binding.dropdownAnimationSpeed.setUp(
-            QuizAnimationSpeed.values(),
-            viewModel.animationSpeed
-        ) {
-            viewModel.animationSpeed = it
+            findNavController().navigate(action)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(KEY_TRAINING_RANGE_FROM, viewModel.trainingRangeFrom.ordinal)
-        outState.putInt(KEY_TRAINING_RANGE_TO, viewModel.trainingRangeTo.ordinal)
-        outState.putInt(KEY_KIMARIJI, viewModel.kimariji.ordinal)
-        outState.putInt(KEY_KAMI_NO_KU_STYLE, viewModel.kamiNoKuStyle.ordinal)
-        outState.putInt(KEY_SHIMO_NO_KU_STYLE, viewModel.shimoNoKuStyle.ordinal)
-        outState.putInt(KEY_COLOR, viewModel.color.ordinal)
-        outState.putInt(KEY_ANIMATION_SPEED, viewModel.animationSpeed.ordinal)
-        super.onSaveInstanceState(outState)
-    }
-
-    @dagger.Module
-    abstract class Module {
-        @FragmentScope
-        @ContributesAndroidInjector
-        abstract fun contributeInjector(): TrainingMenuFragment
-    }
-
-    companion object {
-
-        const val TAG: String = "TrainingMenuFragment"
-
-        private const val KEY_TRAINING_RANGE_FROM = "trainingRangeFrom"
-
-        private const val KEY_TRAINING_RANGE_TO = "trainingRangeTo"
-
-        private const val KEY_KIMARIJI = "kimarij"
-
-        private const val KEY_COLOR = "color"
-
-        private const val KEY_KAMI_NO_KU_STYLE = "kamiNoKuStyle"
-
-        private const val KEY_SHIMO_NO_KU_STYLE = "shimoNoKuStyle"
-
-        private const val KEY_ANIMATION_SPEED = "animationSpeed"
-
-        fun newInstance() = TrainingMenuFragment()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.dropdownRangeFrom.setUp(viewModel.rangeFrom.label(resources)) {
+            viewModel.rangeFrom = RangeFromCondition.values()[it]
+        }
+        binding.dropdownRangeTo.setUp(viewModel.rangeTo.label(resources)) {
+            viewModel.rangeTo = RangeToCondition.values()[it]
+        }
+        binding.dropdownKimariji.setUp(viewModel.kimariji.label(resources)) {
+            viewModel.kimariji = KimarijiCondition.values()[it]
+        }
+        binding.dropdownTopPhraseStyle.setUp(viewModel.kamiNoKuStyle.label(resources)) {
+            viewModel.kamiNoKuStyle = DisplayStyleCondition.values()[it]
+        }
+        binding.dropdownBottomPhraseStyle.setUp(viewModel.shimoNoKuStyle.label(resources)) {
+            viewModel.shimoNoKuStyle = DisplayStyleCondition.values()[it]
+        }
+        binding.dropdownColor.setUp(viewModel.color.label(resources)) {
+            viewModel.color = ColorCondition.values()[it]
+        }
+        binding.dropdownAnimationSpeed.setUp(viewModel.animationSpeed.label(resources)) {
+            viewModel.animationSpeed = DisplayAnimationSpeedCondition.values()[it]
+        }
     }
 }
-
-private fun <T : SpinnerItem> AutoCompleteTextView.setUp(
-    itemList: Array<T>,
-    initialValue: T,
-    onSelected: (value: T) -> Unit
-) {
-    inputType = InputType.TYPE_NULL
-    keyListener = null
-
-    val adapter = ArrayAdapter(
-        context,
-        R.layout.dropdown_menu_popup_item,
-        itemList.map { it.label(resources) }
-    )
-    setAdapter(adapter)
-
-    setText(initialValue.label((resources)), false)
-    setOnItemClickListener { _, _, position, _ -> onSelected(itemList[position]) }
-}
-

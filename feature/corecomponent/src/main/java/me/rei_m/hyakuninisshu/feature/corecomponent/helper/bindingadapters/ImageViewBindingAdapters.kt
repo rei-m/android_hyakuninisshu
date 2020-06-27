@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Rei Matsushita
+ * Copyright (c) 2020. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,28 +17,14 @@ package me.rei_m.hyakuninisshu.feature.corecomponent.helper.bindingadapters
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import me.rei_m.hyakuninisshu.feature.corecomponent.R
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.GlideApp
 
 @BindingAdapter("karutaSrc")
-fun setKarutaSrc(view: ImageView, resIdString: String?) {
-    resIdString ?: return
-    val context = view.context.applicationContext
-    val resId = context.resources.getIdentifier(
-        "karuta_$resIdString",
-        "drawable",
-        context.packageName
-    )
+fun setKarutaSrc(view: ImageView, resId: Int?) {
+    resId ?: return
 
     GlideApp.with(view.context)
         .load(resId)
         .transition(DrawableTransitionOptions.withCrossFade())
         .into(view)
-}
-
-@BindingAdapter("isCorrect")
-fun setIsCorrect(imageView: ImageView, isCorrect: Boolean?) {
-    isCorrect ?: return
-    val resId = if (isCorrect) R.drawable.check_correct else R.drawable.check_incorrect
-    GlideApp.with(imageView.context).load(resId).dontAnimate().into(imageView)
 }

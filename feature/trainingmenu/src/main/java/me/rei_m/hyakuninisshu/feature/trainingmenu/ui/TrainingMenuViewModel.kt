@@ -14,44 +14,89 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.ColorFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KarutaStyleFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.KimarijiFilter
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.QuizAnimationSpeed
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeFrom
-import me.rei_m.hyakuninisshu.feature.corecomponent.enums.TrainingRangeTo
-import javax.inject.Inject
+import me.rei_m.hyakuninisshu.state.training.model.ColorCondition
+import me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition
+import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
+import me.rei_m.hyakuninisshu.state.training.model.KimarijiCondition
+import me.rei_m.hyakuninisshu.state.training.model.RangeFromCondition
+import me.rei_m.hyakuninisshu.state.training.model.RangeToCondition
 
-class TrainingMenuViewModel(
-    var trainingRangeFrom: TrainingRangeFrom,
-    var trainingRangeTo: TrainingRangeTo,
-    var kimariji: KimarijiFilter,
-    var kamiNoKuStyle: KarutaStyleFilter,
-    var shimoNoKuStyle: KarutaStyleFilter,
-    var color: ColorFilter,
-    var animationSpeed: QuizAnimationSpeed
-) : ViewModel() {
+class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() {
+    var rangeFrom: RangeFromCondition
+        get() {
+            val ordinal: Int = handle.get<Int>(KEY_RANGE_FROM) ?: RangeFromCondition.ONE.ordinal
+            return RangeFromCondition[ordinal]
+        }
+        set(value) {
+            handle.set<Int>(KEY_RANGE_FROM, value.ordinal)
+        }
 
-    class Factory @Inject constructor() : ViewModelProvider.Factory {
-        var trainingRangeFrom = TrainingRangeFrom.ONE
-        var trainingRangeTo = TrainingRangeTo.ONE_HUNDRED
-        var kimariji = KimarijiFilter.ALL
-        var kamiNoKuStyle = KarutaStyleFilter.KANJI
-        var shimoNoKuStyle = KarutaStyleFilter.KANA
-        var color = ColorFilter.ALL
-        var animationSpeed = QuizAnimationSpeed.NORMAL
+    var rangeTo: RangeToCondition
+        get() {
+            val ordinal: Int = handle.get<Int>(KEY_RANGE_TO) ?: RangeToCondition.ONE_HUNDRED.ordinal
+            return RangeToCondition[ordinal]
+        }
+        set(value) {
+            handle.set<Int>(KEY_RANGE_TO, value.ordinal)
+        }
 
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = TrainingMenuViewModel(
-            trainingRangeFrom,
-            trainingRangeTo,
-            kimariji,
-            kamiNoKuStyle,
-            shimoNoKuStyle,
-            color,
-            animationSpeed
-        ) as T
+    var kimariji: KimarijiCondition
+        get() {
+            val ordinal: Int = handle.get<Int>(KEY_KIMARIJI) ?: KimarijiCondition.ALL.ordinal
+            return KimarijiCondition[ordinal]
+        }
+        set(value) {
+            handle.set<Int>(KEY_KIMARIJI, value.ordinal)
+        }
+
+    var kamiNoKuStyle: DisplayStyleCondition
+        get() {
+            val ordinal: Int =
+                handle.get<Int>(KEY_KAMI_NO_KU_STYLE) ?: DisplayStyleCondition.KANJI.ordinal
+            return DisplayStyleCondition[ordinal]
+        }
+        set(value) {
+            handle.set<Int>(KEY_KAMI_NO_KU_STYLE, value.ordinal)
+        }
+
+    var shimoNoKuStyle: DisplayStyleCondition
+        get() {
+            val ordinal: Int =
+                handle.get<Int>(KEY_SHIMO_NO_KU_STYLE) ?: DisplayStyleCondition.KANA.ordinal
+            return DisplayStyleCondition[ordinal]
+        }
+        set(value) {
+            handle.set<Int>(KEY_SHIMO_NO_KU_STYLE, value.ordinal)
+        }
+
+    var color: ColorCondition
+        get() {
+            val ordinal: Int = handle.get<Int>(KEY_COLOR) ?: ColorCondition.ALL.ordinal
+            return ColorCondition[ordinal]
+        }
+        set(value) {
+            handle.set<Int>(KEY_COLOR, value.ordinal)
+        }
+
+    var animationSpeed: DisplayAnimationSpeedCondition
+        get() {
+            val ordinal: Int = handle.get<Int>(KEY_ANIMATION_SPEED)
+                ?: DisplayAnimationSpeedCondition.NORMAL.ordinal
+            return DisplayAnimationSpeedCondition[ordinal]
+        }
+        set(value) {
+            handle.set<Int>(KEY_ANIMATION_SPEED, value.ordinal)
+        }
+
+    companion object {
+        private const val KEY_RANGE_FROM = "rangeFrom"
+        private const val KEY_RANGE_TO = "rangeTo"
+        private const val KEY_KIMARIJI = "kimarij"
+        private const val KEY_KAMI_NO_KU_STYLE = "kamiNoKuStyle"
+        private const val KEY_SHIMO_NO_KU_STYLE = "shimoNoKuStyle"
+        private const val KEY_COLOR = "color"
+        private const val KEY_ANIMATION_SPEED = "animationSpeed"
     }
 }

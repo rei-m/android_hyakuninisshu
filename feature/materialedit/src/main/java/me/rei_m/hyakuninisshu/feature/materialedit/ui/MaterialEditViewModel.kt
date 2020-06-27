@@ -14,236 +14,119 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.action.material.MaterialActionCreator
-import me.rei_m.hyakuninisshu.domain.model.karuta.Karuta
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setIfNull
-import me.rei_m.hyakuninisshu.feature.corecomponent.flux.Event
-import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
+import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
+import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
 import me.rei_m.hyakuninisshu.feature.materialedit.R
-import kotlin.coroutines.CoroutineContext
+import me.rei_m.hyakuninisshu.state.core.Dispatcher
+import me.rei_m.hyakuninisshu.state.core.Event
+import me.rei_m.hyakuninisshu.state.material.action.MaterialActionCreator
+import me.rei_m.hyakuninisshu.state.material.model.Material
+import me.rei_m.hyakuninisshu.state.material.store.EditMaterialStore
+import javax.inject.Inject
 
 class MaterialEditViewModel(
-    mainContext: CoroutineContext,
-    ioContext: CoroutineContext,
     dispatcher: Dispatcher,
     private val actionCreator: MaterialActionCreator,
-    private val store: MaterialEditStore,
-    private val karutaId: KarutaIdentifier,
-    firstPhraseKanji: String?,
-    firstPhraseKana: String?,
-    secondPhraseKanji: String?,
-    secondPhraseKana: String?,
-    thirdPhraseKanji: String?,
-    thirdPhraseKana: String?,
-    fourthPhraseKanji: String?,
-    fourthPhraseKana: String?,
-    fifthPhraseKanji: String?,
-    fifthPhraseKana: String?
-) : AbstractViewModel(mainContext, ioContext, dispatcher) {
-    private val karuta: LiveData<Karuta?> = store.karuta
+    private val store: EditMaterialStore,
+    private val orgMaterial: Material,
+    handle: SavedStateHandle
+) : AbstractViewModel(dispatcher) {
 
-    val karutaNo: LiveData<Int?> = karuta.map { it?.identifier?.value }
+    val creatorAndNo = "${orgMaterial.noTxt} / ${orgMaterial.creator}"
 
-    val creator: LiveData<String?> = karuta.map { it?.creator }
+    val firstPhraseKanji = handle.getLiveData<String>(KEY_FIRST_KANJI, orgMaterial.shokuKanji)
+    val firstPhraseKana = handle.getLiveData<String>(KEY_FIRST_KANA, orgMaterial.shokuKana)
 
-    val kimariji: LiveData<Int?> = karuta.map { it?.kimariji?.value }
+    val secondPhraseKanji = handle.getLiveData<String>(KEY_SECOND_KANJI, orgMaterial.nikuKanji)
+    val secondPhraseKana = handle.getLiveData<String>(KEY_SECOND_KANA, orgMaterial.nikuKana)
 
-    val firstPhraseKanji = MutableLiveData<String>()
+    val thirdPhraseKanji = handle.getLiveData<String>(KEY_THIRD_KANJI, orgMaterial.sankuKanji)
+    val thirdPhraseKana = handle.getLiveData<String>(KEY_THIRD_KANA, orgMaterial.sankuKana)
 
-    val firstPhraseKana = MutableLiveData<String>()
+    val fourthPhraseKanji = handle.getLiveData<String>(KEY_FOURTH_KANJI, orgMaterial.shikuKanji)
+    val fourthPhraseKana = handle.getLiveData<String>(KEY_FOURTH_KANA, orgMaterial.shikuKana)
 
-    val secondPhraseKanji = MutableLiveData<String>()
+    val fifthPhraseKanji = handle.getLiveData<String>(KEY_FIFTH_KANJI, orgMaterial.gokuKanji)
+    val fifthPhraseKana = handle.getLiveData<String>(KEY_FIFTH_KANA, orgMaterial.gokuKana)
 
-    val secondPhraseKana = MutableLiveData<String>()
+    private val _confirmEditEvent = MutableLiveData<Event<Unit>>()
+    val confirmEditEvent: LiveData<Event<Unit>> = _confirmEditEvent
 
-    val thirdPhraseKanji = MutableLiveData<String>()
-
-    val thirdPhraseKana = MutableLiveData<String>()
-
-    val fourthPhraseKanji = MutableLiveData<String>()
-
-    val fourthPhraseKana = MutableLiveData<String>()
-
-    val fifthPhraseKanji = MutableLiveData<String>()
-
-    val fifthPhraseKana = MutableLiveData<String>()
-
-    private val _confirmEditEvent = MutableLiveData<Event<ConfirmMaterialEditDialogFragment>>()
-    val confirmEditEvent: LiveData<Event<ConfirmMaterialEditDialogFragment>> = _confirmEditEvent
-
-    val completeEditEvent = store.completeEditEvent
+    val onCompleteEditEvent = store.onCompleteEditEvent
 
     private val _snackBarMessage = MutableLiveData<Event<Int>>()
     val snackBarMessage: LiveData<Event<Int>> = _snackBarMessage
-
-    val unhandledErrorEvent: LiveData<Event<Unit>> = store.unhandledErrorEvent
-
-    private val karutaObserver: Observer<Karuta?> = Observer {
-        it ?: return@Observer
-        this.firstPhraseKanji.setIfNull(it.kamiNoKu.first.kanji)
-        this.firstPhraseKana.setIfNull(it.kamiNoKu.first.kana)
-        this.secondPhraseKanji.setIfNull(it.kamiNoKu.second.kanji)
-        this.secondPhraseKana.setIfNull(it.kamiNoKu.second.kana)
-        this.thirdPhraseKanji.setIfNull(it.kamiNoKu.third.kanji)
-        this.thirdPhraseKana.setIfNull(it.kamiNoKu.third.kana)
-        this.fourthPhraseKanji.setIfNull(it.shimoNoKu.fourth.kanji)
-        this.fourthPhraseKana.setIfNull(it.shimoNoKu.fourth.kana)
-        this.fifthPhraseKanji.setIfNull(it.shimoNoKu.fifth.kanji)
-        this.fifthPhraseKana.setIfNull(it.shimoNoKu.fifth.kana)
-    }
-
-    init {
-        this.firstPhraseKanji.value = firstPhraseKanji
-        this.firstPhraseKana.value = firstPhraseKana
-        this.secondPhraseKanji.value = secondPhraseKanji
-        this.secondPhraseKana.value = secondPhraseKana
-        this.thirdPhraseKanji.value = thirdPhraseKanji
-        this.thirdPhraseKana.value = thirdPhraseKana
-        this.fourthPhraseKanji.value = fourthPhraseKanji
-        this.fourthPhraseKana.value = fourthPhraseKana
-        this.fifthPhraseKanji.value = fifthPhraseKanji
-        this.fifthPhraseKana.value = fifthPhraseKana
-        karuta.observeForever(karutaObserver)
-
-        dispatchAction { actionCreator.startEdit(karutaId) }
-    }
 
     override fun onCleared() {
         store.dispose()
         super.onCleared()
     }
 
-    fun onDestroyView() {
-        karuta.removeObserver(karutaObserver)
-    }
-
-    fun updateMaterial() {
-        val firstPhraseKanji = this.firstPhraseKanji.value ?: ""
-        val firstPhraseKana = this.firstPhraseKana.value ?: ""
-        val secondPhraseKanji = this.secondPhraseKanji.value ?: ""
-        val secondPhraseKana = this.secondPhraseKana.value ?: ""
-        val thirdPhraseKanji = this.thirdPhraseKanji.value ?: ""
-        val thirdPhraseKana = this.thirdPhraseKana.value ?: ""
-        val fourthPhraseKanji = this.fourthPhraseKanji.value ?: ""
-        val fourthPhraseKana = this.fourthPhraseKana.value ?: ""
-        val fifthPhraseKanji = this.fifthPhraseKanji.value ?: ""
-        val fifthPhraseKana = this.fifthPhraseKana.value ?: ""
-
+    fun onClickEdit() {
         if (
-            firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
-            secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
-            thirdPhraseKanji.isBlank() || thirdPhraseKana.isBlank() ||
-            fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
-            fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
+            this.firstPhraseKanji.value.isNullOrBlank() || this.firstPhraseKana.value.isNullOrBlank() ||
+            this.secondPhraseKanji.value.isNullOrBlank() || this.secondPhraseKana.value.isNullOrBlank() ||
+            this.thirdPhraseKanji.value.isNullOrBlank() || this.thirdPhraseKana.value.isNullOrBlank() ||
+            this.fourthPhraseKanji.value.isNullOrBlank() || this.fourthPhraseKana.value.isNullOrBlank() ||
+            this.fifthPhraseKanji.value.isNullOrBlank() || this.fifthPhraseKana.value.isNullOrBlank()
         ) {
-            _snackBarMessage.value =
-                Event(R.string.text_message_edit_error)
+            _snackBarMessage.value = Event(R.string.text_message_edit_error)
             return
         }
+        _confirmEditEvent.value = Event(Unit)
+    }
 
+    fun onSubmitEdit() {
         dispatchAction {
             actionCreator.edit(
-                karutaId,
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
+                orgMaterial.no,
+                firstPhraseKanji.value!!,
+                firstPhraseKana.value!!,
+                secondPhraseKanji.value!!,
+                secondPhraseKana.value!!,
+                thirdPhraseKanji.value!!,
+                thirdPhraseKana.value!!,
+                fourthPhraseKanji.value!!,
+                fourthPhraseKana.value!!,
+                fifthPhraseKanji.value!!,
+                fifthPhraseKana.value!!
             )
         }
     }
 
-    fun onClickEdit() {
-        val firstPhraseKanji = this.firstPhraseKanji.value ?: ""
-        val firstPhraseKana = this.firstPhraseKana.value ?: ""
-        val secondPhraseKanji = this.secondPhraseKanji.value ?: ""
-        val secondPhraseKana = this.secondPhraseKana.value ?: ""
-        val thirdPhraseKanji = this.thirdPhraseKanji.value ?: ""
-        val thirdPhraseKana = this.thirdPhraseKana.value ?: ""
-        val fourthPhraseKanji = this.fourthPhraseKanji.value ?: ""
-        val fourthPhraseKana = this.fourthPhraseKana.value ?: ""
-        val fifthPhraseKanji = this.fifthPhraseKanji.value ?: ""
-        val fifthPhraseKana = this.fifthPhraseKana.value ?: ""
-
-        if (
-            firstPhraseKanji.isBlank() || firstPhraseKana.isBlank() ||
-            secondPhraseKanji.isBlank() || secondPhraseKana.isBlank() ||
-            thirdPhraseKanji.isBlank() || thirdPhraseKana.isBlank() ||
-            fourthPhraseKanji.isBlank() || fourthPhraseKana.isBlank() ||
-            fifthPhraseKanji.isBlank() || fifthPhraseKana.isBlank()
-        ) {
-            _snackBarMessage.value =
-                Event(R.string.text_message_edit_error)
-            return
-        }
-
-        _confirmEditEvent.value = Event(
-            ConfirmMaterialEditDialogFragment.newInstance(
-                firstPhraseKanji,
-                firstPhraseKana,
-                secondPhraseKanji,
-                secondPhraseKana,
-                thirdPhraseKanji,
-                thirdPhraseKana,
-                fourthPhraseKanji,
-                fourthPhraseKana,
-                fifthPhraseKanji,
-                fifthPhraseKana
-            )
-        )
-    }
-
-    class Factory(
-        private val mainContext: CoroutineContext,
-        private val ioContext: CoroutineContext,
+    class Factory @Inject constructor(
+        owner: SavedStateRegistryOwner,
         private val dispatcher: Dispatcher,
         private val actionCreator: MaterialActionCreator,
-        private val store: MaterialEditStore,
-        private val karutaId: KarutaIdentifier
-    ) : ViewModelProvider.Factory {
-
-        var firstPhraseKanji: String? = null
-        var firstPhraseKana: String? = null
-        var secondPhraseKanji: String? = null
-        var secondPhraseKana: String? = null
-        var thirdPhraseKanji: String? = null
-        var thirdPhraseKana: String? = null
-        var fourthPhraseKanji: String? = null
-        var fourthPhraseKana: String? = null
-        var fifthPhraseKanji: String? = null
-        var fifthPhraseKana: String? = null
+        private val store: EditMaterialStore
+    ) : AbstractSavedStateViewModelFactory(owner, null) {
+        lateinit var orgMaterial: Material
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = MaterialEditViewModel(
-            mainContext,
-            ioContext,
+        override fun <T : ViewModel?> create(
+            key: String,
+            modelClass: Class<T>,
+            handle: SavedStateHandle
+        ): T = MaterialEditViewModel(
             dispatcher,
             actionCreator,
             store,
-            karutaId,
-            firstPhraseKanji,
-            firstPhraseKana,
-            secondPhraseKanji,
-            secondPhraseKana,
-            thirdPhraseKanji,
-            thirdPhraseKana,
-            fourthPhraseKanji,
-            fourthPhraseKana,
-            fifthPhraseKanji,
-            fifthPhraseKana
+            orgMaterial,
+            handle
         ) as T
+    }
+
+    companion object {
+        private const val KEY_FIRST_KANJI = "firstKanji"
+        private const val KEY_FIRST_KANA = "firstKana"
+        private const val KEY_SECOND_KANJI = "secondKanji"
+        private const val KEY_SECOND_KANA = "secondKana"
+        private const val KEY_THIRD_KANJI = "thirdKanji"
+        private const val KEY_THIRD_KANA = "thirdKana"
+        private const val KEY_FOURTH_KANJI = "fourthKanji"
+        private const val KEY_FOURTH_KANA = "fourthKana"
+        private const val KEY_FIFTH_KANJI = "fifthKanji"
+        private const val KEY_FIFTH_KANA = "fifthKana"
     }
 }

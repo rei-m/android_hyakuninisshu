@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 
 apply from: rootProject.file('gradle/android.gradle')
 
-android.testOptions.unitTests.includeAndroidResources = true
-
 apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.annotation:annotation:$androidxAnnotationVersion"
+    implementation "androidx.annotation:annotation:$rootProject.androidx_annotation_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.androidx_lifecycle_version"
 }

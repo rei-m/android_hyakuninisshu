@@ -12,4 +12,6 @@
     <color name="white66">#66ffffff</color>
     <color name="white99">#99ffffff</color>
     <color name="whiteSmoke">#f5f5f5</color>
+    <color name="whitePaper">#fffff0</color>
+    <color name="fuda">#556b2f</color>
 </resources>
