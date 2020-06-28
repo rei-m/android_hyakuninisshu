@@ -24,7 +24,7 @@ import java.util.Date
 data class KarutaQuizSchema(
     @Setter("id") @PrimaryKey(autoincrement = true) var id: Long = 0,
     @Setter("quizId") @Column(indexed = true) var quizId: String,
-    @Setter("no") @Column var no: Int,
+    @Setter("no") @Column var no: Int? = 0,
     @Setter("collectId") @Column var collectId: Long,
     @Setter("startDate") @Column var startDate: Date? = null,
     @Setter("choiceNo") @Column var choiceNo: Int? = null,

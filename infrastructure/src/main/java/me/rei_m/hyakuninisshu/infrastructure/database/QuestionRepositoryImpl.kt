@@ -111,7 +111,7 @@ class QuestionRepositoryImpl(
 
                 return@map Question(
                     id = QuestionId(it.quizId),
-                    no = it.no,
+                    no = if (it.no == null) 0 else it.no!!,
                     choiceList = choiceList,
                     correctNo = correctNo,
                     state = Question.State.create(
@@ -166,7 +166,7 @@ private fun KarutaQuizSchema.toModel(choiceSchemaList: List<KarutaQuizChoiceSche
 
     return Question(
         id = questionId,
-        no = no,
+        no = if (no == null) 0 else no!!,
         choiceList = choiceList,
         correctNo = correctNo,
         state = questionState
