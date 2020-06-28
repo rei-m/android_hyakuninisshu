@@ -19,21 +19,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.ContributesAndroidInjector
-import dagger.android.support.DaggerFragment
-import me.rei_m.hyakuninisshu.domain.model.karuta.KarutaIdentifier
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.FragmentScope
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.provideActivityViewModel
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.withArgs
-import me.rei_m.hyakuninisshu.feature.corecomponent.flux.EventObserver
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.materialedit.databinding.FragmentMaterialEditBinding
-import me.rei_m.hyakuninisshu.feature.materialedit.helper.Navigator
+import me.rei_m.hyakuninisshu.feature.corecomponent.helper.EventObserver
+import me.rei_m.hyakuninisshu.feature.materialedit.databinding.MaterialEditFragmentBinding
+import me.rei_m.hyakuninisshu.feature.materialedit.di.MaterialEditComponent
 import javax.inject.Inject
 
-class MaterialEditFragment : DaggerFragment(),
-    ConfirmMaterialEditDialogFragment.OnDialogInteractionListener {
+class MaterialEditFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: MaterialEditViewModel.Factory
@@ -41,20 +39,23 @@ class MaterialEditFragment : DaggerFragment(),
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    @Inject
-    lateinit var navigator: Navigator
-
-    private var _binding: FragmentMaterialEditBinding? = null
+    private var _binding: MaterialEditFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: MaterialEditViewModel
-
-    private var listener: OnFragmentInteractionListener? = null
-
-    private val karutaId by lazy {
-        requireNotNull(arguments?.getParcelable<KarutaIdentifier>(ARG_KARUTA_ID)) {
-            "$ARG_KARUTA_ID is missing"
+    private val viewModel by activityViewModels<MaterialEditViewModel> {
+        viewModelFactory.apply {
+            orgMaterial = args.material
         }
+    }
+
+    private val args: MaterialEditFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        (requireActivity() as MaterialEditComponent.Injector)
+            .materialEditComponent()
+            .create()
+            .inject(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -62,123 +63,41 @@ class MaterialEditFragment : DaggerFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (savedInstanceState != null) {
-            with(viewModelFactory) {
-                firstPhraseKanji = savedInstanceState.getString(KEY_FIRST_KANJI, "")
-                firstPhraseKana = savedInstanceState.getString(KEY_FIRST_KANA, "")
-                secondPhraseKanji = savedInstanceState.getString(KEY_SECOND_KANJI, "")
-                secondPhraseKana = savedInstanceState.getString(KEY_SECOND_KANA, "")
-                thirdPhraseKanji = savedInstanceState.getString(KEY_THIRD_KANJI, "")
-                thirdPhraseKana = savedInstanceState.getString(KEY_THIRD_KANA, "")
-                fourthPhraseKanji = savedInstanceState.getString(KEY_FOURTH_KANJI, "")
-                fourthPhraseKana = savedInstanceState.getString(KEY_FOURTH_KANA, "")
-                fifthPhraseKanji = savedInstanceState.getString(KEY_FIFTH_KANJI, "")
-                fifthPhraseKana = savedInstanceState.getString(KEY_FIFTH_KANA, "")
-            }
-        }
-        viewModel = provideActivityViewModel(MaterialEditViewModel::class.java, viewModelFactory)
+        viewModel.confirmEditEvent.observe(viewLifecycleOwner, EventObserver {
+            val manager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            manager.hideSoftInputFromWindow(view?.windowToken, 0)
 
-        viewModel.confirmEditEvent.observe(viewLifecycleOwner, EventObserver { dialog ->
-            dialog.setTargetFragment(this, 0)
-            dialog.show(requireFragmentManager(), ConfirmMaterialEditDialogFragment.TAG)
+            val action = MaterialEditFragmentDirections.actionMaterialEditToMaterialEditConfirm()
+            findNavController().navigate(action)
         })
-        viewModel.completeEditEvent.observe(viewLifecycleOwner, EventObserver {
-            navigator.back()
+        viewModel.onCompleteEditEvent.observe(viewLifecycleOwner, EventObserver {
+            findNavController().popBackStack()
         })
         viewModel.snackBarMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
                 .setAction("Action", null)
                 .show()
         })
-        viewModel.unhandledErrorEvent.observe(viewLifecycleOwner, EventObserver {
-            listener?.onError()
-        })
 
-        _binding = FragmentMaterialEditBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
+        _binding = MaterialEditFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        analyticsHelper.sendScreenView("MaterialEdit-${args.material.no}", requireActivity())
+    }
+
     override fun onDestroyView() {
-        viewModel.onDestroyView()
         _binding = null
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        analyticsHelper.sendScreenView("MaterialEdit-${karutaId.value}", requireActivity())
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        with(outState) {
-            putString(KEY_FIRST_KANJI, viewModel.firstPhraseKanji.value)
-            putString(KEY_FIRST_KANA, viewModel.firstPhraseKana.value)
-            putString(KEY_SECOND_KANJI, viewModel.secondPhraseKanji.value)
-            putString(KEY_SECOND_KANA, viewModel.secondPhraseKana.value)
-            putString(KEY_THIRD_KANJI, viewModel.thirdPhraseKanji.value)
-            putString(KEY_THIRD_KANA, viewModel.thirdPhraseKana.value)
-            putString(KEY_FOURTH_KANJI, viewModel.fourthPhraseKanji.value)
-            putString(KEY_FOURTH_KANA, viewModel.fourthPhraseKana.value)
-            putString(KEY_FIFTH_KANJI, viewModel.fifthPhraseKanji.value)
-            putString(KEY_FIFTH_KANA, viewModel.fifthPhraseKana.value)
-        }
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onClickUpdate() {
-        viewModel.updateMaterial()
-    }
-
-    override fun onClickBack() {
-    }
-
-    interface OnFragmentInteractionListener {
-        fun onError()
-    }
-
-    @dagger.Module
-    abstract class Module {
-        @FragmentScope
-        @ContributesAndroidInjector
-        abstract fun contributeInjector(): MaterialEditFragment
-    }
-
-    companion object {
-
-        const val TAG: String = "MaterialEditFragment"
-
-        private const val ARG_KARUTA_ID = "karutaId"
-
-        private const val KEY_FIRST_KANJI = "firstKanji"
-        private const val KEY_FIRST_KANA = "firstKana"
-        private const val KEY_SECOND_KANJI = "secondKanji"
-        private const val KEY_SECOND_KANA = "secondKana"
-        private const val KEY_THIRD_KANJI = "thirdKanji"
-        private const val KEY_THIRD_KANA = "thirdKana"
-        private const val KEY_FOURTH_KANJI = "fourthKanji"
-        private const val KEY_FOURTH_KANA = "fourthKana"
-        private const val KEY_FIFTH_KANJI = "fifthKanji"
-        private const val KEY_FIFTH_KANA = "fifthKana"
-
-        fun newInstance(karutaId: KarutaIdentifier) = MaterialEditFragment().withArgs {
-            putParcelable(ARG_KARUTA_ID, karutaId)
-        }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.viewModel = viewModel
     }
 }

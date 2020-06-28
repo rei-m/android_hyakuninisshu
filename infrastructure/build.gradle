@@ -3,24 +3,30 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 apply from: rootProject.file('gradle/android.gradle')
+
+android {
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
+}
+
 apply from: rootProject.file('gradle/dependencies/dagger.gradle'), to: dependencies
 apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
 
-ext {
-    ormaVersion = '6.0.2'
-    moshiVersion = '1.9.2'
-}
-
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$rootProject.kotlin_version"
+
     implementation project(":domain")
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.androidx_lifecycle_version"
 
-    implementation "com.squareup.moshi:moshi:$moshiVersion"
-    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    implementation "com.github.maskarade.android.orma:orma:$rootProject.orma_version"
+    kapt "com.github.maskarade.android.orma:orma-processor:$rootProject.orma_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava_version"
 
-    implementation "com.github.maskarade.android.orma:orma:$ormaVersion"
-    kapt "com.github.maskarade.android.orma:orma-processor:$ormaVersion"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    implementation "com.squareup.moshi:moshi:$rootProject.moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$rootProject.moshi_version"
 }

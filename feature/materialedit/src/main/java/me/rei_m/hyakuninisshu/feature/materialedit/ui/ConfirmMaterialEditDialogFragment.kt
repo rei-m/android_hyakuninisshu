@@ -15,107 +15,64 @@
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
 import android.app.Dialog
-import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import me.rei_m.hyakuninisshu.feature.materialedit.R
 import me.rei_m.hyakuninisshu.feature.materialedit.databinding.DialogConfirmMaterialEditBinding
 
 class ConfirmMaterialEditDialogFragment : DialogFragment() {
 
-    private var listener: OnDialogInteractionListener? = null
+    private val viewModel by activityViewModels<MaterialEditViewModel>()
+
+    private var _binding: DialogConfirmMaterialEditBinding? = null
+    private val binding get() = _binding!!
+
+    private var positiveClickListener: DialogInterface.OnClickListener? = null
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val parentActivity = requireActivity()
 
-        val binding = DialogConfirmMaterialEditBinding
+        _binding = DialogConfirmMaterialEditBinding
             .inflate(parentActivity.layoutInflater, null, false)
 
-        with(binding) {
-            firstPhraseKanji = arguments?.getString(ARG_FIRST_KANJI)
-            firstPhraseKana = arguments?.getString(ARG_FIRST_KANA)
-            secondPhraseKanji = arguments?.getString(ARG_SECOND_KANJI)
-            secondPhraseKana = arguments?.getString(ARG_SECOND_KANA)
-            thirdPhraseKanji = arguments?.getString(ARG_THIRD_KANJI)
-            thirdPhraseKana = arguments?.getString(ARG_THIRD_KANA)
-            fourthPhraseKanji = arguments?.getString(ARG_FOURTH_KANJI)
-            fourthPhraseKana = arguments?.getString(ARG_FOURTH_KANA)
-            fifthPhraseKanji = arguments?.getString(ARG_FIFTH_KANJI)
-            fifthPhraseKana = arguments?.getString(ARG_FIFTH_KANA)
+        positiveClickListener = DialogInterface.OnClickListener { _, _ ->
+            viewModel.onSubmitEdit()
         }
 
         val builder = MaterialAlertDialogBuilder(parentActivity)
             .setView(binding.root)
-            .setPositiveButton(R.string.update) { _, _ ->
-                listener?.onClickUpdate()
+            .setPositiveButton(R.string.update) { v1, v2 ->
+                // LeakCanary先生に怒られるので怪しいところを潰している
+                positiveClickListener?.onClick(v1, v2)
             }
-            .setNegativeButton(R.string.back) { _, _ ->
-                listener?.onClickBack()
-            }
+            .setNegativeButton(R.string.back) { _, _ -> }
 
         return builder.create()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val parentFragment = targetFragment
-        if (parentFragment is OnDialogInteractionListener) {
-            listener = parentFragment
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.viewModel = viewModel
     }
 
     override fun onDetach() {
-        listener = null
+        positiveClickListener = null
         super.onDetach()
-    }
-
-    interface OnDialogInteractionListener {
-        fun onClickUpdate()
-
-        fun onClickBack()
-    }
-
-    companion object {
-
-        const val TAG: String = "ConfirmMaterialEditDialogFragment"
-
-        private const val ARG_FIRST_KANJI = "firstKanji"
-        private const val ARG_FIRST_KANA = "firstKana"
-        private const val ARG_SECOND_KANJI = "secondKanji"
-        private const val ARG_SECOND_KANA = "secondKana"
-        private const val ARG_THIRD_KANJI = "thirdKanji"
-        private const val ARG_THIRD_KANA = "thirdKana"
-        private const val ARG_FOURTH_KANJI = "fourthKanji"
-        private const val ARG_FOURTH_KANA = "fourthKana"
-        private const val ARG_FIFTH_KANJI = "fifthKanji"
-        private const val ARG_FIFTH_KANA = "fifthKana"
-
-        fun newInstance(
-            firstKanji: String,
-            firstKana: String,
-            secondKanji: String,
-            secondKana: String,
-            thirdKanji: String,
-            thirdKana: String,
-            fourthKanji: String,
-            fourthKana: String,
-            fifthKanji: String,
-            fifthKana: String
-        ) = ConfirmMaterialEditDialogFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_FIRST_KANJI, firstKanji)
-                putString(ARG_FIRST_KANA, firstKana)
-                putString(ARG_SECOND_KANJI, secondKanji)
-                putString(ARG_SECOND_KANA, secondKana)
-                putString(ARG_THIRD_KANJI, thirdKanji)
-                putString(ARG_THIRD_KANA, thirdKana)
-                putString(ARG_FOURTH_KANJI, fourthKanji)
-                putString(ARG_FOURTH_KANA, fourthKana)
-                putString(ARG_FIFTH_KANJI, fifthKanji)
-                putString(ARG_FIFTH_KANA, fifthKana)
-            }
-        }
     }
 }

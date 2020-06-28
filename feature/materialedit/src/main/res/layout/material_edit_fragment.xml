@@ -1,0 +1,279 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/spacing_2"
+            android:paddingTop="@dimen/spacing_2"
+            android:paddingEnd="@dimen/spacing_2"
+            android:paddingBottom="@dimen/height_ad_banner">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_edit_explain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/text_explain_edit"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/text_creator_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_creator_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/creator"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/text_creator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_edit_explain" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_creator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.creatorAndNo}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintBottom_toTopOf="@id/text_first_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator_title"
+                tools:text="一番 / 天智天皇" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_first_phrase_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_3"
+                android:text="@string/first_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_first_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_creator" />
+
+            <EditText
+                android:id="@+id/edit_first_phrase_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_first_kanji"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.firstPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_first_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_first_phrase_title"
+                tools:text="秋の田の" />
+
+            <EditText
+                android:id="@+id/edit_first_phrase_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_first_kana"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.firstPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_second_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_first_phrase_kanji"
+                tools:text="あきのたの" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_second_phrase_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/second_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_second_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_first_phrase_kana" />
+
+            <EditText
+                android:id="@+id/edit_second_phrase_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_second_kanji"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.secondPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_second_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_second_phrase_title"
+                tools:text="かりほの庵の" />
+
+            <EditText
+                android:id="@+id/edit_second_phrase_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_second_kana"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.secondPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_third_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_second_phrase_kanji"
+                tools:text="かりほのいほの" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_third_phrase_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/third_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_third_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_second_phrase_kana" />
+
+            <EditText
+                android:id="@+id/edit_third_phrase_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_third_kanji"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.thirdPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_third_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_third_phrase_title"
+                tools:text="苫をあらみ" />
+
+            <EditText
+                android:id="@+id/edit_third_phrase_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_third_kana"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.thirdPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_fourth_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_third_phrase_kanji"
+                tools:text="とまをあらみ" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_fourth_phrase_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/fourth_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_fourth_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_third_phrase_kana" />
+
+            <EditText
+                android:id="@+id/edit_fourth_phrase_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_fourth_kanji"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.fourthPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_fourth_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_fourth_phrase_title"
+                tools:text="わが衣手は" />
+
+            <EditText
+                android:id="@+id/edit_fourth_phrase_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_fourth_kana"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.fourthPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/text_fifth_phrase_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fourth_phrase_kanji"
+                tools:text="わがころもでは" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_fifth_phrase_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_2"
+                android:text="@string/fifth_phrase"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/text_xs"
+                app:layout_constraintBottom_toTopOf="@id/edit_fifth_phrase_kanji"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fourth_phrase_kana" />
+
+            <EditText
+                android:id="@+id/edit_fifth_phrase_kanji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_fifth_kanji"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.fifthPhraseKanji}"
+                app:layout_constraintBottom_toTopOf="@id/edit_fifth_phrase_kana"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_fifth_phrase_title"
+                tools:text="露にぬれつつ" />
+
+            <EditText
+                android:id="@+id/edit_fifth_phrase_kana"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_hint_input_fifth_kana"
+                android:inputType="textNoSuggestions"
+                android:text="@={viewModel.fifthPhraseKana}"
+                app:layout_constraintBottom_toTopOf="@id/button_edit_material"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fifth_phrase_kanji"
+                tools:text="つゆにぬれつつ" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_edit_material"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_3"
+                android:onClick="@{() -> viewModel.onClickEdit()}"
+                android:text="@string/update_confirm"
+                android:textSize="@dimen/text_m"
+                app:backgroundTint="@color/colorSecondary"
+                app:icon="@drawable/ic_edit_white_24dp"
+                app:iconGravity="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_fifth_phrase_kana" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>

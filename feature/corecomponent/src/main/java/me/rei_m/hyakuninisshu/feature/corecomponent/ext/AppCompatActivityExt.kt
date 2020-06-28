@@ -14,39 +14,9 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.ext
 
-import androidx.annotation.IdRes
-import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.feature.corecomponent.widget.dialog.AlertDialogFragment
-
-fun AppCompatActivity.addFragment(
-    @IdRes containerViewId: Int,
-    fragment: Fragment,
-    tag: String
-) {
-    supportFragmentManager
-        .beginTransaction()
-        .add(containerViewId, fragment, tag)
-        .commit()
-}
-
-fun AppCompatActivity.replaceFragment(
-    @IdRes containerViewId: Int,
-    fragment: Fragment,
-    tag: String,
-    transition: Int? = null
-) {
-    val transaction = supportFragmentManager.beginTransaction()
-    transition?.let { transaction.setTransition(it) }
-    transaction
-        .replace(containerViewId, fragment, tag)
-        .commit()
-}
 
 fun AppCompatActivity.setupActionBar(toolbar: Toolbar, action: ActionBar.() -> Unit) {
     setSupportActionBar(toolbar)
@@ -54,19 +24,3 @@ fun AppCompatActivity.setupActionBar(toolbar: Toolbar, action: ActionBar.() -> U
         action()
     }
 }
-
-fun AppCompatActivity.showAlertDialog(@StringRes titleId: Int, @StringRes messageId: Int) {
-    if (supportFragmentManager.findFragmentByTag(AlertDialogFragment.TAG) == null) {
-        AlertDialogFragment.newInstance(
-            titleId,
-            messageId,
-            hasPositiveButton = true,
-            hasNegativeButton = false
-        ).show(supportFragmentManager, AlertDialogFragment.TAG)
-    }
-}
-
-fun <T : ViewModel> AppCompatActivity.provideViewModel(
-    viewModelClass: Class<T>,
-    factory: ViewModelProvider.Factory
-) = ViewModelProvider(this, factory).get(viewModelClass)

@@ -1,47 +1,43 @@
 /*
- * Copyright (c) 2019. Rei Matsushita
+ * Copyright (c) 2020. Rei Matsushita.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
- * the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.examhistory.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.action.Dispatcher
-import me.rei_m.hyakuninisshu.action.exam.ExamActionCreator
-import me.rei_m.hyakuninisshu.domain.model.quiz.KarutaExam
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
-import me.rei_m.hyakuninisshu.feature.corecomponent.lifecycle.AbstractViewModel
+import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
+import me.rei_m.hyakuninisshu.state.core.Dispatcher
+import me.rei_m.hyakuninisshu.state.exam.action.ExamActionCreator
+import me.rei_m.hyakuninisshu.state.exam.store.ExamHistoryStore
 import javax.inject.Inject
-import javax.inject.Named
-import kotlin.coroutines.CoroutineContext
 
 class ExamHistoryViewModel(
-    mainContext: CoroutineContext,
-    ioContext: CoroutineContext,
     dispatcher: Dispatcher,
-    actionCreator: ExamActionCreator,
+    private val actionCreator: ExamActionCreator,
     private val store: ExamHistoryStore
-) : AbstractViewModel(mainContext, ioContext, dispatcher) {
+) : AbstractViewModel(dispatcher) {
 
-    val isLoading: LiveData<Boolean> = store.karutaExamList.map { it == null }
+    val resultList = store.resultList
 
-    val karutaExamList: LiveData<List<KarutaExam>?> = store.karutaExamList
-
-    val unhandledErrorEvent = store.unhandledErrorEvent
+    val isVisibleProgress = store.resultList.map { it == null }
 
     init {
-        dispatchAction { actionCreator.fetchAll() }
+        dispatchAction { actionCreator.fetchAllResult() }
     }
 
     override fun onCleared() {
@@ -50,16 +46,12 @@ class ExamHistoryViewModel(
     }
 
     class Factory @Inject constructor(
-        @Named("mainContext") private val mainContext: CoroutineContext,
-        @Named("ioContext") private val ioContext: CoroutineContext,
         private val dispatcher: Dispatcher,
         private val actionCreator: ExamActionCreator,
         private val store: ExamHistoryStore
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T = ExamHistoryViewModel(
-            mainContext,
-            ioContext,
             dispatcher,
             actionCreator,
             store

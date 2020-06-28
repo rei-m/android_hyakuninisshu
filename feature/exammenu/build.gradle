@@ -3,20 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 apply from: rootProject.file('gradle/android.gradle')
-
-android.dataBinding.enabled = true
+apply from: rootProject.file('gradle/android-feature.gradle')
 
 apply from: rootProject.file('gradle/dependencies/dagger.gradle'), to: dependencies
 apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
 apply from: rootProject.file('gradle/dependencies/androidTest.gradle'), to: dependencies
 
 dependencies {
-    implementation project(':domain')
-    implementation project(':action')
-    implementation project(':feature:corecomponent')
-    implementation project(':feature:exam')
-    implementation project(':feature:examhistory')
-    implementation project(':feature:training')
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(':feature:corecomponent')
 }

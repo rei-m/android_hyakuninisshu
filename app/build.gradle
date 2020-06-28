@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 repositories {
     mavenCentral()
@@ -45,17 +47,16 @@ android {
         }
     }
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compile_sdk_version
+    buildToolsVersion rootProject.ext.build_tools_version
 
     defaultConfig {
         applicationId "me.rei_m.hyakuninisshu"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        multiDexEnabled true
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        minSdkVersion rootProject.ext.min_sdk_version
+        targetSdkVersion rootProject.ext.target_sdk_version
+        versionCode rootProject.ext.version_code
+        versionName rootProject.ext.version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         manifestPlaceholders = [crashlyticsEnabled: true]
     }
 
@@ -70,6 +71,7 @@ android {
             signingConfig signingConfigs.releaseConfig
             debuggable false
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [crashlyticsEnabled: true]
         }
@@ -82,8 +84,15 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
-    dataBinding {
-        enabled = true
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        dataBinding = true
     }
     testOptions {
         unitTests {
@@ -93,49 +102,62 @@ android {
 }
 
 apply from: rootProject.file('gradle/dependencies/dagger.gradle'), to: dependencies
-apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
-apply from: rootProject.file('gradle/dependencies/androidTest.gradle'), to: dependencies
-
-ext {
-    multidexVersion = '2.0.1'
-    crashlyticsVersion = '2.10.1'
-    leakcanaryVersion = '2.2'
-}
 
 dependencies {
-    implementation project(':domain')
-    implementation project(':infrastructure')
-    implementation project(':action')
-    implementation project(':feature:corecomponent')
-
-    implementation project(':feature:splash')
-
-    implementation project(':feature:entrance')
-    implementation project(':feature:trainingmenu')
-    implementation project(':feature:exammenu')
-    implementation project(':feature:materiallist')
-    implementation project(':feature:support')
-
-    implementation project(':feature:training')
-
-    implementation project(':feature:exam')
-    implementation project(':feature:examhistory')
-
-    implementation project(':feature:quiz')
-
-    implementation project(':feature:materialedit')
-    implementation project(':feature:materialdetail')
-
-    implementation project(':feature:karuta')
-
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "androidx.multidex:multidex:$multidexVersion"
+    implementation project(':domain')
+    implementation project(':infrastructure')
+    implementation project(':feature:corecomponent')
 
-    implementation "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
+    implementation project(':feature:splash')
+    implementation project(':feature:question')
+    implementation project(':feature:trainingmenu')
+    implementation project(':feature:trainingstarter')
+    implementation project(':feature:trainingresult')
+    implementation project(':feature:exammenu')
+    implementation project(':feature:examstarter')
+    implementation project(':feature:examresult')
+    implementation project(':feature:examhistory')
+    implementation project(':feature:material')
+    implementation project(':feature:materialedit')
+    implementation project(':feature:support')
 
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
+    implementation 'com.github.hotchemi:android-rate:1.0.1'
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
 }
 
-apply plugin: 'com.google.gms.google-services'
+task addAppLicenseTask {
+    final String UTF_8 = "UTF-8"
+    final byte[] LINE_SEPARATOR = System.getProperty("line.separator").getBytes(UTF_8)
+
+    mustRunAfter tasks.findByName('generateLicenses')
+
+    doLast {
+        def dependencyOutput = new File(project.buildDir, "generated/third_party_licenses")
+
+        def resourceOutput = new File(dependencyOutput, "/res")
+        def outputDir = new File(resourceOutput, "/raw")
+
+
+        def licensesFile = new File(outputDir, "third_party_licenses")
+        def licensesMetadataFile = new File(outputDir, "third_party_license_metadata")
+
+        def start = licensesFile.length()
+
+        def fontLicenseContent = """
+ライセンスはIPAフォントに準拠します。
+http://ipafont.ipa.go.jp/ipa_font_license_v1.html
+"""
+        licensesFile << fontLicenseContent
+        licensesFile << (LINE_SEPARATOR)
+
+        licensesMetadataFile << ("${start}:${fontLicenseContent.getBytes("UTF-8").size()} はんなり明朝")
+        licensesMetadataFile << (LINE_SEPARATOR)
+    }
+}
+
+// preBuild前にライセンス情報を追加する
+tasks.findByPath(':app:preBuild').dependsOn addAppLicenseTask

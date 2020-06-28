@@ -15,7 +15,16 @@
 package me.rei_m.hyakuninisshu.feature.corecomponent.ext
 
 import android.content.Context
+import android.graphics.Point
+import android.view.WindowManager
 import com.google.android.gms.ads.AdSize
 
 val Context.adHeight
     get() = AdSize.SMART_BANNER.getHeightInPixels(this)
+
+fun Context.windowSize(): Point {
+    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val point = Point()
+    windowManager.defaultDisplay.getSize(point)
+    return point
+}

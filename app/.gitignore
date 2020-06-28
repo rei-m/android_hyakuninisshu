@@ -3,3 +3,4 @@ keystore/
 src/release/
 app-release.apk
 release/
+google-services.json

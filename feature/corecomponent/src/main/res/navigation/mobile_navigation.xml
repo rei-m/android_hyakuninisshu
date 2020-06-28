@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/splash_fragment">
+
+    <fragment
+        android:id="@+id/splash_fragment"
+        android:name="me.rei_m.hyakuninisshu.feature.splash.ui.SplashFragment"
+        android:label="@string/navigation_label_splash"
+        android:title="@string/navigation_label_splash">
+
+        <action
+            android:id="@+id/action_splash_to_trainingMenu"
+            app:destination="@id/navigation_training_menu"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/mobile_navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_training_menu"
+        android:name="me.rei_m.hyakuninisshu.feature.trainingmenu.ui.TrainingMenuFragment"
+        android:label="@string/navigation_label_training_menu"
+        android:title="@string/navigation_label_training_menu">
+        <action
+            android:id="@+id/action_trainingMenu_to_trainingStarter"
+            app:destination="@id/navigation_training_starter" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exam_menu"
+        android:name="me.rei_m.hyakuninisshu.feature.exammenu.ui.ExamMenuFragment"
+        android:label="@string/navigation_label_exam"
+        android:title="@string/navigation_label_exam">
+        <action
+            android:id="@+id/action_examMenu_to_examStarter"
+            app:destination="@id/navigation_exam_starter" />
+
+        <action
+            android:id="@+id/action_examMenu_to_examPracticeTrainingStarter"
+            app:destination="@id/navigation_exam_practice_training_starter" />
+
+        <action
+            android:id="@+id/action_examMenu_to_examHistory"
+            app:destination="@id/navigation_exam_history" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_material_list"
+        android:name="me.rei_m.hyakuninisshu.feature.material.ui.MaterialListFragment"
+        android:label="@string/navigation_label_material_list"
+        android:title="@string/navigation_label_material_list">
+        <action
+            android:id="@+id/action_materialList_to_materialDetail"
+            app:destination="@id/navigation_material_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_material_detail"
+        android:name="me.rei_m.hyakuninisshu.feature.material.ui.MaterialDetailFragment"
+        android:label="@string/navigation_label_material_list"
+        android:title="@string/navigation_label_material_list">
+        <argument
+            android:name="position"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_materialDetail_to_materialEdit"
+            app:destination="@id/navigation_material_edit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_material_detail_page"
+        android:name="me.rei_m.hyakuninisshu.feature.material.ui.MaterialDetailPageFragment"
+        android:label="@string/navigation_label_material_list"
+        android:title="@string/navigation_label_material_list">
+        <argument
+            android:name="material"
+            app:argType="me.rei_m.hyakuninisshu.state.material.model.Material" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_support"
+        android:name="me.rei_m.hyakuninisshu.feature.support.ui.SupportFragment"
+        android:label="@string/navigation_label_support"
+        android:title="@string/navigation_label_support">
+        <action
+            android:id="@+id/action_support_to_privacyPolicyDialog"
+            app:destination="@+id/privacy_policy_dialog_fragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/privacy_policy_dialog_fragment"
+        android:name="me.rei_m.hyakuninisshu.feature.support.ui.PrivacyPolicyDialogFragment" />
+
+    <fragment
+        android:id="@+id/navigation_training_starter"
+        android:name="me.rei_m.hyakuninisshu.feature.trainingstarter.ui.TrainingStarterFragment">
+        <argument
+            android:name="rangeFrom"
+            android:defaultValue="ONE"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.RangeFromCondition" />
+        <argument
+            android:name="rangeTo"
+            android:defaultValue="ONE_HUNDRED"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.RangeToCondition" />
+        <argument
+            android:name="kimariji"
+            android:defaultValue="ALL"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.KimarijiCondition" />
+        <argument
+            android:name="color"
+            android:defaultValue="ALL"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.ColorCondition" />
+        <argument
+            android:name="kamiNoKuStyle"
+            android:defaultValue="KANJI"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="shimoNoKuStyle"
+            android:defaultValue="KANA"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="animationSpeed"
+            android:defaultValue="NORMAL"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition" />
+        <action
+            android:id="@+id/action_trainingStarter_to_question"
+            app:destination="@id/navigation_question"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_training_starter"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_question"
+        android:name="me.rei_m.hyakuninisshu.feature.question.ui.QuestionFragment"
+        android:label="@string/navigation_label_question"
+        android:title="@string/navigation_label_question">
+        <argument
+            android:name="questionId"
+            app:argType="string" />
+        <argument
+            android:name="kamiNoKuStyle"
+            android:defaultValue="KANJI"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="shimoNoKuStyle"
+            android:defaultValue="KANA"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="animationSpeed"
+            android:defaultValue="NORMAL"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition" />
+        <argument
+            android:name="referer"
+            android:defaultValue="Training"
+            app:argType="me.rei_m.hyakuninisshu.state.question.model.Referer" />
+        <action
+            android:id="@+id/action_question_to_answer"
+            app:destination="@id/navigation_question_answer"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_question"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_question_answer"
+        android:name="me.rei_m.hyakuninisshu.feature.question.ui.AnswerFragment"
+        android:label="@string/navigation_label_question_answer"
+        android:title="@string/navigation_label_question_answer">
+        <argument
+            android:name="nextQuestionId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="correctKaruta"
+            app:argType="me.rei_m.hyakuninisshu.state.material.model.Material" />
+        <argument
+            android:name="kamiNoKuStyle"
+            android:defaultValue="KANJI"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="shimoNoKuStyle"
+            android:defaultValue="KANA"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="animationSpeed"
+            android:defaultValue="NORMAL"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition" />
+        <argument
+            android:name="referer"
+            android:defaultValue="Training"
+            app:argType="me.rei_m.hyakuninisshu.state.question.model.Referer" />
+        <action
+            android:id="@+id/action_answer_to_question"
+            app:destination="@id/navigation_question"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_question_answer"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_answer_to_material_detail_page"
+            app:destination="@id/navigation_material_detail_page" />
+
+        <action
+            android:id="@+id/action_answer_to_training_result"
+            app:destination="@id/navigation_training_result"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_question_answer"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_answer_to_exam_finisher"
+            app:destination="@id/navigation_exam_finisher"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_question_answer"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_training_result"
+        android:name="me.rei_m.hyakuninisshu.feature.trainingresult.ui.TrainingResultFragment"
+        android:label="@string/navigation_label_training_result"
+        android:title="@string/navigation_label_training_result">
+        <argument
+            android:name="kamiNoKuStyle"
+            android:defaultValue="KANJI"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="shimoNoKuStyle"
+            android:defaultValue="KANA"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="animationSpeed"
+            android:defaultValue="NORMAL"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition" />
+        <action
+            android:id="@+id/action_trainingResult_to_trainingReStarter"
+            app:destination="@id/navigation_training_re_starter"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_training_result"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_trainingResult_pop"
+            app:popUpTo="@+id/navigation_training_menu" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_training_re_starter"
+        android:name="me.rei_m.hyakuninisshu.feature.trainingstarter.ui.TrainingReStarterFragment">
+        <argument
+            android:name="kamiNoKuStyle"
+            android:defaultValue="KANJI"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="shimoNoKuStyle"
+            android:defaultValue="KANA"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="animationSpeed"
+            android:defaultValue="NORMAL"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition" />
+        <action
+            android:id="@+id/action_trainingReStarter_to_question"
+            app:destination="@id/navigation_question"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_training_re_starter"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exam_starter"
+        android:name="me.rei_m.hyakuninisshu.feature.examstarter.ui.ExamStarterFragment">
+        <action
+            android:id="@+id/action_examStarter_to_question"
+            app:destination="@id/navigation_question"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_exam_starter"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exam_finisher"
+        android:name="me.rei_m.hyakuninisshu.feature.examresult.ui.ExamFinisherFragment">
+        <action
+            android:id="@+id/action_examFinisher_to_examResult"
+            app:destination="@id/navigation_exam_result"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_exam_finisher"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exam_result"
+        android:name="me.rei_m.hyakuninisshu.feature.examresult.ui.ExamResultFragment"
+        android:label="@string/navigation_label_exam_result"
+        android:title="@string/navigation_label_exam_result">
+        <argument
+            android:name="examId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_examResult_to_material_detail_page"
+            app:destination="@id/navigation_material_detail_page" />
+        <action
+            android:id="@+id/action_examResult_pop"
+            app:popUpTo="@+id/navigation_exam_menu" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exam_practice_training_starter"
+        android:name="me.rei_m.hyakuninisshu.feature.trainingstarter.ui.ExamPracticeTrainingStarterFragment">
+        <action
+            android:id="@+id/action_examPracticeTrainingStarter_to_question"
+            app:destination="@id/navigation_question"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/navigation_exam_practice_training_starter"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exam_history"
+        android:name="me.rei_m.hyakuninisshu.feature.examhistory.ui.ExamHistoryFragment"
+        android:label="@string/navigation_label_exam_history"
+        android:title="@string/navigation_label_exam_history" />
+
+    <fragment
+        android:id="@+id/navigation_material_edit"
+        android:name="me.rei_m.hyakuninisshu.feature.materialedit.ui.MaterialEditFragment"
+        android:label="@string/navigation_label_material_edit"
+        android:title="@string/navigation_label_material_edit">
+        <argument
+            android:name="material"
+            app:argType="me.rei_m.hyakuninisshu.state.material.model.Material" />
+        <action
+            android:id="@+id/action_materialEdit_to_materialEditConfirm"
+            app:destination="@id/navigation_material_edit_confirm_dialog" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/navigation_material_edit_confirm_dialog"
+        android:name="me.rei_m.hyakuninisshu.feature.materialedit.ui.ConfirmMaterialEditDialogFragment" />
+</navigation>

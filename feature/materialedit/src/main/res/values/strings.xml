@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. Rei Matsushita.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<resources>
+    <string name="update_confirm">変更の確認</string>
+    <string name="update">変更する</string>
+    <string name="text_message_edit_error">未入力の句があります。</string>
+    <string name="text_explain_edit">お手持ちの教材に合わせて歌を編集できます。編集内容は練習や力試しの出題に反映されます。</string>
+
+    <string name="text_confirm_edit">以下の内容で変更します。よろしいですか？</string>
+    <string name="text_caution_edit">※この変更は取り消せません。取り消す場合は再度同じ内容で変更してください。</string>
+
+    <string name="text_hint_input_first_kanji">初句の漢字を入力してください</string>
+    <string name="text_hint_input_first_kana">初句のかなを入力してください</string>
+    <string name="text_hint_input_second_kanji">二句の漢字を入力してください</string>
+    <string name="text_hint_input_second_kana">二句のかなを入力してください</string>
+    <string name="text_hint_input_third_kanji">三句の漢字を入力してください</string>
+    <string name="text_hint_input_third_kana">三句のかなを入力してください</string>
+    <string name="text_hint_input_fourth_kanji">四句の漢字を入力してください</string>
+    <string name="text_hint_input_fourth_kana">四句のかなを入力してください</string>
+    <string name="text_hint_input_fifth_kanji">五句の漢字を入力してください</string>
+    <string name="text_hint_input_fifth_kana">五句のかなを入力してください</string>
+</resources>
