@@ -16,88 +16,15 @@
 #   public *;
 #}
 
--keepattributes SourceFile,LineNumberTable,Signature,Exceptions,*Annotation*,*Table
--keepnames class * extends java.lang.Throwable
+-keepnames class me.rei_m.hyakuninisshu.state.training.model.*
+-keepnames class me.rei_m.hyakuninisshu.state.question.model.*
+-keepnames class me.rei_m.hyakuninisshu.state.material.model.*
 
--keepclassmembers class **.R$* {
-    public static <fields>;
-}
+-keep class kotlin.reflect.jvm.internal.impl.builtins.BuiltInsLoaderImpl
 
--keep class **.R$*
-
-# Android Jetpack
--dontwarn androidx.appcompat.**
--dontwarn androidx.legacy.**
--dontwarn androidx.percentlayout.**
--dontwarn androidx.constraintlayout.**
--dontwarn androidx.browser.**
--dontwarn androidx.multidex.**
--dontwarn androidx.annotation.**
--dontwarn androidx.databinding.**
--dontwarn androidx.lifecycle.**
--keep class androidx.appcompat.** { *; }
--keep class androidx.legacy.** { *; }
--keep class androidx.percentlayout.** { *; }
--keep class androidx.constraintlayout.** { *; }
--keep class androidx.browser.** { *; }
--keep class androidx.multidex.** { *; }
--keep class androidx.annotation.** { *; }
--keep class androidx.databinding.** { *; }
--keep class androidx.lifecycle.** { *; }
-
--keep class com.crashlytics.** { *; }
--keep class com.google.android.material.*.* { *; }
--keep class com.google.firebase.*.* { *; }
-
-# https://github.com/googlesamples/android-ads/blob/master/admob/BannerExample/app/proguard-rules.pro
--keep public class com.google.android.gms.ads.**{
-   public *;
-}
--keep class * extends java.util.ListResourceBundle {
-   protected Object[][] getContents();
-}
--keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
-   public static final *** NULL;
-}
--keepnames @com.google.android.gms.common.annotation.KeepName class *
--keepclassmembernames class * {
-   @com.google.android.gms.common.annotation.KeepName *;
-}
--keepnames class * implements android.os.Parcelable {
-   public static final ** CREATOR;
-}
-
-# Glide
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
-}
-
--dontwarn org.antlr.**
--dontwarn okio.**
--dontwarn java.lang.invoke.**
--dontwarn javax.annotation.**
-
--dontnote android.**
--dontnote com.google.**
--dontnote org.antlr.**
--dontnote org.apache.**
-
--dontwarn com.google.errorprone.annotations.*
-
--dontwarn kotlin.reflect.jvm.internal.**
--keep class kotlin.reflect.jvm.internal.** { *; }
--keepclasseswithmembers class * {
-    @com.squareup.moshi.* <methods>;
-}
--keep @com.squareup.moshi.JsonQualifier interface *
--keepclassmembers class kotlin.Metadata {
+-keep class kotlin.Metadata {
     public <methods>;
 }
--dontwarn org.jetbrains.annotations.**
--keep class kotlin.Metadata { *; }
 -keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaData {
   <init>(...);
   <fields>;
@@ -106,4 +33,3 @@
   <init>(...);
   <fields>;
 }
--keepnames @com.squareup.moshi.JsonClass class *
