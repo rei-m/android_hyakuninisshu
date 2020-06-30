@@ -25,9 +25,10 @@ import me.rei_m.hyakuninisshu.state.question.model.Question
 import me.rei_m.hyakuninisshu.state.question.model.QuestionState
 import me.rei_m.hyakuninisshu.state.question.model.ToriFuda
 import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.NoSuchElementException
 import me.rei_m.hyakuninisshu.domain.question.model.Question as DomainQuestion
 
 @Singleton
@@ -67,7 +68,7 @@ class QuestionActionCreator @Inject constructor(
                     isCorrect = questionState.result.judgement.isCorrect,
                     correctMaterial = choiceKarutaList.find { it.no == question.correctNo }!!
                         .toMaterial(context),
-                    nextQuestionId = questionRepository.findIdByNo(question.no)?.value
+                    nextQuestionId = questionRepository.findIdByNo(question.no + 1)?.value
                 )
         }
         val count = questionRepository.count()

@@ -119,6 +119,7 @@ class QuestionFragment : Fragment() {
         binding.layoutQuestionResult.setOnClickListener {
             val state = viewModel.state.value
             if (state is QuestionState.Answered) {
+                println( state.nextQuestionId)
                 val action = QuestionFragmentDirections.actionQuestionToAnswer(
                     nextQuestionId = state.nextQuestionId,
                     correctKaruta = state.correctMaterial,
