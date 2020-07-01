@@ -30,7 +30,7 @@ import me.rei_m.hyakuninisshu.state.question.action.QuestionActionCreator
 import me.rei_m.hyakuninisshu.state.question.model.QuestionState
 import me.rei_m.hyakuninisshu.state.question.store.QuestionStore
 import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 
 class QuestionViewModel(
@@ -69,6 +69,8 @@ class QuestionViewModel(
         context.getDrawable(resId)
     }
 
+    private var isSelected = false
+
     private val stateObserver = Observer<QuestionState> {
         when (it) {
             is QuestionState.Ready -> {
@@ -99,6 +101,10 @@ class QuestionViewModel(
 
     fun onSelected(position: Int) {
         question.value?.let {
+            if (isSelected) {
+                return@let
+            }
+            isSelected = true
             dispatchAction {
                 actionCreator.answer(questionId, it.toriFudaList[position], Date())
             }
