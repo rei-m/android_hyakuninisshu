@@ -100,6 +100,9 @@ class QuestionViewModel(
     }
 
     fun onSelected(position: Int) {
+        if (state.value !== QuestionState.InAnswer) {
+            return
+        }
         question.value?.let {
             if (isSelected) {
                 return@let
