@@ -57,6 +57,11 @@
     <string name="display_style_kana">すべて仮名で表示</string>
     <string name="display_style_kanji">漢字と仮名で表示</string>
 
+    <string name="input_second_none">なし</string>
+    <string name="input_second_short">すこし</string>
+    <string name="input_second_normal">ふつう</string>
+    <string name="input_second_long">ながめ</string>
+
     <string name="one">一</string>
     <string name="two">二</string>
     <string name="three">三</string>

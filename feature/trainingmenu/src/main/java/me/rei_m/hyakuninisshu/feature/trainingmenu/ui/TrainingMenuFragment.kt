@@ -31,6 +31,7 @@ import me.rei_m.hyakuninisshu.feature.trainingmenu.di.TrainingMenuComponent
 import me.rei_m.hyakuninisshu.state.training.model.ColorCondition
 import me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition
 import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
+import me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition
 import me.rei_m.hyakuninisshu.state.training.model.KimarijiCondition
 import me.rei_m.hyakuninisshu.state.training.model.RangeFromCondition
 import me.rei_m.hyakuninisshu.state.training.model.RangeToCondition
@@ -91,6 +92,9 @@ class TrainingMenuFragment : Fragment() {
         binding.dropdownColor.setUpDropDown(
             ColorCondition.values().map { it.label(resources) }
         )
+        binding.dropdownInputSecond.setUpDropDown(
+            InputSecondCondition.values().map { it.label(resources) }
+        )
         binding.dropdownAnimationSpeed.setUpDropDown(
             DisplayAnimationSpeedCondition.values().map { it.label(resources) }
         )
@@ -113,6 +117,7 @@ class TrainingMenuFragment : Fragment() {
                 color = viewModel.color,
                 kamiNoKuStyle = viewModel.kamiNoKuStyle,
                 shimoNoKuStyle = viewModel.shimoNoKuStyle,
+                inputSecond = viewModel.inputSecond,
                 animationSpeed = viewModel.animationSpeed
             )
             findNavController().navigate(action)
@@ -138,6 +143,9 @@ class TrainingMenuFragment : Fragment() {
         }
         binding.dropdownColor.setUp(viewModel.color.label(resources)) {
             viewModel.color = ColorCondition.values()[it]
+        }
+        binding.dropdownInputSecond.setUp(viewModel.inputSecond.label(resources)) {
+            viewModel.inputSecond = InputSecondCondition.values()[it]
         }
         binding.dropdownAnimationSpeed.setUp(viewModel.animationSpeed.label(resources)) {
             viewModel.animationSpeed = DisplayAnimationSpeedCondition.values()[it]

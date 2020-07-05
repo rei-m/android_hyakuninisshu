@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModel
 import me.rei_m.hyakuninisshu.state.training.model.ColorCondition
 import me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition
 import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
+import me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition
 import me.rei_m.hyakuninisshu.state.training.model.KimarijiCondition
 import me.rei_m.hyakuninisshu.state.training.model.RangeFromCondition
 import me.rei_m.hyakuninisshu.state.training.model.RangeToCondition
@@ -30,7 +31,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return RangeFromCondition[ordinal]
         }
         set(value) {
-            handle.set<Int>(KEY_RANGE_FROM, value.ordinal)
+            handle.set(KEY_RANGE_FROM, value.ordinal)
         }
 
     var rangeTo: RangeToCondition
@@ -39,7 +40,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return RangeToCondition[ordinal]
         }
         set(value) {
-            handle.set<Int>(KEY_RANGE_TO, value.ordinal)
+            handle.set(KEY_RANGE_TO, value.ordinal)
         }
 
     var kimariji: KimarijiCondition
@@ -48,7 +49,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return KimarijiCondition[ordinal]
         }
         set(value) {
-            handle.set<Int>(KEY_KIMARIJI, value.ordinal)
+            handle.set(KEY_KIMARIJI, value.ordinal)
         }
 
     var kamiNoKuStyle: DisplayStyleCondition
@@ -58,7 +59,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return DisplayStyleCondition[ordinal]
         }
         set(value) {
-            handle.set<Int>(KEY_KAMI_NO_KU_STYLE, value.ordinal)
+            handle.set(KEY_KAMI_NO_KU_STYLE, value.ordinal)
         }
 
     var shimoNoKuStyle: DisplayStyleCondition
@@ -68,7 +69,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return DisplayStyleCondition[ordinal]
         }
         set(value) {
-            handle.set<Int>(KEY_SHIMO_NO_KU_STYLE, value.ordinal)
+            handle.set(KEY_SHIMO_NO_KU_STYLE, value.ordinal)
         }
 
     var color: ColorCondition
@@ -77,7 +78,17 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return ColorCondition[ordinal]
         }
         set(value) {
-            handle.set<Int>(KEY_COLOR, value.ordinal)
+            handle.set(KEY_COLOR, value.ordinal)
+        }
+
+    var inputSecond: InputSecondCondition
+        get() {
+            val ordinal: Int =
+                handle.get<Int>(KEY_INPUT_SPEED) ?: InputSecondCondition.NONE.ordinal
+            return InputSecondCondition[ordinal]
+        }
+        set(value) {
+            handle.set(KEY_INPUT_SPEED, value.ordinal)
         }
 
     var animationSpeed: DisplayAnimationSpeedCondition
@@ -87,7 +98,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return DisplayAnimationSpeedCondition[ordinal]
         }
         set(value) {
-            handle.set<Int>(KEY_ANIMATION_SPEED, value.ordinal)
+            handle.set(KEY_ANIMATION_SPEED, value.ordinal)
         }
 
     companion object {
@@ -97,6 +108,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
         private const val KEY_KAMI_NO_KU_STYLE = "kamiNoKuStyle"
         private const val KEY_SHIMO_NO_KU_STYLE = "shimoNoKuStyle"
         private const val KEY_COLOR = "color"
+        private const val KEY_INPUT_SPEED = "inputSpeed"
         private const val KEY_ANIMATION_SPEED = "animationSpeed"
     }
 }

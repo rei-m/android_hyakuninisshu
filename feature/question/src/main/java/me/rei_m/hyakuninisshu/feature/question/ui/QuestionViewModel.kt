@@ -18,6 +18,7 @@
 package me.rei_m.hyakuninisshu.feature.question.ui
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -30,13 +31,17 @@ import me.rei_m.hyakuninisshu.state.question.action.QuestionActionCreator
 import me.rei_m.hyakuninisshu.state.question.model.QuestionState
 import me.rei_m.hyakuninisshu.state.question.store.QuestionStore
 import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
-import java.util.*
+import me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition
+import java.util.Date
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 
 class QuestionViewModel(
     private val questionId: String,
-    val kamiNoKuStyle: DisplayStyleCondition,
-    val shimoNoKuStyle: DisplayStyleCondition,
+    private val kamiNoKuStyle: DisplayStyleCondition,
+    private val shimoNoKuStyle: DisplayStyleCondition,
+    private val inputSecond: InputSecondCondition,
     dispatcher: Dispatcher,
     private val actionCreator: QuestionActionCreator,
     private val store: QuestionStore,
@@ -51,7 +56,11 @@ class QuestionViewModel(
 
     val toriFudaList = question.map { it.toriFudaList }
 
+    val inputSecondCounter: MutableLiveData<Int> = MutableLiveData(-1)
+
     val state = store.state
+
+    val isVisibleWaitingMask = state.map { it is QuestionState.Ready }
 
     val isVisibleResult = state.map { it is QuestionState.Answered }
 
@@ -74,14 +83,28 @@ class QuestionViewModel(
     private val stateObserver = Observer<QuestionState> {
         when (it) {
             is QuestionState.Ready -> {
-                dispatchAction {
-                    actionCreator.startAnswer(questionId, Date())
-                }
+                timer.scheduleAtFixedRate(timerTask, 0, 1000)
             }
             is QuestionState.InAnswer -> {
             }
             is QuestionState.Answered -> {
             }
+        }
+    }
+
+    private val timer = Timer()
+
+    private val timerTask = object : TimerTask() {
+        private var count = inputSecond.value
+        override fun run() {
+            if (count == 0) {
+                timer.cancel()
+                dispatchAction {
+                    actionCreator.startAnswer(questionId, Date())
+                }
+            }
+            inputSecondCounter.postValue(count)
+            count -= 1
         }
     }
 
@@ -114,6 +137,10 @@ class QuestionViewModel(
         }
     }
 
+    fun onClickedMask() {
+        return
+    }
+
     class Factory @Inject constructor(
         private val dispatcher: Dispatcher,
         private val actionCreator: QuestionActionCreator,
@@ -123,12 +150,14 @@ class QuestionViewModel(
         lateinit var questionId: String
         lateinit var kamiNoKuStyle: DisplayStyleCondition
         lateinit var shimoNoKuStyle: DisplayStyleCondition
+        lateinit var inputSecond: InputSecondCondition
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T = QuestionViewModel(
             questionId,
             kamiNoKuStyle,
             shimoNoKuStyle,
+            inputSecond,
             dispatcher,
             actionCreator,
             store,

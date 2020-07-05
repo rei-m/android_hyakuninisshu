@@ -50,6 +50,7 @@ class QuestionFragment : Fragment() {
             questionId = args.questionId
             kamiNoKuStyle = args.kamiNoKuStyle
             shimoNoKuStyle = args.shimoNoKuStyle
+            inputSecond = args.inputSecond
         }
     }
 
@@ -124,6 +125,7 @@ class QuestionFragment : Fragment() {
                     correctKaruta = state.correctMaterial,
                     kamiNoKuStyle = args.kamiNoKuStyle,
                     shimoNoKuStyle = args.shimoNoKuStyle,
+                    inputSecond = args.inputSecond,
                     animationSpeed = args.animationSpeed,
                     referer = args.referer
                 )

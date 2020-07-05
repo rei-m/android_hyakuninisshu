@@ -30,6 +30,7 @@ import me.rei_m.hyakuninisshu.feature.trainingstarter.di.TrainingStarterComponen
 import me.rei_m.hyakuninisshu.state.question.model.Referer
 import me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition
 import me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition
+import me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition
 import javax.inject.Inject
 
 class ExamPracticeTrainingStarterFragment : Fragment() {
@@ -76,6 +77,7 @@ class ExamPracticeTrainingStarterFragment : Fragment() {
                     questionId = it,
                     kamiNoKuStyle = DisplayStyleCondition.KANJI,
                     shimoNoKuStyle = DisplayStyleCondition.KANA,
+                    inputSecond = InputSecondCondition.NONE,
                     animationSpeed = DisplayAnimationSpeedCondition.NORMAL,
                     referer = Referer.Training
                 )

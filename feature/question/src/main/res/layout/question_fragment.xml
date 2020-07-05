@@ -57,6 +57,23 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="1 / 100" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_input_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/whiteSmoke"
+            android:paddingStart="@dimen/spacing_2"
+            android:paddingTop="@dimen/spacing_1"
+            android:paddingEnd="@dimen/spacing_2"
+            android:paddingBottom="@dimen/spacing_1"
+            android:text="@{@string/text_input_second(viewModel.inputSecondCounter)}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintBottom_toBottomOf="@id/view_yomi_fuda"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:visibleOrGone="@{0 &lt; viewModel.inputSecondCounter}"
+            tools:text="あと5秒" />
+
         <me.rei_m.hyakuninisshu.feature.question.ui.widget.YomiFudaView
             android:id="@+id/view_yomi_fuda"
             android:layout_width="176dp"
@@ -67,7 +84,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:textSizeByPx="@{yomiFudaTextSize}" />
+            app:textSizeByPx="@{yomiFudaTextSize}"
+            app:visibleOrInvisible="@{0 == viewModel.inputSecondCounter}" />
 
         <me.rei_m.hyakuninisshu.feature.question.ui.widget.ToriFudaView
             android:id="@+id/view_tori_fuda_1"
@@ -128,6 +146,19 @@
             app:textSizeByPx="@{toriFudaTextSize}"
             app:toriFuda="@{viewModel.toriFudaList[3]}"
             app:visibleOrInvisible="@{viewModel.selectedTorifudaIndex == null || viewModel.selectedTorifudaIndex == 3}" />
+
+        <View
+            android:id="@+id/view_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black10"
+            android:elevation="@dimen/elevation_level_l"
+            android:onClick="@{() -> viewModel.onClickedMask()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleOrGone="@{viewModel.isVisibleWaitingMask}" />
 
         <FrameLayout
             android:id="@+id/layout_question_result"
