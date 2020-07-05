@@ -79,6 +79,7 @@ class TrainingStarterFragment : Fragment() {
                 questionId = it,
                 kamiNoKuStyle = args.kamiNoKuStyle,
                 shimoNoKuStyle = args.shimoNoKuStyle,
+                inputSecond = args.inputSecond,
                 animationSpeed = args.animationSpeed,
                 referer = Referer.Training
             )

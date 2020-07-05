@@ -77,6 +77,7 @@ class TrainingResultFragment : Fragment() {
             val action = TrainingResultFragmentDirections.actionTrainingResultToTrainingReStarter(
                 kamiNoKuStyle = args.kamiNoKuStyle,
                 shimoNoKuStyle = args.shimoNoKuStyle,
+                inputSecond = args.inputSecond,
                 animationSpeed = args.animationSpeed
             )
             findNavController().navigate(action)
