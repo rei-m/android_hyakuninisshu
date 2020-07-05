@@ -138,6 +138,10 @@
             android:defaultValue="KANA"
             app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
         <argument
+            android:name="inputSecond"
+            android:defaultValue="NONE"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition" />
+        <argument
             android:name="animationSpeed"
             android:defaultValue="NORMAL"
             app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition" />
@@ -165,6 +169,10 @@
             android:name="shimoNoKuStyle"
             android:defaultValue="KANA"
             app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="inputSecond"
+            android:defaultValue="NONE"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition" />
         <argument
             android:name="animationSpeed"
             android:defaultValue="NORMAL"
@@ -201,6 +209,10 @@
             android:name="shimoNoKuStyle"
             android:defaultValue="KANA"
             app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="inputSecond"
+            android:defaultValue="NONE"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition" />
         <argument
             android:name="animationSpeed"
             android:defaultValue="NORMAL"
@@ -249,6 +261,10 @@
             android:defaultValue="KANA"
             app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
         <argument
+            android:name="inputSecond"
+            android:defaultValue="NONE"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition" />
+        <argument
             android:name="animationSpeed"
             android:defaultValue="NORMAL"
             app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayAnimationSpeedCondition" />
@@ -275,6 +291,10 @@
             android:name="shimoNoKuStyle"
             android:defaultValue="KANA"
             app:argType="me.rei_m.hyakuninisshu.state.training.model.DisplayStyleCondition" />
+        <argument
+            android:name="inputSecond"
+            android:defaultValue="NONE"
+            app:argType="me.rei_m.hyakuninisshu.state.training.model.InputSecondCondition" />
         <argument
             android:name="animationSpeed"
             android:defaultValue="NORMAL"

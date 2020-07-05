@@ -71,6 +71,7 @@ class AnswerFragment : Fragment() {
                     questionId = it,
                     kamiNoKuStyle = args.kamiNoKuStyle,
                     shimoNoKuStyle = args.shimoNoKuStyle,
+                    inputSecond = args.inputSecond,
                     animationSpeed = args.animationSpeed,
                     referer = args.referer
                 )
@@ -83,6 +84,7 @@ class AnswerFragment : Fragment() {
                     val action = AnswerFragmentDirections.actionAnswerToTrainingResult(
                         kamiNoKuStyle = args.kamiNoKuStyle,
                         shimoNoKuStyle = args.shimoNoKuStyle,
+                        inputSecond = args.inputSecond,
                         animationSpeed = args.animationSpeed
                     )
                     findNavController().navigate(action)

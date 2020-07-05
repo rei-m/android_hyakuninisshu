@@ -39,6 +39,7 @@
     <string name="range_start">出題開始</string>
     <string name="range_end">出題終了</string>
     <string name="animation_condition">読み札のアニメーション表示</string>
+    <string name="input_second">取り札をおぼえる時間</string>
 
     <string name="past_second">%1$d秒前</string>
     <string name="past_minute">%1$d分前</string>
