@@ -117,6 +117,7 @@ class QuestionViewModel(
     }
 
     override fun onCleared() {
+        timer.cancel()
         state.removeObserver(stateObserver)
         store.dispose()
         super.onCleared()

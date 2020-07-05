@@ -74,6 +74,7 @@ class QuestionFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        binding.viewYomiFuda.stopAnimation()
         _binding = null
         super.onDestroyView()
     }
@@ -132,10 +133,5 @@ class QuestionFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
-    }
-
-    override fun onPause() {
-        binding.viewYomiFuda.stopAnimation()
-        super.onPause()
     }
 }
