@@ -15,6 +15,7 @@
 <resources>
     <string name="about_app">このアプリについて</string>
     <string name="post_review">レビューを書く</string>
+    <string name="find_reader">読み上げ版を見る</string>
     <string name="license">ライセンス</string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="version">version: %1$s</string>
