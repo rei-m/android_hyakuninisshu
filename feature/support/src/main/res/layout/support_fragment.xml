@@ -122,6 +122,23 @@
                 android:background="@color/whiteSmoke" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_reader"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2"
+                android:layout_marginTop="@dimen/spacing_1"
+                android:layout_marginEnd="@dimen/spacing_2"
+                android:layout_marginBottom="@dimen/spacing_1"
+                android:text="@string/find_reader" />
+
+            <View
+                android:id="@+id/view_line_4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_2"
+                android:background="@color/whiteSmoke" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_license"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
@@ -133,7 +150,7 @@
                 android:text="@string/license" />
 
             <View
-                android:id="@+id/view_line_4"
+                android:id="@+id/view_line_5"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_2"
                 android:background="@color/whiteSmoke" />
@@ -150,7 +167,7 @@
                 android:text="@string/privacy_policy" />
 
             <View
-                android:id="@+id/view_line_5"
+                android:id="@+id/view_line_6"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_2"
                 android:background="@color/whiteSmoke" />
@@ -165,7 +182,7 @@
                 android:gravity="center_vertical" />
 
             <View
-                android:id="@+id/view_line_6"
+                android:id="@+id/view_line_7"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_2"
                 android:background="@color/whiteSmoke" />
