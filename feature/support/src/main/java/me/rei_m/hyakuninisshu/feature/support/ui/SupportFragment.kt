@@ -79,5 +79,10 @@ class SupportFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             requireActivity().startActivity(intent)
         }
+        binding.buttonReader.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.reader_app_url)))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            requireActivity().startActivity(intent)
+        }
     }
 }
