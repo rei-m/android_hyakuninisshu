@@ -83,7 +83,21 @@ class QuestionViewModel(
     private val stateObserver = Observer<QuestionState> {
         when (it) {
             is QuestionState.Ready -> {
-                timer.scheduleAtFixedRate(timerTask, 0, 1000)
+                timer = Timer()
+                timer?.scheduleAtFixedRate(object : TimerTask() {
+                    private var count = inputSecond.value
+                    override fun run() {
+                        if (count == 0) {
+                            timer?.cancel()
+                            timer = null
+                            dispatchAction {
+                                actionCreator.startAnswer(questionId, Date())
+                            }
+                        }
+                        inputSecondCounter.postValue(count)
+                        count -= 1
+                    }
+                }, 0, 1000)
             }
             is QuestionState.InAnswer -> {
             }
@@ -92,21 +106,7 @@ class QuestionViewModel(
         }
     }
 
-    private val timer = Timer()
-
-    private val timerTask = object : TimerTask() {
-        private var count = inputSecond.value
-        override fun run() {
-            if (count == 0) {
-                timer.cancel()
-                dispatchAction {
-                    actionCreator.startAnswer(questionId, Date())
-                }
-            }
-            inputSecondCounter.postValue(count)
-            count -= 1
-        }
-    }
+    private var timer: Timer? = null
 
     init {
         state.observeForever(stateObserver)
@@ -119,7 +119,8 @@ class QuestionViewModel(
     override fun onCleared() {
         state.removeObserver(stateObserver)
         store.dispose()
-        timer.cancel()
+        timer?.cancel()
+        timer = null
         super.onCleared()
     }
 
