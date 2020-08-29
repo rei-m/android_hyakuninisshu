@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2020. Rei Matsushita
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+ * the License for the specific language governing permissions and limitations under the License.
+ */
+
+import dependencies.Deps
+import dependencies.Versions
+import dependencies.Packages
+import dependencies.Projects
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -14,7 +32,7 @@ configurations {
 }
 
 dependencies {
-    ktlint "com.github.shyiko:ktlint:0.31.0"
+    ktlint Deps.ktlint
     // additional 3rd party ruleset(s) can be specified here
     // just add them to the classpath (e.g. ktlint 'groupId:artifactId:version') and
     // ktlint will pick them up
@@ -47,15 +65,14 @@ android {
         }
     }
 
-    compileSdkVersion rootProject.ext.compile_sdk_version
-    buildToolsVersion rootProject.ext.build_tools_version
+    compileSdkVersion Versions.compileSdkVersion
 
     defaultConfig {
-        applicationId "me.rei_m.hyakuninisshu"
-        minSdkVersion rootProject.ext.min_sdk_version
-        targetSdkVersion rootProject.ext.target_sdk_version
-        versionCode rootProject.ext.version_code
-        versionName rootProject.ext.version_name
+        applicationId Packages.applicationId
+        minSdkVersion Versions.minSdkVersion
+        targetSdkVersion Versions.targetSdkVersion
+        versionCode Versions.versionCode
+        versionName Versions.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [crashlyticsEnabled: true]
     }
@@ -63,8 +80,8 @@ android {
     buildTypes {
         debug {
             debuggable true
-            applicationIdSuffix ".debug"
-            versionNameSuffix "d"
+            applicationIdSuffix Packages.applicationIdSuffix
+            versionNameSuffix Packages.versionNameSuffix
             manifestPlaceholders = [crashlyticsEnabled: false]
         }
         release {
@@ -101,32 +118,35 @@ android {
     }
 }
 
-apply from: rootProject.file('gradle/dependencies/dagger.gradle'), to: dependencies
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation Deps.Kotlin.kotlinStdlibJdk7
 
-    implementation project(':domain')
-    implementation project(':infrastructure')
-    implementation project(':feature:corecomponent')
+    implementation project(Projects.domain)
+    implementation project(Projects.infrastructure)
+    implementation project(Projects.Feature.corecomponent)
+    implementation project(Projects.Feature.splash)
+    implementation project(Projects.Feature.question)
+    implementation project(Projects.Feature.trainingmenu)
+    implementation project(Projects.Feature.trainingstarter)
+    implementation project(Projects.Feature.trainingresult)
+    implementation project(Projects.Feature.exammenu)
+    implementation project(Projects.Feature.examstarter)
+    implementation project(Projects.Feature.examresult)
+    implementation project(Projects.Feature.examhistory)
+    implementation project(Projects.Feature.material)
+    implementation project(Projects.Feature.materialEdit)
+    implementation project(Projects.Feature.support)
 
-    implementation project(':feature:splash')
-    implementation project(':feature:question')
-    implementation project(':feature:trainingmenu')
-    implementation project(':feature:trainingstarter')
-    implementation project(':feature:trainingresult')
-    implementation project(':feature:exammenu')
-    implementation project(':feature:examstarter')
-    implementation project(':feature:examresult')
-    implementation project(':feature:examhistory')
-    implementation project(':feature:material')
-    implementation project(':feature:materialedit')
-    implementation project(':feature:support')
+    implementation Deps.Dagger.dagger
+    implementation Deps.Dagger.daggerAndroid
+    implementation Deps.Dagger.daggerAndroidSupport
+    kapt Deps.Dagger.daggerCompiler
+    kapt Deps.Dagger.daggerAndroidProcessor
 
-    implementation 'com.github.hotchemi:android-rate:1.0.1'
+    implementation Deps.androidRate
 
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+    debugImplementation Deps.leakCanary
 }
 
 task addAppLicenseTask {

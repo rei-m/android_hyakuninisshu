@@ -14,27 +14,40 @@
  * limitations under the License.
  *
  */
+import dependencies.Deps
+import dependencies.Projects
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-apply from: rootProject.file('gradle/android.gradle')
 apply from: rootProject.file('gradle/android-feature.gradle')
 
-apply from: rootProject.file('gradle/dependencies/dagger.gradle'), to: dependencies
-apply from: rootProject.file('gradle/dependencies/test.gradle'), to: dependencies
-
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
-    implementation "androidx.annotation:annotation:$rootProject.androidx_annotation_version"
-    implementation "androidx.lifecycle:lifecycle-reactivestreams:$rootProject.androidx_lifecycle_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava_version"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroid_version"
-    implementation "com.jakewharton.timber:timber:$rootProject.timber_version"
+    implementation Deps.Kotlin.kotlinStdlibJdk7
 
-    implementation project(':domain')
+    implementation project(Projects.domain)
 
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines_version"
+    implementation Deps.AndroidX.androidXAnnotation
+    implementation Deps.AndroidX.Lifecycle.reactiveStreams
+    implementation Deps.RxJava2.rxJava
+    implementation Deps.RxJava2.rxAndroid
+    implementation Deps.timber
+
+    implementation Deps.Dagger.dagger
+    implementation Deps.Dagger.daggerAndroid
+    implementation Deps.Dagger.daggerAndroidSupport
+    kapt Deps.Dagger.daggerCompiler
+    kapt Deps.Dagger.daggerAndroidProcessor
+
+    testImplementation Deps.AndroidX.Test.core
+    testImplementation Deps.AndroidX.Test.runner
+    testImplementation Deps.AndroidX.Test.rules
+    testImplementation Deps.AndroidX.Test.junit
+    testImplementation Deps.AndroidX.Arch.coreTesting
+    testImplementation Deps.AssertJ.core
+    testImplementation Deps.Robolectric.robolectric
+    testImplementation Deps.MockitoKotlin2.mockitokotlin2
+    testImplementation Deps.KotlinX.coroutinesCore
+    testImplementation Deps.KotlinX.coroutinesAndroid
 }

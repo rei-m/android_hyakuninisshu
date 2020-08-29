@@ -14,8 +14,8 @@
 package dependencies
 
 object Versions {
-    val targetSdkVersion = 29
-    val compileSdkVersion = 29
+    val targetSdkVersion = 30
+    val compileSdkVersion = 30
     val minSdkVersion = 21
     val versionCode = 35
     val versionName = "3.1.1"
