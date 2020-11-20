@@ -11,12 +11,12 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
-package me.rei_m.hyakuninisshu.infrastructure.database
+package dependencies
 
-object KarutaJsonConstant {
-
-    const val KARUTA_VERSION = 6    // マスタを変えたらこれをver upする
-
-    const val KEY_KARUTA_JSON_VERSION = "mtFju3hD6N"
+object Versions {
+    val targetSdkVersion = 30
+    val compileSdkVersion = 30
+    val minSdkVersion = 21
+    val versionCode = 36
+    val versionName = "3.1.2"
 }
