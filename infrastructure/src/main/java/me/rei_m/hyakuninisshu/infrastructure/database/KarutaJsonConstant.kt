@@ -16,7 +16,7 @@ package me.rei_m.hyakuninisshu.infrastructure.database
 
 object KarutaJsonConstant {
 
-    const val KARUTA_VERSION = 5    // マスタを変えたらこれをver upする
+    const val KARUTA_VERSION = 6    // マスタを変えたらこれをver upする
 
     const val KEY_KARUTA_JSON_VERSION = "mtFju3hD6N"
 }
