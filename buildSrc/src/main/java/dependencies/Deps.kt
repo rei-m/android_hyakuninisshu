@@ -29,19 +29,19 @@ object Deps {
 
     object Google {
         object Gms {
-            const val googleServices = "com.google.gms:google-services:4.3.3"
+            const val googleServices = "com.google.gms:google-services:4.3.14"
         }
         object Firebase {
-            const val analytics = "com.google.firebase:firebase-analytics:17.5.0"
-            const val crashlyticsGradle = "com.google.firebase:firebase-crashlytics-gradle:2.2.0"
-            const val crashlytics = "com.google.firebase:firebase-crashlytics:17.2.1"
-            const val ads = "com.google.firebase:firebase-ads:19.2.0"
+            const val analytics = "com.google.firebase:firebase-analytics:21.2.0"
+            const val crashlyticsGradle = "com.google.firebase:firebase-crashlytics-gradle:2.9.2"
+            const val crashlytics = "com.google.firebase:firebase-crashlytics:18.3.0"
+            const val ads = "com.google.firebase:firebase-ads:21.3.0"
         }
         object Android {
             object Gms {
-                const val playServicesAds = "com.google.android.gms:play-services-ads:19.3.0"
+                const val playServicesAds = "com.google.android.gms:play-services-ads:21.3.0"
                 const val playServicesOssLicenses = "com.google.android.gms:play-services-oss-licenses:17.0.0"
-                const val ossLicensesPlugin = "com.google.android.gms:oss-licenses-plugin:0.10.2"
+                const val ossLicensesPlugin = "com.google.android.gms:oss-licenses-plugin:0.10.4"
             }
             object Material {
                 const val material = "com.google.android.material:material:1.2.0"
@@ -52,7 +52,7 @@ object Deps {
     object Android {
         object Tools {
             object Build {
-                const val gradle = "com.android.tools.build:gradle:4.0.1"
+                const val gradle = "com.android.tools.build:gradle:4.2.0"
             }
         }
     }
@@ -154,7 +154,7 @@ object Deps {
     }
 
     const val androidRate = "com.github.hotchemi:android-rate:1.0.1"
-    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.3"
+    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.9.1"
     const val timber = "com.jakewharton.timber:timber:4.7.1"
 
     const val ktlint = "com.github.shyiko:ktlint:0.38.1"

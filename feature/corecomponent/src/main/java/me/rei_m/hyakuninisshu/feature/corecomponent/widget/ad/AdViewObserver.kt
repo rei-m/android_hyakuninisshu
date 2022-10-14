@@ -53,7 +53,6 @@ class AdViewObserver @Inject constructor() : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun releaseAd() {
-        adView?.adListener = null
         adView?.destroy()
         adView = null
     }
@@ -72,7 +71,7 @@ class AdViewObserver @Inject constructor() : LifecycleObserver {
         if (adView == null) {
             val adView = AdView(activity).apply {
                 adUnitId = activity.getString(R.string.banner_ad_unit_id)
-                adSize = calcAdSize(activity, container)
+                setAdSize(calcAdSize(activity, container))
                 adListener = object : AdListener() {
                     override fun onAdLoaded() {
                         super.onAdLoaded()
