@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.support.BuildConfig
 import me.rei_m.hyakuninisshu.feature.support.R
 import me.rei_m.hyakuninisshu.feature.support.databinding.SupportFragmentBinding
 import me.rei_m.hyakuninisshu.feature.support.di.SupportComponent
@@ -51,7 +50,7 @@ class SupportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val versionName = getString(R.string.version, "3.1.2")
+        val versionName = getString(R.string.version, "3.1.3")
 
         _binding = SupportFragmentBinding.inflate(inflater, container, false)
         binding.textVersion.text = versionName

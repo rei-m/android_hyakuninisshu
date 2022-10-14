@@ -32,7 +32,6 @@ dependencies {
 
     implementation project(Projects.domain)
 
-    implementation Deps.AndroidX.Lifecycle.extensions
     implementation Deps.AndroidX.Lifecycle.commonJava8
     implementation Deps.AndroidX.Lifecycle.liveDataKtx
 
