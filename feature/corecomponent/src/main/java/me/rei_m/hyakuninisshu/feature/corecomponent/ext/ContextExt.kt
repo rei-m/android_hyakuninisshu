@@ -12,19 +12,53 @@
  */
 
 /* ktlint-disable package-name */
+@file:Suppress("DEPRECATION")
+
 package me.rei_m.hyakuninisshu.feature.corecomponent.ext
 
 import android.content.Context
 import android.graphics.Point
+import android.os.Build
+import android.util.DisplayMetrics
+import android.view.WindowInsets
 import android.view.WindowManager
 import com.google.android.gms.ads.AdSize
 
 val Context.adHeight
-    get() = AdSize.SMART_BANNER.getHeightInPixels(this)
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val metrics = windowManager.currentWindowMetrics
+        AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            this,
+            metrics.bounds.width()
+        ).getHeightInPixels(this)
+    } else {
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = windowManager.defaultDisplay
+        val outMetrics = DisplayMetrics()
+        display.getMetrics(outMetrics)
+        val density = outMetrics.density
+        val adWidthPixels = outMetrics.widthPixels.toFloat()
+        val adWidth = (adWidthPixels / density).toInt()
+        AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
+            .getHeightInPixels(this)
+    }
 
 fun Context.windowSize(): Point {
-    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    val point = Point()
-    windowManager.defaultDisplay.getSize(point)
-    return point
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val windowMetrics = windowManager.currentWindowMetrics
+        val bounds = windowMetrics.bounds
+        val insetsIgnores =
+            windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+        Point(
+            bounds.width() - insetsIgnores.right - insetsIgnores.left,
+            bounds.height() - insetsIgnores.top - insetsIgnores.bottom
+        )
+    } else {
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val point = Point()
+        windowManager.defaultDisplay.getSize(point)
+        point
+    }
 }
