@@ -62,7 +62,7 @@ class MaterialEditFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewModel.confirmEditEvent.observe(viewLifecycleOwner, EventObserver {
             val manager =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -89,15 +89,11 @@ class MaterialEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("MaterialEdit-${args.material.no}", requireActivity())
+        binding.viewModel = viewModel
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.viewModel = viewModel
     }
 }

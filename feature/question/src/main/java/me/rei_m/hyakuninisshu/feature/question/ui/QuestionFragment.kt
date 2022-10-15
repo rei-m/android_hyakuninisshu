@@ -66,7 +66,7 @@ class QuestionFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = QuestionFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -95,10 +95,7 @@ class QuestionFragment : Fragment() {
         val toriFudaTextSize = toriFudaWidth / 5
 
         binding.toriFudaTextSize = toriFudaTextSize
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
 
         viewModel.yomiFudaWithState.observe(viewLifecycleOwner, Observer {

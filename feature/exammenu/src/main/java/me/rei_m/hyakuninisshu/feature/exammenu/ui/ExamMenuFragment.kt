@@ -51,7 +51,7 @@ class ExamMenuFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ExamMenuFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -81,10 +81,6 @@ class ExamMenuFragment : Fragment() {
             val action = ExamMenuFragmentDirections.actionExamMenuToExamPracticeTrainingStarter()
             findNavController().navigate(action)
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
     }
 }

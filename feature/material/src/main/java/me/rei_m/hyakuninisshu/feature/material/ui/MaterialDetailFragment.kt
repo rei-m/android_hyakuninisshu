@@ -15,8 +15,11 @@ package me.rei_m.hyakuninisshu.feature.material.ui
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,6 +29,7 @@ import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
 import me.rei_m.hyakuninisshu.feature.material.R
 import me.rei_m.hyakuninisshu.feature.material.databinding.MaterialDetailFragmentBinding
 import me.rei_m.hyakuninisshu.feature.material.di.MaterialComponent
+import me.rei_m.hyakuninisshu.feature.material.ui.MaterialDetailFragmentDirections
 import me.rei_m.hyakuninisshu.state.material.model.Material
 import javax.inject.Inject
 
@@ -58,14 +62,12 @@ class MaterialDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = MaterialDetailFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
         val pagerAdapter = ScreenSlidePagerAdapter(this, listOf())
         binding.pager.adapter = pagerAdapter
-
-        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -78,6 +80,7 @@ class MaterialDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpOptionMenu()
         analyticsHelper.sendScreenView("MaterialDetail", requireActivity())
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -85,10 +88,6 @@ class MaterialDetailFragment : Fragment() {
                 currentPosition = position
             }
         })
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         viewModel.materialList.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             (binding.pager.adapter as ScreenSlidePagerAdapter).replaceData(it)
@@ -103,29 +102,33 @@ class MaterialDetailFragment : Fragment() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.material_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.material_detail_edit -> {
-                val material =
-                    viewModel.materialList.value?.get(currentPosition) ?: return true
-                val action = MaterialDetailFragmentDirections.actionMaterialDetailToMaterialEdit(
-                    material
-                )
-                findNavController().navigate(action)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(ARG_POSITION, currentPosition)
         super.onSaveInstanceState(outState)
+    }
+
+    private fun setUpOptionMenu() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.material_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.material_detail_edit -> {
+                        val material =
+                            viewModel.materialList.value?.get(currentPosition) ?: return true
+                        val action =
+                            MaterialDetailFragmentDirections.actionMaterialDetailToMaterialEdit(
+                                material
+                            )
+                        findNavController().navigate(action)
+                    }
+                }
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private inner class ScreenSlidePagerAdapter(

@@ -49,7 +49,7 @@ class SupportFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val versionName = getString(R.string.version, "3.1.3")
 
         _binding = SupportFragmentBinding.inflate(inflater, container, false)
