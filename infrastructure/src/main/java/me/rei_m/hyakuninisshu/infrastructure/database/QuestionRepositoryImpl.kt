@@ -139,6 +139,9 @@ class QuestionRepositoryImpl(
                         .choiceNo(state.result.selectedKarutaNo.value)
                         .answerTime(state.result.answerMillSec)
                 }
+                else -> {
+
+                }
             }
             updater.execute()
         }

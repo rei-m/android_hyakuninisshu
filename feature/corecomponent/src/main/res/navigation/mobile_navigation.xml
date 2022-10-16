@@ -149,8 +149,7 @@
             android:id="@+id/action_trainingStarter_to_question"
             app:destination="@id/navigation_question"
             app:launchSingleTop="true"
-            app:popUpTo="@+id/navigation_training_starter"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@+id/navigation_training_menu" />
     </fragment>
 
     <fragment
@@ -314,8 +313,7 @@
             android:id="@+id/action_examStarter_to_question"
             app:destination="@id/navigation_question"
             app:launchSingleTop="true"
-            app:popUpTo="@+id/navigation_exam_starter"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@+id/navigation_exam_menu" />
     </fragment>
 
     <fragment

@@ -14,6 +14,7 @@
 /* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad
 
+import android.os.Build
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.FrameLayout
@@ -53,7 +54,6 @@ class AdViewObserver @Inject constructor() : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun releaseAd() {
-        adView?.adListener = null
         adView?.destroy()
         adView = null
     }
@@ -72,7 +72,7 @@ class AdViewObserver @Inject constructor() : LifecycleObserver {
         if (adView == null) {
             val adView = AdView(activity).apply {
                 adUnitId = activity.getString(R.string.banner_ad_unit_id)
-                adSize = calcAdSize(activity, container)
+                setAdSize(calcAdSize(activity, container))
                 adListener = object : AdListener() {
                     override fun onAdLoaded() {
                         super.onAdLoaded()
@@ -92,18 +92,29 @@ class AdViewObserver @Inject constructor() : LifecycleObserver {
     }
 
     private fun calcAdSize(activity: AppCompatActivity, container: FrameLayout): AdSize {
-        val display = activity.windowManager.defaultDisplay
-        val outMetrics = DisplayMetrics()
-        display.getMetrics(outMetrics)
-
-        val density = outMetrics.density
-
-        var adWidthPixels = container.width.toFloat()
-        if (adWidthPixels == 0f) {
-            adWidthPixels = outMetrics.widthPixels.toFloat()
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowManager = activity.windowManager
+            val metrics = windowManager.currentWindowMetrics
+            val bounds = metrics.bounds
+            var adWidthPixels = container.width.toFloat()
+            if (adWidthPixels == 0f) {
+                adWidthPixels = bounds.width().toFloat()
+            }
+            val density = container.resources.displayMetrics.density
+            val adWidth = (adWidthPixels / density).toInt()
+            AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+                activity,
+                adWidth
+            )
+        } else {
+            val windowManager = activity.windowManager
+            val display = windowManager.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display.getMetrics(outMetrics)
+            val density = outMetrics.density
+            val adWidthPixels = outMetrics.widthPixels.toFloat()
+            val adWidth = (adWidthPixels / density).toInt()
+            AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
         }
-
-        val adWidth = (adWidthPixels / density).toInt()
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
     }
 }

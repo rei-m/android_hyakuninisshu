@@ -59,16 +59,12 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.viewModel = viewModel
     }
 
     override fun onDetach() {

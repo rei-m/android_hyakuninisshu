@@ -105,13 +105,15 @@ class Question constructor(
 
         companion object {
             fun create(startDate: Date?, result: QuestionResult?): State {
-                if (startDate != null && result != null) {
-                    return Answered(startDate, result)
+                return if (startDate != null) {
+                    if (result != null) {
+                        Answered(startDate, result)
+                    } else {
+                        InAnswer(startDate)
+                    }
+                } else {
+                    Ready
                 }
-                if (startDate != null && result == null) {
-                    return InAnswer(startDate)
-                }
-                return Ready
             }
         }
     }

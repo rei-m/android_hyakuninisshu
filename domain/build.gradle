@@ -21,7 +21,6 @@ apply from: rootProject.file('gradle/android.gradle')
 dependencies {
     implementation Deps.Kotlin.kotlinStdlibJdk7
     implementation Deps.AndroidX.androidXAnnotation
-    implementation Deps.AndroidX.Lifecycle.extensions
     implementation Deps.AndroidX.Lifecycle.commonJava8
 
     testImplementation Deps.AndroidX.Test.core

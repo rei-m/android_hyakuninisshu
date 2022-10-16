@@ -37,11 +37,11 @@ class KarutaIdTest {
 
     @Test
     fun equals() {
-        assertThat(karutaId == KarutaId(1)).isTrue()
+        assertThat(karutaId == KarutaId(1)).isTrue
     }
 
     @Test
     fun notEquals() {
-        assertThat(karutaId == KarutaId(2)).isFalse()
+        assertThat(karutaId == KarutaId(2)).isFalse
     }
 }

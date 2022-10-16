@@ -57,11 +57,11 @@ class KarutaNoCollectionTest {
 
     @Test
     fun contains() {
-        assertThat(karutaNoCollection.contains(KarutaNo(1))).isTrue()
+        assertThat(karutaNoCollection.contains(KarutaNo(1))).isTrue
     }
 
     @Test
     fun notContains() {
-        assertThat(karutaNoCollection.contains(KarutaNo(4))).isFalse()
+        assertThat(karutaNoCollection.contains(KarutaNo(4))).isFalse
     }
 }

@@ -67,7 +67,7 @@ class QuestionStoreTest : TestHelper {
     fun initialState() {
         assertThat(store.question.value).isNull()
         assertThat(store.state.value).isNull()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -76,7 +76,7 @@ class QuestionStoreTest : TestHelper {
         dispatcher.dispatch(StartQuestionAction.Success(question, state))
         assertThat(store.question.value).isEqualTo(question)
         assertThat(store.state.value).isEqualTo(state)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -84,7 +84,7 @@ class QuestionStoreTest : TestHelper {
         dispatcher.dispatch(StartQuestionAction.Failure(RuntimeException()))
         assertThat(store.question.value).isNull()
         assertThat(store.state.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 
     @Test
@@ -92,7 +92,7 @@ class QuestionStoreTest : TestHelper {
         val state = QuestionState.InAnswer
         dispatcher.dispatch(StartAnswerQuestionAction.Success(state))
         assertThat(store.state.value).isEqualTo(state)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -100,7 +100,7 @@ class QuestionStoreTest : TestHelper {
         dispatcher.dispatch(StartAnswerQuestionAction.Failure(RuntimeException()))
         assertThat(store.question.value).isNull()
         assertThat(store.state.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 
     @Test
@@ -131,7 +131,7 @@ class QuestionStoreTest : TestHelper {
         )
         dispatcher.dispatch(AnswerQuestionAction.Success(state))
         assertThat(store.state.value).isEqualTo(state)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -139,6 +139,6 @@ class QuestionStoreTest : TestHelper {
         dispatcher.dispatch(AnswerQuestionAction.Failure(RuntimeException()))
         assertThat(store.question.value).isNull()
         assertThat(store.state.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 }

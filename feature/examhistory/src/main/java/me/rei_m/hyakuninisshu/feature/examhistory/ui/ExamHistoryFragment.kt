@@ -50,7 +50,7 @@ class ExamHistoryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ExamHistoryFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -65,10 +65,6 @@ class ExamHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerExamResultList.adapter = ExamResultListAdapter(requireContext(), listOf())
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
         viewModel.resultList.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer

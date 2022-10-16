@@ -47,8 +47,8 @@ class TrainingStarterStoreTest {
     @Test
     fun initialState() {
         assertThat(store.onReadyEvent.value).isNull()
-        assertThat(store.isEmpty.value).isFalse()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isEmpty.value).isFalse
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -57,8 +57,8 @@ class TrainingStarterStoreTest {
             StartTrainingAction.Success("1")
         )
         assertThat(store.onReadyEvent.value).isInstanceOf(Event::class.java)
-        assertThat(store.isEmpty.value).isFalse()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isEmpty.value).isFalse
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -67,15 +67,15 @@ class TrainingStarterStoreTest {
             StartTrainingAction.Empty()
         )
         assertThat(store.onReadyEvent.value).isNull()
-        assertThat(store.isEmpty.value).isTrue()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isEmpty.value).isTrue
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFailedStartTrainingAction() {
         dispatcher.dispatch(StartTrainingAction.Failure(RuntimeException()))
         assertThat(store.onReadyEvent.value).isNull()
-        assertThat(store.isEmpty.value).isFalse()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isEmpty.value).isFalse
+        assertThat(store.isFailure.value).isTrue
     }
 }

@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.windowSize
@@ -66,7 +65,7 @@ class QuestionFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = QuestionFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -95,13 +94,10 @@ class QuestionFragment : Fragment() {
         val toriFudaTextSize = toriFudaWidth / 5
 
         binding.toriFudaTextSize = toriFudaTextSize
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
 
-        viewModel.yomiFudaWithState.observe(viewLifecycleOwner, Observer {
+        viewModel.yomiFudaWithState.observe(viewLifecycleOwner) {
             val (yomiFuda, state) = it
             when (state) {
                 is QuestionState.InAnswer -> {
@@ -116,7 +112,7 @@ class QuestionFragment : Fragment() {
                 else -> {
                 }
             }
-        })
+        }
 
         binding.layoutQuestionResult.setOnClickListener {
             val state = viewModel.state.value

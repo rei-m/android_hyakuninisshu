@@ -44,7 +44,6 @@ dependencies {
     api Deps.AndroidX.constraintLayout
     api Deps.AndroidX.Lifecycle.viewModelSavedState
     api Deps.AndroidX.Lifecycle.viewModelKtx
-    api Deps.AndroidX.Lifecycle.extensions
     api Deps.AndroidX.Lifecycle.reactiveStreams
     api Deps.AndroidX.Navigation.fragment
     api Deps.AndroidX.Navigation.ui

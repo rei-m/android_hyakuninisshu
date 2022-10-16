@@ -47,7 +47,7 @@ class ExamStarterStoreTest {
     @Test
     fun initialState() {
         assertThat(store.onReadyEvent.value).isNull()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -56,13 +56,13 @@ class ExamStarterStoreTest {
             StartExamAction.Success("1")
         )
         assertThat(store.onReadyEvent.value).isInstanceOf(Event::class.java)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFailedFinishExamAction() {
         dispatcher.dispatch(StartExamAction.Failure(RuntimeException()))
         assertThat(store.onReadyEvent.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 }

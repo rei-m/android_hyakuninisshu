@@ -18,8 +18,9 @@ apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
     repositories {
+        gradlePluginPortal()
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath Deps.Android.Tools.Build.gradle
@@ -35,6 +36,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
 }

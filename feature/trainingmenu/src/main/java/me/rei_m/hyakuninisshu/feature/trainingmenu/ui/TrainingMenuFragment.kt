@@ -59,7 +59,7 @@ class TrainingMenuFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = TrainingMenuFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -122,10 +122,7 @@ class TrainingMenuFragment : Fragment() {
             )
             findNavController().navigate(action)
         }
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         binding.dropdownRangeFrom.setUp(viewModel.rangeFrom.label(resources)) {
             viewModel.rangeFrom = RangeFromCondition.values()[it]
         }

@@ -57,7 +57,7 @@ class TrainingResultFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = TrainingResultFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -86,10 +86,7 @@ class TrainingResultFragment : Fragment() {
             val action = TrainingResultFragmentDirections.actionTrainingResultPop()
             findNavController().navigate(action)
         }
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
     }
 }

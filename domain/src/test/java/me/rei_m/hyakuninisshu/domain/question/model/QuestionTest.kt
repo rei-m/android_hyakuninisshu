@@ -26,7 +26,7 @@ import java.util.*
 
 class QuestionTest {
     class WhenStateIsReady : TestHelper {
-        lateinit var question: Question
+        private lateinit var question: Question
 
         @Before
         fun setUp() {

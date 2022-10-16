@@ -50,7 +50,7 @@ class ExamFinisherFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ExamFinisherFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -62,8 +62,8 @@ class ExamFinisherFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         viewModel.onFinishEvent.observe(viewLifecycleOwner, EventObserver {
             val action = ExamFinisherFragmentDirections.actionExamFinisherToExamResult(
