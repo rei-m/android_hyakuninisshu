@@ -47,7 +47,7 @@ class TrainingResultStoreTest {
     @Test
     fun initialState() {
         assertThat(store.result.value).isNull()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -59,13 +59,13 @@ class TrainingResultStoreTest {
         )
         dispatcher.dispatch(AggregateResultsAction.Success(result))
         assertThat(store.result.value).isEqualTo(result)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFailedAggregateResultsAction() {
         dispatcher.dispatch(AggregateResultsAction.Failure(RuntimeException()))
         assertThat(store.result.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 }

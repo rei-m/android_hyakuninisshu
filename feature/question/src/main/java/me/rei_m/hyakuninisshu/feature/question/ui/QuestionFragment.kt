@@ -98,7 +98,7 @@ class QuestionFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        viewModel.yomiFudaWithState.observe(viewLifecycleOwner, Observer {
+        viewModel.yomiFudaWithState.observe(viewLifecycleOwner, {
             val (yomiFuda, state) = it
             when (state) {
                 is QuestionState.InAnswer -> {

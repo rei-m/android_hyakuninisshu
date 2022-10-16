@@ -29,7 +29,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
-import me.rei_m.hyakuninisshu.feature.material.R
 import me.rei_m.hyakuninisshu.feature.material.databinding.MaterialListFragmentBinding
 import me.rei_m.hyakuninisshu.feature.material.di.MaterialComponent
 import me.rei_m.hyakuninisshu.state.material.model.ColorFilter

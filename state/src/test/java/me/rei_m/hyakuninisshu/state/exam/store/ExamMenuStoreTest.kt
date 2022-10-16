@@ -56,34 +56,34 @@ class ExamMenuStoreTest {
     @Test
     fun initialState() {
         assertThat(store.recentResult.value).isNull()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFetchRecentExamResultAction() {
         dispatcher.dispatch(FetchRecentExamResultAction.Success(value))
         assertThat(store.recentResult.value).isEqualTo(value)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFailedFetchRecentExamResultAction() {
         dispatcher.dispatch(FetchRecentExamResultAction.Failure(RuntimeException()))
         assertThat(store.recentResult.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 
     @Test
     fun state_receivedFinishExamAction() {
         dispatcher.dispatch(FinishExamAction.Success(value))
         assertThat(store.recentResult.value).isEqualTo(value)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFailedFinishExamAction() {
         dispatcher.dispatch(FinishExamAction.Failure(RuntimeException()))
         assertThat(store.recentResult.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 }

@@ -85,7 +85,7 @@ class ExamResultFragment : Fragment() {
         }
 
         binding.viewModel = viewModel
-        viewModel.materialMap.observe(viewLifecycleOwner, Observer {
+        viewModel.materialMap.observe(viewLifecycleOwner, {
             binding.viewResult.listener = object : ExamResultView.OnClickItemListener {
                 override fun onClick(karutaNo: Int) {
                     val material = it[karutaNo] ?: return

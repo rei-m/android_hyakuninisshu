@@ -47,7 +47,7 @@ class ExamHistoryStoreTest {
     @Test
     fun initialState() {
         assertThat(store.resultList.value).isNull()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -55,13 +55,13 @@ class ExamHistoryStoreTest {
         val value = listOf<ExamResult>()
         dispatcher.dispatch(FetchAllExamResultAction.Success(value))
         assertThat(store.resultList.value).isEqualTo(value)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFailedFetchAllExamResultAction() {
         dispatcher.dispatch(FetchAllExamResultAction.Failure(RuntimeException()))
         assertThat(store.resultList.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 }

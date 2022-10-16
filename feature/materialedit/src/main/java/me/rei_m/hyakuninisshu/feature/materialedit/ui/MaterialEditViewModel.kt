@@ -35,20 +35,20 @@ class MaterialEditViewModel(
 
     val creatorAndNo = "${orgMaterial.noTxt} / ${orgMaterial.creator}"
 
-    val firstPhraseKanji = handle.getLiveData<String>(KEY_FIRST_KANJI, orgMaterial.shokuKanji)
-    val firstPhraseKana = handle.getLiveData<String>(KEY_FIRST_KANA, orgMaterial.shokuKana)
+    val firstPhraseKanji = handle.getLiveData(KEY_FIRST_KANJI, orgMaterial.shokuKanji)
+    val firstPhraseKana = handle.getLiveData(KEY_FIRST_KANA, orgMaterial.shokuKana)
 
-    val secondPhraseKanji = handle.getLiveData<String>(KEY_SECOND_KANJI, orgMaterial.nikuKanji)
-    val secondPhraseKana = handle.getLiveData<String>(KEY_SECOND_KANA, orgMaterial.nikuKana)
+    val secondPhraseKanji = handle.getLiveData(KEY_SECOND_KANJI, orgMaterial.nikuKanji)
+    val secondPhraseKana = handle.getLiveData(KEY_SECOND_KANA, orgMaterial.nikuKana)
 
-    val thirdPhraseKanji = handle.getLiveData<String>(KEY_THIRD_KANJI, orgMaterial.sankuKanji)
-    val thirdPhraseKana = handle.getLiveData<String>(KEY_THIRD_KANA, orgMaterial.sankuKana)
+    val thirdPhraseKanji = handle.getLiveData(KEY_THIRD_KANJI, orgMaterial.sankuKanji)
+    val thirdPhraseKana = handle.getLiveData(KEY_THIRD_KANA, orgMaterial.sankuKana)
 
-    val fourthPhraseKanji = handle.getLiveData<String>(KEY_FOURTH_KANJI, orgMaterial.shikuKanji)
-    val fourthPhraseKana = handle.getLiveData<String>(KEY_FOURTH_KANA, orgMaterial.shikuKana)
+    val fourthPhraseKanji = handle.getLiveData(KEY_FOURTH_KANJI, orgMaterial.shikuKanji)
+    val fourthPhraseKana = handle.getLiveData(KEY_FOURTH_KANA, orgMaterial.shikuKana)
 
-    val fifthPhraseKanji = handle.getLiveData<String>(KEY_FIFTH_KANJI, orgMaterial.gokuKanji)
-    val fifthPhraseKana = handle.getLiveData<String>(KEY_FIFTH_KANA, orgMaterial.gokuKana)
+    val fifthPhraseKanji = handle.getLiveData(KEY_FIFTH_KANJI, orgMaterial.gokuKanji)
+    val fifthPhraseKana = handle.getLiveData(KEY_FIFTH_KANA, orgMaterial.gokuKana)
 
     private val _confirmEditEvent = MutableLiveData<Event<Unit>>()
     val confirmEditEvent: LiveData<Event<Unit>> = _confirmEditEvent

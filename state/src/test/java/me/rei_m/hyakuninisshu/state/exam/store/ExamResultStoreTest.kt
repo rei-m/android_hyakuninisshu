@@ -49,7 +49,7 @@ class ExamResultStoreTest {
     fun initialState() {
         assertThat(store.result.value).isNull()
         assertThat(store.materialList.value).isNull()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -65,7 +65,7 @@ class ExamResultStoreTest {
         dispatcher.dispatch(FetchExamResultAction.Success(result, materialList))
         assertThat(store.result.value).isEqualTo(result)
         assertThat(store.materialList.value).isEqualTo(materialList)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
@@ -73,6 +73,6 @@ class ExamResultStoreTest {
         dispatcher.dispatch(FetchExamResultAction.Failure(RuntimeException()))
         assertThat(store.result.value).isNull()
         assertThat(store.materialList.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 }

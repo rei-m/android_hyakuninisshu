@@ -31,7 +31,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return RangeFromCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_RANGE_FROM, value.ordinal)
+            handle[KEY_RANGE_FROM] = value.ordinal
         }
 
     var rangeTo: RangeToCondition
@@ -40,7 +40,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return RangeToCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_RANGE_TO, value.ordinal)
+            handle[KEY_RANGE_TO] = value.ordinal
         }
 
     var kimariji: KimarijiCondition
@@ -49,7 +49,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return KimarijiCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_KIMARIJI, value.ordinal)
+            handle[KEY_KIMARIJI] = value.ordinal
         }
 
     var kamiNoKuStyle: DisplayStyleCondition
@@ -59,7 +59,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return DisplayStyleCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_KAMI_NO_KU_STYLE, value.ordinal)
+            handle[KEY_KAMI_NO_KU_STYLE] = value.ordinal
         }
 
     var shimoNoKuStyle: DisplayStyleCondition
@@ -69,7 +69,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return DisplayStyleCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_SHIMO_NO_KU_STYLE, value.ordinal)
+            handle[KEY_SHIMO_NO_KU_STYLE] = value.ordinal
         }
 
     var color: ColorCondition
@@ -78,7 +78,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return ColorCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_COLOR, value.ordinal)
+            handle[KEY_COLOR] = value.ordinal
         }
 
     var inputSecond: InputSecondCondition
@@ -88,7 +88,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return InputSecondCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_INPUT_SPEED, value.ordinal)
+            handle[KEY_INPUT_SPEED] = value.ordinal
         }
 
     var animationSpeed: DisplayAnimationSpeedCondition
@@ -98,7 +98,7 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
             return DisplayAnimationSpeedCondition[ordinal]
         }
         set(value) {
-            handle.set(KEY_ANIMATION_SPEED, value.ordinal)
+            handle[KEY_ANIMATION_SPEED] = value.ordinal
         }
 
     companion object {

@@ -48,20 +48,20 @@ class ApplicationStoreTest {
     @Test
     fun initialState() {
         assertThat(store.onReadyEvent.value).isNull()
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedStartApplicationAction() {
         dispatcher.dispatch(StartApplicationAction.Success())
         assertThat(store.onReadyEvent.value).isInstanceOf(Event::class.java)
-        assertThat(store.isFailure.value).isFalse()
+        assertThat(store.isFailure.value).isFalse
     }
 
     @Test
     fun state_receivedFailedStartApplicationAction() {
         dispatcher.dispatch(StartApplicationAction.Failure(RuntimeException()))
         assertThat(store.onReadyEvent.value).isNull()
-        assertThat(store.isFailure.value).isTrue()
+        assertThat(store.isFailure.value).isTrue
     }
 }

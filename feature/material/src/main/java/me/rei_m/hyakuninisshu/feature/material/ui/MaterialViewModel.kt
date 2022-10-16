@@ -40,7 +40,7 @@ class MaterialViewModel(
         }
         set(value) {
             dispatchAction { actionCreator.fetchMaterialList(value) }
-            handle.set(KEY_COLOR_FILTER, value.ordinal)
+            handle[KEY_COLOR_FILTER] = value.ordinal
         }
 
     init {

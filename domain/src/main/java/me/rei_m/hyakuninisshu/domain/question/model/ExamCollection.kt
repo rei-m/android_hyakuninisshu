@@ -45,7 +45,7 @@ data class ExamCollection(
      */
     val totalWrongKarutaNoCollection: KarutaNoCollection by lazy {
         KarutaNoCollection(
-            values.asSequence().fold(mutableSetOf<KarutaNo>()) { karutaNoSet, karutaExam ->
+            values.fold(mutableSetOf<KarutaNo>()) { karutaNoSet, karutaExam ->
                 karutaNoSet.addAll(karutaExam.result.wrongKarutaNoCollection.values)
                 karutaNoSet
             }.toList()
