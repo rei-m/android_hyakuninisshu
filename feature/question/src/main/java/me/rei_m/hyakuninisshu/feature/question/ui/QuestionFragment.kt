@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.windowSize
@@ -98,7 +97,7 @@ class QuestionFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        viewModel.yomiFudaWithState.observe(viewLifecycleOwner, {
+        viewModel.yomiFudaWithState.observe(viewLifecycleOwner) {
             val (yomiFuda, state) = it
             when (state) {
                 is QuestionState.InAnswer -> {
@@ -113,7 +112,7 @@ class QuestionFragment : Fragment() {
                 else -> {
                 }
             }
-        })
+        }
 
         binding.layoutQuestionResult.setOnClickListener {
             val state = viewModel.state.value
