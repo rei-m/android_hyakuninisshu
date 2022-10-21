@@ -50,7 +50,7 @@ class SupportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val versionName = getString(R.string.version, "3.1.3")
+        val versionName = getString(R.string.version, "3.1.4")
 
         _binding = SupportFragmentBinding.inflate(inflater, container, false)
         binding.textVersion.text = versionName
