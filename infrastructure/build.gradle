@@ -35,8 +35,13 @@ dependencies {
     implementation Deps.AndroidX.Lifecycle.commonJava8
     implementation Deps.AndroidX.Lifecycle.liveDataKtx
 
-    implementation Deps.Orma.orma
-    kapt Deps.Orma.ormaProcessor
+    implementation files('../libs/orma-6.0.2.aar')
+    implementation files('../libs/orma-core-6.0.2.aar')
+    implementation files('../libs/orma-encryption-6.0.2.aar')
+    implementation files('../libs/orma-annotations-6.0.2.jar')
+    implementation files('../libs/orma-migration-6.0.2.aar')
+    kapt files('../libs/orma-processor-6.0.2.jar')
+    implementation 'org.antlr:antlr4-runtime:4.6'
     implementation Deps.RxJava2.rxJava
 
     implementation Deps.Moshi.moshi
