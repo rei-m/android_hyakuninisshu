@@ -146,6 +146,11 @@ dependencies {
 
     implementation Deps.androidRate
 
+    implementation files('../libs/orma-6.0.2.aar')
+    implementation files('../libs/orma-core-6.0.2.aar')
+    implementation files('../libs/orma-encryption-6.0.2.aar')
+    implementation files('../libs/orma-migration-6.0.2.aar')
+
     debugImplementation Deps.leakCanary
 }
 
