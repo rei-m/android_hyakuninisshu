@@ -31,22 +31,17 @@ fun setTextKamiNoKuKana(
         return
     }
 
-    var finallyKimariji = 0
-    for (i in 0 until kamiNoKu.length - 1) {
-        if (kamiNoKu.substring(i, i + 1) == "　") {
-            finallyKimariji++
-        } else {
-            if (kimariji < i) {
-                break
-            }
-        }
-        finallyKimariji++
+    val spaceCount = if (kamiNoKu.substring(0, kimariji).contains("　")) {
+        1
+    } else {
+        0
     }
+
     val ssb = SpannableStringBuilder().append(kamiNoKu)
     ssb.setSpan(
         ForegroundColorSpan(Color.RED),
         0,
-        finallyKimariji - 1,
+        kimariji + spaceCount,
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
     )
     view.text = ssb
