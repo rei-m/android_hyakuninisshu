@@ -109,6 +109,10 @@ class MainActivity : AppCompatActivity(),
                     navView.visibility = View.GONE
                     adViewObserver.showAd(this, adViewContainer)
                 }
+                R.id.navigation_training_menu -> {
+                    navView.visibility = View.VISIBLE
+                    adViewObserver.hideAd(adViewContainer)
+                }
                 else -> {
                     navView.visibility = View.VISIBLE
                     adViewObserver.showAd(this, adViewContainer)
