@@ -27,22 +27,18 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import hotchemi.android.rate.AppRate
 import me.rei_m.hyakuninisshu.App
-import me.rei_m.hyakuninisshu.BuildConfig
 import me.rei_m.hyakuninisshu.R
 import me.rei_m.hyakuninisshu.di.MainComponent
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.setupActionBar
 import me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad.AdViewObserver
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(),
     MainComponent.Injector {
 
     override fun mainComponent(): MainComponent = _mainComponent
 
-    @Inject
-    lateinit var adViewObserver: AdViewObserver
+    private val adViewObserver: AdViewObserver = AdViewObserver()
 
     private lateinit var _mainComponent: MainComponent
 
@@ -61,8 +57,6 @@ class MainActivity : AppCompatActivity(),
         setupNavController()
 
         setupAd()
-
-        setupAppRate()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -121,18 +115,6 @@ class MainActivity : AppCompatActivity(),
                 }
             }
         }
-    }
-
-    private fun setupAppRate() {
-        AppRate.with(this)
-            .setInstallDays(1)
-            .setLaunchTimes(3)
-            .setRemindInterval(10)
-            .setShowLaterButton(true)
-            .setDebug(BuildConfig.DEBUG)
-            .monitor()
-
-        AppRate.showRateDialogIfMeetsConditions(this)
     }
 
     private fun setupAd() {

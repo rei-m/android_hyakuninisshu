@@ -19,19 +19,15 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import me.rei_m.hyakuninisshu.feature.corecomponent.R
-import me.rei_m.hyakuninisshu.feature.corecomponent.di.ActivityScope
-import javax.inject.Inject
 
-@ActivityScope
-class AdViewObserver @Inject constructor() : LifecycleObserver {
+class AdViewObserver : DefaultLifecycleObserver {
 
     private var adView: AdView? = null
 
@@ -52,19 +48,20 @@ class AdViewObserver @Inject constructor() : LifecycleObserver {
         adView?.visibility = View.GONE
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun releaseAd() {
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
         adView?.destroy()
+        isLoadedAd = false
         adView = null
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun resumeAd() {
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         adView?.resume()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun pauseAd() {
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
         adView?.pause()
     }
 
