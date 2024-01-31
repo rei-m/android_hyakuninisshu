@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(),
                 R.id.navigation_question,
                 R.id.navigation_question_answer -> {
                     navView.visibility = View.GONE
-                    adViewObserver.hideAd(adViewContainer)
+                    adViewObserver.hideAd()
                 }
                 R.id.navigation_training_result,
                 R.id.navigation_exam_result,
@@ -108,10 +108,6 @@ class MainActivity : AppCompatActivity(),
                 R.id.navigation_material_edit_confirm_dialog -> {
                     navView.visibility = View.GONE
                     adViewObserver.showAd(this, adViewContainer)
-                }
-                R.id.navigation_training_menu -> {
-                    navView.visibility = View.VISIBLE
-                    adViewObserver.hideAd(adViewContainer)
                 }
                 else -> {
                     navView.visibility = View.VISIBLE

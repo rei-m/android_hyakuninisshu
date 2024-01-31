@@ -17,6 +17,6 @@ object Versions {
     val targetSdkVersion = 33
     val compileSdkVersion = 33
     val minSdkVersion = 21
-    val versionCode = 41
-    val versionName = "3.1.7"
+    val versionCode = 42
+    val versionName = "3.1.8"
 }

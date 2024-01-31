@@ -44,12 +44,8 @@ class AdViewObserver : DefaultLifecycleObserver {
         }
     }
 
-    fun hideAd(container: FrameLayout) {
-        adView?.let {
-            container.removeView(it)
-        }
-        isLoadedAd = false
-        adView = null
+    fun hideAd() {
+        adView?.visibility = View.GONE
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
