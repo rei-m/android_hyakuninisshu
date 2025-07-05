@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -30,16 +30,20 @@ private const val COUNT_HOURS_AT_DAY = 24
 
 private const val COUNT_SECONDS_AT_MINUTE = 60
 
-fun Date.diffString(context: Context, now: Date): String {
+fun Date.diffString(
+    context: Context,
+    now: Date,
+): String {
     val diffMillSeconds = now.time - this.time
 
     val diffSeconds = TimeUnit.MILLISECONDS.toSeconds(diffMillSeconds)
     if (diffSeconds < COUNT_SECONDS_AT_MINUTE) {
-        val displaySecond = if (diffSeconds < 0) {
-            1
-        } else {
-            diffSeconds
-        }
+        val displaySecond =
+            if (diffSeconds < 0) {
+                1
+            } else {
+                diffSeconds
+            }
         return context.getString(R.string.past_second, displaySecond)
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -33,20 +33,22 @@ class ApplicationActionCreatorTest {
     }
 
     @Test
-    fun start_success() = runBlocking {
-        whenever(repository.initialize()).thenAnswer { }
+    fun start_success() =
+        runBlocking {
+            whenever(repository.initialize()).thenAnswer { }
 
-        val actual = actionCreator.start()
-        assertThat(actual).isInstanceOf(StartApplicationAction.Success::class.java)
-        return@runBlocking
-    }
+            val actual = actionCreator.start()
+            assertThat(actual).isInstanceOf(StartApplicationAction.Success::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun start_failure() = runBlocking {
-        whenever(repository.initialize()).thenThrow(RuntimeException())
+    fun start_failure() =
+        runBlocking {
+            whenever(repository.initialize()).thenThrow(RuntimeException())
 
-        val actual = actionCreator.start()
-        assertThat(actual).isInstanceOf(StartApplicationAction.Failure::class.java)
-        return@runBlocking
-    }
+            val actual = actionCreator.start()
+            assertThat(actual).isInstanceOf(StartApplicationAction.Failure::class.java)
+            return@runBlocking
+        }
 }

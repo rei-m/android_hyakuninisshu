@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,14 +18,15 @@ import me.rei_m.hyakuninisshu.state.core.Action
 /**
  * アプリケーションの開始を通知するアクション.
  */
-sealed class StartApplicationAction(override val error: Throwable? = null) : Action {
-
+sealed class StartApplicationAction(
+    override val error: Throwable? = null,
+) : Action {
     class Success : StartApplicationAction() {
         override fun toString() = "$name()"
     }
 
     class Failure(
-        error: Throwable
+        error: Throwable,
     ) : StartApplicationAction(error) {
         override fun toString() = "$name(error=$error)"
     }

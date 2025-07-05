@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -13,8 +13,9 @@
 
 package me.rei_m.hyakuninisshu.infrastructure.database
 
-import com.github.gfx.android.orma.SingleAssociation
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaNo
 import me.rei_m.hyakuninisshu.domain.question.model.*
@@ -24,154 +25,184 @@ import kotlin.coroutines.CoroutineContext
  * 初期のDB設計ミスったままなのでここの中身はおかしい・・・
  */
 class QuestionRepositoryImpl(
-    private val orma: OrmaDatabase,
-    private val ioContext: CoroutineContext = Dispatchers.IO
+    private val database: AppDatabase,
+    private val ioContext: CoroutineContext = Dispatchers.IO,
 ) : QuestionRepository {
-    override suspend fun initialize(questionList: List<Question>) = withContext(ioContext) {
-        orma.transactionSync {
-            KarutaQuizSchema.relation(orma).deleter().execute()
-            KarutaQuizChoiceSchema.relation(orma).deleter().execute()
+    override suspend fun initialize(questionList: List<Question>) {
+        val questionDataList = mutableListOf<KarutaQuestionData>()
+        val choiceDataList = mutableListOf<KarutaQuestionChoiceData>()
+        questionList.forEach { question ->
+            KarutaQuestionData(
+                id = question.identifier.value,
+                no = question.no,
+                correctKarutaNo = question.correctNo.value,
+                startDate = null,
+                selectedKarutaNo = null,
+                isCorrect = null,
+                answerTime = null,
+            ).let {
+                questionDataList.add(it)
+            }
 
-            val karutaQuizSchemaInserter = KarutaQuizSchema.relation(orma).inserter()
-            val karutaQuizChoiceSchemaInserter = KarutaQuizChoiceSchema.relation(orma).inserter()
-
-            questionList.forEach { question ->
-                val karutaQuizSchema = KarutaQuizSchema(
-                    quizId = question.identifier.value,
-                    collectId = question.correctNo.value.toLong(),
-                    no = question.no
-                )
-                karutaQuizSchema.id = karutaQuizSchemaInserter.execute(karutaQuizSchema)
-                question.choiceList.forEachIndexed { choiceOrder, karutaNo ->
-                    val karutaQuizChoiceSchema = KarutaQuizChoiceSchema(
-                        karutaQuizSchema = SingleAssociation.just(karutaQuizSchema),
-                        karutaId = karutaNo.value.toLong(),
-                        orderNo = choiceOrder.toLong()
-                    )
-                    karutaQuizChoiceSchemaInserter.execute(karutaQuizChoiceSchema)
+            question.choiceList.forEachIndexed { indexChoice, choice ->
+                KarutaQuestionChoiceData(
+                    id = null,
+                    karutaQuestionId = question.identifier.value,
+                    karutaNo = choice.value,
+                    order = indexChoice + 1,
+                ).let {
+                    choiceDataList.add(it)
                 }
             }
         }
+
+        withContext(ioContext) {
+            database
+                .runInTransaction<Deferred<Unit>> {
+                    return@runInTransaction async {
+                        database.karutaQuestionDao().deleteAll()
+                        database.karutaQuestionDao().insertKarutaQuestions(questionDataList)
+                        database.karutaQuestionChoiceDao().insertKarutaQuestionChoices(choiceDataList)
+                    }
+                }.await()
+        }
     }
 
-    override suspend fun count(): Int = withContext(ioContext) {
-        KarutaQuizSchema.relation(orma)
-            .selector()
-            .count()
+    override suspend fun count(): Int =
+        withContext(ioContext) {
+            database.karutaQuestionDao().count()
+        }
+
+    override suspend fun findById(questionId: QuestionId): Question? {
+        return withContext(ioContext) {
+            val questionData =
+                database.karutaQuestionDao().findById(questionId.value)
+                    ?: return@withContext null
+            val choiceDataList =
+                database.karutaQuestionChoiceDao().findAllByKarutaQuestionId(questionId.value)
+            val choiceList = choiceDataList.map { KarutaNo((it.karutaNo)) }
+            val correctNo = KarutaNo(questionData.correctKarutaNo)
+            val result =
+                if (questionData.selectedKarutaNo != null &&
+                    questionData.answerTime != null &&
+                    questionData.isCorrect != null
+                ) {
+                    QuestionResult(
+                        selectedKarutaNo = KarutaNo(questionData.selectedKarutaNo),
+                        answerMillSec = questionData.answerTime,
+                        judgement = QuestionJudgement(correctNo, isCorrect = questionData.isCorrect),
+                    )
+                } else {
+                    null
+                }
+            return@withContext Question(
+                id = questionId,
+                no = questionData.no,
+                choiceList = choiceList,
+                correctNo = correctNo,
+                state =
+                    Question.State.create(
+                        startDate = questionData.startDate,
+                        result = result,
+                    ),
+            )
+        }
     }
 
-    override suspend fun findById(questionId: QuestionId): Question? = withContext(ioContext) {
-        KarutaQuizSchema.relation(orma)
-            .quizIdEq(questionId.value)
-            .selector()
-            .firstOrNull()?.let {
-                val karutaIdList = it.getChoices(orma)
-                    .selector()
-                    .toList()
-                it.toModel(karutaIdList)
-            }
-    }
-
-    override suspend fun findIdByNo(no: Int): QuestionId? = withContext(ioContext) {
-        KarutaQuizSchema.relation(orma)
-            .where("no = ?", no)
-            .selector()
-            .firstOrNull()?.let {
-                QuestionId(it.quizId)
-            }
-    }
+    override suspend fun findIdByNo(no: Int): QuestionId? =
+        withContext(ioContext) {
+            database.karutaQuestionDao().findIdByNo(no)?.let { QuestionId(it) }
+        }
 
     override suspend fun findCollection(): QuestionCollection {
         return withContext(ioContext) {
-            val choiceMap: HashMap<Long, MutableList<KarutaNo>> = hashMapOf()
-            KarutaQuizChoiceSchema.relation(orma).selector().forEach {
-                if (choiceMap.containsKey(it.karutaQuizSchema.id)) {
-                    choiceMap[it.karutaQuizSchema.id]!!.add(KarutaNo(it.karutaId.toInt()))
+            val choiceMap: HashMap<String, MutableList<KarutaNo>> = hashMapOf()
+            database.karutaQuestionChoiceDao().findAll().forEach {
+                if (choiceMap.containsKey(it.karutaQuestionId)) {
+                    choiceMap[it.karutaQuestionId]!!.add(KarutaNo(it.karutaNo))
                 } else {
-                    choiceMap[it.karutaQuizSchema.id] = mutableListOf(KarutaNo(it.karutaId.toInt()))
+                    choiceMap[it.karutaQuestionId] = mutableListOf(KarutaNo(it.karutaNo))
                 }
             }
 
-            return@withContext KarutaQuizSchema.relation(orma).selector().orderByIdAsc().map {
-                val choiceList = choiceMap[it.id]
-                    ?: throw IllegalStateException("Question doesn't have choice list")
-                val correctNo = KarutaNo(it.collectId.toInt())
-                val result: QuestionResult? = when {
-                    it.answerTime!! > 0 -> {
-                        QuestionResult(
-                            selectedKarutaNo = KarutaNo(it.choiceNo!!),
-                            answerMillSec = it.answerTime!!,
-                            judgement = QuestionJudgement(correctNo, isCorrect = it.isCollect)
-                        )
-                    }
-                    else -> {
-                        null
-                    }
-                }
+            return@withContext database
+                .karutaQuestionDao()
+                .findAll()
+                .map {
+                    val choiceList =
+                        choiceMap[it.id]
+                            ?: throw IllegalStateException("Question doesn't have choice list")
+                    val correctNo = KarutaNo(it.correctKarutaNo)
+                    val result =
+                        if (it.selectedKarutaNo != null && it.answerTime != null && it.isCorrect != null) {
+                            QuestionResult(
+                                selectedKarutaNo = KarutaNo(it.selectedKarutaNo),
+                                answerMillSec = it.answerTime,
+                                judgement = QuestionJudgement(correctNo, isCorrect = it.isCorrect),
+                            )
+                        } else {
+                            null
+                        }
 
-                return@map Question(
-                    id = QuestionId(it.quizId),
-                    no = if (it.no == null) 0 else it.no!!,
-                    choiceList = choiceList,
-                    correctNo = correctNo,
-                    state = Question.State.create(
-                        startDate = it.startDate,
-                        result = result
+                    return@map Question(
+                        id = QuestionId(it.id),
+                        no = it.no,
+                        choiceList = choiceList,
+                        correctNo = correctNo,
+                        state =
+                            Question.State.create(
+                                startDate = it.startDate,
+                                result = result,
+                            ),
                     )
-                )
-            }.let {
-                QuestionCollection(it)
-            }
+                }.let {
+                    QuestionCollection(it)
+                }
         }
     }
 
-    override suspend fun save(question: Question) = withContext(ioContext) {
-        orma.transactionSync {
-            val updater = KarutaQuizSchema.relation(orma)
-                .quizIdEq(question.identifier.value)
-                .updater()
-            when (val state = question.state) {
+    override suspend fun save(question: Question) {
+        val karutaQuestionData =
+            when (val questionState = question.state) {
+                is Question.State.Ready -> {
+                    KarutaQuestionData(
+                        id = question.identifier.value,
+                        no = question.no,
+                        correctKarutaNo = question.correctNo.value,
+                        startDate = null,
+                        selectedKarutaNo = null,
+                        isCorrect = null,
+                        answerTime = null,
+                    )
+                }
+
                 is Question.State.InAnswer -> {
-                    updater.startDate(state.startDate)
+                    KarutaQuestionData(
+                        id = question.identifier.value,
+                        no = question.no,
+                        correctKarutaNo = question.correctNo.value,
+                        startDate = questionState.startDate,
+                        selectedKarutaNo = null,
+                        isCorrect = null,
+                        answerTime = null,
+                    )
                 }
-                is Question.State.Answered -> {
-                    updater.isCollect(state.result.judgement.isCorrect)
-                        .choiceNo(state.result.selectedKarutaNo.value)
-                        .answerTime(state.result.answerMillSec)
-                }
-                else -> {
 
+                is Question.State.Answered -> {
+                    KarutaQuestionData(
+                        id = question.identifier.value,
+                        no = question.no,
+                        correctKarutaNo = question.correctNo.value,
+                        startDate = questionState.startDate,
+                        selectedKarutaNo = questionState.result.selectedKarutaNo.value,
+                        isCorrect = questionState.result.judgement.isCorrect,
+                        answerTime = questionState.result.answerMillSec,
+                    )
                 }
             }
-            updater.execute()
+
+        withContext(ioContext) {
+            database.karutaQuestionDao().updateKarutaQuestion(karutaQuestionData)
         }
     }
-}
-
-private fun KarutaQuizSchema.toModel(choiceSchemaList: List<KarutaQuizChoiceSchema>): Question {
-    val questionId = QuestionId(quizId)
-    val choiceList = choiceSchemaList.map { KarutaNo(it.karutaId.toInt()) }
-    val correctNo = KarutaNo(collectId.toInt())
-    val result: QuestionResult? = when {
-        answerTime!! > 0 -> {
-            QuestionResult(
-                selectedKarutaNo = KarutaNo(choiceNo!!),
-                answerMillSec = answerTime!!,
-                judgement = QuestionJudgement(correctNo, isCorrect = isCollect)
-            )
-        }
-        else -> {
-            null
-        }
-    }
-
-    val questionState: Question.State = Question.State.create(startDate, result)
-
-    return Question(
-        id = questionId,
-        no = if (no == null) 0 else no!!,
-        choiceList = choiceList,
-        correctNo = correctNo,
-        state = questionState
-    )
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 
 import android.os.Bundle
@@ -38,7 +37,6 @@ import me.rei_m.hyakuninisshu.state.training.model.RangeToCondition
 import javax.inject.Inject
 
 class TrainingMenuFragment : Fragment() {
-
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
@@ -58,7 +56,7 @@ class TrainingMenuFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = TrainingMenuFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -71,55 +69,60 @@ class TrainingMenuFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("TrainingMenu", requireActivity())
         binding.dropdownRangeFrom.setUpDropDown(
-            RangeFromCondition.values().map { it.label(resources) }
+            RangeFromCondition.values().map { it.label(resources) },
         )
         binding.dropdownRangeTo.setUpDropDown(
-            RangeToCondition.values().map { it.label(resources) }
+            RangeToCondition.values().map { it.label(resources) },
         )
         binding.dropdownKimariji.setUpDropDown(
-            KimarijiCondition.values().map { it.label(resources) }
+            KimarijiCondition.values().map { it.label(resources) },
         )
         binding.dropdownTopPhraseStyle.setUpDropDown(
-            DisplayStyleCondition.values().map { it.label(resources) }
+            DisplayStyleCondition.values().map { it.label(resources) },
         )
         binding.dropdownBottomPhraseStyle.setUpDropDown(
-            DisplayStyleCondition.values().map { it.label(resources) }
+            DisplayStyleCondition.values().map { it.label(resources) },
         )
         binding.dropdownColor.setUpDropDown(
-            ColorCondition.values().map { it.label(resources) }
+            ColorCondition.values().map { it.label(resources) },
         )
         binding.dropdownInputSecond.setUpDropDown(
-            InputSecondCondition.values().map { it.label(resources) }
+            InputSecondCondition.values().map { it.label(resources) },
         )
         binding.dropdownAnimationSpeed.setUpDropDown(
-            DisplayAnimationSpeedCondition.values().map { it.label(resources) }
+            DisplayAnimationSpeedCondition.values().map { it.label(resources) },
         )
 
         binding.buttonStartTraining.setOnClickListener {
             if (viewModel.rangeTo.ordinal < viewModel.rangeFrom.ordinal) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.text_message_invalid_training_range,
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                Snackbar
+                    .make(
+                        binding.root,
+                        R.string.text_message_invalid_training_range,
+                        Snackbar.LENGTH_SHORT,
+                    ).show()
                 return@setOnClickListener
             }
             analyticsHelper.logActionEvent(AnalyticsHelper.ActionEvent.START_TRAINING)
 
-            val action = TrainingMenuFragmentDirections.actionTrainingMenuToTrainingStarter(
-                rangeFrom = viewModel.rangeFrom,
-                rangeTo = viewModel.rangeTo,
-                kimariji = viewModel.kimariji,
-                color = viewModel.color,
-                kamiNoKuStyle = viewModel.kamiNoKuStyle,
-                shimoNoKuStyle = viewModel.shimoNoKuStyle,
-                inputSecond = viewModel.inputSecond,
-                animationSpeed = viewModel.animationSpeed
-            )
+            val action =
+                TrainingMenuFragmentDirections.actionTrainingMenuToTrainingStarter(
+                    rangeFrom = viewModel.rangeFrom,
+                    rangeTo = viewModel.rangeTo,
+                    kimariji = viewModel.kimariji,
+                    color = viewModel.color,
+                    kamiNoKuStyle = viewModel.kamiNoKuStyle,
+                    shimoNoKuStyle = viewModel.shimoNoKuStyle,
+                    inputSecond = viewModel.inputSecond,
+                    animationSpeed = viewModel.animationSpeed,
+                )
             findNavController().navigate(action)
         }
 

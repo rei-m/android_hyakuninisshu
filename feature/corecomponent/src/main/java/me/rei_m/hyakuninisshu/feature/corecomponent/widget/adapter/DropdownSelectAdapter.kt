@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -20,18 +20,16 @@ import android.widget.Filter
 class DropdownSelectAdapter<T>(
     context: Context,
     resource: Int,
-    objects: List<T>
+    objects: List<T>,
 ) : ArrayAdapter<T>(
-    context,
-    resource,
-    objects
-) {
+        context,
+        resource,
+        objects,
+    ) {
     private val filter = KNoFilter()
     val items: List<T> = objects
 
-    override fun getFilter(): Filter {
-        return filter
-    }
+    override fun getFilter(): Filter = filter
 
     inner class KNoFilter : Filter() {
         override fun performFiltering(p0: CharSequence?): FilterResults {
@@ -41,7 +39,10 @@ class DropdownSelectAdapter<T>(
             return result
         }
 
-        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+        override fun publishResults(
+            p0: CharSequence?,
+            p1: FilterResults?,
+        ) {
             notifyDataSetChanged()
         }
     }

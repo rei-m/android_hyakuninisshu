@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -13,10 +13,11 @@
 
 package me.rei_m.hyakuninisshu.feature.material.ui
 
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.savedstate.SavedStateRegistryOwner
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
 import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
 import me.rei_m.hyakuninisshu.state.core.Dispatcher
 import me.rei_m.hyakuninisshu.state.material.action.MaterialActionCreator
@@ -28,9 +29,8 @@ class MaterialViewModel(
     dispatcher: Dispatcher,
     private val actionCreator: MaterialActionCreator,
     private val store: MaterialStore,
-    private val handle: SavedStateHandle
+    private val handle: SavedStateHandle,
 ) : AbstractViewModel(dispatcher) {
-
     val materialList = store.materialList
 
     var colorFilter: ColorFilter
@@ -52,24 +52,22 @@ class MaterialViewModel(
         super.onCleared()
     }
 
-    class Factory @Inject constructor(
-        owner: SavedStateRegistryOwner,
-        private val dispatcher: Dispatcher,
-        private val actionCreator: MaterialActionCreator,
-        private val store: MaterialStore
-    ) : AbstractSavedStateViewModelFactory(owner, null) {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(
-            key: String,
-            modelClass: Class<T>,
-            handle: SavedStateHandle
-        ): T = MaterialViewModel(
-            dispatcher,
-            actionCreator,
-            store,
-            handle
-        ) as T
-    }
+    class Factory
+        @Inject
+        constructor(
+            private val dispatcher: Dispatcher,
+            private val actionCreator: MaterialActionCreator,
+            private val store: MaterialStore,
+        ) : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                val savedStateHandle = extras.createSavedStateHandle()
+                return MaterialViewModel(dispatcher, actionCreator, store, savedStateHandle) as T
+            }
+        }
 
     companion object {
         private const val KEY_COLOR_FILTER = "colorFilter"

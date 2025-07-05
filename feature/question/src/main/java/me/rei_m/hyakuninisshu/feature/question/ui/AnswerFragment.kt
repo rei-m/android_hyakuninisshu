@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -46,7 +46,7 @@ class AnswerFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = AnswerFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -59,7 +59,10 @@ class AnswerFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("Answer", requireActivity())
 
@@ -67,26 +70,28 @@ class AnswerFragment : Fragment() {
         binding.existNextQuestion = args.nextQuestionId != null
         binding.buttonGoToNext.setOnClickListener {
             args.nextQuestionId?.let {
-                val action = AnswerFragmentDirections.actionAnswerToQuestion(
-                    questionId = it,
-                    kamiNoKuStyle = args.kamiNoKuStyle,
-                    shimoNoKuStyle = args.shimoNoKuStyle,
-                    inputSecond = args.inputSecond,
-                    animationSpeed = args.animationSpeed,
-                    referer = args.referer
-                )
+                val action =
+                    AnswerFragmentDirections.actionAnswerToQuestion(
+                        questionId = it,
+                        kamiNoKuStyle = args.kamiNoKuStyle,
+                        shimoNoKuStyle = args.shimoNoKuStyle,
+                        inputSecond = args.inputSecond,
+                        animationSpeed = args.animationSpeed,
+                        referer = args.referer,
+                    )
                 findNavController().navigate(action)
             }
         }
         binding.buttonGoToResult.setOnClickListener {
             when (args.referer) {
                 Referer.Training -> {
-                    val action = AnswerFragmentDirections.actionAnswerToTrainingResult(
-                        kamiNoKuStyle = args.kamiNoKuStyle,
-                        shimoNoKuStyle = args.shimoNoKuStyle,
-                        inputSecond = args.inputSecond,
-                        animationSpeed = args.animationSpeed
-                    )
+                    val action =
+                        AnswerFragmentDirections.actionAnswerToTrainingResult(
+                            kamiNoKuStyle = args.kamiNoKuStyle,
+                            shimoNoKuStyle = args.shimoNoKuStyle,
+                            inputSecond = args.inputSecond,
+                            animationSpeed = args.animationSpeed,
+                        )
                     findNavController().navigate(action)
                 }
                 Referer.Exam -> {
@@ -96,9 +101,10 @@ class AnswerFragment : Fragment() {
             }
         }
         binding.textMaterial.setOnClickListener {
-            val action = AnswerFragmentDirections.actionAnswerToMaterialDetailPage(
-                material = args.correctKaruta
-            )
+            val action =
+                AnswerFragmentDirections.actionAnswerToMaterialDetailPage(
+                    material = args.correctKaruta,
+                )
             findNavController().navigate(action)
         }
     }

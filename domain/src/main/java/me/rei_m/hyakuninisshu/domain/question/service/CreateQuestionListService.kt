@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -34,7 +34,7 @@ class CreateQuestionListService {
     operator fun invoke(
         allKarutaNoCollection: KarutaNoCollection,
         targetKarutaNoCollection: KarutaNoCollection,
-        choiceSize: Int
+        choiceSize: Int,
     ): List<Question> {
         if (allKarutaNoCollection.size != KarutaNo.MAX.value) {
             throw IllegalArgumentException("allKarutaList is invalid")
@@ -46,16 +46,18 @@ class CreateQuestionListService {
 
         return targetKarutaNoCollection.asRandomized.mapIndexed { index, targetKarutaNo ->
 
-            val dupNos = allKarutaNoCollection.values.toMutableList().apply {
-                remove(targetKarutaNo)
-            }
+            val dupNos =
+                allKarutaNoCollection.values.toMutableList().apply {
+                    remove(targetKarutaNo)
+                }
 
-            val choices = generateRandomIndexArray(
-                dupNos.size,
-                choiceSize - 1
-            ).map { choiceIndex ->
-                dupNos[choiceIndex]
-            }.toMutableList()
+            val choices =
+                generateRandomIndexArray(
+                    dupNos.size,
+                    choiceSize - 1,
+                ).map { choiceIndex ->
+                    dupNos[choiceIndex]
+                }.toMutableList()
 
             val correctPosition = generateRandomIndexArray(choiceSize, 1)[0]
             choices.add(correctPosition, targetKarutaNo)
@@ -64,4 +66,3 @@ class CreateQuestionListService {
         }
     }
 }
-

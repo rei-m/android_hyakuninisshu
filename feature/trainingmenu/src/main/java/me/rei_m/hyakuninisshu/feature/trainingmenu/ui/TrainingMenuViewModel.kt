@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.trainingmenu.ui
 
 import androidx.lifecycle.SavedStateHandle
@@ -24,7 +23,9 @@ import me.rei_m.hyakuninisshu.state.training.model.KimarijiCondition
 import me.rei_m.hyakuninisshu.state.training.model.RangeFromCondition
 import me.rei_m.hyakuninisshu.state.training.model.RangeToCondition
 
-class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() {
+class TrainingMenuViewModel(
+    private val handle: SavedStateHandle,
+) : ViewModel() {
     var rangeFrom: RangeFromCondition
         get() {
             val ordinal: Int = handle.get<Int>(KEY_RANGE_FROM) ?: RangeFromCondition.ONE.ordinal
@@ -93,8 +94,9 @@ class TrainingMenuViewModel(private val handle: SavedStateHandle) : ViewModel() 
 
     var animationSpeed: DisplayAnimationSpeedCondition
         get() {
-            val ordinal: Int = handle.get<Int>(KEY_ANIMATION_SPEED)
-                ?: DisplayAnimationSpeedCondition.NORMAL.ordinal
+            val ordinal: Int =
+                handle.get<Int>(KEY_ANIMATION_SPEED)
+                    ?: DisplayAnimationSpeedCondition.NORMAL.ordinal
             return DisplayAnimationSpeedCondition[ordinal]
         }
         set(value) {

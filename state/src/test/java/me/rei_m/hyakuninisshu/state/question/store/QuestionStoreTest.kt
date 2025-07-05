@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -39,18 +39,20 @@ class QuestionStoreTest : TestHelper {
     private lateinit var dispatcher: Dispatcher
     private lateinit var store: QuestionStore
 
-    private val question = Question(
-        id = "1",
-        no = 1,
-        position = "1/10",
-        toriFudaList = listOf(),
-        yomiFuda = YomiFuda(
-            karutaNo = 1,
-            firstLine = "aaa",
-            secondLine = "bbb",
-            thirdLine = "ccc"
+    private val question =
+        Question(
+            id = "1",
+            no = 1,
+            position = "1/10",
+            toriFudaList = listOf(),
+            yomiFuda =
+                YomiFuda(
+                    karutaNo = 1,
+                    firstLine = "aaa",
+                    secondLine = "bbb",
+                    thirdLine = "ccc",
+                ),
         )
-    )
 
     @Before
     fun setUp() {
@@ -105,30 +107,31 @@ class QuestionStoreTest : TestHelper {
 
     @Test
     fun state_receivedAnswerQuestionAction() {
-        val state = QuestionState.Answered(
-            1,
-            true,
-            Material(
-                no = 1,
-                noTxt = "1番",
-                kimariji = 1,
-                kimarijiTxt = "1字",
-                creator = "creator",
-                shokuKanji = "秋の田の",
-                shokuKana = "あきのたの",
-                nikuKanji = "かりほの庵の",
-                nikuKana = "かりほのいほの",
-                sankuKanji = "苫をあらみ",
-                sankuKana = "とまをあらみ",
-                shikuKanji = "わが衣手は",
-                shikuKana = "わがころもでは",
-                gokuKanji = "露にぬれつつ",
-                gokuKana = "つゆにぬれつつ",
-                translation = "うんたらかんたら",
-                imageResId = 1
-            ),
-            "2"
-        )
+        val state =
+            QuestionState.Answered(
+                1,
+                true,
+                Material(
+                    no = 1,
+                    noTxt = "1番",
+                    kimariji = 1,
+                    kimarijiTxt = "1字",
+                    creator = "creator",
+                    shokuKanji = "秋の田の",
+                    shokuKana = "あきのたの",
+                    nikuKanji = "かりほの庵の",
+                    nikuKana = "かりほのいほの",
+                    sankuKanji = "苫をあらみ",
+                    sankuKana = "とまをあらみ",
+                    shikuKanji = "わが衣手は",
+                    shikuKana = "わがころもでは",
+                    gokuKanji = "露にぬれつつ",
+                    gokuKana = "つゆにぬれつつ",
+                    translation = "うんたらかんたら",
+                    imageResId = 1,
+                ),
+                "2",
+            )
         dispatcher.dispatch(AnswerQuestionAction.Success(state))
         assertThat(store.state.value).isEqualTo(state)
         assertThat(store.isFailure.value).isFalse

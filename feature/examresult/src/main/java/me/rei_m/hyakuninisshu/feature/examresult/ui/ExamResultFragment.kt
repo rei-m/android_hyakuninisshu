@@ -1,18 +1,14 @@
 /*
- * Copyright (c) 2020. Rei Matsushita.
+ * Copyright (c) 2025. Rei Matsushita
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+ * the License for the specific language governing permissions and limitations under the License.
  */
 
 package me.rei_m.hyakuninisshu.feature.examresult.ui
@@ -23,7 +19,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.rei_m.hyakuninisshu.feature.corecomponent.helper.AnalyticsHelper
@@ -61,7 +56,7 @@ class ExamResultFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = ExamResultFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -75,7 +70,10 @@ class ExamResultFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("ExamResult", requireActivity())
 
@@ -86,14 +84,15 @@ class ExamResultFragment : Fragment() {
 
         binding.viewModel = viewModel
         viewModel.materialMap.observe(viewLifecycleOwner, {
-            binding.viewResult.listener = object : ExamResultView.OnClickItemListener {
-                override fun onClick(karutaNo: Int) {
-                    val material = it[karutaNo] ?: return
-                    val action =
-                        ExamResultFragmentDirections.actionExamResultToMaterialDetailPage(material)
-                    findNavController().navigate(action)
+            binding.viewResult.listener =
+                object : ExamResultView.OnClickItemListener {
+                    override fun onClick(karutaNo: Int) {
+                        val material = it[karutaNo] ?: return
+                        val action =
+                            ExamResultFragmentDirections.actionExamResultToMaterialDetailPage(material)
+                        findNavController().navigate(action)
+                    }
                 }
-            }
         })
     }
 }

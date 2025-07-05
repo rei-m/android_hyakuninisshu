@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -30,9 +30,8 @@ class Question constructor(
     val no: Int,
     val choiceList: List<KarutaNo>,
     val correctNo: KarutaNo,
-    state: State
+    state: State,
 ) : AbstractEntity<QuestionId>(id) {
-
     var state: State = state
         private set
 
@@ -65,21 +64,26 @@ class Question constructor(
      * @throws IllegalStateException 解答開始していない場合, すでに回答済の場合.
      */
     @Throws(IllegalStateException::class)
-    fun verify(selectedNo: KarutaNo, answerDate: Date): Question {
+    fun verify(
+        selectedNo: KarutaNo,
+        answerDate: Date,
+    ): Question {
         when (val current = state) {
             is State.Ready -> {
                 throw IllegalStateException("Question is not started. Call start.")
             }
             is State.InAnswer -> {
                 val answerTime = answerDate.time - current.startDate.time
-                val judgement = QuestionJudgement(
-                    correctNo,
-                    correctNo == selectedNo
-                )
-                this.state = State.Answered(
-                    current.startDate,
-                    QuestionResult(selectedNo, answerTime, judgement)
-                )
+                val judgement =
+                    QuestionJudgement(
+                        correctNo,
+                        correctNo == selectedNo,
+                    )
+                this.state =
+                    State.Answered(
+                        current.startDate,
+                        QuestionResult(selectedNo, answerTime, judgement),
+                    )
                 return this
             }
             is State.Answered -> {
@@ -88,8 +92,7 @@ class Question constructor(
         }
     }
 
-    override fun toString() =
-        "Question(id=$identifier no=$no, choiceList=$choiceList, correctNo=$correctNo, state=$state)"
+    override fun toString() = "Question(id=$identifier no=$no, choiceList=$choiceList, correctNo=$correctNo, state=$state)"
 
     /**
      * 問題の状態.
@@ -100,12 +103,22 @@ class Question constructor(
      */
     sealed class State {
         object Ready : State()
-        class InAnswer(val startDate: Date) : State()
-        class Answered(val startDate: Date, val result: QuestionResult) : State()
+
+        class InAnswer(
+            val startDate: Date,
+        ) : State()
+
+        class Answered(
+            val startDate: Date,
+            val result: QuestionResult,
+        ) : State()
 
         companion object {
-            fun create(startDate: Date?, result: QuestionResult?): State {
-                return if (startDate != null) {
+            fun create(
+                startDate: Date?,
+                result: QuestionResult?,
+            ): State =
+                if (startDate != null) {
                     if (result != null) {
                         Answered(startDate, result)
                     } else {
@@ -114,7 +127,6 @@ class Question constructor(
                 } else {
                     Ready
                 }
-            }
         }
     }
 

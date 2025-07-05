@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
 import android.content.Context
@@ -32,7 +31,6 @@ import me.rei_m.hyakuninisshu.feature.materialedit.di.MaterialEditComponent
 import javax.inject.Inject
 
 class MaterialEditFragment : Fragment() {
-
     @Inject
     lateinit var viewModelFactory: MaterialEditViewModel.Factory
 
@@ -61,24 +59,34 @@ class MaterialEditFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        viewModel.confirmEditEvent.observe(viewLifecycleOwner, EventObserver {
-            val manager =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            manager.hideSoftInputFromWindow(view?.windowToken, 0)
+        viewModel.confirmEditEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                val manager =
+                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(view?.windowToken, 0)
 
-            val action = MaterialEditFragmentDirections.actionMaterialEditToMaterialEditConfirm()
-            findNavController().navigate(action)
-        })
-        viewModel.onCompleteEditEvent.observe(viewLifecycleOwner, EventObserver {
-            findNavController().popBackStack()
-        })
-        viewModel.snackBarMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
-                .setAction("Action", null)
-                .show()
-        })
+                val action = MaterialEditFragmentDirections.actionMaterialEditToMaterialEditConfirm()
+                findNavController().navigate(action)
+            },
+        )
+        viewModel.onCompleteEditEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().popBackStack()
+            },
+        )
+        viewModel.snackBarMessage.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                Snackbar
+                    .make(binding.root, getString(it), Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null)
+                    .show()
+            },
+        )
 
         _binding = MaterialEditFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -86,7 +94,10 @@ class MaterialEditFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("MaterialEdit-${args.material.no}", requireActivity())
         binding.viewModel = viewModel

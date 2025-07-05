@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,6 @@ import me.rei_m.hyakuninisshu.state.material.model.Material
  * 問題の状態表示用.
  */
 sealed class QuestionState {
-
     /**
      * 回答開始前.
      */
@@ -42,6 +41,6 @@ sealed class QuestionState {
         val selectedToriFudaIndex: Int,
         val isCorrect: Boolean,
         val correctMaterial: Material,
-        val nextQuestionId: String?
+        val nextQuestionId: String?,
     ) : QuestionState()
 }

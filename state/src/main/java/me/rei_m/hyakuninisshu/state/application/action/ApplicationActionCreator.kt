@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,18 +18,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ApplicationActionCreator @Inject constructor(
-    private val karutaRepository: KarutaRepository
-) {
-    /**
-     * 百人一首の情報を準備してアプリの利用を開始する.
-     *
-     * @return StartApplicationAction
-     */
-    suspend fun start() = try {
-        karutaRepository.initialize()
-        StartApplicationAction.Success()
-    } catch (e: Exception) {
-        StartApplicationAction.Failure(e)
+class ApplicationActionCreator
+    @Inject
+    constructor(
+        private val karutaRepository: KarutaRepository,
+    ) {
+        /**
+         * 百人一首の情報を準備してアプリの利用を開始する.
+         *
+         * @return StartApplicationAction
+         */
+        suspend fun start() =
+            try {
+                karutaRepository.initialize()
+                StartApplicationAction.Success()
+            } catch (e: Exception) {
+                StartApplicationAction.Failure(e)
+            }
     }
-}

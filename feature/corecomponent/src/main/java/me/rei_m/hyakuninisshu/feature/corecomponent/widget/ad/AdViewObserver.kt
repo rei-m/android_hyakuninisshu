@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.widget.ad
 
 import android.os.Build
@@ -28,12 +27,14 @@ import com.google.android.gms.ads.AdView
 import me.rei_m.hyakuninisshu.feature.corecomponent.R
 
 class AdViewObserver : DefaultLifecycleObserver {
-
     private var adView: AdView? = null
 
     private var isLoadedAd = false
 
-    fun showAd(activity: AppCompatActivity, container: FrameLayout) {
+    fun showAd(
+        activity: AppCompatActivity,
+        container: FrameLayout,
+    ) {
         setup(activity, container)
 
         adView?.let {
@@ -65,18 +66,23 @@ class AdViewObserver : DefaultLifecycleObserver {
         adView?.pause()
     }
 
-    private fun setup(activity: AppCompatActivity, container: FrameLayout) {
+    private fun setup(
+        activity: AppCompatActivity,
+        container: FrameLayout,
+    ) {
         if (adView == null) {
-            val adView = AdView(activity).apply {
-                adUnitId = activity.getString(R.string.banner_ad_unit_id)
-                setAdSize(calcAdSize(activity, container))
-                adListener = object : AdListener() {
-                    override fun onAdLoaded() {
-                        super.onAdLoaded()
-                        isLoadedAd = true
-                    }
+            val adView =
+                AdView(activity).apply {
+                    adUnitId = activity.getString(R.string.banner_ad_unit_id)
+                    setAdSize(calcAdSize(activity, container))
+                    adListener =
+                        object : AdListener() {
+                            override fun onAdLoaded() {
+                                super.onAdLoaded()
+                                isLoadedAd = true
+                            }
+                        }
                 }
-            }
             container.addView(adView)
 
             this.adView = adView
@@ -88,8 +94,11 @@ class AdViewObserver : DefaultLifecycleObserver {
         adView?.loadAd(adRequest)
     }
 
-    private fun calcAdSize(activity: AppCompatActivity, container: FrameLayout): AdSize {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    private fun calcAdSize(
+        activity: AppCompatActivity,
+        container: FrameLayout,
+    ): AdSize =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowManager = activity.windowManager
             val metrics = windowManager.currentWindowMetrics
             val bounds = metrics.bounds
@@ -101,7 +110,7 @@ class AdViewObserver : DefaultLifecycleObserver {
             val adWidth = (adWidthPixels / density).toInt()
             AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
                 activity,
-                adWidth
+                adWidth,
             )
         } else {
             val windowManager = activity.windowManager
@@ -113,5 +122,4 @@ class AdViewObserver : DefaultLifecycleObserver {
             val adWidth = (adWidthPixels / density).toInt()
             AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
         }
-    }
 }

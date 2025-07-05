@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -60,7 +60,7 @@ fun Karuta.toYomiFuda(displayStyleCondition: DisplayStyleCondition): YomiFuda =
                 karutaNo = no.value,
                 firstLine = kamiNoKu.shoku.kana,
                 secondLine = kamiNoKu.niku.kana,
-                thirdLine = kamiNoKu.sanku.kana
+                thirdLine = kamiNoKu.sanku.kana,
             )
         }
         DisplayStyleCondition.KANJI -> {
@@ -68,7 +68,7 @@ fun Karuta.toYomiFuda(displayStyleCondition: DisplayStyleCondition): YomiFuda =
                 karutaNo = no.value,
                 firstLine = kamiNoKu.shoku.kanji,
                 secondLine = kamiNoKu.niku.kanji,
-                thirdLine = kamiNoKu.sanku.kanji
+                thirdLine = kamiNoKu.sanku.kanji,
             )
         }
     }
@@ -79,14 +79,14 @@ fun Karuta.toToriFuda(displayStyleCondition: DisplayStyleCondition): ToriFuda =
             ToriFuda(
                 karutaNo = no.value,
                 firstLine = shimoNoKu.shiku.kana.padEnd(8, '　'),
-                secondLine = shimoNoKu.goku.kana.padEnd(8, '　')
+                secondLine = shimoNoKu.goku.kana.padEnd(8, '　'),
             )
         }
         DisplayStyleCondition.KANJI -> {
             ToriFuda(
                 karutaNo = no.value,
                 firstLine = shimoNoKu.shiku.kanji.padEnd(8, '　'),
-                secondLine = shimoNoKu.goku.kanji.padEnd(8, '　')
+                secondLine = shimoNoKu.goku.kanji.padEnd(8, '　'),
             )
         }
     }
@@ -118,28 +118,33 @@ fun Karuta.toMaterial(context: Context): Material {
         gokuKanji = shimoNoKu.goku.kanji,
         gokuKana = shimoNoKu.goku.kana,
         translation = translation,
-        imageResId = imageResId
+        imageResId = imageResId,
     )
 }
 
-fun Exam.toResult(context: Context, now: Date): ExamResult {
-    val averageAnswerTimeString = String.format(
-        Locale.JAPAN,
-        "%.2f",
-        result.resultSummary.averageAnswerSec
-    )
+fun Exam.toResult(
+    context: Context,
+    now: Date,
+): ExamResult {
+    val averageAnswerTimeString =
+        String.format(
+            Locale.JAPAN,
+            "%.2f",
+            result.resultSummary.averageAnswerSec,
+        )
 
     return ExamResult(
         id = identifier.value,
         score = result.resultSummary.score,
         averageAnswerSecText = context.getString(R.string.seconds, averageAnswerTimeString),
-        questionResultList = KarutaNo.LIST.map { karutaNo ->
-            QuestionResult(
-                karutaNo = karutaNo.value,
-                karutaNoText = karutaNo.toText(context),
-                isCorrect = !result.wrongKarutaNoCollection.contains(karutaNo)
-            )
-        },
-        fromNowText = tookDate.diffString(context, now)
+        questionResultList =
+            KarutaNo.LIST.map { karutaNo ->
+                QuestionResult(
+                    karutaNo = karutaNo.value,
+                    karutaNoText = karutaNo.toText(context),
+                    isCorrect = !result.wrongKarutaNoCollection.contains(karutaNo),
+                )
+            },
+        fromNowText = tookDate.diffString(context, now),
     )
 }

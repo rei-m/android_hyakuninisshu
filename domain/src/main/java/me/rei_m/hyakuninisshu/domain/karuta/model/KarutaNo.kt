@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -22,21 +22,22 @@ import me.rei_m.hyakuninisshu.domain.ValueObject
  *
  * @throws IllegalArgumentException
  */
-data class KarutaNo @Throws(IllegalArgumentException::class) constructor(
-    val value: Int
-) : ValueObject {
+data class KarutaNo
+    @Throws(IllegalArgumentException::class)
+    constructor(
+        val value: Int,
+    ) : ValueObject {
+        init {
+            if (value < MIN_VALUE || MAX_VALUE < value) {
+                throw IllegalArgumentException("KarutaNo is Invalid, value is $value")
+            }
+        }
 
-    init {
-        if (value < MIN_VALUE || MAX_VALUE < value) {
-            throw IllegalArgumentException("KarutaNo is Invalid, value is $value")
+        companion object {
+            private const val MIN_VALUE = 1
+            private const val MAX_VALUE = 100
+            val MIN = KarutaNo(MIN_VALUE)
+            val MAX = KarutaNo(MAX_VALUE)
+            val LIST = (MIN.value..MAX.value).map { KarutaNo(it) }
         }
     }
-
-    companion object {
-        private const val MIN_VALUE = 1
-        private const val MAX_VALUE = 100
-        val MIN = KarutaNo(MIN_VALUE)
-        val MAX = KarutaNo(MAX_VALUE)
-        val LIST = (MIN.value..MAX.value).map { KarutaNo(it) }
-    }
-}

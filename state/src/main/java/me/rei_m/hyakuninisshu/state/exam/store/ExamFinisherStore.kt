@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -24,28 +24,33 @@ import javax.inject.Inject
 /**
  * 力試しの完了状態を管理する.
  */
-class ExamFinisherStore @Inject constructor(dispatcher: Dispatcher) : Store() {
+class ExamFinisherStore
+    @Inject
+    constructor(
+        dispatcher: Dispatcher,
+    ) : Store() {
+        /**
+         * 力試しの完了を通知するイベント.
+         */
+        private val _onFinishEvent = MutableLiveData<Event<Long>>()
+        val onFinishEvent: LiveData<Event<Long>> = _onFinishEvent
 
-    /**
-     * 力試しの完了を通知するイベント.
-     */
-    private val _onFinishEvent = MutableLiveData<Event<Long>>()
-    val onFinishEvent: LiveData<Event<Long>> = _onFinishEvent
+        private val _isFailure = MutableLiveData(false)
+        val isFailure: LiveData<Boolean> = _isFailure
 
-    private val _isFailure = MutableLiveData(false)
-    val isFailure: LiveData<Boolean> = _isFailure
-
-    init {
-        register(dispatcher.on(FinishExamAction::class.java).subscribe {
-            when (it) {
-                is FinishExamAction.Success -> {
-                    _onFinishEvent.value = Event(it.examResult.id)
-                    _isFailure.value = false
-                }
-                is FinishExamAction.Failure -> {
-                    _isFailure.value = true
-                }
-            }
-        })
+        init {
+            register(
+                dispatcher.on(FinishExamAction::class.java).subscribe {
+                    when (it) {
+                        is FinishExamAction.Success -> {
+                            _onFinishEvent.value = Event(it.examResult.id)
+                            _isFailure.value = false
+                        }
+                        is FinishExamAction.Failure -> {
+                            _isFailure.value = true
+                        }
+                    }
+                },
+            )
+        }
     }
-}

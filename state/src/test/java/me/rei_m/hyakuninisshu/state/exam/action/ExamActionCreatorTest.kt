@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -46,130 +46,140 @@ class ExamActionCreatorTest : TestHelper {
         questionRepository = mock {}
         examRepository = mock {}
         createQuestionListService = CreateQuestionListService()
-        actionCreator = ExamActionCreator(
-            context = ApplicationProvider.getApplicationContext(),
-            karutaRepository = karutaRepository,
-            questionRepository = questionRepository,
-            examRepository = examRepository,
-            createQuestionListService = createQuestionListService
-        )
-    }
-
-    @Test
-    fun startExam_success() = runBlocking {
-        whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
-        whenever(questionRepository.initialize(any())).thenAnswer { }
-
-        val actual = actionCreator.start()
-        assertThat(actual).isInstanceOf(StartExamAction.Success::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun startExam_failure() = runBlocking {
-        whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
-        whenever(questionRepository.initialize(any())).thenThrow(IllegalArgumentException())
-
-        val actual = actionCreator.start()
-        assertThat(actual).isInstanceOf(StartExamAction.Failure::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun finish_success() = runBlocking {
-        val question1 = createQuestionAnswered()
-        val question2 = createQuestionAnswered()
-
-        val createdExamId = ExamId(1)
-
-        whenever(questionRepository.findCollection()).thenReturn(
-            QuestionCollection(
-                listOf(question1, question2)
+        actionCreator =
+            ExamActionCreator(
+                context = ApplicationProvider.getApplicationContext(),
+                karutaRepository = karutaRepository,
+                questionRepository = questionRepository,
+                examRepository = examRepository,
+                createQuestionListService = createQuestionListService,
             )
-        )
-        whenever(examRepository.add(any(), any())).thenReturn(createdExamId)
-        whenever(examRepository.findCollection()).thenReturn(ExamCollection(listOf(createExam())))
-        whenever(examRepository.deleteList(any())).thenAnswer { }
-
-        val actual = actionCreator.finish()
-        assertThat(actual).isInstanceOf(FinishExamAction.Success::class.java)
-
-        return@runBlocking
     }
 
     @Test
-    fun finish_failure() = runBlocking {
-        val question1 = createQuestionAnswered()
-        val question2 = createQuestionInAnswer()
+    fun startExam_success() =
+        runBlocking {
+            whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
+            whenever(questionRepository.initialize(any())).thenAnswer { }
 
-        val createdExamId = ExamId(1)
+            val actual = actionCreator.start()
+            assertThat(actual).isInstanceOf(StartExamAction.Success::class.java)
+            return@runBlocking
+        }
 
-        whenever(questionRepository.findCollection()).thenReturn(
-            QuestionCollection(
-                listOf(question1, question2)
+    @Test
+    fun startExam_failure() =
+        runBlocking {
+            whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
+            whenever(questionRepository.initialize(any())).thenThrow(IllegalArgumentException())
+
+            val actual = actionCreator.start()
+            assertThat(actual).isInstanceOf(StartExamAction.Failure::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun finish_success() =
+        runBlocking {
+            val question1 = createQuestionAnswered()
+            val question2 = createQuestionAnswered()
+
+            val createdExamId = ExamId(1)
+
+            whenever(questionRepository.findCollection()).thenReturn(
+                QuestionCollection(
+                    listOf(question1, question2),
+                ),
             )
-        )
-        whenever(examRepository.add(any(), any())).thenReturn(createdExamId)
-        whenever(examRepository.findCollection()).thenReturn(ExamCollection(listOf(createExam())))
-        whenever(examRepository.deleteList(any())).thenAnswer { }
+            whenever(examRepository.add(any(), any())).thenReturn(createdExamId)
+            whenever(examRepository.findCollection()).thenReturn(ExamCollection(listOf(createExam())))
+            whenever(examRepository.deleteList(any())).thenAnswer { }
 
-        val actual = actionCreator.finish()
-        assertThat(actual).isInstanceOf(FinishExamAction.Failure::class.java)
+            val actual = actionCreator.finish()
+            assertThat(actual).isInstanceOf(FinishExamAction.Success::class.java)
 
-        return@runBlocking
-    }
-
-    @Test
-    fun fetchRecentResult_success() = runBlocking {
-        whenever(examRepository.last()).thenReturn(createExam())
-
-        val actual = actionCreator.fetchRecentResult()
-        assertThat(actual).isInstanceOf(FetchRecentExamResultAction.Success::class.java)
-
-        return@runBlocking
-    }
+            return@runBlocking
+        }
 
     @Test
-    fun fetchRecentResult_successWithNull() = runBlocking {
-        whenever(examRepository.last()).thenReturn(null)
+    fun finish_failure() =
+        runBlocking {
+            val question1 = createQuestionAnswered()
+            val question2 = createQuestionInAnswer()
 
-        val actual = actionCreator.fetchRecentResult()
-        assertThat(actual).isInstanceOf(FetchRecentExamResultAction.Success::class.java)
+            val createdExamId = ExamId(1)
 
-        return@runBlocking
-    }
+            whenever(questionRepository.findCollection()).thenReturn(
+                QuestionCollection(
+                    listOf(question1, question2),
+                ),
+            )
+            whenever(examRepository.add(any(), any())).thenReturn(createdExamId)
+            whenever(examRepository.findCollection()).thenReturn(ExamCollection(listOf(createExam())))
+            whenever(examRepository.deleteList(any())).thenAnswer { }
 
-    @Test
-    fun fetchRecentResult_failure() = runBlocking {
-        whenever(examRepository.last()).thenThrow(RuntimeException())
+            val actual = actionCreator.finish()
+            assertThat(actual).isInstanceOf(FinishExamAction.Failure::class.java)
 
-        val actual = actionCreator.fetchRecentResult()
-        assertThat(actual).isInstanceOf(FetchRecentExamResultAction.Failure::class.java)
-
-        return@runBlocking
-    }
-
-    @Test
-    fun fetchResult_success() = runBlocking {
-        val examId = ExamId(1)
-        whenever(examRepository.findById(examId)).thenReturn(createExam())
-        whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
-
-        val actual = actionCreator.fetchResult(examId.value)
-        assertThat(actual).isInstanceOf(FetchExamResultAction.Success::class.java)
-
-        return@runBlocking
-    }
+            return@runBlocking
+        }
 
     @Test
-    fun fetchResult_failure() = runBlocking {
-        val examId = ExamId(1)
-        whenever(examRepository.findById(examId)).thenThrow(RuntimeException())
-        whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
+    fun fetchRecentResult_success() =
+        runBlocking {
+            whenever(examRepository.last()).thenReturn(createExam())
 
-        val actual = actionCreator.fetchResult(examId.value)
-        assertThat(actual).isInstanceOf(FetchExamResultAction.Failure::class.java)
+            val actual = actionCreator.fetchRecentResult()
+            assertThat(actual).isInstanceOf(FetchRecentExamResultAction.Success::class.java)
 
-        return@runBlocking
-    }
+            return@runBlocking
+        }
+
+    @Test
+    fun fetchRecentResult_successWithNull() =
+        runBlocking {
+            whenever(examRepository.last()).thenReturn(null)
+
+            val actual = actionCreator.fetchRecentResult()
+            assertThat(actual).isInstanceOf(FetchRecentExamResultAction.Success::class.java)
+
+            return@runBlocking
+        }
+
+    @Test
+    fun fetchRecentResult_failure() =
+        runBlocking {
+            whenever(examRepository.last()).thenThrow(RuntimeException())
+
+            val actual = actionCreator.fetchRecentResult()
+            assertThat(actual).isInstanceOf(FetchRecentExamResultAction.Failure::class.java)
+
+            return@runBlocking
+        }
+
+    @Test
+    fun fetchResult_success() =
+        runBlocking {
+            val examId = ExamId(1)
+            whenever(examRepository.findById(examId)).thenReturn(createExam())
+            whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
+
+            val actual = actionCreator.fetchResult(examId.value)
+            assertThat(actual).isInstanceOf(FetchExamResultAction.Success::class.java)
+
+            return@runBlocking
+        }
+
+    @Test
+    fun fetchResult_failure() =
+        runBlocking {
+            val examId = ExamId(1)
+            whenever(examRepository.findById(examId)).thenThrow(RuntimeException())
+            whenever(karutaRepository.findAll()).thenReturn(createAllKarutaList())
+
+            val actual = actionCreator.fetchResult(examId.value)
+            assertThat(actual).isInstanceOf(FetchExamResultAction.Failure::class.java)
+
+            return@runBlocking
+        }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -53,7 +53,7 @@ class ExamStarterStoreTest {
     @Test
     fun state_receivedStartExamAction() {
         dispatcher.dispatch(
-            StartExamAction.Success("1")
+            StartExamAction.Success("1"),
         )
         assertThat(store.onReadyEvent.value).isInstanceOf(Event::class.java)
         assertThat(store.isFailure.value).isFalse

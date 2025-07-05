@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -25,14 +25,15 @@ import me.rei_m.hyakuninisshu.state.R
  */
 enum class ColorFilter(
     val value: KarutaColor?,
-    @param:StringRes val resId: Int
+    @param:StringRes val resId: Int,
 ) {
     ALL(null, R.string.color_not_select),
     BLUE(KarutaColor.BLUE, R.string.color_blue),
     PINK(KarutaColor.PINK, R.string.color_pink),
     YELLOW(KarutaColor.YELLOW, R.string.color_yellow),
     GREEN(KarutaColor.GREEN, R.string.color_green),
-    ORANGE(KarutaColor.ORANGE, R.string.color_orange);
+    ORANGE(KarutaColor.ORANGE, R.string.color_orange),
+    ;
 
     companion object {
         operator fun get(ordinal: Int) = values()[ordinal]
