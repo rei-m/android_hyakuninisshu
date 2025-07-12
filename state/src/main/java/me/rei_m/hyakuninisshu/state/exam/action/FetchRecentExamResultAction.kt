@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,16 +19,20 @@ import me.rei_m.hyakuninisshu.state.exam.model.ExamResult
 /**
  * 最新の力試しの結果を取得するアクション.
  */
-sealed class FetchRecentExamResultAction(override val error: Throwable? = null) : Action {
-
-    class Success(val examResult: ExamResult?) : FetchRecentExamResultAction() {
+sealed class FetchRecentExamResultAction(
+    override val error: Throwable? = null,
+) : Action {
+    class Success(
+        val examResult: ExamResult?,
+    ) : FetchRecentExamResultAction() {
         override fun toString() = "$name(examResult=$examResult)"
     }
 
-    class Failure(error: Throwable) : FetchRecentExamResultAction(error) {
+    class Failure(
+        error: Throwable,
+    ) : FetchRecentExamResultAction(error) {
         override fun toString() = "$name(error=$error)"
     }
 
     override val name = "FetchRecentExamResultAction"
 }
-

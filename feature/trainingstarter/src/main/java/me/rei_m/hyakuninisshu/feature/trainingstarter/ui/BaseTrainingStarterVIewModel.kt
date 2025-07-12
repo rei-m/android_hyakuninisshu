@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -13,15 +13,15 @@
 
 package me.rei_m.hyakuninisshu.feature.trainingstarter.ui
 
+import androidx.lifecycle.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.combineLatest
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
 import me.rei_m.hyakuninisshu.state.core.Dispatcher
 import me.rei_m.hyakuninisshu.state.training.store.TrainingStarterStore
 
 abstract class BaseTrainingStarterVIewModel(
     private val store: TrainingStarterStore,
-    dispatcher: Dispatcher
+    dispatcher: Dispatcher,
 ) : AbstractViewModel(dispatcher) {
     val onReadyEvent = store.onReadyEvent
 

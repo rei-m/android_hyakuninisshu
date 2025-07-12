@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -25,36 +25,46 @@ import me.rei_m.hyakuninisshu.state.material.model.Material
 class MaterialListAdapter(
     context: Context,
     private var materialList: List<Material>,
-    private val listener: OnItemInteractionListener
+    private val listener: OnItemInteractionListener,
 ) : RecyclerView.Adapter<MaterialListAdapter.ItemViewHolder>() {
-
-    private val itemPaddingBottom = context.resources.getDimensionPixelOffset(R.dimen.spacing_1)
+    private val itemPaddingBottom =
+        context.resources.getDimensionPixelOffset(
+            me.rei_m.hyakuninisshu.feature.corecomponent.R.dimen.spacing_1,
+        )
 
     private val lastItemPaddingBottom = context.adHeight + itemPaddingBottom
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = AdapterItemMaterialKarutaBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ItemViewHolder {
+        val binding =
+            AdapterItemMaterialKarutaBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
+            )
         binding.listener = listener
 
         return ItemViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ItemViewHolder,
+        position: Int,
+    ) {
         with(holder.binding) {
-            val paddingBottom = if (position == materialList.lastIndex) {
-                lastItemPaddingBottom
-            } else {
-                itemPaddingBottom
-            }
+            val paddingBottom =
+                if (position == materialList.lastIndex) {
+                    lastItemPaddingBottom
+                } else {
+                    itemPaddingBottom
+                }
             holder.binding.rootAdapterItemMaterialKaruta.setPadding(
                 holder.binding.rootAdapterItemMaterialKaruta.paddingLeft,
                 holder.binding.rootAdapterItemMaterialKaruta.paddingTop,
                 holder.binding.rootAdapterItemMaterialKaruta.paddingRight,
-                paddingBottom
+                paddingBottom,
             )
             this.material = materialList[position]
             this.position = position
@@ -74,6 +84,6 @@ class MaterialListAdapter(
     }
 
     inner class ItemViewHolder(
-        val binding: AdapterItemMaterialKarutaBinding
+        val binding: AdapterItemMaterialKarutaBinding,
     ) : RecyclerView.ViewHolder(binding.root)
 }

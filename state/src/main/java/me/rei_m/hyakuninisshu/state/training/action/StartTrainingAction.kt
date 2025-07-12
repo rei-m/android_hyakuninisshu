@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,9 +18,12 @@ import me.rei_m.hyakuninisshu.state.core.Action
 /**
  * 練習を開始するアクション.
  */
-sealed class StartTrainingAction(override val error: Throwable? = null) : Action {
-
-    class Success(val questionId: String) : StartTrainingAction() {
+sealed class StartTrainingAction(
+    override val error: Throwable? = null,
+) : Action {
+    class Success(
+        val questionId: String,
+    ) : StartTrainingAction() {
         override fun toString() = "$name(questionId=$questionId)"
     }
 
@@ -28,7 +31,9 @@ sealed class StartTrainingAction(override val error: Throwable? = null) : Action
         override fun toString() = "$name()"
     }
 
-    class Failure(e: Throwable) : StartTrainingAction(e) {
+    class Failure(
+        e: Throwable,
+    ) : StartTrainingAction(e) {
         override fun toString() = "$name(error=$error)"
     }
 

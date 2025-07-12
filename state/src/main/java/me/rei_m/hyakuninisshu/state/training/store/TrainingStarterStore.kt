@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -24,33 +24,38 @@ import javax.inject.Inject
 /**
  * 練習の開始状態を管理する.
  */
-class TrainingStarterStore @Inject constructor(dispatcher: Dispatcher) : Store() {
+class TrainingStarterStore
+    @Inject
+    constructor(
+        dispatcher: Dispatcher,
+    ) : Store() {
+        private val _onReadyEvent = MutableLiveData<Event<String>>()
+        val onReadyEvent: LiveData<Event<String>> = _onReadyEvent
 
-    private val _onReadyEvent = MutableLiveData<Event<String>>()
-    val onReadyEvent: LiveData<Event<String>> = _onReadyEvent
+        private val _isEmpty = MutableLiveData(false)
+        val isEmpty: LiveData<Boolean> = _isEmpty
 
-    private val _isEmpty = MutableLiveData(false)
-    val isEmpty: LiveData<Boolean> = _isEmpty
+        private val _isFailure = MutableLiveData(false)
+        val isFailure: LiveData<Boolean> = _isFailure
 
-    private val _isFailure = MutableLiveData(false)
-    val isFailure: LiveData<Boolean> = _isFailure
-
-    init {
-        register(dispatcher.on(StartTrainingAction::class.java).subscribe {
-            when (it) {
-                is StartTrainingAction.Success -> {
-                    _onReadyEvent.value = Event(it.questionId)
-                    _isEmpty.value = false
-                    _isFailure.value = false
-                }
-                is StartTrainingAction.Empty -> {
-                    _isEmpty.value = true
-                    _isFailure.value = false
-                }
-                is StartTrainingAction.Failure -> {
-                    _isFailure.value = true
-                }
-            }
-        })
+        init {
+            register(
+                dispatcher.on(StartTrainingAction::class.java).subscribe {
+                    when (it) {
+                        is StartTrainingAction.Success -> {
+                            _onReadyEvent.value = Event(it.questionId)
+                            _isEmpty.value = false
+                            _isFailure.value = false
+                        }
+                        is StartTrainingAction.Empty -> {
+                            _isEmpty.value = true
+                            _isFailure.value = false
+                        }
+                        is StartTrainingAction.Failure -> {
+                            _isFailure.value = true
+                        }
+                    }
+                },
+            )
+        }
     }
-}

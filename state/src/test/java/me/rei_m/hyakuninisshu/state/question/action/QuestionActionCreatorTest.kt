@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -41,114 +41,129 @@ class QuestionActionCreatorTest : TestHelper {
     fun setUp() {
         karutaRepository = mock {}
         questionRepository = mock { }
-        actionCreator = QuestionActionCreator(
-            context = ApplicationProvider.getApplicationContext(),
-            karutaRepository = karutaRepository,
-            questionRepository = questionRepository
-        )
+        actionCreator =
+            QuestionActionCreator(
+                context = ApplicationProvider.getApplicationContext(),
+                karutaRepository = karutaRepository,
+                questionRepository = questionRepository,
+            )
     }
 
     @Test
-    fun start_success() = runBlocking {
-        val question = createQuestionReady(
-            id = questionId
-        )
-        val choiceList = question.choiceList
-        whenever(questionRepository.findById(questionId)).thenReturn(question)
-        whenever(questionRepository.count()).thenReturn(10)
-        whenever(karutaRepository.findAllWithNo(choiceList)).thenReturn(createAllKarutaList())
+    fun start_success() =
+        runBlocking {
+            val question =
+                createQuestionReady(
+                    id = questionId,
+                )
+            val choiceList = question.choiceList
+            whenever(questionRepository.findById(questionId)).thenReturn(question)
+            whenever(questionRepository.count()).thenReturn(10)
+            whenever(karutaRepository.findAllWithNo(choiceList)).thenReturn(createAllKarutaList())
 
-        val actual =
-            actionCreator.start("1", DisplayStyleCondition.KANJI, DisplayStyleCondition.KANA)
-        assertThat(actual).isInstanceOf(StartQuestionAction.Success::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun start_failure() = runBlocking {
-        val question = createQuestionReady(
-            id = questionId
-        )
-        val choiceList = question.choiceList
-        whenever(questionRepository.findById(questionId)).thenReturn(null)
-        whenever(questionRepository.count()).thenReturn(10)
-        whenever(karutaRepository.findAllWithNo(choiceList)).thenReturn(createAllKarutaList())
-
-        val actual =
-            actionCreator.start("1", DisplayStyleCondition.KANJI, DisplayStyleCondition.KANA)
-        assertThat(actual).isInstanceOf(StartQuestionAction.Failure::class.java)
-        return@runBlocking
-    }
+            val actual =
+                actionCreator.start("1", DisplayStyleCondition.KANJI, DisplayStyleCondition.KANA)
+            assertThat(actual).isInstanceOf(StartQuestionAction.Success::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun startAnswer_success() = runBlocking {
-        val question = createQuestionReady(
-            id = questionId
-        )
-        whenever(questionRepository.findById(questionId)).thenReturn(question)
-        whenever(questionRepository.save(question)).thenAnswer { }
-        whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
+    fun start_failure() =
+        runBlocking {
+            val question =
+                createQuestionReady(
+                    id = questionId,
+                )
+            val choiceList = question.choiceList
+            whenever(questionRepository.findById(questionId)).thenReturn(null)
+            whenever(questionRepository.count()).thenReturn(10)
+            whenever(karutaRepository.findAllWithNo(choiceList)).thenReturn(createAllKarutaList())
 
-        val actual = actionCreator.startAnswer("1", Date())
-        assertThat(actual).isInstanceOf(StartAnswerQuestionAction.Success::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun startAnswer_failure() = runBlocking {
-        val question = createQuestionReady(
-            id = questionId
-        )
-        whenever(questionRepository.findById(questionId)).thenReturn(null)
-        whenever(questionRepository.save(question)).thenAnswer { }
-        whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
-
-        val actual = actionCreator.startAnswer("1", Date())
-        assertThat(actual).isInstanceOf(StartAnswerQuestionAction.Failure::class.java)
-        return@runBlocking
-    }
+            val actual =
+                actionCreator.start("1", DisplayStyleCondition.KANJI, DisplayStyleCondition.KANA)
+            assertThat(actual).isInstanceOf(StartQuestionAction.Failure::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun answer_success() = runBlocking {
-        val question = createQuestionInAnswer(
-            id = questionId
-        )
-        whenever(questionRepository.findById(questionId)).thenReturn(question)
-        whenever(questionRepository.save(question)).thenAnswer { }
-        whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
+    fun startAnswer_success() =
+        runBlocking {
+            val question =
+                createQuestionReady(
+                    id = questionId,
+                )
+            whenever(questionRepository.findById(questionId)).thenReturn(question)
+            whenever(questionRepository.save(question)).thenAnswer { }
+            whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
 
-        val actual = actionCreator.answer(
-            "1",
-            ToriFuda(
-                karutaNo = question.choiceList[0].value,
-                firstLine = "aaaaa",
-                secondLine = "bbbbb"
-            ),
-            answerDate = Date()
-        )
-        assertThat(actual).isInstanceOf(AnswerQuestionAction.Success::class.java)
-        return@runBlocking
-    }
+            val actual = actionCreator.startAnswer("1", Date())
+            assertThat(actual).isInstanceOf(StartAnswerQuestionAction.Success::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun answer_failure() = runBlocking {
-        val question = createQuestionInAnswer(
-            id = questionId
-        )
-        whenever(questionRepository.findById(questionId)).thenReturn(null)
-        whenever(questionRepository.save(question)).thenAnswer { }
-        whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
+    fun startAnswer_failure() =
+        runBlocking {
+            val question =
+                createQuestionReady(
+                    id = questionId,
+                )
+            whenever(questionRepository.findById(questionId)).thenReturn(null)
+            whenever(questionRepository.save(question)).thenAnswer { }
+            whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
 
-        val actual = actionCreator.answer(
-            "1",
-            ToriFuda(
-                karutaNo = question.choiceList[0].value,
-                firstLine = "aaaaa",
-                secondLine = "bbbbb"
-            ),
-            answerDate = Date()
-        )
-        assertThat(actual).isInstanceOf(AnswerQuestionAction.Failure::class.java)
-        return@runBlocking
-    }
+            val actual = actionCreator.startAnswer("1", Date())
+            assertThat(actual).isInstanceOf(StartAnswerQuestionAction.Failure::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun answer_success() =
+        runBlocking {
+            val question =
+                createQuestionInAnswer(
+                    id = questionId,
+                )
+            whenever(questionRepository.findById(questionId)).thenReturn(question)
+            whenever(questionRepository.save(question)).thenAnswer { }
+            whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
+
+            val actual =
+                actionCreator.answer(
+                    "1",
+                    ToriFuda(
+                        karutaNo = question.choiceList[0].value,
+                        firstLine = "aaaaa",
+                        secondLine = "bbbbb",
+                    ),
+                    answerDate = Date(),
+                )
+            assertThat(actual).isInstanceOf(AnswerQuestionAction.Success::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun answer_failure() =
+        runBlocking {
+            val question =
+                createQuestionInAnswer(
+                    id = questionId,
+                )
+            whenever(questionRepository.findById(questionId)).thenReturn(null)
+            whenever(questionRepository.save(question)).thenAnswer { }
+            whenever(karutaRepository.findByNo(question.correctNo)).thenReturn(createKaruta())
+
+            val actual =
+                actionCreator.answer(
+                    "1",
+                    ToriFuda(
+                        karutaNo = question.choiceList[0].value,
+                        firstLine = "aaaaa",
+                        secondLine = "bbbbb",
+                    ),
+                    answerDate = Date(),
+                )
+            assertThat(actual).isInstanceOf(AnswerQuestionAction.Failure::class.java)
+            return@runBlocking
+        }
 }

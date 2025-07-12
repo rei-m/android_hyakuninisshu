@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -23,7 +23,7 @@ import me.rei_m.hyakuninisshu.state.R
  */
 enum class KimarijiCondition(
     val value: Kimariji?,
-    @param:StringRes private val resId: Int
+    @param:StringRes private val resId: Int,
 ) : SelectableItem {
     ALL(null, R.string.kimariji_not_select),
     ONE(Kimariji.ONE, R.string.kimariji_1),
@@ -31,7 +31,8 @@ enum class KimarijiCondition(
     THREE(Kimariji.THREE, R.string.kimariji_3),
     FOUR(Kimariji.FOUR, R.string.kimariji_4),
     FIVE(Kimariji.FIVE, R.string.kimariji_5),
-    SIX(Kimariji.SIX, R.string.kimariji_6);
+    SIX(Kimariji.SIX, R.string.kimariji_6),
+    ;
 
     override fun label(res: Resources): String = res.getString(resId)
 

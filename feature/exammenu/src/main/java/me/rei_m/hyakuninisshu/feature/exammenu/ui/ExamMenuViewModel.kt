@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,12 +11,11 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.exammenu.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
+import androidx.lifecycle.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
 import me.rei_m.hyakuninisshu.state.core.Dispatcher
 import me.rei_m.hyakuninisshu.state.exam.action.ExamActionCreator
@@ -26,9 +25,8 @@ import javax.inject.Inject
 class ExamMenuViewModel(
     dispatcher: Dispatcher,
     private val actionCreator: ExamActionCreator,
-    private val store: ExamMenuStore
+    private val store: ExamMenuStore,
 ) : AbstractViewModel(dispatcher) {
-
     val hasResult = store.recentResult.map { it != null }
     val score = store.recentResult.map { it?.score }
     val averageAnswerSec = store.recentResult.map { it?.averageAnswerSecText }
@@ -42,16 +40,19 @@ class ExamMenuViewModel(
         super.onCleared()
     }
 
-    class Factory @Inject constructor(
-        private val dispatcher: Dispatcher,
-        private val actionCreator: ExamActionCreator,
-        private val store: ExamMenuStore
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = ExamMenuViewModel(
-            dispatcher,
-            actionCreator,
-            store
-        ) as T
-    }
+    class Factory
+        @Inject
+        constructor(
+            private val dispatcher: Dispatcher,
+            private val actionCreator: ExamActionCreator,
+            private val store: ExamMenuStore,
+        ) : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                ExamMenuViewModel(
+                    dispatcher,
+                    actionCreator,
+                    store,
+                ) as T
+        }
 }

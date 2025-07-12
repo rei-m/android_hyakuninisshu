@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
  * @param values 問題のリスト
  */
 data class QuestionCollection(
-    val values: List<Question>
+    val values: List<Question>,
 ) {
     val wrongKarutaNoCollection: KarutaNoCollection by lazy {
         KarutaNoCollection(
@@ -36,10 +36,9 @@ data class QuestionCollection(
                             null
                         }
                     }
-                }
-                .filterNot { it.judgement.isCorrect }
+                }.filterNot { it.judgement.isCorrect }
                 .map { it.judgement.karutaNo }
-                .toList()
+                .toList(),
         )
     }
 
@@ -53,12 +52,13 @@ data class QuestionCollection(
             var collectCount = 0
 
             values.forEach {
-                val result = it.state.let { state ->
-                    if (state is Question.State.Answered) {
-                        return@let state.result
+                val result =
+                    it.state.let { state ->
+                        if (state is Question.State.Answered) {
+                            return@let state.result
+                        }
+                        throw IllegalStateException("Question is not finished.")
                     }
-                    throw IllegalStateException("Question is not finished.")
-                }
 
                 totalAnswerTimeMillSec += result.answerMillSec
                 if (result.judgement.isCorrect) {
@@ -67,9 +67,11 @@ data class QuestionCollection(
             }
 
             val averageAnswerTime =
-                totalAnswerTimeMillSec.toFloat() / questionCount.toFloat() / TimeUnit.SECONDS.toMillis(
-                    1
-                ).toFloat()
+                totalAnswerTimeMillSec.toFloat() / questionCount.toFloat() /
+                    TimeUnit.SECONDS
+                        .toMillis(
+                            1,
+                        ).toFloat()
 
             QuestionResultSummary(questionCount, collectCount, averageAnswerTime)
         }

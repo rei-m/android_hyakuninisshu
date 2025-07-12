@@ -1,7 +1,7 @@
 {
   "karuta_list": [
     {
-      "id": 1,
+      "no": 1,
       "creator": "天智天皇",
       "first_kana": "あきのたの",
       "first_kanji": "秋の田の",
@@ -17,10 +17,11 @@
       "image_no": "001",
       "kimariji": 3,
       "color": "pink",
-      "color_no": 16
+      "color_no": 16,
+      "torifuda": "わかころもてはつゆにぬれつつ"
     },
     {
-      "id": 2,
+      "no": 2,
       "creator": "持統天皇",
       "first_kana": "はるすぎて",
       "first_kanji": "春すぎて",
@@ -36,10 +37,11 @@
       "image_no": "002",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 1
+      "color_no": 1,
+      "torifuda": "ころもほすてふあまのかくやま"
     },
     {
-      "id": 3,
+      "no": 3,
       "creator": "柿本人麻呂",
       "first_kana": "あしびきの",
       "first_kanji": "あしびきの",
@@ -55,10 +57,11 @@
       "image_no": "003",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 1
+      "color_no": 1,
+      "torifuda": "なかなかしよをひとりかもねむ"
     },
     {
-      "id": 4,
+      "no": 4,
       "creator": "山部赤人",
       "first_kana": "たごのうらに",
       "first_kanji": "田子の浦に",
@@ -74,10 +77,11 @@
       "image_no": "004",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 17
+      "color_no": 17,
+      "torifuda": "ふしのたかねにゆきはふりつつ"
     },
     {
-      "id": 5,
+      "no": 5,
       "creator": "猿丸大夫",
       "first_kana": "おくやまに",
       "first_kanji": "奥山に",
@@ -93,10 +97,11 @@
       "image_no": "005",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 4
+      "color_no": 4,
+      "torifuda": "こゑきくときそあきはかなしき"
     },
     {
-      "id": 6,
+      "no": 6,
       "creator": "中納言家持",
       "first_kana": "かささぎの",
       "first_kanji": "鵲の",
@@ -112,10 +117,11 @@
       "image_no": "006",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 7
+      "color_no": 7,
+      "torifuda": "しろきをみれはよそふけにける"
     },
     {
-      "id": 7,
+      "no": 7,
       "creator": "阿倍仲麻呂",
       "first_kana": "あまのはら",
       "first_kanji": "天の原",
@@ -131,10 +137,11 @@
       "image_no": "007",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 2
+      "color_no": 2,
+      "torifuda": "みかさのやまにいてしつきかも"
     },
     {
-      "id": 8,
+      "no": 8,
       "creator": "喜撰法師",
       "first_kana": "わがいほは",
       "first_kanji": "わが庵は",
@@ -150,10 +157,11 @@
       "image_no": "008",
       "kimariji": 3,
       "color": "green",
-      "color_no": 1
+      "color_no": 1,
+      "torifuda": "よをうちやまとひとはいふなり"
     },
     {
-      "id": 9,
+      "no": 9,
       "creator": "小野小町",
       "first_kana": "はなのいろは",
       "first_kanji": "花の色は",
@@ -169,10 +177,11 @@
       "image_no": "009",
       "kimariji": 3,
       "color": "green",
-      "color_no": 2
+      "color_no": 2,
+      "torifuda": "わかみよにふるなかめせしまに"
     },
     {
-      "id": 10,
+      "no": 10,
       "creator": "蝉丸",
       "first_kana": "これやこの",
       "first_kanji": "これやこの",
@@ -188,10 +197,11 @@
       "image_no": "010",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 3
+      "color_no": 3,
+      "torifuda": "しるもしらぬもあふさかのせき"
     },
     {
-      "id": 11,
+      "no": 11,
       "creator": "参議篁",
       "first_kana": "わたのはら",
       "first_kanji": "わたの原",
@@ -207,10 +217,11 @@
       "image_no": "011",
       "kimariji": 6,
       "color": "green",
-      "color_no": 3
+      "color_no": 3,
+      "torifuda": "ひとにはつけよあまのつりふね"
     },
     {
-      "id": 12,
+      "no": 12,
       "creator": "僧正遍昭",
       "first_kana": "あまつかぜ",
       "first_kanji": "天つ風",
@@ -226,10 +237,11 @@
       "image_no": "012",
       "kimariji": 3,
       "color": "blue",
-      "color_no": 10
+      "color_no": 10,
+      "torifuda": "をとめのすかたしはしととめむ"
     },
     {
-      "id": 13,
+      "no": 13,
       "creator": "陽成院",
       "first_kana": "つくばねの",
       "first_kanji": "筑波嶺の",
@@ -245,10 +257,11 @@
       "image_no": "013",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 18
+      "color_no": 18,
+      "torifuda": "こひそつもりてふちとなりぬる"
     },
     {
-      "id": 14,
+      "no": 14,
       "creator": "河原左大臣",
       "first_kana": "みちのくの",
       "first_kanji": "陸奥の",
@@ -264,10 +277,11 @@
       "image_no": "014",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 13
+      "color_no": 13,
+      "torifuda": "みたれそめにしわれならなくに"
     },
     {
-      "id": 15,
+      "no": 15,
       "creator": "光孝天皇",
       "first_kana": "きみがため",
       "first_kanji": "君がため",
@@ -283,10 +297,11 @@
       "image_no": "015",
       "kimariji": 6,
       "color": "green",
-      "color_no": 4
+      "color_no": 4,
+      "torifuda": "わかころもてにゆきはふりつつ"
     },
     {
-      "id": 16,
+      "no": 16,
       "creator": "中納言行平",
       "first_kana": "たちわかれ",
       "first_kanji": "立ち別れ",
@@ -302,10 +317,11 @@
       "image_no": "016",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 13
+      "color_no": 13,
+      "torifuda": "まつとしきかはいまかへりこむ"
     },
     {
-      "id": 17,
+      "no": 17,
       "creator": "在原業平朝臣",
       "first_kana": "ちはやぶる",
       "first_kanji": "ちはやぶる",
@@ -321,10 +337,11 @@
       "image_no": "017",
       "kimariji": 2,
       "color": "green",
-      "color_no": 5
+      "color_no": 5,
+      "torifuda": "からくれなゐにみつくくるとは"
     },
     {
-      "id": 18,
+      "no": 18,
       "creator": "藤原敏行朝臣",
       "first_kana": "すみのえの",
       "first_kanji": "住の江の",
@@ -340,10 +357,11 @@
       "image_no": "018",
       "kimariji": 1,
       "color": "yellow",
-      "color_no": 4
+      "color_no": 4,
+      "torifuda": "ゆめのかよひちひとめよくらむ"
     },
     {
-      "id": 19,
+      "no": 19,
       "creator": "伊勢",
       "first_kana": "なにはがた",
       "first_kanji": "難波潟",
@@ -359,10 +377,11 @@
       "image_no": "019",
       "kimariji": 4,
       "color": "orange",
-      "color_no": 13
+      "color_no": 13,
+      "torifuda": "あはてこのよをすくしてよとや"
     },
     {
-      "id": 20,
+      "no": 20,
       "creator": "元良親王",
       "first_kana": "わびぬれば",
       "first_kanji": "わびぬれば",
@@ -378,10 +397,11 @@
       "image_no": "020",
       "kimariji": 2,
       "color": "green",
-      "color_no": 6
+      "color_no": 6,
+      "torifuda": "みをつくしてもあはむとそおもふ"
     },
     {
-      "id": 21,
+      "no": 21,
       "creator": "素性法師",
       "first_kana": "いまこむと",
       "first_kanji": "今来むと",
@@ -397,10 +417,11 @@
       "image_no": "021",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 7
+      "color_no": 7,
+      "torifuda": "ありあけのつきをまちいつるかな"
     },
     {
-      "id": 22,
+      "no": 22,
       "creator": "文屋康秀",
       "first_kana": "ふくからに",
       "first_kanji": "吹くからに",
@@ -416,10 +437,11 @@
       "image_no": "022",
       "kimariji": 1,
       "color": "pink",
-      "color_no": 14
+      "color_no": 14,
+      "torifuda": "むへやまかせをあらしといふらむ"
     },
     {
-      "id": 23,
+      "no": 23,
       "creator": "大江千里",
       "first_kana": "つきみれば",
       "first_kanji": "月見れば",
@@ -435,10 +457,11 @@
       "image_no": "023",
       "kimariji": 2,
       "color": "green",
-      "color_no": 7
+      "color_no": 7,
+      "torifuda": "わかみひとつのあきにはあらねと"
     },
     {
-      "id": 24,
+      "no": 24,
       "creator": "菅家",
       "first_kana": "このたびは",
       "first_kanji": "このたびは",
@@ -454,10 +477,11 @@
       "image_no": "024",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 16
+      "color_no": 16,
+      "torifuda": "もみちのにしきかみのまにまに"
     },
     {
-      "id": 25,
+      "no": 25,
       "creator": "三条右大臣",
       "first_kana": "なにしおはば",
       "first_kanji": "名にし負はば",
@@ -473,10 +497,11 @@
       "image_no": "025",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 11
+      "color_no": 11,
+      "torifuda": "ひとにしられてくるよしもかな"
     },
     {
-      "id": 26,
+      "no": 26,
       "creator": "貞信公",
       "first_kana": "をぐらやま",
       "first_kanji": "小倉山",
@@ -492,10 +517,11 @@
       "image_no": "026",
       "kimariji": 2,
       "color": "green",
-      "color_no": 8
+      "color_no": 8,
+      "torifuda": "いまひとたひのみゆきまたなむ"
     },
     {
-      "id": 27,
+      "no": 27,
       "creator": "中納言兼輔",
       "first_kana": "みかのはら",
       "first_kanji": "みかの原",
@@ -511,10 +537,11 @@
       "image_no": "027",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 17
+      "color_no": 17,
+      "torifuda": "いつみきとてかこひしかるらむ"
     },
     {
-      "id": 28,
+      "no": 28,
       "creator": "源宗于朝臣",
       "first_kana": "やまざとは",
       "first_kanji": "山里は",
@@ -530,10 +557,11 @@
       "image_no": "028",
       "kimariji": 3,
       "color": "pink",
-      "color_no": 15
+      "color_no": 15,
+      "torifuda": "ひとめもくさもかれぬとおもへは"
     },
     {
-      "id": 29,
+      "no": 29,
       "creator": "凡河内躬恒",
       "first_kana": "こころあてに",
       "first_kanji": "心あてに",
@@ -549,10 +577,11 @@
       "image_no": "029",
       "kimariji": 4,
       "color": "green",
-      "color_no": 9
+      "color_no": 9,
+      "torifuda": "おきまとはせるしらきくのはな"
     },
     {
-      "id": 30,
+      "no": 30,
       "creator": "壬生忠岑",
       "first_kana": "ありあけの",
       "first_kanji": "有明の",
@@ -568,10 +597,11 @@
       "image_no": "030",
       "kimariji": 3,
       "color": "blue",
-      "color_no": 2
+      "color_no": 2,
+      "torifuda": "あかつきはかりうきものはなし"
     },
     {
-      "id": 31,
+      "no": 31,
       "creator": "坂上是則",
       "first_kana": "あさぼらけ",
       "first_kanji": "朝ぼらけ",
@@ -587,10 +617,11 @@
       "image_no": "031",
       "kimariji": 6,
       "color": "blue",
-      "color_no": 5
+      "color_no": 5,
+      "torifuda": "よしののさとにふれるしらゆき"
     },
     {
-      "id": 32,
+      "no": 32,
       "creator": "春道列樹",
       "first_kana": "やまがはに",
       "first_kanji": "山川に",
@@ -606,10 +637,11 @@
       "image_no": "032",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 5
+      "color_no": 5,
+      "torifuda": "なかれもあへぬもみちなりけり"
     },
     {
-      "id": 33,
+      "no": 33,
       "creator": "紀友則",
       "first_kana": "ひさかたの",
       "first_kanji": "久方の",
@@ -625,10 +657,11 @@
       "image_no": "033",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 6
+      "color_no": 6,
+      "torifuda": "しつこころなくはなのちるらむ"
     },
     {
-      "id": 34,
+      "no": 34,
       "creator": "藤原興風",
       "first_kana": "たれをかも",
       "first_kanji": "誰をかも",
@@ -644,10 +677,11 @@
       "image_no": "034",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 10
+      "color_no": 10,
+      "torifuda": "まつもむかしのともならなくに"
     },
     {
-      "id": 35,
+      "no": 35,
       "creator": "紀貫之",
       "first_kana": "ひとはいさ",
       "first_kanji": "人はいさ",
@@ -663,10 +697,11 @@
       "image_no": "035",
       "kimariji": 3,
       "color": "green",
-      "color_no": 10
+      "color_no": 10,
+      "torifuda": "はなそむかしのかににほひける"
     },
     {
-      "id": 36,
+      "no": 36,
       "creator": "清原深養父",
       "first_kana": "なつのよは",
       "first_kanji": "夏の夜は",
@@ -682,10 +717,11 @@
       "image_no": "036",
       "kimariji": 2,
       "color": "green",
-      "color_no": 11
+      "color_no": 11,
+      "torifuda": "くものいつこにつきやとるらむ"
     },
     {
-      "id": 37,
+      "no": 37,
       "creator": "文屋朝康",
       "first_kana": "しらつゆに",
       "first_kanji": "白露に",
@@ -701,10 +737,11 @@
       "image_no": "037",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 7
+      "color_no": 7,
+      "torifuda": "つらぬきとめぬたまそちりける"
     },
     {
-      "id": 38,
+      "no": 38,
       "creator": "右近",
       "first_kana": "わすらるる",
       "first_kanji": "忘らるる",
@@ -720,10 +757,11 @@
       "image_no": "038",
       "kimariji": 3,
       "color": "green",
-      "color_no": 12
+      "color_no": 12,
+      "torifuda": "ひとのいのちのをしくもあるかな"
     },
     {
-      "id": 39,
+      "no": 39,
       "creator": "参議等",
       "first_kana": "あさぢふの",
       "first_kanji": "浅茅生の",
@@ -739,10 +777,11 @@
       "image_no": "039",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 8
+      "color_no": 8,
+      "torifuda": "あまりてなとかひとのこひしき"
     },
     {
-      "id": 40,
+      "no": 40,
       "creator": "平兼盛",
       "first_kana": "しのぶれど",
       "first_kanji": "忍ぶれど",
@@ -758,10 +797,11 @@
       "image_no": "040",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 11
+      "color_no": 11,
+      "torifuda": "ものやおもふとひとのとふまて"
     },
     {
-      "id": 41,
+      "no": 41,
       "creator": "壬生忠見",
       "first_kana": "こひすてふ",
       "first_kanji": "恋すてふ",
@@ -777,10 +817,11 @@
       "image_no": "041",
       "kimariji": 2,
       "color": "green",
-      "color_no": 13
+      "color_no": 13,
+      "torifuda": "ひとしれすこそおもひそめしか"
     },
     {
-      "id": 42,
+      "no": 42,
       "creator": "清原元輔",
       "first_kana": "ちぎりきな",
       "first_kanji": "契りきな",
@@ -796,10 +837,11 @@
       "image_no": "042",
       "kimariji": 4,
       "color": "green",
-      "color_no": 14
+      "color_no": 14,
+      "torifuda": "すゑのまつやまなみこさしとは"
     },
     {
-      "id": 43,
+      "no": 43,
       "creator": "権中納言敦忠",
       "first_kana": "あひみての",
       "first_kanji": "逢ひ見ての",
@@ -815,10 +857,11 @@
       "image_no": "043",
       "kimariji": 2,
       "color": "orange",
-      "color_no": 4
+      "color_no": 4,
+      "torifuda": "むかしはものをおもはさりけり"
     },
     {
-      "id": 44,
+      "no": 44,
       "creator": "中納言朝忠",
       "first_kana": "あふことの",
       "first_kanji": "逢ふことの",
@@ -834,10 +877,11 @@
       "image_no": "044",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 5
+      "color_no": 5,
+      "torifuda": "ひとをもみをもうらみさらまし"
     },
     {
-      "id": 45,
+      "no": 45,
       "creator": "謙徳公",
       "first_kana": "あはれとも",
       "first_kanji": "哀れとも",
@@ -853,10 +897,11 @@
       "image_no": "045",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 3
+      "color_no": 3,
+      "torifuda": "みのいたつらになりぬへきかな"
     },
     {
-      "id": 46,
+      "no": 46,
       "creator": "曽禰好忠",
       "first_kana": "ゆらのとを",
       "first_kanji": "由良の門を",
@@ -872,10 +917,11 @@
       "image_no": "046",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 9
+      "color_no": 9,
+      "torifuda": "ゆくへもしらぬこひのみちかな"
     },
     {
-      "id": 47,
+      "no": 47,
       "creator": "恵慶法師",
       "first_kana": "やへむぐら",
       "first_kanji": "八重むぐら",
@@ -891,10 +937,11 @@
       "image_no": "047",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 10
+      "color_no": 10,
+      "torifuda": "ひとこそみえねあきはきにけり"
     },
     {
-      "id": 48,
+      "no": 48,
       "creator": "源重之",
       "first_kana": "かぜをいたみ",
       "first_kanji": "風をいたみ",
@@ -910,16 +957,17 @@
       "image_no": "048",
       "kimariji": 3,
       "color": "pink",
-      "color_no": 12
+      "color_no": 12,
+      "torifuda": "くたけてものをおもふころかな"
     },
     {
-      "id": 49,
+      "no": 49,
       "creator": "大中臣能宣朝臣",
       "first_kana": "みかきもり",
       "first_kanji": "みかきもり",
       "second_kana": "ゑじのたくひの",
       "second_kanji": "衛士のたく火の",
-      "third_kana": "よるはもえて",
+      "third_kana": "よるはもえ",
       "third_kanji": "夜はもえ",
       "fourth_kana": "ひるはきえつつ",
       "fourth_kanji": "昼は消えつつ",
@@ -929,10 +977,11 @@
       "image_no": "049",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 16
+      "color_no": 16,
+      "torifuda": "ひるはきえつつものをこそおもへ"
     },
     {
-      "id": 50,
+      "no": 50,
       "creator": "藤原義孝",
       "first_kana": "きみがため",
       "first_kanji": "君がため",
@@ -948,10 +997,11 @@
       "image_no": "050",
       "kimariji": 6,
       "color": "blue",
-      "color_no": 8
+      "color_no": 8,
+      "torifuda": "なかくもかなとおもひけるかな"
     },
     {
-      "id": 51,
+      "no": 51,
       "creator": "藤原実方朝臣",
       "first_kana": "かくとだに",
       "first_kanji": "かくとだに",
@@ -967,10 +1017,11 @@
       "image_no": "051",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 7
+      "color_no": 7,
+      "torifuda": "さしもしらしなもゆるおもひを"
     },
     {
-      "id": 52,
+      "no": 52,
       "creator": "藤原道信朝臣",
       "first_kana": "あけぬれば",
       "first_kanji": "明けぬれば",
@@ -986,10 +1037,11 @@
       "image_no": "052",
       "kimariji": 2,
       "color": "orange",
-      "color_no": 1
+      "color_no": 1,
+      "torifuda": "なほうらめしきあさほらけかな"
     },
     {
-      "id": 53,
+      "no": 53,
       "creator": "右大将道綱母",
       "first_kana": "なげきつつ",
       "first_kanji": "嘆きつつ",
@@ -1005,10 +1057,11 @@
       "image_no": "053",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 10
+      "color_no": 10,
+      "torifuda": "いかにひさしきものとかはしる"
     },
     {
-      "id": 54,
+      "no": 54,
       "creator": "儀同三司母",
       "first_kana": "わすれじの",
       "first_kanji": "忘れじの",
@@ -1024,10 +1077,11 @@
       "image_no": "054",
       "kimariji": 3,
       "color": "green",
-      "color_no": 15
+      "color_no": 15,
+      "torifuda": "けふをかきりのいのちともかな"
     },
     {
-      "id": 55,
+      "no": 55,
       "creator": "大納言公任",
       "first_kana": "たきのおとは",
       "first_kanji": "滝の音は",
@@ -1043,10 +1097,11 @@
       "image_no": "055",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 11
+      "color_no": 11,
+      "torifuda": "なこそなかれてなほきこえけれ"
     },
     {
-      "id": 56,
+      "no": 56,
       "creator": "和泉式部",
       "first_kana": "あらざらむ",
       "first_kanji": "あらざらむ",
@@ -1062,10 +1117,11 @@
       "image_no": "056",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 6
+      "color_no": 6,
+      "torifuda": "いまひとたひのあふこともかな"
     },
     {
-      "id": 57,
+      "no": 57,
       "creator": "紫式部",
       "first_kana": "めぐりあひて",
       "first_kanji": "めぐり逢ひて",
@@ -1081,10 +1137,11 @@
       "image_no": "057",
       "kimariji": 1,
       "color": "blue",
-      "color_no": 11
+      "color_no": 11,
+      "torifuda": "くもかくれにしよはのつきかな"
     },
     {
-      "id": 58,
+      "no": 58,
       "creator": "大弐三位",
       "first_kana": "ありまやま",
       "first_kanji": "有馬山",
@@ -1100,10 +1157,11 @@
       "image_no": "058",
       "kimariji": 3,
       "color": "pink",
-      "color_no": 8
+      "color_no": 8,
+      "torifuda": "いてそよひとをわすれやはする"
     },
     {
-      "id": 59,
+      "no": 59,
       "creator": "赤染衛門",
       "first_kana": "やすらはで",
       "first_kanji": "やすらはで",
@@ -1119,10 +1177,11 @@
       "image_no": "059",
       "kimariji": 2,
       "color": "green",
-      "color_no": 16
+      "color_no": 16,
+      "torifuda": "かたふくまてのつきをみしかな"
     },
     {
-      "id": 60,
+      "no": 60,
       "creator": "小式部内侍",
       "first_kana": "おほえやま",
       "first_kanji": "大江山",
@@ -1138,10 +1197,11 @@
       "image_no": "060",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 12
+      "color_no": 12,
+      "torifuda": "またふみもみすあまのはしたて"
     },
     {
-      "id": 61,
+      "no": 61,
       "creator": "伊勢大輔",
       "first_kana": "いにしへの",
       "first_kanji": "いにしへの",
@@ -1157,10 +1217,11 @@
       "image_no": "061",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 14
+      "color_no": 14,
+      "torifuda": "けふここのへににほひぬるかな"
     },
     {
-      "id": 62,
+      "no": 62,
       "creator": "清少納言",
       "first_kana": "よをこめて",
       "first_kanji": "夜をこめて",
@@ -1176,10 +1237,11 @@
       "image_no": "062",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 17
+      "color_no": 17,
+      "torifuda": "よにあふさかのせきはゆるさし"
     },
     {
-      "id": 63,
+      "no": 63,
       "creator": "左京大夫道雅",
       "first_kana": "いまはただ",
       "first_kanji": "今はただ",
@@ -1195,10 +1257,11 @@
       "image_no": "063",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 8
+      "color_no": 8,
+      "torifuda": "ひとつてならていふよしもかな"
     },
     {
-      "id": 64,
+      "no": 64,
       "creator": "権中納言定頼",
       "first_kana": "あさぼらけ",
       "first_kanji": "朝ぼらけ",
@@ -1214,10 +1277,11 @@
       "image_no": "064",
       "kimariji": 6,
       "color": "orange",
-      "color_no": 2
+      "color_no": 2,
+      "torifuda": "あらはれわたるせせのあしろき"
     },
     {
-      "id": 65,
+      "no": 65,
       "creator": "相模",
       "first_kana": "うらみわび",
       "first_kanji": "恨みわび",
@@ -1233,10 +1297,11 @@
       "image_no": "065",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 9
+      "color_no": 9,
+      "torifuda": "こひにくちなむなこそをしけれ"
     },
     {
-      "id": 66,
+      "no": 66,
       "creator": "前大僧正行尊",
       "first_kana": "もろともに",
       "first_kanji": "もろともに",
@@ -1252,10 +1317,11 @@
       "image_no": "066",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 3
+      "color_no": 3,
+      "torifuda": "はなよりほかにしるひともなし"
     },
     {
-      "id": 67,
+      "no": 67,
       "creator": "周防内侍",
       "first_kana": "はるのよの",
       "first_kanji": "春の夜の",
@@ -1271,10 +1337,11 @@
       "image_no": "067",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 14
+      "color_no": 14,
+      "torifuda": "かひなくたたむなこそをしけれ"
     },
     {
-      "id": 68,
+      "no": 68,
       "creator": "三条院",
       "first_kana": "こころにも",
       "first_kanji": "心にも",
@@ -1290,10 +1357,11 @@
       "image_no": "068",
       "kimariji": 4,
       "color": "green",
-      "color_no": 17
+      "color_no": 17,
+      "torifuda": "こひしかるへきよはのつきかな"
     },
     {
-      "id": 69,
+      "no": 69,
       "creator": "能因法師",
       "first_kana": "あらしふく",
       "first_kanji": "嵐吹く",
@@ -1309,10 +1377,11 @@
       "image_no": "069",
       "kimariji": 3,
       "color": "blue",
-      "color_no": 3
+      "color_no": 3,
+      "torifuda": "たつたのかはのにしきなりけり"
     },
     {
-      "id": 70,
+      "no": 70,
       "creator": "良選法師",
       "first_kana": "さびしさに",
       "first_kanji": "さびしさに",
@@ -1328,10 +1397,11 @@
       "image_no": "070",
       "kimariji": 1,
       "color": "blue",
-      "color_no": 6
+      "color_no": 6,
+      "torifuda": "いつくもおなしあきのゆふくれ"
     },
     {
-      "id": 71,
+      "no": 71,
       "creator": "大納言経信",
       "first_kana": "ゆふされば",
       "first_kanji": "夕されば",
@@ -1347,10 +1417,11 @@
       "image_no": "071",
       "kimariji": 2,
       "color": "green",
-      "color_no": 18
+      "color_no": 18,
+      "torifuda": "あしのまろやにあきがせそふく"
     },
     {
-      "id": 72,
+      "no": 72,
       "creator": "祐子内親王家紀伊",
       "first_kana": "おとにきく",
       "first_kanji": "音に聞く",
@@ -1366,10 +1437,11 @@
       "image_no": "072",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 4
+      "color_no": 4,
+      "torifuda": "かけしやそてのぬれもこそすれ"
     },
     {
-      "id": 73,
+      "no": 73,
       "creator": "前権中納言匡房",
       "first_kana": "たかさごの",
       "first_kanji": "高砂の",
@@ -1385,10 +1457,11 @@
       "image_no": "073",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 5
+      "color_no": 5,
+      "torifuda": "とやまのかすみたたすもあらなむ"
     },
     {
-      "id": 74,
+      "no": 74,
       "creator": "源俊頼朝臣",
       "first_kana": "うかりける",
       "first_kanji": "憂かりける",
@@ -1404,10 +1477,11 @@
       "image_no": "074",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 9
+      "color_no": 9,
+      "torifuda": "はけしかれとはいのらぬものを"
     },
     {
-      "id": 75,
+      "no": 75,
       "creator": "藤原基俊",
       "first_kana": "ちぎりおきし",
       "first_kanji": "契りおきし",
@@ -1423,10 +1497,11 @@
       "image_no": "075",
       "kimariji": 4,
       "color": "blue",
-      "color_no": 19
+      "color_no": 19,
+      "torifuda": "あはれことしのあきもいぬめり"
     },
     {
-      "id": 76,
+      "no": 76,
       "creator": "法性寺入道前関白太政大臣",
       "first_kana": "わたのはら",
       "first_kanji": "わたの原",
@@ -1442,10 +1517,11 @@
       "image_no": "076",
       "kimariji": 6,
       "color": "blue",
-      "color_no": 12
+      "color_no": 12,
+      "torifuda": "くもゐにまかふおきつしらなみ"
     },
     {
-      "id": 77,
+      "no": 77,
       "creator": "崇徳院",
       "first_kana": "せをはやみ",
       "first_kanji": "瀬を早み",
@@ -1461,10 +1537,11 @@
       "image_no": "077",
       "kimariji": 1,
       "color": "orange",
-      "color_no": 9
+      "color_no": 9,
+      "torifuda": "われてもすゑにあはむとそおもふ"
     },
     {
-      "id": 78,
+      "no": 78,
       "creator": "源兼昌",
       "first_kana": "あはぢしま",
       "first_kanji": "淡路島",
@@ -1480,10 +1557,11 @@
       "image_no": "078",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 13
+      "color_no": 13,
+      "torifuda": "いくよねさめぬすまのせきもり"
     },
     {
-      "id": 79,
+      "no": 79,
       "creator": "左京大夫顕輔",
       "first_kana": "あきかぜに",
       "first_kanji": "秋風に",
@@ -1499,10 +1577,11 @@
       "image_no": "079",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 14
+      "color_no": 14,
+      "torifuda": "もれいつるつきのかけのさやけき"
     },
     {
-      "id": 80,
+      "no": 80,
       "creator": "待賢門院堀河",
       "first_kana": "ながからむ",
       "first_kanji": "長からむ",
@@ -1518,10 +1597,11 @@
       "image_no": "080",
       "kimariji": 3,
       "color": "pink",
-      "color_no": 6
+      "color_no": 6,
+      "torifuda": "みたれてけさはものをこそおもへ"
     },
     {
-      "id": 81,
+      "no": 81,
       "creator": "後徳大寺左大臣",
       "first_kana": "ほととぎす",
       "first_kanji": "ほととぎす",
@@ -1537,10 +1617,11 @@
       "image_no": "081",
       "kimariji": 1,
       "color": "yellow",
-      "color_no": 15
+      "color_no": 15,
+      "torifuda": "たたありあけのつきそのこれる"
     },
     {
-      "id": 82,
+      "no": 82,
       "creator": "道因法師",
       "first_kana": "おもひわび",
       "first_kanji": "思ひわび",
@@ -1556,10 +1637,11 @@
       "image_no": "082",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 20
+      "color_no": 20,
+      "torifuda": "うきにたへぬはなみたなりけり"
     },
     {
-      "id": 83,
+      "no": 83,
       "creator": "皇太后宮大夫俊成",
       "first_kana": "よのなかよ",
       "first_kanji": "世の中よ",
@@ -1575,10 +1657,11 @@
       "image_no": "083",
       "kimariji": 5,
       "color": "pink",
-      "color_no": 19
+      "color_no": 19,
+      "torifuda": "やまのおくにもしかそなくなる"
     },
     {
-      "id": 84,
+      "no": 84,
       "creator": "藤原清輔朝臣",
       "first_kana": "ながらへば",
       "first_kanji": "長らへば",
@@ -1594,10 +1677,11 @@
       "image_no": "084",
       "kimariji": 3,
       "color": "pink",
-      "color_no": 20
+      "color_no": 20,
+      "torifuda": "うしとみしよそいまはこひしき"
     },
     {
-      "id": 85,
+      "no": 85,
       "creator": "俊恵法師",
       "first_kana": "よもすがら",
       "first_kanji": "夜もすがら",
@@ -1613,10 +1697,11 @@
       "image_no": "085",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 19
+      "color_no": 19,
+      "torifuda": "ねやのひまさへつれなかりけり"
     },
     {
-      "id": 86,
+      "no": 86,
       "creator": "西行法師",
       "first_kana": "なげけとて",
       "first_kanji": "嘆けとて",
@@ -1632,10 +1717,11 @@
       "image_no": "086",
       "kimariji": 3,
       "color": "pink",
-      "color_no": 1
+      "color_no": 1,
+      "torifuda": "かこちかほなるわかなみたかな"
     },
     {
-      "id": 87,
+      "no": 87,
       "creator": "寂蓮法師",
       "first_kana": "むらさめの",
       "first_kanji": "村雨の",
@@ -1651,10 +1737,11 @@
       "image_no": "087",
       "kimariji": 1,
       "color": "yellow",
-      "color_no": 16
+      "color_no": 16,
+      "torifuda": "きりたちのほるあきのゆふくれ"
     },
     {
-      "id": 88,
+      "no": 88,
       "creator": "皇嘉門院別当",
       "first_kana": "なにはえの",
       "first_kanji": "難波江の",
@@ -1670,10 +1757,11 @@
       "image_no": "088",
       "kimariji": 4,
       "color": "orange",
-      "color_no": 12
+      "color_no": 12,
+      "torifuda": "みをつくしてやこひわたるへき"
     },
     {
-      "id": 89,
+      "no": 89,
       "creator": "式子内親王",
       "first_kana": "たまのをよ",
       "first_kanji": "玉の緒よ",
@@ -1689,10 +1777,11 @@
       "image_no": "089",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 20
+      "color_no": 20,
+      "torifuda": "しのふることのよはりもそする"
     },
     {
-      "id": 90,
+      "no": 90,
       "creator": "殷富門院大輔",
       "first_kana": "みせばやな",
       "first_kanji": "見せばやな",
@@ -1708,10 +1797,11 @@
       "image_no": "090",
       "kimariji": 2,
       "color": "orange",
-      "color_no": 18
+      "color_no": 18,
+      "torifuda": "ぬれにそぬれしいろはかはらす"
     },
     {
-      "id": 91,
+      "no": 91,
       "creator": "後京極摂政前太政大臣",
       "first_kana": "きりぎりす",
       "first_kanji": "きりぎりす",
@@ -1727,10 +1817,11 @@
       "image_no": "091",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 15
+      "color_no": 15,
+      "torifuda": "ころもかたしきひとりかもねむ"
     },
     {
-      "id": 92,
+      "no": 92,
       "creator": "二条院讃岐",
       "first_kana": "わがそでは",
       "first_kanji": "わが袖は",
@@ -1746,10 +1837,11 @@
       "image_no": "092",
       "kimariji": 3,
       "color": "green",
-      "color_no": 19
+      "color_no": 19,
+      "torifuda": "ひとこそしらねかわくまもなし"
     },
     {
-      "id": 93,
+      "no": 93,
       "creator": "鎌倉右大臣",
       "first_kana": "よのなかは",
       "first_kanji": "世の中は",
@@ -1765,10 +1857,11 @@
       "image_no": "093",
       "kimariji": 5,
       "color": "green",
-      "color_no": 20
+      "color_no": 20,
+      "torifuda": "あまのをふねのつなてかなしむ"
     },
     {
-      "id": 94,
+      "no": 94,
       "creator": "参議雅経",
       "first_kana": "みよしのの",
       "first_kanji": "み吉野の",
@@ -1784,10 +1877,11 @@
       "image_no": "094",
       "kimariji": 2,
       "color": "yellow",
-      "color_no": 17
+      "color_no": 17,
+      "torifuda": "ふるさとさむくころもうつなり"
     },
     {
-      "id": 95,
+      "no": 95,
       "creator": "前大僧正慈円",
       "first_kana": "おほけなく",
       "first_kanji": "おほけなく",
@@ -1803,10 +1897,11 @@
       "image_no": "095",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 19
+      "color_no": 19,
+      "torifuda": "わかたつそまにすみそめのそて"
     },
     {
-      "id": 96,
+      "no": 96,
       "creator": "入道前太政大臣",
       "first_kana": "はなさそふ",
       "first_kanji": "花さそふ",
@@ -1822,10 +1917,11 @@
       "image_no": "096",
       "kimariji": 3,
       "color": "yellow",
-      "color_no": 18
+      "color_no": 18,
+      "torifuda": "ふりゆくものはわかみなりけり"
     },
     {
-      "id": 97,
+      "no": 97,
       "creator": "権中納言定家",
       "first_kana": "こぬひとを",
       "first_kanji": "来ぬ人を",
@@ -1841,10 +1937,11 @@
       "image_no": "097",
       "kimariji": 2,
       "color": "pink",
-      "color_no": 2
+      "color_no": 2,
+      "torifuda": "やくやもしほのみもこかれつつ"
     },
     {
-      "id": 98,
+      "no": 98,
       "creator": "従二位家隆",
       "first_kana": "かぜそよぐ",
       "first_kanji": "風そよぐ",
@@ -1860,10 +1957,11 @@
       "image_no": "098",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 20
+      "color_no": 20,
+      "torifuda": "みそきそなつのしるしなりけり"
     },
     {
-      "id": 99,
+      "no": 99,
       "creator": "後鳥羽院",
       "first_kana": "ひともをし",
       "first_kanji": "人もをし",
@@ -1879,10 +1977,11 @@
       "image_no": "099",
       "kimariji": 3,
       "color": "orange",
-      "color_no": 15
+      "color_no": 15,
+      "torifuda": "よをおもふゆゑにものおもふみは"
     },
     {
-      "id": 100,
+      "no": 100,
       "creator": "順徳院",
       "first_kana": "ももしきや",
       "first_kanji": "ももしきや",
@@ -1898,7 +1997,8 @@
       "image_no": "100",
       "kimariji": 2,
       "color": "blue",
-      "color_no": 18
+      "color_no": 18,
+      "torifuda": "なほあまりあるむかしなりけり"
     }
   ]
 }

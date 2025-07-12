@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -31,7 +31,7 @@ class MaterialDetailPageFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = MaterialDetailPageFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -54,10 +54,12 @@ class MaterialDetailPageFragment : Fragment() {
     companion object {
         private const val ARG_MATERIAL = "material"
 
-        fun newInstance(material: Material) = MaterialDetailPageFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(ARG_MATERIAL, material)
+        fun newInstance(material: Material) =
+            MaterialDetailPageFragment().apply {
+                arguments =
+                    Bundle().apply {
+                        putParcelable(ARG_MATERIAL, material)
+                    }
             }
-        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.exammenu.ui
 
 import android.os.Bundle
@@ -27,7 +26,6 @@ import me.rei_m.hyakuninisshu.feature.exammenu.di.ExamMenuComponent
 import javax.inject.Inject
 
 class ExamMenuFragment : Fragment() {
-
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
@@ -50,7 +48,7 @@ class ExamMenuFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = ExamMenuFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -63,7 +61,10 @@ class ExamMenuFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("ExamMenu", requireActivity())
 

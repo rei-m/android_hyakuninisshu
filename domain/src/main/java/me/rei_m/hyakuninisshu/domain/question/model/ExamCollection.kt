@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -22,9 +22,8 @@ import me.rei_m.hyakuninisshu.domain.karuta.model.KarutaNoCollection
  * @param values 値のリスト
  */
 data class ExamCollection(
-    private val values: List<Exam>
+    private val values: List<Exam>,
 ) {
-
     /**
      * すべての力試し.
      */
@@ -45,10 +44,11 @@ data class ExamCollection(
      */
     val totalWrongKarutaNoCollection: KarutaNoCollection by lazy {
         KarutaNoCollection(
-            values.fold(mutableSetOf<KarutaNo>()) { karutaNoSet, karutaExam ->
-                karutaNoSet.addAll(karutaExam.result.wrongKarutaNoCollection.values)
-                karutaNoSet
-            }.toList()
+            values
+                .fold(mutableSetOf<KarutaNo>()) { karutaNoSet, karutaExam ->
+                    karutaNoSet.addAll(karutaExam.result.wrongKarutaNoCollection.values)
+                    karutaNoSet
+                }.toList(),
         )
     }
 

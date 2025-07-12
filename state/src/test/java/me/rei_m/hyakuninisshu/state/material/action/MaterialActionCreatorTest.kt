@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -38,103 +38,111 @@ class MaterialActionCreatorTest : TestHelper {
     @Before
     fun setUp() {
         karutaRepository = mock {}
-        actionCreator = MaterialActionCreator(
-            context = ApplicationProvider.getApplicationContext(),
-            karutaRepository = karutaRepository
-        )
-    }
-
-    @Test
-    fun fetchMaterialList_success_withoutColor() = runBlocking {
-        whenever(
-            karutaRepository.findAllWithCondition(
-                fromNo = KarutaNo.MIN,
-                toNo = KarutaNo.MAX,
-                kimarijis = Kimariji.values().toList(),
-                colors = KarutaColor.values().toList()
+        actionCreator =
+            MaterialActionCreator(
+                context = ApplicationProvider.getApplicationContext(),
+                karutaRepository = karutaRepository,
             )
-        ).thenReturn(createAllKarutaList())
-
-        val actual = actionCreator.fetchMaterialList(null)
-        assertThat(actual).isInstanceOf(FetchMaterialListAction.Success::class.java)
-        return@runBlocking
     }
 
     @Test
-    fun fetchMaterialList_success_withColor() = runBlocking {
-        whenever(
-            karutaRepository.findAllWithCondition(
-                fromNo = KarutaNo.MIN,
-                toNo = KarutaNo.MAX,
-                kimarijis = Kimariji.values().toList(),
-                colors = listOf(KarutaColor.BLUE)
-            )
-        ).thenReturn(createAllKarutaList())
+    fun fetchMaterialList_success_withoutColor() =
+        runBlocking {
+            whenever(
+                karutaRepository.findAllWithCondition(
+                    fromNo = KarutaNo.MIN,
+                    toNo = KarutaNo.MAX,
+                    kimarijis = Kimariji.values().toList(),
+                    colors = KarutaColor.values().toList(),
+                ),
+            ).thenReturn(createAllKarutaList())
 
-        val actual = actionCreator.fetchMaterialList(ColorFilter.BLUE)
-        assertThat(actual).isInstanceOf(FetchMaterialListAction.Success::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun fetchMaterialList_failure() = runBlocking {
-        whenever(
-            karutaRepository.findAllWithCondition(
-                fromNo = KarutaNo.MIN,
-                toNo = KarutaNo.MAX,
-                kimarijis = Kimariji.values().toList(),
-                colors = KarutaColor.values().toList()
-            )
-        ).thenThrow(RuntimeException())
-
-        val actual = actionCreator.fetchMaterialList(null)
-        assertThat(actual).isInstanceOf(FetchMaterialListAction.Failure::class.java)
-        return@runBlocking
-    }
+            val actual = actionCreator.fetchMaterialList(null)
+            assertThat(actual).isInstanceOf(FetchMaterialListAction.Success::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun edit_success() = runBlocking {
-        val karuta = createKaruta()
-        whenever(karutaRepository.findByNo(karuta.no)).thenReturn(karuta)
-        whenever(karutaRepository.save(any())).thenAnswer {}
+    fun fetchMaterialList_success_withColor() =
+        runBlocking {
+            whenever(
+                karutaRepository.findAllWithCondition(
+                    fromNo = KarutaNo.MIN,
+                    toNo = KarutaNo.MAX,
+                    kimarijis = Kimariji.values().toList(),
+                    colors = listOf(KarutaColor.BLUE),
+                ),
+            ).thenReturn(createAllKarutaList())
 
-        val actual = actionCreator.edit(
-            karutaNo = karuta.no.value,
-            firstPhraseKanji = "firstPhraseKanji",
-            firstPhraseKana = "firstPhraseKana",
-            secondPhraseKanji = "secondPhraseKanji",
-            secondPhraseKana = "secondPhraseKana",
-            thirdPhraseKanji = "thirdPhraseKanji",
-            thirdPhraseKana = "thirdPhraseKana",
-            fourthPhraseKanji = "fourthPhraseKanji",
-            fourthPhraseKana = "fourthPhraseKana",
-            fifthPhraseKanji = "fifthPhraseKanji",
-            fifthPhraseKana = "fifthPhraseKana"
-        )
-        assertThat(actual).isInstanceOf(EditMaterialAction.Success::class.java)
-        return@runBlocking
-    }
+            val actual = actionCreator.fetchMaterialList(ColorFilter.BLUE)
+            assertThat(actual).isInstanceOf(FetchMaterialListAction.Success::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun edit_failure() = runBlocking {
-        val karuta = createKaruta()
-        whenever(karutaRepository.findByNo(karuta.no)).thenReturn(karuta)
-        whenever(karutaRepository.save(any())).thenThrow(RuntimeException())
+    fun fetchMaterialList_failure() =
+        runBlocking {
+            whenever(
+                karutaRepository.findAllWithCondition(
+                    fromNo = KarutaNo.MIN,
+                    toNo = KarutaNo.MAX,
+                    kimarijis = Kimariji.values().toList(),
+                    colors = KarutaColor.values().toList(),
+                ),
+            ).thenThrow(RuntimeException())
 
-        val actual = actionCreator.edit(
-            karutaNo = karuta.no.value,
-            firstPhraseKanji = "firstPhraseKanji",
-            firstPhraseKana = "firstPhraseKana",
-            secondPhraseKanji = "secondPhraseKanji",
-            secondPhraseKana = "secondPhraseKana",
-            thirdPhraseKanji = "thirdPhraseKanji",
-            thirdPhraseKana = "thirdPhraseKana",
-            fourthPhraseKanji = "fourthPhraseKanji",
-            fourthPhraseKana = "fourthPhraseKana",
-            fifthPhraseKanji = "fifthPhraseKanji",
-            fifthPhraseKana = "fifthPhraseKana"
-        )
-        assertThat(actual).isInstanceOf(EditMaterialAction.Failure::class.java)
-        return@runBlocking
-    }
+            val actual = actionCreator.fetchMaterialList(null)
+            assertThat(actual).isInstanceOf(FetchMaterialListAction.Failure::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun edit_success() =
+        runBlocking {
+            val karuta = createKaruta()
+            whenever(karutaRepository.findByNo(karuta.no)).thenReturn(karuta)
+            whenever(karutaRepository.save(any())).thenAnswer {}
+
+            val actual =
+                actionCreator.edit(
+                    karutaNo = karuta.no.value,
+                    firstPhraseKanji = "firstPhraseKanji",
+                    firstPhraseKana = "firstPhraseKana",
+                    secondPhraseKanji = "secondPhraseKanji",
+                    secondPhraseKana = "secondPhraseKana",
+                    thirdPhraseKanji = "thirdPhraseKanji",
+                    thirdPhraseKana = "thirdPhraseKana",
+                    fourthPhraseKanji = "fourthPhraseKanji",
+                    fourthPhraseKana = "fourthPhraseKana",
+                    fifthPhraseKanji = "fifthPhraseKanji",
+                    fifthPhraseKana = "fifthPhraseKana",
+                )
+            assertThat(actual).isInstanceOf(EditMaterialAction.Success::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun edit_failure() =
+        runBlocking {
+            val karuta = createKaruta()
+            whenever(karutaRepository.findByNo(karuta.no)).thenReturn(karuta)
+            whenever(karutaRepository.save(any())).thenThrow(RuntimeException())
+
+            val actual =
+                actionCreator.edit(
+                    karutaNo = karuta.no.value,
+                    firstPhraseKanji = "firstPhraseKanji",
+                    firstPhraseKana = "firstPhraseKana",
+                    secondPhraseKanji = "secondPhraseKanji",
+                    secondPhraseKana = "secondPhraseKana",
+                    thirdPhraseKanji = "thirdPhraseKanji",
+                    thirdPhraseKana = "thirdPhraseKana",
+                    fourthPhraseKanji = "fourthPhraseKanji",
+                    fourthPhraseKana = "fourthPhraseKana",
+                    fifthPhraseKanji = "fifthPhraseKanji",
+                    fifthPhraseKana = "fifthPhraseKana",
+                )
+            assertThat(actual).isInstanceOf(EditMaterialAction.Failure::class.java)
+            return@runBlocking
+        }
 }
