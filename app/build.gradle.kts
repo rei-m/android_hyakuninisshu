@@ -24,15 +24,17 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
-// Create a variable called keystorePropertiesFile, and initialize it to your
-// keystore.properties file, in the rootProject folder.
-val keystorePropertiesFile = rootProject.file("signingConfigs/keystore.properties")
-
-// Initialize a new Properties() object called keystoreProperties.
 val keystoreProperties = Properties()
 
-// Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+if (rootProject.file("signingConfigs/keystore.properties").exists()) {
+    val keystorePropertiesFile = rootProject.file("signingConfigs/keystore.properties")
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+} else {
+    keystoreProperties["keyAlias"] = "dummyKeyAlias"
+    keystoreProperties["keyPassword"] = "dummyKeyPassword"
+    keystoreProperties["storeFile"] = "README.md"
+    keystoreProperties["storePassword"] = "dummyStorePassword"
+}
 
 android {
     namespace = "me.rei_m.hyakuninisshu"
