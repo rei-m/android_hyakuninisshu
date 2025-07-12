@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -54,7 +54,7 @@ class TrainingStarterStoreTest {
     @Test
     fun state_receivedStartTrainingAction() {
         dispatcher.dispatch(
-            StartTrainingAction.Success("1")
+            StartTrainingAction.Success("1"),
         )
         assertThat(store.onReadyEvent.value).isInstanceOf(Event::class.java)
         assertThat(store.isEmpty.value).isFalse
@@ -64,7 +64,7 @@ class TrainingStarterStoreTest {
     @Test
     fun state_receivedEmptyStartTrainingAction() {
         dispatcher.dispatch(
-            StartTrainingAction.Empty()
+            StartTrainingAction.Empty(),
         )
         assertThat(store.onReadyEvent.value).isNull()
         assertThat(store.isEmpty.value).isTrue

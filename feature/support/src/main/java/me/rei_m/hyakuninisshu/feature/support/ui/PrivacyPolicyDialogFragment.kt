@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.support.ui
 
 import android.app.Dialog
@@ -22,24 +21,24 @@ import androidx.fragment.app.DialogFragment
 import me.rei_m.hyakuninisshu.feature.support.R
 
 class PrivacyPolicyDialogFragment : DialogFragment() {
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val activityContext = requireActivity()
 
-        val webView = WebView(activityContext).apply {
-            loadUrl(getString(R.string.url_policy))
-        }
+        val webView =
+            WebView(activityContext).apply {
+                loadUrl(getString(R.string.url_policy))
+            }
 
-        val builder = AlertDialog.Builder(activityContext)
-            .setPositiveButton(getString(R.string.back), null)
-            .setView(webView)
+        val builder =
+            AlertDialog
+                .Builder(activityContext)
+                .setPositiveButton(getString(me.rei_m.hyakuninisshu.feature.corecomponent.R.string.back), null)
+                .setView(webView)
 
         return builder.create()
     }
 
     companion object {
-
         const val TAG: String = "PrivacyPolicyDialogFragment"
 
         fun newInstance() = PrivacyPolicyDialogFragment()

@@ -1,18 +1,14 @@
 /*
- * Copyright (c) 2020. Rei Matsushita.
+ * Copyright (c) 2025. Rei Matsushita
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
+ * the License for the specific language governing permissions and limitations under the License.
  */
 
 package me.rei_m.hyakuninisshu.feature.question.ui
@@ -22,8 +18,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.ext.combineLatest
-import me.rei_m.hyakuninisshu.feature.corecomponent.ext.map
 import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
 import me.rei_m.hyakuninisshu.feature.question.R
 import me.rei_m.hyakuninisshu.state.core.Dispatcher
@@ -45,9 +41,8 @@ class QuestionViewModel(
     dispatcher: Dispatcher,
     private val actionCreator: QuestionActionCreator,
     private val store: QuestionStore,
-    private val context: Context
+    private val context: Context,
 ) : AbstractViewModel(dispatcher) {
-
     val question = store.question
 
     val position = question.map { it.position }
@@ -64,49 +59,54 @@ class QuestionViewModel(
 
     val isVisibleResult = state.map { it is QuestionState.Answered }
 
-    val selectedTorifudaIndex = state.map {
-        if (it is QuestionState.Answered) {
-            return@map it.selectedToriFudaIndex
-        } else {
-            return@map null
+    val selectedTorifudaIndex =
+        state.map {
+            if (it is QuestionState.Answered) {
+                return@map it.selectedToriFudaIndex
+            } else {
+                return@map null
+            }
         }
-    }
 
-    val isCorrectResId = state.map {
-        val resId =
-            if (it is QuestionState.Answered && it.isCorrect) R.drawable.check_correct else R.drawable.check_incorrect
-        context.getDrawable(resId)
-    }
+    val isCorrectResId =
+        state.map {
+            val resId =
+                if (it is QuestionState.Answered && it.isCorrect) R.drawable.check_correct else R.drawable.check_incorrect
+            context.getDrawable(resId)
+        }
 
     private var isSelected = false
 
-    private val stateObserver = Observer<QuestionState> {
-        when (it) {
-            is QuestionState.Ready -> {
-                timer.scheduleAtFixedRate(timerTask, 0, 1000)
-            }
-            is QuestionState.InAnswer -> {
-            }
-            is QuestionState.Answered -> {
+    private val stateObserver =
+        Observer<QuestionState> {
+            when (it) {
+                is QuestionState.Ready -> {
+                    timer.scheduleAtFixedRate(timerTask, 0, 1000)
+                }
+                is QuestionState.InAnswer -> {
+                }
+                is QuestionState.Answered -> {
+                }
             }
         }
-    }
 
     private val timer = Timer()
 
-    private val timerTask = object : TimerTask() {
-        private var count = inputSecond.value
-        override fun run() {
-            if (count == 0) {
-                timer.cancel()
-                dispatchAction {
-                    actionCreator.startAnswer(questionId, Date())
+    private val timerTask =
+        object : TimerTask() {
+            private var count = inputSecond.value
+
+            override fun run() {
+                if (count == 0) {
+                    timer.cancel()
+                    dispatchAction {
+                        actionCreator.startAnswer(questionId, Date())
+                    }
                 }
+                inputSecondCounter.postValue(count)
+                count -= 1
             }
-            inputSecondCounter.postValue(count)
-            count -= 1
         }
-    }
 
     init {
         state.observeForever(stateObserver)
@@ -142,27 +142,30 @@ class QuestionViewModel(
         return
     }
 
-    class Factory @Inject constructor(
-        private val dispatcher: Dispatcher,
-        private val actionCreator: QuestionActionCreator,
-        private val store: QuestionStore,
-        private val context: Context
-    ) : ViewModelProvider.Factory {
-        lateinit var questionId: String
-        lateinit var kamiNoKuStyle: DisplayStyleCondition
-        lateinit var shimoNoKuStyle: DisplayStyleCondition
-        lateinit var inputSecond: InputSecondCondition
+    class Factory
+        @Inject
+        constructor(
+            private val dispatcher: Dispatcher,
+            private val actionCreator: QuestionActionCreator,
+            private val store: QuestionStore,
+            private val context: Context,
+        ) : ViewModelProvider.Factory {
+            lateinit var questionId: String
+            lateinit var kamiNoKuStyle: DisplayStyleCondition
+            lateinit var shimoNoKuStyle: DisplayStyleCondition
+            lateinit var inputSecond: InputSecondCondition
 
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = QuestionViewModel(
-            questionId,
-            kamiNoKuStyle,
-            shimoNoKuStyle,
-            inputSecond,
-            dispatcher,
-            actionCreator,
-            store,
-            context
-        ) as T
-    }
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                QuestionViewModel(
+                    questionId,
+                    kamiNoKuStyle,
+                    shimoNoKuStyle,
+                    inputSecond,
+                    dispatcher,
+                    actionCreator,
+                    store,
+                    context,
+                ) as T
+        }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -24,23 +24,29 @@ import javax.inject.Inject
 /**
  * 力試しの履歴を管理する.
  */
-class ExamHistoryStore @Inject constructor(dispatcher: Dispatcher) : Store() {
-    private val _resultList = MutableLiveData<List<ExamResult>?>(null)
-    val resultList: LiveData<List<ExamResult>?> = _resultList
+class ExamHistoryStore
+    @Inject
+    constructor(
+        dispatcher: Dispatcher,
+    ) : Store() {
+        private val _resultList = MutableLiveData<List<ExamResult>?>(null)
+        val resultList: LiveData<List<ExamResult>?> = _resultList
 
-    private val _isFailure = MutableLiveData(false)
-    val isFailure: LiveData<Boolean> = _isFailure
+        private val _isFailure = MutableLiveData(false)
+        val isFailure: LiveData<Boolean> = _isFailure
 
-    init {
-        register(dispatcher.on(FetchAllExamResultAction::class.java).subscribe {
-            when (it) {
-                is FetchAllExamResultAction.Success -> {
-                    _resultList.value = it.examResultList
-                }
-                is FetchAllExamResultAction.Failure -> {
-                    _isFailure.value = true
-                }
-            }
-        })
+        init {
+            register(
+                dispatcher.on(FetchAllExamResultAction::class.java).subscribe {
+                    when (it) {
+                        is FetchAllExamResultAction.Success -> {
+                            _resultList.value = it.examResultList
+                        }
+                        is FetchAllExamResultAction.Failure -> {
+                            _isFailure.value = true
+                        }
+                    }
+                },
+            )
+        }
     }
-}

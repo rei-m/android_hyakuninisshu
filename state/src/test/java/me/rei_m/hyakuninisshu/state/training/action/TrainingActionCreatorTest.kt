@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -53,156 +53,171 @@ class TrainingActionCreatorTest : TestHelper {
         questionRepository = mock {}
         examRepository = mock {}
         createQuestionListService = CreateQuestionListService()
-        actionCreator = TrainingActionCreator(
-            context = ApplicationProvider.getApplicationContext(),
-            karutaRepository = karutaRepository,
-            questionRepository = questionRepository,
-            examRepository = examRepository,
-            createQuestionListService = createQuestionListService
-        )
-    }
-
-    @Test
-    fun start_success() = runBlocking {
-        whenever(
-            karutaRepository.findAllWithCondition(
-                fromNo = KarutaNo(11),
-                toNo = KarutaNo(80),
-                kimarijis = listOf(Kimariji.TWO),
-                colors = listOf(KarutaColor.BLUE)
+        actionCreator =
+            TrainingActionCreator(
+                context = ApplicationProvider.getApplicationContext(),
+                karutaRepository = karutaRepository,
+                questionRepository = questionRepository,
+                examRepository = examRepository,
+                createQuestionListService = createQuestionListService,
             )
-        ).thenReturn(createAllKarutaList())
-        whenever(questionRepository.initialize(any())).thenAnswer { }
-
-        val actual = actionCreator.start(
-            fromCondition = RangeFromCondition.ELEVEN,
-            toCondition = RangeToCondition.EIGHTY,
-            kimariji = KimarijiCondition.TWO,
-            color = ColorCondition.BLUE
-        )
-        assertThat(actual).isInstanceOf(StartTrainingAction.Success::class.java)
-        return@runBlocking
     }
 
     @Test
-    fun start_success_empty() = runBlocking {
-        whenever(
-            karutaRepository.findAllWithCondition(
-                fromNo = KarutaNo(11),
-                toNo = KarutaNo(80),
-                kimarijis = listOf(Kimariji.TWO),
-                colors = listOf(KarutaColor.BLUE)
-            )
-        ).thenReturn(listOf())
-        whenever(questionRepository.initialize(any())).thenAnswer { }
-
-        val actual = actionCreator.start(
-            fromCondition = RangeFromCondition.ELEVEN,
-            toCondition = RangeToCondition.EIGHTY,
-            kimariji = KimarijiCondition.TWO,
-            color = ColorCondition.BLUE
-        )
-        assertThat(actual).isInstanceOf(StartTrainingAction.Empty::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun start_failure() = runBlocking {
-        whenever(
-            karutaRepository.findAllWithCondition(
-                fromNo = KarutaNo(11),
-                toNo = KarutaNo(80),
-                kimarijis = listOf(Kimariji.TWO),
-                colors = listOf(KarutaColor.BLUE)
-            )
-        ).thenThrow(RuntimeException())
-        whenever(questionRepository.initialize(any())).thenAnswer { }
-
-        val actual = actionCreator.start(
-            fromCondition = RangeFromCondition.ELEVEN,
-            toCondition = RangeToCondition.EIGHTY,
-            kimariji = KimarijiCondition.TWO,
-            color = ColorCondition.BLUE
-        )
-        assertThat(actual).isInstanceOf(StartTrainingAction.Failure::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun start_startByExamPractice_success() = runBlocking {
-        val wrongKarutaNoCollection = KarutaNoCollection(listOf(KarutaNo(1), KarutaNo(2)))
-        val examCollection = ExamCollection(
-            listOf(
-                createExam(
-                    wrongKarutaNoCollection = wrongKarutaNoCollection
-                )
-            )
-        )
-        whenever(examRepository.findCollection()).thenReturn(examCollection)
-        whenever(
-            karutaRepository.findAllWithNo(wrongKarutaNoCollection.values)
-        ).thenReturn(createAllKarutaList())
-        whenever(questionRepository.initialize(any())).thenAnswer { }
-
-        val actual = actionCreator.startByExamPractice()
-        assertThat(actual).isInstanceOf(StartTrainingAction.Success::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun start_startByExamPractice_success_empty() = runBlocking {
-        val examCollection = ExamCollection(listOf())
-        whenever(examRepository.findCollection()).thenReturn(examCollection)
-        val actual = actionCreator.startByExamPractice()
-        assertThat(actual).isInstanceOf(StartTrainingAction.Empty::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun start_startByExamPractice_failure() = runBlocking {
-        whenever(examRepository.findCollection()).thenThrow(RuntimeException())
-        val actual = actionCreator.startByExamPractice()
-        assertThat(actual).isInstanceOf(StartTrainingAction.Failure::class.java)
-        return@runBlocking
-    }
-
-    @Test
-    fun start_restart_success() = runBlocking {
-        val questionCollection = QuestionCollection(
-            listOf(
-                createQuestionAnswered(
-                    correctNo = KarutaNo(1),
-                    isCorrect = false
+    fun start_success() =
+        runBlocking {
+            whenever(
+                karutaRepository.findAllWithCondition(
+                    fromNo = KarutaNo(11),
+                    toNo = KarutaNo(80),
+                    kimarijis = listOf(Kimariji.TWO),
+                    colors = listOf(KarutaColor.BLUE),
                 ),
-                createQuestionAnswered(
-                    correctNo = KarutaNo(2),
-                    isCorrect = true
+            ).thenReturn(createAllKarutaList())
+            whenever(questionRepository.initialize(any())).thenAnswer { }
+
+            val actual =
+                actionCreator.start(
+                    fromCondition = RangeFromCondition.ELEVEN,
+                    toCondition = RangeToCondition.EIGHTY,
+                    kimariji = KimarijiCondition.TWO,
+                    color = ColorCondition.BLUE,
                 )
-            )
-        )
-        whenever(questionRepository.findCollection()).thenReturn(questionCollection)
-        whenever(karutaRepository.findAllWithNo(listOf(KarutaNo(1)))).thenReturn(createAllKarutaList())
-        whenever(questionRepository.initialize(any())).thenAnswer { }
-
-        val actual = actionCreator.restart()
-        assertThat(actual).isInstanceOf(StartTrainingAction.Success::class.java)
-        return@runBlocking
-    }
+            assertThat(actual).isInstanceOf(StartTrainingAction.Success::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun start_restart_success_empty() = runBlocking {
-        val questionCollection = QuestionCollection(listOf())
-        whenever(questionRepository.findCollection()).thenReturn(questionCollection)
-        val actual = actionCreator.restart()
-        assertThat(actual).isInstanceOf(StartTrainingAction.Empty::class.java)
-        return@runBlocking
-    }
+    fun start_success_empty() =
+        runBlocking {
+            whenever(
+                karutaRepository.findAllWithCondition(
+                    fromNo = KarutaNo(11),
+                    toNo = KarutaNo(80),
+                    kimarijis = listOf(Kimariji.TWO),
+                    colors = listOf(KarutaColor.BLUE),
+                ),
+            ).thenReturn(listOf())
+            whenever(questionRepository.initialize(any())).thenAnswer { }
+
+            val actual =
+                actionCreator.start(
+                    fromCondition = RangeFromCondition.ELEVEN,
+                    toCondition = RangeToCondition.EIGHTY,
+                    kimariji = KimarijiCondition.TWO,
+                    color = ColorCondition.BLUE,
+                )
+            assertThat(actual).isInstanceOf(StartTrainingAction.Empty::class.java)
+            return@runBlocking
+        }
 
     @Test
-    fun start_restart_failure() = runBlocking {
-        whenever(questionRepository.findCollection()).thenThrow(RuntimeException())
-        val actual = actionCreator.restart()
-        assertThat(actual).isInstanceOf(StartTrainingAction.Failure::class.java)
-        return@runBlocking
-    }
+    fun start_failure() =
+        runBlocking {
+            whenever(
+                karutaRepository.findAllWithCondition(
+                    fromNo = KarutaNo(11),
+                    toNo = KarutaNo(80),
+                    kimarijis = listOf(Kimariji.TWO),
+                    colors = listOf(KarutaColor.BLUE),
+                ),
+            ).thenThrow(RuntimeException())
+            whenever(questionRepository.initialize(any())).thenAnswer { }
+
+            val actual =
+                actionCreator.start(
+                    fromCondition = RangeFromCondition.ELEVEN,
+                    toCondition = RangeToCondition.EIGHTY,
+                    kimariji = KimarijiCondition.TWO,
+                    color = ColorCondition.BLUE,
+                )
+            assertThat(actual).isInstanceOf(StartTrainingAction.Failure::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun start_startByExamPractice_success() =
+        runBlocking {
+            val wrongKarutaNoCollection = KarutaNoCollection(listOf(KarutaNo(1), KarutaNo(2)))
+            val examCollection =
+                ExamCollection(
+                    listOf(
+                        createExam(
+                            wrongKarutaNoCollection = wrongKarutaNoCollection,
+                        ),
+                    ),
+                )
+            whenever(examRepository.findCollection()).thenReturn(examCollection)
+            whenever(
+                karutaRepository.findAllWithNo(wrongKarutaNoCollection.values),
+            ).thenReturn(createAllKarutaList())
+            whenever(questionRepository.initialize(any())).thenAnswer { }
+
+            val actual = actionCreator.startByExamPractice()
+            assertThat(actual).isInstanceOf(StartTrainingAction.Success::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun start_startByExamPractice_success_empty() =
+        runBlocking {
+            val examCollection = ExamCollection(listOf())
+            whenever(examRepository.findCollection()).thenReturn(examCollection)
+            val actual = actionCreator.startByExamPractice()
+            assertThat(actual).isInstanceOf(StartTrainingAction.Empty::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun start_startByExamPractice_failure() =
+        runBlocking {
+            whenever(examRepository.findCollection()).thenThrow(RuntimeException())
+            val actual = actionCreator.startByExamPractice()
+            assertThat(actual).isInstanceOf(StartTrainingAction.Failure::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun start_restart_success() =
+        runBlocking {
+            val questionCollection =
+                QuestionCollection(
+                    listOf(
+                        createQuestionAnswered(
+                            correctNo = KarutaNo(1),
+                            isCorrect = false,
+                        ),
+                        createQuestionAnswered(
+                            correctNo = KarutaNo(2),
+                            isCorrect = true,
+                        ),
+                    ),
+                )
+            whenever(questionRepository.findCollection()).thenReturn(questionCollection)
+            whenever(karutaRepository.findAllWithNo(listOf(KarutaNo(1)))).thenReturn(createAllKarutaList())
+            whenever(questionRepository.initialize(any())).thenAnswer { }
+
+            val actual = actionCreator.restart()
+            assertThat(actual).isInstanceOf(StartTrainingAction.Success::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun start_restart_success_empty() =
+        runBlocking {
+            val questionCollection = QuestionCollection(listOf())
+            whenever(questionRepository.findCollection()).thenReturn(questionCollection)
+            val actual = actionCreator.restart()
+            assertThat(actual).isInstanceOf(StartTrainingAction.Empty::class.java)
+            return@runBlocking
+        }
+
+    @Test
+    fun start_restart_failure() =
+        runBlocking {
+            whenever(questionRepository.findCollection()).thenThrow(RuntimeException())
+            val actual = actionCreator.restart()
+            assertThat(actual).isInstanceOf(StartTrainingAction.Failure::class.java)
+            return@runBlocking
+        }
 }

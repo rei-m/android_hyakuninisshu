@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -21,24 +21,30 @@ import me.rei_m.hyakuninisshu.state.core.Store
 import me.rei_m.hyakuninisshu.state.material.action.EditMaterialAction
 import javax.inject.Inject
 
-class EditMaterialStore @Inject constructor(dispatcher: Dispatcher) : Store() {
-    private val _onCompleteEditEvent = MutableLiveData<Event<Unit>>()
-    val onCompleteEditEvent: LiveData<Event<Unit>> = _onCompleteEditEvent
+class EditMaterialStore
+    @Inject
+    constructor(
+        dispatcher: Dispatcher,
+    ) : Store() {
+        private val _onCompleteEditEvent = MutableLiveData<Event<Unit>>()
+        val onCompleteEditEvent: LiveData<Event<Unit>> = _onCompleteEditEvent
 
-    private val _isFailure = MutableLiveData(false)
-    val isFailure: LiveData<Boolean> = _isFailure
+        private val _isFailure = MutableLiveData(false)
+        val isFailure: LiveData<Boolean> = _isFailure
 
-    init {
-        register(dispatcher.on(EditMaterialAction::class.java).subscribe {
-            when (it) {
-                is EditMaterialAction.Success -> {
-                    _isFailure.value = false
-                    _onCompleteEditEvent.value = Event(Unit)
-                }
-                is EditMaterialAction.Failure -> {
-                    _isFailure.value = true
-                }
-            }
-        })
+        init {
+            register(
+                dispatcher.on(EditMaterialAction::class.java).subscribe {
+                    when (it) {
+                        is EditMaterialAction.Success -> {
+                            _isFailure.value = false
+                            _onCompleteEditEvent.value = Event(Unit)
+                        }
+                        is EditMaterialAction.Failure -> {
+                            _isFailure.value = true
+                        }
+                    }
+                },
+            )
+        }
     }
-}

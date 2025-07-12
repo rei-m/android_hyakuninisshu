@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -18,8 +18,9 @@ import io.reactivex.Scheduler
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
-class ActionDispatcher(private val uiScheduler: Scheduler) : Dispatcher {
-
+class ActionDispatcher(
+    private val uiScheduler: Scheduler,
+) : Dispatcher {
     private val processor = PublishProcessor.create<Action>()
 
     override fun dispatch(action: Action) {
@@ -32,8 +33,10 @@ class ActionDispatcher(private val uiScheduler: Scheduler) : Dispatcher {
         processor.onNext(action)
     }
 
-    override fun <T : Action> on(clazz: Class<T>): Observable<T> = processor.onBackpressureBuffer()
-        .ofType(clazz)
-        .observeOn(uiScheduler)
-        .toObservable()
+    override fun <T : Action> on(clazz: Class<T>): Observable<T> =
+        processor
+            .onBackpressureBuffer()
+            .ofType(clazz)
+            .observeOn(uiScheduler)
+            .toObservable()
 }

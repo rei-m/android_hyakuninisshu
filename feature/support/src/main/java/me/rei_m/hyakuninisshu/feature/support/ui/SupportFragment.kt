@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,15 +11,14 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.support.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -30,7 +29,6 @@ import me.rei_m.hyakuninisshu.feature.support.di.SupportComponent
 import javax.inject.Inject
 
 class SupportFragment : Fragment() {
-
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
@@ -48,7 +46,7 @@ class SupportFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val versionName = getString(R.string.version, "3.1.4")
 
@@ -63,23 +61,34 @@ class SupportFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         analyticsHelper.sendScreenView("Support", requireActivity())
 
         binding.buttonLicense.setOnClickListener {
-            startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
+            startActivity(Intent(requireActivity(), OssLicensesMenuActivity::class.java))
         }
         binding.buttonPrivacyPolicy.setOnClickListener {
-            findNavController().navigate(R.id.action_support_to_privacyPolicyDialog)
+            findNavController().navigate(me.rei_m.hyakuninisshu.feature.corecomponent.R.id.action_support_to_privacyPolicyDialog)
         }
         binding.buttonReview.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)))
+            val intent =
+                Intent(
+                    Intent.ACTION_VIEW,
+                    getString(me.rei_m.hyakuninisshu.feature.corecomponent.R.string.app_url).toUri(),
+                )
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             requireActivity().startActivity(intent)
         }
         binding.buttonReader.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.reader_app_url)))
+            val intent =
+                Intent(
+                    Intent.ACTION_VIEW,
+                    getString(me.rei_m.hyakuninisshu.feature.corecomponent.R.string.reader_app_url).toUri(),
+                )
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             requireActivity().startActivity(intent)
         }

@@ -2,7 +2,7 @@
 # By default, the flags in this file are appended to flags specified
 # in /Users/rei_m/android-sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+# directive in build.gradle.kts.
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
@@ -20,16 +20,9 @@
 -keepnames class me.rei_m.hyakuninisshu.state.question.model.*
 -keepnames class me.rei_m.hyakuninisshu.state.material.model.*
 
--keep class kotlin.reflect.jvm.internal.impl.builtins.BuiltInsLoaderImpl
-
--keep class kotlin.Metadata {
-    public <methods>;
+-keep class me.rei_m.hyakuninisshu.infrastructure.database.KarutaData {
+    public *;
 }
--keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaData {
-  <init>(...);
-  <fields>;
-}
--keepclassmembers class me.rei_m.hyakuninisshu.infrastructure.database.KarutaSchema {
-  <init>(...);
-  <fields>;
+-keep class me.rei_m.hyakuninisshu.infrastructure.database.KarutaDataList {
+    public *;
 }

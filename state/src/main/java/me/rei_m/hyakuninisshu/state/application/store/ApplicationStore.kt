@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -15,37 +15,42 @@ package me.rei_m.hyakuninisshu.state.application.store
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import me.rei_m.hyakuninisshu.state.application.action.StartApplicationAction
 import me.rei_m.hyakuninisshu.state.core.Dispatcher
 import me.rei_m.hyakuninisshu.state.core.Event
 import me.rei_m.hyakuninisshu.state.core.Store
-import me.rei_m.hyakuninisshu.state.application.action.StartApplicationAction
 import javax.inject.Inject
 
 /**
  * アプリケーションの状態を管理する.
  */
-class ApplicationStore @Inject constructor(dispatcher: Dispatcher) : Store() {
+class ApplicationStore
+    @Inject
+    constructor(
+        dispatcher: Dispatcher,
+    ) : Store() {
+        /**
+         * アプリケーションの準備が完了したことを通知するイベント.
+         */
+        private val _onReadyEvent = MutableLiveData<Event<Unit>>()
+        val onReadyEvent: LiveData<Event<Unit>> = _onReadyEvent
 
-    /**
-     * アプリケーションの準備が完了したことを通知するイベント.
-     */
-    private val _onReadyEvent = MutableLiveData<Event<Unit>>()
-    val onReadyEvent: LiveData<Event<Unit>> = _onReadyEvent
+        private val _isFailure = MutableLiveData(false)
+        val isFailure: LiveData<Boolean> = _isFailure
 
-    private val _isFailure = MutableLiveData(false)
-    val isFailure: LiveData<Boolean> = _isFailure
-
-    init {
-        register(dispatcher.on(StartApplicationAction::class.java).subscribe {
-            when (it) {
-                is StartApplicationAction.Success -> {
-                    _onReadyEvent.value = Event(Unit)
-                    _isFailure.value = false
-                }
-                is StartApplicationAction.Failure -> {
-                    _isFailure.value = true
-                }
-            }
-        })
+        init {
+            register(
+                dispatcher.on(StartApplicationAction::class.java).subscribe {
+                    when (it) {
+                        is StartApplicationAction.Success -> {
+                            _onReadyEvent.value = Event(Unit)
+                            _isFailure.value = false
+                        }
+                        is StartApplicationAction.Failure -> {
+                            _isFailure.value = true
+                        }
+                    }
+                },
+            )
+        }
     }
-}

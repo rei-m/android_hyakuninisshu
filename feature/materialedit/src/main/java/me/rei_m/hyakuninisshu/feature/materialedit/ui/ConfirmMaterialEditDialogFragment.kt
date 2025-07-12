@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,13 +11,14 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,7 +26,6 @@ import me.rei_m.hyakuninisshu.feature.materialedit.R
 import me.rei_m.hyakuninisshu.feature.materialedit.databinding.DialogConfirmMaterialEditBinding
 
 class ConfirmMaterialEditDialogFragment : DialogFragment() {
-
     private val viewModel by activityViewModels<MaterialEditViewModel>()
 
     private var _binding: DialogConfirmMaterialEditBinding? = null
@@ -33,42 +33,32 @@ class ConfirmMaterialEditDialogFragment : DialogFragment() {
 
     private var positiveClickListener: DialogInterface.OnClickListener? = null
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val parentActivity = requireActivity()
 
-        _binding = DialogConfirmMaterialEditBinding
-            .inflate(parentActivity.layoutInflater, null, false)
-
-        positiveClickListener = DialogInterface.OnClickListener { _, _ ->
-            viewModel.onSubmitEdit()
-        }
-
-        val builder = MaterialAlertDialogBuilder(parentActivity)
-            .setView(binding.root)
-            .setPositiveButton(R.string.update) { v1, v2 ->
-                // LeakCanary先生に怒られるので怪しいところを潰している
-                positiveClickListener?.onClick(v1, v2)
+        _binding =
+            DialogConfirmMaterialEditBinding
+                .inflate(parentActivity.layoutInflater, null, false)
+        binding.viewModel = viewModel
+        positiveClickListener =
+            DialogInterface.OnClickListener { _, _ ->
+                viewModel.onSubmitEdit()
             }
-            .setNegativeButton(R.string.back) { _, _ -> }
+
+        val builder =
+            MaterialAlertDialogBuilder(parentActivity)
+                .setView(binding.root)
+                .setPositiveButton(R.string.update) { v1, v2 ->
+                    // LeakCanary先生に怒られるので怪しいところを潰している
+                    positiveClickListener?.onClick(v1, v2)
+                }.setNegativeButton(me.rei_m.hyakuninisshu.feature.corecomponent.R.string.back) { _, _ -> }
 
         return builder.create()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-    }
-
-    override fun onDestroyView() {
+    override fun onDismiss(dialog: DialogInterface) {
         _binding = null
-        super.onDestroyView()
-    }
-
-    override fun onDetach() {
         positiveClickListener = null
-        super.onDetach()
+        super.onDismiss(dialog)
     }
 }

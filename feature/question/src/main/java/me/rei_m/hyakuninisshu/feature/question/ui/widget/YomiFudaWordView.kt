@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -21,33 +21,35 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.withStyledAttributes
 import me.rei_m.hyakuninisshu.feature.question.R
 
-class YomiFudaWordView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
-    private var position: Int? = null
+class YomiFudaWordView
+    @JvmOverloads
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+    ) : AppCompatTextView(context, attrs, defStyleAttr) {
+        private var position: Int? = null
 
-    init {
-        typeface = ResourcesCompat.getFont(context, R.font.hannari)
-        context.withStyledAttributes(attrs, R.styleable.YomiFudaWordView) {
-            position = getInt(R.styleable.YomiFudaWordView_position, 0)
+        init {
+            typeface = ResourcesCompat.getFont(context, me.rei_m.hyakuninisshu.feature.corecomponent.R.font.hannari)
+            context.withStyledAttributes(attrs, R.styleable.YomiFudaWordView) {
+                position = getInt(R.styleable.YomiFudaWordView_position, 0)
+            }
+        }
+
+        var textSizeByPx: Int? = null
+            set(value) {
+                field = value
+                value ?: return
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, value.toFloat())
+            }
+
+        fun setText(text: String?) {
+            text ?: return
+            val textPosition = position ?: return
+            if (text.length < textPosition) {
+                return
+            }
+            this.text = text.substring(textPosition - 1, textPosition)
         }
     }
-
-    var textSizeByPx: Int? = null
-        set(value) {
-            field = value
-            value ?: return
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, value.toFloat())
-        }
-
-    fun setText(text: String?) {
-        text ?: return
-        val textPosition = position ?: return
-        if (text.length < textPosition) {
-            return
-        }
-        this.text = text.substring(textPosition - 1, textPosition)
-    }
-}

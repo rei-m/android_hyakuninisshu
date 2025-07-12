@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -61,7 +61,7 @@ class MaterialDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = MaterialDetailFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -78,28 +78,36 @@ class MaterialDetailFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setUpOptionMenu()
         analyticsHelper.sendScreenView("MaterialDetail", requireActivity())
-        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                currentPosition = position
-            }
-        })
-        viewModel.materialList.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            (binding.pager.adapter as ScreenSlidePagerAdapter).replaceData(it)
-            if (savedInstanceState == null) {
-                binding.pager.setCurrentItem(args.position, false)
-            } else {
-                binding.pager.setCurrentItem(
-                    savedInstanceState.getInt(ARG_POSITION, args.position),
-                    false
-                )
-            }
-        })
+        binding.pager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    currentPosition = position
+                }
+            },
+        )
+        viewModel.materialList.observe(
+            viewLifecycleOwner,
+            Observer {
+                it ?: return@Observer
+                (binding.pager.adapter as ScreenSlidePagerAdapter).replaceData(it)
+                if (savedInstanceState == null) {
+                    binding.pager.setCurrentItem(args.position, false)
+                } else {
+                    binding.pager.setCurrentItem(
+                        savedInstanceState.getInt(ARG_POSITION, args.position),
+                        false,
+                    )
+                }
+            },
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -109,35 +117,42 @@ class MaterialDetailFragment : Fragment() {
 
     private fun setUpOptionMenu() {
         val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.material_menu, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when (menuItem.itemId) {
-                    R.id.material_detail_edit -> {
-                        val material =
-                            viewModel.materialList.value?.get(currentPosition) ?: return true
-                        val action =
-                            MaterialDetailFragmentDirections.actionMaterialDetailToMaterialEdit(
-                                material
-                            )
-                        findNavController().navigate(action)
-                    }
+        menuHost.addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(
+                    menu: Menu,
+                    menuInflater: MenuInflater,
+                ) {
+                    menuInflater.inflate(R.menu.material_menu, menu)
                 }
-                return true
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    when (menuItem.itemId) {
+                        R.id.material_detail_edit -> {
+                            val material =
+                                viewModel.materialList.value?.get(currentPosition) ?: return true
+                            val action =
+                                MaterialDetailFragmentDirections.actionMaterialDetailToMaterialEdit(
+                                    material,
+                                )
+                            findNavController().navigate(action)
+                        }
+                    }
+                    return true
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED,
+        )
     }
 
     private inner class ScreenSlidePagerAdapter(
         fragment: Fragment,
-        private var materialList: List<Material>
+        private var materialList: List<Material>,
     ) : FragmentStateAdapter(fragment) {
         override fun getItemCount(): Int = materialList.size
-        override fun createFragment(position: Int): Fragment =
-            MaterialDetailPageFragment.newInstance(materialList[position])
+
+        override fun createFragment(position: Int): Fragment = MaterialDetailPageFragment.newInstance(materialList[position])
 
         fun replaceData(materialList: List<Material>) {
             this.materialList = materialList

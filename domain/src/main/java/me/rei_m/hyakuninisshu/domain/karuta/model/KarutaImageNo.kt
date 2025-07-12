@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -25,13 +25,14 @@ private val pattern = Pattern.compile("^(?!000)(0\\d\\d|001|100)$")
  *
  * @throws IllegalArgumentException
  */
-data class KarutaImageNo @Throws(IllegalArgumentException::class) constructor(
-    val value: String
-) : ValueObject {
-
-    init {
-        if (!pattern.matcher(value).matches()) {
-            throw IllegalArgumentException("ImageNo is Invalid, value is $value")
+data class KarutaImageNo
+    @Throws(IllegalArgumentException::class)
+    constructor(
+        val value: String,
+    ) : ValueObject {
+        init {
+            if (!pattern.matcher(value).matches()) {
+                throw IllegalArgumentException("ImageNo is Invalid, value is $value")
+            }
         }
     }
-}

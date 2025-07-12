@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -16,13 +16,18 @@ package me.rei_m.hyakuninisshu.state.material.action
 import me.rei_m.hyakuninisshu.state.core.Action
 import me.rei_m.hyakuninisshu.state.material.model.Material
 
-sealed class EditMaterialAction(override val error: Throwable? = null) : Action {
-
-    class Success(val material: Material) : EditMaterialAction() {
+sealed class EditMaterialAction(
+    override val error: Throwable? = null,
+) : Action {
+    class Success(
+        val material: Material,
+    ) : EditMaterialAction() {
         override fun toString() = "$name(material=$material)"
     }
 
-    class Failure(error: Throwable) : EditMaterialAction(error) {
+    class Failure(
+        error: Throwable,
+    ) : EditMaterialAction(error) {
         override fun toString() = "$name(error=$error)"
     }
 

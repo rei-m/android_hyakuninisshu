@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,11 +11,15 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.materialedit.ui
 
-import androidx.lifecycle.*
-import androidx.savedstate.SavedStateRegistryOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
 import me.rei_m.hyakuninisshu.feature.corecomponent.ui.AbstractViewModel
 import me.rei_m.hyakuninisshu.feature.materialedit.R
 import me.rei_m.hyakuninisshu.state.core.Dispatcher
@@ -30,9 +34,8 @@ class MaterialEditViewModel(
     private val actionCreator: MaterialActionCreator,
     private val store: EditMaterialStore,
     private val orgMaterial: Material,
-    handle: SavedStateHandle
+    handle: SavedStateHandle,
 ) : AbstractViewModel(dispatcher) {
-
     val creatorAndNo = "${orgMaterial.noTxt} / ${orgMaterial.creator}"
 
     val firstPhraseKanji = handle.getLiveData(KEY_FIRST_KANJI, orgMaterial.shokuKanji)
@@ -65,11 +68,16 @@ class MaterialEditViewModel(
 
     fun onClickEdit() {
         if (
-            this.firstPhraseKanji.value.isNullOrBlank() || this.firstPhraseKana.value.isNullOrBlank() ||
-            this.secondPhraseKanji.value.isNullOrBlank() || this.secondPhraseKana.value.isNullOrBlank() ||
-            this.thirdPhraseKanji.value.isNullOrBlank() || this.thirdPhraseKana.value.isNullOrBlank() ||
-            this.fourthPhraseKanji.value.isNullOrBlank() || this.fourthPhraseKana.value.isNullOrBlank() ||
-            this.fifthPhraseKanji.value.isNullOrBlank() || this.fifthPhraseKana.value.isNullOrBlank()
+            this.firstPhraseKanji.value.isNullOrBlank() ||
+            this.firstPhraseKana.value.isNullOrBlank() ||
+            this.secondPhraseKanji.value.isNullOrBlank() ||
+            this.secondPhraseKana.value.isNullOrBlank() ||
+            this.thirdPhraseKanji.value.isNullOrBlank() ||
+            this.thirdPhraseKana.value.isNullOrBlank() ||
+            this.fourthPhraseKanji.value.isNullOrBlank() ||
+            this.fourthPhraseKana.value.isNullOrBlank() ||
+            this.fifthPhraseKanji.value.isNullOrBlank() ||
+            this.fifthPhraseKana.value.isNullOrBlank()
         ) {
             _snackBarMessage.value = Event(R.string.text_message_edit_error)
             return
@@ -90,32 +98,35 @@ class MaterialEditViewModel(
                 fourthPhraseKanji.value!!,
                 fourthPhraseKana.value!!,
                 fifthPhraseKanji.value!!,
-                fifthPhraseKana.value!!
+                fifthPhraseKana.value!!,
             )
         }
     }
 
-    class Factory @Inject constructor(
-        owner: SavedStateRegistryOwner,
-        private val dispatcher: Dispatcher,
-        private val actionCreator: MaterialActionCreator,
-        private val store: EditMaterialStore
-    ) : AbstractSavedStateViewModelFactory(owner, null) {
-        lateinit var orgMaterial: Material
+    class Factory
+        @Inject
+        constructor(
+            private val dispatcher: Dispatcher,
+            private val actionCreator: MaterialActionCreator,
+            private val store: EditMaterialStore,
+        ) : ViewModelProvider.Factory {
+            lateinit var orgMaterial: Material
 
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(
-            key: String,
-            modelClass: Class<T>,
-            handle: SavedStateHandle
-        ): T = MaterialEditViewModel(
-            dispatcher,
-            actionCreator,
-            store,
-            orgMaterial,
-            handle
-        ) as T
-    }
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                val handle = extras.createSavedStateHandle()
+                return MaterialEditViewModel(
+                    dispatcher,
+                    actionCreator,
+                    store,
+                    orgMaterial,
+                    handle,
+                ) as T
+            }
+        }
 
     companion object {
         private const val KEY_FIRST_KANJI = "firstKanji"

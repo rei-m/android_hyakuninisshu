@@ -9,3 +9,4 @@
 /keystores/
 /signingConfigs/
 *.log
+signingConfigs/keystore.properties

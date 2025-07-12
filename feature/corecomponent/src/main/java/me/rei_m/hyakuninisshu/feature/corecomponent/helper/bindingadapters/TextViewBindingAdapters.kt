@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -11,7 +11,6 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-/* ktlint-disable package-name */
 package me.rei_m.hyakuninisshu.feature.corecomponent.helper.bindingadapters
 
 import android.graphics.Color
@@ -25,24 +24,25 @@ import com.google.android.material.textview.MaterialTextView
 fun setTextKamiNoKuKana(
     view: MaterialTextView,
     kamiNoKu: String?,
-    kimariji: Int?
+    kimariji: Int?,
 ) {
     if (kamiNoKu == null || kimariji == null) {
         return
     }
 
-    val spaceCount = if (kamiNoKu.substring(0, kimariji).contains("　")) {
-        1
-    } else {
-        0
-    }
+    val spaceCount =
+        if (kamiNoKu.substring(0, kimariji).contains("　")) {
+            1
+        } else {
+            0
+        }
 
     val ssb = SpannableStringBuilder().append(kamiNoKu)
     ssb.setSpan(
         ForegroundColorSpan(Color.RED),
         0,
         kimariji + spaceCount,
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
     )
     view.text = ssb
 }

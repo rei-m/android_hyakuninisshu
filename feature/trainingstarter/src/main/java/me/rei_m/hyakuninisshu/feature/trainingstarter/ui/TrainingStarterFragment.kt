@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -56,7 +56,7 @@ class TrainingStarterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = TrainingStarterFragmentBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -69,20 +69,27 @@ class TrainingStarterFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        viewModel.onReadyEvent.observe(viewLifecycleOwner, EventObserver {
-            val action = TrainingStarterFragmentDirections.actionTrainingStarterToQuestion(
-                questionId = it,
-                kamiNoKuStyle = args.kamiNoKuStyle,
-                shimoNoKuStyle = args.shimoNoKuStyle,
-                inputSecond = args.inputSecond,
-                animationSpeed = args.animationSpeed,
-                referer = Referer.Training
-            )
-            findNavController().navigate(action)
-        })
+        viewModel.onReadyEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                val action =
+                    TrainingStarterFragmentDirections.actionTrainingStarterToQuestion(
+                        questionId = it,
+                        kamiNoKuStyle = args.kamiNoKuStyle,
+                        shimoNoKuStyle = args.shimoNoKuStyle,
+                        inputSecond = args.inputSecond,
+                        animationSpeed = args.animationSpeed,
+                        referer = Referer.Training,
+                    )
+                findNavController().navigate(action)
+            },
+        )
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -54,13 +54,14 @@ class ExamResultStoreTest {
 
     @Test
     fun state_receivedFetchExamResultAction() {
-        val result = ExamResult(
-            id = 1,
-            score = "score",
-            averageAnswerSecText = "averageAnswerSecText",
-            questionResultList = listOf(),
-            fromNowText = "fromNowText"
-        )
+        val result =
+            ExamResult(
+                id = 1,
+                score = "score",
+                averageAnswerSecText = "averageAnswerSecText",
+                questionResultList = listOf(),
+                fromNowText = "fromNowText",
+            )
         val materialList: List<Material> = listOf()
         dispatcher.dispatch(FetchExamResultAction.Success(result, materialList))
         assertThat(store.result.value).isEqualTo(result)

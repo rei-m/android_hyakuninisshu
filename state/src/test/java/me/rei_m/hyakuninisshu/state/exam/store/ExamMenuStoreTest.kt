@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Rei Matsushita
+ * Copyright (c) 2025. Rei Matsushita
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -34,13 +34,14 @@ class ExamMenuStoreTest {
     private lateinit var dispatcher: Dispatcher
     private lateinit var store: ExamMenuStore
 
-    private val value = ExamResult(
-        id = 1,
-        score = "score",
-        averageAnswerSecText = "averageAnswerSecText",
-        questionResultList = listOf(),
-        fromNowText = "fromNowText"
-    )
+    private val value =
+        ExamResult(
+            id = 1,
+            score = "score",
+            averageAnswerSecText = "averageAnswerSecText",
+            questionResultList = listOf(),
+            fromNowText = "fromNowText",
+        )
 
     @Before
     fun setUp() {
