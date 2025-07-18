@@ -18,6 +18,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -53,6 +56,19 @@ class MainActivity :
         setupNavController()
 
         setupAd()
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.container)) { v, windowInsets ->
+            val bars = windowInsets.getInsets(
+                WindowInsetsCompat.Type.statusBars(),
+            )
+            v.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom,
+            )
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -87,16 +103,18 @@ class MainActivity :
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     navView.visibility = View.GONE
                 }
+
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_training_starter,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_training_re_starter,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_exam_practice_training_starter,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_exam_finisher,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_question,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_question_answer,
-                -> {
+                    -> {
                     navView.visibility = View.GONE
                     adViewObserver.hideAd()
                 }
+
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_training_result,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_exam_result,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_exam_history,
@@ -104,10 +122,11 @@ class MainActivity :
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_material_detail_page,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_material_edit,
                 me.rei_m.hyakuninisshu.feature.corecomponent.R.id.navigation_material_edit_confirm_dialog,
-                -> {
+                    -> {
                     navView.visibility = View.GONE
                     adViewObserver.showAd(this, adViewContainer)
                 }
+
                 else -> {
                     navView.visibility = View.VISIBLE
                     adViewObserver.showAd(this, adViewContainer)
