@@ -22,7 +22,6 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -39,7 +38,6 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="true">
