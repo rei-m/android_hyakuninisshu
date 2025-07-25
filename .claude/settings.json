@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Write(*.kt)",
+      "Write(*.yml)",
+      "Bash(gh issue view:*)"
+    ],
+    "deny": [
+      "Read(.env.*)",
+      "Read(**/.ssh/*)",
+      "Read(id_rsa)",
+      "Read(id_ed25519)",
+      "Read(**/*token*)",
+      "Read(**/*key*)",
+      "Read(config/credentials/*)",
+      "Read(terraform/**/.terraform/terraform.tfstate)",
+      "Write(.env*)",
+      "Write(**/secrets/**)",
+      "Bash(sudo:*)",
+      "Bash(rm:*)",
+      "Bash(rm -rf:*)",
+      "Bash(git reset:*)",
+      "Bash(git rebase:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(nc:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm remove:*)",
+      "Bash(yarn remove:*)",
+      "Bash(mysql:*)",
+      "Bash(apt remove:*)",
+      "Bash(yum remove:*)",
+      "Bash(dnf remove:*)",
+      "Bash(ssh:*)",
+      "Bash(terraform:*)",
+      "Bash(ansible-playbook:*)",
+      "Bash(aws:*)"
+    ]
+  },
+  "model": "opus"
+}
