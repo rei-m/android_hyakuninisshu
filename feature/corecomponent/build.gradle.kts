@@ -14,6 +14,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     alias(libs.plugins.navigation.safeargs)
@@ -49,6 +50,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        compose = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -85,11 +87,24 @@ dependencies {
 
     api(libs.glide)
     ksp(libs.glide.compiler)
+    api(libs.glide.compose)
 
     api(libs.rxjava)
     api(libs.rxandroid)
 
     api(libs.timber)
+
+    // Jetpack Compose
+    val composeBom = platform(libs.androidx.compose.bom)
+    api(composeBom)
+    api(libs.androidx.compose.ui)
+    api(libs.androidx.compose.ui.graphics)
+    api(libs.androidx.compose.ui.tooling.preview)
+    api(libs.androidx.compose.material3)
+    api(libs.androidx.activity.compose)
+    api(libs.androidx.lifecycle.viewmodel.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
